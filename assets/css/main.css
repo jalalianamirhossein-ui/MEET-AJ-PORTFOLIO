@@ -9057,14 +9057,23 @@ html[dir="rtl"] .related-content {
 }
 
 .hero-content-section {
-  flex: 1;
-  max-width: 650px;
+  width: 45%;
+  max-width: 620px;
+  flex: 0 0 45%;
   position: relative;
+  z-index: 2;
+
+  margin-top: auto;
+  margin-right: auto;
+  margin-left: 0;
+
+  padding-bottom: 2rem;
 }
 
 .hero-content {
   text-align: left;
   position: relative;
+  max-width: 560px;
   z-index: 2;
 }
 
@@ -9489,11 +9498,6 @@ html[dir="rtl"] .hero-actions .btn-modern:hover .btn-text {
     justify-content: center;
   }
 
-  .hero-content-section {
-    width: 100%;
-    margin-top: auto;
-    padding-bottom: 2rem;
-  }
 
   /* دکمه‌های کوچک‌تر و کنار هم در موبایل */
   .hero-actions {
@@ -9565,5 +9569,285 @@ html[dir="rtl"] .hero-actions .btn-modern:hover .btn-text {
   .hero-actions .btn {
     width: 200px;
     padding: 12px 20px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Production quality baseline
+   This final, shared layer resolves responsive, keyboard, and motion issues
+   without coupling page components to device-specific JavaScript.
+   -------------------------------------------------------------------------- */
+:root {
+  --heading-font: var(--default-font);
+  --nav-font: var(--default-font);
+  --apple-orange: #f59e0b;
+  --apple-white: #ffffff;
+}
+
+html {
+  overflow-x: clip;
+  scroll-padding-block-start: 1rem;
+}
+
+body {
+  min-width: 0;
+  overflow-x: clip;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-inline-size: 100%;
+}
+
+:focus-visible {
+  outline: 3px solid #1d4ed8;
+  outline-offset: 3px;
+}
+
+body.menu-open {
+  overflow: hidden;
+  touch-action: none;
+}
+
+.header .social-links a {
+  min-inline-size: 44px;
+  min-block-size: 44px;
+}
+
+.hero .hero-title {
+  font-size: clamp(2rem, 5vw, 4.75rem);
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.hero-profile-section:empty {
+  display: none;
+}
+
+.hero .hero-subtitle,
+.section-title p,
+.portfolio .portfolio-info h4 {
+  text-wrap: pretty;
+}
+
+.portfolio .portfolio-content {
+  aspect-ratio: 1;
+}
+
+.portfolio .portfolio-content img {
+  block-size: 100%;
+  inline-size: 100%;
+  object-fit: cover;
+}
+
+.portfolio .portfolio-filters li:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 4px;
+}
+
+.hero-actions .btn,
+.submit-btn,
+.testimonials .swiper-button-next,
+.testimonials .swiper-button-prev,
+.swiper-autoplay-toggle {
+  min-block-size: 44px;
+}
+
+.hero-badge > .bi {
+  color: #fbbf24;
+}
+
+.title-accent.bi {
+  background: none;
+  color: var(--primary);
+  -webkit-text-fill-color: currentColor;
+}
+
+.testimonials .swiper-button-next,
+.testimonials .swiper-button-prev {
+  border: 0;
+  font: inherit;
+}
+
+.swiper-autoplay-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem auto 0;
+  padding: 0.625rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--primary), transparent 70%);
+  border-radius: 999px;
+  background: #ffffff;
+  color: #1e3a8a;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.2;
+  transition: background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.swiper-autoplay-toggle:hover {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 0.5rem 1.25rem color-mix(in srgb, var(--primary), transparent 75%);
+}
+
+.swiper-autoplay-toggle[aria-pressed="true"] {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.swiper-autoplay-toggle[hidden] {
+  display: none;
+}
+
+@media (min-width: 1200px) {
+  .header {
+    block-size: 100dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+}
+
+@media (max-width: 1199px) {
+  .header {
+    inline-size: min(19.5rem, 100%);
+    block-size: 100dvh;
+    /* Keep the drawer above its scrim but below its persistent close control. */
+    z-index: 10000;
+  }
+
+  .menu-toggle {
+    min-inline-size: 48px;
+    min-block-size: 48px;
+    inset-block-start: max(1rem, env(safe-area-inset-top));
+    inset-inline-end: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+@media (max-width: 575px) {
+  .hero-actions {
+    inline-size: 100%;
+    flex-direction: column !important;
+    align-items: stretch;
+  }
+
+  .hero-actions .btn {
+    inline-size: 100%;
+    max-inline-size: none !important;
+    padding: 0.75rem 1rem !important;
+    justify-content: center;
+  }
+
+  .portfolio .portfolio-filters {
+    gap: 0.625rem;
+    margin-block-end: 2rem;
+  }
+
+  .portfolio .portfolio-filters li {
+    min-block-size: 44px;
+    padding: 0.75rem 1rem;
+  }
+
+  .portfolio .portfolio-content {
+    aspect-ratio: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-wrapper {
+    min-block-size: 100svh;
+    padding: clamp(5rem, 14vw, 7rem) 0 4rem;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+.hero .container {
+  position: relative;
+  z-index: 3;
+  height: 100%;
+  width: 100%;
+  max-width: none;
+  padding-inline: clamp(1.5rem, 4vw, 5rem);
+}
+
+.hero-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  width: 100%;
+}
+
+.hero-content-section {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(31vw, 32rem);
+  max-width: min(31vw, 32rem);
+  z-index: 5;
+}
+
+.hero-content {
+  max-width: 100%;
+}
+
+.hero-title {
+  max-width: 100%;
+}
+.hero-bg {
+  object-fit: cover;
+  object-position: 75% center;
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .hero .hero-bg {
+    object-position: left center;
+  }
+}
+
+@media (max-width: 991px) {
+  .hero .container {
+    padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+  }
+
+  .hero-wrapper {
+    min-block-size: 100svh;
+    justify-content: flex-end;
+    padding-block: clamp(19rem, 60vh, 32rem) 3rem;
+  }
+
+  .hero-content-section {
+    position: relative;
+    inset: auto;
+    width: min(100%, 42rem);
+    max-width: 42rem;
+    margin-inline: auto;
+    transform: none;
+    text-align: center;
+  }
+
+  .hero-content {
+    text-align: center;
+  }
+}
+
+@media (max-width: 575px) {
+  .hero .hero-bg {
+    object-position: 50% 20%;
   }
 }

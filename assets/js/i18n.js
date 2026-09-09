@@ -28,6 +28,49 @@
   const isCorrupted = (val) =>
     val == null || val.indexOf("\uFFFD") !== -1 || /[\u0000-\u001f]/.test(val);
 
+  const getRtlStyle = () => {
+    const existing = document.getElementById("rtl-style");
+    if (existing) return existing;
+
+    const script = Array.from(document.scripts).find((item) =>
+      /assets\/js\/i18n\.js(?:\?|$)/.test(item.src),
+    );
+    if (!script?.src) return null;
+
+    const stylesheet = document.createElement("link");
+    stylesheet.id = "rtl-style";
+    stylesheet.rel = "stylesheet";
+    stylesheet.href = new URL("../css/rtl.css", script.src).href;
+    stylesheet.disabled = true;
+    document.head.appendChild(stylesheet);
+    return stylesheet;
+  };
+
+  /**
+   * Translate only the text that belongs to an element. Replacing `textContent`
+   * on every translated element looks convenient, but it also removes nested
+   * icons, links, and presentational spans (for example the two-line hero
+   * heading). Keeping child elements intact makes language changes safe and
+   * avoids a full-page reload.
+   */
+  const setElementText = (element, value) => {
+    const textNodes = Array.from(element.childNodes).filter(
+      (node) =>
+        node.nodeType === Node.TEXT_NODE && node.nodeValue.trim().length > 0,
+    );
+
+    if (element.children.length === 0) {
+      element.textContent = value;
+      return;
+    }
+
+    if (textNodes.length === 1) {
+      const textNode = textNodes[0];
+      const trailingSpace = /\s$/.test(textNode.nodeValue) ? " " : "";
+      textNode.nodeValue = value + trailingSpace;
+    }
+  };
+
   const apply = (lang) => {
     const isPersian = lang === "fa";
     const html = document.documentElement;
@@ -35,7 +78,7 @@
     html.lang = lang;
     html.dir = isPersian ? "rtl" : "ltr";
 
-    const rtlStyle = document.getElementById("rtl-style");
+    const rtlStyle = getRtlStyle();
     if (rtlStyle) {
       if (isPersian) {
         rtlStyle.disabled = false;
@@ -57,7 +100,7 @@
 
       const translation = isPersian ? fa : en;
       if (translation != null) {
-        el.textContent = translation;
+        setElementText(el, translation);
       }
     });
 
@@ -94,14 +137,15 @@
 
     localStorage.setItem(KEY, lang);
     setCookie(lang);
+    window.dispatchEvent(
+      new CustomEvent("meetaj:languagechange", { detail: { lang } }),
+    );
   };
 
   const toggle = () => {
     const currentLang = document.documentElement.lang;
     const nextLang = currentLang === "fa" ? "en" : "fa";
-    localStorage.setItem(KEY, nextLang);
-    setCookie(nextLang);
-    setTimeout(() => window.location.reload(), 150);
+    apply(nextLang);
   };
 
   const injectLanguageToggle = () => {
@@ -186,35 +230,6 @@
       }
     });
 
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeType === Node.ELEMENT_NODE) {
-            const headers = node.querySelectorAll
-              ? node.querySelectorAll(
-                  "nav, .navbar, .navmenu, header, .header, .topbar, #header, #navmenu",
-                )
-              : node.matches &&
-                  node.matches(
-                    "nav, .navbar, .navmenu, header, .header, .topbar, #header, #navmenu",
-                  )
-                ? [node]
-                : [];
-
-            headers.forEach((header) => {
-              if (!header.querySelector("#lang-toggle")) {
-                injectLanguageToggle();
-              }
-            });
-          }
-        });
-      });
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
   };
 
   if (document.readyState === "loading") {
@@ -226,11 +241,7 @@
   window.i18n = {
     getCurrentLanguage: () => document.documentElement.lang,
     setLanguage: (lang) => {
-      localStorage.setItem(KEY, lang);
-      setCookie(lang);
-      setTimeout(() => {
-        window.location.reload();
-      }, 150);
+      if (lang === "fa" || lang === "en") apply(lang);
     },
     toggleLanguage: toggle,
     getAvailableLanguages: () => ["fa", "en"],

@@ -106,7 +106,7 @@ $email = filter_var($email, FILTER_SANITIZE_EMAIL);
 $subject = htmlspecialchars($subject, ENT_QUOTES, 'UTF-8');
 $message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
 
-if( file_exists($php_email_form = '../assets/vendor/php-email-form/php-email-form.php' )) {
+if (file_exists($php_email_form = __DIR__ . '/../assets/vendor/php-email-form/php-email-form.php')) {
   include( $php_email_form );
 } else {
   http_response_code(500);

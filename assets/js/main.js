@@ -19,6 +19,7 @@
 
   const headerToggleBtn = document.querySelector("#menu-toggle");
   const header = document.querySelector("#header");
+  let menuTrigger = null;
 
   // Simple debounce helper to prevent ReferenceError and calm resize spam
   function debounce(fn, delay = 200) {
@@ -37,8 +38,18 @@
     document.body.appendChild(overlay);
   }
 
+  function syncMenuAccessibility() {
+    if (!header) return;
+
+    const isMobileMenu = window.innerWidth < 1200;
+    const isOpen = header.classList.contains("header-show");
+    header.inert = isMobileMenu && !isOpen;
+    header.setAttribute("aria-hidden", String(isMobileMenu && !isOpen));
+  }
+
   function openMenu() {
     if (header) {
+      menuTrigger = document.activeElement;
       header.classList.add("header-show");
       overlay.classList.add("active");
       if (headerToggleBtn) {
@@ -49,13 +60,15 @@
           icon.classList.add("bi-x");
         }
       }
-      // Improve mobile performance - prevent scroll without changing position
-      document.body.style.overflow = "hidden";
-      // Remove position: fixed and top to prevent page position change
+      document.body.classList.add("menu-open");
+      syncMenuAccessibility();
+
+      const firstMenuLink = header.querySelector(".navmenu a");
+      firstMenuLink?.focus({ preventScroll: true });
     }
   }
 
-  function closeMenu() {
+  function closeMenu({ restoreFocus = false } = {}) {
     if (header) {
       header.classList.remove("header-show");
       overlay.classList.remove("active");
@@ -67,9 +80,11 @@
           icon.classList.remove("bi-x");
         }
       }
-      // Restore scroll position - without changing page position
-      document.body.style.overflow = "";
-      // Remove position: fixed and top to prevent page position change
+      document.body.classList.remove("menu-open");
+      syncMenuAccessibility();
+      if (restoreFocus && menuTrigger instanceof HTMLElement) {
+        menuTrigger.focus({ preventScroll: true });
+      }
     }
   }
 
@@ -87,99 +102,23 @@
   }
 
   if (overlay) {
-    overlay.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", () => closeMenu({ restoreFocus: true }));
   }
 
   // Close menu after clicking menu links on mobile
   document.querySelectorAll("#navmenu a").forEach((navmenu) => {
-    navmenu.addEventListener("click", (e) => {
+    navmenu.addEventListener("click", () => {
       if (
         window.innerWidth < 1200 &&
         header &&
         header.classList.contains("header-show")
       ) {
         closeMenu();
-        // If link is Home and we're elsewhere, prevent going to Hero
-        if (navmenu.getAttribute("href") === "#hero" && window.scrollY > 200) {
-          e.preventDefault();
-          // Just close menu, don't change page position
-        }
       }
     });
   });
 
-  // Close menu when page size changes
-  // This event listener is added at the end of the file
-
-  // Improve mobile performance - prevent body scroll when menu is open
-  function preventBodyScroll() {
-    if (header && header.classList.contains("header-show")) {
-      document.body.style.overflow = "hidden";
-      // Remove position: fixed and top to prevent page position change
-    } else {
-      document.body.style.overflow = "";
-      // Remove position: fixed and top to prevent page position change
-    }
-  }
-
-  // Add event listener for menu state change
-  const observer = new MutationObserver(function (mutations) {
-    mutations.forEach(function (mutation) {
-      if (
-        mutation.type === "attributes" &&
-        mutation.attributeName === "class"
-      ) {
-        preventBodyScroll();
-      }
-    });
-  });
-
-  if (header) {
-    observer.observe(header, { attributes: true });
-  }
-
-  // Improve touch events performance on mobile
-  if ("ontouchstart" in window) {
-    // Add touch support for menu
-    if (headerToggleBtn) {
-      headerToggleBtn.addEventListener(
-        "touchstart",
-        function (e) {
-          e.preventDefault();
-          headerToggle();
-        },
-        { passive: false },
-      );
-    }
-
-    // Improve menu links performance on mobile
-    document.querySelectorAll("#navmenu a").forEach((link) => {
-      link.addEventListener("touchstart", function (e) {
-        // Add small delay for better UX
-        setTimeout(() => {
-          if (
-            window.innerWidth < 1200 &&
-            header &&
-            header.classList.contains("header-show")
-          ) {
-            closeMenu();
-          }
-        }, 100);
-      });
-    });
-
-    // Improve overlay performance on mobile
-    if (overlay) {
-      overlay.addEventListener(
-        "touchstart",
-        function (e) {
-          e.preventDefault();
-          closeMenu();
-        },
-        { passive: false },
-      );
-    }
-  }
+  syncMenuAccessibility();
 
   // Improve keyboard navigation performance
   document.addEventListener("keydown", function (e) {
@@ -188,7 +127,7 @@
       header &&
       header.classList.contains("header-show")
     ) {
-      closeMenu();
+      closeMenu({ restoreFocus: true });
     }
   });
 
@@ -207,6 +146,10 @@
       if (window.innerWidth <= 768) {
         config.duration = 400; // Reduce duration for mobile
         config.offset = 50; // Reduce offset for mobile
+      }
+
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        config.disable = true;
       }
 
       AOS.init(config);
@@ -289,82 +232,85 @@
         const container = isotopeItem.querySelector(".isotope-container");
 
         if (container && window.imagesLoaded && window.Isotope) {
-          // Ensure images are ready
-          imagesLoaded(container, function () {
-            // Improve mobile settings for Isotope
-            let transitionDuration = "0.6s";
-            if (window.innerWidth <= 768) {
-              transitionDuration = "0.4s"; // Reduce duration for mobile
-            }
+          // Initialize before below-the-fold images arrive. Waiting for every
+          // lazy thumbnail delayed filtering and encouraged an unnecessary
+          // 30 MB image fetch on first visit.
+          let transitionDuration = "0.6s";
+          if (window.innerWidth <= 768) {
+            transitionDuration = "0.4s";
+          }
 
-            initIsotope = new Isotope(container, {
-              itemSelector: ".isotope-item",
-              layoutMode: layout,
-              filter: filter,
-              sortBy: sort,
-              transitionDuration: transitionDuration,
-              isOriginLeft: document.documentElement.dir !== "rtl",
-            });
-            container._isotopeInstance = initIsotope;
-            container.classList.add("isotope-ready");
-
-            // Force a relayout after fonts/images settle to avoid broken first render
-            setTimeout(() => initIsotope.arrange(), 150);
-            if (document.fonts && document.fonts.ready) {
-              document.fonts.ready.then(() => {
-                if (container._isotopeInstance)
-                  container._isotopeInstance.arrange();
-              });
-            }
-
-            // After initializing Isotope, refresh AOS
-            if (typeof aosInit === "function") {
-              setTimeout(aosInit, 100);
-            }
+          initIsotope = new Isotope(container, {
+            itemSelector: ".isotope-item",
+            layoutMode: layout,
+            filter: filter,
+            sortBy: sort,
+            transitionDuration: transitionDuration,
+            isOriginLeft: document.documentElement.dir !== "rtl",
           });
+          container._isotopeInstance = initIsotope;
+          container.classList.add("isotope-ready");
+
+          // Relayout incrementally as images and fonts settle instead of
+          // blocking initialization on all lazy media.
+          imagesLoaded(container).on("progress", () => {
+            if (container._isotopeInstance) initIsotope.arrange();
+          });
+          setTimeout(() => initIsotope.arrange(), 150);
+          if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(() => {
+              if (container._isotopeInstance) initIsotope.arrange();
+            });
+          }
+
+          // After initializing Isotope, refresh AOS
+          if (typeof aosInit === "function") {
+            setTimeout(aosInit, 100);
+          }
 
           // Event listeners for filters
           isotopeItem
             .querySelectorAll(".isotope-filters li")
             .forEach(function (filters) {
-              filters.addEventListener(
-                "click",
-                function () {
-                  const activeFilter = isotopeItem.querySelector(
-                    ".isotope-filters .filter-active",
-                  );
-                  if (activeFilter) {
-                    activeFilter.classList.remove("filter-active");
-                  }
-                  this.classList.add("filter-active");
-                  if (initIsotope) {
-                    initIsotope.arrange({
-                      filter: this.getAttribute("data-filter"),
-                    });
-                    // After filtering, refresh AOS too
-                    setTimeout(function () {
-                      if (typeof aosInit === "function") aosInit();
-                    }, 200);
-                  }
-                },
-                false,
+              filters.setAttribute("role", "button");
+              filters.setAttribute("tabindex", "0");
+              filters.setAttribute(
+                "aria-pressed",
+                String(filters.classList.contains("filter-active")),
               );
 
-              // Improve touch events performance for filters on mobile
-              if ("ontouchstart" in window) {
-                filters.addEventListener(
-                  "touchstart",
-                  function (e) {
-                    e.preventDefault();
-                    this.click();
-                  },
-                  { passive: false },
+              const activateFilter = function () {
+                const activeFilter = isotopeItem.querySelector(
+                  ".isotope-filters .filter-active",
                 );
-              }
+                if (activeFilter) {
+                  activeFilter.classList.remove("filter-active");
+                  activeFilter.setAttribute("aria-pressed", "false");
+                }
+                this.classList.add("filter-active");
+                this.setAttribute("aria-pressed", "true");
+                if (initIsotope) {
+                  initIsotope.arrange({
+                    filter: this.getAttribute("data-filter"),
+                  });
+                  setTimeout(function () {
+                    if (typeof aosInit === "function") aosInit();
+                  }, 200);
+                }
+              };
+
+              filters.addEventListener("click", activateFilter, false);
+              filters.addEventListener("keydown", function (event) {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  this.click();
+                }
+              });
             });
-        } else {
-          // If Isotope or imagesLoaded not loaded, try again
-          setTimeout(initPortfolio, 100);
+        } else if (container) {
+          // Keep the Bootstrap grid usable if an optional enhancement fails to
+          // load. Retrying forever creates an unnecessary timer on every page.
+          console.warn("Portfolio enhancements are unavailable; using the static grid.");
         }
       });
   }
@@ -381,6 +327,60 @@
       });
     }, 150),
   );
+
+  function initTypedText() {
+    const typedElement = document.querySelector(".typed");
+    if (!typedElement || !window.Typed) return;
+
+    const language = document.documentElement.lang === "fa" ? "fa" : "en";
+    const source =
+      language === "fa"
+        ? typedElement.getAttribute("data-typed-items-fa")
+        : typedElement.getAttribute("data-typed-items");
+    const strings = (source || "")
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+
+    if (!strings.length) return;
+
+    typedElement._typedInstance?.destroy();
+    typedElement.textContent = strings[0];
+    typedElement.setAttribute("aria-label", strings[0]);
+    typedElement.setAttribute("aria-live", "off");
+    typedElement._typedInstance = new window.Typed(typedElement, {
+      strings,
+      typeSpeed: 70,
+      backSpeed: 35,
+      backDelay: 1800,
+      loop: true,
+    });
+  }
+
+  function labelIconOnlyLinks() {
+    document.querySelectorAll(".preview-link, .details-link").forEach((link) => {
+      if (link.hasAttribute("aria-label")) return;
+      const title =
+        link.closest(".portfolio-content")?.querySelector("h4")?.textContent?.trim() ||
+        link.getAttribute("title") ||
+        "article";
+      const isPreview = link.classList.contains("preview-link");
+      link.setAttribute(
+        "aria-label",
+        isPreview ? `Preview image: ${title}` : `Read article: ${title}`,
+      );
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    initTypedText();
+    labelIconOnlyLinks();
+  });
+
+  window.addEventListener("meetaj:languagechange", () => {
+    initTypedText();
+    labelIconOnlyLinks();
+  });
 
   // Enable tap-to-reveal overlay for portfolio cards on touch devices
   function initPortfolioTouchToggle() {
@@ -423,6 +423,101 @@
   }
 
   window.addEventListener("load", initPortfolioTouchToggle);
+
+  function bindSwiperAutoplayControls(swiperElement, swiper) {
+    const testimonials = swiperElement.closest(".testimonials");
+    const toggle = testimonials?.querySelector("[data-swiper-autoplay-toggle]");
+    if (!testimonials || !toggle || !swiper.autoplay) {
+      toggle?.setAttribute("hidden", "");
+      return;
+    }
+
+    const reducedMotion = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (reducedMotion) {
+      swiper.autoplay.stop();
+      toggle.setAttribute("hidden", "");
+      return;
+    }
+    let userPaused = false;
+
+    const labels = () =>
+      document.documentElement.lang === "fa"
+        ? {
+            pause: "توقف حرکت نظرات",
+            play: "پخش حرکت نظرات",
+            pauseText: "توقف حرکت",
+            playText: "پخش حرکت",
+          }
+        : {
+            pause: "Pause testimonial motion",
+            play: "Play testimonial motion",
+            pauseText: "Pause motion",
+            playText: "Play motion",
+          };
+
+    const updateToggle = () => {
+      const isPaused = userPaused;
+      const label = labels();
+      const icon = toggle.querySelector("i");
+      const text = toggle.querySelector("span");
+
+      toggle.setAttribute("aria-pressed", String(isPaused));
+      toggle.setAttribute("aria-label", isPaused ? label.play : label.pause);
+      toggle.title = isPaused ? label.play : label.pause;
+      icon?.classList.toggle("bi-pause-fill", !isPaused);
+      icon?.classList.toggle("bi-play-fill", isPaused);
+      if (text) text.textContent = isPaused ? label.playText : label.pauseText;
+    };
+
+    const pause = () => swiper.autoplay.stop();
+    const resume = () => {
+      if (!userPaused && !document.hidden) {
+        swiper.autoplay.start();
+      }
+    };
+
+    updateToggle();
+
+    toggle.addEventListener("click", () => {
+      userPaused = !userPaused;
+      if (userPaused) pause();
+      else resume();
+      updateToggle();
+    });
+
+    testimonials.addEventListener("focusin", pause);
+    testimonials.addEventListener("focusout", (event) => {
+      if (!testimonials.contains(event.relatedTarget)) resume();
+    });
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) pause();
+      else resume();
+    });
+    document.addEventListener("meetaj:languagechange", updateToggle);
+  }
+
+  function enhanceSwiperPagination(swiper) {
+    const labelBullets = () => {
+      swiper.pagination?.bullets?.forEach((bullet, index) => {
+        bullet.setAttribute("role", "button");
+        bullet.setAttribute("tabindex", "0");
+        bullet.setAttribute("aria-label", `Show testimonial ${index + 1}`);
+
+        if (bullet.dataset.keyboardReady) return;
+        bullet.dataset.keyboardReady = "true";
+        bullet.addEventListener("keydown", (event) => {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          event.preventDefault();
+          swiper.slideToLoop(index);
+        });
+      });
+    };
+
+    labelBullets();
+    swiper.on("paginationUpdate", labelBullets);
+  }
 
   function initSwiper() {
     if (window.Swiper) {
@@ -473,18 +568,16 @@
                 config.navigation.prevEl = originalNext;
               }
 
-              if (window.innerWidth <= 768) {
-                if (config.autoplay) {
-                  config.autoplay = Object.assign({}, config.autoplay, {
-                    delay: config.autoplay.delay || 4000,
-                    disableOnInteraction: false,
-                  });
-                } else {
-                  config.autoplay = {
-                    delay: 4000,
-                    disableOnInteraction: false,
-                  };
-                }
+              const reducedMotion = window.matchMedia?.(
+                "(prefers-reduced-motion: reduce)",
+              ).matches;
+              if (reducedMotion) {
+                config.autoplay = false;
+              } else if (window.innerWidth <= 768 && config.autoplay) {
+                config.autoplay = Object.assign({}, config.autoplay, {
+                  delay: config.autoplay.delay || 4000,
+                  disableOnInteraction: false,
+                });
               }
 
               if (swiperElement.classList.contains("swiper-tab")) {
@@ -493,9 +586,15 @@
                 }
               } else {
                 const swiper = new Swiper(swiperElement, config);
-
-                // Keep autoplay running continuously for testimonials
-                // No pause/resume functionality - autoplay continues during hover
+                if (isTestimonialsSlider) {
+                  if (!swiperElement.id) swiperElement.id = "testimonials-carousel";
+                  const toggle = isTestimonialsSlider.querySelector(
+                    "[data-swiper-autoplay-toggle]",
+                  );
+                  toggle?.setAttribute("aria-controls", swiperElement.id);
+                  enhanceSwiperPagination(swiper);
+                  bindSwiperAutoplayControls(swiperElement, swiper);
+                }
               }
             } catch (e) {
               console.warn("Invalid Swiper config:", e);
@@ -504,7 +603,11 @@
         });
     }
   }
-  window.addEventListener("load", initSwiper);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSwiper, { once: true });
+  } else {
+    initSwiper();
+  }
 
   window.addEventListener("load", function () {
     if (window.location.hash && document.querySelector(window.location.hash)) {
@@ -554,24 +657,18 @@
     });
   }
   window.addEventListener("load", navmenuScrollspy);
-  document.addEventListener("scroll", navmenuScrollspy);
-
-  // Improve mobile performance for scroll events
-  let scrollTimeout;
-  function throttledScroll() {
-    if (!scrollTimeout) {
-      scrollTimeout = setTimeout(function () {
+  let scrollFrame = null;
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (scrollFrame !== null) return;
+      scrollFrame = window.requestAnimationFrame(() => {
         navmenuScrollspy();
-        scrollTimeout = null;
-      }, 16); // ~60fps
-    }
-  }
-
-  // Use throttled scroll for better performance
-  document.addEventListener("scroll", throttledScroll);
-
-  // Remove old scroll event listener
-  document.removeEventListener("scroll", navmenuScrollspy);
+        scrollFrame = null;
+      });
+    },
+    { passive: true },
+  );
 
   // Improve mobile performance for resize events
   let resizeTimeout;
@@ -601,6 +698,7 @@
     ) {
       closeMenu();
     }
+    syncMenuAccessibility();
   });
 
   // Load-more for articles (portfolio) section
@@ -613,6 +711,7 @@
     const batchSize = 6;
     let visibleCount = batchSize;
     let ready = false;
+    let attempts = 0;
 
     const getFilteredItems = () => {
       const iso = container._isotopeInstance;
@@ -646,9 +745,13 @@
       if (container._isotopeInstance) {
         ready = true;
         updateVisibility();
-      } else {
-        // Wait for isotope to initialize
+      } else if (attempts++ < 20) {
+        // Give the optional layout plugin one second to finish initialization.
         setTimeout(kickOff, 50);
+      } else {
+        // Graceful fallback for pages where the optional plugin is unavailable.
+        ready = true;
+        updateVisibility();
       }
     };
 
@@ -676,29 +779,21 @@
   const preloader = document.querySelector("#preloader");
 
   if (preloader) {
-    // Hide preloader when page is loaded
-    window.addEventListener("load", () => {
-      setTimeout(() => {
-        preloader.classList.remove("visible");
-        preloader.classList.add("hidden");
+    let preloaderDismissed = false;
+    const hidePreloader = () => {
+      if (preloaderDismissed) return;
+      preloaderDismissed = true;
+      preloader.classList.remove("visible");
+      preloader.classList.add("hidden");
+      window.setTimeout(() => {
+        preloader.style.display = "none";
+      }, 200);
+    };
 
-        setTimeout(() => {
-          preloader.style.display = "none";
-        }, 200);
-      }, 500); // Shorten minimum preloader time for faster perceived load
-    });
-
-    // Optional: Hide preloader after minimum time even if page loads faster
-    setTimeout(() => {
-      if (preloader.classList.contains("visible")) {
-        preloader.classList.remove("visible");
-        preloader.classList.add("hidden");
-
-        setTimeout(() => {
-          preloader.style.display = "none";
-        }, 200);
-      }
-    }, 1500); // Tighten maximum wait time
+    // Do not hide meaningful content behind a load-event gate. DOM-ready is
+    // sufficient, while the timeout remains a safe fallback for slow scripts.
+    document.addEventListener("DOMContentLoaded", hidePreloader, { once: true });
+    window.setTimeout(hidePreloader, 900);
   }
 
   // ===============================================
@@ -713,10 +808,30 @@
     const loadingEl = statusContainer?.querySelector(".loading");
     const errorEl = statusContainer?.querySelector(".error-message");
     const sentEl = statusContainer?.querySelector(".sent-message");
+    if (!submitBtn) return;
     const originalText = submitBtn.innerHTML;
+
+    const setLoading = (isLoading) => {
+      loadingEl?.classList.toggle("visible", isLoading);
+      if (isLoading) loadingEl?.setAttribute("aria-busy", "true");
+      else loadingEl?.removeAttribute("aria-busy");
+    };
+
+    const showError = (message) => {
+      const errorSpan = errorEl?.querySelector("span");
+      if (errorSpan) errorSpan.textContent = message;
+      errorEl?.classList.add("visible");
+      window.requestAnimationFrame(() => {
+        errorEl?.focus({ preventScroll: false });
+      });
+    };
 
     form.addEventListener("submit", async function (e) {
       e.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
 
       const formData = new FormData(form);
 
@@ -725,7 +840,7 @@
       submitBtn.innerHTML =
         '<i class="bi bi-hourglass-split"></i><span data-en="Sending..." data-fa="در حال ارسال...">Sending...</span>';
       submitBtn.setAttribute("aria-busy", "true");
-      loadingEl?.classList.add("visible");
+      setLoading(true);
       errorEl?.classList.remove("visible");
       sentEl?.classList.remove("visible");
 
@@ -747,12 +862,8 @@
         }
       } catch (err) {
         console.error("Could not fetch CSRF token:", err);
-        loadingEl?.classList.remove("visible");
-        errorEl?.classList.add("visible");
-        const errorSpan = errorEl?.querySelector("span");
-        if (errorSpan)
-          errorSpan.textContent =
-            "Security token error. Please refresh and try again.";
+        setLoading(false);
+        showError("Security token error. Please refresh and try again.");
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
         submitBtn.removeAttribute("aria-busy");
@@ -773,7 +884,7 @@
 
         if (response.ok && responseText.trim() === "OK") {
           // Show success
-          loadingEl?.classList.remove("visible");
+          setLoading(false);
           sentEl?.classList.add("visible");
           form.reset();
 
@@ -782,20 +893,13 @@
             sentEl?.classList.remove("visible");
           }, 5000);
         } else {
-          loadingEl?.classList.remove("visible");
-          errorEl?.classList.add("visible");
-          const errorSpan = errorEl?.querySelector("span");
-          if (errorSpan)
-            errorSpan.textContent =
-              responseText || "Error sending message. Please try again.";
+          setLoading(false);
+          showError(responseText || "Error sending message. Please try again.");
         }
       } catch (error) {
         console.error("Form submission error:", error);
-        loadingEl?.classList.remove("visible");
-        errorEl?.classList.add("visible");
-        const errorSpan = errorEl?.querySelector("span");
-        if (errorSpan)
-          errorSpan.textContent = "An error occurred. Please try again later.";
+        setLoading(false);
+        showError("An error occurred. Please try again later.");
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;

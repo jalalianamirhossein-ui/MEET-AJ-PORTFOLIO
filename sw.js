@@ -12,14 +12,14 @@
  * - Performance optimization
  * - Dynamic form/API endpoints are NEVER cached
  *
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: AmirHossein Jalalian
  * ===============================================
  */
 
 // Cache configuration
-const ASSET_VERSION = "1000";
-const CACHE_NAME = `meet-aj-v1.0.6-${ASSET_VERSION}`;
+const ASSET_VERSION = "1001";
+const CACHE_NAME = `meet-aj-v1.0.7-${ASSET_VERSION}`;
 const OFFLINE_FALLBACK_CACHE = `meet-aj-offline-${ASSET_VERSION}`;
 
 const versionedAssets = [
@@ -97,25 +97,8 @@ self.addEventListener("install", function (event) {
         return cache.addAll(coreAssets);
       })
       .then(function () {
-        // Pre-cache portfolio images in background (non-blocking)
-        return caches.open(CACHE_NAME).then(function (cache) {
-          return Promise.allSettled(
-            portfolioImages.map((url) =>
-              fetch(url)
-                .then((response) => {
-                  if (response.ok) {
-                    return cache.put(url, response);
-                  }
-                })
-                .catch(() => {
-                  // Silently fail for portfolio images - they'll be cached on demand
-                }),
-            ),
-          );
-        });
-      })
-      .then(function () {
-        // Only skip waiting if core assets cached successfully
+        // Portfolio images are cached on demand by the static-asset strategy.
+        // Avoid fetching ~30 MB during installation on a visitor's first load.
         console.log("Service Worker installed successfully");
         return self.skipWaiting();
       })

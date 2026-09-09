@@ -657,3 +657,119 @@ p {
     display: none;
   }
 }
+
+/* Production responsive and accessibility baseline */
+html {
+  overflow-x: clip;
+  scroll-padding-block-start: 1rem;
+}
+
+body {
+  min-width: 0;
+  overflow-x: clip;
+}
+
+:focus-visible {
+  outline: 3px solid #1d4ed8;
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: fixed;
+  inset-block-start: 0.75rem;
+  inset-inline-start: 0.75rem;
+  z-index: 2000;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  background: var(--text);
+  color: #ffffff;
+  transform: translateY(-150%);
+  transition: transform 160ms ease;
+}
+
+.skip-link:focus-visible {
+  color: #ffffff;
+  transform: translateY(0);
+}
+
+.grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18.75rem), 1fr));
+}
+
+.services-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 21.875rem), 1fr));
+}
+
+.price,
+.timeline-item {
+  flex-wrap: wrap;
+}
+
+.faq-question {
+  inline-size: 100%;
+  border: 0;
+  color: var(--text);
+  text-align: start;
+}
+
+.faq-question:focus-visible {
+  position: relative;
+  z-index: 1;
+}
+
+.btn,
+.faq-question,
+.back-button,
+.lang-btn {
+  min-block-size: 44px;
+}
+
+.back-button {
+  inset-block-start: max(var(--space-4), env(safe-area-inset-top));
+  inset-inline-start: max(var(--space-4), env(safe-area-inset-left));
+}
+
+.rtl .back-button {
+  inset-inline-start: auto;
+  inset-inline-end: max(var(--space-4), env(safe-area-inset-right));
+}
+
+.language-toggle {
+  inset-block-start: max(var(--space-4), env(safe-area-inset-top));
+  inset-inline-end: max(var(--space-4), env(safe-area-inset-right));
+}
+
+.rtl .language-toggle {
+  inset-inline-end: auto;
+  inset-inline-start: max(var(--space-4), env(safe-area-inset-left));
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-inline: var(--space-4);
+  }
+
+  .card {
+    padding: var(--space-5);
+  }
+
+  .back-button {
+    inset-block-start: max(var(--space-4), env(safe-area-inset-top));
+    inset-inline-start: max(var(--space-4), env(safe-area-inset-left));
+  }
+
+  .price .amount {
+    font-size: clamp(2rem, 12vw, 2.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
