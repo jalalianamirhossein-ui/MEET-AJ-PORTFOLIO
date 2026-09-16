@@ -2422,7 +2422,6 @@ body.service-landing .service-title {
   display: grid;
   gap: 0.45rem;
   margin-bottom: 1.75rem;
-  max-width: 40rem;
 }
 
 .section-header h2 {
@@ -2830,9 +2829,14 @@ body.service-landing .service-title {
 
 @media (min-width: 1024px) {
   .service-process {
-    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0 1.5rem;
     padding-top: 0.5rem;
+  }
+
+  .service-process:has(> :nth-child(5)) {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
   .service-process li {
