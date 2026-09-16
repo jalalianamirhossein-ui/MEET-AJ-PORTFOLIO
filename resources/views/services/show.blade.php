@@ -50,7 +50,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/css/services.css?v=1000" />
-    <link href="/assets/css/visual-upgrade.css?v=1119" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1120" rel="stylesheet" />
     <link href="/assets/css/lang-toggle.css?v=1115" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
     <link rel="stylesheet" href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" />
