@@ -11,7 +11,7 @@ Legend:
 - **PRODUCTION TESTED** — meetaj.ir / DirectAdmin (none in this matrix)
 - Status: **PASS** | **FAIL** | **NOT TESTED** | **BLOCKED**
 
-Latest default suite: **30 tests, 584 assertions, 1 skipped, 0 failures**.  
+Latest default suite: **31 tests, 593 assertions, 1 skipped, 0 failures**.  
 `site:compare-content`: **Failures: 0**.  
 MariaDB `MysqlSchemaTest`: **1 test, 7 assertions, OK**.
 
@@ -23,10 +23,10 @@ Skipped in default sqlite suite: `MysqlSchemaTest` (runs only when MySQL is boun
 
 | URL / Feature | Expected | Actual | Test method | Status | Notes |
 |---------------|----------|--------|-------------|--------|-------|
-| `GET /` | 200, section IDs, EN default | 200, IDs present | PHPUnit `test_homepage_and_index_redirect`; `site:compare-content`; browser QA | PASS · LOCAL TESTED | Overlay `visual-upgrade.css?v=1109` |
-| `GET /index.html` | 301 → `/` | 301 | PHPUnit | PASS · LOCAL TESTED | |
-| `GET /articles` | 200, 23 cards, filters | 200 | PHPUnit + browser | PASS · LOCAL TESTED | Same Isotope + `.is-filtered-out` as homepage |
-| `GET /services/{slug}` | 200, imported content, CSRF form | 200 | PHPUnit `ServiceCatalogTest` / `PublicSiteTest` | PASS · LOCAL TESTED | Prices from DB |
+| `GET /` | 200, section IDs, EN default | 200, IDs present | PHPUnit `test_homepage_and_index_redirect`; `site:compare-content`; browser QA | PASS · LOCAL TESTED | Overlay `visual-upgrade.css?v=1120` |
+| `GET /index.html` | 301 → `/` | 301 | PHPUnit | PASS · LOCAL TESTED | Master prompt listed 200; implementation and tests use 301 |
+| `GET /articles` | 200, 23 cards, filters | 200 | PHPUnit + browser | PASS · LOCAL TESTED | Filter controls are `<button type="button">` |
+| `GET /services/{slug}` | 200, landing + hidden quote form | 200 | PHPUnit `ServiceCatalogTest` / `PublicSiteTest`; browser | PASS · LOCAL TESTED | Form revealed by CTA |
 | `GET /services/{slug}.html` | 301 → clean slug | 301 | PHPUnit | PASS · LOCAL TESTED | Query string preserved |
 
 ## Article pages (23)

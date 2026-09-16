@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-16  
 **Source of truth:** application code (`index.html`, Blade, `assets/css`, Filament), not older phase reports.  
-**Status:** Audit used as the implementation plan for the design-system pass.
+**Status:** Implemented 2026-09-16. Overlay `visual-upgrade.css` v1120. See [design-system.md](design-system.md) and [final-project-qa-report.md](final-project-qa-report.md).
 
 ## Verdict of the current visual system
 

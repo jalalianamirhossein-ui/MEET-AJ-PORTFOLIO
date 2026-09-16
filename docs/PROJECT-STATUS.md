@@ -51,7 +51,7 @@ Tables from migrations (no `pages`, no `contact_requests`):
 
 | Environment | Engine | Status |
 |-------------|--------|--------|
-| Default PHPUnit | SQLite `:memory:` | LOCAL TESTED (30 tests, 0 failures) |
+| Default PHPUnit | SQLite `:memory:` | LOCAL TESTED (31 tests, 0 failures) |
 | Local artisan | SQLite `database/database.sqlite` | LOCAL TESTED |
 | MariaDB via `phpunit.mysql.xml` | `127.0.0.1:3307` / `meetaj_test` | INTEGRATION TESTED (`MysqlSchemaTest` 1 test, 7 assertions, OK) |
 | DirectAdmin production DB | — | BLOCKED · NOT TESTED |
@@ -86,7 +86,7 @@ See [DATABASE.md](DATABASE.md).
 
 ## Frontend migration
 
-Blade views rebuilt from original HTML via `php artisan site:publish-assets --views`. Overlay `assets/css/visual-upgrade.css` (cache `v=1109`) after `rtl.css`. No Tailwind. Identity (photo hero, white sidebar, blue footer, `#2563eb`, Poppins / Vazirmatn) retained.
+Blade views rebuilt from original HTML via `php artisan site:publish-assets --views`. Overlay `assets/css/visual-upgrade.css` (cache `v=1120`) after `rtl.css`. No Tailwind. Identity (photo hero, white sidebar, blue footer, `#2563eb`, Poppins / Vazirmatn) retained. Service details render `services/show.blade.php` as landings (form hidden until CTA).
 
 | Item | Status |
 |------|--------|

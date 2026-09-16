@@ -28,6 +28,11 @@ Classifications: **AUTHORITATIVE** | **REFERENCE** | **HISTORICAL** | **DEPLOYME
 | [DOCUMENTATION-CLEANUP-REPORT.md](DOCUMENTATION-CLEANUP-REPORT.md) | What changed in the docs rebuild | Current | REFERENCE |
 | [PROJECT-STRUCTURE-CLEANUP.md](PROJECT-STRUCTURE-CLEANUP.md) | Structure cleanup report | Current | REFERENCE |
 | [get-to-know-me-ui.md](get-to-know-me-ui.md) | About / Get to Know Me UI report | Current | REFERENCE |
+| [design-system.md](design-system.md) | Public overlay tokens and components | Current | AUTHORITATIVE |
+| [full-site-design-audit.md](full-site-design-audit.md) | Pre-implementation visual audit (then implemented) | Current | REFERENCE |
+| [full-site-visual-qa.md](full-site-visual-qa.md) | Viewport matrix and screenshot notes | Current | REFERENCE |
+| [service-detail-ui-qa.md](service-detail-ui-qa.md) | Six service landings + quote form | Current | REFERENCE |
+| [final-project-qa-report.md](final-project-qa-report.md) | UI rebuild acceptance matrix | Current | AUTHORITATIVE |
 
 ## Historical / superseded (retained)
 

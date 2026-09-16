@@ -11,7 +11,7 @@ Visitors see a Blade-rendered site: homepage sections, six service quote pages, 
 ## Features
 
 - Public homepage (`/`) with the original section IDs (`#hero` … `#contact`) and a database-driven service catalog
-- Six service detail pages at `/services/{slug}` (legacy `/services/{slug}.html` 301s once)
+- Six service **landing** pages at `/services/{slug}` (hero → included → pricing → process → FAQ → quote CTA; form hidden until request; legacy `/services/{slug}.html` 301s once)
 - 23 published English articles at `/articles/{slug}` with 301 redirects from `*.html`
 - Category filters on the homepage and `/articles` listing
 - Bilingual UI via `data-en` / `data-fa` (English LTR, Persian RTL)
@@ -19,9 +19,13 @@ Visitors see a Blade-rendered site: homepage sections, six service quote pages, 
 - Filament admin: articles, categories, services (admin-only), contact requests (admin-only)
 - SEO: canonical, Open Graph, Twitter, JSON-LD, `/sitemap.xml`, `/robots.txt`
 - PWA: `manifest.json`, `sw.js`, `/offline.html`
-- Overlay stylesheet `assets/css/visual-upgrade.css` (design tokens, no Tailwind)
+- Overlay stylesheet `assets/css/visual-upgrade.css` (shared design tokens, service landings, no Tailwind)
 
 German is **not** a public language. `/de` returns 404. German article rows cannot be published.
+
+## Design system
+
+Public chrome is unified in `assets/css/visual-upgrade.css` (cache `v=1120`): blue primary `#2563eb`, Poppins/Vazirmatn, 44px controls, shared cards/buttons, service landing layout, CTA-gated quote form. See [docs/design-system.md](docs/design-system.md). Do not add Tailwind, React, Vue, or extra CDNs.
 
 ## Technology stack
 
@@ -111,7 +115,7 @@ Contract is unchanged from the static site:
 
 ## Languages
 
-See [docs/MULTILINGUAL.md](docs/MULTILINGUAL.md). Switcher: `#lang-toggle`, `localStorage` / cookie `lang` (`en` \| `fa`), stylesheet `rtl.css`.
+See [docs/MULTILINGUAL.md](docs/MULTILINGUAL.md). Switcher: glass `#lang-switcher` listbox (`#lang-toggle` button), `localStorage` / cookie `lang` (`en` \| `fa`), stylesheet `rtl.css`. DE is injected only if the page has `[data-de]` (public pages do not).
 
 ## URL migration
 
@@ -171,7 +175,7 @@ Content compare against original HTML (uses the live configured database):
 php artisan site:compare-content
 ```
 
-Latest default-suite result on this machine: **30 tests, 584 assertions, 1 skipped** (`MysqlSchemaTest` unless MySQL is bound), **0 failures**. `site:compare-content`: **Failures: 0**.
+Latest default-suite result on this machine: **31 tests, 593 assertions, 1 skipped** (`MysqlSchemaTest` unless MySQL is bound), **0 failures**. `site:compare-content`: **Failures: 0**.
 
 ## Article import
 
