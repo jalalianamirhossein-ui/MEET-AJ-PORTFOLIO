@@ -1,0 +1,35 @@
+diff --git a/assets/css/main.css b/assets/css/main.css
+index 64ea8d5..04bf8b7 100644
+--- a/assets/css/main.css
++++ b/assets/css/main.css
+@@ -158,6 +158,7 @@
+   color: var(--surface);
+   position: relative;
+   overflow: hidden;
++  
+ }
+ 
+ .hero::after {
+@@ -9851,3 +9852,21 @@ body.menu-open {
+     object-position: 50% 20%;
+   }
+ }
++.header,
++.navmenu {
++  overflow-y: auto;
++
++  /* Firefox */
++  scrollbar-width: none;
++
++  /* IE / Edge Legacy */
++  -ms-overflow-style: none;
++}
++
++/* Chrome / Edge / Safari */
++.header::-webkit-scrollbar,
++.navmenu::-webkit-scrollbar {
++  width: 0;
++  height: 0;
++  display: none;
++}
+\ No newline at end of file
