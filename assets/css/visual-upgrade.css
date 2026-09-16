@@ -12,18 +12,18 @@
   --accent: #0ea5e9;
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
-  --color-primary-soft: #dbeafe;
+  --color-primary-soft: rgba(37, 99, 235, 0.13);
   --color-secondary: #0f172a;
   --color-accent: var(--accent);
   --color-success: #059669;
   --color-danger: #dc2626;
   --color-warning: #d97706;
-  --color-text: #0f172a;
+  --color-text: #1e293b;
   --color-text-muted: #64748b;
-  --color-background: #ffffff;
-  --color-surface: #f8fafc;
+  --color-background: #f4f7fb;
+  --color-surface: #eef4ff;
   --color-surface-elevated: #ffffff;
-  --color-border: #e2e8f0;
+  --color-border: #dce5f1;
   --color-glass: rgba(248, 250, 252, 0.72);
   --text-primary: var(--color-text);
   --text-secondary: var(--color-text-muted);
@@ -45,7 +45,7 @@
   --text-2xl: 1.5rem;
   --text-3xl: 1.875rem;
   --text-4xl: 2.25rem;
-  --text-display: clamp(2.25rem, 5vw, 4.25rem);
+  --text-display: clamp(2rem, 3.35vw, 3.5rem);
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -65,27 +65,30 @@
   --radius-lg: 16px;
   --radius-xl: 20px;
   --radius-pill: 999px;
+  --radius-control: 0.75rem;
+  --radius-panel: 1rem;
   --radius-small: var(--radius-sm);
   --radius-medium: var(--radius-md);
   --radius-large: var(--radius-lg);
 
-  --shadow-subtle: 0 1px 2px rgba(15, 23, 42, 0.06);
-  --shadow-card: 0 8px 24px rgba(15, 23, 42, 0.08);
-  --shadow-elevated: 0 16px 40px rgba(15, 23, 42, 0.1);
+  --shadow-subtle: 0 4px 12px rgba(15, 23, 42, 0.05);
+  --shadow-card: 0 18px 45px rgba(15, 23, 42, 0.1);
+  --shadow-elevated: 0 18px 45px rgba(15, 23, 42, 0.1);
   --shadow-floating: 0 24px 48px rgba(15, 23, 42, 0.14);
+  --shadow-button: 0 7px 16px color-mix(in srgb, var(--primary), transparent 78%);
   --shadow-sm: var(--shadow-subtle);
   --shadow-md: var(--shadow-card);
   --shadow-lg: var(--shadow-elevated);
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --duration-fast: 150ms;
+  --duration-fast: 180ms;
   --duration-normal: 220ms;
-  --duration-slow: 400ms;
+  --duration-slow: 560ms;
 
-  --container: 1140px;
-  --measure: 40rem;
+  --container: 56rem;
+  --measure: 46rem;
   --focus-ring: 2px solid var(--color-primary);
-  --control-height: 44px;
+  --control-height: 2.95rem;
   --text-on-primary: #ffffff;
 }
 
@@ -96,6 +99,30 @@ html {
 body {
   font-family: var(--default-font);
   text-rendering: optimizeLegibility;
+}
+
+body.index-page {
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+body:not(.article-page) .btn,
+body:not(.article-page) button.btn,
+body:not(.article-page) a.btn {
+  min-height: var(--control-height);
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius-control);
+  font-weight: 700;
+}
+
+body:not(.article-page) .btn-primary {
+  box-shadow: var(--shadow-button);
+}
+
+body:not(.article-page) .btn-primary:hover,
+body:not(.article-page) .btn-outline:hover,
+body:not(.article-page) .hero-actions .btn-modern:hover {
+  transform: translateY(-2px);
 }
 
 h1,
@@ -222,25 +249,33 @@ button:disabled {
 # Sections, cards, resume
 --------------------------------------------------------------*/
 .section-title h2 {
-  font-size: clamp(1.5rem, 2vw, 2rem);
+  font-size: clamp(1.45rem, 2.6vw, 2rem);
   font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+  line-height: 1.28;
 }
 
 .section-title p {
   max-width: 46rem;
   color: var(--text-secondary, #64748b);
   font-size: 1rem;
-  line-height: 1.65;
+  line-height: 1.7;
 }
 
 .profile-card,
 .about-card,
 .stats .stats-item,
 .services .service-item,
+.services .service-catalog-card,
 .testimonials .testimonial-item,
-.resume .resume-item {
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+.resume .resume-item,
+.contact-card,
+.contact-form-section {
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+  background: var(--color-surface-elevated);
 }
 
 .profile-card:hover,
@@ -588,8 +623,9 @@ body.service-page .service-title {
 }
 
 body.service-landing.service-page .service-title {
-  font-size: clamp(2.4rem, 6.2vw, 4.35rem);
-  letter-spacing: -0.045em;
+  font-size: clamp(2rem, 4.4vw, 3.5rem);
+  letter-spacing: -0.025em;
+  font-weight: 700;
 }
 
 body.service-page .service-subtitle {
@@ -2196,7 +2232,19 @@ html[dir="rtl"] .resume .resume-item {
 .contact-form-section {
   background: var(--color-surface-elevated);
   border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-subtle);
+  box-shadow: var(--shadow-card);
+  border-radius: var(--radius-panel);
+}
+
+body.index-page .php-email-form input,
+body.index-page .php-email-form textarea,
+body.index-page .php-email-form select {
+  min-height: var(--control-height);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: #fff;
+  color: var(--color-text);
+  box-shadow: none;
 }
 
 .map-container iframe,
@@ -2231,11 +2279,11 @@ html[dir="rtl"] .resume .resume-item {
 }
 
 /*--------------------------------------------------------------
-# Service landing pages — editorial portfolio
+# Service landing pages — article design language
 --------------------------------------------------------------*/
 body.service-landing {
-  background: #f7f8fa;
-  color: #0f172a;
+  background: var(--color-background);
+  color: var(--color-text);
   counter-reset: svc;
   position: relative;
 }
@@ -2244,31 +2292,37 @@ body.service-landing p {
   margin-bottom: 0;
 }
 
-body.service-landing .btn-primary {
-  min-height: 52px;
-  padding-inline: 1.4rem;
-  border-radius: 999px;
-  letter-spacing: 0.01em;
+body.service-landing .btn-primary,
+body.service-landing .btn-outline {
+  min-height: var(--control-height);
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius-control);
+  font-weight: 700;
 }
 
 body.service-landing .btn-outline {
-  min-height: 52px;
-  padding-inline: 1.3rem;
-  border-radius: 999px;
-  border-color: rgba(15, 23, 42, 0.18);
-  color: var(--color-secondary);
-  background: transparent;
+  border-color: var(--color-border);
+  color: var(--color-primary-hover);
+  background: var(--color-surface-elevated);
 }
 
 body.service-landing .btn-outline:hover {
-  background: var(--color-secondary);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-hover);
+  border-color: var(--color-primary);
+}
+
+body.service-landing .btn-primary {
+  background: var(--primary);
+  border-color: var(--primary);
   color: #fff;
-  border-color: var(--color-secondary);
+  box-shadow: var(--shadow-button);
 }
 
 body.service-landing .btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.28);
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-2px);
 }
 
 .service-landing .service-hero,
@@ -2278,12 +2332,23 @@ body.service-landing .btn-primary:hover {
 
 .service-hero {
   position: relative;
+  isolation: isolate;
   overflow: hidden;
-  padding: clamp(5.5rem, 12vw, 8rem) 4.5rem 4.5rem;
+  padding: clamp(3.25rem, 5vw, 4.75rem) 1.5rem clamp(2.5rem, 4vw, 3.75rem);
+  color: var(--color-text);
   background:
-    radial-gradient(1200px 420px at 100% -10%, rgba(37, 99, 235, 0.08), transparent 55%),
-    linear-gradient(180deg, #f4f6f9 0%, #f7f8fa 100%);
-  border-bottom: 0;
+    radial-gradient(circle at 92% 8%, var(--color-primary-soft), transparent 21rem),
+    linear-gradient(180deg, var(--color-surface-elevated) 0%, var(--color-surface) 100%);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.service-hero::before {
+  position: absolute;
+  z-index: 1;
+  inset: 0 0 auto;
+  height: 0.28rem;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  content: "";
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -2312,11 +2377,14 @@ body.service-landing .btn-primary:hover {
 }
 
 .service-hero-inner {
-  width: min(72rem, 100%);
+  width: min(56rem, 100%);
 }
 
 .service-block:not(.service-quote) {
-  width: min(72rem, calc(100% - 9rem));
+  width: min(56rem, calc(100% - 2rem));
+  background: var(--color-surface-elevated);
+  border-inline: 1px solid var(--color-border);
+  padding-inline: clamp(1.15rem, 3.2vw, 2.5rem);
 }
 
 .service-hero-inner {
@@ -2348,12 +2416,20 @@ body.service-landing .btn-primary:hover {
 
 .service-kicker,
 .section-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   margin: 0 0 0.85rem;
-  font-size: 0.72rem;
+  min-height: 2rem;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--primary), transparent 68%);
+  border-radius: 999px;
+  background: var(--color-primary-soft);
+  font-size: 0.76rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--color-primary);
+  color: var(--color-primary-hover);
 }
 
 .service-kicker i {
@@ -2363,14 +2439,15 @@ body.service-landing .btn-primary:hover {
 }
 
 .service-title,
-body.service-landing .service-title {
+body.service-landing .service-title,
+body.service-landing.service-page .service-title {
   margin: 0 0 1.1rem;
   font-family: var(--font-heading);
-  font-size: clamp(2.4rem, 6.2vw, 4.35rem);
-  font-weight: 800;
-  line-height: 0.98;
-  letter-spacing: -0.045em;
-  color: #0f172a;
+  font-size: clamp(2rem, 4.4vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+  color: var(--color-text);
 }
 
 .service-subtitle,
@@ -2414,10 +2491,10 @@ body.service-landing .service-title {
 
 .price-number {
   font-family: var(--font-heading);
-  font-size: clamp(3rem, 7vw, 5rem);
-  font-weight: 800;
-  line-height: 0.9;
-  letter-spacing: -0.05em;
+  font-size: clamp(2.4rem, 5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.025em;
 }
 
 .service-hero-unit {
@@ -2434,26 +2511,30 @@ body.service-landing .service-title {
 
 .service-block {
   margin-inline: auto;
-  padding: clamp(3.25rem, 6vw, 5rem) 0;
-  border-top: 1px solid rgba(15, 23, 42, 0.08);
+  padding: clamp(1.15rem, 3.2vw, 2.5rem) 0;
+  border-top: 1px solid var(--color-border);
   counter-increment: svc;
 }
 
-@media (min-width: 900px) {
-  .service-block:not(.service-quote) {
-    display: grid;
-    grid-template-columns: minmax(13rem, 20rem) minmax(0, 1fr);
-    column-gap: clamp(2rem, 5vw, 4.5rem);
-    align-items: start;
-  }
+.service-block:not(.service-quote):nth-child(2) {
+  border-top: 1px solid var(--color-border);
+  border-radius: 1rem 1rem 0 0;
+  box-shadow: var(--shadow-card);
+  margin-top: -1.25rem;
+}
 
+.service-block:not(.service-quote):nth-last-child(2) {
+  border-radius: 0 0 1rem 1rem;
+  margin-bottom: 1.75rem;
+}
+
+@media (min-width: 900px) {
   .service-block:not(.service-quote) .section-header {
-    margin-bottom: 0;
+    margin-bottom: 1.25rem;
   }
 
   .service-block > .service-process {
-    grid-column: 1 / -1;
-    margin-top: 1.25rem;
+    margin-top: 0.5rem;
   }
 }
 
@@ -2464,17 +2545,35 @@ body.service-landing .service-title {
 }
 
 .section-header {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 0.45rem;
   margin-bottom: 1.75rem;
 }
 
 .section-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
   margin: 0;
-  font-size: clamp(1.7rem, 3vw, 2.35rem);
+  padding-bottom: 0.55rem;
+  border-bottom: 2px solid var(--color-border);
+  font-size: clamp(1.45rem, 2.6vw, 2rem);
   font-weight: 700;
-  letter-spacing: -0.035em;
-  color: #0f172a;
+  letter-spacing: -0.025em;
+  line-height: 1.28;
+  color: var(--color-text);
+}
+
+.section-header h2::before {
+  display: block;
+  flex: 0 0 auto;
+  width: 0.3rem;
+  height: 1.2em;
+  border-radius: 999px;
+  background: linear-gradient(var(--primary), var(--accent));
+  content: "";
 }
 
 .service-lead {
@@ -2585,7 +2684,7 @@ html[dir="ltr"] .service-lines li::before {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0;
+  gap: 0.75rem;
 }
 
 .service-process li {
@@ -2594,29 +2693,22 @@ html[dir="ltr"] .service-lines li::before {
   grid-template-columns: 3.5rem 1fr;
   gap: 1rem;
   align-items: start;
-  padding-block: 1.35rem;
-  padding-inline: 1.15rem 0;
-  background: none;
-  border: 0;
-  border-radius: 0;
+  padding: 0.85rem 1rem;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 0.8rem;
   box-shadow: none;
 }
 
 .service-process li::before {
-  content: "";
-  position: absolute;
-  inset-inline-start: 0;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: rgba(37, 99, 235, 0.22);
+  display: none;
 }
 
 .service-process-num {
   font-family: var(--font-heading);
-  font-size: clamp(1.8rem, 3vw, 2.4rem);
-  font-weight: 800;
-  letter-spacing: -0.05em;
+  font-size: clamp(1.45rem, 2.6vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
   line-height: 1;
   color: var(--color-primary);
 }
@@ -2642,16 +2734,14 @@ html[dir="ltr"] .service-lines li::before {
 
 .service-compact li {
   margin: 0;
-  padding-block: 0.85rem;
-  padding-inline: 1rem 0.25rem;
-  background: none;
-  border: 0;
-  border-inline-start: 2px solid var(--color-primary);
-  border-radius: 0;
+  padding: 0.85rem 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.8rem;
   box-shadow: none;
   font-size: 0.95rem;
   line-height: 1.5;
-  color: #334155;
+  color: var(--color-text);
 }
 
 .service-compact li::before {
@@ -2709,12 +2799,12 @@ html[dir="ltr"] .service-lines li::before {
   display: grid;
   gap: 0;
   text-align: start;
-  background: #0f172a;
-  color: #e2e8f0;
+  background: linear-gradient(180deg, var(--color-surface), var(--color-background) 18rem);
+  color: var(--color-text);
   width: 100%;
   max-width: none;
   margin: 0;
-  padding: clamp(3.5rem, 7vw, 5.5rem) max(1.5rem, 4.25rem);
+  padding: clamp(2rem, 4.5vw, 3.5rem) 1.5rem clamp(2.75rem, 5vw, 4.25rem);
   border-top: 0;
 }
 
@@ -2723,56 +2813,54 @@ html[dir="ltr"] .service-lines li::before {
 .service-quote .service-lead,
 .service-quote > .btn,
 .service-quote .contact-form {
-  width: min(72rem, 100%);
+  width: min(56rem, 100%);
   margin-inline: auto;
 }
 
 .service-quote .section-kicker,
 .service-quote h2,
 .service-quote .service-lead {
-  color: #f8fafc;
+  color: inherit;
 }
 
 .service-quote .section-kicker::before {
-  color: #93c5fd;
+  color: inherit;
 }
 
 .service-quote .service-lead {
   margin: 0 0 1.5rem;
-  color: #cbd5e1;
+  color: var(--color-text-muted);
 }
 
 .service-quote h2 {
-  font-size: clamp(2rem, 4.2vw, 3.15rem);
+  font-size: clamp(1.45rem, 2.6vw, 2rem);
 }
 
 .service-quote > .btn-primary {
   width: auto;
-  min-width: 14rem;
-  background: #fff;
-  color: #0f172a;
-  border-color: #fff;
+  min-width: 12rem;
 }
 
 .service-quote > .btn-primary:hover {
-  background: #dbeafe;
-  border-color: #dbeafe;
-  color: #0f172a;
-}
-
-.service-landing .contact-form[hidden] {
-  display: none !important;
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  color: #fff;
 }
 
 .service-landing .contact-form.show,
 .service-landing .contact-form.is-open {
   display: block;
-  width: min(72rem, 100%);
-  margin: 2rem auto 0;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  border-radius: 0;
+  width: min(56rem, 100%);
+  margin: 1.25rem auto 0;
+  padding: clamp(1.15rem, 3.2vw, 2.5rem);
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-card);
+}
+
+.service-landing .contact-form[hidden] {
+  display: none !important;
 }
 
 .service-landing .php-email-form {
@@ -2789,14 +2877,13 @@ html[dir="ltr"] .service-lines li::before {
 body.service-landing.service-page .form-float input,
 body.service-landing.service-page .form-float select,
 body.service-landing.service-page .form-float textarea {
-  min-height: 3.4rem;
+  min-height: var(--control-height);
   width: 100%;
-  padding: 1.35rem 0.15rem 0.55rem;
-  border: 0;
-  border-bottom: 1px solid rgba(226, 232, 240, 0.35);
-  border-radius: 0;
-  background: transparent;
-  color: #f8fafc;
+  padding: 1.15rem 0.9rem 0.45rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: #fff;
+  color: var(--color-text);
   font: inherit;
   box-shadow: none;
   appearance: none;
@@ -2818,12 +2905,12 @@ body.service-landing.service-page .form-float textarea {
 
 .service-landing .form-float label {
   position: absolute;
-  top: 1rem;
-  inset-inline-start: 0.15rem;
+  top: 0.95rem;
+  inset-inline-start: 0.9rem;
   margin: 0;
-  color: #94a3b8;
-  font-size: 0.92rem;
-  font-weight: 500;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
   pointer-events: none;
   transition: top var(--duration-fast) var(--ease-out), font-size var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
 }
@@ -2835,9 +2922,9 @@ body.service-landing.service-page .form-float textarea {
 .service-landing .form-float select + label {
   top: 0.28rem;
   font-size: 0.68rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #93c5fd;
+  color: var(--color-primary-hover);
 }
 
 body.service-landing.service-page .form-float input:focus,
@@ -2845,17 +2932,17 @@ body.service-landing.service-page .form-float select:focus,
 body.service-landing.service-page .form-float textarea:focus {
   outline: none;
   box-shadow: none;
-  border-bottom-color: #60a5fa;
-  background: transparent;
+  border-color: var(--primary);
+  background: #fff;
 }
 
 .service-landing .form-float input:user-invalid,
 .service-landing .form-float textarea:user-invalid {
-  border-bottom-color: #fca5a5;
+  border-color: #fca5a5;
 }
 
 .service-landing .form-error {
-  color: #fecaca;
+  color: var(--color-danger);
   margin: 0;
 }
 
@@ -2889,8 +2976,12 @@ body.service-landing.service-page .form-float textarea:focus {
   position: absolute;
   top: max(1.1rem, env(safe-area-inset-top));
   z-index: 20;
-  border-radius: 999px;
-  background: rgba(247, 248, 250, 0.92);
+  border-radius: 0.7rem;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  color: var(--color-primary-hover);
+  box-shadow: var(--shadow-subtle);
+  font-weight: 700;
 }
 
 @media (min-width: 768px) {
@@ -2940,9 +3031,8 @@ body.service-landing.service-page .form-float textarea:focus {
 
   .service-process li {
     grid-template-columns: 1fr;
-    padding: 0;
-    padding-inline-end: 0.4rem;
-    border: 0;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--color-border);
   }
 
   .service-process li::before {
@@ -2950,16 +3040,6 @@ body.service-landing.service-page .form-float textarea:focus {
   }
 
   .service-process li::after {
-    content: "";
-    position: absolute;
-    top: 1.15rem;
-    inset-inline-start: 3.4rem;
-    inset-inline-end: 0.4rem;
-    height: 1px;
-    background: rgba(37, 99, 235, 0.25);
-  }
-
-  .service-process li:last-child::after {
     display: none;
   }
 
@@ -2971,7 +3051,7 @@ body.service-landing.service-page .form-float textarea:focus {
 
 @media (max-width: 767px) {
   .service-hero {
-    padding: 4.75rem 1.25rem 3.25rem;
+    padding: clamp(3.25rem, 8vw, 4.25rem) 1.25rem 2.5rem;
   }
 
   .service-hero-inner {
@@ -3020,7 +3100,7 @@ html[dir="rtl"] .section-header h2,
 html[dir="rtl"] .price-number,
 html[dir="rtl"] .service-process-num {
   letter-spacing: 0;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 @media (prefers-reduced-motion: reduce) {
