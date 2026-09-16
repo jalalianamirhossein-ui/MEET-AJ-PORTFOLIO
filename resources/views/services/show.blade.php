@@ -27,6 +27,10 @@
   $ctaFa = data_get($service->presentation, 'cta_fa') ?: $ctaEn;
   $formSubject = data_get($service->presentation, 'form_subject') ?: $service->title.' Quote Request';
   $shortFa = data_get($service->presentation, 'short_description_fa') ?: $service->short_description;
+  $hasNumericPrice = $service->price !== null && $service->price !== '' && $service->price_type !== 'custom_quote';
+  $amountEn = $hasNumericPrice ? number_format((float) $service->price) : null;
+  $amountFa = $amountEn ? strtr($amountEn, ['0' => '۰', '1' => '۱', '2' => '۲', '3' => '۳', '4' => '۴', '5' => '۵', '6' => '۶', '7' => '۷', '8' => '۸', '9' => '۹', ',' => '٬']) : null;
+  $currencyEn = $service->price_currency ?: 'AED';
 @endphp
 <!doctype html>
 <html lang="en" dir="ltr">
@@ -48,9 +52,9 @@
     <meta name="twitter:description" content="{{ $ogDesc }}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/css/services.css?v=1000" />
-    <link href="/assets/css/visual-upgrade.css?v=1120" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1201" rel="stylesheet" />
     <link href="/assets/css/lang-toggle.css?v=1115" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
     <link rel="stylesheet" href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" />
@@ -66,15 +70,30 @@
     <main id="main-content">
       <section class="service-hero" data-aos="fade-up">
         <div class="service-hero-inner">
-          <p class="service-kicker"><i class="{{ $service->iconClass() }}" aria-hidden="true"></i> <span data-en="{{ $service->priceTypeLabel('en') }}" data-fa="{{ $service->priceTypeLabel('fa') }}">{{ $service->priceTypeLabel('en') }}</span></p>
-          <h1 class="service-title" data-en="{{ $service->title }}" data-fa="{{ $titleFa }}">{{ $service->title }}</h1>
-          <p class="service-subtitle" data-en="{{ $service->description }}" data-fa="{{ $descFa }}">{{ $service->description }}</p>
-          <p class="service-hero-price" data-en="{{ $service->displayPrice('en') }}" data-fa="{{ $service->displayPrice('fa') }}">{{ $service->displayPrice('en') }}</p>
-          <div class="service-hero-actions">
-            <a class="btn btn-primary" href="#service-request" data-en="Request a Quote" data-fa="درخواست پیش‌فاکتور">Request a Quote</a>
-            @if ($service->features)
-              <a class="btn btn-outline" href="#included" data-en="See what’s included" data-fa="مشاهده موارد شامل">See what’s included</a>
+          <i class="service-hero-mark {{ $service->iconClass() }}" aria-hidden="true"></i>
+          <div class="service-hero-copy">
+            <p class="service-kicker"><i class="{{ $service->iconClass() }}" aria-hidden="true"></i> <span data-en="{{ $service->priceTypeLabel('en') }}" data-fa="{{ $service->priceTypeLabel('fa') }}">{{ $service->priceTypeLabel('en') }}</span></p>
+            <h1 class="service-title" data-en="{{ $service->title }}" data-fa="{{ $titleFa }}">{{ $service->title }}</h1>
+            <p class="service-subtitle" data-en="{{ $service->description }}" data-fa="{{ $descFa }}">{{ $service->description }}</p>
+          </div>
+          <div class="service-hero-aside">
+            <p class="service-hero-price" aria-label="{{ $service->displayPrice('en') }}">
+              @if ($hasNumericPrice)
+                <span class="price-currency" data-en="{{ $currencyEn }}" data-fa="درهم">{{ $currencyEn }}</span>
+                <span class="price-number" data-en="{{ $amountEn }}" data-fa="{{ $amountFa }}">{{ $amountEn }}</span>
+              @else
+                <span class="price-number" data-en="{{ $service->displayPrice('en') }}" data-fa="{{ $service->displayPrice('fa') }}">{{ $service->displayPrice('en') }}</span>
+              @endif
+            </p>
+            @if (data_get($service->presentation, 'unit_en'))
+              <p class="service-hero-unit muted" data-en="{{ data_get($service->presentation, 'unit_en') }}" data-fa="{{ data_get($service->presentation, 'unit_fa') }}">{{ data_get($service->presentation, 'unit_en') }}</p>
             @endif
+            <div class="service-hero-actions">
+              <a class="btn btn-primary" href="#service-request" data-en="Request a Quote" data-fa="درخواست پیش‌فاکتور">Request a Quote</a>
+              @if ($service->features)
+                <a class="btn btn-outline" href="#included" data-en="See what’s included" data-fa="مشاهده موارد شامل">See what’s included</a>
+              @endif
+            </div>
           </div>
         </div>
       </section>
@@ -95,7 +114,7 @@
             <p class="section-kicker" data-en="Included" data-fa="شامل">Included</p>
             <h2 data-en="What is included" data-fa="چه چیزهایی شامل می‌شود">What is included</h2>
           </header>
-          <ul class="service-include-grid">
+          <ul class="service-include-grid service-lines">
             @foreach ($service->features as $item)
               <li data-en="{{ $item['en'] ?? '' }}" data-fa="{{ $item['fa'] ?? ($item['en'] ?? '') }}">{{ $item['en'] ?? '' }}</li>
             @endforeach
@@ -103,14 +122,21 @@
         </section>
       @endif
 
-      <section class="service-block" id="pricing" data-aos="fade-up">
+      <section class="service-block service-block--pricing" id="pricing" data-aos="fade-up">
         <header class="section-header">
           <p class="section-kicker" data-en="Pricing" data-fa="قیمت‌گذاری">Pricing</p>
           <h2 data-en="Investment" data-fa="سرمایه‌گذاری">Investment</h2>
         </header>
         <div class="service-price-panel">
-          <div>
-            <p class="service-price-amount" data-en="{{ $service->displayPrice('en') }}" data-fa="{{ $service->displayPrice('fa') }}">{{ $service->displayPrice('en') }}</p>
+          <div class="service-price-anchor">
+            <p class="service-price-amount" aria-label="{{ $service->displayPrice('en') }}">
+              @if ($hasNumericPrice)
+                <span class="price-currency" data-en="{{ $currencyEn }}" data-fa="درهم">{{ $currencyEn }}</span>
+                <span class="price-number" data-en="{{ $amountEn }}" data-fa="{{ $amountFa }}">{{ $amountEn }}</span>
+              @else
+                <span class="price-number" data-en="{{ $service->displayPrice('en') }}" data-fa="{{ $service->displayPrice('fa') }}">{{ $service->displayPrice('en') }}</span>
+              @endif
+            </p>
             @if (data_get($service->presentation, 'unit_en'))
               <p class="muted" data-en="{{ data_get($service->presentation, 'unit_en') }}" data-fa="{{ data_get($service->presentation, 'unit_fa') }}">{{ data_get($service->presentation, 'unit_en') }}</p>
             @endif
@@ -119,7 +145,7 @@
             @endif
           </div>
           @if ($exclusions)
-            <div>
+            <div class="service-price-notes">
               <h3 data-en="Exclusions & Assumptions" data-fa="فرضیات و خارج از شمول">Exclusions & Assumptions</h3>
               <ul class="service-plain-list">
                 @foreach ($exclusions as $item)
@@ -137,7 +163,7 @@
             <p class="section-kicker" data-en="Deliverables" data-fa="اقلام قابل تحویل">Deliverables</p>
             <h2 data-en="What you receive" data-fa="آنچه تحویل می‌گیرید">What you receive</h2>
           </header>
-          <ul class="service-include-grid">
+          <ul class="service-include-grid service-lines">
             @foreach ($deliverables as $item)
               <li data-en="{{ $item['en'] ?? '' }}" data-fa="{{ $item['fa'] ?? ($item['en'] ?? '') }}">{{ $item['en'] ?? '' }}</li>
             @endforeach
@@ -153,7 +179,7 @@
           </header>
           <ol class="service-process">
             @foreach ($service->process as $index => $step)
-              <li>
+              <li data-aos="fade-up" data-aos-delay="{{ min(400, $index * 80) }}">
                 <span class="service-process-num">{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</span>
                 <div>
                   <h3 data-en="{{ $step['en'] ?? '' }}" data-fa="{{ $step['fa'] ?? ($step['en'] ?? '') }}">{{ $step['en'] ?? '' }}</h3>
@@ -171,7 +197,7 @@
             <p class="section-kicker" data-en="SLA" data-fa="SLA">SLA</p>
             <h2 data-en="SLA & Warranty" data-fa="SLA و وارانتی">SLA & Warranty</h2>
           </header>
-          <ul class="service-include-grid">
+          <ul class="service-include-grid service-compact">
             @foreach ($sla as $item)
               <li data-en="{{ $item['en'] ?? '' }}" data-fa="{{ $item['fa'] ?? ($item['en'] ?? '') }}">{{ $item['en'] ?? '' }}</li>
             @endforeach
@@ -185,7 +211,7 @@
             <p class="section-kicker" data-en="Optional" data-fa="اختیاری">Optional</p>
             <h2 data-en="Optional Add-ons" data-fa="افزونه‌های اختیاری">Optional Add-ons</h2>
           </header>
-          <ul class="service-include-grid">
+          <ul class="service-include-grid service-compact">
             @foreach ($addons as $item)
               <li data-en="{{ $item['en'] ?? '' }}" data-fa="{{ $item['fa'] ?? ($item['en'] ?? '') }}">{{ $item['en'] ?? '' }}</li>
             @endforeach
@@ -228,37 +254,37 @@
               <label for="website-field">Website</label>
               <input type="text" name="website" id="website-field" tabindex="-1" autocomplete="off" />
             </div>
-            <div class="form-group">
+            <div class="form-group form-float">
+              <input type="text" name="name" id="contact-name" placeholder=" " required minlength="2" maxlength="50" autocomplete="name" />
               <label for="contact-name" data-en="Full Name" data-fa="نام کامل">Full Name</label>
-              <input type="text" name="name" id="contact-name" required minlength="2" maxlength="50" autocomplete="name" />
             </div>
-            <div class="form-group">
+            <div class="form-group form-float">
+              <input type="email" name="email" id="contact-email" placeholder=" " required maxlength="100" autocomplete="email" />
               <label for="contact-email" data-en="Email Address" data-fa="آدرس ایمیل">Email Address</label>
-              <input type="email" name="email" id="contact-email" required maxlength="100" autocomplete="email" />
             </div>
-            <div class="form-group">
+            <div class="form-group form-float">
+              <input type="tel" name="phone" id="contact-phone" placeholder=" " autocomplete="tel" />
               <label for="contact-phone" data-en="Phone Number" data-fa="شماره تلفن">Phone Number</label>
-              <input type="tel" name="phone" id="contact-phone" autocomplete="tel" />
             </div>
-            <div class="form-group">
-              <label for="contact-service" data-en="Service" data-fa="خدمت">Service</label>
+            <div class="form-group form-float">
               <select name="service" id="contact-service" required>
                 @foreach ($catalog as $option)
                   <option value="{{ $option->slug }}" @selected($option->id === $service->id) data-en="{{ $option->title }}" data-fa="{{ data_get($option->presentation, 'title_fa') ?: $option->title }}">{{ $option->title }}</option>
                 @endforeach
               </select>
+              <label for="contact-service" data-en="Service" data-fa="خدمت">Service</label>
             </div>
-            <div class="form-group">
+            <div class="form-group form-float form-span">
+              <input type="text" name="subject" id="contact-subject" placeholder=" " required minlength="5" maxlength="100" value="{{ $formSubject }}" />
               <label for="contact-subject" data-en="Subject" data-fa="موضوع">Subject</label>
-              <input type="text" name="subject" id="contact-subject" required minlength="5" maxlength="100" value="{{ $formSubject }}" />
             </div>
-            <div class="form-group">
+            <div class="form-group form-float form-span">
+              <textarea name="message" id="contact-message" rows="7" placeholder=" " required minlength="10" maxlength="1000"></textarea>
               <label for="contact-message" data-en="Project Details" data-fa="جزئیات پروژه">Project Details</label>
-              <textarea name="message" id="contact-message" rows="4" required minlength="10" maxlength="1000"></textarea>
             </div>
             <input type="hidden" name="csrf_token" id="csrf_token" value="" />
-            <div class="form-error" id="form-error" role="alert" aria-live="assertive" hidden></div>
-            <button type="submit" class="btn btn-primary" data-en="Submit Request" data-fa="ارسال درخواست">Submit Request</button>
+            <div class="form-error form-span" id="form-error" role="alert" aria-live="assertive" hidden></div>
+            <button type="submit" class="btn btn-primary form-span" data-en="Submit Request" data-fa="ارسال درخواست">Submit Request</button>
           </form>
         </div>
       </section>

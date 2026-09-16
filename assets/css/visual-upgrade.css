@@ -587,6 +587,11 @@ body.service-page .service-title {
   color: var(--text-primary, #0f172a);
 }
 
+body.service-landing.service-page .service-title {
+  font-size: clamp(2.4rem, 6.2vw, 4.35rem);
+  letter-spacing: -0.045em;
+}
+
 body.service-page .service-subtitle {
   color: var(--text-secondary, #64748b);
   line-height: 1.65;
@@ -2226,12 +2231,37 @@ html[dir="rtl"] .resume .resume-item {
 }
 
 /*--------------------------------------------------------------
-# Service landing pages
+# Service landing pages — editorial portfolio
 --------------------------------------------------------------*/
-body.service-landing {
-  font-family: var(--font-body);
-  color: var(--color-text);
-  background: var(--color-background);
+body.service-landing p {
+  margin-bottom: 0;
+}
+
+body.service-landing .btn-primary {
+  min-height: 52px;
+  padding-inline: 1.4rem;
+  border-radius: 999px;
+  letter-spacing: 0.01em;
+}
+
+body.service-landing .btn-outline {
+  min-height: 52px;
+  padding-inline: 1.3rem;
+  border-radius: 999px;
+  border-color: rgba(15, 23, 42, 0.18);
+  color: var(--color-secondary);
+  background: transparent;
+}
+
+body.service-landing .btn-outline:hover {
+  background: var(--color-secondary);
+  color: #fff;
+  border-color: var(--color-secondary);
+}
+
+body.service-landing .btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.28);
 }
 
 .service-landing .service-hero,
@@ -2240,69 +2270,172 @@ body.service-landing {
 }
 
 .service-hero {
-  padding: clamp(4.75rem, 10vw, 6.5rem) 1.25rem 3rem;
+  position: relative;
+  overflow: hidden;
+  padding: clamp(5.5rem, 12vw, 8rem) 1.5rem 4.5rem;
   background:
-    linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
-  border-bottom: 1px solid var(--color-border);
+    radial-gradient(1200px 420px at 100% -10%, rgba(37, 99, 235, 0.08), transparent 55%),
+    linear-gradient(180deg, #f4f6f9 0%, #f7f8fa 100%);
+  border-bottom: 0;
 }
 
-.service-hero-inner,
-.service-block {
-  width: min(46rem, calc(100% - 2rem));
+.service-hero-inner {
+  position: relative;
+  z-index: 1;
+  width: min(72rem, calc(100% - 2rem));
   margin-inline: auto;
+  display: grid;
+  gap: 2.5rem;
 }
 
-.service-block {
-  padding: clamp(2.5rem, 5vw, 4rem) 0;
+.service-hero-mark {
+  position: absolute;
+  inset-inline-end: -0.4rem;
+  top: -1.2rem;
+  font-size: clamp(7rem, 18vw, 14rem);
+  line-height: 1;
+  color: #2563eb;
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.service-hero-copy {
+  position: relative;
+  z-index: 1;
+  max-width: 38rem;
 }
 
 .service-kicker,
 .section-kicker {
-  margin: 0 0 0.5rem;
-  font-size: var(--text-xs);
+  margin: 0 0 0.85rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-primary);
 }
 
-.service-title {
-  margin: 0 0 0.75rem;
+.service-kicker i {
+  margin-inline-end: 0.4rem;
+  font-size: 0.9rem;
+  vertical-align: -1px;
+}
+
+.service-title,
+body.service-landing .service-title {
+  margin: 0 0 1.1rem;
   font-family: var(--font-heading);
-  font-size: clamp(1.85rem, 4vw, 2.75rem);
-  line-height: 1.15;
-  letter-spacing: -0.03em;
+  font-size: clamp(2.4rem, 6.2vw, 4.35rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  color: #0f172a;
 }
 
 .service-subtitle,
 .service-lead {
-  max-width: var(--measure);
-  margin: 0 0 1.25rem;
-  font-size: var(--text-md);
-  line-height: 1.7;
-  color: var(--color-text-muted);
+  max-width: 36rem;
+  margin: 0;
+  font-size: clamp(1.02rem, 1.5vw, 1.15rem);
+  line-height: 1.75;
+  color: #64748b;
 }
 
-.service-hero-price {
-  margin: 0 0 1.5rem;
-  font-size: clamp(1.5rem, 3vw, 2rem);
+.service-hero-aside {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.service-hero-price,
+.service-price-amount {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.55rem 0.75rem;
+  margin: 0;
+  color: #0f172a;
+}
+
+.price-currency {
+  font-size: 0.85rem;
   font-weight: 700;
-  color: var(--color-text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.price-number {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 7vw, 5rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+}
+
+.service-hero-unit {
+  margin: 0 0 1.1rem;
+  font-size: 0.92rem;
 }
 
 .service-hero-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.service-block {
+  width: min(72rem, calc(100% - 2rem));
+  margin-inline: auto;
+  padding: clamp(3.25rem, 6vw, 5rem) 0;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+  counter-increment: svc;
+}
+
+@media (min-width: 900px) {
+  .service-block:not(.service-quote) {
+    display: grid;
+    grid-template-columns: minmax(13rem, 20rem) minmax(0, 1fr);
+    column-gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+
+  .service-block:not(.service-quote) .section-header {
+    margin-bottom: 0;
+  }
+}
+
+.service-block .section-kicker::before {
+  content: counter(svc, decimal-leading-zero) "  ";
+  color: #94a3b8;
+  letter-spacing: 0.12em;
 }
 
 .section-header {
-  margin-bottom: 1.25rem;
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 1.75rem;
+  max-width: 40rem;
 }
 
 .section-header h2 {
   margin: 0;
-  font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+  font-size: clamp(1.7rem, 3vw, 2.35rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  color: #0f172a;
+}
+
+.service-lead {
+  margin-top: 0;
+  font-size: 1.125rem;
 }
 
 .service-include-grid,
@@ -2310,50 +2443,81 @@ body.service-landing {
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+.service-lines {
   display: grid;
-  gap: 0.75rem;
-}
-
-.service-include-grid {
   grid-template-columns: 1fr;
+  gap: 0;
 }
 
-.service-include-grid li,
-.service-price-panel,
-.service-quote {
-  background: var(--color-surface-elevated);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-subtle);
-  padding: 1rem 1.1rem;
-}
-
-.service-include-grid li {
+.service-lines li {
   position: relative;
-  padding-inline-start: 1.75rem;
+  margin: 0;
+  padding: 1.05rem 0 1.05rem 1.7rem;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: #334155;
 }
 
-.service-include-grid li::before {
+.service-lines li::before {
   content: "";
   position: absolute;
-  inset-inline-start: 0.7rem;
-  top: 1.2rem;
-  width: 0.45rem;
-  height: 0.45rem;
-  border-radius: 50%;
+  inset-inline-start: 0;
+  top: 1.4rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 0;
   background: var(--color-primary);
+}
+
+.service-block--pricing {
+  background: transparent;
 }
 
 .service-price-panel {
   display: grid;
-  gap: 1.25rem;
-  padding: 1.5rem;
+  gap: 2.5rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  align-items: end;
 }
 
-.service-price-amount {
-  margin: 0;
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
+.service-price-anchor .muted {
+  margin: 0.45rem 0 0;
+  max-width: 22rem;
+}
+
+.service-price-notes h3 {
+  margin: 0 0 0.85rem;
+  font-size: 0.78rem;
   font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.service-plain-list li {
+  position: relative;
+  padding: 0.45rem 0 0.45rem 1.1rem;
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.service-plain-list li::before {
+  content: "–";
+  position: absolute;
+  inset-inline-start: 0;
+  color: #94a3b8;
 }
 
 .service-process {
@@ -2361,50 +2525,90 @@ body.service-landing {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 1rem;
+  gap: 0;
 }
 
 .service-process li {
+  position: relative;
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 3.5rem 1fr;
   gap: 1rem;
   align-items: start;
-  padding: 1rem 1.1rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  padding: 1.35rem 0 1.35rem 1.15rem;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.service-process li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(37, 99, 235, 0.22);
 }
 
 .service-process-num {
   font-family: var(--font-heading);
-  font-size: 1.15rem;
-  font-weight: 700;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1;
   color: var(--color-primary);
 }
 
 .service-process h3 {
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.3rem;
   font-size: 1.05rem;
+  font-weight: 650;
+  color: #0f172a;
 }
 
 .service-process p {
   margin: 0;
-  color: var(--color-text-muted);
-  font-size: var(--text-sm);
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.service-compact {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem 2rem;
+}
+
+.service-compact li {
+  margin: 0;
+  padding: 0.85rem 0 0.85rem 1rem;
+  background: none;
+  border: 0;
+  border-inline-start: 2px solid var(--color-primary);
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #334155;
+}
+
+.service-compact li::before {
+  display: none;
 }
 
 .service-faq .faq-item {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  margin-bottom: 0.75rem;
+  border: 0;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 0;
+  margin: 0;
+  background: transparent;
   overflow: hidden;
-  background: var(--color-surface-elevated);
 }
 
 .service-faq .faq-question {
   width: 100%;
   min-height: var(--control-height);
-  padding: 0.85rem 1rem;
+  padding: 1.05rem 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -2414,15 +2618,64 @@ body.service-landing {
   text-align: start;
   font: inherit;
   font-weight: 600;
+  color: #0f172a;
   cursor: pointer;
 }
 
+.service-faq .faq-question i {
+  color: var(--color-primary);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
 .service-faq .faq-answer {
-  padding: 0 1rem 1rem;
+  padding: 0 0 1.1rem;
+  color: #64748b;
 }
 
 .service-quote {
   text-align: start;
+  background: #0f172a;
+  color: #e2e8f0;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: clamp(3.5rem, 7vw, 5.5rem) 1.5rem;
+  border-top: 0;
+}
+
+.service-quote .section-header,
+.service-quote .php-email-form,
+.service-quote .service-lead,
+.service-quote > .btn {
+  width: min(72rem, 100%);
+  margin-inline: auto;
+}
+
+.service-quote .section-kicker,
+.service-quote h2,
+.service-quote .service-lead {
+  color: #f8fafc;
+}
+
+.service-quote .section-kicker::before {
+  color: #93c5fd;
+}
+
+.service-quote .service-lead {
+  margin: 0 0 1.5rem;
+  color: #cbd5e1;
+}
+
+.service-quote > .btn-primary {
+  background: #fff;
+  color: #0f172a;
+  border-color: #fff;
+}
+
+.service-quote > .btn-primary:hover {
+  background: #dbeafe;
+  border-color: #dbeafe;
+  color: #0f172a;
 }
 
 .service-landing .contact-form[hidden] {
@@ -2432,46 +2685,96 @@ body.service-landing {
 .service-landing .contact-form.show,
 .service-landing .contact-form.is-open {
   display: block;
-  margin-top: 1.5rem;
-  padding: 1.25rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  width: min(72rem, 100%);
+  margin: 2rem auto 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
 }
 
-.service-landing .form-group input,
-.service-landing .form-group select,
-.service-landing .form-group textarea {
-  min-height: var(--control-height);
+.service-landing .php-email-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem 1.25rem;
+}
+
+.service-landing .form-group {
+  position: relative;
+  margin: 0;
+}
+
+.service-landing .form-float input,
+.service-landing .form-float select,
+.service-landing .form-float textarea {
+  min-height: 3.4rem;
   width: 100%;
-  padding: 0.7rem 0.85rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: #fff;
-  color: var(--color-text);
+  padding: 1.35rem 0.95rem 0.55rem;
+  border: 0;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.35);
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.04);
+  color: #f8fafc;
   font: inherit;
 }
 
-.service-landing .form-group input,
-.service-landing .form-group textarea {
-  appearance: none;
+.service-landing .form-float textarea {
+  min-height: 11rem;
+  resize: vertical;
 }
 
-.service-landing .form-group textarea {
-  min-height: 8rem;
+.service-landing .form-float label {
+  position: absolute;
+  top: 1rem;
+  inset-inline-start: 0.95rem;
+  margin: 0;
+  color: #94a3b8;
+  font-size: 0.92rem;
+  font-weight: 500;
+  pointer-events: none;
+  transition: top var(--duration-fast) var(--ease-out), font-size var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
 }
 
-.service-landing .form-group input:focus,
-.service-landing .form-group select:focus,
-.service-landing .form-group textarea:focus {
-  outline: var(--focus-ring);
-  outline-offset: 2px;
-  border-color: var(--color-primary);
+.service-landing .form-float input:focus + label,
+.service-landing .form-float input:not(:placeholder-shown) + label,
+.service-landing .form-float textarea:focus + label,
+.service-landing .form-float textarea:not(:placeholder-shown) + label,
+.service-landing .form-float select + label {
+  top: 0.28rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #93c5fd;
 }
 
-.service-landing .form-group input:user-invalid,
-.service-landing .form-group textarea:user-invalid {
-  border-color: var(--color-danger);
+.service-landing .form-float input:focus,
+.service-landing .form-float select:focus,
+.service-landing .form-float textarea:focus {
+  outline: none;
+  border-bottom-color: #60a5fa;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.service-landing .form-float input:user-invalid,
+.service-landing .form-float textarea:user-invalid {
+  border-bottom-color: #fca5a5;
+}
+
+.service-landing .form-error {
+  color: #fecaca;
+  margin: 0;
+}
+
+.service-landing .php-email-form .btn-primary {
+  justify-self: start;
+  min-width: 12rem;
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+.service-landing .toast {
+  background: #059669;
 }
 
 .service-landing .toast.show {
@@ -2480,26 +2783,94 @@ body.service-landing {
 
 .service-landing .back-button {
   z-index: 30;
+  border-radius: 999px;
+  background: rgba(247, 248, 250, 0.92);
 }
 
 @media (min-width: 768px) {
-  .service-include-grid {
+  .service-hero-inner {
+    grid-template-columns: minmax(0, 1.2fr) minmax(16rem, 0.8fr);
+    align-items: end;
+    gap: 4rem;
+  }
+
+  .service-hero-aside {
+    border-top: 0;
+    border-inline-start: 1px solid rgba(15, 23, 42, 0.1);
+    padding: 0 0 0.2rem 2rem;
+  }
+
+  html[dir="rtl"] .service-hero-aside {
+    padding: 0 2rem 0.2rem 0;
+  }
+
+  .service-lines {
     grid-template-columns: 1fr 1fr;
+    column-gap: 3.5rem;
   }
 
   .service-price-panel {
-    grid-template-columns: minmax(12rem, 0.8fr) 1fr;
-    align-items: start;
+    grid-template-columns: minmax(16rem, 0.85fr) 1fr;
+    gap: 4rem;
   }
 
-  .service-process {
+  .service-compact {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .service-landing .php-email-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .service-landing .form-span,
+  .service-landing .php-email-form .btn[type="submit"] {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .service-process {
+    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    gap: 0 1.5rem;
+    padding-top: 0.5rem;
+  }
+
+  .service-process li {
+    grid-template-columns: 1fr;
+    padding: 0 0.4rem 0 0;
+    border: 0;
+  }
+
+  .service-process li::before {
+    display: none;
+  }
+
+  .service-process li::after {
+    content: "";
+    position: absolute;
+    top: 1.15rem;
+    inset-inline-start: 3.4rem;
+    inset-inline-end: 0.4rem;
+    height: 1px;
+    background: rgba(37, 99, 235, 0.25);
+  }
+
+  .service-process li:last-child::after {
+    display: none;
+  }
+
+  .service-compact {
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }
 
 @media (max-width: 767px) {
+  .service-hero {
+    padding-top: 5.5rem;
+  }
+
   .service-hero-actions .btn,
-  .service-quote .btn {
+  .service-quote > .btn {
     width: 100%;
   }
 
@@ -2508,10 +2879,22 @@ body.service-landing {
     margin: 0.75rem 1rem 0;
     inset: auto;
   }
+
+  .price-number {
+    font-size: clamp(2.4rem, 14vw, 3.4rem);
+  }
 }
 
 html[dir="rtl"] .service-landing {
   font-family: "Vazirmatn", var(--font-body);
+}
+
+html[dir="rtl"] .service-title,
+html[dir="rtl"] .section-header h2,
+html[dir="rtl"] .price-number,
+html[dir="rtl"] .service-process-num {
+  letter-spacing: 0;
+  font-weight: 800;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2520,7 +2903,8 @@ html[dir="rtl"] .service-landing {
   .resume .resume-item,
   .service-include-grid li,
   .service-process li,
-  .btn {
+  .btn,
+  .service-hero-mark {
     transition: none;
     animation: none;
     transform: none;
