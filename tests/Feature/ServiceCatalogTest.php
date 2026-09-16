@@ -1,0 +1,153 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\Service;
+use App\Models\User;
+use App\Services\LegacyServiceImporter;
+use App\Services\LegacySitePublisher;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Validation\ValidationException;
+use Tests\TestCase;
+
+class ServiceCatalogTest extends TestCase
+{
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        app(LegacySitePublisher::class)->buildViews();
+        app(LegacyServiceImporter::class)->import(false);
+    }
+
+    public function test_six_published_services_are_imported_from_source_html(): void
+    {
+        $this->assertSame(6, Service::query()->count());
+        $this->assertSame(6, Service::query()->publicCatalog()->count());
+        $this->assertSame([
+            'network-design',
+            'system-administration',
+            'devops-automation',
+            'monitoring-security',
+            'virtualization-solutions',
+            'technical-consulting',
+        ], Service::query()->publicCatalog()->pluck('slug')->all());
+    }
+
+    public function test_homepage_lists_published_prices_and_hides_drafts(): void
+    {
+        $home = $this->get('/')->assertOk();
+        $home->assertSee('id="service-catalog"', false);
+        $home->assertSee('AED 4,900', false);
+        $home->assertSee('/services/network-design', false);
+        $home->assertSee('View Details', false);
+        $home->assertSee('Request Service', false);
+
+        $draft = Service::query()->where('slug', 'technical-consulting')->firstOrFail();
+        $draft->status = 'draft';
+        $draft->save();
+
+        $this->get('/')->assertOk()->assertDontSee('/services/technical-consulting"', false);
+        $this->get('/services/technical-consulting')->assertNotFound();
+        $this->get('/sitemap.xml')->assertOk()->assertDontSee('/services/technical-consulting', false);
+    }
+
+    public function test_service_request_stores_service_id(): void
+    {
+        $token = $this->get('/forms/get-csrf-token.php')->json('token');
+        $this->post('/forms/contact.php', [
+            'csrf_token' => $token,
+            'name' => 'Service Buyer',
+            'email' => 'service-buyer@example.com',
+            'phone' => '0501234567',
+            'service' => 'network-design',
+            'subject' => 'Network Design Quote Request',
+            'message' => 'Please quote a campus network refresh.',
+        ])->assertOk()->assertSee('OK', false);
+
+        $serviceId = Service::query()->where('slug', 'network-design')->value('id');
+        $this->assertDatabaseHas('requests', [
+            'email' => 'service-buyer@example.com',
+            'service_id' => $serviceId,
+            'subject' => 'Network Design Quote Request',
+        ]);
+    }
+
+    public function test_unpublished_slug_does_not_attach_and_homepage_contact_still_works(): void
+    {
+        $token = $this->get('/forms/get-csrf-token.php')->json('token');
+        $this->post('/forms/contact.php', [
+            'csrf_token' => $token,
+            'name' => 'Homepage User',
+            'email' => 'homepage-user@example.com',
+            'subject' => 'Need help with network',
+            'message' => 'This is a valid test message.',
+            'service' => 'not-a-real-service',
+        ])->assertOk();
+        $this->assertDatabaseHas('requests', [
+            'email' => 'homepage-user@example.com',
+            'service_id' => null,
+        ]);
+    }
+
+    public function test_admin_can_manage_services_and_editors_cannot(): void
+    {
+        $editor = User::create(['name' => 'Editor', 'email' => 'svc-editor@example.test', 'password' => 'password12chars']);
+        $editor->forceFill(['role' => 'editor'])->save();
+        $admin = User::create(['name' => 'Admin', 'email' => 'svc-admin@example.test', 'password' => 'password12chars']);
+        $admin->forceFill(['role' => 'admin'])->save();
+
+        $this->assertFalse($editor->fresh()->can('viewAny', Service::class));
+        $this->assertTrue($admin->fresh()->can('viewAny', Service::class));
+        \Livewire\Livewire::actingAs($editor)
+            ->test(\App\Filament\Resources\ServiceResource\Pages\ListServices::class)
+            ->assertForbidden();
+        \Livewire\Livewire::actingAs($admin)
+            ->test(\App\Filament\Resources\ServiceResource\Pages\ListServices::class)
+            ->assertOk();
+        $this->actingAs($admin)->get('/admin/services')->assertOk();
+    }
+
+    public function test_price_changes_are_admin_controlled_and_german_stays_draft(): void
+    {
+        $service = Service::query()->where('slug', 'network-design')->firstOrFail();
+        $service->price = 500;
+        $service->price_type = 'starting_from';
+        $service->price_currency = 'AED';
+        $service->save();
+
+        $this->get('/services/network-design')->assertOk()->assertSee('Starting from 500 AED', false);
+        $this->get('/')->assertOk()->assertSee('Starting from 500 AED', false);
+
+        $this->expectException(ValidationException::class);
+        Service::create([
+            'title' => 'Netzwerk',
+            'slug' => 'netzwerk',
+            'language' => 'de',
+            'short_description' => 'Entwurf',
+            'status' => 'published',
+            'published_at' => now(),
+            'price_type' => 'custom_quote',
+        ]);
+    }
+
+    public function test_legacy_query_string_survives_service_redirect(): void
+    {
+        $this->get('/services/network-design.html?ref=nav')->assertRedirect('/services/network-design?ref=nav');
+        $this->get('/services/does-not-exist')->assertNotFound();
+    }
+
+    public function test_service_landing_keeps_quote_form_hidden_until_cta(): void
+    {
+        $html = $this->get('/services/network-design')->assertOk()->getContent();
+        $this->assertStringContainsString('<h1', $html);
+        $this->assertStringContainsString('php-email-form', $html);
+        $this->assertStringContainsString('csrf_token', $html);
+        $this->assertStringContainsString('Request a Quote', $html);
+        $this->assertStringContainsString('id="contactForm" hidden', $html);
+        $this->assertStringNotContainsString('class="contact-form show"', $html);
+        $this->assertStringContainsString('Need this service?', $html);
+        $this->assertStringContainsString('What is included', $html);
+    }
+}

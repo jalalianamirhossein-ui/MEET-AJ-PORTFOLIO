@@ -1,0 +1,84 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\Article;
+
+class ArticleSeo
+{
+    public function forArticle(Article $article): array
+    {
+        $seo = $article->seo_data ?? [];
+        $canonical = $article->canonicalUrl();
+        $image = $article->imageUrl();
+        $title = $article->meta_title ?: $article->title;
+        $description = $article->meta_description ?: $article->excerpt;
+
+        $schema = $seo['schema'] ?? null;
+        if (! is_array($schema) || ($schema['@type'] ?? '') !== 'Article') {
+            $schema = [
+                '@context' => 'https://schema.org',
+                '@type' => 'Article',
+                'headline' => $title,
+                'description' => $description,
+                'image' => $image,
+                'author' => [
+                    '@type' => 'Person',
+                    'name' => 'AmirHossein Jalalian',
+                    'url' => rtrim((string) config('app.url'), '/').'/',
+                ],
+                'mainEntityOfPage' => $canonical,
+            ];
+        } else {
+            $schema = $this->absolutize($schema, $canonical, $image);
+        }
+
+        return [
+            'title' => $title,
+            'description' => $description,
+            'canonical' => $canonical,
+            'og_title' => $seo['og_title'] ?? $title,
+            'og_description' => $seo['og_description'] ?? $description,
+            'og_url' => $canonical,
+            'og_type' => $seo['og_type'] ?? 'article',
+            'og_image' => $this->absolute($seo['og_image'] ?? $image),
+            'twitter_card' => $seo['twitter_card'] ?? 'summary',
+            'twitter_title' => $seo['twitter_title'] ?? $title,
+            'twitter_description' => $seo['twitter_description'] ?? $description,
+            'twitter_image' => isset($seo['twitter_image']) ? $this->absolute($seo['twitter_image']) : null,
+            'schema' => $schema,
+            'robots' => $seo['robots'] ?? 'index, follow',
+        ];
+    }
+
+    private function absolutize(array $schema, string $canonical, string $image): array
+    {
+        $schema['@context'] ??= 'https://schema.org';
+        if (isset($schema['image'])) {
+            if (is_string($schema['image'])) {
+                $schema['image'] = $this->absolute($schema['image']);
+            } elseif (is_array($schema['image']) && isset($schema['image']['url'])) {
+                $schema['image']['url'] = $this->absolute((string) $schema['image']['url']);
+            }
+        } else {
+            $schema['image'] = $image;
+        }
+        $schema['mainEntityOfPage'] = $canonical;
+        $schema['url'] = $canonical;
+
+        return $schema;
+    }
+
+    private function absolute(?string $url): ?string
+    {
+        if (! $url) {
+            return $url;
+        }
+        if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
+            return $url;
+        }
+        $path = '/'.ltrim(str_replace('../', '', $url), '/');
+
+        return rtrim((string) config('app.url'), '/').$path;
+    }
+}

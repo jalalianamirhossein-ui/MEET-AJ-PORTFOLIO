@@ -1,4 +1,8 @@
+> **HISTORICAL DECISION (still in force).** Pre-install version evidence. Live versions: [PROJECT-STATUS.md](PROJECT-STATUS.md). ADR: [architecture-decision-record.md](architecture-decision-record.md).
+
 # Framework version decision
+
+Canonical architecture after installation: `docs/architecture-decision-record.md`. This file remains the pre-install version evidence.
 
 Verified 2026-09-15, before installing dependencies. The user subsequently upgraded the target PHP to **8.4**. This supersedes the initial PHP 8.2 constraint.
 

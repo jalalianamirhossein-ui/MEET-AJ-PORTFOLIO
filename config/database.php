@@ -9,7 +9,15 @@ return [
             'unix_socket' => env('DB_SOCKET', ''), 'charset' => 'utf8mb4', 'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '', 'prefix_indexes' => true, 'strict' => true, 'engine' => null,
         ],
-        'sqlite' => ['driver' => 'sqlite', 'database' => env('DB_DATABASE', ':memory:'), 'prefix' => '', 'foreign_key_constraints' => true, 'busy_timeout' => 5000],
+        'sqlite' => [
+            'driver' => 'sqlite',
+            'database' => (($database = env('DB_DATABASE', database_path('database.sqlite'))) === ':memory:')
+                ? ':memory:'
+                : ((preg_match('/^(?:[A-Za-z]:[\\\\\\/]|\\/)/', (string) $database) ? $database : base_path($database))),
+            'prefix' => '',
+            'foreign_key_constraints' => true,
+            'busy_timeout' => 5000,
+        ],
     ],
     'migrations' => ['table' => 'migrations', 'update_date_on_publish' => true],
 ];

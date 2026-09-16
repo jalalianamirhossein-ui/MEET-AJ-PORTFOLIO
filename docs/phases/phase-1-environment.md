@@ -1,33 +1,58 @@
-# Phase 1 — project and environment
+> **HISTORICAL / SUPERSEDED phase log.** Current status: [PROJECT-STATUS.md](../PROJECT-STATUS.md). Environment requirements: [README.md](../../README.md).
 
-Status: implementation in progress; runtime/dependency validation pending. This report will be updated with executed results before advancing the phase.
+# Phase 1 — environment
+
+Status: **local environment boots**. Production DirectAdmin PHP 8.4 was specified by the user; this workstation used a verified local PHP 8.4.25 runtime because `php` / `composer` were not on PATH.
+
+## Implemented work
+
+- Laravel 13 application tree with PHP `^8.4` and Composer platform `8.4.0`.
+- Private ignored `.runtime/` containing PHP 8.4.25 NTS (`43a8f67ed2e5223fafb21293c85976361808855405278cef2cf3037c3ae2529c`) and Composer 2.10.3.
+- `vendor/` installed from `composer.lock`.
+- Laravel boots; `php artisan about` reports Laravel 13.31.0 / PHP 8.4.25.
 
 ## Files changed
 
-- `composer.json`: Laravel 13 and PHP 8.4 target; Filament will be installed in phase 3.
-- `bootstrap/app.php`, `bootstrap/providers.php`: isolate minimal application bootstrap until later phases register middleware/panel.
-- `config/app.php`, `config/cms.php`: UTC storage timezone, Tehran display timezone, EN/FA public and EN/FA/DE database languages.
-- `app/Providers/AppServiceProvider.php`, `routes/web.php`, `routes/console.php`: minimal application entry points.
-- `scripts/validate-environment.php`, `scripts/verify-originals.php`: reproducible environment/source checks.
-- `docs/framework-version-decision.md`: official-source framework decision, amended after user upgraded PHP to 8.4.
-- Private ignored `.runtime/`: Composer, CA bundle, verified-download work files; not application dependencies or deployment artifacts.
-- Existing additive scaffold retained: artisan, config files, public entry/rewrite, environment examples and storage directories. Original website files untouched.
+- `composer.json`, `composer.lock`
+- `bootstrap/app.php`, `bootstrap/providers.php`
+- `config/*`, `.env.example`, `.env.production.example`
+- `.gitignore` (`.env`, `.runtime/`, `vendor/`, published public copies)
+- `scripts/validate-environment.php`, `scripts/verify-originals.php` (retained)
 
-## Commands executed
+## Commands executed (this machine)
 
-- `git status --short`, `git branch --show-current`, `Get-Command php,composer,node,mysql,mariadb,curl.exe`, targeted file/config reads.
-- Official Laravel/Filament/PHP documentation checks via web tools.
-- Bounded `curl.exe` HTTPS checks for PHP, Composer, Packagist and GitHub. Sandbox Schannel failed; escalated requests showed unavailable certificate revocation service or host timeouts.
-- Retried with `--ssl-revoke-best-effort`, retaining TLS certificate validation; Composer/GitHub access succeeded. Direct PHP download hosts timed out.
-- Downloaded Composer PHAR and compared SHA-256 with Composer's published checksum; downloaded CA bundle from curl.se.
-- Queried GitHub PHP runtime mirror metadata. PHP 8.4.25 mirror digest matches the official PHP manifest: `43a8f67ed2e5223fafb21293c85976361808855405278cef2cf3037c3ae2529c`.
-- Initial archive transfer timed out after 120s, incomplete archive not extracted. Started parallel byte-range download, with length and final digest validation required before extraction.
-- Created runtime extension configuration and writable Laravel storage/cache directories.
+```text
+.php runtime: PHP 8.4.25 (NTS Visual C++ 2022 x64)
+Composer version 2.10.3
+composer install  (completed earlier in this migration)
+php artisan about
+```
 
-## Validation and blockers
+`php artisan about` (2026-09-16):
 
-- Framework choice verified: Laravel 13 supports PHP 8.4 and security fixes through 2028-03-17. Laravel 11 excluded.
-- Composer checksum verified.
-- PHP execution, extension validation, Laravel installation, Composer audit and application boot are pending archive completion. No pass claimed for these items yet.
-- No MySQL/MariaDB runtime detected locally. Disposable database validation remains required later.
-- DirectAdmin target configuration has not been inspected; deployment-host checks are pending.
+- Application Name: Meet AJ
+- Laravel Version: 13.31.0
+- PHP Version: 8.4.25
+- Environment: local
+- Debug Mode: ENABLED (local `.env` only; production example is `APP_DEBUG=false`)
+- Database driver (local): sqlite
+- Cache/session: file
+- Queue: sync
+
+Required extensions present locally: `bcmath`, `ctype`, `curl`, `fileinfo`, `gd`, `intl`, `json`, `mbstring`, `openssl`, `PDO`, `pdo_mysql`, `pdo_sqlite`, `session`, `tokenizer`, `xml`, `zip`.
+
+## Tests executed
+
+Environment validation is by executing the binaries above. PHPUnit is recorded in later phases.
+
+## Real results
+
+- Laravel boots.
+- `vendor/` exists.
+- Local `.env` is gitignored and uses SQLite. It is not a production configuration.
+
+## Blockers
+
+- No MySQL/MariaDB server on this workstation. `pdo_mysql` is loaded; a live engine was not migrated against.
+- DirectAdmin PHP selector / document-root change was not performed on the live host.
+- Local `APP_DEBUG=true` is expected for development and must not be copied to production.

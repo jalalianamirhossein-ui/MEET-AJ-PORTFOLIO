@@ -1,420 +1,226 @@
-# MEET AJ PORTFOLIO
+# Meet AJ Portfolio
 
-Professional portfolio website for AmirHossein Jalalian
-Network Expert, DevOps Engineer & IT Infrastructure Specialist
+Laravel CMS for [meetaj.ir](https://meetaj.ir) — the public portfolio of **AmirHossein Jalalian** (network, DevOps, and IT infrastructure). The live design, article HTML, service pages, contact contract, and SEO URLs from the original static site are preserved.
 
-**Template Name:** Meet AJ Portfolio  
-**Template URL:** https://meetaj.ir  
-**Author:** AmirHossein Jalalian  
-**License:** https://meetaj.ir  
-**Version:** 1.0.4  
-**Last Updated:** December 2024
+This repository is a **Laravel 13** application. The original `index.html`, `articles/*.html`, and `services/*.html` files remain in the project root as the import/source of truth. They are **not** the public document root.
 
-===============================================
-MEET AJ PORTFOLIO - README
-===============================================
+## Overview
 
-Professional portfolio website for AmirHossein Jalalian
-Network Expert, DevOps Engineer & IT Infrastructure Specialist
+Visitors see a Blade-rendered site: homepage sections, six service quote pages, 23 technical articles, a bilingual (English / Persian) switcher, and a PWA. Editors use **Filament 5** at `/admin`. Contact submissions keep the original form endpoints and are stored in the `requests` table.
 
-Template Name: Meet AJ Portfolio
-Template URL: https://meetaj.ir
-Author: AmirHossein Jalalian
-License: https://meetaj.ir
-Version: 1.0.4
-Last Updated: December 2024
+## Features
 
-## PROJECT OVERVIEW
+- Public homepage (`/`) with the original section IDs (`#hero` … `#contact`) and a database-driven service catalog
+- Six service detail pages at `/services/{slug}` (legacy `/services/{slug}.html` 301s once)
+- 23 published English articles at `/articles/{slug}` with 301 redirects from `*.html`
+- Category filters on the homepage and `/articles` listing
+- Bilingual UI via `data-en` / `data-fa` (English LTR, Persian RTL)
+- Contact and service-request forms: CSRF token endpoint, honeypot, validation, rate limit, database persistence (`requests.service_id` when a service is selected)
+- Filament admin: articles, categories, services (admin-only), contact requests (admin-only)
+- SEO: canonical, Open Graph, Twitter, JSON-LD, `/sitemap.xml`, `/robots.txt`
+- PWA: `manifest.json`, `sw.js`, `/offline.html`
+- Overlay stylesheet `assets/css/visual-upgrade.css` (design tokens, no Tailwind)
 
-This is a modern, responsive portfolio website built as a Progressive Web App (PWA) showcasing the professional work and technical expertise of AmirHossein Jalalian. The website features a clean Apple-inspired design system with comprehensive multilingual support and advanced functionality.
+German is **not** a public language. `/de` returns 404. German article rows cannot be published.
 
-## KEY FEATURES
+## Technology stack
 
-### 🌐 PROGRESSIVE WEB APP (PWA)
+Verified 2026-09-16 from `composer.lock` and `php artisan about` on this workstation:
 
-- Offline-first caching strategy
-- Service Worker implementation
-- App-like installation experience
-- Background sync capabilities
-- Push notification support
+| Component | Version |
+|-----------|---------|
+| PHP | 8.4.25 (constraint `^8.4`) |
+| Laravel | 13.31.0 |
+| Filament | 5.8.2 |
+| Livewire | 4.4.5 |
+| PHPUnit | 11.5.56 |
+| Database (local) | SQLite (`database/database.sqlite`) |
+| Database (intended production) | MySQL / MariaDB |
+| Frontend | Blade, Bootstrap 5 (vendored), custom CSS/JS |
 
-### 🌍 MULTILINGUAL SUPPORT
+There is **no** `package.json`. Node/npm is not required to build or run the site.
 
-- English and Persian/Farsi languages
-- RTL (Right-to-Left) layout support
-- Dynamic language switching
-- Persistent language preferences
-- Typed.js animations with language-specific content
-
-### 📱 RESPONSIVE DESIGN
-
-- Mobile-first approach
-- Cross-device compatibility
-- Touch-friendly interface
-- Optimized for all screen sizes
-- Modern Apple Design System
-
-### 🎨 MODERN UI/UX
-
-- Clean, minimalist design
-- Smooth animations and transitions
-- Dark/Light theme support
-- Accessibility compliant (WCAG 2.1 AA)
-- Performance optimized
-
-### 📧 CONTACT SYSTEM
-
-- Secure contact form with validation
-- Rate limiting protection
-- XSS and injection prevention
-- Email format validation
-- PHP backend processing
-
-### 📚 CONTENT MANAGEMENT
-
-- Portfolio showcase with filtering
-- Technical articles and guides
-- Service details pages
-- Testimonials section
-- Interactive galleries
-
-## TECHNICAL STACK
-
-### FRONTEND TECHNOLOGIES:
-
-- HTML5 (Semantic structure)
-- CSS3 (Custom properties, animations)
-- JavaScript ES6+ (Modern APIs)
-- Bootstrap 5.3.3 (Grid system, components)
-
-### LIBRARIES & FRAMEWORKS:
-
-- AOS (Animate On Scroll) - Scroll animations
-- Swiper.js - Touch sliders and carousels
-- Typed.js - Typing animation effects
-- GLightbox - Image and video galleries
-- PureCounter - Animated counters
-- Waypoints - Scroll-triggered events
-- Isotope - Portfolio filtering
-- ImagesLoaded - Image loading optimization
-
-### PWA FEATURES:
-
-- Service Worker (sw.js)
-- Web App Manifest (manifest.json)
-- Offline caching strategies
-- Background sync
-- Push notifications
-
-### BACKEND & SECURITY:
-
-- PHP contact form handler
-- Input validation and sanitization
-- Rate limiting protection
-- XSS prevention
-- Secure email processing
-
-## PROJECT STRUCTURE
+## Architecture
 
 ```
-📁 ROOT DIRECTORY:
-├── index.html              # Main homepage
-├── portfolio-details.html  # Portfolio item details
-├── service-details.html    # Service details page
-├── starter-page.html       # Template starter page
-├── manifest.json           # PWA manifest
-├── sw.js                   # Service Worker
-└── README.md               # This documentation
-
-📁 ASSETS DIRECTORY:
-├── css/                    # Stylesheets
-│   ├── main.css           # Main stylesheet
-│   ├── rtl.css            # RTL-specific styles
-│   └── articles.css        # Article page styles
-├── js/                     # JavaScript files
-│   ├── main.js            # Main functionality
-│   └── i18n.js            # Internationalization
-├── img/                    # Images and media
-│   ├── portfolio/         # Portfolio images
-│   └── testimonials/      # Testimonial photos
-└── vendor/                 # Third-party libraries
-    ├── bootstrap/         # Bootstrap framework
-    ├── aos/               # Animate On Scroll
-    ├── swiper/            # Touch slider
-    ├── glightbox/         # Gallery lightbox
-    ├── typed.js/          # Typing animation
-    └── [other libraries]  # Additional dependencies
-
-📁 ARTICLES DIRECTORY:
-├── mikrotik-openvpn-setup-v7.html
-├── mikrotik-block-website.html
-├── mikrotik-unequal-dual-wan-load-balancing-ecmp.html
-├── nginx-installation-configuration-ubuntu.html
-├── enable-ssh-linux-complete-guide.html
-└── windows-cmd-common-network-commands.html
-
-📁 FORMS DIRECTORY:
-├── contact.php             # Contact form handler
-└── Readme.txt              # Forms documentation
+Browser
+   │
+   ▼
+Laravel 13 (public/ front controller)
+   │
+   ├── Blade views  →  services / presentation JSON  →  SQLite or MySQL
+   │
+   └── /admin  →  Filament 5  →  Livewire 4  →  models / policies  →  database
 ```
 
-## INSTALLATION & SETUP
+Document root in production must be **`public/`**, not the repository root.
 
-### 1. CLONE OR DOWNLOAD:
+## Public website
 
-- Download the project files
-- Extract to your web server directory
+| URL | Purpose |
+|-----|---------|
+| `/` | Homepage (EN default markup; FA via client switcher) |
+| `/index.html` | 301 → `/` |
+| `/articles` | Article listing (same filters/cards as `#portfolio`) |
+| `/articles/{slug}` | Article detail |
+| `/articles/{slug}.html` | 301 → clean slug (query string preserved) |
+| `/services/{slug}` | Service detail (published English only) |
+| `/services/{slug}.html` | 301 → `/services/{slug}` (query string preserved) |
+| `GET /forms/get-csrf-token.php` | JSON `{ token, success }` |
+| `POST /forms/contact.php` | Plain-text `OK` / `400` / `429` |
+| `/sitemap.xml`, `/robots.txt` | SEO |
+| `/manifest.json`, `/sw.js`, `/offline.html` | PWA |
 
-### 2. WEB SERVER REQUIREMENTS:
+Languages: **EN production**, **FA production** (same URLs, `dir`/`lang` swapped in the browser). **DE** has no public routes.
 
-- Apache/Nginx web server
-- PHP 7.4+ (for contact form)
-- HTTPS support (required for PWA)
+## CMS
 
-### 3. CONFIGURATION:
+`/admin` (Filament login at `/admin/login`).
 
-- Update contact form email in forms/contact.php
-- Configure web server for HTTPS
-- Set proper file permissions
+| Resource | Who | Notes |
+|----------|-----|--------|
+| Articles | Admin + editor | CRUD, publish/draft, SEO, image upload, slug 301 history |
+| Categories | Admin + editor | Per-language slug uniqueness |
+| Services | Admin only | Catalog, prices, publish/draft, SEO. See [docs/SERVICES.md](docs/SERVICES.md) |
+| Requests | Admin only | Inbound contact/service rows; status only (fields read-only); filter by service |
+| Users | Class exists, **not in navigation** | `shouldRegisterNavigation()` is false. After cache clear, `/admin/users` and `/admin/cms-users` exist. Create accounts with `php artisan cms:create-user` |
 
-### 4. DEPLOYMENT:
+Roles: `admin`, `editor`. Passwords: hashed, minimum 12 characters. No default password is shipped.
 
-- Upload files to web server
-- Ensure Service Worker is accessible
-- Test PWA functionality
+## Articles
 
-## CUSTOMIZATION GUIDE
+- Importer: `php artisan articles:import-legacy` reads `articles/*.html`
+- 23 legacy articles, unique `(language, slug)` and `(translation_key, language)`
+- Public listing/detail query **published English** rows (`language = en`)
+- Persian copy lives in `data-fa` attributes inside HTML (not separate FA URLs)
+- Categories: Microsoft, Linux, MikroTik, VMware, Others (filter classes)
+- Slug changes write `article_redirects` (`cascadeOnDelete` with the article)
+- Do not run `--refresh` on a database that already has editorial edits
 
-### 🎨 DESIGN CUSTOMIZATION:
+## Contact
 
-- Modify CSS variables in main.css
-- Update color scheme in :root selector
-- Customize Apple Design System colors
-- Adjust animations and transitions
+Contract is unchanged from the static site:
 
-### 🌍 LANGUAGE CUSTOMIZATION:
+1. `GET /forms/get-csrf-token.php` — session CSRF JSON, `Cache-Control: no-store`
+2. `POST /forms/contact.php` — field `csrf_token` (also accepted via `AcceptLegacyCsrfToken`)
+3. Honeypot field `website`: if filled, response is still `OK` and **nothing is stored**
+4. Validation failures: HTTP 400, first error as `text/plain`
+5. Rate limit: 5 posts per IP per hour → HTTP 429 (`throttle:30,1` on the route plus `RateLimiter` 5/hour)
+6. Success: row in `requests`, body `OK`
+7. Email: optional `CONTACT_NOTIFICATION_EMAIL`. If unset or SMTP fails, the row is still saved
 
-- Edit translations in assets/js/i18n.js
-- Add new languages to DICT object
-- Update RTL support for new languages
-- Modify Typed.js content arrays
+## Languages
 
-### 📱 PWA CUSTOMIZATION:
+See [docs/MULTILINGUAL.md](docs/MULTILINGUAL.md). Switcher: `#lang-toggle`, `localStorage` / cookie `lang` (`en` \| `fa`), stylesheet `rtl.css`.
 
-- Update manifest.json for app details
-- Modify Service Worker caching strategy
-- Add new icons and screenshots
-- Configure push notification settings
+## URL migration
 
-### 📧 CONTACT FORM CUSTOMIZATION:
+| Legacy | Current |
+|--------|---------|
+| `/index.html` | `/` (301) |
+| `/articles/{slug}.html` | `/articles/{slug}` (301) |
+| `/services/{slug}.html` | `/services/{slug}` (301) |
 
-- Update email address in contact.php
-- Configure SMTP settings (optional)
-- Modify validation rules
-- Add new form fields
+## Installation
 
-## PERFORMANCE OPTIMIZATION
+Requirements: PHP 8.4 with extensions used by Laravel (including `pdo_sqlite` locally and `pdo_mysql` for production), Composer 2, and write access to `storage/` and `bootstrap/cache`.
 
-### ✅ IMPLEMENTED OPTIMIZATIONS:
-
-- Service Worker caching
-- Image lazy loading
-- CSS/JS minification
-- Gzip compression support
-- Optimized asset loading
-- Mobile performance improvements
-- Accessibility optimizations
-
-### 📊 PERFORMANCE METRICS:
-
-- Lighthouse Score: 95+ (Performance)
-- First Contentful Paint: < 1.5s
-- Largest Contentful Paint: < 2.5s
-- Cumulative Layout Shift: < 0.1
-- Time to Interactive: < 3.0s
-
-## BROWSER SUPPORT
-
-### ✅ FULLY SUPPORTED:
-
-- Chrome 80+
-- Firefox 75+
-- Safari 13+
-- Edge 80+
-
-### ⚠️ PARTIAL SUPPORT:
-
-- Internet Explorer 11 (basic functionality)
-- Older mobile browsers (graceful degradation)
-
-## SECURITY FEATURES
-
-### 🔒 IMPLEMENTED SECURITY:
-
-- Input validation and sanitization
-- XSS prevention
-- CSRF protection
-- Rate limiting
-- Secure email processing
-- HTTPS enforcement
-- Content Security Policy ready
-
-## SUPPORT & MAINTENANCE
-
-### 📞 SUPPORT:
-
-- Website: https://meetaj.ir
-- Email: jalalian.amirhossein@gmail.com
-- Documentation: This README file
-
-### 🔄 MAINTENANCE:
-
-- Regular security updates
-- Performance monitoring
-- Browser compatibility testing
-- Content updates
-- PWA feature enhancements
-
-## LICENSE & CREDITS
-
-### 📄 LICENSE:
-
-- Template: Custom License
-- Author: AmirHossein Jalalian
-- Website: https://meetaj.ir
-
-### 🙏 CREDITS:
-
-- Based on: iPortfolio Template by BootstrapMade
-- Icons: Bootstrap Icons
-- Fonts: System fonts (SF Pro Display, etc.)
-- Design Inspiration: Apple Design System
-
-## CHANGELOG
-
-### v1.0.4 (December 2024):
-
-- Enhanced PWA functionality
-- Improved mobile performance
-- Updated Service Worker caching
-- Added comprehensive documentation
-- Security improvements
-- Accessibility enhancements
-
-### v1.0.3 (November 2024):
-
-- Added multilingual support
-- Implemented RTL layout
-- Enhanced contact form security
-- Performance optimizations
-
-### v1.0.2 (October 2024):
-
-- Initial PWA implementation
-- Service Worker integration
-- Mobile optimization
-
-### v1.0.1 (September 2024):
-
-- Basic portfolio template
-- Contact form implementation
-- Responsive design
-
-### v1.0.0 (August 2024):
-
-- Initial release
-- Core functionality
-- Basic design system
-
-## PRELOADER COMPONENT
-
-Modern bilingual preloader component with RTL/LTR support and CSS animations.
-
-### Features:
-
-- ✅ **Bilingual**: Full Persian (RTL) and English (LTR) support
-- ✅ **CSS Animations**: High performance and smooth
-- ✅ **Responsive**: Compatible with all screen sizes
-- ✅ **Brand Colors**: Uses primary color #2563eb
-- ✅ **Dark Mode**: Dark mode support
-- ✅ **Accessibility**: Reduced motion support
-- ✅ **Typography**: Optimized fonts for Persian and Latin
-
-### Usage:
-
-#### React Component:
-
-```jsx
-import Preloader from "./Preloader";
-
-function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [language, setLanguage] = useState("en"); // 'en' or 'fa'
-
-  return <Preloader isVisible={isLoading} language={language} />;
-}
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+# Set DB_* in .env (sqlite file or mysql)
+php artisan migrate
+php artisan storage:link
+php artisan site:publish-assets --views
+php artisan articles:import-legacy
+php artisan services:import-legacy
+php artisan cms:create-user
 ```
 
-#### HTML:
+Do not invent Node steps. Do not commit `.env`.
 
-```html
-<div id="preloader" class="preloader-overlay visible">
-  <div class="preloader-container ltr">
-    <div class="preloader-spinner">
-      <div class="spinner-circle">
-        <div class="spinner-inner"></div>
-      </div>
-    </div>
-    <div class="preloader-text">
-      <span class="loading-text">Loading...</span>
-    </div>
-    <div class="preloader-progress">
-      <div class="progress-line"></div>
-    </div>
-  </div>
-</div>
+On this Windows workstation `php` is not on PATH; the verified binary is `.runtime/php84/php.exe`.
+
+## Development
+
+```bash
+php artisan serve --host=127.0.0.1 --port=8000
 ```
 
-### Props:
+Public assets are copies under `public/assets/` produced by `site:publish-assets`. Edit sources in `assets/` (and `index.html` / `articles/` / `services/`) then publish.
 
-| Prop        | Type    | Default | Description                      |
-| ----------- | ------- | ------- | -------------------------------- |
-| `isVisible` | boolean | `true`  | Show or hide preloader           |
-| `language`  | string  | `'en'`  | Site language (`'en'` or `'fa'`) |
+## Testing
 
-### CSS Classes:
+Default suite uses SQLite `:memory:` (`phpunit.xml`):
 
-- `.preloader-overlay` - Background layer
-- `.preloader-container` - Main container
-- `.preloader-spinner` - Spinning animation
-- `.preloader-text` - Loading text
-- `.preloader-progress` - Progress bar
-- `.rtl` - Right-to-left (Persian)
-- `.ltr` - Left-to-right (English)
-- `.visible` - Show preloader
-- `.hidden` - Hide preloader
-
-### Customization:
-
-```css
-:root {
-  --primary-color: #2563eb;
-  --primary-color-light: rgba(37, 99, 235, 0.1);
-}
+```bash
+php artisan test
+# or: vendor/bin/phpunit
 ```
 
-### Browser Support:
+MariaDB/MySQL schema suite (separate config, skipped in the default run):
 
-- ✅ Chrome 60+
-- ✅ Firefox 55+
-- ✅ Safari 12+
-- ✅ Edge 79+
-- ✅ iOS Safari 12+
-- ✅ Android Chrome 60+
+```bash
+vendor/bin/phpunit -c phpunit.mysql.xml
+```
 
-### Performance:
+Content compare against original HTML (uses the live configured database):
 
-- ⚡ Pure CSS animations (no JavaScript)
-- 🎯 Optimized GPU usage
-- 📱 Mobile optimized
-- ♿ Reduced motion support
+```bash
+php artisan site:compare-content
+```
+
+Latest default-suite result on this machine: **30 tests, 584 assertions, 1 skipped** (`MysqlSchemaTest` unless MySQL is bound), **0 failures**. `site:compare-content`: **Failures: 0**.
+
+## Article import
+
+```bash
+php artisan articles:import-legacy            # insert missing
+php artisan articles:import-legacy --dry-run  # report only
+php artisan articles:import-legacy --refresh  # deletes articles + redirects, then re-imports
+```
+
+## Service import
+
+```bash
+php artisan services:import-legacy            # insert missing
+php artisan services:import-legacy --dry-run  # report only
+php artisan services:import-legacy --refresh  # deletes services, then re-imports from HTML
+```
+
+Do not run `--refresh` after editorial price or copy changes. Details: [docs/SERVICES.md](docs/SERVICES.md).
+
+## Admin user
+
+```bash
+php artisan cms:create-user
+php artisan cms:create-user --name="…" --email="…" --role=admin
+```
+
+Password is prompted unless `--password=` is passed. Minimum 12 characters. Never commit passwords.
+
+## Deployment
+
+See [DEPLOYMENT.md](DEPLOYMENT.md). DirectAdmin production cutover is **documented, not executed** in this environment.
+
+## Security
+
+Production must use `APP_DEBUG=false`, HTTPS, `SESSION_SECURE_COOKIE=true`, and a unique `APP_KEY`. Details: [docs/SECURITY.md](docs/SECURITY.md). This repository has **not** been penetration-tested.
+
+## Documentation
+
+Start here:
+
+| File | Role |
+|------|------|
+| [docs/DOCUMENTATION-INDEX.md](docs/DOCUMENTATION-INDEX.md) | Index of every project Markdown file |
+| [docs/PROJECT-STATUS.md](docs/PROJECT-STATUS.md) | Authoritative current status |
+| [docs/QA-MATRIX.md](docs/QA-MATRIX.md) | Authoritative QA evidence |
+| [docs/SERVICES.md](docs/SERVICES.md) | Service catalog + CMS |
+| [DEPLOYMENT.md](DEPLOYMENT.md) | DirectAdmin / production |
+| [docs/historical/README.md](docs/historical/README.md) | Superseded plans and snapshots |
+
+## Git
+
+HEAD is `feature/laravel-migration`. Remote `AJ` is configured. Creating/committing the `laravel` branch requires `git.exe` on PATH (missing on this workstation).

@@ -20,6 +20,10 @@
   const headerToggleBtn = document.querySelector("#menu-toggle");
   const header = document.querySelector("#header");
   let menuTrigger = null;
+  const MENU_LABELS = {
+    en: { open: "Open menu", close: "Close menu" },
+    fa: { open: "باز کردن منو", close: "بستن منو" },
+  };
 
   // Simple debounce helper to prevent ReferenceError and calm resize spam
   function debounce(fn, delay = 200) {
@@ -30,7 +34,36 @@
     };
   }
 
-  // Create overlay for mobile
+  function enhanceMenuToggle() {
+    if (!headerToggleBtn) return;
+    headerToggleBtn.setAttribute("aria-controls", "header");
+    headerToggleBtn.type = "button";
+    if (!headerToggleBtn.querySelector(".menu-toggle-bars")) {
+      const bars = document.createElement("span");
+      bars.className = "menu-toggle-bars";
+      bars.setAttribute("aria-hidden", "true");
+      bars.innerHTML = "<span></span><span></span><span></span>";
+      const icon = headerToggleBtn.querySelector("i");
+      if (icon) icon.replaceWith(bars);
+      else headerToggleBtn.prepend(bars);
+    }
+  }
+
+  function menuLabel(open) {
+    const lang = document.documentElement.lang === "fa" ? "fa" : "en";
+    return open ? MENU_LABELS[lang].close : MENU_LABELS[lang].open;
+  }
+
+  function setToggleState(open) {
+    if (!headerToggleBtn) return;
+    headerToggleBtn.classList.toggle("is-open", open);
+    headerToggleBtn.setAttribute("aria-expanded", String(open));
+    headerToggleBtn.setAttribute("aria-label", menuLabel(open));
+    const sr = headerToggleBtn.querySelector(".sr-only, .visually-hidden");
+    if (sr) sr.textContent = menuLabel(open);
+  }
+
+  // Create overlay for mobile (kept for older CSS; fullscreen menu covers it)
   let overlay = document.getElementById("menu-overlay");
   if (!overlay) {
     overlay = document.createElement("div");
@@ -38,65 +71,103 @@
     document.body.appendChild(overlay);
   }
 
+  function isMobileMenu() {
+    return window.innerWidth < 1200;
+  }
+
   function syncMenuAccessibility() {
     if (!header) return;
 
-    const isMobileMenu = window.innerWidth < 1200;
+    const mobile = isMobileMenu();
     const isOpen = header.classList.contains("header-show");
-    header.inert = isMobileMenu && !isOpen;
-    header.setAttribute("aria-hidden", String(isMobileMenu && !isOpen));
-  }
-
-  function openMenu() {
-    if (header) {
-      menuTrigger = document.activeElement;
-      header.classList.add("header-show");
-      overlay.classList.add("active");
-      if (headerToggleBtn) {
-        headerToggleBtn.setAttribute("aria-expanded", "true");
-        const icon = headerToggleBtn.querySelector("i");
-        if (icon) {
-          icon.classList.remove("bi-list");
-          icon.classList.add("bi-x");
-        }
-      }
-      document.body.classList.add("menu-open");
-      syncMenuAccessibility();
-
-      const firstMenuLink = header.querySelector(".navmenu a");
-      firstMenuLink?.focus({ preventScroll: true });
+    header.inert = mobile && !isOpen;
+    header.setAttribute("aria-hidden", String(mobile && !isOpen));
+    if (mobile && !isOpen) {
+      header.setAttribute("hidden", "");
+    } else {
+      header.removeAttribute("hidden");
     }
   }
 
-  function closeMenu({ restoreFocus = false } = {}) {
+  function menuFocusables() {
+    const nodes = [];
+    if (headerToggleBtn) nodes.push(headerToggleBtn);
+    const langToggle = document.getElementById("lang-toggle");
+    if (langToggle) nodes.push(langToggle);
     if (header) {
-      header.classList.remove("header-show");
-      overlay.classList.remove("active");
-      if (headerToggleBtn) {
-        headerToggleBtn.setAttribute("aria-expanded", "false");
-        const icon = headerToggleBtn.querySelector("i");
-        if (icon) {
-          icon.classList.add("bi-list");
-          icon.classList.remove("bi-x");
-        }
-      }
-      document.body.classList.remove("menu-open");
-      syncMenuAccessibility();
-      if (restoreFocus && menuTrigger instanceof HTMLElement) {
-        menuTrigger.focus({ preventScroll: true });
-      }
+      header
+        .querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')
+        .forEach((el) => nodes.push(el));
+    }
+    return nodes.filter((el) => {
+      if (!el || el.disabled || el.hidden) return false;
+      const style = window.getComputedStyle(el);
+      return style.display !== "none" && style.visibility !== "hidden";
+    });
+  }
+
+  function trapMenuFocus(event) {
+    if (!header || !header.classList.contains("header-show") || !isMobileMenu()) {
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const items = menuFocusables();
+    if (!items.length) return;
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  function openMenu() {
+    if (!header || !isMobileMenu()) return;
+    menuTrigger = document.activeElement;
+    header.removeAttribute("hidden");
+    header.inert = false;
+    header.setAttribute("aria-hidden", "false");
+    header.classList.add("header-show");
+    overlay.classList.add("active");
+    setToggleState(true);
+    document.body.classList.add("menu-open");
+    document.documentElement.classList.add("menu-open");
+    syncMenuAccessibility();
+
+    const firstMenuLink = header.querySelector(".navmenu a");
+    firstMenuLink?.focus({ preventScroll: true });
+  }
+
+  function closeMenu({ restoreFocus = false } = {}) {
+    if (!header) return;
+    header.classList.remove("header-show");
+    overlay.classList.remove("active");
+    setToggleState(false);
+    document.body.classList.remove("menu-open");
+    document.documentElement.classList.remove("menu-open");
+    syncMenuAccessibility();
+    if (restoreFocus && menuTrigger instanceof HTMLElement) {
+      menuTrigger.focus({ preventScroll: true });
+    } else if (restoreFocus) {
+      headerToggleBtn?.focus({ preventScroll: true });
     }
   }
 
   function headerToggle() {
+    if (!isMobileMenu()) return;
     if (header && header.classList.contains("header-show")) {
-      closeMenu();
+      closeMenu({ restoreFocus: true });
     } else {
       openMenu();
     }
   }
 
-  // Event listeners
+  enhanceMenuToggle();
+  setToggleState(false);
+
   if (headerToggleBtn) {
     headerToggleBtn.addEventListener("click", headerToggle);
   }
@@ -105,14 +176,9 @@
     overlay.addEventListener("click", () => closeMenu({ restoreFocus: true }));
   }
 
-  // Close menu after clicking menu links on mobile
   document.querySelectorAll("#navmenu a").forEach((navmenu) => {
     navmenu.addEventListener("click", () => {
-      if (
-        window.innerWidth < 1200 &&
-        header &&
-        header.classList.contains("header-show")
-      ) {
+      if (isMobileMenu() && header && header.classList.contains("header-show")) {
         closeMenu();
       }
     });
@@ -120,8 +186,8 @@
 
   syncMenuAccessibility();
 
-  // Improve keyboard navigation performance
   document.addEventListener("keydown", function (e) {
+    trapMenuFocus(e);
     if (
       e.key === "Escape" &&
       header &&
@@ -129,6 +195,20 @@
     ) {
       closeMenu({ restoreFocus: true });
     }
+  });
+
+  window.addEventListener(
+    "resize",
+    debounce(() => {
+      if (!isMobileMenu() && header?.classList.contains("header-show")) {
+        closeMenu();
+      }
+      syncMenuAccessibility();
+    }, 150),
+  );
+
+  window.addEventListener("meetaj:languagechange", () => {
+    setToggleState(header?.classList.contains("header-show"));
   });
 
   // scroll top is managed at the end of the file
@@ -270,7 +350,7 @@
 
           // Event listeners for filters
           isotopeItem
-            .querySelectorAll(".isotope-filters li")
+            .querySelectorAll(".isotope-filters [data-filter]")
             .forEach(function (filters) {
               filters.setAttribute("role", "button");
               filters.setAttribute("tabindex", "0");
@@ -293,6 +373,15 @@
                   initIsotope.arrange({
                     filter: this.getAttribute("data-filter"),
                   });
+                  const filterValue = this.getAttribute("data-filter") || "*";
+                  const grid = isotopeItem.querySelector(".isotope-container");
+                  if (grid) {
+                    grid.querySelectorAll(".portfolio-item").forEach((item) => {
+                      const match =
+                        filterValue === "*" || item.matches(filterValue);
+                      item.classList.toggle("is-filtered-out", !match);
+                    });
+                  }
                   setTimeout(function () {
                     if (typeof aosInit === "function") aosInit();
                   }, 200);
@@ -1028,4 +1117,38 @@
   }
 
   window.addEventListener("load", initScrollProgress);
+
+  const aboutCore = document.querySelector("[data-about-core]");
+  if (aboutCore) {
+    const nodes = aboutCore.querySelectorAll(".about-node");
+    const panels = aboutCore.querySelectorAll(".about-core-detail [data-panel]");
+    const activate = (panel) => {
+      nodes.forEach((node) => {
+        const on = node.getAttribute("data-panel") === panel;
+        node.classList.toggle("is-active", on);
+        node.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+      panels.forEach((item) => {
+        const on = item.getAttribute("data-panel") === panel;
+        item.classList.toggle("is-active", on);
+        item.hidden = !on;
+      });
+      aboutCore.className = aboutCore.className
+        .split(" ")
+        .filter((cls) => cls && !cls.startsWith("is-"))
+        .concat("is-" + panel)
+        .join(" ");
+    };
+    aboutCore.classList.add("is-core");
+    nodes.forEach((node) => {
+      const panel = node.getAttribute("data-panel");
+      node.addEventListener("click", () => activate(panel));
+      node.addEventListener("focus", () => activate(panel));
+      node.addEventListener("mouseenter", () => {
+        if (window.matchMedia("(hover: hover)").matches) {
+          activate(panel);
+        }
+      });
+    });
+  }
 })();

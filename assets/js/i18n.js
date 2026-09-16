@@ -1,22 +1,35 @@
 /**
- * Language Switch System - Resilient Version
- * Cleans corrupted data-fa attributes and falls back gracefully.
+ * Language switch — EN / FA, plus DE only when the page has data-de.
+ * Builds a compact glass listbox. Does not invent German copy.
  */
 
 (() => {
   "use strict";
 
   const KEY = "lang";
+  const LABELS = {
+    en: { code: "EN", name: "English" },
+    fa: { code: "FA", name: "\u0641\u0627\u0631\u0633\u06CC" },
+    de: { code: "DE", name: "Deutsch" },
+  };
 
-  const init = () => {
+  const availableLanguages = () => {
+    const langs = ["en"];
+    if (document.querySelector("[data-fa]")) langs.push("fa");
+    if (document.querySelector("[data-de]")) langs.push("de");
+    return langs;
+  };
+
+  const init = (langs) => {
     const stored = localStorage.getItem(KEY);
-    if (stored === "fa" || stored === "en") return stored;
+    if (langs.includes(stored)) return stored;
 
-    const cookieMatch = document.cookie.match(/(?:^|;\s*)lang=(fa|en)\b/);
-    if (cookieMatch) return cookieMatch[1];
+    const cookieMatch = document.cookie.match(/(?:^|;\s*)lang=(en|fa|de)\b/);
+    if (cookieMatch && langs.includes(cookieMatch[1])) return cookieMatch[1];
 
-    const browserLang = navigator.language || navigator.userLanguage;
-    if (browserLang && browserLang.startsWith("fa")) return "fa";
+    const browserLang = navigator.language || navigator.userLanguage || "";
+    if (browserLang.startsWith("fa") && langs.includes("fa")) return "fa";
+    if (browserLang.startsWith("de") && langs.includes("de")) return "de";
 
     return "en";
   };
@@ -46,13 +59,6 @@
     return stylesheet;
   };
 
-  /**
-   * Translate only the text that belongs to an element. Replacing `textContent`
-   * on every translated element looks convenient, but it also removes nested
-   * icons, links, and presentational spans (for example the two-line hero
-   * heading). Keeping child elements intact makes language changes safe and
-   * avoids a full-page reload.
-   */
   const setElementText = (element, value) => {
     const textNodes = Array.from(element.childNodes).filter(
       (node) =>
@@ -71,11 +77,56 @@
     }
   };
 
+  const translationFor = (el, lang) => {
+    if (lang === "fa") {
+      let fa = el.getAttribute("data-fa");
+      if (isCorrupted(fa)) {
+        fa = el.getAttribute("data-en") || fa || "";
+        el.setAttribute("data-fa", fa);
+      }
+      return fa;
+    }
+    if (lang === "de") {
+      const de = el.getAttribute("data-de");
+      return de && !isCorrupted(de) ? de : el.getAttribute("data-en");
+    }
+    return el.getAttribute("data-en");
+  };
+
+  let open = false;
+
+  const closeSwitcher = () => {
+    const root = document.getElementById("lang-switcher");
+    const btn = document.getElementById("lang-toggle");
+    const panel = document.getElementById("lang-menu");
+    if (!root || !btn || !panel) return;
+    open = false;
+    root.classList.remove("is-open");
+    btn.setAttribute("aria-expanded", "false");
+    panel.hidden = true;
+  };
+
+  const openSwitcher = () => {
+    const root = document.getElementById("lang-switcher");
+    const btn = document.getElementById("lang-toggle");
+    const panel = document.getElementById("lang-menu");
+    if (!root || !btn || !panel) return;
+    open = true;
+    root.classList.add("is-open");
+    btn.setAttribute("aria-expanded", "true");
+    panel.hidden = false;
+    const current = document.documentElement.lang;
+    const active = panel.querySelector(`[data-lang="${current}"]`) || panel.querySelector("[role='option']");
+    active?.focus();
+  };
+
   const apply = (lang) => {
-    const isPersian = lang === "fa";
+    const langs = availableLanguages();
+    const next = langs.includes(lang) ? lang : "en";
+    const isPersian = next === "fa";
     const html = document.documentElement;
 
-    html.lang = lang;
+    html.lang = next;
     html.dir = isPersian ? "rtl" : "ltr";
 
     const rtlStyle = getRtlStyle();
@@ -89,40 +140,29 @@
       }
     }
 
-    document.querySelectorAll("[data-en][data-fa]").forEach((el) => {
-      const en = el.getAttribute("data-en");
-      let fa = el.getAttribute("data-fa");
-
-      if (isCorrupted(fa)) {
-        fa = en || fa || "";
-        el.setAttribute("data-fa", fa);
-      }
-
-      const translation = isPersian ? fa : en;
+    document.querySelectorAll("[data-en]").forEach((el) => {
+      const translation = translationFor(el, next);
       if (translation != null) {
         setElementText(el, translation);
       }
     });
 
     const btn = document.getElementById("lang-toggle");
-    if (btn) {
-      btn.setAttribute("aria-pressed", String(isPersian));
+    const current = btn?.querySelector(".lang-switcher-current");
+    if (btn && current) {
+      current.textContent = LABELS[next].code;
       btn.setAttribute(
         "aria-label",
-        isPersian
-          ? "\u062A\u063A\u06CC\u06CC\u0631 \u0632\u0628\u0627\u0646 \u0628\u0647 \u0627\u0646\u06AF\u0644\u06CC\u0633\u06CC"
-          : "Switch language to \u0641\u0627\u0631\u0633\u06CC",
+        isPersian ? "\u0627\u0646\u062a\u062e\u0627\u0628 \u0632\u0628\u0627\u0646" : "Choose language",
       );
-
-      const cur = btn.querySelector(".i18n-cur");
-      const alt = btn.querySelector(".i18n-alt");
-      if (cur && alt) {
-        cur.textContent = isPersian ? "FA" : "EN";
-        alt.textContent = isPersian ? "EN" : "FA";
-        cur.classList.add("is-active");
-        alt.classList.remove("is-active");
-      }
     }
+
+    document.querySelectorAll("#lang-menu [data-lang]").forEach((option) => {
+      const on = option.getAttribute("data-lang") === next;
+      option.classList.toggle("is-active", on);
+      option.setAttribute("aria-selected", on ? "true" : "false");
+      option.tabIndex = on ? 0 : -1;
+    });
 
     const preloaderContainer = document.getElementById("preloader-container");
     const loadingText = document.getElementById("loading-text");
@@ -135,101 +175,153 @@
         : "Loading...";
     }
 
-    localStorage.setItem(KEY, lang);
-    setCookie(lang);
+    localStorage.setItem(KEY, next);
+    setCookie(next);
     window.dispatchEvent(
-      new CustomEvent("meetaj:languagechange", { detail: { lang } }),
+      new CustomEvent("meetaj:languagechange", { detail: { lang: next } }),
     );
   };
 
-  const toggle = () => {
-    const currentLang = document.documentElement.lang;
-    const nextLang = currentLang === "fa" ? "en" : "fa";
-    apply(nextLang);
-  };
-
-  const injectLanguageToggle = () => {
-    if (document.querySelector("#lang-toggle")) return;
-
-    const headerSelectors = [
-      "nav",
-      ".navbar",
-      ".navmenu",
-      "header",
-      ".header",
-      ".topbar",
-      "#header",
-      "#navmenu",
-    ];
-
-    let headerContainer = null;
-    for (const selector of headerSelectors) {
-      headerContainer = document.querySelector(selector);
-      if (headerContainer) break;
-    }
-
-    const toggleButton = document.createElement("button");
-    toggleButton.id = "lang-toggle";
-    toggleButton.className = "i18n-link";
-    toggleButton.type = "button";
-    toggleButton.setAttribute("aria-pressed", "false");
-    toggleButton.setAttribute("aria-label", "Switch language");
-
-    const curSpan = document.createElement("span");
-    curSpan.className = "i18n-cur";
-    curSpan.textContent = "EN";
-
-    const sepSpan = document.createElement("span");
-    sepSpan.className = "i18n-sep";
-    sepSpan.textContent = " | ";
-
-    const altSpan = document.createElement("span");
-    altSpan.className = "i18n-alt";
-    altSpan.textContent = "FA";
-
-    toggleButton.appendChild(curSpan);
-    toggleButton.appendChild(sepSpan);
-    toggleButton.appendChild(altSpan);
-
-    if (headerContainer) {
-      headerContainer.appendChild(toggleButton);
+  const mountSwitcher = (root) => {
+    const header = document.querySelector("#header");
+    const logo = header?.querySelector(".logo-section");
+    const desktop = window.matchMedia("(min-width: 1200px)").matches;
+    if (desktop && logo) {
+      logo.appendChild(root);
+      root.classList.remove("is-floating");
     } else {
-      document.body.appendChild(toggleButton);
+      document.body.appendChild(root);
+      root.classList.add("is-floating");
     }
   };
 
-  const initSystem = () => {
-    apply(init());
-    injectLanguageToggle();
-    apply(document.documentElement.lang);
+  const injectLanguageToggle = (langs) => {
+    let root = document.getElementById("lang-switcher");
+    const legacy = document.getElementById("lang-toggle");
 
-    const btn = document.getElementById("lang-toggle");
-    if (!btn) return;
+    if (!root) {
+      root = document.createElement("div");
+      root.id = "lang-switcher";
+      if (legacy && legacy.parentNode) {
+        legacy.replaceWith(root);
+      }
+    } else {
+      root.replaceChildren();
+    }
 
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      btn.style.transform = "scale(0.95)";
-      btn.style.opacity = "0.7";
-      setTimeout(() => {
-        btn.style.transform = "";
-        btn.style.opacity = "";
-      }, 100);
-      toggle();
+    root.className = "lang-switcher";
+
+    const btn = document.createElement("button");
+    btn.id = "lang-toggle";
+    btn.className = "lang-switcher-toggle";
+    btn.type = "button";
+    btn.setAttribute("aria-haspopup", "listbox");
+    btn.setAttribute("aria-expanded", "false");
+    btn.setAttribute("aria-controls", "lang-menu");
+    btn.setAttribute("aria-label", "Choose language");
+
+    const current = document.createElement("span");
+    current.className = "lang-switcher-current";
+    current.textContent = "EN";
+
+    const chevron = document.createElement("span");
+    chevron.className = "lang-switcher-chevron";
+    chevron.setAttribute("aria-hidden", "true");
+
+    btn.appendChild(current);
+    btn.appendChild(chevron);
+
+    const panel = document.createElement("div");
+    panel.id = "lang-menu";
+    panel.className = "lang-switcher-menu";
+    panel.setAttribute("role", "listbox");
+    panel.setAttribute("aria-label", "Languages");
+    panel.hidden = true;
+
+    if (langs.length < 2) {
+      root.hidden = true;
+    }
+
+    langs.forEach((code) => {
+      const option = document.createElement("button");
+      option.type = "button";
+      option.className = "lang-switcher-option";
+      option.setAttribute("role", "option");
+      option.setAttribute("data-lang", code);
+      option.setAttribute("aria-selected", "false");
+      option.tabIndex = -1;
+      option.textContent = LABELS[code].code;
+      option.setAttribute("aria-label", LABELS[code].name);
+      option.addEventListener("click", (event) => {
+        event.preventDefault();
+        apply(code);
+        closeSwitcher();
+        btn.focus();
+      });
+      panel.appendChild(option);
     });
 
-    btn.addEventListener("keydown", (e) => {
-      if (e.key === " " || e.key === "Enter") {
-        e.preventDefault();
-        btn.style.transform = "scale(0.95)";
-        btn.style.opacity = "0.7";
-        setTimeout(() => {
-          btn.style.transform = "";
-          btn.style.opacity = "";
-        }, 100);
-        toggle();
+    root.appendChild(btn);
+    root.appendChild(panel);
+    mountSwitcher(root);
+
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (open) {
+        closeSwitcher();
+      } else {
+        openSwitcher();
       }
     });
 
+    panel.addEventListener("keydown", (event) => {
+      const options = [...panel.querySelectorAll("[data-lang]")];
+      const index = options.indexOf(document.activeElement);
+      if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+        event.preventDefault();
+        options[(index + 1) % options.length]?.focus();
+      } else if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+        event.preventDefault();
+        options[(index - 1 + options.length) % options.length]?.focus();
+      } else if (event.key === "Home") {
+        event.preventDefault();
+        options[0]?.focus();
+      } else if (event.key === "End") {
+        event.preventDefault();
+        options[options.length - 1]?.focus();
+      } else if (event.key === "Escape") {
+        event.preventDefault();
+        closeSwitcher();
+        btn.focus();
+      } else if (event.key === "Tab") {
+        closeSwitcher();
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      if (open && !root.contains(event.target)) {
+        closeSwitcher();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && open) {
+        closeSwitcher();
+        btn.focus();
+      }
+    });
+
+    window.addEventListener("resize", () => {
+      closeSwitcher();
+      mountSwitcher(root);
+    });
+  };
+
+  const initSystem = () => {
+    const langs = availableLanguages();
+    injectLanguageToggle(langs);
+    apply(init(langs));
   };
 
   if (document.readyState === "loading") {
@@ -240,11 +332,14 @@
 
   window.i18n = {
     getCurrentLanguage: () => document.documentElement.lang,
-    setLanguage: (lang) => {
-      if (lang === "fa" || lang === "en") apply(lang);
+    setLanguage: (lang) => apply(lang),
+    toggleLanguage: () => {
+      const langs = availableLanguages();
+      const current = document.documentElement.lang;
+      const index = Math.max(0, langs.indexOf(current));
+      apply(langs[(index + 1) % langs.length]);
     },
-    toggleLanguage: toggle,
-    getAvailableLanguages: () => ["fa", "en"],
+    getAvailableLanguages: availableLanguages,
     isRtlCssEnabled: () => {
       const rtlStyle = document.getElementById("rtl-style");
       return rtlStyle ? !rtlStyle.disabled : false;

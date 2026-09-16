@@ -1,25 +1,63 @@
-# Phase 2 — schema, models and policies
+> **HISTORICAL / SUPERSEDED phase log.** Authoritative schema: [DATABASE.md](../DATABASE.md). Current status: [PROJECT-STATUS.md](../PROJECT-STATUS.md). DirectAdmin production DB remains NOT TESTED.
 
-Status: code written; executable database/policy tests pending completion of Composer installation. No migration success is claimed yet.
+# Phase 2 — database
+
+Status: **MariaDB 11.4.13 integration validated locally** on `127.0.0.1:3307`, database `meetaj_test`, charset `utf8mb4` / `utf8mb4_unicode_ci`. DirectAdmin production MySQL was **not** connected.
+
+## Implemented work
+
+Tables (InnoDB):
+
+1. `users` + `password_reset_tokens`
+2. `categories` — unique `(language, slug)` and `(translation_key, language)`
+3. `articles` — unique `(language, slug)` and `(translation_key, language)`; FK `category_id`; indexes `(language, status, published_at)` and `(status, published_at)`
+4. `article_redirects` — unique `old_path`; FK `article_id` ON DELETE CASCADE
+5. `requests`
+6. `sessions`
+
+No `contact_requests`. No `pages`.
+
+`php artisan migrate:fresh --seed` on MariaDB imported 23 articles and 23 redirects. Persian category names and a Persian `requests` row stored in utf8mb4 (Windows console may print `?`; the database charset is utf8mb4).
 
 ## Files changed
 
-- Six `database/migrations/2026_09_15_*` migrations create users/password_reset_tokens, categories, articles, article_redirects, requests, sessions in dependency order.
-- `app/Models/{User,Category,Article,ArticleRedirect,Request}.php` with relationships, localized uniqueness, publication constraints and transactional slug history.
-- `app/Policies/{Article,Category,Request}Policy.php` restrict content to admin/editor and contacts to admin.
-- `tests/TestCase.php`, `tests/Feature/ContentRulesTest.php`, `phpunit.xml` add disposable SQLite feature tests; MySQL/MariaDB is a separate required host check.
+- `database/migrations/2026_09_15_00000{1-6}_*.php`
+- `database/seeders/DatabaseSeeder.php` — rebuilds views and runs `articles:import-legacy`
+- `phpunit.mysql.xml` — dedicated MySQL/MariaDB PHPUnit config (port 3307, database `meetaj_test`)
+- `app/Models/*`, `app/Policies/*`
 
 ## Commands executed
 
-- PHP `-l` over app, database, config, bootstrap, routes, scripts and tests: passed for all 35 current PHP files.
-- PHP environment/original-source checks: all required extension/directory checks passed; 451 original hashes unchanged.
-- Inspected official MariaDB release metadata for possible local MySQL-compatible validation. No server installed or started yet.
+```text
+mysql_install_db / mysqld --port=3307   (portable MariaDB 11.4.13 in ignored .runtime/)
+CREATE DATABASE meetaj_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+php artisan config:clear
+php artisan migrate:fresh --force --seed
+php artisan db:show     → MariaDB 11.4.13, meetaj_test, 8 tables
+vendor/phpunit/phpunit/phpunit -c phpunit.mysql.xml
+  OK (23 tests, 517 assertions)
+```
 
-## Validation and blockers
+Local `.env` remains SQLite for the artisan serve process (not rewritten to MySQL).
 
-- Syntax validation passed.
-- Composite `(language, slug)` uniqueness and translation-group uniqueness defined; category and redirect foreign keys plus status/date indexes defined.
-- DE publishing is rejected at model level; public scope is explicitly EN/FA, published and due. Editorial UI validation alone is not relied on.
-- Model saves serialize route claims through Laravel's file cache lock and a database transaction; renamed slugs retain direct redirect history.
-- Tests are written for publication/drafts, historical slug reservation, category FK/language behavior, admin/editor policies and redirect cascade. Execution pending dependencies; tests are not marked passed.
-- MySQL/MariaDB engine-specific migration validation remains pending. SQLite tests cannot prove host collation/permissions/rewrite configuration.
+## Tests executed
+
+- Default `php artisan test` (SQLite in-memory via `phpunit.xml`): **OK, 23 tests, 510 assertions, 1 skipped** (`MysqlSchemaTest` skips unless the connection is mysql).
+- `phpunit.mysql.xml`: **OK (23 tests, 517 assertions)** including utf8mb4, unique slug, FK presence.
+
+## Real results
+
+| Check | Result |
+| --- | --- |
+| Connection | PASS (127.0.0.1:3307, user `meetaj`) |
+| utf8mb4 | PASS (`DEFAULT_CHARACTER_SET_NAME=utf8mb4`) |
+| migrate:fresh --seed | PASS (23 articles, 23 redirects) |
+| Foreign keys | PASS (`article_redirects_article_id_foreign` CASCADE) |
+| Unique `(language, slug)` | PASS (index present; duplicate insert raises QueryException) |
+| Publication indexes | PASS |
+| Sessions table | PASS |
+| DirectAdmin production DB | **BLOCKED** — no hosting credentials in this environment |
+
+## Blockers
+
+Production DirectAdmin MySQL/MariaDB remains **BLOCKED**. Repeat `migrate` (not `migrate:fresh`) there after backup. Do not point this workstation `.env` at production.

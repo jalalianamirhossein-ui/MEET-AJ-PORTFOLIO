@@ -1,11 +1,11 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -14,44 +14,129 @@ use Illuminate\Validation\ValidationException;
 
 class Article extends Model
 {
-    protected $fillable = ['title', 'slug', 'language', 'translation_key', 'excerpt', 'content', 'featured_image', 'category_id', 'meta_title', 'meta_description', 'canonical_url', 'status', 'published_at'];
+    protected $fillable = [
+        'title', 'slug', 'language', 'translation_key', 'excerpt', 'content', 'featured_image',
+        'category_id', 'meta_title', 'meta_description', 'canonical_url', 'seo_data',
+        'presentation', 'sort_order', 'status', 'published_at',
+    ];
+
     protected $attributes = ['language' => 'en', 'status' => 'draft', 'sort_order' => 0];
-    protected function casts(): array { return ['published_at' => 'datetime', 'presentation' => 'array', 'seo_data' => 'array']; }
-    public function category(): BelongsTo { return $this->belongsTo(Category::class); }
-    public function redirects(): HasMany { return $this->hasMany(ArticleRedirect::class); }
-    public function scopePublished(Builder $query): Builder {
-        return $query->whereIn('language', ['en', 'fa'])->where('status', 'published')->whereNotNull('published_at')->where('published_at', '<=', now());
+
+    protected function casts(): array
+    {
+        return [
+            'published_at' => 'datetime',
+            'presentation' => 'array',
+            'seo_data' => 'array',
+        ];
     }
-    public function path(): string { return self::pathFor($this->slug, $this->language); }
-    public static function pathFor(string $slug, string $language): string {
-        return ($language === 'en' ? '' : '/'.$language).'/articles/'.$slug;
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
-    public function publicUrl(): string { return rtrim(config('app.url'), '/').$this->path(); }
-    public function imageUrl(): string {
-        $image = $this->featured_image ?: '/assets/img/hero-bg.jpg';
-        return rtrim(config('app.url'), '/').(str_starts_with($image, '/assets/') ? $image : '/storage/'.ltrim($image, '/'));
+
+    public function redirects(): HasMany
+    {
+        return $this->hasMany(ArticleRedirect::class);
     }
-    public function translatedText(string $field, string $locale): string {
-        // An edited title/excerpt must not revert to obsolete imported data-* text.
+
+    public function scopePublished(Builder $query): Builder
+    {
+        return $query->whereIn('language', ['en', 'fa'])
+            ->where('status', 'published')
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
+    }
+
+    public function path(): string
+    {
+        return self::pathFor($this->slug, $this->language);
+    }
+
+    public static function pathFor(string $slug, string $language): string
+    {
+        // Production public articles stay on unprefixed English/default URLs.
+        // German never receives a public route.
+        return '/articles/'.$slug;
+    }
+
+    public function publicUrl(): string
+    {
+        return rtrim((string) config('app.url'), '/').$this->path();
+    }
+
+    public function canonicalUrl(): string
+    {
+        return $this->canonical_url ?: $this->publicUrl();
+    }
+
+    public function imageUrl(): string
+    {
+        $image = $this->featured_image ?: data_get($this->presentation, 'thumbnail') ?: '/assets/img/hero-bg.jpg';
+        if (str_starts_with((string) $image, 'http://') || str_starts_with((string) $image, 'https://')) {
+            return $image;
+        }
+        if (str_starts_with((string) $image, '/')) {
+            return rtrim((string) config('app.url'), '/').$image;
+        }
+
+        return rtrim((string) config('app.url'), '/').'/storage/'.ltrim((string) $image, '/');
+    }
+
+    public function galleryUrl(): string
+    {
+        $image = data_get($this->presentation, 'gallery') ?: $this->featured_image ?: '/assets/img/hero-bg.jpg';
+        if (str_starts_with((string) $image, '/')) {
+            return $image;
+        }
+
+        return '/'.ltrim((string) $image, '/');
+    }
+
+    public function thumbnailUrl(): string
+    {
+        $image = data_get($this->presentation, 'thumbnail') ?: $this->featured_image ?: '/assets/img/hero-bg.jpg';
+
+        return str_starts_with((string) $image, '/') ? $image : '/'.ltrim((string) $image, '/');
+    }
+
+    public function filterClass(): string
+    {
+        return (string) (data_get($this->presentation, 'filter_class') ?: 'filter-others');
+    }
+
+    public function translatedText(string $field, string $locale): string
+    {
         $original = data_get($this->presentation, 'original_'.$field);
-        return $this->{$field} === $original ? (data_get($this->presentation, $field.'_translations.'.$locale) ?: (string) $this->{$field}) : (string) $this->{$field};
+
+        return $this->{$field} === $original
+            ? (data_get($this->presentation, $field.'_translations.'.$locale) ?: (string) $this->{$field})
+            : (string) $this->{$field};
     }
-    public function save(array $options = []): bool {
-        // A shared-host file lock serializes route claims across the two route tables.
-        return Cache::lock('cms-article-route-write', 30)->block(10, fn () => DB::transaction(fn () => parent::save($options)));
+
+    public function save(array $options = []): bool
+    {
+        return DB::transaction(fn () => parent::save($options));
     }
-    protected static function booted(): void {
+
+    protected static function booted(): void
+    {
         static::saving(function (Article $article) {
             $article->translation_key ??= (string) Str::uuid();
             Validator::make($article->attributesToArray(), [
-                'title' => ['required', 'string', 'max:255'], 'language' => ['required', Rule::in(['en', 'fa', 'de'])],
+                'title' => ['required', 'string', 'max:255'],
+                'language' => ['required', Rule::in(['en', 'fa', 'de'])],
                 'slug' => ['required', 'string', 'max:180', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('articles')->where('language', $article->language)->ignore($article->id)],
                 'translation_key' => ['required', 'uuid', Rule::unique('articles')->where('language', $article->language)->ignore($article->id)],
-                'content' => ['required', 'string'], 'excerpt' => ['nullable', 'string'],
+                'content' => ['required', 'string'],
+                'excerpt' => ['nullable', 'string'],
                 'category_id' => ['nullable', Rule::exists('categories', 'id')->where('language', $article->language)],
-                'meta_title' => ['nullable', 'string', 'max:255'], 'meta_description' => ['nullable', 'string'],
-                'status' => ['required', Rule::in(['draft', 'published'])], 'published_at' => ['nullable', 'date', 'required_if:status,published'],
-                'featured_image' => ['nullable', 'string', 'max:2048', 'regex:~^(?:/assets/img/|articles/)[a-zA-Z0-9/_-]+\.(?:jpg|jpeg|png|webp)$~'],
+                'meta_title' => ['nullable', 'string', 'max:255'],
+                'meta_description' => ['nullable', 'string'],
+                'status' => ['required', Rule::in(['draft', 'published'])],
+                'published_at' => ['nullable', 'date', 'required_if:status,published'],
+                'featured_image' => ['nullable', 'string', 'max:2048', 'not_regex:/\.(php|phtml|phar|exe|js)$/i'],
             ])->validate();
             if ($article->language === 'de' && $article->status !== 'draft') {
                 throw ValidationException::withMessages(['status' => 'German content remains draft until real translations are approved for release.']);
@@ -59,8 +144,11 @@ class Article extends Model
             if ($article->exists && $article->isDirty('language')) {
                 throw ValidationException::withMessages(['language' => 'Create a separate translation; an existing article language cannot change.']);
             }
-            if ($article->canonical_url && $article->canonical_url !== $article->publicUrl()) {
-                throw ValidationException::withMessages(['canonical_url' => 'Use this article’s current public URL or leave blank for automatic canonical handling.']);
+            if ($article->canonical_url) {
+                $allowed = [$article->publicUrl(), 'https://meetaj.ir'.$article->path()];
+                if (! in_array($article->canonical_url, $allowed, true)) {
+                    throw ValidationException::withMessages(['canonical_url' => 'Use this article’s current public URL or leave blank for automatic canonical handling.']);
+                }
             }
             $paths = [$article->path(), $article->path().'.html'];
             if (ArticleRedirect::whereIn('old_path', $paths)->where('article_id', '!=', $article->id ?? 0)->exists()) {
