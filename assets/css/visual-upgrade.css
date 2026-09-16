@@ -2233,6 +2233,13 @@ html[dir="rtl"] .resume .resume-item {
 /*--------------------------------------------------------------
 # Service landing pages — editorial portfolio
 --------------------------------------------------------------*/
+body.service-landing {
+  background: #f7f8fa;
+  color: #0f172a;
+  counter-reset: svc;
+  position: relative;
+}
+
 body.service-landing p {
   margin-bottom: 0;
 }
@@ -2272,17 +2279,49 @@ body.service-landing .btn-primary:hover {
 .service-hero {
   position: relative;
   overflow: hidden;
-  padding: clamp(5.5rem, 12vw, 8rem) 1.5rem 4.5rem;
+  padding: clamp(5.5rem, 12vw, 8rem) 4.5rem 4.5rem;
   background:
     radial-gradient(1200px 420px at 100% -10%, rgba(37, 99, 235, 0.08), transparent 55%),
     linear-gradient(180deg, #f4f6f9 0%, #f7f8fa 100%);
   border-bottom: 0;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .service-hero-copy,
+  .service-hero-aside {
+    animation: svcReveal 0.7s var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
+  }
+
+  .service-hero-aside {
+    animation-delay: 0.12s;
+  }
+
+  .service-hero-mark {
+    animation: svcMark 1.1s var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
+  }
+}
+
+@keyframes svcReveal {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes svcMark {
+  from { opacity: 0; transform: translateY(18px) scale(0.96); }
+  to { opacity: 0.07; transform: none; }
+}
+
+.service-hero-inner {
+  width: min(72rem, 100%);
+}
+
+.service-block:not(.service-quote) {
+  width: min(72rem, calc(100% - 9rem));
+}
+
 .service-hero-inner {
   position: relative;
   z-index: 1;
-  width: min(72rem, calc(100% - 2rem));
   margin-inline: auto;
   display: grid;
   gap: 2.5rem;
@@ -2304,6 +2343,7 @@ body.service-landing .btn-primary:hover {
   position: relative;
   z-index: 1;
   max-width: 38rem;
+  min-width: 0;
 }
 
 .service-kicker,
@@ -2349,6 +2389,7 @@ body.service-landing .service-title {
   flex-direction: column;
   justify-content: flex-end;
   gap: 0.35rem;
+  min-width: 0;
   padding-top: 0.25rem;
   border-top: 1px solid rgba(15, 23, 42, 0.08);
 }
@@ -2392,7 +2433,6 @@ body.service-landing .service-title {
 }
 
 .service-block {
-  width: min(72rem, calc(100% - 2rem));
   margin-inline: auto;
   padding: clamp(3.25rem, 6vw, 5rem) 0;
   border-top: 1px solid rgba(15, 23, 42, 0.08);
@@ -2409,6 +2449,11 @@ body.service-landing .service-title {
 
   .service-block:not(.service-quote) .section-header {
     margin-bottom: 0;
+  }
+
+  .service-block > .service-process {
+    grid-column: 1 / -1;
+    margin-top: 1.25rem;
   }
 }
 
@@ -2453,7 +2498,8 @@ body.service-landing .service-title {
 .service-lines li {
   position: relative;
   margin: 0;
-  padding: 1.05rem 0 1.05rem 1.7rem;
+  padding-block: 1.05rem;
+  padding-inline: 1.7rem 0;
   background: none;
   border: 0;
   border-bottom: 1px solid rgba(15, 23, 42, 0.08);
@@ -2475,6 +2521,16 @@ body.service-landing .service-title {
   background: var(--color-primary);
 }
 
+html[dir="rtl"] .service-lines li::before {
+  left: auto;
+  right: 0;
+}
+
+html[dir="ltr"] .service-lines li::before {
+  right: auto;
+  left: 0;
+}
+
 .service-block--pricing {
   background: transparent;
 }
@@ -2488,6 +2544,10 @@ body.service-landing .service-title {
   border-radius: 0;
   box-shadow: none;
   align-items: end;
+}
+
+.service-price-anchor {
+  padding-bottom: 0.25rem;
 }
 
 .service-price-anchor .muted {
@@ -2506,7 +2566,8 @@ body.service-landing .service-title {
 
 .service-plain-list li {
   position: relative;
-  padding: 0.45rem 0 0.45rem 1.1rem;
+  padding-block: 0.45rem;
+  padding-inline: 1.1rem 0;
   color: #475569;
   font-size: 0.95rem;
   line-height: 1.55;
@@ -2533,7 +2594,8 @@ body.service-landing .service-title {
   grid-template-columns: 3.5rem 1fr;
   gap: 1rem;
   align-items: start;
-  padding: 1.35rem 0 1.35rem 1.15rem;
+  padding-block: 1.35rem;
+  padding-inline: 1.15rem 0;
   background: none;
   border: 0;
   border-radius: 0;
@@ -2580,7 +2642,8 @@ body.service-landing .service-title {
 
 .service-compact li {
   margin: 0;
-  padding: 0.85rem 0 0.85rem 1rem;
+  padding-block: 0.85rem;
+  padding-inline: 1rem 0.25rem;
   background: none;
   border: 0;
   border-inline-start: 2px solid var(--color-primary);
@@ -2621,31 +2684,45 @@ body.service-landing .service-title {
   cursor: pointer;
 }
 
+.service-faq .faq-question:hover {
+  background: transparent;
+  color: var(--color-primary);
+}
+
 .service-faq .faq-question i {
   color: var(--color-primary);
   transition: transform var(--duration-fast) var(--ease-out);
 }
 
 .service-faq .faq-answer {
+  display: none;
   padding: 0 0 1.1rem;
+  background: transparent;
   color: #64748b;
 }
 
+.service-faq .faq-answer.show {
+  display: block;
+}
+
 .service-quote {
+  display: grid;
+  gap: 0;
   text-align: start;
   background: #0f172a;
   color: #e2e8f0;
   width: 100%;
   max-width: none;
   margin: 0;
-  padding: clamp(3.5rem, 7vw, 5.5rem) 1.5rem;
+  padding: clamp(3.5rem, 7vw, 5.5rem) max(1.5rem, 4.25rem);
   border-top: 0;
 }
 
 .service-quote .section-header,
 .service-quote .php-email-form,
 .service-quote .service-lead,
-.service-quote > .btn {
+.service-quote > .btn,
+.service-quote .contact-form {
   width: min(72rem, 100%);
   margin-inline: auto;
 }
@@ -2665,7 +2742,13 @@ body.service-landing .service-title {
   color: #cbd5e1;
 }
 
+.service-quote h2 {
+  font-size: clamp(2rem, 4.2vw, 3.15rem);
+}
+
 .service-quote > .btn-primary {
+  width: auto;
+  min-width: 14rem;
   background: #fff;
   color: #0f172a;
   border-color: #fff;
@@ -2703,18 +2786,29 @@ body.service-landing .service-title {
   margin: 0;
 }
 
-.service-landing .form-float input,
-.service-landing .form-float select,
-.service-landing .form-float textarea {
+body.service-landing.service-page .form-float input,
+body.service-landing.service-page .form-float select,
+body.service-landing.service-page .form-float textarea {
   min-height: 3.4rem;
   width: 100%;
-  padding: 1.35rem 0.95rem 0.55rem;
+  padding: 1.35rem 0.15rem 0.55rem;
   border: 0;
   border-bottom: 1px solid rgba(226, 232, 240, 0.35);
   border-radius: 0;
-  background: rgba(255, 255, 255, 0.04);
+  background: transparent;
   color: #f8fafc;
   font: inherit;
+  box-shadow: none;
+  appearance: none;
+}
+
+.service-landing .form-float select {
+  cursor: pointer;
+}
+
+.service-landing .form-float option {
+  color: #0f172a;
+  background: #fff;
 }
 
 .service-landing .form-float textarea {
@@ -2725,7 +2819,7 @@ body.service-landing .service-title {
 .service-landing .form-float label {
   position: absolute;
   top: 1rem;
-  inset-inline-start: 0.95rem;
+  inset-inline-start: 0.15rem;
   margin: 0;
   color: #94a3b8;
   font-size: 0.92rem;
@@ -2746,12 +2840,13 @@ body.service-landing .service-title {
   color: #93c5fd;
 }
 
-.service-landing .form-float input:focus,
-.service-landing .form-float select:focus,
-.service-landing .form-float textarea:focus {
+body.service-landing.service-page .form-float input:focus,
+body.service-landing.service-page .form-float select:focus,
+body.service-landing.service-page .form-float textarea:focus {
   outline: none;
+  box-shadow: none;
   border-bottom-color: #60a5fa;
-  background: rgba(255, 255, 255, 0.07);
+  background: transparent;
 }
 
 .service-landing .form-float input:user-invalid,
@@ -2767,9 +2862,19 @@ body.service-landing .service-title {
 .service-landing .php-email-form .btn-primary {
   justify-self: start;
   min-width: 12rem;
+  margin-top: 0.5rem;
   background: #2563eb;
   border-color: #2563eb;
   color: #fff;
+}
+
+.service-landing .php-email-form .btn-primary:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+.service-landing .php-email-form .btn-primary[aria-busy="true"] {
+  opacity: 0.7;
 }
 
 .service-landing .toast {
@@ -2781,7 +2886,9 @@ body.service-landing .service-title {
 }
 
 .service-landing .back-button {
-  z-index: 30;
+  position: absolute;
+  top: max(1.1rem, env(safe-area-inset-top));
+  z-index: 20;
   border-radius: 999px;
   background: rgba(247, 248, 250, 0.92);
 }
@@ -2796,21 +2903,13 @@ body.service-landing .service-title {
   .service-hero-aside {
     border-top: 0;
     border-inline-start: 1px solid rgba(15, 23, 42, 0.1);
-    padding: 0 0 0.2rem 2rem;
-  }
-
-  html[dir="rtl"] .service-hero-aside {
-    padding: 0 2rem 0.2rem 0;
+    padding-block: 0 0.2rem;
+    padding-inline: 2rem 0;
   }
 
   .service-lines {
     grid-template-columns: 1fr 1fr;
     column-gap: 3.5rem;
-  }
-
-  .service-price-panel {
-    grid-template-columns: minmax(16rem, 0.85fr) 1fr;
-    gap: 4rem;
   }
 
   .service-compact {
@@ -2841,7 +2940,8 @@ body.service-landing .service-title {
 
   .service-process li {
     grid-template-columns: 1fr;
-    padding: 0 0.4rem 0 0;
+    padding: 0;
+    padding-inline-end: 0.4rem;
     border: 0;
   }
 
@@ -2864,13 +2964,26 @@ body.service-landing .service-title {
   }
 
   .service-compact {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 2.5rem;
   }
 }
 
 @media (max-width: 767px) {
   .service-hero {
-    padding-top: 5.5rem;
+    padding: 4.75rem 1.25rem 3.25rem;
+  }
+
+  .service-hero-inner {
+    width: min(72rem, 100%);
+  }
+
+  .service-block:not(.service-quote) {
+    width: min(72rem, calc(100% - 2.5rem));
+  }
+
+  .service-quote {
+    padding-inline: 1.25rem;
   }
 
   .service-hero-actions .btn,
@@ -2884,8 +2997,17 @@ body.service-landing .service-title {
     inset: auto;
   }
 
+  html[dir="rtl"] body.service-landing .lang-switcher.is-floating {
+    inset-inline-start: auto;
+    inset-inline-end: max(0.75rem, env(safe-area-inset-left));
+  }
+
   .price-number {
     font-size: clamp(2.4rem, 14vw, 3.4rem);
+  }
+
+  .section-header h2 {
+    font-size: clamp(1.45rem, 7vw, 1.9rem);
   }
 }
 
@@ -2908,7 +3030,9 @@ html[dir="rtl"] .service-process-num {
   .service-include-grid li,
   .service-process li,
   .btn,
-  .service-hero-mark {
+  .service-hero-mark,
+  .service-hero-copy,
+  .service-hero-aside {
     transition: none;
     animation: none;
     transform: none;
