@@ -374,7 +374,7 @@
   =============================================== -->
 
   <body class="index-page">
-    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <a class="skip-link" href="#main-content" data-en="Skip to main content" data-fa="رفتن به محتوای اصلی">Skip to main content</a>
     <!-- ===============================================
     ==================== HEADER SECTION ================
     =============================================== -->
@@ -509,7 +509,7 @@
       <!-- ===============================================
       ==================== NAVIGATION MENU ================
       =============================================== -->
-      <nav id="navmenu" class="navmenu" role="navigation" aria-label="Primary">
+      <nav id="navmenu" class="navmenu" role="navigation" aria-label="Primary" data-en-aria-label="Primary" data-fa-aria-label="منوی اصلی">
         <ul>
           <!-- Home Section -->
           <li>
@@ -580,6 +580,8 @@
       class="menu-toggle d-xl-none"
       type="button"
       aria-label="Open menu"
+      data-en-aria-label="Open menu"
+      data-fa-aria-label="باز کردن منو"
       aria-expanded="false"
       aria-controls="header"
     >
