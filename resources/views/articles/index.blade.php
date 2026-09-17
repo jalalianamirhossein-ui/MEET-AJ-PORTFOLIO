@@ -15,9 +15,9 @@
     <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
     <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
-    <link href="/assets/css/lang-toggle.css?v=1202" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1204" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1404" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1409" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">@verbatim
 <a class="skip-link" href="#portfolio">Skip to main content</a>
@@ -25,6 +25,7 @@
     ==================== HEADER SECTION ================
     =============================================== -->
     <header id="header" class="header dark-background d-flex flex-column">
+      <div class="brand-lang" id="lang-mount"></div>
       <!-- ===============================================
       ==================== PROFILE IMAGE =================
       =============================================== -->
@@ -61,9 +62,6 @@
           <div class="sitename">Meet AJ</div>
         </a>
       </div>
-
-      <!-- Language control mount point (filled by i18n.js) -->
-      <div class="brand-lang" id="lang-mount"></div>
 
       <!-- ===============================================
       ==================== SOCIAL LINKS ===================
@@ -279,7 +277,7 @@
                 >Category</span
               >
               <ul
-                class="portfolio-filters isotope-filters"
+                class="portfolio-filters isotope-filters article-chip-row"
                 role="group"
                 aria-labelledby="article-filter-label"
               >
@@ -544,7 +542,7 @@
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/js/main.js?v=1201" defer></script>
-    <script src="/assets/js/i18n.js?v=1201" defer></script>
+    <script src="/assets/js/i18n.js?v=1203" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {

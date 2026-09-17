@@ -1,7 +1,7 @@
 # Features — Meet AJ
 
 **Authority:** AUTHORITATIVE description of public and CMS features after the 2026-09-17 master audit.  
-**Overlay:** `visual-upgrade.css?v=1404`  
+**Overlay:** `visual-upgrade.css?v=1405`  
 **Scripts:** `i18n.js?v=1201`, `main.js?v=1201`  
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md) · **Detail:** [ARTICLES.md](ARTICLES.md), [SERVICES.md](SERVICES.md), [REQUESTS.md](REQUESTS.md), [ADMIN.md](ADMIN.md)
 

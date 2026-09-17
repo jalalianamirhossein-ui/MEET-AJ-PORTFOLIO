@@ -39,8 +39,9 @@
             </div>
           </form>
           @if (isset($tags) && $tags->isNotEmpty())
-            <nav class="article-tag-nav" aria-label="Filter by tag">
+          <nav class="article-tag-nav" aria-label="Filter by tag">
               <span class="article-tag-nav-label" data-en="Tags" data-fa="برچسب‌ها">Tags</span>
+              <div class="article-chip-row">
               <a
                 class="article-tag{{ $tagSlug === '' ? ' is-active' : '' }}"
                 href="{{ url('/articles') }}"
@@ -56,6 +57,7 @@
                   @if ($tagSlug === $tag->slug) aria-current="page" @endif
                 >{{ $tag->name }}</a>
               @endforeach
+              </div>
             </nav>
           @endif
         </div>

@@ -227,7 +227,7 @@
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
 
     <!-- Language Toggle Stylesheet -->
-    <link href="/assets/css/lang-toggle.css?v=1202" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1204" rel="stylesheet" />
 
     <!-- RTL Support Stylesheet -->
     <link
@@ -236,7 +236,7 @@
       rel="stylesheet"
       disabled
     />
-    <link href="/assets/css/visual-upgrade.css?v=1404" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1409" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -379,6 +379,7 @@
     ==================== HEADER SECTION ================
     =============================================== -->
     <header id="header" class="header dark-background d-flex flex-column">
+      <div class="brand-lang" id="lang-mount"></div>
       <!-- ===============================================
       ==================== PROFILE IMAGE =================
       =============================================== -->
@@ -415,9 +416,6 @@
           <div class="sitename">Meet AJ</div>
         </a>
       </div>
-
-      <!-- Language control mount point (filled by i18n.js) -->
-      <div class="brand-lang" id="lang-mount"></div>
 
       <!-- ===============================================
       ==================== SOCIAL LINKS ===================
@@ -1981,7 +1979,7 @@
                 >Category</span
               >
               <ul
-                class="portfolio-filters isotope-filters"
+                class="portfolio-filters isotope-filters article-chip-row"
                 role="group"
                 aria-labelledby="article-filter-label"
               >
@@ -2974,7 +2972,7 @@
 
     <!-- Internationalization (i18n) Support -->
     <!-- Language Toggle JavaScript -->
-    <script src="/assets/js/i18n.js?v=1201" defer></script>
+    <script src="/assets/js/i18n.js?v=1203" defer></script>
 
     <!-- Progressive image loading for non-critical media -->
     <script>

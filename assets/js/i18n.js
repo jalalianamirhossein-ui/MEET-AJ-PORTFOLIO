@@ -173,30 +173,24 @@
   };
 
   const mountSwitcher = (root) => {
-    const header = document.querySelector("#header");
-    const mount =
-      document.getElementById("lang-mount") ||
-      header?.querySelector(".brand-lang");
     const desktop = window.matchMedia("(min-width: 1200px)").matches;
+    const slot = document.getElementById("lang-mount");
+    const inHeader = Boolean(desktop && slot);
 
-    if (desktop && mount) {
-      mount.appendChild(root);
-      root.classList.remove("is-floating");
+    root.classList.toggle("is-header-slot", inHeader);
+    root.classList.toggle("is-floating", !inHeader);
+    root.classList.toggle("is-desktop-chrome", desktop);
+
+    if (inHeader) {
+      if (root.parentElement !== slot) {
+        slot.appendChild(root);
+      }
       return;
     }
 
-    if (desktop && header) {
-      const logo = header.querySelector(".logo-section");
-      (logo?.parentNode || header).insertBefore(
-        root,
-        logo ? logo.nextSibling : header.firstChild,
-      );
-      root.classList.remove("is-floating");
-      return;
+    if (root.parentElement !== document.body) {
+      document.body.appendChild(root);
     }
-
-    document.body.appendChild(root);
-    root.classList.add("is-floating");
   };
 
   const injectLanguageToggle = (langs) => {

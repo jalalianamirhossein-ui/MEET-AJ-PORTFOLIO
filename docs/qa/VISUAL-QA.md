@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-17  
 **Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md) · **Accessibility:** [ACCESSIBILITY-QA.md](ACCESSIBILITY-QA.md) · **Responsive:** [RESPONSIVE-QA.md](RESPONSIVE-QA.md)  
-**Overlay:** `assets/css/visual-upgrade.css?v=1404`  
+**Overlay:** `assets/css/visual-upgrade.css?v=1405`  
 **Scripts:** `main.js?v=1201`, `i18n.js?v=1201`, `lang-toggle.css?v=1202`  
 **Latest visual pass:** [VISUAL-UX-FINAL-REPORT.md](VISUAL-UX-FINAL-REPORT.md)  
 **Method:** Cursor browser snapshots + CDP overflow/computed styles. Screenshots are often **stale vs URL**; CDP and the accessibility tree are the visual/layout truth this pass.

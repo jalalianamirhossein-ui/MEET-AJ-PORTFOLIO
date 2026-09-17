@@ -56,7 +56,7 @@ Relations are eager-loaded on the public paths, so no N+1 pattern is visible in 
 
 ## Front-end characteristics
 
-- Asset cache busting is manual via query strings (`visual-upgrade.css?v=1314`, `main.js?v=1119`, `i18n.js?v=1116`); every publish point must be bumped together.
+- Asset cache busting is manual via query strings (`visual-upgrade.css?v=1405`, `main.js?v=1201`, `i18n.js?v=1201`, `lang-toggle.css?v=1202`); every publish point must be bumped together.
 - CSS is layered: original `main.css` → `rtl.css` → `visual-upgrade.css` overlay. The overlay adds weight rather than replacing the base sheet.
 - Language switching is client-side DOM attribute swapping, so both languages ship in every page.
 

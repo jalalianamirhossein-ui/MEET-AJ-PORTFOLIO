@@ -54,9 +54,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/css/services.css?v=1000" />
-    <link href="/assets/css/lang-toggle.css?v=1202" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1204" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1404" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1409" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" />
     <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
@@ -289,11 +289,14 @@
         </div>
       </section>
     </main>
-    <div id="toast" class="toast" hidden role="status" data-en="Request submitted successfully! We'll contact you soon." data-fa="درخواست با موفقیت ارسال شد.">Request submitted successfully! We'll contact you soon.</div>
+    <div id="toast" class="toast" hidden role="status" aria-live="polite" aria-atomic="true" data-en="Request submitted successfully! We'll contact you soon." data-fa="درخواست با موفقیت ارسال شد.">Request submitted successfully! We'll contact you soon.</div>
     <script src="/assets/vendor/aos/aos.js"></script>
-    <script src="/assets/js/i18n.js?v=1201"></script>
+    <script src="/assets/js/i18n.js?v=1203"></script>
     <script>
       AOS.init({ once: true, disable: window.matchMedia('(prefers-reduced-motion: reduce)').matches });
+      function copyText(en, fa) {
+        return document.documentElement.lang === "fa" ? fa : en;
+      }
       function toggleFAQ(element) {
         const answer = element.nextElementSibling;
         const icon = element.querySelector("i");
@@ -327,17 +330,24 @@
         const email = (formData.get("email") || "").trim();
         const message = (formData.get("message") || "").trim();
         const subject = (formData.get("subject") || "").trim();
-        if (name.length < 2 || name.length > 50) { errorEl.hidden = false; errorEl.textContent = "Invalid name (2-50 characters required)"; return; }
-        if (!email || email.length > 100) { errorEl.hidden = false; errorEl.textContent = "Invalid email address"; return; }
-        if (subject.length < 5 || subject.length > 100) { errorEl.hidden = false; errorEl.textContent = "Invalid subject (5-100 characters required)"; return; }
-        if (message.length < 10 || message.length > 1000) { errorEl.hidden = false; errorEl.textContent = "Invalid message (10-1000 characters required)"; return; }
+        const showError = (en, fa) => {
+          errorEl.hidden = false;
+          errorEl.textContent = copyText(en, fa);
+        };
+        if (name.length < 2 || name.length > 50) { showError("Invalid name (2-50 characters required)", "نام نامعتبر است (۲ تا ۵۰ نویسه)"); return; }
+        if (!email || email.length > 100) { showError("Invalid email address", "نشانی ایمیل نامعتبر است"); return; }
+        if (subject.length < 5 || subject.length > 100) { showError("Invalid subject (5-100 characters required)", "موضوع نامعتبر است (۵ تا ۱۰۰ نویسه)"); return; }
+        if (message.length < 10 || message.length > 1000) { showError("Invalid message (10-1000 characters required)", "پیام نامعتبر است (۱۰ تا ۱۰۰۰ نویسه)"); return; }
         errorEl.hidden = true;
-        const originalText = submitBtn.textContent;
         submitBtn.disabled = true;
         submitBtn.setAttribute("aria-busy", "true");
-        submitBtn.textContent = "Sending...";
+        submitBtn.textContent = copyText("Sending...", "در حال ارسال...");
         try {
           const csrfResponse = await fetch("/forms/get-csrf-token.php", { cache: "no-store", credentials: "same-origin" });
+          if (!csrfResponse.ok) {
+            showError("Security token error. Please refresh and try again.", "خطای امنیتی. صفحه را تازه‌سازی کنید و دوباره تلاش کنید.");
+            return;
+          }
           const csrfData = await csrfResponse.json();
           formData.set("csrf_token", csrfData.token);
           const response = await fetch("/forms/contact.php", { method: "POST", body: formData, credentials: "same-origin" });
@@ -348,17 +358,23 @@
             document.getElementById("contact-subject").value = @json($formSubject);
             toast.hidden = false;
             toast.classList.add("show");
+            window.setTimeout(() => {
+              toast.classList.remove("show");
+              toast.hidden = true;
+            }, 5000);
+          } else if (response.status === 419) {
+            showError("Security token error. Please refresh and try again.", "خطای امنیتی. صفحه را تازه‌سازی کنید و دوباره تلاش کنید.");
           } else {
             errorEl.hidden = false;
-            errorEl.textContent = responseText || "Request failed.";
+            errorEl.textContent = responseText || copyText("Request failed.", "ارسال درخواست ناموفق بود.");
           }
         } catch (e) {
-          errorEl.hidden = false;
-          errorEl.textContent = "Network error. Please try again.";
+          showError("Network error. Please try again.", "خطای شبکه. دوباره تلاش کنید.");
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.removeAttribute("aria-busy");
+          submitBtn.textContent = copyText(submitBtn.getAttribute("data-en") || "Submit Request", submitBtn.getAttribute("data-fa") || "ارسال درخواست");
         }
-        submitBtn.disabled = false;
-        submitBtn.removeAttribute("aria-busy");
-        submitBtn.textContent = originalText;
       }
       if (location.hash === "#service-request" || location.hash === "#contactForm") {
         showContactForm();

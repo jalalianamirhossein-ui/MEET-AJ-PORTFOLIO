@@ -140,7 +140,7 @@ Detail: [ADMIN.md](ADMIN.md).
 
 ## Assets and document root
 
-Original CSS/JS/images live in `assets/` and are copied into `public/assets/` by the publisher. The overlay stylesheet `assets/css/visual-upgrade.css` loads after `rtl.css`. Current cache-busting versions in the Blade heads: `visual-upgrade.css?v=1404`, `main.js?v=1201`, `i18n.js?v=1201`, `lang-toggle.css?v=1202`.
+Original CSS/JS/images live in `assets/` and are copied into `public/assets/` by the publisher. The overlay stylesheet `assets/css/visual-upgrade.css` loads after `rtl.css`. Current cache-busting versions in the Blade heads: `visual-upgrade.css?v=1405`, `main.js?v=1201`, `i18n.js?v=1201`, `lang-toggle.css?v=1202`.
 
 Only `public/` may be exposed by the web server. The root-level `index.html`, `articles/`, `services/`, `assets/`, `forms/` and `partials/` are **sources**; serving them directly would bypass Laravel.
 

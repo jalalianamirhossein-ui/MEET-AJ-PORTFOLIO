@@ -1,6 +1,6 @@
 # Design system — Meet AJ public site
 
-**Authority:** [design-system/meet-aj/MASTER.md](../../design-system/meet-aj/MASTER.md). Live overlay `assets/css/visual-upgrade.css?v=1404`.  
+**Authority:** [design-system/meet-aj/MASTER.md](../../design-system/meet-aj/MASTER.md). Live overlay `assets/css/visual-upgrade.css?v=1405`.  
 **Visual DNA:** [ARTICLE-VISUAL-DNA.md](ARTICLE-VISUAL-DNA.md) (Article detail pages are the reference; they are not restyled from this file).  
 **Date:** 2026-09-17  
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md)

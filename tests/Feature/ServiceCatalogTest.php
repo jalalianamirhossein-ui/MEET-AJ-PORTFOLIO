@@ -147,7 +147,9 @@ class ServiceCatalogTest extends TestCase
         $this->assertStringContainsString('Request a Quote', $html);
         $this->assertStringContainsString('id="contactForm" hidden', $html);
         $this->assertStringNotContainsString('class="contact-form show"', $html);
-        $this->assertStringContainsString('Need this service?', $html);
+        $this->assertStringContainsString('aria-live="assertive"', $html);
+        $this->assertStringContainsString('aria-live="polite"', $html);
+        $this->assertStringContainsString('data-en="Submit Request"', $html);
         $this->assertStringContainsString('What is included', $html);
     }
 }

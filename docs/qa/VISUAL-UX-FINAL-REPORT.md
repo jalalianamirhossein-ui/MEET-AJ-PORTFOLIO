@@ -2,7 +2,7 @@
 
 **Status:** CURRENT  
 **Date:** 2026-09-17  
-**Overlay:** `visual-upgrade.css?v=1404` · `main.js?v=1201` · `i18n.js?v=1201` · `lang-toggle.css?v=1202`  
+**Overlay:** `visual-upgrade.css?v=1405` · `main.js?v=1201` · `i18n.js?v=1201` · `lang-toggle.css?v=1202`  
 **Baseline before this pass:** [pre-visual-upgrade-baseline.md](pre-visual-upgrade-baseline.md)  
 **Tests this pass:** 40 tests, 708 assertions, 1 skipped. `site:compare-content` Failures: 0.
 
@@ -42,7 +42,7 @@ Homepage `#portfolio` / `#contact` were **already unique** in the live DOM (1 ea
 | Language keeps the current route | PASS | `/services/network-design` stayed on that URL in FA; article detail keeps its slug |
 | Skills bars + existing percentages | PASS | Screenshot + earlier CDP widths 100/92/90/88/77 matching `aria-valuenow` |
 | Skills IO animation | PASS | Bars start at 0, fill once in view; `prefers-reduced-motion` skips WAAPI |
-| Service landing + quote form | PASS | Form opens, labelled fields, CSRF/honeypot unchanged; RTL screenshot earlier this pass |
+| Service landing + quote form | PASS | Form opens, labelled fields, CSRF/honeypot unchanged; RTL screenshot earlier this pass. Follow-up: `:focus-visible` restored, bilingual Sending/errors, toast `aria-live`, CSRF fetch failure handled, 320px block gutters reset |
 | Mobile menu Escape / inert / scroll lock | PASS | Existing `main.js` behaviour unchanged this pass |
 | RTL (FA) | PASS | Brand stays [logo][Meet AJ]; language `FA ⇄`; chrome mirrored |
 | LTR (EN) | PASS | Homepage, listing, article detail, admin login tree |

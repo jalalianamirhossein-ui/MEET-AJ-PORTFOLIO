@@ -1,7 +1,7 @@
 # Final project QA report — Meet AJ master audit
 
 **Date:** 2026-09-17  
-**Overlay:** `visual-upgrade.css?v=1404`  
+**Overlay:** `visual-upgrade.css?v=1405`  
 **Scripts:** `i18n.js?v=1201`, `main.js?v=1201`, `lang-toggle.css?v=1202`  
 **Latest visual pass:** [VISUAL-UX-FINAL-REPORT.md](VISUAL-UX-FINAL-REPORT.md)  
 **Git:** no git command was run in this pass — no add, no commit, no push. (A `.git` directory already exists in the repository; it was not touched.)  
@@ -56,7 +56,7 @@ HTTP: 68 URL checks, **0 unexpected** statuses.
 | Item | Result | Evidence |
 |------|--------|----------|
 | Article DNA not redesigned | PASS | H1 `rgb(30, 41, 59)`; body HTML compare-content PASS |
-| Overlay tokens | PASS | Live `visual-upgrade.css?v=1404` |
+| Overlay tokens | PASS | Live `visual-upgrade.css?v=1405` |
 | Homepage H2 700 | PASS | CDP on About heading |
 | Icon language | PASS | Bootstrap Icons (hero arrows replaced earlier) |
 | Motion / reduced-motion | PASS in CSS | Not re-toggled in OS settings this pass — WARN |
@@ -145,7 +145,7 @@ HTTP: 68 URL checks, **0 unexpected** statuses.
 1. `assets/js/i18n.js` applies `data-*-placeholder` (FA search placeholder verified).
 2. Article teasers `h4` → `h3` + overlay selectors.
 3. Mobile menu `setBackgroundInert` so page content is not tabbable while open.
-4. Overlay cache `v=1404`; i18n `v=1201`; main `v=1201`; lang-toggle `v=1202`.
+4. Overlay cache `v=1405`; i18n `v=1201`; main `v=1201`; lang-toggle `v=1202`.
 5. Compare-content kernel `terminate()` so article 1 is not a false canonical FAIL.
 6. Brand lock `direction: ltr`; language is a single switch button in `#lang-mount`.
 
