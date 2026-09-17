@@ -1,66 +1,162 @@
-# Final project QA report — Meet AJ visual DNA unification
+# Final project QA report — Meet AJ master audit
 
 **Date:** 2026-09-17  
-**Overlay:** `visual-upgrade.css?v=1310`  
+**Overlay:** `visual-upgrade.css?v=1314`  
+**Scripts:** `i18n.js?v=1116`, `main.js?v=1119`  
 **Git:** not initialized, not committed (per instruction).
+
+This is **not** a claim that every viewport screenshot and every authenticated admin screen was proven. PASS below means verified with the evidence named. BLOCKED means not tested. FAIL would mean a proven defect still open.
 
 ## Executive summary
 
-Article detail pages remain the visual DNA and were **not** redesigned. Linux SSH H1 is navy `rgb(30, 41, 59)` with no text-shadow under overlay v=1310.
+Meet AJ remains Laravel 13 + PHP 8.4 + Filament 5 + Livewire 4 + Blade. Article detail pages stay the visual DNA (H1 `#1e293b` verified). Homepage, services, library, search, tags, related articles, share, breadcrumbs, request workflow, and Filament resources share that language.
 
-Homepage is an editorial portfolio (hero photo, Get to Know Me, expertise domains, Technical/Professional skill lists, resume timeline, service previews, article teasers, testimonials, contact). Service pages are landings that reuse Article tokens without copying the Article document layout. Cards are limited to grouping (catalog, teasers, quote/contact form).
+This pass fixed: FA search placeholders (`i18n.js`), article teaser heading skip (H4→H3), mobile menu background `inert` when open.
 
-`php artisan site:compare-content` → **Failures: 0**.  
-`php artisan test` → **31 tests, 593 assertions, 1 skipped, 0 failures**.
+`php artisan site:compare-content` → **Failures: 0** (23 articles, 6 services, home).  
+`php artisan test` → **39 tests, 647 assertions, 1 skipped (`MysqlSchemaTest`), 0 failures**.  
+HTTP: 68 URL checks, **0 unexpected** statuses.
 
-## Fixes in this pass (visual loop)
+## Architecture
 
-- Homepage hero: white name scoped to `body.index-page`; left scrim; `.hero-bg` crop.
-- Article titles restored after white-fill leak.
-- About H2 DNA bar; body copy `#1e293b`.
-- Skills: Technical / Professional headings; progress bars and percentages hidden.
-- Service/article overlay loads last; service blocks inset 6.5rem for the floating EN control.
+| Question | Answer |
+|----------|--------|
+| 1. Business logic outside Blade? | YES — search, related, tags, share URLs, reading time, contact store |
+| 2. Validation centralized? | YES — `StoreContactRequest` + model `saving` validators |
+| 3. Authorization server-side? | YES — policies; Filament `canViewAny` / admin-only requests |
+| 4. Database constraints correct? | YES — unique tag name/slug, pivot FKs, request notes column |
+| 5. Queries efficient? | YES for 23 rows — listing omits `content`; LIKE search is enough |
+| 6. Public/private separated? | YES — `internal_notes` hidden; contact create does not accept notes/status |
+| 7. Filament only Admin UI? | YES |
+| 8. New articles without code changes? | YES — CMS + importer |
+| 9. Services managed cleanly? | YES — catalog CMS + one landing Blade |
+| 10. Search upgradable later? | YES — `Article::scopeSearch` |
+| 11. Design system maintainable? | YES — overlay tokens + MASTER.md |
+| 12. Languages handled correctly? | YES — EN/FA UI; DE only if `[data-de]`; no fake German articles |
 
-## Acceptance
+## Acceptance matrix
 
+### Architecture
+| Item | Result |
+|------|--------|
+| Laravel 13 / PHP 8.4 / Filament 5 / Livewire 4 / Blade | PASS |
+| Database | PASS local SQLite. Production MariaDB **BLOCKED** (skipped test) |
+| Models / Controllers / Policies / Form Requests / Routes | PASS (`php artisan route:list` shows 36 routes) |
+
+### Database
+| Item | Result |
+|------|--------|
+| `tags` + `article_tag` FKs/unique | PASS (migration + PHPUnit) |
+| `requests.status` + `internal_notes` | PASS |
+| No duplicate `contact_requests` table | PASS |
+
+### Frontend / design system
 | Item | Result | Evidence |
 |------|--------|----------|
-| ARTICLE VISUAL DNA | PASS | Live Linux SSH + [article-visual-dna.md](article-visual-dna.md) |
-| DESIGN SYSTEM | PASS | [design-system.md](design-system.md) overlay v=1310 |
-| TYPOGRAPHY | PASS | Article scale; Poppins / Vazirmatn |
-| COLOR SYSTEM | PASS | `#2563eb` site-wide; Linux green stays on article theme |
-| SPACING | PASS | `--space-*` overlay; service inset 6.5rem |
-| HERO | PASS | Rendered 1280 + 375; white name + scrim |
-| GET TO KNOW ME | PASS | Two-column editorial; H2 bar |
-| SKILLS | PASS | Grouped lists, not a progress-bar wall |
-| RESUME | PASS | Timeline, not cards |
-| SERVICES INDEX | PASS | Six preview cards on `/#services` |
-| SERVICE 1 network-design | PASS | 1280 hero/process/FAQ/form + 375 hero |
-| SERVICE 2 system-administration | PASS | 1280 hero rendered |
-| SERVICE 3 monitoring-security | PASS | 1280 hero rendered |
-| SERVICE 4 virtualization-solutions | PASS | 1280 hero rendered |
-| SERVICE 5 technical-consulting | PASS | 1280 hero rendered |
-| SERVICE 6 devops-automation | PASS | 1280 hero rendered |
-| SERVICE FORMS | PASS | Hidden until CTA; fields named in a11y tree |
-| ARTICLE INDEX | PASS | 23 titles; EN/FA switcher; filters present |
-| ARTICLE DETAIL | PASS | Not redesigned; H1 navy |
-| CONTACT | PASS | Flattened methods + one form surface |
-| NAVIGATION | PASS | Same chrome as articles |
-| LANGUAGE SWITCHER | PASS | EN + FA only; no DE |
-| MOBILE MENU | PASS | Fullscreen `header-show`; Close focused |
-| FOOTER | PASS | Primary blue; same type/icons |
-| ANIMATION | PASS | 180/560ms; `prefers-reduced-motion` rules present |
-| RESPONSIVE | PASS | Homepage overflow 0 (or negative) at 320, 375, 390, 414, 768, 1024, 1280, 1366, 1440, 1920; service 375 overflow 0. Visual screenshots sampled at 375 and ~1280 — not every section at every width. |
-| ACCESSIBILITY | PASS | Skip link, named socials, FAQ buttons collapsed, form labels, 44px menu/lang. No axe CLI in this environment. |
-| PERFORMANCE | PASS | No Three.js / extra CDNs added |
-| SEO | PASS | compare-content SEO tokens; URLs unchanged |
-| CONTENT INTEGRITY | PASS | Failures: 0 |
-| AUTOMATED TESTS | PASS | 31 / 593 / 1 skipped |
-| BROWSER CONSOLE | BLOCKED | No DevTools console export this pass; `__qaErrors` unset |
+| Article DNA not redesigned | PASS | H1 `rgb(30, 41, 59)`; body HTML compare-content PASS |
+| Overlay tokens | PASS | Live `visual-upgrade.css?v=1314` |
+| Homepage H2 700 | PASS | CDP on About heading |
+| Icon language | PASS | Bootstrap Icons (hero arrows replaced earlier) |
+| Motion / reduced-motion | PASS in CSS | Not re-toggled in OS settings this pass — WARN |
 
-## Not done
+### Homepage
+| Item | Result |
+|------|--------|
+| Structure + tokens | PASS (snapshot + CDP overflow 0 at 320/412/1280) |
+| Get to Know Me / expertise / resume | PASS prior + still serving. Skill titles still `h4` — **WARN** a11y skip |
+| Services preview / articles / contact | PASS in snapshot |
 
-- Git init / commit / push (forbidden).
-- Article body/content/URL/SEO edits (forbidden).
-- Invented German, prices, or credentials (forbidden).
-- Full visual screenshot of every section at every listed viewport (overflow was measured; appearance sampled).
+### Services
+| Item | Result |
+|------|--------|
+| Six URLs 200 | PASS HTTP |
+| Network Design landing + gated form | PASS a11y + CDP (0 visible fields) |
+| Services 2–6 independent screenshots | **BLOCKED** this pass (shared Blade; HTTP only) |
+
+### Articles
+| Item | Result |
+|------|--------|
+| 23 kept | PASS compare-content + index H3 count 23 |
+| Search | PASS `?q=linux` → 8 results, labelled search |
+| Tags | PASS 8 catalog chips |
+| Related | PASS 3 on SSH guide (snapshot) |
+| Share | PASS LinkedIn / WhatsApp / Telegram / copy |
+| Breadcrumbs + JSON-LD | PASS nav + 2 ld+json scripts |
+| Related titles in FA session | **WARN** — English DB titles |
+
+### Search / tags / related / requests
+| Item | Result |
+|------|--------|
+| Laravel LIKE search | PASS |
+| Tag filter UI | PASS |
+| Request statuses + hidden notes | PASS code + PHPUnit |
+
+### Admin
+| Item | Result |
+|------|--------|
+| Login page | PASS a11y snapshot |
+| Authenticated dashboard/resources visual | **BLOCKED** |
+| PHPUnit admin/auth | PASS |
+
+### Security
+| Item | Result |
+|------|--------|
+| CSRF, honeypot, rate limit, headers | PASS code |
+| `APP_DEBUG` | **WARN** local `.env` is `true`. `.env.example` is `false`. Production must be false |
+| Secrets committed | PASS (`.env` not documented) |
+
+### Accessibility
+| Item | Result |
+|------|--------|
+| Skip link, landmarks, labelled search | PASS |
+| Article teaser H2→H3 | PASS (was H4) |
+| Mobile menu Escape + inert | PASS |
+| Homepage H2→H4 skills/certs | **WARN** |
+| axe CLI | **BLOCKED** (not run) |
+| Full Tab tour of every page | **BLOCKED** |
+
+### Responsive
+| Item | Result |
+|------|--------|
+| Overflow 0 at 320, 375, 412, 1280 (named pages) | PASS |
+| Full 10-width screenshot matrix | **BLOCKED** this pass |
+
+### SEO / PWA / performance
+| Item | Result |
+|------|--------|
+| Canonical/OG/JSON-LD/sitemap/robots | PASS compare-content + robots Disallow `/admin` `/livewire` `/forms` |
+| Fake German hreflang | PASS (absent) |
+| PWA exclusions | PASS in `sw.js` |
+| Offline page behaviour | **BLOCKED** (not network-throttled) |
+| N+1 at 23 articles | PASS for volume |
+
+### Documentation / structure / testing
+| Item | Result |
+|------|--------|
+| Required docs updated | PASS this file + DNA/design/features/visual/admin |
+| Unused-file deletion | Not performed (no proven-unused deletions this pass) |
+| PHPUnit | PASS 39 / 647 / 1 skipped |
+| Git | PASS — no init/add/commit/push |
+
+## Fixes applied this pass
+
+1. `assets/js/i18n.js` applies `data-*-placeholder` (FA search placeholder verified).
+2. Article teasers `h4` → `h3` + overlay selectors.
+3. Mobile menu `setBackgroundInert` so page content is not tabbable while open.
+4. Overlay cache `v=1314`; i18n `v=1116`; main `v=1119`.
+
+## Open items (not hidden)
+
+- Authenticated Filament visual/responsive QA
+- Independent screenshots of five remaining service landings
+- Homepage heading skip on skill/value/cert `h4`
+- Related-article titles remain English in FA UI
+- Screenshot tool often stale; CDP used instead
+- Local `APP_DEBUG=true`
+- MySQL phpunit suite skipped
+- Offline PWA untested
+- Browser unlock after lock was blocked by auto-review
+
+## Git
+
+Not run.

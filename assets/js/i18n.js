@@ -147,6 +147,19 @@
       }
     });
 
+    document.querySelectorAll("[data-en-placeholder]").forEach((el) => {
+      const attr =
+        next === "fa"
+          ? "data-fa-placeholder"
+          : next === "de"
+            ? "data-de-placeholder"
+            : "data-en-placeholder";
+      const value = el.getAttribute(attr) || el.getAttribute("data-en-placeholder");
+      if (value) {
+        el.setAttribute("placeholder", value);
+      }
+    });
+
     const btn = document.getElementById("lang-toggle");
     const current = btn?.querySelector(".lang-switcher-current");
     if (btn && current) {

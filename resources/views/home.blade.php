@@ -227,7 +227,7 @@
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
 
     <!-- Language Toggle Stylesheet -->
-    <link href="/assets/css/lang-toggle.css?v=1115" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1116" rel="stylesheet" />
 
     <!-- RTL Support Stylesheet -->
     <link
@@ -236,7 +236,7 @@
       rel="stylesheet"
       disabled
     />
-    <link href="/assets/css/visual-upgrade.css?v=1120" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1314" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -689,7 +689,7 @@
                 <div
                   class="hero-actions"
                   data-aos="fade-up"
-                  data-aos-delay="1000"
+                  data-aos-delay="80"
                 >
                   <a
                     href="#contact"
@@ -703,7 +703,7 @@
                       data-fa="ارتباط با من"
                       >Get In Touch</span
                     >
-                    <span class="btn-icon">→</span>
+                    <span class="btn-icon" aria-hidden="true"><i class="bi bi-envelope"></i></span>
                   </a>
                   <a
                     href="#portfolio"
@@ -714,7 +714,7 @@
                     <span class="btn-text" data-en="Articles" data-fa="مقالات"
                       >Articles</span
                     >
-                    <span class="btn-icon">→</span>
+                    <span class="btn-icon" aria-hidden="true"><i class="bi bi-journal-text"></i></span>
                   </a>
                 </div>
               </div>
@@ -923,7 +923,7 @@
             <!-- Happy Clients Stat -->
             <div class="col-lg-3 col-md-6">
               <div class="stats-item">
-                <i class="bi bi-emoji-smile"></i>
+                <i class="bi bi-people" aria-hidden="true"></i>
                 <span
                   data-purecounter-start="0"
                   data-purecounter-end="49"
@@ -1952,6 +1952,9 @@
           </p>
         </div>
         <!-- End Section Title -->
+@endverbatim
+        @include('articles.partials.library-toolbar')
+@verbatim
 
         <!-- ===============================================
         ==================== ARTICLES CONTAINER ==============
@@ -2951,11 +2954,11 @@
     =============================================== -->
 
     <!-- Main Application JavaScript -->
-    <script src="/assets/js/main.js?v=1117" defer></script>
+    <script src="/assets/js/main.js?v=1119" defer></script>
 
     <!-- Internationalization (i18n) Support -->
     <!-- Language Toggle JavaScript -->
-    <script src="/assets/js/i18n.js?v=1115" defer></script>
+    <script src="/assets/js/i18n.js?v=1116" defer></script>
 
     <!-- Progressive image loading for non-critical media -->
     <script>

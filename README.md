@@ -13,11 +13,13 @@ Visitors see a Blade-rendered site: homepage sections, six service quote pages, 
 - Public homepage (`/`) with the original section IDs (`#hero` … `#contact`) and a database-driven service catalog
 - Six service **landing** pages at `/services/{slug}` (hero → included → pricing → process → FAQ → quote CTA; form hidden until request; legacy `/services/{slug}.html` 301s once)
 - 23 published English articles at `/articles/{slug}` with 301 redirects from `*.html`
+- Article search (`/articles?q=`) and tag filters (`/articles?tag=`) with pagination; listing queries omit article HTML bodies
+- Tags, related articles, share links (LinkedIn / WhatsApp / Telegram / copy), breadcrumbs + BreadcrumbList JSON-LD
 - Category filters on the homepage and `/articles` listing
 - Bilingual UI via `data-en` / `data-fa` (English LTR, Persian RTL)
 - Contact and service-request forms: CSRF token endpoint, honeypot, validation, rate limit, database persistence (`requests.service_id` when a service is selected)
-- Filament admin: articles, categories, services (admin-only), contact requests (admin-only)
-- SEO: canonical, Open Graph, Twitter, JSON-LD, `/sitemap.xml`, `/robots.txt`
+- Filament admin: articles, categories, tags, services (admin-only), contact request pipeline (admin-only), users (admin-only)
+- SEO: canonical, Open Graph, Twitter, JSON-LD (Article + BreadcrumbList), `/sitemap.xml`, `/robots.txt`
 - PWA: `manifest.json`, `sw.js`, `/offline.html`
 - Overlay stylesheet `assets/css/visual-upgrade.css` (shared design tokens, service landings, no Tailwind)
 
@@ -25,7 +27,7 @@ German is **not** a public language. `/de` returns 404. German article rows cann
 
 ## Design system
 
-Public chrome is unified in `assets/css/visual-upgrade.css` (cache `v=1310`): Article visual DNA (blue `#2563eb`, Poppins/Vazirmatn, 12px buttons, H2 bars). Homepage is editorial (skills lists, resume timeline); services are landings with CTA-gated quote forms. Cards are for grouping only. See [docs/article-visual-dna.md](docs/article-visual-dna.md) and [docs/design-system.md](docs/design-system.md). Do not add Tailwind, React, Vue, or extra CDNs.
+Public chrome is unified in `assets/css/visual-upgrade.css` (cache `v=1314`): Article visual DNA (blue `#2563eb`, Poppins/Vazirmatn, 12px buttons, H2 bars). Homepage is editorial (skills lists, resume timeline); services are landings with CTA-gated quote forms. Cards are for grouping only. See [docs/article-visual-dna.md](docs/article-visual-dna.md) and [docs/design-system.md](docs/design-system.md). Do not add Tailwind, React, Vue, or extra CDNs.
 
 ## Technology stack
 
@@ -86,8 +88,9 @@ Languages: **EN production**, **FA production** (same URLs, `dir`/`lang` swapped
 | Articles | Admin + editor | CRUD, publish/draft, SEO, image upload, slug 301 history |
 | Categories | Admin + editor | Per-language slug uniqueness |
 | Services | Admin only | Catalog, prices, publish/draft, SEO. See [docs/SERVICES.md](docs/SERVICES.md) |
-| Requests | Admin only | Inbound contact/service rows; status only (fields read-only); filter by service |
-| Users | Class exists, **not in navigation** | `shouldRegisterNavigation()` is false. After cache clear, `/admin/users` and `/admin/cms-users` exist. Create accounts with `php artisan cms:create-user` |
+| Tags | Admin + editor | Unique name/slug; attach to articles |
+| Requests | Admin only | CRM-lite statuses (New → Cancelled) plus internal notes (never public) |
+| Users | Admin only | Sidebar **Administration** group. Table shows name/email/role, never hashes. Create accounts with `php artisan cms:create-user` |
 
 Roles: `admin`, `editor`. Passwords: hashed, minimum 12 characters. No default password is shipped.
 
@@ -98,6 +101,7 @@ Roles: `admin`, `editor`. Passwords: hashed, minimum 12 characters. No default p
 - Public listing/detail query **published English** rows (`language = en`)
 - Persian copy lives in `data-fa` attributes inside HTML (not separate FA URLs)
 - Categories: Microsoft, Linux, MikroTik, VMware, Others (filter classes)
+- Tags: DevOps, Linux, Microsoft, MikroTik, Networking, Security, VMware, Windows Server (from real content; `articles:sync-tags`)
 - Slug changes write `article_redirects` (`cascadeOnDelete` with the article)
 - Do not run `--refresh` on a database that already has editorial edits
 
@@ -115,7 +119,7 @@ Contract is unchanged from the static site:
 
 ## Languages
 
-See [docs/MULTILINGUAL.md](docs/MULTILINGUAL.md). Switcher: glass `#lang-switcher` listbox (`#lang-toggle` button), `localStorage` / cookie `lang` (`en` \| `fa`), stylesheet `rtl.css`. DE is injected only if the page has `[data-de]` (public pages do not).
+See [docs/MULTILINGUAL.md](docs/MULTILINGUAL.md). Switcher: compact `#lang-switcher` listbox (`#lang-toggle` button), `localStorage` / cookie `lang` (`en` \| `fa`), stylesheet `rtl.css`. Placeholders with `data-fa-placeholder` are applied by `assets/js/i18n.js`. DE is injected only if the page has `[data-de]` (public pages do not).
 
 ## URL migration
 
@@ -175,7 +179,7 @@ Content compare against original HTML (uses the live configured database):
 php artisan site:compare-content
 ```
 
-Latest default-suite result on this machine: **31 tests, 593 assertions, 1 skipped** (`MysqlSchemaTest` unless MySQL is bound), **0 failures**. `site:compare-content`: **Failures: 0**.
+Latest default-suite result on this machine: **39 tests, 647 assertions, 1 skipped** (`MysqlSchemaTest` unless MySQL is bound), **0 failures**. `site:compare-content`: **Failures: 0**.
 
 ## Article import
 
@@ -183,6 +187,7 @@ Latest default-suite result on this machine: **31 tests, 593 assertions, 1 skipp
 php artisan articles:import-legacy            # insert missing
 php artisan articles:import-legacy --dry-run  # report only
 php artisan articles:import-legacy --refresh  # deletes articles + redirects, then re-imports
+php artisan articles:sync-tags                # catalog tags from live titles/categories (no invented topics)
 ```
 
 ## Service import
@@ -222,8 +227,11 @@ Start here:
 | [docs/PROJECT-STATUS.md](docs/PROJECT-STATUS.md) | Authoritative current status |
 | [docs/QA-MATRIX.md](docs/QA-MATRIX.md) | Authoritative QA evidence |
 | [docs/SERVICES.md](docs/SERVICES.md) | Service catalog + CMS |
+| [docs/features.md](docs/features.md) | Search, tags, related, share, request pipeline |
+| [docs/admin-ui-qa.md](docs/admin-ui-qa.md) | Filament UI QA (code + PHPUnit; browser login BLOCKED) |
 | [docs/article-visual-dna.md](docs/article-visual-dna.md) | Article detail visual reference (do not restyle those pages) |
 | [docs/design-system.md](docs/design-system.md) | Public overlay tokens |
+| [docs/full-site-design-audit.md](docs/full-site-design-audit.md) | Visual system audit vs Article DNA |
 | [docs/full-site-visual-qa.md](docs/full-site-visual-qa.md) | Rendered visual QA |
 | [docs/service-detail-ui-qa.md](docs/service-detail-ui-qa.md) | Six service landing QA |
 | [docs/final-project-qa-report.md](docs/final-project-qa-report.md) | Acceptance PASS/FAIL |

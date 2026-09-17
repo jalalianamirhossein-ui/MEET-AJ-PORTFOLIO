@@ -51,6 +51,7 @@ class LegacySitePublisher
         $html = $this->toBlade($html);
         $html = $this->replacePortfolioGrid($html);
         $html = $this->replaceServicesGrid($html);
+        $html = $this->injectArticleLibrary($html, false);
         $target = resource_path('views/home.blade.php');
         file_put_contents($target, $html);
 
@@ -74,6 +75,7 @@ class LegacySitePublisher
         $assembled = $chrome."\n    <main id=\"main-content\" class=\"main\" role=\"main\">\n".$section."\n    </main>\n".$footer;
         $assembled = $this->toBlade($assembled);
         $assembled = $this->replacePortfolioGrid($assembled);
+        $assembled = $this->injectArticleLibrary($assembled, true);
         $page = <<<'BLADE'
 <!doctype html>
 <html lang="en" dir="ltr">
@@ -92,9 +94,9 @@ class LegacySitePublisher
     <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
     <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
-    <link href="/assets/css/lang-toggle.css?v=1115" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1116" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1120" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1314" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">
 BLADE;
@@ -105,8 +107,8 @@ BLADE;
     <script src="/assets/vendor/glightbox/js/glightbox.min.js" defer></script>
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1117" defer></script>
-    <script src="/assets/js/i18n.js?v=1115" defer></script>
+    <script src="/assets/js/main.js?v=1119" defer></script>
+    <script src="/assets/js/i18n.js?v=1116" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {
@@ -214,6 +216,71 @@ BLADE;
 BLADE;
 
         return substr($html, 0, $open).$loop.substr($html, $end + strlen('<!-- End Articles Grid -->'));
+    }
+
+    private function injectArticleLibrary(string $html, bool $allowSearchResults): string
+    {
+        $toolbar = <<<'BLADE'
+        <!-- End Section Title -->
+@endverbatim
+        @include('articles.partials.library-toolbar')
+BLADE;
+        if ($allowSearchResults) {
+            $toolbar .= <<<'BLADE'
+
+        @if ($searching)
+          @include('articles.partials.search-results')
+        @else
+@verbatim
+
+        <!-- ===============================================
+        ==================== ARTICLES CONTAINER ==============
+BLADE;
+        } else {
+            $toolbar .= <<<'BLADE'
+
+@verbatim
+
+        <!-- ===============================================
+        ==================== ARTICLES CONTAINER ==============
+BLADE;
+        }
+
+        $html = preg_replace(
+            '/        <!-- End Section Title -->\r?\n\r?\n        <!-- ===============================================\r?\n        ==================== ARTICLES CONTAINER ==============/',
+            $toolbar,
+            $html,
+            1,
+            $count
+        );
+        if (! is_string($html) || $count !== 1) {
+            throw new \RuntimeException('Unable to inject article library toolbar');
+        }
+
+        if (! $allowSearchResults) {
+            return $html;
+        }
+
+        $close = <<<'BLADE'
+          <!-- End Articles Container -->
+        </div>
+@endverbatim
+        @endif
+@verbatim
+        <!-- End Main Container -->
+BLADE;
+        $html = preg_replace(
+            '/          <!-- End Articles Container -->\r?\n        <\/div>\r?\n        <!-- End Main Container -->/',
+            $close,
+            $html,
+            1,
+            $closed
+        );
+        if (! is_string($html) || $closed !== 1) {
+            throw new \RuntimeException('Unable to close article search results branch');
+        }
+
+        return $html;
     }
 
     public function toBlade(string $html): string

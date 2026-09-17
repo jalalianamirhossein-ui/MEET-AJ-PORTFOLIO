@@ -1,7 +1,7 @@
 # Project status — Meet AJ Laravel CMS
 
 **Authority:** AUTHORITATIVE current-state document.  
-**Verified:** 2026-09-16 against application code, `composer.lock`, migrations, routes, and local test runs.  
+**Verified:** 2026-09-17 against application code, `composer.lock`, migrations, routes, and local test runs.  
 **Not production-validated.** DirectAdmin cutover has not been executed from this environment.
 
 Status vocabulary: **IMPLEMENTED** | **TESTED** | **NOT TESTED** | **BLOCKED** | **PLANNED**.  
@@ -47,11 +47,11 @@ Local `php artisan about` also showed: environment **local**, debug **ENABLED**,
 
 Tables from migrations (no `pages`, no `contact_requests`):
 
-`users`, `password_reset_tokens`, `sessions`, `categories`, `articles`, `article_redirects`, `requests`, `services`.
+`users`, `password_reset_tokens`, `sessions`, `categories`, `articles`, `article_redirects`, `tags`, `article_tag`, `requests`, `services`.
 
 | Environment | Engine | Status |
 |-------------|--------|--------|
-| Default PHPUnit | SQLite `:memory:` | LOCAL TESTED (31 tests, 0 failures) |
+| Default PHPUnit | SQLite `:memory:` | LOCAL TESTED (39 tests, 647 assertions, 1 skipped, 0 failures) |
 | Local artisan | SQLite `database/database.sqlite` | LOCAL TESTED |
 | MariaDB via `phpunit.mysql.xml` | `127.0.0.1:3307` / `meetaj_test` | INTEGRATION TESTED (`MysqlSchemaTest` 1 test, 7 assertions, OK) |
 | DirectAdmin production DB | — | BLOCKED · NOT TESTED |
@@ -69,6 +69,7 @@ See [DATABASE.md](DATABASE.md).
 | Item | Status |
 |------|--------|
 | Import + listing + detail + 301s | IMPLEMENTED · LOCAL TESTED |
+| Search / tags / related / share / breadcrumbs | IMPLEMENTED · LOCAL TESTED (`ArticleLibraryTest` + browser search + SSH article) |
 | German published articles | Not allowed (model throws `ValidationException`) |
 
 ## Service catalog

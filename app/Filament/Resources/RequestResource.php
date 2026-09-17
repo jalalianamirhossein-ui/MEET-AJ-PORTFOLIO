@@ -6,6 +6,7 @@ use App\Models\Request;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -15,6 +16,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
@@ -75,9 +77,14 @@ class RequestResource extends Resource
             Section::make('Handling')
                 ->schema([
                     Select::make('status')
-                        ->options(['new' => 'New', 'in_progress' => 'In progress', 'resolved' => 'Resolved', 'spam' => 'Spam'])
+                        ->options(\App\Models\Request::STATUSES)
                         ->required()
-                        ->helperText('Mark spam instead of deleting so the original submission stays auditable.'),
+                        ->helperText('Customer fields stay read-only. Internal notes never appear on the public site.'),
+                    Textarea::make('internal_notes')
+                        ->label('Internal notes')
+                        ->rows(6)
+                        ->columnSpanFull()
+                        ->helperText('Visible only to CMS admins.'),
                 ]),
         ]);
     }
@@ -95,15 +102,29 @@ class RequestResource extends Resource
                 TextColumn::make('message')->searchable()->limit(40)->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('status')->badge()->color(fn (string $state): string => match ($state) {
                     'new' => 'danger',
-                    'in_progress' => 'warning',
-                    'resolved' => 'success',
+                    'contacted' => 'info',
+                    'in_discussion' => 'warning',
+                    'quoted' => 'primary',
+                    'approved', 'completed' => 'success',
                     default => 'gray',
-                })->sortable(),
+                })->formatStateUsing(fn (string $state): string => \App\Models\Request::STATUSES[$state] ?? $state)->sortable(),
                 TextColumn::make('created_at')->label('Received')->dateTime()->sortable(),
+                TextColumn::make('updated_at')->since()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('status')->options(['new' => 'New', 'in_progress' => 'In progress', 'resolved' => 'Resolved', 'spam' => 'Spam']),
+                SelectFilter::make('status')->options(Request::STATUSES),
                 SelectFilter::make('service_id')->label('Service')->relationship('service', 'title'),
+                Filter::make('created_at')
+                    ->label('Date')
+                    ->schema([
+                        DatePicker::make('from'),
+                        DatePicker::make('until'),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query
+                            ->when($data['from'] ?? null, fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
+                            ->when($data['until'] ?? null, fn ($q, $date) => $q->whereDate('created_at', '<=', $date));
+                    }),
             ])
             ->modifyQueryUsing(fn ($query) => $query->with('service'))
             ->recordClasses(fn (Request $record): ?string => $record->status === 'new' ? 'meetaj-request-new' : null)
@@ -116,30 +137,30 @@ class RequestResource extends Resource
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    BulkAction::make('resolve')
-                        ->label('Mark resolved')
+                    BulkAction::make('complete')
+                        ->label('Mark completed')
                         ->icon(Heroicon::OutlinedCheckCircle)
                         ->requiresConfirmation()
                         ->deselectRecordsAfterCompletion()
                         ->action(function (Collection $records): void {
                             $records->each(function (Request $request): void {
-                                $request->status = 'resolved';
+                                $request->status = 'completed';
                                 $request->save();
                             });
-                            Notification::make()->title('Selected requests marked resolved.')->success()->send();
+                            Notification::make()->title('Selected requests marked completed.')->success()->send();
                         }),
-                    BulkAction::make('spam')
-                        ->label('Mark as spam')
+                    BulkAction::make('cancel')
+                        ->label('Mark cancelled')
                         ->icon(Heroicon::OutlinedNoSymbol)
                         ->color('danger')
                         ->requiresConfirmation()
                         ->deselectRecordsAfterCompletion()
                         ->action(function (Collection $records): void {
                             $records->each(function (Request $request): void {
-                                $request->status = 'spam';
+                                $request->status = 'cancelled';
                                 $request->save();
                             });
-                            Notification::make()->title('Selected requests marked as spam.')->success()->send();
+                            Notification::make()->title('Selected requests marked cancelled.')->success()->send();
                         }),
                 ]),
             ])

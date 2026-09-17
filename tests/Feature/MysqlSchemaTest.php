@@ -21,6 +21,8 @@ class MysqlSchemaTest extends TestCase
         $this->assertTrue(Schema::hasTable('articles'));
         $this->assertTrue(Schema::hasTable('requests'));
         $this->assertTrue(Schema::hasTable('services'));
+        $this->assertTrue(Schema::hasTable('tags'));
+        $this->assertTrue(Schema::hasTable('article_tag'));
         $charset = DB::selectOne('select @@character_set_database as c, @@collation_database as col');
         $this->assertStringContainsString('utf8mb4', (string) $charset->c);
 

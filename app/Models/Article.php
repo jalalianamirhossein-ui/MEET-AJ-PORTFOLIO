@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -39,6 +40,110 @@ class Article extends Model
     public function redirects(): HasMany
     {
         return $this->hasMany(ArticleRedirect::class);
+    }
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class)->withTimestamps();
+    }
+
+    public function scopeForListing(Builder $query): Builder
+    {
+        return $query->select([
+            'articles.id',
+            'articles.title',
+            'articles.slug',
+            'articles.language',
+            'articles.excerpt',
+            'articles.featured_image',
+            'articles.category_id',
+            'articles.presentation',
+            'articles.sort_order',
+            'articles.status',
+            'articles.published_at',
+        ]);
+    }
+
+    public function scopeSearch(Builder $query, string $term): Builder
+    {
+        $term = trim($term);
+        if ($term === '') {
+            return $query;
+        }
+
+        $like = '%'.addcslashes($term, '%_\\').'%';
+
+        return $query->where(function (Builder $inner) use ($like): void {
+            $inner->where('title', 'like', $like)
+                ->orWhere('excerpt', 'like', $like)
+                ->orWhere('content', 'like', $like)
+                ->orWhereHas('category', fn (Builder $category) => $category->where('name', 'like', $like))
+                ->orWhereHas('tags', fn (Builder $tag) => $tag->where('name', 'like', $like)->orWhere('slug', 'like', $like));
+        });
+    }
+
+    public function scopeWithTag(Builder $query, string $slug): Builder
+    {
+        $slug = trim($slug);
+        if ($slug === '') {
+            return $query;
+        }
+
+        return $query->whereHas('tags', fn (Builder $tag) => $tag->where('slug', $slug));
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection<int, Article>
+     */
+    public function relatedArticles(int $limit = 3)
+    {
+        $exclude = [$this->id];
+        $query = static::published()
+            ->where('language', $this->language)
+            ->whereKeyNot($exclude)
+            ->with(['category', 'tags']);
+
+        $tagIds = $this->tags()->pluck('tags.id');
+        $found = collect();
+
+        if ($tagIds->isNotEmpty()) {
+            $found = (clone $query)
+                ->whereHas('tags', fn (Builder $tag) => $tag->whereIn('tags.id', $tagIds))
+                ->orderByDesc('published_at')
+                ->limit($limit)
+                ->get();
+        }
+
+        if ($found->count() < $limit && $this->category_id) {
+            $needed = $limit - $found->count();
+            $more = (clone $query)
+                ->where('category_id', $this->category_id)
+                ->whereNotIn('id', $found->pluck('id')->all())
+                ->orderByDesc('published_at')
+                ->limit($needed)
+                ->get();
+            $found = $found->concat($more);
+        }
+
+        if ($found->count() < $limit) {
+            $needed = $limit - $found->count();
+            $more = (clone $query)
+                ->whereNotIn('id', $found->pluck('id')->all())
+                ->orderByDesc('published_at')
+                ->limit($needed)
+                ->get();
+            $found = $found->concat($more);
+        }
+
+        return $found->take($limit)->values();
+    }
+
+    public function readingMinutes(): int
+    {
+        $text = trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags((string) $this->content), ENT_QUOTES | ENT_HTML5, 'UTF-8')) ?: '');
+        $words = $text === '' ? 0 : count(preg_split('/\s+/', $text) ?: []);
+
+        return max(1, (int) ceil($words / 200));
     }
 
     public function scopePublished(Builder $query): Builder

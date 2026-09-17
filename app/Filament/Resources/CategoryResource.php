@@ -43,6 +43,7 @@ class CategoryResource extends Resource
                     TextInput::make('name')->required()->maxLength(255),
                     TextInput::make('slug')->required()->maxLength(180)->regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/'),
                     Select::make('language')->options(['en' => 'English', 'fa' => 'فارسی', 'de' => 'Deutsch'])->default('en')->required(),
+                    TextInput::make('translation_key')->disabled()->dehydrated(false)->helperText('Assigned automatically. Unique per language.'),
                 ]),
         ]);
     }

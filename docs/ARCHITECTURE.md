@@ -1,7 +1,7 @@
 # Architecture — Meet AJ Laravel CMS
 
 **Authority:** AUTHORITATIVE description of the running application.  
-**Verified:** 2026-09-16 against `app/`, `routes/`, `config/`, `public/`, `composer.lock`.
+**Verified:** 2026-09-17 against `app/`, `routes/`, `config/`, `public/`, `composer.lock`.
 
 ## Request flow
 
@@ -14,10 +14,10 @@ Apache / DirectAdmin (document root = public/)
    ▼
 public/index.php  →  Laravel 13 HTTP kernel
    │
-   ├── GET  / , /articles , /articles/{slug} , /services/{slug} (and .html 301)
+   ├── GET  / , /articles , /articles?q= , /articles?tag= , /articles/{slug} , /services/{slug} (and .html 301)
    │         Blade views
-   │         App\Services (SEO, importer, publisher)
-   │         Eloquent models
+   │         App\Services (SEO, share links, tag assigner, importer, publisher)
+   │         Eloquent models (`scopeSearch`, `relatedArticles`)
    │         SQLite or MySQL/MariaDB
    │
    ├── GET/POST  /forms/*.php
@@ -32,7 +32,7 @@ There is no separate SPA, no Node build, and no queue worker. Cache and sessions
 
 - Application root: repository root (contains `artisan`, `app/`, `composer.json`).
 - Front controller: `public/index.php`.
-- Web routes: `routes/web.php`. After `optimize:clear` on 2026-09-16, `php artisan route:list` showed **31** routes (Filament Users URLs present; previously a stale route cache listed 29).
+- Web routes: `routes/web.php`. After `optimize:clear` on 2026-09-17, `php artisan route:list` showed **36** routes including `/admin/tags`.
 - Console: `app/Console/Commands/`.
 - Config: `config/*.php`; CMS-specific: `config/cms.php`.
 - Local runtime used for verification: `.runtime/php84/php.exe` (PHP 8.4.25) because `php` is not on PATH.

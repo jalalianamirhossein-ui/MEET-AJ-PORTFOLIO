@@ -20,12 +20,12 @@
                         data-fa="{{ data_get($article->presentation, 'category_label_fa') ?: data_get($article->presentation, 'category_label_en') ?: $article->category?->name }}"
                       >{{ data_get($article->presentation, 'category_label_en') ?: $article->category?->name }}</p>
                     @endif
-                    <h4
+                    <h3
                       data-en="{{ data_get($article->presentation, 'card_title_en') ?: $article->title }}"
                       data-fa="{{ data_get($article->presentation, 'card_title_fa') ?: $article->title }}"
                     >
                       {{ data_get($article->presentation, 'card_title_en') ?: $article->title }}
-                    </h4>
+                    </h3>
                     <p class="article-teaser-excerpt"
                       data-en="{{ data_get($article->presentation, 'card_excerpt_en') ?: $article->excerpt }}"
                       data-fa="{{ data_get($article->presentation, 'card_excerpt_fa') ?: $article->excerpt }}"

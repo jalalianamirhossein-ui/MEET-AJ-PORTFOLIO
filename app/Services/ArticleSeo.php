@@ -47,6 +47,7 @@ class ArticleSeo
             'twitter_description' => $seo['twitter_description'] ?? $description,
             'twitter_image' => isset($seo['twitter_image']) ? $this->absolute($seo['twitter_image']) : null,
             'schema' => $schema,
+            'breadcrumb' => $this->breadcrumb($article, $canonical),
             'robots' => $seo['robots'] ?? 'index, follow',
         ];
     }
@@ -67,6 +68,40 @@ class ArticleSeo
         $schema['url'] = $canonical;
 
         return $schema;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function breadcrumb(Article $article, string $canonical): array
+    {
+        $origin = rtrim((string) config('app.url'), '/');
+        $items = [
+            ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $origin.'/'],
+            ['@type' => 'ListItem', 'position' => 2, 'name' => 'Articles', 'item' => $origin.'/articles'],
+        ];
+        $position = 3;
+        if ($article->category) {
+            $items[] = [
+                '@type' => 'ListItem',
+                'position' => $position,
+                'name' => $article->category->name,
+                'item' => $origin.'/articles',
+            ];
+            $position++;
+        }
+        $items[] = [
+            '@type' => 'ListItem',
+            'position' => $position,
+            'name' => $article->title,
+            'item' => $canonical,
+        ];
+
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => $items,
+        ];
     }
 
     private function absolute(?string $url): ?string

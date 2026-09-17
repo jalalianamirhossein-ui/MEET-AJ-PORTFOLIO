@@ -1,10 +1,10 @@
 # Database — Meet AJ Laravel CMS
 
 **Authority:** AUTHORITATIVE schema document.  
-**Source:** `database/migrations/2026_09_15_000001` … `000006` plus `2026_09_16_000007` (services) and `000008` (`requests.service_id`).  
-**Verified:** 2026-09-16 against those files and `MysqlSchemaTest`.
+**Source:** `database/migrations/2026_09_15_000001` … `000006` plus `2026_09_16_000007` (services), `000008` (`requests.service_id`), and `2026_09_17_000009` (`tags`, `article_tag`, `requests.internal_notes`).  
+**Verified:** 2026-09-17 against those files, PHPUnit (`MysqlSchemaTest` skipped on SQLite default suite), and local SQLite migrate.
 
-`users`, `password_reset_tokens`, `sessions`, `categories`, `articles`, `article_redirects`, `requests`, `services`.
+`users`, `password_reset_tokens`, `sessions`, `categories`, `articles`, `article_redirects`, `article_tag`, `tags`, `requests`, `services`.
 
 ## Engines
 
@@ -110,6 +110,29 @@ Purpose: 301 map from a previous path to the current article.
 
 Deleting an article removes its redirect rows.
 
+### `tags`
+
+Purpose: public article taxonomy used for filters, related articles, and search.
+
+| Column | Notes |
+|--------|--------|
+| `id` | PK |
+| `name` | **unique**, max 80 |
+| `slug` | 180 chars, **unique** |
+| `timestamps` | |
+
+### `article_tag`
+
+Purpose: article ↔ tag pivot.
+
+| Column | Notes |
+|--------|--------|
+| `article_id` | FK → `articles`, **cascadeOnDelete**, part of composite PK |
+| `tag_id` | FK → `tags`, **cascadeOnDelete**, indexed |
+| `timestamps` | |
+
+Primary key `(article_id, tag_id)`.
+
 ### `requests`
 
 Purpose: inbound contact form submissions.
@@ -122,7 +145,8 @@ Purpose: inbound contact form submissions.
 | `phone` | nullable, 40 chars |
 | `subject` | nullable (form still requires subject at validation) |
 | `message` | text |
-| `status` | default `new` |
+| `status` | `new`, `contacted`, `in_discussion`, `quoted`, `approved`, `completed`, `cancelled` (legacy `in_progress`/`resolved`/`spam` remapped in 000009) |
+| `internal_notes` | nullable text, **hidden from serialization**, never public |
 | `service_id` | nullable FK → `services`, **nullOnDelete** |
 | `timestamps` | |
 

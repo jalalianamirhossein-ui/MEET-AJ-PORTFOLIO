@@ -71,6 +71,7 @@ class LegacyArticleImporter
             $run();
         } else {
             DB::transaction($run);
+            app(\App\Services\ArticleTagAssigner::class)->syncPublishedLibrary();
         }
 
         return compact('imported', 'skipped', 'redirects', 'report');

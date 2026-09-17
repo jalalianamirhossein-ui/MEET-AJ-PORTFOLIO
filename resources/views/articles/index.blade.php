@@ -15,9 +15,9 @@
     <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
     <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
-    <link href="/assets/css/lang-toggle.css?v=1115" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1116" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1120" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1314" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">@verbatim
 <a class="skip-link" href="#portfolio">Skip to main content</a>
@@ -247,6 +247,12 @@
           </p>
         </div>
         <!-- End Section Title -->
+@endverbatim
+        @include('articles.partials.library-toolbar')
+        @if ($searching)
+          @include('articles.partials.search-results')
+        @else
+@verbatim
 
         <!-- ===============================================
         ==================== ARTICLES CONTAINER ==============
@@ -374,6 +380,9 @@
           </div>
           <!-- End Articles Container -->
         </div>
+@endverbatim
+        @endif
+@verbatim
         <!-- End Main Container -->
       </section>
       
@@ -518,8 +527,8 @@
     <script src="/assets/vendor/glightbox/js/glightbox.min.js" defer></script>
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1117" defer></script>
-    <script src="/assets/js/i18n.js?v=1115" defer></script>
+    <script src="/assets/js/main.js?v=1119" defer></script>
+    <script src="/assets/js/i18n.js?v=1116" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {

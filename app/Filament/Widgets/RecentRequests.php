@@ -32,8 +32,10 @@ class RecentRequests extends TableWidget
                 TextColumn::make('subject')->limit(32)->wrap(),
                 TextColumn::make('status')->badge()->color(fn (string $state): string => match ($state) {
                     'new' => 'danger',
-                    'in_progress' => 'warning',
-                    'resolved' => 'success',
+                    'contacted' => 'info',
+                    'in_discussion' => 'warning',
+                    'quoted' => 'primary',
+                    'approved', 'completed' => 'success',
                     default => 'gray',
                 }),
                 TextColumn::make('created_at')->since()->label('Received'),

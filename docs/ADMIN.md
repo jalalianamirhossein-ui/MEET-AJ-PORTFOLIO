@@ -13,9 +13,12 @@ Brand: `#2563eb`, logo from existing site assets. Navigation groups: **Content**
 Content
 ├── Articles
 ├── Categories
+├── Tags
 └── Services
 Communications
 └── Requests
+Administration
+└── Users (admins only)
 ```
 
 Interactive browser login as an editor was **not** repeated in the documentation verification pass. PHPUnit covers login page visibility, panel protection, article CRUD, service CRUD authorization, and request authorization.
@@ -28,7 +31,7 @@ CRUD for `articles`. Admin and editor (`ArticlePolicy` / `canManageContent()`).
 
 Form sections:
 
-- **Identity:** title, slug, language (`en`/`fa`/`de`), category, excerpt
+- **Identity:** title, slug, language (`en`/`fa`/`de`), category, tags (multi), excerpt
 - **Image:** optional upload (JPEG/PNG/WebP, max 5 MB). Paths already under `/assets/` stay unless replaced
 - **Body:** HTML or Filament RichEditor (`content` required)
 - **SEO (collapsed):** `meta_title`, `meta_description`, `canonical_url` (blank → public article URL)
@@ -37,6 +40,10 @@ Form sections:
 Table: searchable/sortable title, language badge, category name, status, `published_at`, `updated_at` (toggleable). Filters and default sort exist on the resource. Slug changes write `article_redirects`.
 
 Do not claim a public preview button or media library beyond this upload field.
+
+### Tags (`TagResource`) — Content
+
+CRUD for `tags`. Admin and editor (`TagPolicy` / `canManageContent()`). Unique `name` and `slug`. Table shows article count. Seed/repair with `php artisan articles:sync-tags` (catalog is derived from live article titles/categories; Docker is not included).
 
 ### Categories (`CategoryResource`) — Content
 
@@ -58,8 +65,9 @@ Admin **only** (`RequestPolicy`). Editors receive authorization failure (PHPUnit
 
 - Inbound fields (`name`, `email`, `phone`, `subject`, `message`) are **read-only**
 - Linked service title is shown when `service_id` is set; homepage contacts show “no service”
-- Filter by service and by status
-- `status` is editable by admin
+- Filter by service, status, and received date
+- `status` workflow: `new`, `contacted`, `in_discussion`, `quoted`, `approved`, `completed`, `cancelled`
+- `internal_notes` (admin only; `$hidden` on the model; never in contact mail or public JSON)
 - Filament **create** of requests is denied (`create` policy false)
 - No claim of reply-from-admin or SMTP from this screen
 
@@ -67,7 +75,7 @@ Admin **only** (`RequestPolicy`). Editors receive authorization failure (PHPUnit
 
 The class exists (`app/Filament/Resources/Users/UserResource.php`) with form fields for name, email, role, password and `canViewAny` = admin.
 
-**`shouldRegisterNavigation()` returns false**, so Users is not in the sidebar.
+**`shouldRegisterNavigation()` returns true for admins**, so Users appears in the Administration group.
 
 After `php artisan optimize:clear` (2026-09-16), `route:list` **does** include:
 

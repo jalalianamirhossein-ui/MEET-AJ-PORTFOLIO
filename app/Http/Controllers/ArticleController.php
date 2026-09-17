@@ -4,28 +4,69 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\ArticleRedirect;
+use App\Models\Tag;
 use App\Services\ArticleSeo;
+use App\Services\ArticleShareLinks;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ArticleController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $articles = Article::published()->with('category')->orderBy('sort_order')->orderBy('id')->get();
+        $q = trim((string) $request->query('q', ''));
+        $tagSlug = trim((string) $request->query('tag', ''));
+        $searching = $q !== '' || $tagSlug !== '';
 
-        return view('articles.index', compact('articles'));
+        $listing = Article::published()
+            ->forListing()
+            ->with(['category', 'tags'])
+            ->orderBy('sort_order')
+            ->orderBy('id');
+
+        $results = null;
+        $articles = collect();
+
+        if ($searching) {
+            $results = Article::published()
+                ->forListing()
+                ->with(['category', 'tags'])
+                ->search($q)
+                ->withTag($tagSlug)
+                ->orderByDesc('published_at')
+                ->orderBy('id')
+                ->paginate(9)
+                ->withQueryString();
+        } else {
+            $articles = $listing->get();
+        }
+
+        return view('articles.index', [
+            'articles' => $articles,
+            'results' => $results,
+            'searching' => $searching,
+            'q' => $q,
+            'tagSlug' => $tagSlug,
+            'activeTag' => $tagSlug !== '' ? Tag::query()->where('slug', $tagSlug)->first() : null,
+            'tags' => Tag::query()->orderBy('name')->get(),
+        ]);
     }
 
     public function show(string $slug): View
     {
-        $article = Article::published()->where('slug', $slug)->where('language', 'en')->first();
+        $article = Article::published()
+            ->with(['category', 'tags'])
+            ->where('slug', $slug)
+            ->where('language', 'en')
+            ->first();
         abort_if($article === null, 404);
 
         return view('articles.show', [
             'article' => $article,
             'seo' => app(ArticleSeo::class)->forArticle($article),
+            'share' => app(ArticleShareLinks::class)->for($article),
+            'related' => $article->relatedArticles(3),
         ]);
     }
 

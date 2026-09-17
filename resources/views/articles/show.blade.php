@@ -36,10 +36,13 @@
     <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
     <link href="/assets/css/articles.css?v=1013" rel="stylesheet" />
-    <link href="/assets/css/lang-toggle.css?v=1115" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1116" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1310" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1314" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+    @if (!empty($seo['breadcrumb']))
+      <script type="application/ld+json">{!! json_encode($seo['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+    @endif
   </head>
   <body class="{{ data_get($article->presentation, 'body_class', 'article-page theme-other') }}">
     <a href="#main-content" class="skip-link sr-only sr-only-focusable"
@@ -92,10 +95,21 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-10 mx-auto">
+              @include('articles.partials.breadcrumbs')
               <div class="article-meta">
                 <span class="article-category" data-en="{{ data_get($article->presentation, 'category_label_en', $article->category->name ?? 'Article') }}" data-fa="{{ data_get($article->presentation, 'category_label_fa', $article->category->name ?? 'مقاله') }}">{{ data_get($article->presentation, 'category_label_en', $article->category->name ?? 'Article') }}</span>
-                <span class="meta-date"><span class="article-date" data-en="Article" data-fa="مقاله">Article</span></span>
+                @if ($article->published_at)
+                  <time class="meta-date article-date" datetime="{{ $article->published_at->toAtomString() }}">{{ $article->published_at->timezone(config('cms.display_timezone', config('app.timezone')))->format('M j, Y') }}</time>
+                @endif
+                <span class="article-readtime">{{ $article->readingMinutes() }} <span data-en="min read" data-fa="دقیقه مطالعه">min read</span></span>
               </div>
+              @if ($article->tags->isNotEmpty())
+                <ul class="article-tags">
+                  @foreach ($article->tags as $tag)
+                    <li><a href="{{ $tag->path() }}">{{ $tag->name }}</a></li>
+                  @endforeach
+                </ul>
+              @endif
               <h1 class="article-title hero-title" data-en="{{ data_get($article->presentation, 'hero_title_en', $article->title) }}" data-fa="{{ data_get($article->presentation, 'hero_title_fa', $article->title) }}">{{ $article->title }}</h1>
               <p class="article-excerpt hero-subtitle" data-en="{{ $article->excerpt }}" data-fa="{{ data_get($article->presentation, 'excerpt_translations.fa', $article->excerpt) }}">{{ $article->excerpt }}</p>
               <div class="article-banner">
@@ -126,6 +140,8 @@
               <article class="article-body">
                 {!! $article->content !!}
               </article>
+              @include('articles.partials.share')
+              @include('articles.partials.related')
             </div>
           </div>
         </div>
@@ -169,9 +185,29 @@
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1117" defer></script>
-    <script src="/assets/js/i18n.js?v=1115" defer></script>
+    <script src="/assets/js/main.js?v=1119" defer></script>
+    <script src="/assets/js/i18n.js?v=1116" defer></script>
     <script>
+      document.querySelectorAll("[data-copy-link]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          var url = button.getAttribute("data-copy-link") || "";
+          var status = button.closest(".article-share") && button.closest(".article-share").querySelector(".article-share-status");
+          var done = function () {
+            if (!status) return;
+            status.hidden = false;
+            status.textContent = "Link copied";
+            status.setAttribute("data-en", "Link copied");
+            status.setAttribute("data-fa", "پیوند کپی شد");
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(done).catch(function () {
+              window.prompt("Copy link", url);
+            });
+          } else {
+            window.prompt("Copy link", url);
+          }
+        });
+      });
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {
           navigator.serviceWorker.register("/sw.js").catch(function () {});

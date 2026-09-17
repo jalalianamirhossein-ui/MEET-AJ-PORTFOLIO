@@ -1,7 +1,7 @@
 # QA matrix — Meet AJ Laravel CMS
 
 **Authority:** AUTHORITATIVE QA evidence.  
-**Date:** 2026-09-16  
+**Date:** 2026-09-17  
 **Do not treat older phase reports as current PASS/FAIL.**
 
 Legend:
@@ -11,9 +11,9 @@ Legend:
 - **PRODUCTION TESTED** — meetaj.ir / DirectAdmin (none in this matrix)
 - Status: **PASS** | **FAIL** | **NOT TESTED** | **BLOCKED**
 
-Latest default suite: **31 tests, 593 assertions, 1 skipped, 0 failures**.  
+Latest default suite: **39 tests, 647 assertions, 1 skipped, 0 failures**.  
 `site:compare-content`: **Failures: 0**.  
-MariaDB `MysqlSchemaTest`: **1 test, 7 assertions, OK**.
+HTTP (curl against `127.0.0.1:8000`): `/` 200, `/index.html` 301, 23 articles 200, 23 legacy 301, 6 services 200, search/tag 200, sitemap/robots/manifest/sw.js 200.
 
 Skipped in default sqlite suite: `MysqlSchemaTest` (runs only when MySQL is bound).
 
@@ -40,6 +40,9 @@ Slugs: `creating-a-bootable-usb`, `downgrade-mikrotik-routeros-firmware-safely`,
 | 23 article details | 200 | 200 | PHPUnit `test_all_articles_redirect_once_and_render`; compare-content | PASS · LOCAL TESTED | FA H1 regression fixed in importer `attr()` |
 | 23 legacy `.html` redirects | 301 once to clean slug | 301 | PHPUnit | PASS · LOCAL TESTED | Query string survives |
 | Unknown slug | 404 | 404 | PHPUnit | PASS · LOCAL TESTED | |
+| `GET /articles?q=linux` | paginated results, no isotope grid, no bodies | 8 results, overflow 0 | PHPUnit `ArticleLibraryTest` + browser | PASS · LOCAL TESTED | Searchbox labelled |
+| `GET /articles?tag=linux` | tag filter | 200 | PHPUnit | PASS · LOCAL TESTED | |
+| Article breadcrumbs / share / related | BreadcrumbList + 3 related + share | present | PHPUnit + SSH article screenshot | PASS · LOCAL TESTED | Date only when `published_at` exists |
 
 ## Forms
 
@@ -73,9 +76,11 @@ Slugs: `creating-a-bootable-usb`, `downgrade-mikrotik-routeros-firmware-safely`,
 | `/admin` guest | redirect to login | redirect | PHPUnit | PASS · LOCAL TESTED | |
 | Article CRUD publish/draft/delete | works for manager | works | PHPUnit | PASS · LOCAL TESTED | |
 | Service CRUD publish/draft/price | admin only | admin only | PHPUnit `ServiceCatalogTest` | PASS · LOCAL TESTED | Editors forbidden |
-| Editor cannot open contact requests | denied | denied | PHPUnit | PASS · LOCAL TESTED | |
-| Users resource in sidebar | hidden | hidden | code + route:list after optimize:clear | PASS as mitigated | `/admin/users` and `/admin/cms-users` exist; nav still off |
-| Browser login + edit | usable | — | — | NOT TESTED this pass | Prior UI work did not re-login Filament |
+| Editor cannot open contact requests | denied | denied | PHPUnit `RequestWorkflowTest` | PASS · LOCAL TESTED | |
+| Request statuses + hidden notes | 7 statuses; public cannot set notes | enforced | PHPUnit | PASS · LOCAL TESTED | |
+| Tags admin | editors can open | Livewire 200 | PHPUnit | PASS · LOCAL TESTED | |
+| Users resource in sidebar | admin only | `shouldRegisterNavigation` true for admins | code | PASS · LOCAL TESTED | Interactive Filament UI BLOCKED |
+| Browser login + edit | usable | — | — | BLOCKED | No credentials used this pass |
 
 ## German
 
@@ -88,7 +93,7 @@ Slugs: `creating-a-bootable-usb`, `downgrade-mikrotik-routeros-firmware-safely`,
 
 | Feature | Expected | Actual | Test method | Status | Notes |
 |---------|----------|--------|-------------|--------|-------|
-| SQLite migrations | 8 tables including `services` | created | PHPUnit RefreshDatabase | PASS · LOCAL TESTED | |
+| SQLite migrations | tags + article_tag + internal_notes | created | local migrate + PHPUnit | PASS · LOCAL TESTED | |
 | MariaDB constraints | unique/FK behaviour | OK | `phpunit.mysql.xml` MysqlSchemaTest | PASS · INTEGRATION TESTED | Host `127.0.0.1:3307` |
 | DirectAdmin MySQL | migrated production | — | — | BLOCKED · NOT TESTED | |
 

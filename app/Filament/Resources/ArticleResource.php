@@ -65,6 +65,7 @@ class ArticleResource extends Resource
                     TextInput::make('slug')->required()->maxLength(180)->regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/')->helperText('Lowercase words separated by hyphens.'),
                     Select::make('language')->options(['en' => 'English', 'fa' => 'فارسی', 'de' => 'Deutsch (draft only)'])->default('en')->required()->disabled(fn (?Article $record) => $record !== null)->dehydrated(),
                     Select::make('category_id')->relationship('category', 'name')->searchable()->preload()->helperText('Category language must match the article language.'),
+                    Select::make('tags')->relationship('tags', 'name')->multiple()->preload()->searchable()->columnSpanFull(),
                     Textarea::make('excerpt')->rows(3)->columnSpanFull(),
                 ]),
             Section::make('Featured image')
@@ -113,6 +114,7 @@ class ArticleResource extends Resource
                 TextColumn::make('title')->searchable()->sortable()->wrap()->limit(48),
                 TextColumn::make('language')->badge()->sortable(),
                 TextColumn::make('category.name')->placeholder('—')->toggleable(),
+                TextColumn::make('tags.name')->badge()->separator(',')->toggleable(),
                 TextColumn::make('status')->badge()->color(fn (string $state): string => $state === 'published' ? 'success' : 'gray')->sortable(),
                 TextColumn::make('published_at')->dateTime()->sortable()->placeholder('—'),
                 TextColumn::make('updated_at')->since()->sortable()->toggleable(isToggledHiddenByDefault: true),
@@ -121,6 +123,7 @@ class ArticleResource extends Resource
                 SelectFilter::make('language')->options(['en' => 'English', 'fa' => 'فارسی', 'de' => 'Deutsch']),
                 SelectFilter::make('status')->options(['draft' => 'Draft', 'published' => 'Published']),
                 SelectFilter::make('category')->relationship('category', 'name'),
+                SelectFilter::make('tags')->relationship('tags', 'name'),
             ])
             ->recordActions([
                 Action::make('preview')

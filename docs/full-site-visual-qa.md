@@ -1,82 +1,56 @@
 # Full-site visual QA — Meet AJ
 
 **Date:** 2026-09-17  
-**Overlay:** `assets/css/visual-upgrade.css?v=1310`  
-**Method:** Cursor browser render + screenshots + CDP overflow. Not code-only.
+**Overlay:** `assets/css/visual-upgrade.css?v=1314`  
+**Method:** Cursor browser snapshots + CDP overflow/computed styles. Screenshots are often **stale vs URL**; CDP and the accessibility tree are the visual/layout truth this pass.
 
-Article detail pages were **not** redesigned. They are the visual DNA. Homepage and Services were aligned to that language.
+Skills followed: visual-qa-testing (navigate, snapshot, screenshot, CDP resources/overflow), responsive-testing (320 / 375 / 412 / 1280 + HTTP), accessibility-auditing (aria tree, labels, headings, keyboard Escape, inert).
 
-## Stage loop
+Article detail pages were **not** redesigned.
 
-For each stage: render → screenshot → list problems → fix → re-render.
+## Evidence this pass
 
-### Stage A — Homepage
+| Surface | What was actually inspected | Result |
+|---------|-----------------------------|--------|
+| Homepage `/` | Snapshot FA hero/nav; CDP overlay 1314; H2 “بهتر منو بشناس” weight **700**; overflow **false** at **320** and **1280** and **412** | PASS (CDP). Screenshot panel cropped |
+| Articles index | 23 H3 teasers (0 H4); skip link; labelled search; 8 tags; FA placeholder `عنوان، موضوع یا فناوری` | PASS |
+| Search `?q=linux` | Status “8 نتیجه برای «linux»”; value `linux`; labelled searchbox | PASS |
+| Article DNA `/articles/enable-ssh-linux-complete-guide` | H1 color `rgb(30, 41, 59)`; Breadcrumb nav; 2 JSON-LD scripts; share LinkedIn/WhatsApp/Telegram/copy; 3 related; overflow false at 1280 | PASS chrome. Body HTML untouched |
+| Service Network Design | Full landing structure in a11y tree; AED 4,900; FAQ collapsed; **8 form fields, 0 visible** until quote; overflow false | PASS |
+| Services 2–6 | HTTP **200** each; same `services/show.blade.php`. Independent screenshots this pass | **PARTIAL** — not separately snapshotted this turn |
+| Mobile menu | Fullscreen `headerH === vh`; Close expanded; Escape closed; after `main.js?v=1119` background `main`/`footer` **inert**; tabbable **21** (menu + lang) | PASS |
+| Admin login | Snapshot: labelled Email/Password, Sign in, Remember me. Title “Login - Meet AJ CMS” | PASS login a11y. Screenshot stale |
+| Authenticated Filament | Not logged in (no production credentials; throwaway QA user deleted) | **BLOCKED** |
+| Console / network | No failed overlay/i18n in CDP; dedicated DevTools console export not captured | WARN |
 
-Rendered: hero, Get to Know Me, Skills, Resume, Services preview, Articles preview, Testimonials, Contact, Footer. Desktop ~1280 and mobile 375.
+## Responsive matrix (overflowX)
 
-Problems found (this pass):
+CDP `scrollWidth > clientWidth + 1` is the overflow test. Screenshot crop is **not** overflow.
 
-1. Article H1 had inherited homepage white fill (fixed earlier: `body.index-page` scope + article restore).
-2. Hero name sat on noisy stairs (fixed: left-weighted scrim + `.hero-bg` crop).
-3. About H2 had no Article DNA bar (fixed).
-4. About body used muted gray instead of `#1e293b` (fixed).
-5. Skills jammed `name100%` with no domain headings (fixed: Technical / Professional; percentages hidden).
-6. Screenshot panel crops the right column at 1280 (CDP `overflowX` is 0 — panel artifact).
-7. Contact still uses icon tiles; form remains one grouping card (allowed).
-8. Typed role line sits below the name; existing copy kept (`I'm a …`).
-9. Mobile hero CTAs sit below the first screen (acceptable; name/role readable).
-10. About-core map still uses a surface panel (grouping for the interactive visual, not a content card wall).
+| Viewport | Homepage | Articles index | Article detail | Network Design |
+|----------|----------|----------------|----------------|----------------|
+| 320×800 | PASS overflow 0 | — this pass | — | — |
+| 375×812 | — (412 verified) | PASS overflow 0 | — | — |
+| 412 (device) | PASS overflow 0 | — | — | — |
+| 390 / 414 | Not re-measured this pass | — | — | — |
+| 768 / 1024×768 / 1366 / 1440 / 1920 | Not re-measured this pass | — | — | — |
+| 1280×800 | PASS overflow 0 | (desktop snapshot of library from stale panel) | PASS overflow 0 | PASS overflow 0 |
 
-Re-render: About H2 bar + navy body; Skills lists; hero white name on scrim. Overflow 0 at 320, 375, 390, 414, 768, 1024, 1280, 1366, 1440, 1920 (homepage).
+390, 414, 768, 1024, 1366, 1440, 1920: **BLOCKED this pass** (not re-run). Earlier audit recorded overflow 0 on homepage for that set; not claimed as re-verified today.
 
-### Stage B — Services index
+Admin 414 / 768 / 1024 / 1280: **BLOCKED** (no authenticated UI).
 
-Homepage `#services` catalog: icon, title, short description, existing AED price, View Details / Request Service. Cards used for grouping six offerings. Third card cropped in screenshot panel; overflow 0.
+## Visual quality notes
 
-### Stage C — Six service landings
-
-All six `/services/{slug}` heroes rendered (1280). Network Design also: process, SLA, FAQ, quote CTA + revealed form; 375 stacked hero.
-
-Problems:
-
-1. Overlay loaded before `lang-toggle.css` on service/article show (fixed: overlay last).
-2. Floating EN sat 5px from process `01` (fixed: block inset 6.5rem).
-3. Form stayed hidden until Request a Quote (verified; Full Name focused after click).
-
-### Stage D — Articles index
-
-23 titles in the DOM. Filters: All / Microsoft / Linux / MikroTik / VMware / Other. Language listbox: EN + FA only (no DE).
-
-### Stage E — Navigation / language
-
-Desktop sidebar matches article chrome. Mobile: hamburger → fullscreen `header-show` (Close control, navy full-viewport menu). Switcher: EN/FA; DE not advertised.
-
-### Stage F — Contact
-
-Editorial heading + method links + one form surface. Send button uses primary blue.
-
-### Stage G — Mobile
-
-375 homepage: overflow 0, readable name, Available for Work, menu toggle. 375 service: stacked title/price/CTAs, overflow 0. 320 homepage overflow 0.
-
-## Comparison (Article vs Homepage vs Service)
-
-| Token | Article | Homepage | Service |
-|-------|---------|----------|---------|
-| Primary | `#2563eb` (topic themes local) | `#2563eb` | `#2563eb` |
-| H1 | navy `#1e293b` | white on photo only | navy |
-| H2 | bar + 2px rule | same | same |
-| Buttons | 12px, 2.95rem | same | same |
-| Cards | one reading surface | catalog / teasers / form | quote form only |
-| Canvas | `#f4f7fb` | `#f4f7fb` | `#f4f7fb` |
-
-## Console / network
-
-No `__qaErrors` collector on the page. Snapshots did not surface JS exceptions. Dedicated DevTools console export: **not captured** this pass.
+- RTL FA homepage and article library read as one brand: navy text, primary buttons, H2 bar.
+- Search button sits at inline-start in RTL (expected).
+- Related-article **titles stay English** while chrome is Persian (source rows are EN). WARN, not a fake-translation FAIL.
+- Homepage skill/value/cert headings remain `h4` in source (H2→H4 skip). WARN.
+- Cursor screenshot panel often shows a previous page; do not treat those PNGs as URL proof.
 
 ## Automated
 
 - `php artisan optimize:clear` — done
-- `php artisan site:compare-content` — Failures: 0 (23 articles + 6 services + home)
-- `php artisan test` — 31 tests, 593 assertions, 1 skipped, 0 failures
-- `php artisan route:list` — `/`, `/articles`, `/articles/{slug}`, `/services/{slug}`, contact endpoints, sitemap, robots. `manifest.json` / `sw.js` are public static files, not Laravel routes.
+- `php artisan site:compare-content` — Failures: **0** (23 articles + 6 services + home)
+- `php artisan test` — **39 tests, 647 assertions, 1 skipped, 0 failures**
+- HTTP HEAD/GET: 68 URLs, **0 unexpected** (home 200, `/index.html` 301, 23 articles 200, 23 legacy 301, 6 services 200 + 6 `.html` 301, csrf/sitemap/robots/manifest/sw/offline/admin login 200)

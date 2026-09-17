@@ -28,6 +28,8 @@ Classifications: **AUTHORITATIVE** | **REFERENCE** | **HISTORICAL** | **DEPLOYME
 | [DOCUMENTATION-CLEANUP-REPORT.md](DOCUMENTATION-CLEANUP-REPORT.md) | What changed in the docs rebuild | Current | REFERENCE |
 | [PROJECT-STRUCTURE-CLEANUP.md](PROJECT-STRUCTURE-CLEANUP.md) | Structure cleanup report | Current | REFERENCE |
 | [get-to-know-me-ui.md](get-to-know-me-ui.md) | About / Get to Know Me UI report | Current | REFERENCE |
+| [features.md](features.md) | Search, tags, related, share, request pipeline | Current | AUTHORITATIVE |
+| [admin-ui-qa.md](admin-ui-qa.md) | Filament UI QA | Current | REFERENCE |
 | [design-system.md](design-system.md) | Public overlay tokens and components | Current | AUTHORITATIVE |
 | [article-visual-dna.md](article-visual-dna.md) | Article detail pages as visual reference | Current | AUTHORITATIVE |
 | [full-site-design-audit.md](full-site-design-audit.md) | Pre-implementation visual audit (then implemented) | Current | REFERENCE |
