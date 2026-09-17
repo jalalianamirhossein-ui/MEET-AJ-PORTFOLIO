@@ -1,0 +1,432 @@
+{
+    "driver": "sqlite",
+    "database": "C:\\Users\\Administrator\\Documents\\MEET AJ PORTFOLIO\\database/database.sqlite",
+    "tables": {
+        "article_redirects": {
+            "rows": 23,
+            "columns": [
+                "id:integer",
+                "old_path:varchar",
+                "article_id:integer",
+                "created_at:datetime null",
+                "updated_at:datetime null"
+            ],
+            "indexes": [
+                "article_redirects_old_path_unique(old_path) UNIQUE",
+                "primary(id) UNIQUE PRIMARY"
+            ],
+            "foreign_keys": [
+                "article_id -> articles(id) onDelete=cascade"
+            ]
+        },
+        "article_tag": {
+            "rows": 38,
+            "columns": [
+                "article_id:integer",
+                "tag_id:integer",
+                "created_at:datetime null",
+                "updated_at:datetime null"
+            ],
+            "indexes": [
+                "article_tag_tag_id_index(tag_id)",
+                "sqlite_autoindex_article_tag_1(article_id,tag_id) UNIQUE PRIMARY"
+            ],
+            "foreign_keys": [
+                "tag_id -> tags(id) onDelete=cascade",
+                "article_id -> articles(id) onDelete=cascade"
+            ]
+        },
+        "articles": {
+            "rows": 23,
+            "columns": [
+                "id:integer",
+                "translation_key:varchar",
+                "title:varchar",
+                "slug:varchar",
+                "language:varchar",
+                "excerpt:text null",
+                "content:text",
+                "featured_image:varchar null",
+                "category_id:integer null",
+                "meta_title:varchar null",
+                "meta_description:text null",
+                "canonical_url:varchar null",
+                "seo_data:text null",
+                "presentation:text null",
+                "sort_order:integer",
+                "status:varchar",
+                "published_at:datetime null",
+                "created_at:datetime null",
+                "updated_at:datetime null"
+            ],
+            "indexes": [
+                "articles_language_slug_unique(language,slug) UNIQUE",
+                "articles_language_status_published_at_index(language,status,published_at)",
+                "articles_status_published_at_index(status,published_at)",
+                "articles_translation_key_language_unique(translation_key,language) UNIQUE",
+                "primary(id) UNIQUE PRIMARY"
+            ],
+            "foreign_keys": [
+                "category_id -> categories(id) onDelete=set null"
+            ]
+        },
+        "categories": {
+            "rows": 10,
+            "columns": [
+                "id:integer",
+                "translation_key:varchar",
+                "name:varchar",
+                "slug:varchar",
+                "language:varchar",
+                "created_at:datetime null",
+                "updated_at:datetime null"
+            ],
+            "indexes": [
+                "categories_language_slug_unique(language,slug) UNIQUE",
+                "categories_translation_key_language_unique(translation_key,language) UNIQUE",
+                "primary(id) UNIQUE PRIMARY"
+            ],
+            "foreign_keys": []
+        },
+        "migrations": {
+            "rows": 9,
+            "columns": [
+                "id:integer",
+                "migration:varchar",
+                "batch:integer"
+            ],
+            "indexes": [
+                "primary(id) UNIQUE PRIMARY"
+            ],
+            "foreign_keys": []
+        },
+        "password_reset_tokens": {
+            "rows": 0,
+            "columns": [
+                "email:varchar",
+                "token:varchar",
+                "created_at:datetime null"
+            ],
+            "indexes": [
+                "sqlite_autoindex_password_reset_tokens_1(email) UNIQUE PRIMARY"
+            ],
+            "foreign_keys": []
+        },
+        "requests": {
+            "rows": 0,
+            "columns": [
+                "id:integer",
+                "name:varchar",
+                "email:varchar",
+                "phone:varchar null",
+                "subject:varchar null",
+                "message:text",
+                "status:varchar",
+                "created_at:datetime null",
+                "updated_at:datetime null",
+                "service_id:integer null",
+                "internal_notes:text null"
+            ],
+            "indexes": [
+                "primary(id) UNIQUE PRIMARY",
+                "requests_service_id_index(service_id)",
+                "requests_status_created_at_index(status,created_at)"
+            ],
+            "foreign_keys": [
+                "service_id -> services(id) onDelete=set null"
+            ]
+        },
+        "services": {
+            "rows": 6,
+            "columns": [
+                "id:integer",
+                "translation_key:varchar",
+                "title:varchar",
+                "slug:varchar",
+                "language:varchar",
+                "short_description:text null",
+                "description:text null",
+                "content:text null",
+                "features:text null",
+                "process:text null",
+                "faq:text null",
+                "price:numeric null",
+                "price_currency:varchar",
+                "price_label:varchar null",
+                "price_type:varchar",
+                "featured_image:varchar null",
+                "seo_title:varchar null",
+                "seo_description:text null",
+                "og_title:varchar null",
+                "og_description:text null",
+                "presentation:text null",
+                "sort_order:integer",
+                "status:varchar",
+                "published_at:datetime null",
+                "created_at:datetime null",
+                "updated_at:datetime null"
+            ],
+            "indexes": [
+                "primary(id) UNIQUE PRIMARY",
+                "services_language_slug_unique(language,slug) UNIQUE",
+                "services_language_status_published_at_index(language,status,published_at)",
+                "services_status_sort_order_index(status,sort_order)",
+                "services_translation_key_language_unique(translation_key,language) UNIQUE"
+            ],
+            "foreign_keys": []
+        },
+        "sessions": {
+            "rows": 0,
+            "columns": [
+                "id:varchar",
+                "user_id:integer null",
+                "ip_address:varchar null",
+                "user_agent:text null",
+                "payload:text",
+                "last_activity:integer"
+            ],
+            "indexes": [
+                "sessions_last_activity_index(last_activity)",
+                "sqlite_autoindex_sessions_1(id) UNIQUE PRIMARY"
+            ],
+            "foreign_keys": [
+                "user_id -> users(id) onDelete=set null"
+            ]
+        },
+        "tags": {
+            "rows": 8,
+            "columns": [
+                "id:integer",
+                "name:varchar",
+                "slug:varchar",
+                "created_at:datetime null",
+                "updated_at:datetime null"
+            ],
+            "indexes": [
+                "primary(id) UNIQUE PRIMARY",
+                "tags_name_unique(name) UNIQUE",
+                "tags_slug_unique(slug) UNIQUE"
+            ],
+            "foreign_keys": []
+        },
+        "users": {
+            "rows": 0,
+            "columns": [
+                "id:integer",
+                "name:varchar",
+                "email:varchar",
+                "email_verified_at:datetime null",
+                "password:varchar",
+                "role:varchar",
+                "remember_token:varchar null",
+                "created_at:datetime null",
+                "updated_at:datetime null"
+            ],
+            "indexes": [
+                "primary(id) UNIQUE PRIMARY",
+                "users_email_unique(email) UNIQUE"
+            ],
+            "foreign_keys": []
+        }
+    },
+    "articles": {
+        "total": 23,
+        "by_language_status": [
+            {
+                "language": "en",
+                "status": "published",
+                "c": 23
+            }
+        ],
+        "with_published_at": 23,
+        "redirects": 23
+    },
+    "categories": [
+        {
+            "id": 1,
+            "name": "Microsoft",
+            "slug": "microsoft",
+            "language": "en",
+            "translation_key": "360c7da3-0d45-4708-9c6d-37e8bbb6d5e4"
+        },
+        {
+            "id": 2,
+            "name": "مایکروسافت",
+            "slug": "microsoft",
+            "language": "fa",
+            "translation_key": "360c7da3-0d45-4708-9c6d-37e8bbb6d5e4"
+        },
+        {
+            "id": 3,
+            "name": "Linux",
+            "slug": "linux",
+            "language": "en",
+            "translation_key": "28376da9-8987-481b-881a-361386f9d942"
+        },
+        {
+            "id": 4,
+            "name": "لینوکس",
+            "slug": "linux",
+            "language": "fa",
+            "translation_key": "28376da9-8987-481b-881a-361386f9d942"
+        },
+        {
+            "id": 5,
+            "name": "MikroTik",
+            "slug": "mikrotik",
+            "language": "en",
+            "translation_key": "892a0336-3e54-4887-868f-506b21c6f6b8"
+        },
+        {
+            "id": 6,
+            "name": "میکروتیک",
+            "slug": "mikrotik",
+            "language": "fa",
+            "translation_key": "892a0336-3e54-4887-868f-506b21c6f6b8"
+        },
+        {
+            "id": 7,
+            "name": "VMware",
+            "slug": "vmware",
+            "language": "en",
+            "translation_key": "79e34e27-5264-4c20-a21f-35fed8c5675a"
+        },
+        {
+            "id": 8,
+            "name": "مجازی‌سازی",
+            "slug": "vmware",
+            "language": "fa",
+            "translation_key": "79e34e27-5264-4c20-a21f-35fed8c5675a"
+        },
+        {
+            "id": 9,
+            "name": "Others",
+            "slug": "others",
+            "language": "en",
+            "translation_key": "0773ede2-e340-45f9-95f1-1c9dc0108d9f"
+        },
+        {
+            "id": 10,
+            "name": "سایر",
+            "slug": "others",
+            "language": "fa",
+            "translation_key": "0773ede2-e340-45f9-95f1-1c9dc0108d9f"
+        }
+    ],
+    "tags": [
+        {
+            "id": 8,
+            "name": "DevOps",
+            "slug": "devops"
+        },
+        {
+            "id": 1,
+            "name": "Linux",
+            "slug": "linux"
+        },
+        {
+            "id": 2,
+            "name": "Microsoft",
+            "slug": "microsoft"
+        },
+        {
+            "id": 3,
+            "name": "MikroTik",
+            "slug": "mikrotik"
+        },
+        {
+            "id": 6,
+            "name": "Networking",
+            "slug": "networking"
+        },
+        {
+            "id": 7,
+            "name": "Security",
+            "slug": "security"
+        },
+        {
+            "id": 4,
+            "name": "VMware",
+            "slug": "vmware"
+        },
+        {
+            "id": 5,
+            "name": "Windows Server",
+            "slug": "windows-server"
+        }
+    ],
+    "article_tag_links": 38,
+    "services": [
+        {
+            "id": 1,
+            "slug": "network-design",
+            "title": "Network Design & Implementation",
+            "language": "en",
+            "status": "published",
+            "price": 4900,
+            "price_currency": "AED",
+            "\"price_unit\"": "price_unit",
+            "sort_order": 1
+        },
+        {
+            "id": 2,
+            "slug": "system-administration",
+            "title": "System Administration",
+            "language": "en",
+            "status": "published",
+            "price": 3900,
+            "price_currency": "AED",
+            "\"price_unit\"": "price_unit",
+            "sort_order": 2
+        },
+        {
+            "id": 3,
+            "slug": "devops-automation",
+            "title": "DevOps & Automation",
+            "language": "en",
+            "status": "published",
+            "price": 6900,
+            "price_currency": "AED",
+            "\"price_unit\"": "price_unit",
+            "sort_order": 3
+        },
+        {
+            "id": 4,
+            "slug": "monitoring-security",
+            "title": "Monitoring & Security",
+            "language": "en",
+            "status": "published",
+            "price": 4200,
+            "price_currency": "AED",
+            "\"price_unit\"": "price_unit",
+            "sort_order": 4
+        },
+        {
+            "id": 5,
+            "slug": "virtualization-solutions",
+            "title": "Virtualization Solutions",
+            "language": "en",
+            "status": "published",
+            "price": 5900,
+            "price_currency": "AED",
+            "\"price_unit\"": "price_unit",
+            "sort_order": 5
+        },
+        {
+            "id": 6,
+            "slug": "technical-consulting",
+            "title": "Technical Consulting",
+            "language": "en",
+            "status": "published",
+            "price": 2500,
+            "price_currency": "AED",
+            "\"price_unit\"": "price_unit",
+            "sort_order": 6
+        }
+    ],
+    "requests": {
+        "total": 0,
+        "by_status": []
+    },
+    "users": []
+}
