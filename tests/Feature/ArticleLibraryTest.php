@@ -96,7 +96,7 @@ class ArticleLibraryTest extends TestCase
         $this->assertStringContainsString('Related Articles', $html);
         $this->assertStringContainsString('article-related-grid', $html);
         $this->assertStringContainsString('article-share-btn', $html);
-        $this->assertStringContainsString('article-cover', $html);
+        $this->assertStringContainsString('article-hero-media', $html);
         $this->assertStringContainsString('linkedin.com/sharing', $html);
         $this->assertStringContainsString('twitter.com/intent/tweet', $html);
         $this->assertStringContainsString('wa.me/', $html);

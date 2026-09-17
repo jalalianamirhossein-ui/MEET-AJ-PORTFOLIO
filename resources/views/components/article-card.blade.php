@@ -42,12 +42,15 @@
                         data-en="{{ $titleEn }}"
                         data-fa="{{ $titleFa }}"
                       >{{ $titleEn }}</h3>
-                      @if ($article->published_at)
-                        <p class="article-teaser-meta">
-                          <i class="bi bi-calendar3" aria-hidden="true"></i>
-                          <time datetime="{{ $article->published_at->toDateString() }}">{{ $article->published_at->format('M j, Y') }}</time>
-                        </p>
-                      @endif
+                      <p class="article-teaser-meta">
+                        @if ($article->published_at)
+                          <span>
+                            <i class="bi bi-calendar3" aria-hidden="true"></i>
+                            <time datetime="{{ $article->published_at->toDateString() }}">{{ $article->published_at->format('M j, Y') }}</time>
+                          </span>
+                        @endif
+                        <span>{{ $article->readingMinutes() }} <span data-en="min read" data-fa="دقیقه مطالعه">min read</span></span>
+                      </p>
                     </div>
                   </a>
                 </article>

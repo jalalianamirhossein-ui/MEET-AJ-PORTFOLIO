@@ -39,6 +39,7 @@
     <link href="/assets/css/lang-toggle.css?v=1300" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1703" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1800" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @if (!empty($seo['breadcrumb']))
       <script type="application/ld+json">{!! json_encode($seo['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
@@ -94,8 +95,8 @@
     <main id="main-content" class="main" role="main">
       <section class="article-hero article-header hero" role="banner">
         <div class="container">
-          <div class="row">
-            <div class="col-lg-10 mx-auto">
+          <div class="article-hero-layout">
+            <div class="article-hero-copy">
               @include('articles.partials.breadcrumbs')
               <h1 class="article-title hero-title" data-en="{{ data_get($article->presentation, 'hero_title_en', $article->title) }}" data-fa="{{ data_get($article->presentation, 'hero_title_fa', $article->title) }}">{{ $article->title }}</h1>
               <div class="article-meta">
@@ -117,20 +118,15 @@
                 <a href="#article-content" class="btn btn-primary btn-lg action-btn"><span class="btn-content"><i class="bi bi-play-circle" aria-hidden="true"></i><span data-en="Start reading" data-fa="شروع مطالعه">Start reading</span></span></a>
               </div>
             </div>
+            <figure class="article-hero-media">
+              <img class="article-hero-thumbnail" src="{{ $article->galleryUrl() }}" width="500" height="500" decoding="async" fetchpriority="high" alt="{{ data_get($article->presentation, 'image_alt') ?: $article->title }}" />
+            </figure>
           </div>
-        </div>
-        <div class="hero-background" aria-hidden="true">
-          <div class="bg-shape bg-shape-1"></div>
-          <div class="bg-shape bg-shape-2"></div>
-          <div class="bg-shape bg-shape-3"></div>
         </div>
       </section>
       <section id="article-content" class="article-content article-container" aria-label="Article content" data-en-aria-label="Article content" data-fa-aria-label="متن مقاله">
         <div class="container">
           <div class="article-reading">
-            <figure class="article-cover">
-              <img class="article-hero-thumbnail" src="{{ $article->galleryUrl() }}" width="500" height="500" decoding="async" fetchpriority="high" alt="{{ data_get($article->presentation, 'image_alt') ?: $article->title }}" />
-            </figure>
             <article class="article-body">
               {!! $article->content !!}
             </article>

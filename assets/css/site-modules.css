@@ -1,0 +1,550 @@
+/**
+ * Shared site modules — article cards, article hero, related, share, testimonials.
+ * Load after visual-upgrade.css. Do not copy these rules onto individual pages.
+ */
+
+/*--------------------------------------------------------------
+# Article cards (homepage, library, search, related)
+--------------------------------------------------------------*/
+.article-teaser,
+.article-teaser--related {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #dce5f1);
+  border-radius: var(--radius-panel, 1rem);
+  box-shadow: var(--shadow-card, 0 10px 28px rgba(15, 23, 42, 0.06));
+  transform: translateY(0);
+  transition:
+    transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.article-teaser:hover,
+.article-teaser--related:hover {
+  transform: translateY(-5px);
+  border-color: color-mix(in srgb, var(--topic, var(--color-primary, #2563eb)) 35%, var(--color-border, #dce5f1));
+  box-shadow: 0 18px 40px color-mix(in srgb, var(--topic, var(--color-primary, #2563eb)) 18%, rgba(15, 23, 42, 0.08));
+}
+
+.article-teaser .article-teaser-media,
+.article-teaser .portfolio-content,
+.article-teaser .portfolio-content.h-100,
+.article-teaser--related .article-teaser-media {
+  position: relative;
+  display: block !important;
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  aspect-ratio: 1 / 1 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: var(--color-surface-muted, #eef2f7);
+}
+
+.article-teaser .article-teaser-media img,
+.article-teaser .portfolio-content img,
+.article-teaser--related .article-teaser-media img {
+  position: absolute !important;
+  inset: 0;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  aspect-ratio: auto !important;
+  object-fit: cover !important;
+  object-position: center;
+  border-radius: 0 !important;
+  flex: none !important;
+  transform: scale(1);
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.article-teaser:hover .article-teaser-media img,
+.article-teaser:hover .portfolio-content img,
+.article-teaser--related:hover .article-teaser-media img {
+  transform: scale(1.04);
+}
+
+.article-teaser-media .preview-link,
+.article-teaser .portfolio-content > .preview-link {
+  position: absolute !important;
+  top: auto;
+  right: auto;
+  bottom: 0.75rem;
+  left: auto;
+  inset-inline-end: 0.75rem;
+  inset-inline-start: auto;
+  z-index: 2;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.72);
+  color: #fff;
+  opacity: 0;
+  pointer-events: auto;
+  transform: none;
+  transition: opacity 200ms ease;
+}
+
+.article-teaser:hover .preview-link,
+.article-teaser:focus-within .preview-link,
+.article-teaser-media .preview-link:focus-visible {
+  opacity: 1;
+}
+
+.article-teaser .portfolio-info,
+.article-teaser--related .portfolio-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  gap: 0.45rem;
+  padding: 0.95rem 1rem 1.05rem;
+  position: relative !important;
+  inset: auto !important;
+  opacity: 1 !important;
+  background: transparent !important;
+  pointer-events: auto !important;
+  text-align: start !important;
+  justify-content: flex-start !important;
+}
+
+.article-teaser--related .portfolio-info {
+  padding: 0.8rem 0.9rem 0.95rem;
+}
+
+.article-teaser-title,
+.article-teaser .portfolio-info h3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin: 0;
+}
+
+.article-teaser-excerpt {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin: 0;
+}
+
+.article-teaser-foot {
+  margin-top: auto;
+}
+
+.portfolio .isotope-item,
+.article-grid-item {
+  display: flex;
+  min-width: 0;
+  width: auto;
+  max-width: none;
+  padding: 0;
+}
+
+.portfolio .isotope-item > .article-teaser,
+.article-grid-item > .article-teaser {
+  width: 100%;
+}
+
+.portfolio .isotope-container,
+.portfolio .isotope-container.isotope-ready,
+.article-grid,
+.article-related-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+@media (min-width: 768px) {
+  .portfolio .isotope-container,
+  .portfolio .isotope-container.isotope-ready,
+  .article-grid,
+  .article-related-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .portfolio .isotope-container,
+  .portfolio .isotope-container.isotope-ready,
+  .article-grid,
+  .article-related-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+#portfolio .isotope-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+#portfolio .articles-load-more,
+.portfolio .articles-load-more {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0.25rem 0 0;
+  padding: 0;
+}
+
+/*--------------------------------------------------------------
+# Article detail hero — two columns, shared template
+--------------------------------------------------------------*/
+.article-page .article-hero.hero {
+  min-height: 0;
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0 clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.article-hero-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.article-hero-copy {
+  min-width: 0;
+}
+
+.article-hero-media {
+  width: min(100%, 500px);
+  max-width: 500px;
+  margin: 0;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--article-radius, 1rem);
+  box-shadow: var(--article-shadow, 0 18px 45px rgba(15, 23, 42, 0.1));
+}
+
+.article-hero-media img,
+.article-page .article-hero-media .article-hero-thumbnail,
+.article-page .article-hero-thumbnail {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 500px !important;
+  max-height: none !important;
+  aspect-ratio: 1 / 1 !important;
+  object-fit: cover !important;
+  margin: 0 !important;
+}
+
+@media (min-width: 900px) {
+  .article-hero-layout {
+    grid-template-columns: minmax(0, 1fr) min(38vw, 500px);
+    gap: 2rem;
+  }
+
+  .article-hero-media {
+    width: 100%;
+    justify-self: end;
+  }
+}
+
+.article-page .article-cover {
+  display: none !important;
+}
+
+.article-reading {
+  width: min(100%, 52.5rem);
+  margin-inline: auto;
+}
+
+/*--------------------------------------------------------------
+# Related articles
+--------------------------------------------------------------*/
+.article-page .related-articles,
+.article-page .article-related.related-articles {
+  display: block;
+  margin-top: 2rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid var(--article-border, #dce5f1);
+}
+
+.article-page .article-related-grid,
+.article-page .article-grid.article-related-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+  width: 100%;
+  margin: 0;
+  align-items: stretch;
+}
+
+.article-page .article-related-grid > .article-teaser,
+.article-page .article-related-grid > :not(.article-card) {
+  grid-column: auto;
+}
+
+@media (min-width: 640px) {
+  .article-page .article-related-grid,
+  .article-page .article-grid.article-related-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .article-page .article-related-grid,
+  .article-page .article-grid.article-related-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.article-teaser--related .article-teaser-title {
+  font-size: 0.98rem;
+  line-height: 1.35;
+}
+
+.article-teaser-meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.7rem;
+  margin: 0 !important;
+  color: var(--color-text-muted, #64748b);
+  font-size: 0.78rem;
+}
+
+/*--------------------------------------------------------------
+# Share
+--------------------------------------------------------------*/
+.article-share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem 0.75rem;
+  margin-top: 1.5rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--article-border, #dce5f1);
+  border-radius: 0.85rem;
+  background: var(--article-surface, #fff);
+  box-shadow: none;
+}
+
+.article-share-label {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.article-share-actions,
+.article-share ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.article-share-btn,
+.article-share a.article-share-btn,
+.article-copy-link.article-share-btn {
+  width: 2.25rem;
+  height: 2.25rem;
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+}
+
+.article-share-status {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+/*--------------------------------------------------------------
+# Testimonials slider
+--------------------------------------------------------------*/
+body.index-page #portfolio.section,
+body.index-page #testimonials.section,
+body.index-page #contact.section {
+  padding-block: clamp(2.25rem, 4.2vw, 3.35rem);
+}
+
+.testimonials {
+  background: transparent;
+}
+
+.testimonials-slider {
+  position: relative;
+  max-width: 46rem;
+  margin-inline: auto;
+  padding: 0 0 0.25rem;
+  overflow: hidden;
+}
+
+.testimonials-slider .swiper-wrapper {
+  align-items: stretch;
+}
+
+.testimonials-slider .swiper-slide {
+  height: auto;
+}
+
+.testimonial-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  height: 100%;
+  margin: 0;
+  padding: 1.5rem 1.35rem 1.35rem;
+  border: 1px solid var(--color-border, #dce5f1);
+  border-radius: var(--radius-panel, 1rem);
+  background: var(--color-surface, #fff);
+  box-shadow: var(--shadow-card, 0 10px 28px rgba(15, 23, 42, 0.06));
+}
+
+.testimonial-card p {
+  margin: 0;
+  color: var(--color-text, #1e293b);
+  font-size: clamp(0.98rem, 1.6vw, 1.12rem);
+  line-height: 1.7;
+}
+
+.testimonial-card footer {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: auto;
+}
+
+.testimonial-card .testimonial-img {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.testimonial-card cite {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-style: normal;
+}
+
+.testimonial-card cite strong {
+  color: var(--color-text, #1e293b);
+  font-size: 0.95rem;
+}
+
+.testimonial-card cite span {
+  color: var(--color-text-muted, #64748b);
+  font-size: 0.82rem;
+}
+
+.testimonials-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  margin-top: 1.15rem;
+}
+
+.testimonials-prev,
+.testimonials-next {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid var(--color-border, #dce5f1);
+  border-radius: 999px;
+  background: var(--color-surface, #fff);
+  color: var(--color-primary, #2563eb);
+  cursor: pointer;
+}
+
+.testimonials-prev:hover,
+.testimonials-next:hover,
+.testimonials-prev:focus-visible,
+.testimonials-next:focus-visible {
+  border-color: var(--color-primary, #2563eb);
+  color: #fff;
+  background: var(--color-primary, #2563eb);
+  outline: none;
+}
+
+.testimonials-dots.swiper-pagination {
+  position: static;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: auto;
+}
+
+.testimonials-dots .swiper-pagination-bullet {
+  width: 0.55rem;
+  height: 0.55rem;
+  margin: 0;
+  background: #cbd5e1;
+  opacity: 1;
+}
+
+.testimonials-dots .swiper-pagination-bullet-active {
+  width: 1.35rem;
+  border-radius: 999px;
+  background: var(--color-primary, #2563eb);
+}
+
+html[dir="rtl"] .article-hero-layout,
+html[dir="rtl"] .article-teaser .portfolio-info,
+html[dir="rtl"] .testimonial-card,
+html[dir="rtl"] .testimonial-card p,
+html[dir="rtl"] .testimonial-card cite {
+  text-align: start;
+}
+
+@media (max-width: 767px) {
+  .article-page .article-hero.hero {
+    padding-top: 4.5rem;
+  }
+
+  .article-hero-media {
+    margin-inline: auto;
+  }
+
+  .testimonial-card {
+    padding: 1.25rem 1.1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .article-teaser,
+  .article-teaser img,
+  .article-share-btn,
+  .testimonials-prev,
+  .testimonials-next {
+    transition: none;
+  }
+
+  .article-teaser:hover,
+  .article-teaser:hover img {
+    transform: none;
+  }
+}

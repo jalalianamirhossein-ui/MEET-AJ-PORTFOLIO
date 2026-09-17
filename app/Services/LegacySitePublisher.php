@@ -51,6 +51,7 @@ class LegacySitePublisher
         $html = $this->toBlade($html);
         $html = $this->replacePortfolioGrid($html);
         $html = $this->replaceServicesGrid($html);
+        $html = $this->replaceTestimonials($html);
         $html = $this->injectArticleLibrary($html, false);
         $target = resource_path('views/home.blade.php');
         file_put_contents($target, $html);
@@ -97,6 +98,7 @@ class LegacySitePublisher
     <link href="/assets/css/lang-toggle.css?v=1300" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1703" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1800" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">
 BLADE;
