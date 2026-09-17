@@ -19,6 +19,9 @@ class CompareLegacyContent extends Command
         if (\App\Models\Service::query()->count() === 0) {
             app(LegacyServiceImporter::class)->import(false);
         }
+        if (Article::query()->count() === 0) {
+            $importer->import(false);
+        }
 
         $rows = [];
         $fails = 0;

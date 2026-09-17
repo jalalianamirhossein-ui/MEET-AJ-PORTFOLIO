@@ -25,3 +25,12 @@ Route::post('/forms/contact.php', [ContactController::class, 'store'])->middlewa
 
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 Route::get('/robots.txt', RobotsController::class)->name('robots');
+Route::get('/manifest.json', function () {
+    $path = public_path('manifest.json');
+    abort_unless(is_file($path), 404);
+
+    return response()->file($path, [
+        'Content-Type' => 'application/manifest+json; charset=UTF-8',
+        'Cache-Control' => 'public, max-age=0, must-revalidate',
+    ]);
+})->name('manifest');
