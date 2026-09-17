@@ -15,14 +15,15 @@
                 "loop": true,
                 "speed": 550,
                 "grabCursor": true,
+                "simulateTouch": true,
                 "watchOverflow": true,
+                "slidesPerView": 1,
+                "spaceBetween": 20,
                 "autoplay": {
                   "delay": 5000,
                   "pauseOnMouseEnter": true,
                   "disableOnInteraction": false
                 },
-                "slidesPerView": 1,
-                "spaceBetween": 20,
                 "pagination": {
                   "el": ".testimonials-dots",
                   "clickable": true
@@ -30,6 +31,11 @@
                 "navigation": {
                   "nextEl": ".testimonials-next",
                   "prevEl": ".testimonials-prev"
+                },
+                "breakpoints": {
+                  "0": { "slidesPerView": 1, "spaceBetween": 16 },
+                  "768": { "slidesPerView": 1, "spaceBetween": 20 },
+                  "1200": { "slidesPerView": 1, "spaceBetween": 24 }
                 }
               }
             </script>

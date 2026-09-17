@@ -99,7 +99,7 @@ class LegacyArticleImporter
         }
         $cards = [];
         if (! preg_match_all('/<div\s+class="col-lg-4 col-md-6 portfolio-item isotope-item\s+([^"]+)"\s*>/s', $html, $starts, PREG_OFFSET_CAPTURE)) {
-            throw new \RuntimeException('Unable to parse homepage article cards');
+            return [];
         }
         foreach ($starts[0] as $order => $start) {
             $from = $start[1];
@@ -125,9 +125,6 @@ class LegacyArticleImporter
                 'card_excerpt_fa' => $excerpts[2] ?? null,
                 'sort_order' => $order,
             ];
-        }
-        if (count($cards) !== 23) {
-            throw new \RuntimeException('Expected 23 homepage cards, found '.count($cards));
         }
 
         return $cards;

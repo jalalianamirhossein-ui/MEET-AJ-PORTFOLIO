@@ -18,10 +18,10 @@
     <link href="/assets/css/lang-toggle.css?v=1300" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1703" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1800" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1801" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">@verbatim
-<a class="skip-link" href="#portfolio" data-en="Skip to main content" data-fa="رفتن به محتوای اصلی">Skip to main content</a>
+<a class="skip-link" href="#portfolio" data-en="Skip to main content" data-fa="???? ?? ?????? ????">Skip to main content</a>
     <!-- ===============================================
     ==================== HEADER SECTION ================
     =============================================== -->
@@ -104,7 +104,7 @@
           ></a>
         </div>
 
-        <!-- ردیف دوم: بقیه -->
+        <!-- ???? ???: ???? -->
         <div class="social-row social-row-secondary">
           <a
             href="https://twitter.com/RealAjMercury"
@@ -156,13 +156,13 @@
       <!-- ===============================================
       ==================== NAVIGATION MENU ================
       =============================================== -->
-      <nav id="navmenu" class="navmenu" role="navigation" aria-label="Primary" data-en-aria-label="Primary" data-fa-aria-label="منوی اصلی">
+      <nav id="navmenu" class="navmenu" role="navigation" aria-label="Primary" data-en-aria-label="Primary" data-fa-aria-label="???? ????">
         <ul>
           <!-- Home Section -->
           <li>
             <a href="/#hero"
               ><i class="bi bi-house navicon"></i
-              ><span data-en="Home" data-fa="صفحه اصلی">Home</span></a
+              ><span data-en="Home" data-fa="???? ????">Home</span></a
             >
           </li>
 
@@ -170,7 +170,7 @@
           <li>
             <a href="/#about"
               ><i class="bi bi-person navicon"></i
-              ><span data-en="About" data-fa="درباره من">About</span></a
+              ><span data-en="About" data-fa="?????? ??">About</span></a
             >
           </li>
 
@@ -178,7 +178,7 @@
           <li>
             <a href="/#resume"
               ><i class="bi bi-file-earmark-text navicon"></i
-              ><span data-en="Resume" data-fa="رزومه کاری">Resume</span></a
+              ><span data-en="Resume" data-fa="????? ????">Resume</span></a
             >
           </li>
 
@@ -186,7 +186,7 @@
           <li>
             <a href="/#services"
               ><i class="bi bi-hdd-stack navicon"></i
-              ><span data-en="Services" data-fa="خدمات">Services</span></a
+              ><span data-en="Services" data-fa="?????">Services</span></a
             >
           </li>
 
@@ -194,7 +194,7 @@
           <li>
             <a href="/articles" class="active" aria-current="page"
               ><i class="bi bi-images navicon"></i
-              ><span data-en="Articles" data-fa="مقالات">Articles</span></a
+              ><span data-en="Articles" data-fa="??????">Articles</span></a
             >
           </li>
 
@@ -202,7 +202,7 @@
           <li>
             <a href="/#testimonials"
               ><i class="bi bi-menu-button navicon"></i
-              ><span data-en="Testimonials" data-fa="نظرات"
+              ><span data-en="Testimonials" data-fa="?????"
                 >Testimonials</span
               ></a
             >
@@ -212,7 +212,7 @@
           <li>
             <a href="/#contact"
               ><i class="bi bi-envelope navicon"></i
-              ><span data-en="Contact" data-fa="تماس با من">Contact</span></a
+              ><span data-en="Contact" data-fa="???? ?? ??">Contact</span></a
             >
           </li>
         </ul>
@@ -228,12 +228,12 @@
       type="button"
       aria-label="Open menu"
       data-en-aria-label="Open menu"
-      data-fa-aria-label="باز کردن منو"
+      data-fa-aria-label="??? ???? ???"
       aria-expanded="false"
       aria-controls="header"
     >
       <span class="menu-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
-      <span class="sr-only" data-en="Open menu" data-fa="باز کردن منو">Open menu</span>
+      <span class="sr-only" data-en="Open menu" data-fa="??? ???? ???">Open menu</span>
     </button>
     <main id="main-content" class="main" role="main">
 <section id="portfolio" class="portfolio section light-background">
@@ -241,10 +241,10 @@
         ==================== SECTION TITLE ==================
         =============================================== -->
         <div class="container section-title" data-aos="fade-up">
-          <h2 data-en="Articles" data-fa="مقالات">Articles</h2>
+          <h2 data-en="Articles" data-fa="??????">Articles</h2>
           <p
             data-en="A collection of my technical articles and insights on network infrastructure, system administration, and DevOps solutions."
-            data-fa="مجموعه‌ای از مقالات فنی و بینش‌های من در زمینه زیرساخت شبکه، مدیریت سیستم و راهکارهای DevOps."
+            data-fa="????????? ?? ?????? ??? ? ???????? ?? ?? ????? ??????? ????? ?????? ????? ? ????????? DevOps."
           >
             A collection of my technical articles and insights on network
             infrastructure, system administration, and DevOps solutions.
@@ -300,10 +300,10 @@
                 class="btn btn-primary load-more-btn"
                 type="button"
                 data-en="Load more articles"
-                data-fa="نمایش مقالات بیشتر"
+                data-fa="????? ?????? ?????"
                 aria-label="Load more articles"
                 data-en-aria-label="Load more articles"
-                data-fa-aria-label="نمایش مقالات بیشتر"
+                data-fa-aria-label="????? ?????? ?????"
               >
                 Load more articles
               </button>
@@ -329,21 +329,21 @@
             <!-- Brand Section -->
             <div class="footer-brand">
               <h3 class="brand-name">
-                <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
+                <span data-en="AmirHossein Jalalian" data-fa="???????? ???????"
                   >AmirHossein Jalalian</span
                 >
               </h3>
               <p
                 class="brand-title"
                 data-en="IT Infrastructure Specialist"
-                data-fa="متخصص زیرساخت فناوری اطلاعات"
+                data-fa="????? ??????? ?????? ???????"
               >
                 IT Infrastructure Specialist
               </p>
               <p
                 class="brand-description"
                 data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
-                data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
+                data-fa="????? ????????? IT ??????? ??? ? ?????????? ???? ?????? ???????? ???."
               >
                 Delivering reliable, secure, and scalable IT solutions for your
                 business success.
@@ -355,14 +355,14 @@
               <h4
                 class="contact-title"
                 data-en="Get In Touch"
-                data-fa="تماس با من"
+                data-fa="???? ?? ??"
               >
                 Get In Touch
               </h4>
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>
-                  <span data-en="Tehran, Iran" data-fa="تهران، ایران"
+                  <span data-en="Tehran, Iran" data-fa="?????? ?????"
                     >Tehran, Iran</span
                   >
                 </div>
@@ -388,7 +388,7 @@
                 <h5
                   class="social-title"
                   data-en="Follow Me"
-                  data-fa="دنبال کنید"
+                  data-fa="????? ????"
                 >
                   Follow Me
                 </h5>
@@ -428,25 +428,25 @@
             <div class="footer-bottom-content">
               <div class="copyright">
                 <p>
-                  © <span>2025</span>
+                  ? <span>2025</span>
                   <strong
                     data-en="AmirHossein Jalalian"
-                    data-fa="امیرحسین جلالیان"
+                    data-fa="???????? ???????"
                     >AmirHossein Jalalian</strong
                   >
                   <span
                     data-en="All Rights Reserved"
-                    data-fa="تمام حقوق محفوظ است"
+                    data-fa="???? ???? ????? ???"
                     >All Rights Reserved</span
                   >
                 </p>
               </div>
               <div class="footer-heart">
-                <span data-en="Made with" data-fa="ساخته شده با"
+                <span data-en="Made with" data-fa="????? ??? ??"
                   >Made with</span
                 >
                 <i class="bi bi-heart-fill"></i>
-                <span data-en="in Iran" data-fa="در ایران">in Iran</span>
+                <span data-en="in Iran" data-fa="?? ?????">in Iran</span>
               </div>
             </div>
           </div>
@@ -458,7 +458,7 @@
     <script src="/assets/vendor/glightbox/js/glightbox.min.js" defer></script>
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1401" defer></script>
+    <script src="/assets/js/main.js?v=1402" defer></script>
     <script src="/assets/js/i18n.js?v=1300" defer></script>
     <script>
       if ("serviceWorker" in navigator) {

@@ -24,7 +24,7 @@ class PublicSiteTest extends TestCase
 
     public function test_homepage_and_index_redirect(): void
     {
-        $this->get('/')->assertOk()->assertSee('Meet AJ', false)->assertSee('id="portfolio"', false)->assertSee('id="service-catalog"', false)->assertSee('mailto:jalalian.amirhossein@gmail.com', false)->assertSee('data-fa=', false)->assertSee('csrf_token', false)->assertDontSee('@@gmail', false);
+        $this->get('/')->assertOk()->assertSee('Meet AJ', false)->assertSee('id="portfolio"', false)->assertSee('id="service-catalog"', false)->assertSee('testimonials-slider', false)->assertSee('mailto:jalalian.amirhossein@gmail.com', false)->assertSee('data-fa=', false)->assertSee('csrf_token', false)->assertDontSee('@@gmail', false);
         $this->get('/index.html')->assertRedirect('/');
         $this->assertSame(301, $this->get('/index.html')->baseResponse->getStatusCode());
     }

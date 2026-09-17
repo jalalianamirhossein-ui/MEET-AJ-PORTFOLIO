@@ -31,6 +31,7 @@ class ArticleLibraryTest extends TestCase
             ->assertSee('role="search"', false)
             ->assertSee('id="article-q"', false)
             ->assertSee('isotope-container', false)
+            ->assertSee('articles-load-more', false)
             ->assertSee('Linux', false)
             ->assertSee('data-fa="رفتن به محتوای اصلی"', false)
             ->assertSee('data-fa="نمایش مقالات بیشتر"', false)
@@ -96,7 +97,9 @@ class ArticleLibraryTest extends TestCase
         $this->assertStringContainsString('Related Articles', $html);
         $this->assertStringContainsString('article-related-grid', $html);
         $this->assertStringContainsString('article-share-btn', $html);
+        $this->assertStringContainsString('article-hero-layout', $html);
         $this->assertStringContainsString('article-hero-media', $html);
+        $this->assertStringNotContainsString('figure class="article-cover"', $html);
         $this->assertStringContainsString('linkedin.com/sharing', $html);
         $this->assertStringContainsString('twitter.com/intent/tweet', $html);
         $this->assertStringContainsString('wa.me/', $html);

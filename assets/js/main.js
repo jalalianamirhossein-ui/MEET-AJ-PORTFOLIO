@@ -777,7 +777,7 @@
                 config.breakpoints &&
                 Object.keys(config.breakpoints).length > 0;
 
-              if (!hasBreakpoints) {
+              if (!hasBreakpoints && !isTestimonialsSlider) {
                 if (window.innerWidth <= 768) {
                   config.slidesPerView = 1;
                   config.spaceBetween = 20;
@@ -827,6 +827,14 @@
                   );
                   toggle?.setAttribute("aria-controls", swiperElement.id);
                   enhanceSwiperPagination(swiper);
+                  if (swiper.autoplay) {
+                    swiperElement.addEventListener("mouseenter", () => {
+                      swiper.autoplay.stop();
+                    });
+                    swiperElement.addEventListener("mouseleave", () => {
+                      swiper.autoplay.start();
+                    });
+                  }
                   bindSwiperAutoplayControls(swiperElement, swiper);
                 }
               }

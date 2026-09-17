@@ -98,7 +98,7 @@ class LegacySitePublisher
     <link href="/assets/css/lang-toggle.css?v=1300" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1703" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1800" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1801" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">
 BLADE;
@@ -109,7 +109,7 @@ BLADE;
     <script src="/assets/vendor/glightbox/js/glightbox.min.js" defer></script>
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1401" defer></script>
+    <script src="/assets/js/main.js?v=1402" defer></script>
     <script src="/assets/js/i18n.js?v=1300" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
@@ -207,28 +207,11 @@ BLADE;
 BLADE;
 
         if (str_contains($html, "@include('partials.testimonials')")) {
-            return $html;
-        }
+            if (! str_contains($html, "@endverbatim\n      @include('partials.testimonials')")
+                && ! str_contains($html, "@endverbatim\r\n      @include('partials.testimonials')")) {
+                return str_replace("@include('partials.testimonials')", $include, $html);
+            }
 
-        $start = strpos($html, '<section id="testimonials"');
-        $end = strpos($html, '<!-- /Testimonials Section -->');
-        if ($start === false || $end === false) {
-            throw new \RuntimeException('Unable to locate testimonials section');
-        }
-
-        return substr($html, 0, $start).$include.substr($html, $end + strlen('<!-- /Testimonials Section -->'));
-    }
-
-    private function replaceTestimonials(string $html): string
-    {
-        $include = <<<'BLADE'
-@endverbatim
-      @include('partials.testimonials')
-@verbatim
-      <!-- /Testimonials Section -->
-BLADE;
-
-        if (str_contains($html, "@include('partials.testimonials')")) {
             return $html;
         }
 
@@ -303,11 +286,7 @@ BLADE;
 
     private function injectArticleLibrary(string $html, bool $allowSearchResults): string
     {
-        if ($allowSearchResults && str_contains($html, '@if ($searching)')) {
-            return $html;
-        }
-
-        if ($allowSearchResults) {
+        if ($allowSearchResults && ! str_contains($html, '@if ($searching)')) {
             $toolbar = <<<'BLADE'
         <!-- End Section Title -->
 @endverbatim
@@ -338,7 +317,7 @@ BLADE;
             return $html;
         }
 
-        if (str_contains($html, '@if ($searching)')) {
+        if (preg_match('/@endif\s*@verbatim\s*<!-- End Main Container -->/', preg_replace('/\s+/', ' ', $html) ?? $html)) {
             return $html;
         }
 
@@ -366,6 +345,9 @@ BLADE;
 
     public function toBlade(string $html): string
     {
+        $html = preg_replace('/\xEF\xBB\xBF/', '', $html) ?? $html;
+        $html = preg_replace('/^\s*@verbatim\s*/', '', $html) ?? $html;
+        $html = preg_replace('/\s*@endverbatim\s*$/', '', $html) ?? $html;
         $html = str_replace('../assets/', '/assets/', $html);
         $html = preg_replace('#(?<![\w./])assets/#', '/assets/', $html) ?? $html;
         $html = str_replace('href="../index.html', 'href="/', $html);
