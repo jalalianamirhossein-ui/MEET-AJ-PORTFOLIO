@@ -1,52 +1,66 @@
 # Final project QA report — Meet AJ visual DNA unification
 
 **Date:** 2026-09-17  
-**Overlay:** `visual-upgrade.css?v=1306`  
-**Git:** not initialized, not committed.
+**Overlay:** `visual-upgrade.css?v=1310`  
+**Git:** not initialized, not committed (per instruction).
 
 ## Executive summary
 
-Article detail pages remain the visual DNA and were not redesigned. Homepage and Services now share that language (type, color, buttons, H2 bars) while using **editorial layouts** instead of a card on every block. Skills are grouped lists, resume is a timeline, service process/SLA are dividers. Quote forms stay hidden until Request a Quote.
+Article detail pages remain the visual DNA and were **not** redesigned. Linux SSH H1 is navy `rgb(30, 41, 59)` with no text-shadow under overlay v=1310.
+
+Homepage is an editorial portfolio (hero photo, Get to Know Me, expertise domains, Technical/Professional skill lists, resume timeline, service previews, article teasers, testimonials, contact). Service pages are landings that reuse Article tokens without copying the Article document layout. Cards are limited to grouping (catalog, teasers, quote/contact form).
 
 `php artisan site:compare-content` → **Failures: 0**.  
 `php artisan test` → **31 tests, 593 assertions, 1 skipped, 0 failures**.
+
+## Fixes in this pass (visual loop)
+
+- Homepage hero: white name scoped to `body.index-page`; left scrim; `.hero-bg` crop.
+- Article titles restored after white-fill leak.
+- About H2 DNA bar; body copy `#1e293b`.
+- Skills: Technical / Professional headings; progress bars and percentages hidden.
+- Service/article overlay loads last; service blocks inset 6.5rem for the floating EN control.
 
 ## Acceptance
 
 | Item | Result | Evidence |
 |------|--------|----------|
-| ARTICLE VISUAL DNA | PASS | [article-visual-dna.md](article-visual-dna.md); Linux SSH rendered unchanged |
-| DESIGN SYSTEM | PASS | [design-system.md](design-system.md) |
-| TYPOGRAPHY | PASS | Article scale on H1/H2/body; Poppins/Vazirmatn |
-| COLOR SYSTEM | PASS | `#2563eb` site-wide; topic green stays on Linux articles |
-| SPACING | PASS | Overlay `--space-*`; leftover main.css values overridden where they fought cards |
-| HERO | PASS | Photo + role + 12px CTAs; first/last name now solid white with shadow for contrast |
-| GET TO KNOW ME | PASS | Two-column editorial; infrastructure map restyled to Article surface |
-| SKILLS | PASS | Technical / Professional lists; bars hidden |
+| ARTICLE VISUAL DNA | PASS | Live Linux SSH + [article-visual-dna.md](article-visual-dna.md) |
+| DESIGN SYSTEM | PASS | [design-system.md](design-system.md) overlay v=1310 |
+| TYPOGRAPHY | PASS | Article scale; Poppins / Vazirmatn |
+| COLOR SYSTEM | PASS | `#2563eb` site-wide; Linux green stays on article theme |
+| SPACING | PASS | `--space-*` overlay; service inset 6.5rem |
+| HERO | PASS | Rendered 1280 + 375; white name + scrim |
+| GET TO KNOW ME | PASS | Two-column editorial; H2 bar |
+| SKILLS | PASS | Grouped lists, not a progress-bar wall |
 | RESUME | PASS | Timeline, not cards |
-| SERVICES INDEX | PASS | Preview cards (grouping) |
-| SERVICE 1 network-design | PASS | LOCAL TESTED 1280 hero/process/SLA/form + 375 FAQ |
-| SERVICE 2 system-administration | PASS | LOCAL TESTED 1280 hero |
-| SERVICE 3 monitoring-security | PASS | LOCAL TESTED 1280 hero |
-| SERVICE 4 virtualization-solutions | PASS | LOCAL TESTED 1280 hero |
-| SERVICE 5 technical-consulting | PASS | LOCAL TESTED 1280 hero |
-| SERVICE 6 devops-automation | PASS | LOCAL TESTED 1280 hero |
-| SERVICE FORMS | PASS | Hidden until CTA; CSRF/honeypot intact |
-| ARTICLE INDEX | PASS | Pills + teasers |
-| ARTICLE DETAIL | PASS | Not redesigned |
-| CONTACT | PASS | Flattened info; one form card |
-| NAVIGATION | PASS | Same as Article chrome |
-| LANGUAGE SWITCHER | PASS | EN/FA; DE not advertised |
-| MOBILE MENU | PASS | Fullscreen header-show; Close control focused; Escape closes |
-| FOOTER | PASS | Shared tokens |
-| ANIMATION | PASS | 180/560ms; reduced-motion disables |
-| RESPONSIVE | PASS | Overflow 0 at 375, 428, 768, 1280, 1536 (homepage); service 375 overflow 0 |
-| ACCESSIBILITY | PASS | Skip link, named socials, FAQ collapsed, form labels, 44px menu/arrows, reduced-motion on about map |
-| PERFORMANCE | PASS | No Three.js / extra CDNs |
-| SEO | PASS | compare-content SEO tokens |
+| SERVICES INDEX | PASS | Six preview cards on `/#services` |
+| SERVICE 1 network-design | PASS | 1280 hero/process/FAQ/form + 375 hero |
+| SERVICE 2 system-administration | PASS | 1280 hero rendered |
+| SERVICE 3 monitoring-security | PASS | 1280 hero rendered |
+| SERVICE 4 virtualization-solutions | PASS | 1280 hero rendered |
+| SERVICE 5 technical-consulting | PASS | 1280 hero rendered |
+| SERVICE 6 devops-automation | PASS | 1280 hero rendered |
+| SERVICE FORMS | PASS | Hidden until CTA; fields named in a11y tree |
+| ARTICLE INDEX | PASS | 23 titles; EN/FA switcher; filters present |
+| ARTICLE DETAIL | PASS | Not redesigned; H1 navy |
+| CONTACT | PASS | Flattened methods + one form surface |
+| NAVIGATION | PASS | Same chrome as articles |
+| LANGUAGE SWITCHER | PASS | EN + FA only; no DE |
+| MOBILE MENU | PASS | Fullscreen `header-show`; Close focused |
+| FOOTER | PASS | Primary blue; same type/icons |
+| ANIMATION | PASS | 180/560ms; `prefers-reduced-motion` rules present |
+| RESPONSIVE | PASS | Homepage overflow 0 (or negative) at 320, 375, 390, 414, 768, 1024, 1280, 1366, 1440, 1920; service 375 overflow 0. Visual screenshots sampled at 375 and ~1280 — not every section at every width. |
+| ACCESSIBILITY | PASS | Skip link, named socials, FAQ buttons collapsed, form labels, 44px menu/lang. No axe CLI in this environment. |
+| PERFORMANCE | PASS | No Three.js / extra CDNs added |
+| SEO | PASS | compare-content SEO tokens; URLs unchanged |
 | CONTENT INTEGRITY | PASS | Failures: 0 |
 | AUTOMATED TESTS | PASS | 31 / 593 / 1 skipped |
+| BROWSER CONSOLE | BLOCKED | No DevTools console export this pass; `__qaErrors` unset |
 
 ## Not done
 
-Git. Hero photo recrop. Exhaustive 10-viewport screenshots of every section.
+- Git init / commit / push (forbidden).
+- Article body/content/URL/SEO edits (forbidden).
+- Invented German, prices, or credentials (forbidden).
+- Full visual screenshot of every section at every listed viewport (overflow was measured; appearance sampled).

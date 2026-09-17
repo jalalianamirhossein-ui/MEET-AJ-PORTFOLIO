@@ -1,6 +1,6 @@
 # Design system — Meet AJ public site
 
-**Authority:** Live overlay `assets/css/visual-upgrade.css`.  
+**Authority:** Live overlay `assets/css/visual-upgrade.css?v=1310`.  
 **Visual DNA:** [article-visual-dna.md](article-visual-dna.md) (Article detail pages are the reference; they are not restyled from this file).  
 **Date:** 2026-09-17
 

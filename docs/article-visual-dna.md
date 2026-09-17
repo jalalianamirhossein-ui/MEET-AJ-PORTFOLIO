@@ -3,7 +3,10 @@
 **Status:** REFERENCE ONLY. Article detail pages must not be redesigned.  
 **Sources:** live `/articles/{slug}` (desktop 1440, mobile 375) + `assets/css/articles.css`.  
 **Inspected representatives:** Linux SSH guide (theme-linux), Microsoft CMD article (theme-microsoft), MikroTik article (theme-mikrotik).  
-**Date:** 2026-09-17
+**Date:** 2026-09-17  
+**Overlay at last DNA check:** `visual-upgrade.css?v=1310`
+
+Homepage hero fill must stay scoped to `body.index-page`. Article H1 is `#1e293b` with no text-shadow (verified on `/articles/enable-ssh-linux-complete-guide`: computed `rgb(30, 41, 59)`).
 
 ## 1. What works well
 

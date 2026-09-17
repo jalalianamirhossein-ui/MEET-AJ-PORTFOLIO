@@ -1,32 +1,40 @@
-# Service detail UI QA
+# Service detail UI QA — Meet AJ
 
 **Date:** 2026-09-17  
-**Canonical route:** `/services/{slug}` via `resources/views/services/show.blade.php`  
-**Static** `resources/views/services/{slug}.blade.php` files are unused leftovers.
+**Template:** `resources/views/services/show.blade.php`  
+**Overlay:** `visual-upgrade.css?v=1310` (loaded **after** `lang-toggle.css`)  
+**URLs:** canonical `/services/{slug}` only. Static `resources/views/services/{slug}.blade.php` is unused.
 
-## DNA vs landing
+## Shared landing story (existing CMS content)
 
-Service pages use Article tokens (type, color, 12px buttons, H2 bar, 56rem story width) without copying TOC/code-block layout.
+SERVICE HERO → OVERVIEW → WHAT YOU GET → PROCESS → PRICING → SLA → ADD-ONS → FAQ → REQUEST SERVICE
 
-## Pages
+Not an Article layout. Same tokens: H2 bar, `#2563eb`, 12px buttons, `#f4f7fb` canvas, 56rem reading width, 6.5rem LTR inset for the floating language control.
 
-| Slug | Price (existing) | Form until CTA | Visual |
-|------|------------------|----------------|--------|
-| network-design | AED 4,900 | hidden | LOCAL TESTED 1440/375 |
-| system-administration | AED 3,900 | hidden | LOCAL TESTED 1024 |
-| monitoring-security | AED 4,200 | hidden | LOCAL TESTED structure |
-| virtualization-solutions | AED 5,900 | hidden | LOCAL TESTED structure |
-| technical-consulting | AED 2,500 | hidden | LOCAL TESTED structure |
-| devops-automation | AED 6,900 | hidden | LOCAL TESTED 320/768/1920 |
+Quote `#contactForm` is `hidden` until **Request a Quote**. Fields: Name, Email, Phone, Service, Subject, Project Details. CSRF + honeypot preserved.
 
-## Story order (existing content)
+FAQ: accordion buttons, `aria-expanded` / `aria-hidden` on answers.
 
-Hero → Overview → Included → Pricing → Deliverables → Process → SLA → Add-ons → FAQ → CTA → Form.
+## Per service (rendered)
 
-## Card policy
+| Slug | Hero screenshot | Price shown | Notes |
+|------|-----------------|-------------|--------|
+| network-design | 1280 + 375 | AED 4,900 | Process/SLA/FAQ/form also rendered |
+| system-administration | 1280 | AED 3,900 | Same chrome |
+| devops-automation | 1280 | AED 6,900 | Five process steps |
+| monitoring-security | 1280 | AED 4,200 | Same chrome |
+| virtualization-solutions | 1280 | AED 5,900 | Same chrome |
+| technical-consulting | 1280 | AED 2,500 | Same chrome |
 
-Hero wash, lists, process, SLA, FAQ are not cards. The quote form is the grouping card.
+No invented prices. `/services` index route does not exist (catalog is `/#services`) — 404 by design.
 
-## Contracts unchanged
+## Issues this pass
 
-CSRF, honeypot, field names, `/forms/contact.php`, prices, slugs, JSON-LD.
+1. Stylesheet order put overlay before language CSS — **fixed**.
+2. EN switcher nearly overlapped process `01` — **inset increased**.
+3. Screenshot canvases are narrower than emulated 1280; CDP overflow 0 is the overflow source of truth.
+4. 375: Back + EN share the top edge; title stacks; CTAs full width — **PASS**.
+
+## Forms
+
+Request a Quote reveals labeled fields; Service select pre-filled; Subject pre-filled. Submit remains `Submit Request`. Backend contract unchanged.
