@@ -92,6 +92,7 @@ class ArticleLibraryTest extends TestCase
         $this->assertStringContainsString('BreadcrumbList', $html);
         $this->assertStringContainsString('Related Articles', $html);
         $this->assertStringContainsString('linkedin.com/sharing', $html);
+        $this->assertStringContainsString('twitter.com/intent/tweet', $html);
         $this->assertStringContainsString('wa.me/', $html);
         $this->assertStringContainsString('t.me/share', $html);
         $this->assertStringContainsString('data-copy-link', $html);

@@ -236,7 +236,7 @@
       rel="stylesheet"
       disabled
     />
-    <link href="/assets/css/visual-upgrade.css?v=1701" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1702" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -1998,6 +1998,8 @@
                 data-en="Load more articles"
                 data-fa="نمایش مقالات بیشتر"
                 aria-label="Load more articles"
+                data-en-aria-label="Load more articles"
+                data-fa-aria-label="نمایش مقالات بیشتر"
               >
                 Load more articles
               </button>
@@ -2877,7 +2879,7 @@
     =============================================== -->
 
     <!-- Main Application JavaScript -->
-    <script src="/assets/js/main.js?v=1400" defer></script>
+    <script src="/assets/js/main.js?v=1401" defer></script>
 
     <!-- Internationalization (i18n) Support -->
     <!-- Language Toggle JavaScript -->

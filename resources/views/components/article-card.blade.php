@@ -7,8 +7,8 @@
         'filter-others' => 'other',
     ];
     $topic = $topics[$article->filterClass()] ?? 'other';
-    $categoryEn = data_get($article->presentation, 'category_label_en') ?: $article->category?->name;
-    $categoryFa = data_get($article->presentation, 'category_label_fa') ?: $categoryEn;
+    $categoryEn = $article->categoryLabelEn();
+    $categoryFa = $article->categoryLabelFa();
     $titleEn = data_get($article->presentation, 'card_title_en') ?: $article->title;
     $titleFa = data_get($article->presentation, 'card_title_fa') ?: $article->title;
     $excerptEn = data_get($article->presentation, 'card_excerpt_en') ?: $article->excerpt;

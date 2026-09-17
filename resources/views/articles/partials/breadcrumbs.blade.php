@@ -1,6 +1,6 @@
               @php
-                  $crumbCategoryEn = data_get($article->presentation, 'category_label_en') ?: $article->category?->name;
-                  $crumbCategoryFa = data_get($article->presentation, 'category_label_fa') ?: $crumbCategoryEn;
+                  $crumbCategoryEn = $article->categoryLabelEn();
+                  $crumbCategoryFa = $article->categoryLabelFa();
               @endphp
               <nav
                 class="article-breadcrumb"

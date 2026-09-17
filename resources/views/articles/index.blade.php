@@ -17,7 +17,7 @@
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
     <link href="/assets/css/lang-toggle.css?v=1300" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1701" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1702" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">@verbatim
 <a class="skip-link" href="#portfolio" data-en="Skip to main content" data-fa="رفتن به محتوای اصلی">Skip to main content</a>
@@ -226,6 +226,8 @@
       class="menu-toggle d-xl-none"
       type="button"
       aria-label="Open menu"
+      data-en-aria-label="Open menu"
+      data-fa-aria-label="باز کردن منو"
       aria-expanded="false"
       aria-controls="header"
     >
@@ -250,9 +252,7 @@
         <!-- End Section Title -->
 @endverbatim
         @if ($searching)
-          <div class="container">
-            @include('articles.partials.library-toolbar')
-          </div>
+          @include('articles.partials.library-toolbar')
           @include('articles.partials.search-results')
         @else
 @verbatim
@@ -301,6 +301,8 @@
                 data-en="Load more articles"
                 data-fa="نمایش مقالات بیشتر"
                 aria-label="Load more articles"
+                data-en-aria-label="Load more articles"
+                data-fa-aria-label="نمایش مقالات بیشتر"
               >
                 Load more articles
               </button>
@@ -455,7 +457,7 @@
     <script src="/assets/vendor/glightbox/js/glightbox.min.js" defer></script>
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1400" defer></script>
+    <script src="/assets/js/main.js?v=1401" defer></script>
     <script src="/assets/js/i18n.js?v=1300" defer></script>
     <script>
       if ("serviceWorker" in navigator) {

@@ -1135,6 +1135,15 @@
       updateButton(button);
     });
 
+    window.addEventListener("meetaj:languagechange", () => {
+      document.querySelectorAll(selector).forEach((button) => {
+        if (button.classList.contains("is-copied") || button.classList.contains("is-copy-error")) {
+          return;
+        }
+        updateButton(button);
+      });
+    });
+
     document.addEventListener("click", async (event) => {
       const button = event.target.closest(selector);
       if (!button || button.dataset.articleCopyBusy === "true") return;

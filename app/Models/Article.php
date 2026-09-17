@@ -211,6 +211,48 @@ class Article extends Model
         return (string) (data_get($this->presentation, 'filter_class') ?: 'filter-others');
     }
 
+    public function categoryLabelEn(): string
+    {
+        $stored = trim((string) data_get($this->presentation, 'category_label_en'));
+
+        return $stored !== '' ? $stored : $this->localizedCategoryLabel('en');
+    }
+
+    public function categoryLabelFa(): string
+    {
+        $stored = trim((string) data_get($this->presentation, 'category_label_fa'));
+
+        return $stored !== '' ? $stored : $this->localizedCategoryLabel('fa');
+    }
+
+    protected function localizedCategoryLabel(string $locale): string
+    {
+        $name = trim((string) ($this->category?->name ?? ''));
+        $slug = strtolower((string) ($this->category?->slug ?? ''));
+        $filter = strtolower(str_replace('filter-', '', $this->filterClass()));
+        $key = $slug !== '' ? $slug : $filter;
+        $map = [
+            'microsoft' => ['en' => 'Microsoft', 'fa' => 'مایکروسافت'],
+            'linux' => ['en' => 'Linux', 'fa' => 'لینوکس'],
+            'mikrotik' => ['en' => 'MikroTik', 'fa' => 'میکروتیک'],
+            'vmware' => ['en' => 'VMware', 'fa' => 'مجازی‌سازی'],
+            'other' => ['en' => 'Other', 'fa' => 'سایر'],
+            'others' => ['en' => 'Other', 'fa' => 'سایر'],
+        ];
+
+        foreach ($map as $needle => $labels) {
+            if ($key === $needle || str_contains($key, $needle) || strcasecmp($name, $labels['en']) === 0) {
+                return $labels[$locale] ?? $labels['en'];
+            }
+        }
+
+        if ($locale === 'en') {
+            return $name !== '' ? $name : 'Article';
+        }
+
+        return $this->categoryLabelEn();
+    }
+
     public function translatedText(string $field, string $locale): string
     {
         $original = data_get($this->presentation, 'original_'.$field);

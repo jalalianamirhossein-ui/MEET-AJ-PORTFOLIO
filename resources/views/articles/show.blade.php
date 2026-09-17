@@ -38,7 +38,7 @@
     <link href="/assets/css/articles.css?v=1100" rel="stylesheet" />
     <link href="/assets/css/lang-toggle.css?v=1300" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1701" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1702" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @if (!empty($seo['breadcrumb']))
       <script type="application/ld+json">{!! json_encode($seo['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
@@ -48,7 +48,7 @@
     <a href="#main-content" class="skip-link sr-only sr-only-focusable"
       ><span data-en="Skip to main content" data-fa="رفتن به محتوای اصلی">Skip to main content</span></a
     >
-    <button id="menu-toggle" class="menu-toggle d-xl-none" aria-label="Open menu" aria-expanded="false" aria-controls="header" type="button">
+    <button id="menu-toggle" class="menu-toggle d-xl-none" aria-label="Open menu" data-en-aria-label="Open menu" data-fa-aria-label="باز کردن منو" aria-expanded="false" aria-controls="header" type="button">
       <span class="menu-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
       <span class="sr-only" data-en="Open menu" data-fa="باز کردن منو">Open menu</span>
     </button>
@@ -97,8 +97,9 @@
           <div class="row">
             <div class="col-lg-10 mx-auto">
               @include('articles.partials.breadcrumbs')
+              <h1 class="article-title hero-title" data-en="{{ data_get($article->presentation, 'hero_title_en', $article->title) }}" data-fa="{{ data_get($article->presentation, 'hero_title_fa', $article->title) }}">{{ $article->title }}</h1>
               <div class="article-meta">
-                <span class="article-category" data-en="{{ data_get($article->presentation, 'category_label_en', $article->category->name ?? 'Article') }}" data-fa="{{ data_get($article->presentation, 'category_label_fa', $article->category->name ?? 'Article') }}">{{ data_get($article->presentation, 'category_label_en', $article->category->name ?? 'Article') }}</span>
+                <span class="article-category" data-en="{{ $article->categoryLabelEn() }}" data-fa="{{ $article->categoryLabelFa() }}">{{ $article->categoryLabelEn() }}</span>
                 @if ($article->published_at)
                   <time class="meta-date article-date" datetime="{{ $article->published_at->toAtomString() }}">{{ $article->published_at->timezone(config('cms.display_timezone', config('app.timezone')))->format('M j, Y') }}</time>
                 @endif
@@ -111,7 +112,6 @@
                   @endforeach
                 </ul>
               @endif
-              <h1 class="article-title hero-title" data-en="{{ data_get($article->presentation, 'hero_title_en', $article->title) }}" data-fa="{{ data_get($article->presentation, 'hero_title_fa', $article->title) }}">{{ $article->title }}</h1>
               <p class="article-excerpt hero-subtitle" data-en="{{ $article->excerpt }}" data-fa="{{ data_get($article->presentation, 'excerpt_translations.fa', $article->excerpt) }}">{{ $article->excerpt }}</p>
               <div class="article-actions">
                 <a href="#article-content" class="btn btn-primary btn-lg action-btn"><span class="btn-content"><i class="bi bi-play-circle" aria-hidden="true"></i><span data-en="Start reading" data-fa="شروع مطالعه">Start reading</span></span></a>
@@ -178,7 +178,7 @@
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1400" defer></script>
+    <script src="/assets/js/main.js?v=1401" defer></script>
     <script src="/assets/js/i18n.js?v=1300" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
