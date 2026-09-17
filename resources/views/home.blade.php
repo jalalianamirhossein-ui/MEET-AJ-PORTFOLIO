@@ -227,7 +227,7 @@
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
 
     <!-- Language Toggle Stylesheet -->
-    <link href="/assets/css/lang-toggle.css?v=1201" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1202" rel="stylesheet" />
 
     <!-- RTL Support Stylesheet -->
     <link
@@ -236,7 +236,7 @@
       rel="stylesheet"
       disabled
     />
-    <link href="/assets/css/visual-upgrade.css?v=1402" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1404" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================

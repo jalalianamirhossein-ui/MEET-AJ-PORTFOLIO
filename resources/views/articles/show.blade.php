@@ -36,9 +36,9 @@
     <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
     <link href="/assets/css/articles.css?v=1013" rel="stylesheet" />
-    <link href="/assets/css/lang-toggle.css?v=1201" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1202" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1402" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1404" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @if (!empty($seo['breadcrumb']))
       <script type="application/ld+json">{!! json_encode($seo['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
@@ -56,12 +56,13 @@
       <div class="profile-img">
         <img src="/assets/img/my-profile-img.jpg" loading="lazy" alt="AmirHossein Jalalian Profile Picture" class="img-fluid rounded-circle" />
       </div>
-      <div class="logo-section d-flex align-items-center justify-content-between">
+      <div class="logo-section d-flex align-items-center justify-content-center">
         <a href="/#hero" class="logo d-flex align-items-center">
-          <img src="/assets/img/logo.png" alt="Aj-Network" loading="lazy" />
+          <img src="/assets/img/logo.png" alt="Aj-Network" width="40" height="40" loading="lazy" />
           <p class="sitename">Meet AJ</p>
         </a>
       </div>
+      <div class="brand-lang" id="lang-mount"></div>
       <div class="social-links text-center">
         <div class="social-row social-row-main">
           <a href="https://www.linkedin.com/in/amirhussein-jalalian-050702188/" class="linkedin" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>

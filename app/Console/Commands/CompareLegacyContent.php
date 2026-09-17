@@ -35,9 +35,9 @@ class CompareLegacyContent extends Command
             'devops-automation', 'monitoring-security', 'network-design',
             'system-administration', 'technical-consulting', 'virtualization-solutions',
         ] as $service) {
-            $legacy = $this->laravel->make(\Illuminate\Contracts\Http\Kernel::class)->handle(
-                \Illuminate\Http\Request::create('/services/'.$service.'.html', 'GET')
-            );
+            $legacyRequest = \Illuminate\Http\Request::create('/services/'.$service.'.html', 'GET');
+            $legacy = $this->laravel->make(\Illuminate\Contracts\Http\Kernel::class)->handle($legacyRequest);
+            $this->laravel->make(\Illuminate\Contracts\Http\Kernel::class)->terminate($legacyRequest, $legacy);
             if ($legacy->getStatusCode() !== 301) {
                 $rows[] = ['service-redirect:'.$service, 'FAIL', 'expected 301 from .html, got '.$legacy->getStatusCode()];
                 $fails++;
@@ -114,7 +114,9 @@ class CompareLegacyContent extends Command
     private function render(string $path): string
     {
         $kernel = $this->laravel->make(\Illuminate\Contracts\Http\Kernel::class);
-        $response = $kernel->handle(\Illuminate\Http\Request::create($path, 'GET'));
+        $request = \Illuminate\Http\Request::create($path, 'GET');
+        $response = $kernel->handle($request);
+        $kernel->terminate($request, $response);
         if ($response->isRedirection()) {
             $location = (string) $response->headers->get('Location');
             $target = parse_url($location, PHP_URL_PATH) ?: $location;
@@ -122,7 +124,8 @@ class CompareLegacyContent extends Command
             if ($query) {
                 $target .= '?'.$query;
             }
-            $response = $kernel->handle(\Illuminate\Http\Request::create($target, 'GET'));
+
+            return $this->render($target);
         }
 
         return (string) $response->getContent();

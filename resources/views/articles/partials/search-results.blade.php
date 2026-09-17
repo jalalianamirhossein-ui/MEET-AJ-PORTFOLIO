@@ -21,7 +21,7 @@
               <a class="btn btn-primary" href="{{ url('/articles') }}" data-en="Show all articles" data-fa="نمایش همه مقالات">Show all articles</a>
             </div>
           @else
-            <div class="row gy-4 article-grid article-grid-results">
+            <div class="article-grid article-grid-results">
               @foreach ($results as $article)
                 @include('components.article-card', ['article' => $article])
               @endforeach
