@@ -269,36 +269,82 @@
     new PureCounter(config);
   }
 
-  let skillsAnimation = document.querySelectorAll(".skills-animation");
-  if (skillsAnimation.length > 0 && window.Waypoint) {
-    skillsAnimation.forEach((item) => {
-      // Improve mobile settings for Waypoint
-      let offset = "80%";
-      if (window.innerWidth <= 768) {
-        offset = "60%"; // Reduce offset for mobile
-      }
+  // Skill meters: announce the real value, then grow the bar to it once the
+  // group scrolls into view. Values come from the markup; nothing is invented.
+  function initSkillMeters() {
+    const groups = document.querySelectorAll(".skills-animation");
+    if (!groups.length) return;
 
-      new Waypoint({
-        element: item,
-        offset: offset,
-        handler: function () {
-          let progress = item.querySelectorAll(".progress .progress-bar");
-          progress.forEach((el) => {
-            const value = el.getAttribute("aria-valuenow");
-            if (value) {
-              // Improve animation for mobile
-              let duration = "0.9s";
-              if (window.innerWidth <= 768) {
-                duration = "0.6s";
-              }
-              el.style.transition = `width ${duration} ease`;
-              el.style.width = value + "%";
-            }
-          });
-        },
+    const bars = [];
+    groups.forEach((group) => {
+      group.querySelectorAll(".progress").forEach((row) => {
+        const bar = row.querySelector(".progress-bar");
+        if (!bar) return;
+        const value = Number.parseInt(bar.getAttribute("aria-valuenow") || "", 10);
+        if (!Number.isFinite(value)) return;
+
+        bar.setAttribute("aria-valuemin", "0");
+        bar.setAttribute("aria-valuemax", "100");
+        bar.style.width = "0%";
+        bars.push({ bar, row, value, done: false });
       });
     });
+
+    if (!bars.length) return;
+
+    // The visible skill name is the bar's label, and it is translated at
+    // runtime, so re-read it whenever the language changes.
+    const labelBars = () => {
+      bars.forEach(({ bar, row, value }) => {
+        const name = row.querySelector(".skill span")?.textContent?.trim();
+        if (name) bar.setAttribute("aria-label", `${name}: ${value}%`);
+      });
+    };
+    labelBars();
+    window.addEventListener("meetaj:languagechange", labelBars);
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const fill = (entry) => {
+      if (entry.done) return;
+      entry.done = true;
+      const target = `${entry.value}%`;
+      if (reduceMotion.matches || typeof entry.bar.animate !== "function") {
+        entry.bar.style.width = target;
+        return;
+      }
+      entry.bar.style.width = target;
+      entry.bar.animate(
+        { width: ["0%", target] },
+        { duration: 900, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "none" },
+      );
+    };
+
+    if (!("IntersectionObserver" in window)) {
+      bars.forEach(fill);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((observed) => {
+          if (!observed.isIntersecting) return;
+          const group = observed.target;
+          bars
+            .filter((entry) => group.contains(entry.bar))
+            .forEach((entry, index) => {
+              window.setTimeout(() => fill(entry), reduceMotion.matches ? 0 : index * 45);
+            });
+          observer.unobserve(group);
+        });
+      },
+      { threshold: 0.2, rootMargin: "0px 0px -10% 0px" },
+    );
+
+    groups.forEach((group) => observer.observe(group));
   }
+
+  initSkillMeters();
 
   if (window.GLightbox) {
     // Improve mobile settings for GLightbox
