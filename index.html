@@ -398,7 +398,7 @@
       ==================== LOGO SECTION ==================
       =============================================== -->
       <div
-        class="logo-section d-flex align-items-center justify-content-between"
+        class="logo-section d-flex align-items-center justify-content-center"
       >
         <!-- Site Logo & Name -->
         <a href="#hero" class="logo d-flex align-items-center">
@@ -414,6 +414,9 @@
           <div class="sitename">Meet AJ</div>
         </a>
       </div>
+
+      <!-- Language control mount point (filled by i18n.js) -->
+      <div class="brand-lang" id="lang-mount"></div>
 
       <!-- ===============================================
       ==================== SOCIAL LINKS ===================
@@ -2132,81 +2135,94 @@
             <!-- ===============================================
             ==================== FILTER BUTTONS =================
             =============================================== -->
-            <ul
-              class="portfolio-filters isotope-filters"
-              role="group"
-              aria-label="Filter articles"
-              data-aos="fade-up"
-              data-aos-delay="100"
-            >
-              <li>
-                <button
-                  type="button"
-                  data-filter="*"
-                  class="filter-active"
-                  aria-pressed="true"
-                  data-en="All Articles"
-                  data-fa="همه مقالات"
-                >
-                  All Articles
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  data-filter=".filter-microsoft"
-                  aria-pressed="false"
-                  data-en="Microsoft"
-                  data-fa="مایکروسافت"
-                >
-                  Microsoft
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  data-filter=".filter-linux"
-                  aria-pressed="false"
-                  data-en="Linux Articles"
-                  data-fa="لینوکس"
-                >
-                  Linux Articles
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  data-filter=".filter-mikrotik"
-                  aria-pressed="false"
-                  data-en="MikroTik"
-                  data-fa="میکروتیک"
-                >
-                  MikroTik
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  data-filter=".filter-vmware"
-                  aria-pressed="false"
-                  data-en="Vmware"
-                  data-fa="مجازی‌سازی"
-                >
-                  Vmware
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  data-filter=".filter-others"
-                  aria-pressed="false"
-                  data-en="Other Articles"
-                  data-fa="سایر مقالات"
-                >
-                  Other Articles
-                </button>
-              </li>
-            </ul>
+            <div class="article-filter-bar" data-aos="fade-up" data-aos-delay="100">
+              <span
+                class="article-filter-label"
+                id="article-filter-label"
+                data-en="Category"
+                data-fa="دسته‌بندی"
+                >Category</span
+              >
+              <ul
+                class="portfolio-filters isotope-filters"
+                role="group"
+                aria-labelledby="article-filter-label"
+              >
+                <li>
+                  <button
+                    type="button"
+                    data-filter="*"
+                    data-topic="all"
+                    class="filter-active"
+                    aria-pressed="true"
+                    data-en="All articles"
+                    data-fa="همه مقالات"
+                  >
+                    All articles
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    data-filter=".filter-microsoft"
+                    data-topic="microsoft"
+                    aria-pressed="false"
+                    data-en="Microsoft"
+                    data-fa="مایکروسافت"
+                  >
+                    Microsoft
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    data-filter=".filter-linux"
+                    data-topic="linux"
+                    aria-pressed="false"
+                    data-en="Linux"
+                    data-fa="لینوکس"
+                  >
+                    Linux
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    data-filter=".filter-mikrotik"
+                    data-topic="mikrotik"
+                    aria-pressed="false"
+                    data-en="MikroTik"
+                    data-fa="میکروتیک"
+                  >
+                    MikroTik
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    data-filter=".filter-vmware"
+                    data-topic="vmware"
+                    aria-pressed="false"
+                    data-en="VMware"
+                    data-fa="مجازی‌سازی"
+                  >
+                    VMware
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    data-filter=".filter-others"
+                    data-topic="other"
+                    aria-pressed="false"
+                    data-en="Other"
+                    data-fa="سایر مقالات"
+                  >
+                    Other
+                  </button>
+                </li>
+              </ul>
+            </div>
             <!-- End Filter Buttons -->
 
             <!-- ===============================================

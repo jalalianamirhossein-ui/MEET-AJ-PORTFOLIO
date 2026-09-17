@@ -1,37 +1,31 @@
-        <div class="container article-search-results">
-          <p class="article-search-summary" role="status">
-            @if ($activeTag && $q === '')
-              <span data-en="Articles tagged {{ $activeTag->name }}" data-fa="مقالات با برچسب {{ $activeTag->name }}">Articles tagged {{ $activeTag->name }}</span>
-            @elseif ($q !== '')
-              <span data-en="{{ $results->total() }} result(s) for “{{ $q }}”" data-fa="{{ $results->total() }} نتیجه برای «{{ $q }}»">{{ $results->total() }} result(s) for “{{ $q }}”</span>
-            @else
-              <span data-en="{{ $results->total() }} matching article(s)" data-fa="{{ $results->total() }} مقاله مطابق">{{ $results->total() }} matching article(s)</span>
+        <div class="container article-search-results article-result-list">
+          <div class="article-search-head">
+            <p class="article-search-summary" role="status">
+              @if ($activeTag && $q === '')
+                <span data-en="Articles tagged {{ $activeTag->name }}" data-fa="مقالات با برچسب {{ $activeTag->name }}">Articles tagged {{ $activeTag->name }}</span>
+              @elseif ($q !== '')
+                <span data-en="{{ $results->total() }} result(s) for “{{ $q }}”" data-fa="{{ $results->total() }} نتیجه برای «{{ $q }}»">{{ $results->total() }} result(s) for “{{ $q }}”</span>
+              @else
+                <span data-en="{{ $results->total() }} matching article(s)" data-fa="{{ $results->total() }} مقاله مطابق">{{ $results->total() }} matching article(s)</span>
+              @endif
+            </p>
+            @if ($q !== '' || $tagSlug !== '')
+              <a class="article-search-clear" href="{{ url('/articles') }}" data-en="Clear search" data-fa="پاک کردن جستجو">Clear search</a>
             @endif
-            <a class="article-search-clear" href="{{ url('/articles') }}" data-en="Clear" data-fa="پاک کردن">Clear</a>
-          </p>
+          </div>
           @if ($results->isEmpty())
-            <p class="article-search-empty" data-en="No published articles match this search." data-fa="مقاله منتشرشده‌ای با این جستجو پیدا نشد.">No published articles match this search.</p>
+            <div class="article-search-empty">
+              <i class="bi bi-search" aria-hidden="true"></i>
+              <p class="article-search-empty-title" data-en="No articles found" data-fa="مقاله‌ای پیدا نشد">No articles found</p>
+              <p class="article-search-empty-hint" data-en="Try another keyword, or open the full library." data-fa="واژه دیگری را امتحان کنید یا همه مقالات را ببینید.">Try another keyword, or open the full library.</p>
+              <a class="btn btn-primary" href="{{ url('/articles') }}" data-en="Show all articles" data-fa="نمایش همه مقالات">Show all articles</a>
+            </div>
           @else
-            <ol class="article-result-list">
+            <div class="row gy-4 article-grid article-grid-results">
               @foreach ($results as $article)
-                <li>
-                  <a class="article-result-title" href="{{ $article->path() }}">{{ $article->title }}</a>
-                  @if ($article->category)
-                    <p class="article-result-meta">{{ $article->category->name }}</p>
-                  @endif
-                  @if ($article->excerpt)
-                    <p class="article-result-excerpt">{{ $article->excerpt }}</p>
-                  @endif
-                  @if ($article->tags->isNotEmpty())
-                    <ul class="article-tags">
-                      @foreach ($article->tags as $tag)
-                        <li><a href="{{ $tag->path() }}">{{ $tag->name }}</a></li>
-                      @endforeach
-                    </ul>
-                  @endif
-                </li>
+                @include('components.article-card', ['article' => $article])
               @endforeach
-            </ol>
+            </div>
             @if ($results->hasPages())
               <nav class="article-pagination" aria-label="Search results pages">
                 @if ($results->onFirstPage())
