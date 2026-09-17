@@ -222,9 +222,14 @@ Start here:
 | [docs/PROJECT-STATUS.md](docs/PROJECT-STATUS.md) | Authoritative current status |
 | [docs/QA-MATRIX.md](docs/QA-MATRIX.md) | Authoritative QA evidence |
 | [docs/SERVICES.md](docs/SERVICES.md) | Service catalog + CMS |
+| [docs/article-visual-dna.md](docs/article-visual-dna.md) | Article detail visual reference (do not restyle those pages) |
+| [docs/design-system.md](docs/design-system.md) | Public overlay tokens |
+| [docs/full-site-visual-qa.md](docs/full-site-visual-qa.md) | Rendered visual QA |
+| [docs/service-detail-ui-qa.md](docs/service-detail-ui-qa.md) | Six service landing QA |
+| [docs/final-project-qa-report.md](docs/final-project-qa-report.md) | Acceptance PASS/FAIL |
 | [DEPLOYMENT.md](DEPLOYMENT.md) | DirectAdmin / production |
 | [docs/historical/README.md](docs/historical/README.md) | Superseded plans and snapshots |
 
 ## Git
 
-HEAD is `feature/laravel-migration`. Remote `AJ` is configured. Creating/committing the `laravel` branch requires `git.exe` on PATH (missing on this workstation).
+Git is handled separately after visual approval. This workspace copy is **not** used for `git init` / commit / push in the visual redesign pass.
