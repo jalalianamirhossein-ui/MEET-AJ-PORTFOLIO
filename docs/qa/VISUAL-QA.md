@@ -2,7 +2,8 @@
 
 **Date:** 2026-09-17  
 **Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md) · **Accessibility:** [ACCESSIBILITY-QA.md](ACCESSIBILITY-QA.md) · **Responsive:** [RESPONSIVE-QA.md](RESPONSIVE-QA.md)  
-**Overlay:** `assets/css/visual-upgrade.css?v=1402`  
+**Overlay:** `assets/css/visual-upgrade.css?v=1404`  
+**Scripts:** `main.js?v=1201`, `i18n.js?v=1201`, `lang-toggle.css?v=1202`  
 **Latest visual pass:** [VISUAL-UX-FINAL-REPORT.md](VISUAL-UX-FINAL-REPORT.md)  
 **Method:** Cursor browser snapshots + CDP overflow/computed styles. Screenshots are often **stale vs URL**; CDP and the accessibility tree are the visual/layout truth this pass.
 
@@ -42,6 +43,6 @@ Summary: overflow 0 confirmed at 320, 375, 412 and 1280 on the pages named there
 ## Automated
 
 - `php artisan optimize:clear` — done
-- `php artisan site:compare-content` — Failures: **0** (23 articles + 6 services + home)
-- `php artisan test` — **39 tests, 647 assertions, 1 skipped, 0 failures**
+- `php artisan site:compare-content` — Failures: **0** (23 articles + 6 services + home). Compare command now calls `$kernel->terminate()` so the first article is not a false FAIL.
+- `php artisan test` — **40 tests, 708 assertions, 1 skipped, 0 failures**
 - HTTP HEAD/GET: 68 URLs, **0 unexpected** (home 200, `/index.html` 301, 23 articles 200, 23 legacy 301, 6 services 200 + 6 `.html` 301, csrf/sitemap/robots/manifest/sw/offline/admin login 200)

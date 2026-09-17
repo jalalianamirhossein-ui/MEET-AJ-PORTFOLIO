@@ -17,7 +17,9 @@ No automated accessibility engine was run. `axe`, Lighthouse and Pa11y are all *
 | Heading hierarchy on the article library | Section H2 followed by 23 teaser H3 headings, 0 H4 (previously H4, corrected in `components/article-card.blade.php`) |
 | Article detail breadcrumbs | `nav[aria-label="Breadcrumb"]` plus a `BreadcrumbList` JSON-LD block |
 | Mobile menu closes on Escape | Keyboard Escape closes the fullscreen menu |
-| Background is inert while the menu is open | After `main.js?v=1119`, tabbable elements drop to 21 (menu plus language switcher) from roughly 90 |
+| Background is inert while the menu is open | After `main.js?v=1201`, tabbable elements drop to 21 (menu plus language switcher) from roughly 90 |
+| Language control is a single button | `#lang-toggle`, no listbox, 44×44 CSS minimum, `aria-label` names the target language |
+| Skill meters expose values | `aria-valuenow` matches visible percentages; bars remain after IO animation |
 | Closed header is out of the tab order | Verified in the tabbable count with the menu closed |
 | Admin login form | Textboxes named “Email address” and “Password”, both required, with show-password and remember-me controls |
 | Article H1 contrast colour | Computed `rgb(30, 41, 59)` on a light background |

@@ -155,7 +155,7 @@ Canonical URLs, Open Graph, Twitter cards, JSON-LD (Person/WebSite on the homepa
 ## Testing
 
 ```bash
-php artisan test                                                    # 39 tests, 647 assertions, 1 skipped
+php artisan test                                                    # 40 tests, 708 assertions, 1 skipped
 vendor/bin/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest     # MySQL schema check
 php artisan site:compare-content                                     # Failures: 0
 ```
@@ -194,7 +194,7 @@ resources/    Blade views and admin CSS
 routes/       web.php, console.php
 scripts/      validate-environment.php, verify-originals.php
 services/     6 original service HTML files (import source)
-tests/        7 feature test files, 39 tests
+tests/        7 feature test files, 40 tests
 ```
 
 Detail: [docs/current/PROJECT-STRUCTURE.md](docs/current/PROJECT-STRUCTURE.md).

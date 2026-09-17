@@ -2,24 +2,24 @@
 
 **Date:** 2026-09-17
 **Method:** Cursor browser with CDP. The overflow test is `document.documentElement.scrollWidth > clientWidth + 1`; a cropped screenshot is **not** evidence of overflow.
-**Related:** [VISUAL-QA.md](VISUAL-QA.md) · [ACCESSIBILITY-QA.md](ACCESSIBILITY-QA.md) · [QA-MATRIX.md](QA-MATRIX.md)
+**Related:** [VISUAL-QA.md](VISUAL-QA.md) · [ACCESSIBILITY-QA.md](ACCESSIBILITY-QA.md) · [QA-MATRIX.md](QA-MATRIX.md) · [VISUAL-UX-FINAL-REPORT.md](VISUAL-UX-FINAL-REPORT.md)
 
 Only the cells that were actually measured are marked PASS. Everything else is BLOCKED or NOT TESTED and must not be upgraded without a new run.
 
 ## Public pages
 
-| Viewport | Homepage `/` | Articles index | Article detail | Service detail |
-|----------|--------------|----------------|----------------|----------------|
-| 320 × 800 | PASS (overflow 0) | NOT TESTED | NOT TESTED | NOT TESTED |
-| 375 × 812 | NOT TESTED (412 measured instead) | PASS (overflow 0) | NOT TESTED | NOT TESTED |
-| 412 (device emulation) | PASS (overflow 0) | NOT TESTED | NOT TESTED | NOT TESTED |
-| 1280 × 800 | PASS (overflow 0) | NOT TESTED at this width | PASS (overflow 0) | PASS (overflow 0) |
+| Viewport | Homepage `/` | Articles index | Article detail | Service detail | Admin login |
+|----------|--------------|----------------|----------------|----------------|-------------|
+| 320 × 800 | PASS (overflow 0) | Visual PASS in emulation (search stacked, thumbnail visible). Overflow on `/articles` at 320 NOT TESTED | NOT TESTED | NOT TESTED | PASS (overflow 0, scrollWidth 320) |
+| 375 × 812 | NOT TESTED (412 measured instead) | PASS (overflow 0) | NOT TESTED | NOT TESTED | NOT TESTED |
+| 412 (device emulation) | PASS (overflow 0) | NOT TESTED | NOT TESTED | NOT TESTED | NOT TESTED |
+| 1280 × 800 | PASS (overflow 0) | NOT TESTED at this width | PASS (overflow 0) | PASS (overflow 0) | PASS (login screenshot) |
 
-Pages measured: `/`, `/articles`, `/articles/enable-ssh-linux-complete-guide`, `/services/network-design`.
+Pages measured: `/`, `/articles`, `/articles?q=linux`, `/articles/nginx-installation-configuration-ubuntu`, `/articles/enable-ssh-linux-complete-guide`, `/services/network-design`, `/admin/login`.
 
 ## Widths not re-measured on 2026-09-17
 
-390, 414, 768, 1024 × 768, 1366, 1440 and 1920: **BLOCKED this pass.** An earlier audit recorded overflow 0 on the homepage across that set, but that result is historical and is not claimed as current.
+390, 414, 768, 1024 × 768, 1366, 1440 and 1920: **NOT TESTED this pass.** An earlier audit recorded overflow 0 on the homepage across that set, but that result is historical and is not claimed as current.
 
 ## Admin panel
 

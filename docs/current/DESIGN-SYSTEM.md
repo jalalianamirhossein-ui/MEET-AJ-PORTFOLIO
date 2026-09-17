@@ -1,6 +1,6 @@
 # Design system — Meet AJ public site
 
-**Authority:** [design-system/meet-aj/MASTER.md](../../design-system/meet-aj/MASTER.md). Live overlay `assets/css/visual-upgrade.css?v=1314`.  
+**Authority:** [design-system/meet-aj/MASTER.md](../../design-system/meet-aj/MASTER.md). Live overlay `assets/css/visual-upgrade.css?v=1404`.  
 **Visual DNA:** [ARTICLE-VISUAL-DNA.md](ARTICLE-VISUAL-DNA.md) (Article detail pages are the reference; they are not restyled from this file).  
 **Date:** 2026-09-17  
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md)
@@ -25,7 +25,7 @@ Cards are for **grouping**. They are not a default wrapper.
 | Motion | `--duration-fast` 180ms, `--duration-slow` 560ms, `--ease-out` `cubic-bezier(0.22, 1, 0.36, 1)` |
 | Layout | `--container` 56rem (reading), homepage catalog ~70rem, `--control-height` 2.75–2.95rem |
 
-Green is success / availability only (hero “Available for Work”, form success). Skills use primary blue, never a rainbow of bar colors.
+| Topic accents | `--topic-microsoft` `#2563eb`, `--topic-linux` `#15803d`, `--topic-mikrotik` `#c2410c`, `--topic-vmware` `#6d28d9`, `--topic-security` `#be123c`, `--topic-devops` `#0e7490`, `--topic-other` `#a16207` — badge, 3px edge, CTA and active filter only. Card fill stays white. |
 
 ## Type hierarchy
 

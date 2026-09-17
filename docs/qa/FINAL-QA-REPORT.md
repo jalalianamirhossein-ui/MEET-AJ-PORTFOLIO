@@ -1,8 +1,9 @@
 # Final project QA report — Meet AJ master audit
 
 **Date:** 2026-09-17  
-**Overlay:** `visual-upgrade.css?v=1314`  
-**Scripts:** `i18n.js?v=1116`, `main.js?v=1119`  
+**Overlay:** `visual-upgrade.css?v=1404`  
+**Scripts:** `i18n.js?v=1201`, `main.js?v=1201`, `lang-toggle.css?v=1202`  
+**Latest visual pass:** [VISUAL-UX-FINAL-REPORT.md](VISUAL-UX-FINAL-REPORT.md)  
 **Git:** no git command was run in this pass — no add, no commit, no push. (A `.git` directory already exists in the repository; it was not touched.)  
 **Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md) · **Detail:** [VISUAL-QA.md](VISUAL-QA.md), [RESPONSIVE-QA.md](RESPONSIVE-QA.md), [ACCESSIBILITY-QA.md](ACCESSIBILITY-QA.md), [ADMIN-QA.md](ADMIN-QA.md), [CONTENT-INTEGRITY.md](CONTENT-INTEGRITY.md), [QA-MATRIX.md](QA-MATRIX.md)
 
@@ -15,7 +16,7 @@ Meet AJ remains Laravel 13 + PHP 8.4 + Filament 5 + Livewire 4 + Blade. Article 
 This pass fixed: FA search placeholders (`i18n.js`), article teaser heading skip (H4→H3), mobile menu background `inert` when open.
 
 `php artisan site:compare-content` → **Failures: 0** (23 articles, 6 services, home).  
-`php artisan test` → **39 tests, 647 assertions, 1 skipped (`MysqlSchemaTest`), 0 failures**.  
+`php artisan test` → **40 tests, 708 assertions, 1 skipped (`MysqlSchemaTest`), 0 failures**.  
 HTTP: 68 URL checks, **0 unexpected** statuses.
 
 ## Architecture
@@ -55,7 +56,7 @@ HTTP: 68 URL checks, **0 unexpected** statuses.
 | Item | Result | Evidence |
 |------|--------|----------|
 | Article DNA not redesigned | PASS | H1 `rgb(30, 41, 59)`; body HTML compare-content PASS |
-| Overlay tokens | PASS | Live `visual-upgrade.css?v=1314` |
+| Overlay tokens | PASS | Live `visual-upgrade.css?v=1404` |
 | Homepage H2 700 | PASS | CDP on About heading |
 | Icon language | PASS | Bootstrap Icons (hero arrows replaced earlier) |
 | Motion / reduced-motion | PASS in CSS | Not re-toggled in OS settings this pass — WARN |
@@ -136,7 +137,7 @@ HTTP: 68 URL checks, **0 unexpected** statuses.
 |------|--------|
 | Required docs updated | PASS this file + DNA/design/features/visual/admin |
 | Unused-file deletion | Not performed (no proven-unused deletions this pass) |
-| PHPUnit | PASS 39 / 647 / 1 skipped |
+| PHPUnit | PASS 40 / 708 / 1 skipped |
 | Git | PASS — no git command executed |
 
 ## Fixes applied this pass
@@ -144,7 +145,9 @@ HTTP: 68 URL checks, **0 unexpected** statuses.
 1. `assets/js/i18n.js` applies `data-*-placeholder` (FA search placeholder verified).
 2. Article teasers `h4` → `h3` + overlay selectors.
 3. Mobile menu `setBackgroundInert` so page content is not tabbable while open.
-4. Overlay cache `v=1314`; i18n `v=1116`; main `v=1119`.
+4. Overlay cache `v=1404`; i18n `v=1201`; main `v=1201`; lang-toggle `v=1202`.
+5. Compare-content kernel `terminate()` so article 1 is not a false canonical FAIL.
+6. Brand lock `direction: ltr`; language is a single switch button in `#lang-mount`.
 
 ## Open items (not hidden)
 
