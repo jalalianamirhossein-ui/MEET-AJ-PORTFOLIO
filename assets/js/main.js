@@ -805,7 +805,15 @@
               const reducedMotion = window.matchMedia?.(
                 "(prefers-reduced-motion: reduce)",
               ).matches;
-              if (reducedMotion) {
+              if (isTestimonialsSlider) {
+                config.slidesPerView = 1;
+                if (reducedMotion) {
+                  config.autoplay = false;
+                } else if (config.autoplay && typeof config.autoplay === "object") {
+                  config.autoplay.pauseOnMouseEnter = true;
+                  config.autoplay.disableOnInteraction = false;
+                }
+              } else if (reducedMotion) {
                 config.autoplay = false;
               } else if (window.innerWidth <= 768 && config.autoplay) {
                 config.autoplay = Object.assign({}, config.autoplay, {

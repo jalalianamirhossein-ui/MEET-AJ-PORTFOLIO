@@ -9,7 +9,7 @@
 <article class="col-lg-4 col-md-6 service-item service-catalog-card d-flex" data-aos="fade-up">
   <div class="icon flex-shrink-0" aria-hidden="true">
     @if ($image)
-      <img src="{{ $image }}" alt="" width="32" height="32">
+      <img src="{{ $image }}" alt="" width="40" height="40">
     @else
       <i class="{{ $service->iconClass() }}"></i>
     @endif
@@ -22,7 +22,7 @@
     <p class="service-catalog-price" data-en="{{ $service->displayPrice('en') }}" data-fa="{{ $service->displayPrice('fa') }}">{{ $service->displayPrice('en') }}</p>
     <div class="service-catalog-actions">
       <a class="btn btn-primary service-catalog-cta" href="{{ $service->path() }}" data-en="View Details" data-fa="مشاهده جزئیات">View Details</a>
-      <a class="btn btn-outline-primary service-catalog-cta" href="{{ $service->path() }}#service-request" data-en="Request Service" data-fa="درخواست خدمت">Request Service</a>
+      <a class="btn btn-outline-primary service-catalog-cta" href="{{ $service->path() }}#service-request" data-en="Request" data-fa="درخواست">Request</a>
     </div>
   </div>
 </article>
