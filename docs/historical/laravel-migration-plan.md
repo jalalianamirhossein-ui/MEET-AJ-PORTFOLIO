@@ -1,6 +1,6 @@
 # Meet AJ Laravel migration plan
 
-> **SUPERSEDED (HISTORICAL).** Planning document retained as history. Obsolete targets in this file: Laravel 11, PHP 8.2, Filament 3, public `/de`, `pages`, `contact_requests`. Current status: [PROJECT-STATUS.md](../PROJECT-STATUS.md). Decision record: [architecture-decision-record.md](../architecture-decision-record.md).
+> **SUPERSEDED (HISTORICAL).** Planning document retained as history. Obsolete targets in this file: Laravel 11, PHP 8.2, Filament 3, public `/de`, `pages`, `contact_requests`. Current status: [PROJECT-STATUS.md](../current/PROJECT-STATUS.md). Decision record: [architecture-decision-record.md](../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md).
 
 Date: 2026-09-14. Status: **Superseded.**
 

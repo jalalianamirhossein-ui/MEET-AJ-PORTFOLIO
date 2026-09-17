@@ -1,7 +1,7 @@
 # Documentation index — Meet AJ
 
 **Authority:** AUTHORITATIVE catalog of Markdown in this repository after the 2026-09-16 documentation rebuild.  
-**Source of truth for current state:** [README.md](../README.md), [DEPLOYMENT.md](../DEPLOYMENT.md), [PROJECT-STATUS.md](PROJECT-STATUS.md), [QA-MATRIX.md](QA-MATRIX.md).
+**Source of truth for current state:** [README.md](../README.md), [DEPLOYMENT.md](../current/DEPLOYMENT.md), [PROJECT-STATUS.md](../current/PROJECT-STATUS.md), [QA-MATRIX.md](../qa/QA-MATRIX.md).
 
 Classifications: **AUTHORITATIVE** | **REFERENCE** | **HISTORICAL** | **DEPLOYMENT** | **VENDOR** (not project docs).
 
@@ -12,30 +12,30 @@ Classifications: **AUTHORITATIVE** | **REFERENCE** | **HISTORICAL** | **DEPLOYME
 | File | Purpose | Status | Authority |
 |------|---------|--------|-----------|
 | [README.md](../README.md) | GitHub onboarding, stack, install, commands | Current | AUTHORITATIVE |
-| [DEPLOYMENT.md](../DEPLOYMENT.md) | DirectAdmin production procedure | Current procedure; cutover not executed | DEPLOYMENT |
-| [PROJECT-STATUS.md](PROJECT-STATUS.md) | Live implementation/test/blocker status | Current | AUTHORITATIVE |
-| [ARCHITECTURE.md](ARCHITECTURE.md) | Runtime paths, routes, services | Current | AUTHORITATIVE |
-| [DATABASE.md](DATABASE.md) | Tables, FKs, engines | Current | AUTHORITATIVE |
-| [ADMIN.md](ADMIN.md) | Filament resources and gaps | Current | AUTHORITATIVE |
-| [MULTILINGUAL.md](MULTILINGUAL.md) | EN / FA / DE | Current | AUTHORITATIVE |
-| [SERVICES.md](SERVICES.md) | Service catalog, prices, URLs, admin | Current | AUTHORITATIVE |
+| [DEPLOYMENT.md](../current/DEPLOYMENT.md) | DirectAdmin production procedure | Current procedure; cutover not executed | DEPLOYMENT |
+| [PROJECT-STATUS.md](../current/PROJECT-STATUS.md) | Live implementation/test/blocker status | Current | AUTHORITATIVE |
+| [ARCHITECTURE.md](../current/ARCHITECTURE.md) | Runtime paths, routes, services | Current | AUTHORITATIVE |
+| [DATABASE.md](../current/DATABASE.md) | Tables, FKs, engines | Current | AUTHORITATIVE |
+| [ADMIN.md](../current/ADMIN.md) | Filament resources and gaps | Current | AUTHORITATIVE |
+| [MULTILINGUAL.md](../current/MULTILINGUAL.md) | EN / FA / DE | Current | AUTHORITATIVE |
+| [SERVICES.md](../current/SERVICES.md) | Service catalog, prices, URLs, admin | Current | AUTHORITATIVE |
 | [SERVICE-CMS-IMPLEMENTATION.md](SERVICE-CMS-IMPLEMENTATION.md) | Implementation report for the service CMS | Current | REFERENCE |
-| [SEO.md](SEO.md) | Canonical, OG, sitemap, robots | Current | AUTHORITATIVE |
-| [PWA.md](PWA.md) | manifest, sw.js, cache, exclusions | Current | AUTHORITATIVE |
-| [SECURITY.md](SECURITY.md) | CSRF, honeypot, headers, env | Current | AUTHORITATIVE |
-| [QA-MATRIX.md](QA-MATRIX.md) | Evidence-based QA | Current | AUTHORITATIVE |
+| [SEO.md](../current/SEO.md) | Canonical, OG, sitemap, robots | Current | AUTHORITATIVE |
+| [PWA.md](../current/PWA.md) | manifest, sw.js, cache, exclusions | Current | AUTHORITATIVE |
+| [SECURITY.md](../current/SECURITY.md) | CSRF, honeypot, headers, env | Current | AUTHORITATIVE |
+| [QA-MATRIX.md](../qa/QA-MATRIX.md) | Evidence-based QA | Current | AUTHORITATIVE |
 | [DOCUMENTATION-INDEX.md](DOCUMENTATION-INDEX.md) | This catalog | Current | AUTHORITATIVE |
 | [DOCUMENTATION-CLEANUP-REPORT.md](DOCUMENTATION-CLEANUP-REPORT.md) | What changed in the docs rebuild | Current | REFERENCE |
 | [PROJECT-STRUCTURE-CLEANUP.md](PROJECT-STRUCTURE-CLEANUP.md) | Structure cleanup report | Current | REFERENCE |
 | [get-to-know-me-ui.md](get-to-know-me-ui.md) | About / Get to Know Me UI report | Current | REFERENCE |
-| [features.md](features.md) | Search, tags, related, share, request pipeline | Current | AUTHORITATIVE |
-| [admin-ui-qa.md](admin-ui-qa.md) | Filament UI QA | Current | REFERENCE |
-| [design-system.md](design-system.md) | Public overlay tokens and components | Current | AUTHORITATIVE |
-| [article-visual-dna.md](article-visual-dna.md) | Article detail pages as visual reference | Current | AUTHORITATIVE |
-| [full-site-design-audit.md](full-site-design-audit.md) | Pre-implementation visual audit (then implemented) | Current | REFERENCE |
-| [full-site-visual-qa.md](full-site-visual-qa.md) | Viewport matrix and screenshot notes | Current | REFERENCE |
+| [features.md](../current/FEATURES.md) | Search, tags, related, share, request pipeline | Current | AUTHORITATIVE |
+| [admin-ui-qa.md](../qa/ADMIN-QA.md) | Filament UI QA | Current | REFERENCE |
+| [design-system.md](../current/DESIGN-SYSTEM.md) | Public overlay tokens and components | Current | AUTHORITATIVE |
+| [article-visual-dna.md](../current/ARTICLE-VISUAL-DNA.md) | Article detail pages as visual reference | Current | AUTHORITATIVE |
+| [full-site-design-audit.md](../qa/DESIGN-AUDIT.md) | Pre-implementation visual audit (then implemented) | Current | REFERENCE |
+| [full-site-visual-qa.md](../qa/VISUAL-QA.md) | Viewport matrix and screenshot notes | Current | REFERENCE |
 | [service-detail-ui-qa.md](service-detail-ui-qa.md) | Six service landings + quote form | Current | REFERENCE |
-| [final-project-qa-report.md](final-project-qa-report.md) | UI rebuild acceptance matrix | Current | AUTHORITATIVE |
+| [final-project-qa-report.md](../qa/FINAL-QA-REPORT.md) | UI rebuild acceptance matrix | Current | AUTHORITATIVE |
 
 ## Historical / superseded (retained)
 
@@ -44,8 +44,8 @@ Moved to [historical/](historical/README.md) so `docs/` current-state files stay
 | File | Purpose | Status | Authority |
 |------|---------|--------|-----------|
 | [historical/AUDIT_REPORT.md](historical/AUDIT_REPORT.md) | Static-site audit 2026-09-09 | HISTORICAL | HISTORICAL |
-| [architecture-decision-record.md](architecture-decision-record.md) | Why Laravel 13 / PHP 8.4 / Filament 5 | Decision still in force | HISTORICAL |
-| [framework-version-decision.md](framework-version-decision.md) | Pre-install version evidence | Decision still in force | HISTORICAL |
+| [architecture-decision-record.md](../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md) | Why Laravel 13 / PHP 8.4 / Filament 5 | Decision still in force | HISTORICAL |
+| [framework-version-decision.md](../decisions/ADR/ADR-002-framework-version-selection.md) | Pre-install version evidence | Decision still in force | HISTORICAL |
 | [historical/laravel-implementation-plan.md](historical/laravel-implementation-plan.md) | Original implementation plan (Laravel 11 era) | SUPERSEDED | HISTORICAL |
 | [historical/laravel-migration-plan.md](historical/laravel-migration-plan.md) | Original migration plan | SUPERSEDED | HISTORICAL |
 | [historical/content-migration-analysis.md](historical/content-migration-analysis.md) | Static content inventory | HISTORICAL | HISTORICAL |
@@ -57,12 +57,12 @@ Moved to [historical/](historical/README.md) so `docs/` current-state files stay
 | [historical/implementation-report.md](historical/implementation-report.md) | Point-in-time CMS report | SUPERSEDED by PROJECT-STATUS | HISTORICAL |
 | [historical/final-site-qa-report.md](historical/final-site-qa-report.md) | CMS QA snapshot | SUPERSEDED by QA-MATRIX | HISTORICAL |
 | [final-ui-qa.md](final-ui-qa.md) | Latest UI/UX browser QA | Keep as evidence | REFERENCE |
-| [phases/phase-1-environment.md](phases/phase-1-environment.md) | Phase 1 log | SUPERSEDED | HISTORICAL |
-| [phases/phase-2-database.md](phases/phase-2-database.md) | Phase 2 log | SUPERSEDED | HISTORICAL |
-| [phases/phase-3-filament.md](phases/phase-3-filament.md) | Phase 3 log | SUPERSEDED | HISTORICAL |
-| [phases/phase-4-importer.md](phases/phase-4-importer.md) | Phase 4 log | SUPERSEDED | HISTORICAL |
-| [phases/phase-5-frontend.md](phases/phase-5-frontend.md) | Phase 5 log | SUPERSEDED | HISTORICAL |
-| [phases/phase-6-deployment.md](phases/phase-6-deployment.md) | Phase 6 log | SUPERSEDED | HISTORICAL |
+| [phases/phase-1-environment.md](../phases/phase-01-environment.md) | Phase 1 log | SUPERSEDED | HISTORICAL |
+| [phases/phase-2-database.md](../phases/phase-02-database.md) | Phase 2 log | SUPERSEDED | HISTORICAL |
+| [phases/phase-3-filament.md](../phases/phase-03-filament.md) | Phase 3 log | SUPERSEDED | HISTORICAL |
+| [phases/phase-4-importer.md](../phases/phase-04-article-importer.md) | Phase 4 log | SUPERSEDED | HISTORICAL |
+| [phases/phase-5-frontend.md](../phases/phase-05-frontend-seo-pwa.md) | Phase 5 log | SUPERSEDED | HISTORICAL |
+| [phases/phase-6-deployment.md](../phases/phase-06-deployment.md) | Phase 6 log | SUPERSEDED | HISTORICAL |
 
 ## JSON inventories (not Markdown)
 

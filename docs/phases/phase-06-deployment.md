@@ -1,4 +1,4 @@
-> **HISTORICAL / SUPERSEDED phase log.** Authoritative deploy procedure: [DEPLOYMENT.md](../../DEPLOYMENT.md). Cutover is still not executed.
+> **HISTORICAL / SUPERSEDED phase log.** Authoritative deploy procedure: [DEPLOYMENT.md](../current/DEPLOYMENT.md). Cutover is still not executed.
 
 # Phase 6 — DirectAdmin deployment
 

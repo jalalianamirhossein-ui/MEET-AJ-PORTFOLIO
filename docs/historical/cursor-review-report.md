@@ -1,4 +1,4 @@
-> **HISTORICAL.** Read-only `/docs` review snapshot (2026-09-16) taken before this documentation rebuild. Current status: [PROJECT-STATUS.md](../PROJECT-STATUS.md). Index: [DOCUMENTATION-INDEX.md](../DOCUMENTATION-INDEX.md).
+> **HISTORICAL.** Read-only `/docs` review snapshot (2026-09-16) taken before this documentation rebuild. Current status: [PROJECT-STATUS.md](../current/PROJECT-STATUS.md). Index: [DOCUMENTATION-INDEX.md](DOCUMENTATION-INDEX.md).
 
 # Meet AJ Portfolio — Cursor Migration Documentation Review
 

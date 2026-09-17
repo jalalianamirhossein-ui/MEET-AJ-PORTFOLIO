@@ -1,4 +1,4 @@
-> **HISTORICAL DECISION (still in force).** Pre-install version evidence. Live versions: [PROJECT-STATUS.md](PROJECT-STATUS.md). ADR: [architecture-decision-record.md](architecture-decision-record.md).
+> **HISTORICAL DECISION (still in force).** Pre-install version evidence. Live versions: [PROJECT-STATUS.md](../../current/PROJECT-STATUS.md). ADR: [architecture-decision-record.md](ADR-001-laravel-13-filament-5-stack.md).
 
 # Framework version decision
 

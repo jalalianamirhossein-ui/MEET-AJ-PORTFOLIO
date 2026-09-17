@@ -1,4 +1,4 @@
-> **HISTORICAL.** Site QA snapshot from the CMS implementation pass. Authoritative current QA: [QA-MATRIX.md](../QA-MATRIX.md). Later UI evidence: [final-ui-qa.md](../final-ui-qa.md).
+> **HISTORICAL.** Site QA snapshot from the CMS implementation pass. Authoritative current QA: [QA-MATRIX.md](../qa/QA-MATRIX.md). Later UI evidence: [final-ui-qa.md](final-ui-qa.md).
 
 # Final site QA report
 

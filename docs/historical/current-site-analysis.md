@@ -1,4 +1,4 @@
-> **HISTORICAL.** Pre-implementation audit of the static site (2026-09-14). Not the current Laravel CMS status. See [PROJECT-STATUS.md](../PROJECT-STATUS.md).
+> **HISTORICAL.** Pre-implementation audit of the static site (2026-09-14). Not the current Laravel CMS status. See [PROJECT-STATUS.md](../current/PROJECT-STATUS.md).
 
 # Current site analysis — audit before implementation
 

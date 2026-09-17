@@ -1,4 +1,4 @@
-> **HISTORICAL.** Log of content-integrity repairs vs original HTML. Current compare-content result lives in [QA-MATRIX.md](../QA-MATRIX.md) and [PROJECT-STATUS.md](../PROJECT-STATUS.md).
+> **HISTORICAL.** Log of content-integrity repairs vs original HTML. Current compare-content result lives in [QA-MATRIX.md](../qa/QA-MATRIX.md) and [PROJECT-STATUS.md](../current/PROJECT-STATUS.md).
 
 # Content integrity fixes
 

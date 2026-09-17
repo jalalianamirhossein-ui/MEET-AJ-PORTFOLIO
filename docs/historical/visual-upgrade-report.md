@@ -1,4 +1,4 @@
-> **HISTORICAL.** Overlay implementation report. Later UI QA: [final-ui-qa.md](../final-ui-qa.md). Authoritative overall QA: [QA-MATRIX.md](../QA-MATRIX.md).
+> **HISTORICAL.** Overlay implementation report. Later UI QA: [final-ui-qa.md](final-ui-qa.md). Authoritative overall QA: [QA-MATRIX.md](../qa/QA-MATRIX.md).
 
 # Meet AJ — Visual upgrade report
 

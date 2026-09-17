@@ -1,4 +1,4 @@
-> **HISTORICAL / SUPERSEDED phase log.** Authoritative schema: [DATABASE.md](../DATABASE.md). Current status: [PROJECT-STATUS.md](../PROJECT-STATUS.md). DirectAdmin production DB remains NOT TESTED.
+> **HISTORICAL / SUPERSEDED phase log.** Authoritative schema: [DATABASE.md](../current/DATABASE.md). Current status: [PROJECT-STATUS.md](../current/PROJECT-STATUS.md). DirectAdmin production DB remains NOT TESTED.
 
 # Phase 2 — database
 

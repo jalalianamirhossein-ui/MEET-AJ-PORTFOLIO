@@ -1,4 +1,4 @@
-> **HISTORICAL / SUPERSEDED phase log.** Current status: [PROJECT-STATUS.md](../PROJECT-STATUS.md). Environment requirements: [README.md](../../README.md).
+> **HISTORICAL / SUPERSEDED phase log.** Current status: [PROJECT-STATUS.md](../current/PROJECT-STATUS.md). Environment requirements: [README.md](../../README.md).
 
 # Phase 1 — environment
 

@@ -1,4 +1,4 @@
-> **HISTORICAL.** Visual audit that preceded the overlay upgrade. Later work: [visual-upgrade-report.md](visual-upgrade-report.md), [final-ui-qa.md](../final-ui-qa.md). Current status: [PROJECT-STATUS.md](../PROJECT-STATUS.md).
+> **HISTORICAL.** Visual audit that preceded the overlay upgrade. Later work: [visual-upgrade-report.md](visual-upgrade-report.md), [final-ui-qa.md](final-ui-qa.md). Current status: [PROJECT-STATUS.md](../current/PROJECT-STATUS.md).
 
 # Meet AJ — Visual Design Audit
 

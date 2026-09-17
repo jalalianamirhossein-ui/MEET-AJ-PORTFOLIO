@@ -1,4 +1,4 @@
-> **HISTORICAL / SUPERSEDED phase log.** Current importer command and article counts: [PROJECT-STATUS.md](../PROJECT-STATUS.md), [README.md](../../README.md).
+> **HISTORICAL / SUPERSEDED phase log.** Current importer command and article counts: [PROJECT-STATUS.md](../current/PROJECT-STATUS.md), [README.md](../../README.md).
 
 # Phase 4 — article importer
 

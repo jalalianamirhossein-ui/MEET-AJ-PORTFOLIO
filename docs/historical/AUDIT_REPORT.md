@@ -1,4 +1,4 @@
-> **HISTORICAL.** Pre-Laravel static-site audit dated 2026-09-09. Describes the former PWA, not the current Laravel CMS. Current status: [PROJECT-STATUS.md](../PROJECT-STATUS.md).
+> **HISTORICAL.** Pre-Laravel static-site audit dated 2026-09-09. Describes the former PWA, not the current Laravel CMS. Current status: [PROJECT-STATUS.md](../current/PROJECT-STATUS.md).
 
 # Production Website Audit — Meet AJ Portfolio
 

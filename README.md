@@ -27,7 +27,7 @@ German is **not** a public language. `/de` returns 404. German article rows cann
 
 ## Design system
 
-Public chrome is unified in `assets/css/visual-upgrade.css` (cache `v=1314`): Article visual DNA (blue `#2563eb`, Poppins/Vazirmatn, 12px buttons, H2 bars). Homepage is editorial (skills lists, resume timeline); services are landings with CTA-gated quote forms. Cards are for grouping only. See [docs/article-visual-dna.md](docs/article-visual-dna.md) and [docs/design-system.md](docs/design-system.md). Do not add Tailwind, React, Vue, or extra CDNs.
+Public chrome is unified in `assets/css/visual-upgrade.css` (cache `v=1314`): Article visual DNA (blue `#2563eb`, Poppins/Vazirmatn, 12px buttons, H2 bars). Homepage is editorial (skills lists, resume timeline); services are landings with CTA-gated quote forms. Cards are for grouping only. See [docs/article-visual-dna.md](docs/current/ARTICLE-VISUAL-DNA.md) and [docs/design-system.md](docs/current/DESIGN-SYSTEM.md). Do not add Tailwind, React, Vue, or extra CDNs.
 
 ## Technology stack
 
@@ -87,7 +87,7 @@ Languages: **EN production**, **FA production** (same URLs, `dir`/`lang` swapped
 |----------|-----|--------|
 | Articles | Admin + editor | CRUD, publish/draft, SEO, image upload, slug 301 history |
 | Categories | Admin + editor | Per-language slug uniqueness |
-| Services | Admin only | Catalog, prices, publish/draft, SEO. See [docs/SERVICES.md](docs/SERVICES.md) |
+| Services | Admin only | Catalog, prices, publish/draft, SEO. See [docs/SERVICES.md](docs/current/SERVICES.md) |
 | Tags | Admin + editor | Unique name/slug; attach to articles |
 | Requests | Admin only | CRM-lite statuses (New → Cancelled) plus internal notes (never public) |
 | Users | Admin only | Sidebar **Administration** group. Table shows name/email/role, never hashes. Create accounts with `php artisan cms:create-user` |
@@ -119,7 +119,7 @@ Contract is unchanged from the static site:
 
 ## Languages
 
-See [docs/MULTILINGUAL.md](docs/MULTILINGUAL.md). Switcher: compact `#lang-switcher` listbox (`#lang-toggle` button), `localStorage` / cookie `lang` (`en` \| `fa`), stylesheet `rtl.css`. Placeholders with `data-fa-placeholder` are applied by `assets/js/i18n.js`. DE is injected only if the page has `[data-de]` (public pages do not).
+See [docs/MULTILINGUAL.md](docs/current/MULTILINGUAL.md). Switcher: compact `#lang-switcher` listbox (`#lang-toggle` button), `localStorage` / cookie `lang` (`en` \| `fa`), stylesheet `rtl.css`. Placeholders with `data-fa-placeholder` are applied by `assets/js/i18n.js`. DE is injected only if the page has `[data-de]` (public pages do not).
 
 ## URL migration
 
@@ -198,7 +198,7 @@ php artisan services:import-legacy --dry-run  # report only
 php artisan services:import-legacy --refresh  # deletes services, then re-imports from HTML
 ```
 
-Do not run `--refresh` after editorial price or copy changes. Details: [docs/SERVICES.md](docs/SERVICES.md).
+Do not run `--refresh` after editorial price or copy changes. Details: [docs/SERVICES.md](docs/current/SERVICES.md).
 
 ## Admin user
 
@@ -211,11 +211,11 @@ Password is prompted unless `--password=` is passed. Minimum 12 characters. Neve
 
 ## Deployment
 
-See [DEPLOYMENT.md](DEPLOYMENT.md). DirectAdmin production cutover is **documented, not executed** in this environment.
+See [DEPLOYMENT.md](docs/current/DEPLOYMENT.md). DirectAdmin production cutover is **documented, not executed** in this environment.
 
 ## Security
 
-Production must use `APP_DEBUG=false`, HTTPS, `SESSION_SECURE_COOKIE=true`, and a unique `APP_KEY`. Details: [docs/SECURITY.md](docs/SECURITY.md). This repository has **not** been penetration-tested.
+Production must use `APP_DEBUG=false`, HTTPS, `SESSION_SECURE_COOKIE=true`, and a unique `APP_KEY`. Details: [docs/SECURITY.md](docs/current/SECURITY.md). This repository has **not** been penetration-tested.
 
 ## Documentation
 
@@ -223,19 +223,19 @@ Start here:
 
 | File | Role |
 |------|------|
-| [docs/DOCUMENTATION-INDEX.md](docs/DOCUMENTATION-INDEX.md) | Index of every project Markdown file |
-| [docs/PROJECT-STATUS.md](docs/PROJECT-STATUS.md) | Authoritative current status |
-| [docs/QA-MATRIX.md](docs/QA-MATRIX.md) | Authoritative QA evidence |
-| [docs/SERVICES.md](docs/SERVICES.md) | Service catalog + CMS |
-| [docs/features.md](docs/features.md) | Search, tags, related, share, request pipeline |
-| [docs/admin-ui-qa.md](docs/admin-ui-qa.md) | Filament UI QA (code + PHPUnit; browser login BLOCKED) |
-| [docs/article-visual-dna.md](docs/article-visual-dna.md) | Article detail visual reference (do not restyle those pages) |
-| [docs/design-system.md](docs/design-system.md) | Public overlay tokens |
-| [docs/full-site-design-audit.md](docs/full-site-design-audit.md) | Visual system audit vs Article DNA |
-| [docs/full-site-visual-qa.md](docs/full-site-visual-qa.md) | Rendered visual QA |
-| [docs/service-detail-ui-qa.md](docs/service-detail-ui-qa.md) | Six service landing QA |
-| [docs/final-project-qa-report.md](docs/final-project-qa-report.md) | Acceptance PASS/FAIL |
-| [DEPLOYMENT.md](DEPLOYMENT.md) | DirectAdmin / production |
+| [docs/DOCUMENTATION-INDEX.md](docs/historical/DOCUMENTATION-INDEX.md) | Index of every project Markdown file |
+| [docs/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md) | Authoritative current status |
+| [docs/QA-MATRIX.md](docs/qa/QA-MATRIX.md) | Authoritative QA evidence |
+| [docs/SERVICES.md](docs/current/SERVICES.md) | Service catalog + CMS |
+| [docs/features.md](docs/current/FEATURES.md) | Search, tags, related, share, request pipeline |
+| [docs/admin-ui-qa.md](docs/qa/ADMIN-QA.md) | Filament UI QA (code + PHPUnit; browser login BLOCKED) |
+| [docs/article-visual-dna.md](docs/current/ARTICLE-VISUAL-DNA.md) | Article detail visual reference (do not restyle those pages) |
+| [docs/design-system.md](docs/current/DESIGN-SYSTEM.md) | Public overlay tokens |
+| [docs/full-site-design-audit.md](docs/qa/DESIGN-AUDIT.md) | Visual system audit vs Article DNA |
+| [docs/full-site-visual-qa.md](docs/qa/VISUAL-QA.md) | Rendered visual QA |
+| [docs/service-detail-ui-qa.md](docs/historical/service-detail-ui-qa.md) | Six service landing QA |
+| [docs/final-project-qa-report.md](docs/qa/FINAL-QA-REPORT.md) | Acceptance PASS/FAIL |
+| [DEPLOYMENT.md](docs/current/DEPLOYMENT.md) | DirectAdmin / production |
 | [docs/historical/README.md](docs/historical/README.md) | Superseded plans and snapshots |
 
 ## Git

@@ -3,7 +3,8 @@
 **Date:** 2026-09-17  
 **Overlay:** `visual-upgrade.css?v=1314`  
 **Scripts:** `i18n.js?v=1116`, `main.js?v=1119`  
-**Git:** not initialized, not committed (per instruction).
+**Git:** no git command was run in this pass — no add, no commit, no push. (A `.git` directory already exists in the repository; it was not touched.)  
+**Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md) · **Detail:** [VISUAL-QA.md](VISUAL-QA.md), [RESPONSIVE-QA.md](RESPONSIVE-QA.md), [ACCESSIBILITY-QA.md](ACCESSIBILITY-QA.md), [ADMIN-QA.md](ADMIN-QA.md), [CONTENT-INTEGRITY.md](CONTENT-INTEGRITY.md), [QA-MATRIX.md](QA-MATRIX.md)
 
 This is **not** a claim that every viewport screenshot and every authenticated admin screen was proven. PASS below means verified with the evidence named. BLOCKED means not tested. FAIL would mean a proven defect still open.
 
@@ -136,7 +137,7 @@ HTTP: 68 URL checks, **0 unexpected** statuses.
 | Required docs updated | PASS this file + DNA/design/features/visual/admin |
 | Unused-file deletion | Not performed (no proven-unused deletions this pass) |
 | PHPUnit | PASS 39 / 647 / 1 skipped |
-| Git | PASS — no init/add/commit/push |
+| Git | PASS — no git command executed |
 
 ## Fixes applied this pass
 
@@ -159,4 +160,4 @@ HTTP: 68 URL checks, **0 unexpected** statuses.
 
 ## Git
 
-Not run.
+No git command was executed in this pass.

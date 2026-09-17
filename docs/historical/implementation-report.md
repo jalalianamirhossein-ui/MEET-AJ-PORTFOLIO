@@ -1,4 +1,4 @@
-> **SUPERSEDED (HISTORICAL).** Point-in-time implementation report. Authoritative current status is [PROJECT-STATUS.md](../PROJECT-STATUS.md). Authoritative QA is [QA-MATRIX.md](../QA-MATRIX.md). Historical measurements below are not rewritten.
+> **SUPERSEDED (HISTORICAL).** Point-in-time implementation report. Authoritative current status is [PROJECT-STATUS.md](../current/PROJECT-STATUS.md). Authoritative QA is [QA-MATRIX.md](../qa/QA-MATRIX.md). Historical measurements below are not rewritten.
 
 # Implementation report — Meet AJ Laravel CMS
 

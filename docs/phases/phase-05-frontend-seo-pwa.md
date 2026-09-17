@@ -1,4 +1,4 @@
-> **HISTORICAL / SUPERSEDED phase log.** Current public/SEO/PWA/contact status: [SEO.md](../SEO.md), [PWA.md](../PWA.md), [QA-MATRIX.md](../QA-MATRIX.md). Overlay cache was later `v=1108`.
+> **HISTORICAL / SUPERSEDED phase log.** Current public/SEO/PWA/contact status: [SEO.md](../current/SEO.md), [PWA.md](../current/PWA.md), [QA-MATRIX.md](../qa/QA-MATRIX.md). Overlay cache was later `v=1108`.
 
 # Phase 5 — frontend, SEO, PWA, contact
 

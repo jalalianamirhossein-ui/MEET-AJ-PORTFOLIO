@@ -1,4 +1,4 @@
-> **HISTORICAL / SUPERSEDED phase log.** Authoritative Filament description: [ADMIN.md](../ADMIN.md). Users navigation was later hidden because the index route was missing.
+> **HISTORICAL / SUPERSEDED phase log.** Authoritative Filament description: [ADMIN.md](../current/ADMIN.md). Users navigation was later hidden because the index route was missing.
 
 # Phase 3 — Filament
 

@@ -1,6 +1,6 @@
 # Meet AJ content migration analysis
 
-> **HISTORICAL.** Content inventory from the static site. Architecture details that conflict with the running CMS yield to [PROJECT-STATUS.md](../PROJECT-STATUS.md) (stack versions, `/de`, `contact_requests`).
+> **HISTORICAL.** Content inventory from the static site. Architecture details that conflict with the running CMS yield to [PROJECT-STATUS.md](../current/PROJECT-STATUS.md) (stack versions, `/de`, `contact_requests`).
 
 Date: 2026-09-14. Planning-only review of the completed audit, not a new implementation. Read with `laravel-implementation-plan.md`, which contains proposed schema, scope choices, migration risks, SEO policy and the approval gate.
 

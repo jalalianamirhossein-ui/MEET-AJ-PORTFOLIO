@@ -1,4 +1,4 @@
-> **HISTORICAL DECISION (still in force).** Record of why Laravel 13 / PHP 8.4 / Filament 5 / Blade / MySQL were chosen. Installed versions and live status: [PROJECT-STATUS.md](PROJECT-STATUS.md). Do not treat planning leftovers as current QA.
+> **HISTORICAL DECISION (still in force).** Record of why Laravel 13 / PHP 8.4 / Filament 5 / Blade / MySQL were chosen. Installed versions and live status: [PROJECT-STATUS.md](../../current/PROJECT-STATUS.md). Do not treat planning leftovers as current QA.
 
 # Architecture Decision Record — Meet AJ Laravel CMS
 

@@ -1,6 +1,7 @@
-# Full-site visual QA — Meet AJ
+# Visual QA — Meet AJ
 
 **Date:** 2026-09-17  
+**Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md) · **Accessibility:** [ACCESSIBILITY-QA.md](ACCESSIBILITY-QA.md) · **Responsive:** [RESPONSIVE-QA.md](RESPONSIVE-QA.md)  
 **Overlay:** `assets/css/visual-upgrade.css?v=1314`  
 **Method:** Cursor browser snapshots + CDP overflow/computed styles. Screenshots are often **stale vs URL**; CDP and the accessibility tree are the visual/layout truth this pass.
 
@@ -23,22 +24,11 @@ Article detail pages were **not** redesigned.
 | Authenticated Filament | Not logged in (no production credentials; throwaway QA user deleted) | **BLOCKED** |
 | Console / network | No failed overlay/i18n in CDP; dedicated DevTools console export not captured | WARN |
 
-## Responsive matrix (overflowX)
+## Responsive matrix
 
-CDP `scrollWidth > clientWidth + 1` is the overflow test. Screenshot crop is **not** overflow.
+Viewport measurements live in one place to avoid two competing matrices: [RESPONSIVE-QA.md](RESPONSIVE-QA.md).
 
-| Viewport | Homepage | Articles index | Article detail | Network Design |
-|----------|----------|----------------|----------------|----------------|
-| 320×800 | PASS overflow 0 | — this pass | — | — |
-| 375×812 | — (412 verified) | PASS overflow 0 | — | — |
-| 412 (device) | PASS overflow 0 | — | — | — |
-| 390 / 414 | Not re-measured this pass | — | — | — |
-| 768 / 1024×768 / 1366 / 1440 / 1920 | Not re-measured this pass | — | — | — |
-| 1280×800 | PASS overflow 0 | (desktop snapshot of library from stale panel) | PASS overflow 0 | PASS overflow 0 |
-
-390, 414, 768, 1024, 1366, 1440, 1920: **BLOCKED this pass** (not re-run). Earlier audit recorded overflow 0 on homepage for that set; not claimed as re-verified today.
-
-Admin 414 / 768 / 1024 / 1280: **BLOCKED** (no authenticated UI).
+Summary: overflow 0 confirmed at 320, 375, 412 and 1280 on the pages named there; all other widths and the whole authenticated admin are BLOCKED.
 
 ## Visual quality notes
 

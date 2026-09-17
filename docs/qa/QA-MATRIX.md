@@ -1,7 +1,8 @@
-# QA matrix — Meet AJ Laravel CMS
+# QA matrix — Meet AJ
 
-**Authority:** AUTHORITATIVE QA evidence.  
+**Authority:** AUTHORITATIVE per-URL QA evidence.  
 **Date:** 2026-09-17  
+**Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md)  
 **Do not treat older phase reports as current PASS/FAIL.**
 
 Legend:
@@ -23,7 +24,7 @@ Skipped in default sqlite suite: `MysqlSchemaTest` (runs only when MySQL is boun
 
 | URL / Feature | Expected | Actual | Test method | Status | Notes |
 |---------------|----------|--------|-------------|--------|-------|
-| `GET /` | 200, section IDs, EN default | 200, IDs present | PHPUnit `test_homepage_and_index_redirect`; `site:compare-content`; browser QA | PASS · LOCAL TESTED | Overlay `visual-upgrade.css?v=1120` |
+| `GET /` | 200, section IDs, EN default | 200, IDs present | PHPUnit `test_homepage_and_index_redirect`; `site:compare-content`; browser QA | PASS · LOCAL TESTED | Overlay `visual-upgrade.css?v=1314` |
 | `GET /index.html` | 301 → `/` | 301 | PHPUnit | PASS · LOCAL TESTED | Master prompt listed 200; implementation and tests use 301 |
 | `GET /articles` | 200, 23 cards, filters | 200 | PHPUnit + browser | PASS · LOCAL TESTED | Filter controls are `<button type="button">` |
 | `GET /services/{slug}` | 200, landing + hidden quote form | 200 | PHPUnit `ServiceCatalogTest` / `PublicSiteTest`; browser | PASS · LOCAL TESTED | Form revealed by CTA |
@@ -99,7 +100,8 @@ Slugs: `creating-a-bootable-usb`, `downgrade-mikrotik-routeros-firmware-safely`,
 
 ## UI / a11y (browser, 2026-09-16)
 
-Evidence file: [final-ui-qa.md](final-ui-qa.md) (REFERENCE). Filters 44px, persistent cards, EN/FA fonts, 10-viewport matrix recorded there. Lighthouse: **NOT TESTED**.
+Current evidence: [VISUAL-QA.md](VISUAL-QA.md), [RESPONSIVE-QA.md](RESPONSIVE-QA.md), [ACCESSIBILITY-QA.md](ACCESSIBILITY-QA.md).
+Historical snapshot from 2026-09-16 (filters 44 px, persistent cards, EN/FA fonts, the older 10-viewport matrix): [../historical/final-ui-qa.md](../historical/final-ui-qa.md). Lighthouse: **NOT TESTED**.
 
 ## Production / DirectAdmin
 

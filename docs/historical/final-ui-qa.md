@@ -1,4 +1,4 @@
-> **REFERENCE.** Latest UI/UX browser QA (2026-09-16). Authoritative overall QA status: [QA-MATRIX.md](QA-MATRIX.md).
+> **REFERENCE.** Latest UI/UX browser QA (2026-09-16). Authoritative overall QA status: [QA-MATRIX.md](../qa/QA-MATRIX.md).
 
 # Final UI/UX QA — Meet AJ
 
