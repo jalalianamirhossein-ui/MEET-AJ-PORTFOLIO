@@ -236,7 +236,7 @@
       rel="stylesheet"
       disabled
     />
-    <link href="/assets/css/visual-upgrade.css?v=1702" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1703" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================

@@ -31,7 +31,10 @@ class ArticleLibraryTest extends TestCase
             ->assertSee('role="search"', false)
             ->assertSee('id="article-q"', false)
             ->assertSee('isotope-container', false)
-            ->assertSee('Linux', false);
+            ->assertSee('Linux', false)
+            ->assertSee('data-fa="رفتن به محتوای اصلی"', false)
+            ->assertSee('data-fa="نمایش مقالات بیشتر"', false)
+            ->assertSee('article-chip-label', false);
     }
 
     public function test_article_search_filters_published_rows_without_loading_the_isotope_grid(): void
