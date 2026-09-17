@@ -126,13 +126,6 @@
         <div class="container">
           @php $tocHtml = data_get($article->presentation, 'toc_html'); @endphp
           <div class="article-shell{{ $tocHtml ? ' article-shell--with-toc' : '' }}">
-            <div class="article-reading">
-              <article class="article-body">
-                {!! $article->content !!}
-              </article>
-              @include('articles.partials.share')
-              @include('articles.partials.related')
-            </div>
             @if ($tocHtml)
               <aside class="article-toc" aria-label="Table of contents" data-en-aria-label="Table of contents" data-fa-aria-label="فهرست مطالب">
                 <p class="article-toc-title" data-en="On this page" data-fa="در این مقاله">On this page</p>
@@ -143,6 +136,13 @@
                 </nav>
               </aside>
             @endif
+            <div class="article-reading">
+              <article class="article-body">
+                {!! $article->content !!}
+              </article>
+              @include('articles.partials.share')
+              @include('articles.partials.related')
+            </div>
           </div>
         </div>
       </section>
