@@ -2,7 +2,8 @@
 
 **Date:** 2026-09-17  
 **Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md) · **Accessibility:** [ACCESSIBILITY-QA.md](ACCESSIBILITY-QA.md) · **Responsive:** [RESPONSIVE-QA.md](RESPONSIVE-QA.md)  
-**Overlay:** `assets/css/visual-upgrade.css?v=1314`  
+**Overlay:** `assets/css/visual-upgrade.css?v=1402`  
+**Latest visual pass:** [VISUAL-UX-FINAL-REPORT.md](VISUAL-UX-FINAL-REPORT.md)  
 **Method:** Cursor browser snapshots + CDP overflow/computed styles. Screenshots are often **stale vs URL**; CDP and the accessibility tree are the visual/layout truth this pass.
 
 Skills followed: visual-qa-testing (navigate, snapshot, screenshot, CDP resources/overflow), responsive-testing (320 / 375 / 412 / 1280 + HTTP), accessibility-auditing (aria tree, labels, headings, keyboard Escape, inert).

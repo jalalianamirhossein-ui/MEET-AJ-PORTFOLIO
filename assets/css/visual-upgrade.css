@@ -4087,6 +4087,11 @@ html[dir="rtl"] .hero-actions .btn-modern:hover .btn-text {
   font-size: 0.82rem;
   font-weight: 700;
   color: var(--color-text-muted);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
 }
 
 .article-search-row {
@@ -4166,13 +4171,34 @@ html[dir="rtl"] .hero-actions .btn-modern:hover .btn-text {
   color: var(--color-text-muted);
 }
 
+.article-page .article-banner {
+  display: block;
+  margin: 1.25rem 0 0;
+}
+
+.article-page .banner-card {
+  display: block;
+  max-width: 52rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.article-page .banner-content {
+  display: none;
+}
+
+.article-page .article-hero-thumbnail,
 .article-hero-thumbnail {
   display: block;
   width: 100%;
   height: auto;
+  max-height: 28rem;
   aspect-ratio: 16 / 10;
   object-fit: cover;
   border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-card);
 }
 
 body.index-page .section {
@@ -4219,6 +4245,12 @@ body.index-page #resume.section {
   border-radius: var(--radius-control);
   background: var(--color-surface);
   color: var(--color-text);
+}
+
+.php-email-form .form-float input,
+.php-email-form .form-float select,
+.php-email-form .form-float textarea {
+  padding: 1.15rem 0.9rem 0.45rem;
 }
 
 .php-email-form textarea {
