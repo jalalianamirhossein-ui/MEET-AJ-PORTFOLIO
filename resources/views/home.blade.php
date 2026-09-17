@@ -237,7 +237,7 @@
       disabled
     />
     <link href="/assets/css/visual-upgrade.css?v=1703" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1802" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1803" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -375,7 +375,7 @@
   =============================================== -->
 
   <body class="index-page">
-    <a class="skip-link" href="#main-content" data-en="Skip to main content" data-fa="رفتن به محتوای اصلی">Skip to main content</a>
+    <a class="skip-link" href="#main-content" data-en="Skip to main content" data-fa="???? ?? ?????? ????">Skip to main content</a>
     <!-- ===============================================
     ==================== HEADER SECTION ================
     =============================================== -->
@@ -510,13 +510,13 @@
       <!-- ===============================================
       ==================== NAVIGATION MENU ================
       =============================================== -->
-      <nav id="navmenu" class="navmenu" role="navigation" aria-label="Primary" data-en-aria-label="Primary" data-fa-aria-label="منوی اصلی">
+      <nav id="navmenu" class="navmenu" role="navigation" aria-label="Primary" data-en-aria-label="Primary" data-fa-aria-label="???? ????">
         <ul>
           <!-- Home Section -->
           <li>
             <a href="#hero" class="active" aria-current="page"
               ><i class="bi bi-house navicon"></i
-              ><span data-en="Home" data-fa="صفحه اصلی">Home</span></a
+              ><span data-en="Home" data-fa="???? ????">Home</span></a
             >
           </li>
 
@@ -524,7 +524,7 @@
           <li>
             <a href="#about"
               ><i class="bi bi-person navicon"></i
-              ><span data-en="About" data-fa="درباره من">About</span></a
+              ><span data-en="About" data-fa="?????? ??">About</span></a
             >
           </li>
 
@@ -532,7 +532,7 @@
           <li>
             <a href="#resume"
               ><i class="bi bi-file-earmark-text navicon"></i
-              ><span data-en="Resume" data-fa="رزومه کاری">Resume</span></a
+              ><span data-en="Resume" data-fa="????? ????">Resume</span></a
             >
           </li>
 
@@ -540,7 +540,7 @@
           <li>
             <a href="#services"
               ><i class="bi bi-hdd-stack navicon"></i
-              ><span data-en="Services" data-fa="خدمات">Services</span></a
+              ><span data-en="Services" data-fa="?????">Services</span></a
             >
           </li>
 
@@ -548,7 +548,7 @@
           <li>
             <a href="#portfolio"
               ><i class="bi bi-images navicon"></i
-              ><span data-en="Articles" data-fa="مقالات">Articles</span></a
+              ><span data-en="Articles" data-fa="??????">Articles</span></a
             >
           </li>
 
@@ -556,7 +556,7 @@
           <li>
             <a href="#testimonials"
               ><i class="bi bi-menu-button navicon"></i
-              ><span data-en="Testimonials" data-fa="نظرات"
+              ><span data-en="Testimonials" data-fa="?????"
                 >Testimonials</span
               ></a
             >
@@ -566,7 +566,7 @@
           <li>
             <a href="#contact"
               ><i class="bi bi-envelope navicon"></i
-              ><span data-en="Contact" data-fa="تماس با من">Contact</span></a
+              ><span data-en="Contact" data-fa="???? ?? ??">Contact</span></a
             >
           </li>
         </ul>
@@ -582,12 +582,12 @@
       type="button"
       aria-label="Open menu"
       data-en-aria-label="Open menu"
-      data-fa-aria-label="باز کردن منو"
+      data-fa-aria-label="??? ???? ???"
       aria-expanded="false"
       aria-controls="header"
     >
       <span class="menu-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
-      <span class="sr-only" data-en="Open menu" data-fa="باز کردن منو">Open menu</span>
+      <span class="sr-only" data-en="Open menu" data-fa="??? ???? ???">Open menu</span>
     </button>
 
     <!-- ===============================================
@@ -633,7 +633,7 @@
                   <span
                     class="badge-text"
                     data-en="Available for Work"
-                    data-fa="آماده برای همکاری"
+                    data-fa="????? ???? ??????"
                     >Available for Work</span
                   >
                   <div class="badge-dot"></div>
@@ -643,7 +643,7 @@
                 <h1
                   class="hero-title"
                   data-en="AmirHossein Jalalian"
-                  data-fa="امیرحسین جلالیان"
+                  data-fa="???????? ???????"
                   data-aos="fade-up"
                   data-aos-delay="400"
                 >
@@ -663,7 +663,7 @@
                 <p
                   class="hero-role"
                   data-en="Network and IT Infrastructure Specialist"
-                  data-fa="متخصص شبکه و زیرساخت فناوری اطلاعات"
+                  data-fa="????? ???? ? ??????? ?????? ???????"
                 >
                   Network and IT Infrastructure Specialist
                 </p>
@@ -675,7 +675,7 @@
                   data-aos-delay="600"
                 >
                   <p class="hero-subtitle">
-                    <span class="subtitle-prefix" data-en="I'm a" data-fa="من"
+                    <span class="subtitle-prefix" data-en="I'm a" data-fa="??"
                       >I'm a</span
                     >
                     <span
@@ -699,12 +699,12 @@
                     href="#contact"
                     class="btn btn-primary btn-modern"
                     data-en="Get In Touch"
-                    data-fa="تماس با من"
+                    data-fa="???? ?? ??"
                   >
                     <span
                       class="btn-text"
                       data-en="Get In Touch"
-                      data-fa="تماس با من"
+                      data-fa="???? ?? ??"
                       >Get In Touch</span
                     >
                     <span class="btn-icon" aria-hidden="true"><i class="bi bi-envelope"></i></span>
@@ -713,9 +713,9 @@
                     href="#portfolio"
                     class="btn btn-outline-light btn-modern"
                     data-en="Articles"
-                    data-fa="مقالات"
+                    data-fa="??????"
                   >
-                    <span class="btn-text" data-en="Articles" data-fa="مقالات"
+                    <span class="btn-text" data-en="Articles" data-fa="??????"
                       >Articles</span
                     >
                     <span class="btn-icon" aria-hidden="true"><i class="bi bi-journal-text"></i></span>
@@ -734,48 +734,48 @@
       <section id="about" class="about section about-premium">
         <div class="container about-stage">
           <div class="about-copy" data-aos="fade-up">
-            <p class="about-kicker" data-en="IT Infrastructure Specialist" data-fa="متخصص زیرساخت فناوری اطلاعات">IT Infrastructure Specialist</p>
-            <h2 data-en="Get to Know Me" data-fa="بهتر منو بشناس">Get to Know Me</h2>
-            <p class="about-headline" data-en="Designing, managing, and optimizing enterprise systems." data-fa="طراحی، مدیریت و بهینه‌سازی سیستم‌های سازمانی.">Designing, managing, and optimizing enterprise systems.</p>
+            <p class="about-kicker" data-en="IT Infrastructure Specialist" data-fa="????? ??????? ?????? ???????">IT Infrastructure Specialist</p>
+            <h2 data-en="Get to Know Me" data-fa="???? ??? ?????">Get to Know Me</h2>
+            <p class="about-headline" data-en="Designing, managing, and optimizing enterprise systems." data-fa="?????? ?????? ? ?????????? ????????? ???????.">Designing, managing, and optimizing enterprise systems.</p>
             <div class="about-profile">
               <div class="about-photo">
                 <img src="/assets/img/my-profile-img-2.jpg" alt="Amirhossein Jalalian Profile" width="200" height="200" loading="lazy" sizes="120px" />
               </div>
               <div class="about-profile-meta">
-                <p class="about-name" data-en="Amirhossein Jalalian" data-fa="امیرحسین جلالیان">Amirhossein Jalalian</p>
-                <p class="about-role" data-en="Network and IT Infrastructure Specialist" data-fa="متخصص شبکه و زیرساخت فناوری اطلاعات">Network and IT Infrastructure Specialist</p>
-                <p class="about-place"><i class="bi bi-geo-alt" aria-hidden="true"></i> <span data-en="Tehran, Iran" data-fa="تهران، ایران">Tehran, Iran</span></p>
+                <p class="about-name" data-en="Amirhossein Jalalian" data-fa="???????? ???????">Amirhossein Jalalian</p>
+                <p class="about-role" data-en="Network and IT Infrastructure Specialist" data-fa="????? ???? ? ??????? ?????? ???????">Network and IT Infrastructure Specialist</p>
+                <p class="about-place"><i class="bi bi-geo-alt" aria-hidden="true"></i> <span data-en="Tehran, Iran" data-fa="?????? ?????">Tehran, Iran</span></p>
               </div>
             </div>
-            <p class="about-lead" data-en="I am Amirhossein Jalalian, a Network and IT Infrastructure Specialist with extensive experience in designing, managing, and optimizing enterprise systems. My goal is to provide reliable, secure, and scalable solutions that help organizations operate more efficiently while reducing risks." data-fa="من یک متخصص شبکه و زیرساخت فناوری اطلاعات هستم که با علاقه‌مندی در این حوزه فعالیت می‌کنم. در سال‌های کاری‌ام تجربه گسترده‌ای در طراحی، پیاده‌سازی و مدیریت سیستم‌های سازمانی به دست آورده‌ام و تلاش می‌کنم همیشه راهکارهایی ارائه دهم که پایدار، امن و قابل‌گسترش باشند. با تسلط بر Windows Server، تجهیزات Cisco و MikroTik، مجازی‌سازی و مجموعه‌ای از فناوری‌های زیرساختی، می‌کوشم فرآیندهای سازمانی را بهینه کنم و ریسک‌های عملیاتی را کاهش دهم. در کار، نتیجه‌گرایی، دقت فنی و مسئولیت‌پذیری برای من اصل است و باور دارم موفقیت هر پروژه بدون همکاری و هماهنگی تیمی محقق نمی‌شود.">
+            <p class="about-lead" data-en="I am Amirhossein Jalalian, a Network and IT Infrastructure Specialist with extensive experience in designing, managing, and optimizing enterprise systems. My goal is to provide reliable, secure, and scalable solutions that help organizations operate more efficiently while reducing risks." data-fa="?? ?? ????? ???? ? ??????? ?????? ??????? ???? ?? ?? ?????????? ?? ??? ???? ?????? ??????. ?? ??????? ??????? ????? ????????? ?? ?????? ?????????? ? ?????? ????????? ??????? ?? ??? ???????? ? ???? ?????? ????? ?????????? ????? ??? ?? ??????? ??? ? ?????????? ?????. ?? ???? ?? Windows Server? ??????? Cisco ? MikroTik? ?????????? ? ????????? ?? ?????????? ????????? ??????? ????????? ??????? ?? ????? ??? ? ???????? ??????? ?? ???? ???. ?? ???? ???????????? ??? ??? ? ????????????? ???? ?? ??? ??? ? ???? ???? ?????? ?? ????? ???? ?????? ? ??????? ???? ???? ???????.">
               I am Amirhossein Jalalian, a Network and IT Infrastructure Specialist with extensive experience in designing, managing, and optimizing enterprise systems. My goal is to provide reliable, secure, and scalable solutions that help organizations operate more efficiently while reducing risks.
             </p>
-            <p class="about-lead" data-en="I have extensive experience in Windows Server, Cisco and MikroTik technologies, virtualization, and other IT infrastructure solutions. My approach is always results-driven, carrying out each project with accountability, precision, and strong teamwork." data-fa="من تجربه‌ای گسترده در Windows Server، تجهیزات سیسکو و میکروتیک، مجازی‌سازی و سایر فناوری‌های زیرساختی دارم. رویکرد من در کار، همواره نتیجه‌محور است و هر پروژه را با مسئولیت‌پذیری بالا، دقت فنی و روحیه کار تیمی به سرانجام می‌رسانم.">
+            <p class="about-lead" data-en="I have extensive experience in Windows Server, Cisco and MikroTik technologies, virtualization, and other IT infrastructure solutions. My approach is always results-driven, carrying out each project with accountability, precision, and strong teamwork." data-fa="?? ???????? ?????? ?? Windows Server? ??????? ????? ? ????????? ?????????? ? ???? ?????????? ???????? ????. ?????? ?? ?? ???? ?????? ?????????? ??? ? ?? ????? ?? ?? ????????????? ????? ??? ??? ? ????? ??? ???? ?? ??????? ????????.">
               I have extensive experience in Windows Server, Cisco and MikroTik technologies, virtualization, and other IT infrastructure solutions. My approach is always results-driven, carrying out each project with accountability, precision, and strong teamwork.
             </p>
             <dl class="about-facts">
               <div>
-                <dt data-en="Birthday" data-fa="تاریخ تولد">Birthday</dt>
-                <dd data-en="19 July 1999" data-fa="۲۸ تیر ۱۳۷۸">19 July 1999</dd>
+                <dt data-en="Birthday" data-fa="????? ????">Birthday</dt>
+                <dd data-en="19 July 1999" data-fa="?? ??? ????">19 July 1999</dd>
               </div>
               <div>
-                <dt data-en="Degree" data-fa="مدرک تحصیلی">Degree</dt>
-                <dd data-en="Bachelor of IT Engineering" data-fa="کارشناسی مهندسی فناوری اطلاعات">Bachelor of IT Engineering</dd>
+                <dt data-en="Degree" data-fa="???? ??????">Degree</dt>
+                <dd data-en="Bachelor of IT Engineering" data-fa="???????? ?????? ?????? ???????">Bachelor of IT Engineering</dd>
               </div>
               <div>
-                <dt data-en="Experience" data-fa="تجربه">Experience</dt>
-                <dd data-en="5+ Years" data-fa="بیش از ۵ سال">5+ Years</dd>
+                <dt data-en="Experience" data-fa="?????">Experience</dt>
+                <dd data-en="5+ Years" data-fa="??? ?? ? ???">5+ Years</dd>
               </div>
             </dl>
             <div class="about-actions">
-              <a class="btn btn-primary" href="#contact" data-en="Get In Touch" data-fa="تماس با من">Get In Touch</a>
-              <a class="btn btn-outline-primary" href="#services" data-en="Services" data-fa="خدمات">Services</a>
+              <a class="btn btn-primary" href="#contact" data-en="Get In Touch" data-fa="???? ?? ??">Get In Touch</a>
+              <a class="btn btn-outline-primary" href="#services" data-en="Services" data-fa="?????">Services</a>
             </div>
           </div>
 
           <div class="about-visual" data-aos="fade-up" data-aos-delay="120">
             <div class="about-core is-core" data-about-core>
-              <p class="about-core-label" data-en="Infrastructure Core" data-fa="هسته زیرساخت">Infrastructure Core</p>
+              <p class="about-core-label" data-en="Infrastructure Core" data-fa="???? ???????">Infrastructure Core</p>
               <div class="about-core-canvas" dir="ltr">
                 <div class="about-core-grid" aria-hidden="true"></div>
                 <svg class="about-core-svg" viewBox="0 0 640 420" aria-hidden="true" focusable="false">
@@ -792,47 +792,47 @@
                 </button>
                 <button type="button" class="about-node about-node--infra" data-panel="infra" aria-pressed="false" aria-controls="about-core-detail">
                   <span class="about-node-status" aria-hidden="true"></span>
-                  <span data-en="Infrastructure" data-fa="زیرساخت">Infrastructure</span>
+                  <span data-en="Infrastructure" data-fa="???????">Infrastructure</span>
                 </button>
                 <button type="button" class="about-node about-node--devops" data-panel="devops" aria-pressed="false" aria-controls="about-core-detail">
                   <span class="about-node-status" aria-hidden="true"></span>
-                  <span data-en="DevOps" data-fa="دواپس">DevOps</span>
+                  <span data-en="DevOps" data-fa="?????">DevOps</span>
                 </button>
                 <button type="button" class="about-node about-node--net" data-panel="net" aria-pressed="false" aria-controls="about-core-detail">
                   <span class="about-node-status" aria-hidden="true"></span>
-                  <span data-en="Networking" data-fa="شبکه">Networking</span>
+                  <span data-en="Networking" data-fa="????">Networking</span>
                 </button>
                 <button type="button" class="about-node about-node--virt" data-panel="virt" aria-pressed="false" aria-controls="about-core-detail">
                   <span class="about-node-status" aria-hidden="true"></span>
-                  <span data-en="Virtualization" data-fa="مجازی‌سازی">Virtualization</span>
+                  <span data-en="Virtualization" data-fa="??????????">Virtualization</span>
                 </button>
                 <button type="button" class="about-node about-node--mon" data-panel="mon" aria-pressed="false" aria-controls="about-core-detail">
                   <span class="about-node-status" aria-hidden="true"></span>
-                  <span data-en="Monitoring" data-fa="مانیتورینگ">Monitoring</span>
+                  <span data-en="Monitoring" data-fa="??????????">Monitoring</span>
                 </button>
                 <button type="button" class="about-node about-node--auto" data-panel="auto" aria-pressed="false" aria-controls="about-core-detail">
                   <span class="about-node-status" aria-hidden="true"></span>
-                  <span data-en="Automation" data-fa="اتوماسیون">Automation</span>
+                  <span data-en="Automation" data-fa="?????????">Automation</span>
                 </button>
               </div>
               <div class="about-core-detail" id="about-core-detail" aria-live="polite">
-                <p data-panel="core" class="is-active" data-en="Reliable, secure, and scalable solutions for enterprise systems ? Windows Server, Cisco, MikroTik, and virtualization." data-fa="راهکارهای پایدار، امن و مقیاس‌پذیر برای سیستم‌های سازمانی — Windows Server، سیسکو، میکروتیک و مجازی‌سازی.">Reliable, secure, and scalable solutions for enterprise systems ? Windows Server, Cisco, MikroTik, and virtualization.</p>
-                <p data-panel="infra" hidden data-en="Linux administration (Ubuntu, CentOS) and Microsoft services (Active Directory, DNS, DFS, WDS, WSUS, NTP)." data-fa="مدیریت لینوکس (اوبونتو، سنت‌اواس) و خدمات مایکروسافت (Active Directory، DNS، DFS، WDS، WSUS، NTP).">Linux administration (Ubuntu, CentOS) and Microsoft services (Active Directory, DNS, DFS, WDS, WSUS, NTP).</p>
-                <p data-panel="devops" hidden data-en="Docker containerization, CI/CD pipelines, and GitLab / Jenkins workflows." data-fa="کانتینریزاسیون Docker، خط لوله CI/CD و گردش‌کار GitLab / Jenkins.">Docker containerization, CI/CD pipelines, and GitLab / Jenkins workflows.</p>
-                <p data-panel="net" hidden data-en="Network design with Cisco and MikroTik, firewall and security rules, VPN, and VoIP infrastructure." data-fa="طراحی شبکه با سیسکو و میکروتیک، فایروال و قوانین امنیتی، VPN و زیرساخت VoIP.">Network design with Cisco and MikroTik, firewall and security rules, VPN, and VoIP infrastructure.</p>
-                <p data-panel="virt" hidden data-en="VMware vSphere and KVM virtualization, plus cloud platforms (AWS, Azure)." data-fa="مجازی‌سازی VMware vSphere و KVM، و پلتفرم‌های ابری (AWS، Azure).">VMware vSphere and KVM virtualization, plus cloud platforms (AWS, Azure).</p>
-                <p data-panel="mon" hidden data-en="Zabbix, Grafana, Cacti, and Redgate monitoring ? dashboards and alerting." data-fa="مانیتورینگ Zabbix، Grafana، Cacti و Redgate — داشبورد و هشدار.">Zabbix, Grafana, Cacti, and Redgate monitoring ? dashboards and alerting.</p>
-                <p data-panel="auto" hidden data-en="CI/CD pipeline setup and infrastructure automation, including Ansible and Terraform where the project requires it." data-fa="راه‌اندازی CI/CD و خودکارسازی زیرساخت، شامل Ansible و Terraform در صورت نیاز پروژه.">CI/CD pipeline setup and infrastructure automation, including Ansible and Terraform where the project requires it.</p>
+                <p data-panel="core" class="is-active" data-en="Reliable, secure, and scalable solutions for enterprise systems ? Windows Server, Cisco, MikroTik, and virtualization." data-fa="????????? ??????? ??? ? ?????????? ???? ????????? ??????? ? Windows Server? ?????? ???????? ? ??????????.">Reliable, secure, and scalable solutions for enterprise systems ? Windows Server, Cisco, MikroTik, and virtualization.</p>
+                <p data-panel="infra" hidden data-en="Linux administration (Ubuntu, CentOS) and Microsoft services (Active Directory, DNS, DFS, WDS, WSUS, NTP)." data-fa="?????? ?????? (???????? ????????) ? ????? ?????????? (Active Directory? DNS? DFS? WDS? WSUS? NTP).">Linux administration (Ubuntu, CentOS) and Microsoft services (Active Directory, DNS, DFS, WDS, WSUS, NTP).</p>
+                <p data-panel="devops" hidden data-en="Docker containerization, CI/CD pipelines, and GitLab / Jenkins workflows." data-fa="?????????????? Docker? ?? ???? CI/CD ? ???????? GitLab / Jenkins.">Docker containerization, CI/CD pipelines, and GitLab / Jenkins workflows.</p>
+                <p data-panel="net" hidden data-en="Network design with Cisco and MikroTik, firewall and security rules, VPN, and VoIP infrastructure." data-fa="????? ???? ?? ????? ? ????????? ??????? ? ?????? ??????? VPN ? ??????? VoIP.">Network design with Cisco and MikroTik, firewall and security rules, VPN, and VoIP infrastructure.</p>
+                <p data-panel="virt" hidden data-en="VMware vSphere and KVM virtualization, plus cloud platforms (AWS, Azure)." data-fa="?????????? VMware vSphere ? KVM? ? ?????????? ???? (AWS? Azure).">VMware vSphere and KVM virtualization, plus cloud platforms (AWS, Azure).</p>
+                <p data-panel="mon" hidden data-en="Zabbix, Grafana, Cacti, and Redgate monitoring ? dashboards and alerting." data-fa="?????????? Zabbix? Grafana? Cacti ? Redgate ? ??????? ? ?????.">Zabbix, Grafana, Cacti, and Redgate monitoring ? dashboards and alerting.</p>
+                <p data-panel="auto" hidden data-en="CI/CD pipeline setup and infrastructure automation, including Ansible and Terraform where the project requires it." data-fa="?????????? CI/CD ? ?????????? ???????? ???? Ansible ? Terraform ?? ???? ???? ?????.">CI/CD pipeline setup and infrastructure automation, including Ansible and Terraform where the project requires it.</p>
               </div>
             </div>
           </div>
         </div>
 
         <div class="container about-domains" data-aos="fade-up">
-          <h3 class="about-domains-title" data-en="Expertise" data-fa="تخصص‌ها">Expertise</h3>
+          <h3 class="about-domains-title" data-en="Expertise" data-fa="???????">Expertise</h3>
           <div class="about-domain-grid">
             <section class="about-domain">
-              <h4 data-en="Infrastructure" data-fa="زیرساخت">Infrastructure</h4>
+              <h4 data-en="Infrastructure" data-fa="???????">Infrastructure</h4>
               <ul>
                 <li>Linux</li>
                 <li>Windows Server</li>
@@ -841,7 +841,7 @@
               </ul>
             </section>
             <section class="about-domain">
-              <h4 data-en="Networking" data-fa="شبکه">Networking</h4>
+              <h4 data-en="Networking" data-fa="????">Networking</h4>
               <ul>
                 <li>Cisco</li>
                 <li>MikroTik</li>
@@ -850,7 +850,7 @@
               </ul>
             </section>
             <section class="about-domain">
-              <h4 data-en="DevOps" data-fa="دواپس">DevOps</h4>
+              <h4 data-en="DevOps" data-fa="?????">DevOps</h4>
               <ul>
                 <li>Docker</li>
                 <li>CI/CD</li>
@@ -861,7 +861,7 @@
               </ul>
             </section>
             <section class="about-domain">
-              <h4 data-en="Monitoring" data-fa="مانیتورینگ">Monitoring</h4>
+              <h4 data-en="Monitoring" data-fa="??????????">Monitoring</h4>
               <ul>
                 <li>Zabbix</li>
                 <li>Grafana</li>
@@ -870,12 +870,12 @@
               </ul>
             </section>
             <section class="about-domain">
-              <h4 data-en="Security" data-fa="امنیت">Security</h4>
+              <h4 data-en="Security" data-fa="?????">Security</h4>
               <ul>
-                <li data-en="Firewall &amp; security rules" data-fa="فایروال و قوانین امنیتی">Firewall &amp; security rules</li>
+                <li data-en="Firewall &amp; security rules" data-fa="??????? ? ?????? ??????">Firewall &amp; security rules</li>
                 <li>Active Directory</li>
                 <li>VPN</li>
-                <li data-en="Backup (Veeam)" data-fa="پشتیبان‌گیری (Veeam)">Backup (Veeam)</li>
+                <li data-en="Backup (Veeam)" data-fa="???????????? (Veeam)">Backup (Veeam)</li>
               </ul>
             </section>
           </div>
@@ -883,33 +883,33 @@
 
         <div class="container about-secondary">
           <div class="about-values">
-            <h3 data-en="Core Values" data-fa="ارزش‌های اصلی">Core Values</h3>
+            <h3 data-en="Core Values" data-fa="???????? ????">Core Values</h3>
             <ul class="about-value-list">
               <li>
-                <h4 data-en="Integrity" data-fa="صداقت">Integrity</h4>
-                <p data-en="Honest and transparent in all professional interactions" data-fa="صادق و شفاف در تمام تعاملات حرفه‌ای">Honest and transparent in all professional interactions</p>
+                <h4 data-en="Integrity" data-fa="?????">Integrity</h4>
+                <p data-en="Honest and transparent in all professional interactions" data-fa="???? ? ???? ?? ???? ??????? ???????">Honest and transparent in all professional interactions</p>
               </li>
               <li>
-                <h4 data-en="Excellence" data-fa="تعالی">Excellence</h4>
-                <p data-en="Committed to delivering the highest quality solutions" data-fa="متعهد به ارائه راهکارهای با بالاترین کیفیت">Committed to delivering the highest quality solutions</p>
+                <h4 data-en="Excellence" data-fa="?????">Excellence</h4>
+                <p data-en="Committed to delivering the highest quality solutions" data-fa="????? ?? ????? ????????? ?? ???????? ?????">Committed to delivering the highest quality solutions</p>
               </li>
               <li>
-                <h4 data-en="Collaboration" data-fa="همکاری">Collaboration</h4>
-                <p data-en="Strong believer in teamwork and collective success" data-fa="باور قوی به کار تیمی و موفقیت جمعی">Strong believer in teamwork and collective success</p>
+                <h4 data-en="Collaboration" data-fa="??????">Collaboration</h4>
+                <p data-en="Strong believer in teamwork and collective success" data-fa="???? ??? ?? ??? ???? ? ?????? ????">Strong believer in teamwork and collective success</p>
               </li>
               <li>
-                <h4 data-en="Innovation" data-fa="نوآوری">Innovation</h4>
-                <p data-en="Continuously learning and adapting to new technologies" data-fa="یادگیری مداوم و سازگاری با فناوری‌های جدید">Continuously learning and adapting to new technologies</p>
+                <h4 data-en="Innovation" data-fa="??????">Innovation</h4>
+                <p data-en="Continuously learning and adapting to new technologies" data-fa="??????? ????? ? ??????? ?? ?????????? ????">Continuously learning and adapting to new technologies</p>
               </li>
             </ul>
           </div>
           <blockquote class="about-quote">
-            <p data-en="Success is born of sustained effort, continuous learning, and faith in the journey." data-fa="موفقیت زاده تلاش مستمر، یادگیری مداوم و ایمان به مسیر است.">Success is born of sustained effort, continuous learning, and faith in the journey.</p>
-            <footer data-en="? My Personal Motto" data-fa="— شعار شخصی من">? My Personal Motto</footer>
+            <p data-en="Success is born of sustained effort, continuous learning, and faith in the journey." data-fa="?????? ???? ???? ?????? ??????? ????? ? ????? ?? ???? ???.">Success is born of sustained effort, continuous learning, and faith in the journey.</p>
+            <footer data-en="? My Personal Motto" data-fa="? ???? ???? ??">? My Personal Motto</footer>
           </blockquote>
           <div class="about-philosophy">
-            <h3 data-en="My Philosophy" data-fa="فلسفه من">My Philosophy</h3>
-            <p data-en="I value honesty, patience, and accountability as core principles. I believe that respect for the profession and adherence to fundamental values form the foundation for achieving long-term and sustainable success in the field of Information Technology." data-fa="برای من، صداقت،  صبر و مسئولیت‌پذیری ارزش‌های اساسی هستند. باور دارم که احترام به حرفه و پایبندی به اصول بنیادین، زیربنای دستیابی به موفقیت پایدار و بلندمدت در حوزه فناوری اطلاعات است.">
+            <h3 data-en="My Philosophy" data-fa="????? ??">My Philosophy</h3>
+            <p data-en="I value honesty, patience, and accountability as core principles. I believe that respect for the profession and adherence to fundamental values form the foundation for achieving long-term and sustainable success in the field of Information Technology." data-fa="???? ??? ??????  ??? ? ????????????? ???????? ????? ?????. ???? ???? ?? ?????? ?? ???? ? ??????? ?? ???? ???????? ??????? ??????? ?? ?????? ?????? ? ??????? ?? ???? ?????? ??????? ???.">
               I value honesty, patience, and accountability as core principles. I believe that respect for the profession and adherence to fundamental values form the foundation for achieving long-term and sustainable success in the field of Information Technology.
             </p>
           </div>
@@ -1015,7 +1015,7 @@
         ==================== SECTION TITLE ==================
         =============================================== -->
         <div class="container section-title" data-aos="fade-up">
-          <h2 data-en="Skills" data-fa="????????">Skills</h2>
+          <h2 data-en="Skills" data-fa="مهارت‌ها">Skills</h2>
           <p
             data-en="My core technical and professional skills in computer networks and IT infrastructure."
             data-fa="????????? ???? ??? ? ??????? ?? ?? ???????? ????????? ? ??????? ?????? ???????."
@@ -1026,362 +1026,59 @@
         </div>
         <!-- End Section Title -->
 
-        <!-- ===============================================
-        ==================== SKILLS CONTENT ==================
-        =============================================== -->
-        <div class="container" data-aos="fade-up" data-aos-delay="100">
-          <div class="row skills-content skills-animation">
-            <!-- ===============================================
-            ==================== LEFT COLUMN ====================
-            =============================================== -->
-            <div class="col-lg-6">
-              <div class="progress">
-                <span class="skill">
-                  <span
-                    data-en="Network Design (Cisco, MikroTik)"
-                    data-fa="????? ???? (?????? ????????)"
-                    >Network Design (Cisco, MikroTik)</span
-                  >
-                  <i class="val">100%</i>
-                </span>
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="100"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill">
-                  <span
-                    data-en="Firewall & Security Rules (MikroTik, Cisco)"
-                    data-fa="??????? ? ?????? ?????? (????????? ?????)"
-                    >Firewall & Security Rules (MikroTik, Cisco)</span
-                  >
-                  <i class="val">92%</i>
-                </span>
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="92"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill">
-                  <span
-                    data-en="Linux Administration (Ubuntu, CentOS)"
-                    data-fa="?????? ?????? (???????? ????????)"
-                    >Linux Administration (Ubuntu, CentOS)</span
-                  >
-                  <i class="val">90%</i>
-                </span>
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="90"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill">
-                  <span
-                    data-en="Microsoft Services (AD, DNS, DFS, WDS, WSUS, NTP)"
-                    data-fa="????? ?????????? (AD? DNS? DFS? WDS? WSUS? NTP)"
-                    >Microsoft Services (AD, DNS, DFS, WDS, WSUS, NTP)</span
-                  >
-                  <i class="val">88%</i>
-                </span>
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="88"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill">
-                  <span
-                    data-en="Virtualization (VMware vSphere, KVM)"
-                    data-fa="?????????? (VMware vSphere? KVM)"
-                    >Virtualization (VMware vSphere, KVM)</span
-                  >
-                  <i class="val">77%</i>
-                </span>
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="77"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill"
-                  ><span
-                    data-en="SQL Server (Clustering, HA, Monitoring)"
-                    data-fa="SQL Server (?????????? HA? ?????)"
-                    >SQL Server (Clustering, HA, Monitoring)</span
-                  >
-                  <i class="val">66%</i></span
-                >
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="66"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill"
-                  ><span
-                    data-en="Backup Systems (Veeam Backup & NAS)"
-                    data-fa="????????? ???????????? (Veeam Backup & NAS)"
-                    >Backup Systems (Veeam Backup & NAS)</span
-                  >
-                  <i class="val">98%</i></span
-                >
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="98"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill"
-                  ><span
-                    data-en="Monitoring Tools (Zabbix, Cacti, Redgate)"
-                    data-fa="???????? ????? (Zabbix? Cacti? Redgate)"
-                    >Monitoring Tools (Zabbix, Cacti, Redgate)</span
-                  >
-                  <i class="val">94%</i></span
-                >
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="94"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill"
-                  ><span
-                    data-en="VPN & Tunnel Configuration"
-                    data-fa="???????? VPN ? ????"
-                    >VPN & Tunnel Configuration</span
-                  >
-                  <i class="val">96%</i></span
-                >
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="96"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill"
-                  ><span
-                    data-en="Cloud Platforms (AWS, Azure)"
-                    data-fa="?????????? ???? (AWS? Azure)"
-                    >Cloud Platforms (AWS, Azure)</span
-                  >
-                  <i class="val">66%</i></span
-                >
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="66"
-                  ></div>
-                </div>
-              </div>
-            </div>
-            <!-- End Left Column -->
-
-            <!-- ===============================================
-            ==================== RIGHT COLUMN ===================
-            =============================================== -->
-            <div class="col-lg-6">
-              <div class="progress">
-                <span class="skill"
-                  ><span data-en="Technical Documentation" data-fa="مستندات فنی"
-                    >Technical Documentation</span
-                  >
-                  <i class="val">88%</i></span
-                >
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="88"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill"
-                  ><span
-                    data-en="Diagram & Network Mapping"
-                    data-fa="?????? ? ??????????? ????"
-                    >Diagram & Network Mapping</span
-                  >
-                  <i class="val">80%</i></span
-                >
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="80"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill"
-                  ><span
-                    data-en="System Analysis & Troubleshooting"
-                    data-fa="????? ????? ? ????????"
-                    >System Analysis & Troubleshooting</span
-                  >
-                  <i class="val">95%</i></span
-                >
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="95"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill"
-                  ><span
-                    data-en="Project Planning & IT Management"
-                    data-fa="??????????? ????? ? ?????? IT"
-                    >Project Planning & IT Management</span
-                  >
-                  <i class="val">88%</i></span
-                >
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="88"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill"
-                  ><span
-                    data-en="Team Collaboration & Communication"
-                    data-fa="?????? ???? ? ????????"
-                    >Team Collaboration & Communication</span
-                  >
-                  <i class="val">85%</i></span
-                >
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="85"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill"
-                  ><span
-                    data-en="Problem Solving Under Pressure"
-                    data-fa="?? ????? ??? ????"
-                    >Problem Solving Under Pressure</span
-                  >
-                  <i class="val">92%</i></span
-                >
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="92"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill"
-                  ><span data-en="Security Awareness" data-fa="????? ??????"
-                    >Security Awareness</span
-                  >
-                  <i class="val">90%</i></span
-                >
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="90"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill"
-                  ><span
-                    data-en="Adaptability & Continuous Learning"
-                    data-fa="???????????? ? ??????? ?????"
-                    >Adaptability & Continuous Learning</span
-                  >
-                  <i class="val">100%</i></span
-                >
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="100"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill"
-                  ><span
-                    data-en="Leadership & Mentoring"
-                    data-fa="????? ? ???????"
-                    >Leadership & Mentoring</span
-                  >
-                  <i class="val">75%</i></span
-                >
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="75"
-                  ></div>
-                </div>
-              </div>
-              <div class="progress">
-                <span class="skill"
-                  ><span
-                    data-en="Client Communication & Reporting"
-                    data-fa="?????? ?? ????? ? ?????????"
-                    >Client Communication & Reporting</span
-                  >
-                  <i class="val">80%</i></span
-                >
-                <div class="progress-bar-wrap">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuenow="80"
-                  ></div>
-                </div>
-              </div>
-            </div>
-            <!-- End Right Column -->
+                <div class="container" data-aos="fade-up" data-aos-delay="100">
+          <div class="skills-board">
+            <article class="skill-group">
+              <h3 data-en="Infrastructure" data-fa="زیرساخت">Infrastructure</h3>
+              <ul class="skill-chip-row">
+                <li>Linux</li>
+                <li>Windows Server</li>
+                <li>Active Directory</li>
+                <li>DNS / DFS / WSUS</li>
+                <li data-en="Backup (Veeam)" data-fa="پشتیبان‌گیری (Veeam)">Backup (Veeam)</li>
+              </ul>
+            </article>
+            <article class="skill-group">
+              <h3 data-en="Networking" data-fa="شبکه">Networking</h3>
+              <ul class="skill-chip-row">
+                <li>Cisco</li>
+                <li>MikroTik</li>
+                <li data-en="Firewall" data-fa="فایروال">Firewall</li>
+                <li>VPN</li>
+                <li>VoIP</li>
+              </ul>
+            </article>
+            <article class="skill-group">
+              <h3 data-en="Virtualization & Cloud" data-fa="مجازی‌سازی و ابر">Virtualization & Cloud</h3>
+              <ul class="skill-chip-row">
+                <li>VMware vSphere</li>
+                <li>KVM</li>
+                <li>AWS</li>
+                <li>Azure</li>
+                <li>SQL Server HA</li>
+              </ul>
+            </article>
+            <article class="skill-group">
+              <h3 data-en="DevOps & Operations" data-fa="DevOps و عملیات">DevOps & Operations</h3>
+              <ul class="skill-chip-row">
+                <li>Docker</li>
+                <li>CI/CD</li>
+                <li>GitLab / Jenkins</li>
+                <li>Ansible</li>
+                <li>Terraform</li>
+                <li>Zabbix / Grafana</li>
+              </ul>
+            </article>
+            <article class="skill-group">
+              <h3 data-en="Professional" data-fa="مهارت‌های حرفه‌ای">Professional</h3>
+              <ul class="skill-chip-row">
+                <li data-en="Documentation" data-fa="مستندسازی">Documentation</li>
+                <li data-en="Troubleshooting" data-fa="عیب‌یابی">Troubleshooting</li>
+                <li data-en="Planning" data-fa="برنامه‌ریزی">Planning</li>
+                <li data-en="Communication" data-fa="ارتباط با مشتری">Communication</li>
+              </ul>
+            </article>
           </div>
-          <!-- End Skills Row -->
         </div>
         <!-- End Skills Container -->
       </section>
@@ -1629,7 +1326,7 @@
                       target="_blank"
                       rel="noopener"
                       data-en="Newsha Drinks Co."
-                      data-fa="شرکت نوشیدنی نوشا"
+                      data-fa="???? ??????? ????"
                       >Newsha Drinks Co.</a
                     ></em
                   >
@@ -1908,7 +1605,7 @@
       <section id="services" class="services section">
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
-          <h2 data-en="Services" data-fa="خدمات">Services</h2>
+          <h2 data-en="Services" data-fa="?????">Services</h2>
           <p
             data-en="Professional IT services including network design, system administration, infrastructure management, and technical consulting."
             data-fa="????? ??????? IT ???? ????? ????? ?????? ?????? ?????? ??????? ? ?????? ???."
@@ -1946,10 +1643,10 @@
         ==================== SECTION TITLE ==================
         =============================================== -->
         <div class="container section-title" data-aos="fade-up">
-          <h2 data-en="Articles" data-fa="مقالات">Articles</h2>
+          <h2 data-en="Articles" data-fa="??????">Articles</h2>
           <p
             data-en="A collection of my technical articles and insights on network infrastructure, system administration, and DevOps solutions."
-            data-fa="مجموعه‌ای از مقالات فنی و بینش‌های من در زمینه زیرساخت شبکه، مدیریت سیستم و راهکارهای DevOps."
+            data-fa="????????? ?? ?????? ??? ? ???????? ?? ?? ????? ??????? ????? ?????? ????? ? ????????? DevOps."
           >
             A collection of my technical articles and insights on network
             infrastructure, system administration, and DevOps solutions.
@@ -1999,10 +1696,10 @@
                 class="btn btn-primary load-more-btn"
                 type="button"
                 data-en="Load more articles"
-                data-fa="نمایش مقالات بیشتر"
+                data-fa="????? ?????? ?????"
                 aria-label="Load more articles"
                 data-en-aria-label="Load more articles"
-                data-fa-aria-label="نمایش مقالات بیشتر"
+                data-fa-aria-label="????? ?????? ?????"
               >
                 Load more articles
               </button>
@@ -2106,7 +1803,7 @@
                       <i class="bi bi-whatsapp"></i>
                     </div>
                     <div class="card-content">
-                      <h4 data-en="WhatsApp" data-fa="واتساپ">WhatsApp</h4>
+                      <h4 data-en="WhatsApp" data-fa="??????">WhatsApp</h4>
                       <p
                         data-en="Quick messaging & support"
                         data-fa="?????????? ???? ? ????????"
@@ -2164,7 +1861,7 @@
                       <i class="bi bi-telegram"></i>
                     </div>
                     <div class="card-content">
-                      <h4 data-en="Telegram" data-fa="تلگرام">Telegram</h4>
+                      <h4 data-en="Telegram" data-fa="??????">Telegram</h4>
                       <p data-en="Instant communication" data-fa="?????? ????">
                         Instant communication
                       </p>
@@ -2195,7 +1892,7 @@
                       </h4>
                     </div>
                     <div class="location-content">
-                      <p data-en="Tehran, Iran" data-fa="تهران، ایران">
+                      <p data-en="Tehran, Iran" data-fa="?????? ?????">
                         Tehran, Iran
                       </p>
                       <div class="map-container">
@@ -2311,7 +2008,7 @@
                     <div class="form-group">
                       <label for="subject-field" class="form-label">
                         <i class="bi bi-tag"></i>
-                        <span data-en="Subject" data-fa="موضوع">Subject</span>
+                        <span data-en="Subject" data-fa="?????">Subject</span>
                       </label>
                       <input
                         type="text"
@@ -2351,7 +2048,7 @@
                         <div
                           class="loading"
                           data-en="Sending..."
-                          data-fa="در حال ارسال..."
+                          data-fa="?? ??? ?????..."
                           role="status"
                           aria-live="polite"
                           aria-busy="true"
@@ -2360,7 +2057,7 @@
                             class="bi bi-hourglass-split"
                             aria-hidden="true"
                           ></i>
-                          <span data-en="Sending..." data-fa="در حال ارسال..."
+                          <span data-en="Sending..." data-fa="?? ??? ?????..."
                             >Sending...</span
                           >
                         </div>
@@ -2425,21 +2122,21 @@
             <!-- Brand Section -->
             <div class="footer-brand">
               <h3 class="brand-name">
-                <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
+                <span data-en="AmirHossein Jalalian" data-fa="???????? ???????"
                   >AmirHossein Jalalian</span
                 >
               </h3>
               <p
                 class="brand-title"
                 data-en="IT Infrastructure Specialist"
-                data-fa="متخصص زیرساخت فناوری اطلاعات"
+                data-fa="????? ??????? ?????? ???????"
               >
                 IT Infrastructure Specialist
               </p>
               <p
                 class="brand-description"
                 data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
-                data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
+                data-fa="????? ????????? IT ??????? ??? ? ?????????? ???? ?????? ???????? ???."
               >
                 Delivering reliable, secure, and scalable IT solutions for your
                 business success.
@@ -2451,14 +2148,14 @@
               <h4
                 class="contact-title"
                 data-en="Get In Touch"
-                data-fa="تماس با من"
+                data-fa="???? ?? ??"
               >
                 Get In Touch
               </h4>
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>
-                  <span data-en="Tehran, Iran" data-fa="تهران، ایران"
+                  <span data-en="Tehran, Iran" data-fa="?????? ?????"
                     >Tehran, Iran</span
                   >
                 </div>
@@ -2484,7 +2181,7 @@
                 <h5
                   class="social-title"
                   data-en="Follow Me"
-                  data-fa="من را دنبال کنید"
+                  data-fa="?? ?? ????? ????"
                 >
                   Follow Me
                 </h5>
@@ -2527,22 +2224,22 @@
                   ? <span>2025</span>
                   <strong
                     data-en="AmirHossein Jalalian"
-                    data-fa="امیرحسین جلالیان"
+                    data-fa="???????? ???????"
                     >AmirHossein Jalalian</strong
                   >
                   <span
                     data-en="All Rights Reserved"
-                    data-fa="تمام حقوق محفوظ است"
+                    data-fa="???? ???? ????? ???"
                     >All Rights Reserved</span
                   >
                 </p>
               </div>
               <div class="footer-heart">
-                <span data-en="Made with" data-fa="ساخته شده با"
+                <span data-en="Made with" data-fa="????? ??? ??"
                   >Made with</span
                 >
                 <i class="bi bi-heart-fill"></i>
-                <span data-en="in Iran" data-fa="در ایران">in Iran</span>
+                <span data-en="in Iran" data-fa="?? ?????">in Iran</span>
               </div>
             </div>
           </div>
