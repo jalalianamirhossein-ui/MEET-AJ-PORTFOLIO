@@ -15,9 +15,9 @@
     <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
     <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
-    <link href="/assets/css/lang-toggle.css?v=1204" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1300" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1409" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1602" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">@verbatim
 <a class="skip-link" href="#portfolio">Skip to main content</a>
@@ -249,8 +249,8 @@
         </div>
         <!-- End Section Title -->
 @endverbatim
-        @include('articles.partials.library-toolbar')
         @if ($searching)
+          @include('articles.partials.library-toolbar')
           @include('articles.partials.search-results')
         @else
 @verbatim
@@ -265,97 +265,9 @@
             data-layout="masonry"
             data-sort="original-order"
           >
-            <!-- ===============================================
-            ==================== FILTER BUTTONS =================
-            =============================================== -->
-            <div class="article-filter-bar" data-aos="fade-up" data-aos-delay="100">
-              <span
-                class="article-filter-label"
-                id="article-filter-label"
-                data-en="Category"
-                data-fa="دسته‌بندی"
-                >Category</span
-              >
-              <ul
-                class="portfolio-filters isotope-filters article-chip-row"
-                role="group"
-                aria-labelledby="article-filter-label"
-              >
-                <li>
-                  <button
-                    type="button"
-                    data-filter="*"
-                    data-topic="all"
-                    class="filter-active"
-                    aria-pressed="true"
-                    data-en="All articles"
-                    data-fa="همه مقالات"
-                  >
-                    All articles
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    data-filter=".filter-microsoft"
-                    data-topic="microsoft"
-                    aria-pressed="false"
-                    data-en="Microsoft"
-                    data-fa="مایکروسافت"
-                  >
-                    Microsoft
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    data-filter=".filter-linux"
-                    data-topic="linux"
-                    aria-pressed="false"
-                    data-en="Linux"
-                    data-fa="لینوکس"
-                  >
-                    Linux
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    data-filter=".filter-mikrotik"
-                    data-topic="mikrotik"
-                    aria-pressed="false"
-                    data-en="MikroTik"
-                    data-fa="میکروتیک"
-                  >
-                    MikroTik
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    data-filter=".filter-vmware"
-                    data-topic="vmware"
-                    aria-pressed="false"
-                    data-en="VMware"
-                    data-fa="مجازی‌سازی"
-                  >
-                    VMware
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    data-filter=".filter-others"
-                    data-topic="other"
-                    aria-pressed="false"
-                    data-en="Other"
-                    data-fa="سایر مقالات"
-                  >
-                    Other
-                  </button>
-                </li>
-              </ul>
-            </div>
+            @endverbatim
+            @include('articles.partials.library-toolbar', ['showCategoryFilters' => true])
+@verbatim
             <!-- End Filter Buttons -->
 
             <!-- ===============================================
@@ -541,7 +453,7 @@
     <script src="/assets/vendor/glightbox/js/glightbox.min.js" defer></script>
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1201" defer></script>
+    <script src="/assets/js/main.js?v=1300" defer></script>
     <script src="/assets/js/i18n.js?v=1203" defer></script>
     <script>
       if ("serviceWorker" in navigator) {

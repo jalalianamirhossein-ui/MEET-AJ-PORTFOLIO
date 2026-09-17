@@ -441,68 +441,77 @@
 
       const animateFilter = () => {
         const reduce = prefersReducedMotion() || !state.booted;
-        const duration = 380;
+        const duration = 420;
         const first = reduce ? new Map() : capture();
         const visible = nextVisible();
 
-        items().forEach(clearInlineMotion);
+        items().forEach((el) => {
+          el.getAnimations?.().forEach((anim) => anim.cancel());
+          clearInlineMotion(el);
+        });
         applyVisibility(visible);
         updateLoadMore();
         state.booted = true;
         if (reduce || typeof container.animate !== "function") return;
 
-        const parent = container.getBoundingClientRect();
-        const last = capture();
+        const run = () => {
+          const parent = container.getBoundingClientRect();
+          const last = capture();
 
-        first.forEach((box, el) => {
-          if (last.has(el)) return;
-          el.classList.remove("is-filtered-out", "is-hidden");
-          el.classList.add("is-flip-leave");
-          el.style.position = "absolute";
-          el.style.left = `${box.left - parent.left}px`;
-          el.style.top = `${box.top - parent.top}px`;
-          el.style.width = `${box.width}px`;
-          el.style.zIndex = "0";
-          const leave = el.animate(
-            [
-              { transform: "translate3d(0,0,0)", opacity: 1 },
-              { transform: "translate3d(0,14px,0)", opacity: 0 },
-            ],
-            {
-              duration,
-              easing: "cubic-bezier(0.22, 1, 0.36, 1)",
-              fill: "forwards",
-            },
-          );
-          leave.onfinish = () => {
-            el.classList.add("is-filtered-out", "is-hidden");
-            clearInlineMotion(el);
-          };
-        });
+          first.forEach((box, el) => {
+            if (last.has(el)) return;
+            el.classList.remove("is-filtered-out", "is-hidden");
+            el.classList.add("is-flip-leave");
+            el.style.position = "absolute";
+            el.style.left = `${box.left - parent.left}px`;
+            el.style.top = `${box.top - parent.top}px`;
+            el.style.width = `${box.width}px`;
+            el.style.zIndex = "0";
+            const leave = el.animate(
+              [
+                { transform: "translate3d(0,0,0)", opacity: 1 },
+                { transform: "translate3d(0,12px,0)", opacity: 0 },
+              ],
+              {
+                duration: Math.round(duration * 0.85),
+                easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+                fill: "forwards",
+              },
+            );
+            leave.onfinish = () => {
+              el.classList.add("is-filtered-out", "is-hidden");
+              clearInlineMotion(el);
+            };
+          });
 
-        last.forEach((box, el) => {
-          const prev = first.get(el);
-          if (!prev) {
+          last.forEach((box, el) => {
+            const prev = first.get(el);
+            if (!prev) {
+              el.classList.add("is-flip-enter");
+              el.animate(
+                [
+                  { transform: "translate3d(0,14px,0)", opacity: 0 },
+                  { transform: "translate3d(0,0,0)", opacity: 1 },
+                ],
+                { duration, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+              ).onfinish = () => el.classList.remove("is-flip-enter");
+              return;
+            }
+            const dx = prev.left - box.left;
+            const dy = prev.top - box.top;
+            if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+            el.classList.add("is-flip-move");
             el.animate(
               [
-                { transform: "translate3d(0,16px,0)", opacity: 0 },
-                { transform: "translate3d(0,0,0)", opacity: 1 },
+                { transform: `translate3d(${dx}px, ${dy}px, 0)` },
+                { transform: "translate3d(0,0,0)" },
               ],
               { duration, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
-            );
-            return;
-          }
-          const dx = prev.left - box.left;
-          const dy = prev.top - box.top;
-          if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
-          el.animate(
-            [
-              { transform: `translate3d(${dx}px, ${dy}px, 0)` },
-              { transform: "translate3d(0,0,0)" },
-            ],
-            { duration, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
-          );
-        });
+            ).onfinish = () => el.classList.remove("is-flip-move");
+          });
+        };
+
+        requestAnimationFrame(run);
       };
 
       layout.querySelectorAll(".isotope-filters [data-filter]").forEach((btn) => {

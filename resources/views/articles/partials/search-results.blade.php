@@ -1,18 +1,4 @@
         <div class="container article-search-results article-result-list">
-          <div class="article-search-head">
-            <p class="article-search-summary" role="status">
-              @if ($activeTag && $q === '')
-                <span data-en="Articles tagged {{ $activeTag->name }}" data-fa="مقالات با برچسب {{ $activeTag->name }}">Articles tagged {{ $activeTag->name }}</span>
-              @elseif ($q !== '')
-                <span data-en="{{ $results->total() }} result(s) for “{{ $q }}”" data-fa="{{ $results->total() }} نتیجه برای «{{ $q }}»">{{ $results->total() }} result(s) for “{{ $q }}”</span>
-              @else
-                <span data-en="{{ $results->total() }} matching article(s)" data-fa="{{ $results->total() }} مقاله مطابق">{{ $results->total() }} matching article(s)</span>
-              @endif
-            </p>
-            @if ($q !== '' || $tagSlug !== '')
-              <a class="article-search-clear" href="{{ url('/articles') }}" data-en="Clear search" data-fa="پاک کردن جستجو">Clear search</a>
-            @endif
-          </div>
           @if ($results->isEmpty())
             <div class="article-search-empty">
               <i class="bi bi-search" aria-hidden="true"></i>

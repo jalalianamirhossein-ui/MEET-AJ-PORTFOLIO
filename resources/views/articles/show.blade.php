@@ -36,9 +36,9 @@
     <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
     <link href="/assets/css/articles.css?v=1013" rel="stylesheet" />
-    <link href="/assets/css/lang-toggle.css?v=1204" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1300" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1409" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1602" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @if (!empty($seo['breadcrumb']))
       <script type="application/ld+json">{!! json_encode($seo['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
@@ -186,7 +186,7 @@
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1201" defer></script>
+    <script src="/assets/js/main.js?v=1300" defer></script>
     <script src="/assets/js/i18n.js?v=1203" defer></script>
     <script>
       document.querySelectorAll("[data-copy-link]").forEach(function (button) {

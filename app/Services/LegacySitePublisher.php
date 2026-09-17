@@ -94,9 +94,9 @@ class LegacySitePublisher
     <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
     <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
-    <link href="/assets/css/lang-toggle.css?v=1204" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1300" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1409" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1602" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">
 BLADE;
@@ -107,7 +107,7 @@ BLADE;
     <script src="/assets/vendor/glightbox/js/glightbox.min.js" defer></script>
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1201" defer></script>
+    <script src="/assets/js/main.js?v=1300" defer></script>
     <script src="/assets/js/i18n.js?v=1203" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
@@ -218,17 +218,39 @@ BLADE;
         return substr($html, 0, $open).$loop.substr($html, $end + strlen('<!-- End Articles Grid -->'));
     }
 
+    private function replaceCategoryFilters(string $html): string
+    {
+        $startNeedle = '==================== FILTER BUTTONS =================';
+        $endNeedle = '<!-- End Filter Buttons -->';
+        $start = strpos($html, $startNeedle);
+        $end = strpos($html, $endNeedle);
+        if ($start === false || $end === false) {
+            throw new \RuntimeException('Unable to locate article category filters');
+        }
+
+        $commentOpen = strrpos(substr($html, 0, $start), '<!--');
+        if ($commentOpen === false) {
+            throw new \RuntimeException('Unable to locate article category filter comment');
+        }
+
+        $include = <<<'BLADE'
+@endverbatim
+            @include('articles.partials.library-toolbar', ['showCategoryFilters' => true])
+@verbatim
+            <!-- End Filter Buttons -->
+BLADE;
+
+        return substr($html, 0, $commentOpen).$include.substr($html, $end + strlen($endNeedle));
+    }
+
     private function injectArticleLibrary(string $html, bool $allowSearchResults): string
     {
-        $toolbar = <<<'BLADE'
+        if ($allowSearchResults) {
+            $toolbar = <<<'BLADE'
         <!-- End Section Title -->
 @endverbatim
-        @include('articles.partials.library-toolbar')
-BLADE;
-        if ($allowSearchResults) {
-            $toolbar .= <<<'BLADE'
-
         @if ($searching)
+          @include('articles.partials.library-toolbar')
           @include('articles.partials.search-results')
         @else
 @verbatim
@@ -236,26 +258,19 @@ BLADE;
         <!-- ===============================================
         ==================== ARTICLES CONTAINER ==============
 BLADE;
-        } else {
-            $toolbar .= <<<'BLADE'
-
-@verbatim
-
-        <!-- ===============================================
-        ==================== ARTICLES CONTAINER ==============
-BLADE;
+            $html = preg_replace(
+                '/        <!-- End Section Title -->\r?\n\r?\n        <!-- ===============================================\r?\n        ==================== ARTICLES CONTAINER ==============/',
+                $toolbar,
+                $html,
+                1,
+                $count
+            );
+            if (! is_string($html) || $count !== 1) {
+                throw new \RuntimeException('Unable to inject article library toolbar');
+            }
         }
 
-        $html = preg_replace(
-            '/        <!-- End Section Title -->\r?\n\r?\n        <!-- ===============================================\r?\n        ==================== ARTICLES CONTAINER ==============/',
-            $toolbar,
-            $html,
-            1,
-            $count
-        );
-        if (! is_string($html) || $count !== 1) {
-            throw new \RuntimeException('Unable to inject article library toolbar');
-        }
+        $html = $this->replaceCategoryFilters($html);
 
         if (! $allowSearchResults) {
             return $html;

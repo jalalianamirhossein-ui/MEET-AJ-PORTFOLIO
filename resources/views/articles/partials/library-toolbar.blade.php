@@ -9,8 +9,11 @@
         'security' => 'security',
         'vmware' => 'vmware',
     ];
+    $showCategoryFilters = ! empty($showCategoryFilters);
+    $isSearching = ! empty($searching);
 @endphp
-        <div class="article-library-toolbar container">
+        <div class="article-library-toolbar">
+          <div class="article-filter-panel">
           <form class="article-search" method="get" action="{{ url('/articles') }}" role="search">
             <label class="article-search-label" for="article-q" data-en="Search articles" data-fa="جستجوی مقالات">Search articles</label>
             <div class="article-search-row">
@@ -33,9 +36,6 @@
                 <input type="hidden" name="tag" value="{{ $tagSlug }}" />
               @endif
               <button class="btn btn-primary" type="submit" data-en="Search" data-fa="جستجو">Search</button>
-              @if ($q !== '')
-                <a class="article-search-reset" href="{{ url('/articles') }}{{ $tagSlug !== '' ? '?tag='.urlencode($tagSlug) : '' }}" data-en="Reset" data-fa="بازنشانی">Reset</a>
-              @endif
             </div>
           </form>
           @if (isset($tags) && $tags->isNotEmpty())
@@ -60,4 +60,24 @@
               </div>
             </nav>
           @endif
+          @if ($showCategoryFilters)
+            @include('articles.partials.category-filters')
+          @endif
+          @if ($isSearching)
+          <div class="article-search-status">
+            <p class="article-search-summary" role="status">
+              @if ($activeTag && $q === '')
+                <span data-en="Articles tagged {{ $activeTag->name }}" data-fa="مقالات با برچسب {{ $activeTag->name }}">Articles tagged {{ $activeTag->name }}</span>
+              @elseif ($q !== '')
+                <span data-en="{{ $results->total() }} result(s) for “{{ $q }}”" data-fa="{{ $results->total() }} نتیجه برای «{{ $q }}»">{{ $results->total() }} result(s) for “{{ $q }}”</span>
+              @else
+                <span data-en="{{ $results->total() }} matching article(s)" data-fa="{{ $results->total() }} مقاله مطابق">{{ $results->total() }} matching article(s)</span>
+              @endif
+            </p>
+            @if ($q !== '' || $tagSlug !== '')
+              <a class="article-search-clear" href="{{ url('/articles') }}" data-en="Clear search" data-fa="پاک کردن جستجو">Clear search</a>
+            @endif
+          </div>
+          @endif
+          </div>
         </div>
