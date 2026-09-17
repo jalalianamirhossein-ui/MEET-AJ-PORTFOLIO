@@ -1,3 +1,9 @@
+> **HISTORICAL / SUPERSEDED.**
+> **Original date:** 2026-09-16.
+> **Original purpose:** record which project files were deleted or kept during the file-structure cleanup.
+> **Superseded by:** [../current/PROJECT-STRUCTURE.md](../current/PROJECT-STRUCTURE.md) for the current tree.
+> Current status: [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md).
+
 # Project structure cleanup
 
 Date: 2026-09-16  

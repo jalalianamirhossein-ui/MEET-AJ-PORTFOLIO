@@ -1,6 +1,6 @@
 > **HISTORICAL DECISION (still in force).** Record of why Laravel 13 / PHP 8.4 / Filament 5 / Blade / MySQL were chosen. Installed versions and live status: [PROJECT-STATUS.md](../../current/PROJECT-STATUS.md). Do not treat planning leftovers as current QA.
 
-# Architecture Decision Record — Meet AJ Laravel CMS
+# ADR-001 — Laravel 13 + PHP 8.4 + Filament 5 + Blade + MySQL
 
 Status: **Accepted**  
 Date: 2026-09-16  
@@ -43,9 +43,11 @@ Physical legacy `articles/*.html` and `services/*.html` remain **outside** `publ
 
 ## Core schema
 
-`users`, `password_reset_tokens`, `sessions`, `categories`, `articles`, `article_redirects`, `requests`.
+As decided on 2026-09-16: `users`, `password_reset_tokens`, `sessions`, `categories`, `articles`, `article_redirects`, `requests`.
 
 No `contact_requests`. No `pages`.
+
+> Since this decision was recorded, three tables were added by later migrations under the same architecture: `services` (phase 07) and `tags` + `article_tag` (phase 08). The authoritative schema is [../../current/DATABASE.md](../../current/DATABASE.md).
 
 ## URL policy
 

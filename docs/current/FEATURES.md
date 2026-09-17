@@ -3,7 +3,7 @@
 **Authority:** AUTHORITATIVE description of public and CMS features after the 2026-09-17 master audit.  
 **Overlay:** `visual-upgrade.css?v=1314`  
 **Scripts:** `i18n.js?v=1116`, `main.js?v=1119`  
-**Git:** not committed (forbidden this pass).
+**Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md) · **Detail:** [ARTICLES.md](ARTICLES.md), [SERVICES.md](SERVICES.md), [REQUESTS.md](REQUESTS.md), [ADMIN.md](ADMIN.md)
 
 ## Public site
 

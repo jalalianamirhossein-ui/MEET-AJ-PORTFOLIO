@@ -1,243 +1,231 @@
-# Meet AJ Portfolio
+# Meet AJ
 
-Laravel CMS for [meetaj.ir](https://meetaj.ir) — the public portfolio of **AmirHossein Jalalian** (network, DevOps, and IT infrastructure). The live design, article HTML, service pages, contact contract, and SEO URLs from the original static site are preserved.
+Personal portfolio and technical article site for **AmirHossein Jalalian** (infrastructure, networking, virtualization and DevOps), running as a Laravel application with a Filament admin panel.
 
-This repository is a **Laravel 13** application. The original `index.html`, `articles/*.html`, and `services/*.html` files remain in the project root as the import/source of truth. They are **not** the public document root.
+Verified against the running code on **2026-09-17**. Single source of truth for project state: [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).
 
 ## Overview
 
-Visitors see a Blade-rendered site: homepage sections, six service quote pages, 23 technical articles, a bilingual (English / Persian) switcher, and a PWA. Editors use **Filament 5** at `/admin`. Contact submissions keep the original form endpoints and are stored in the `requests` table.
+The site was originally a static English/Persian progressive web app: one homepage, six service quote pages, 23 HTML articles, PHP contact endpoints, a sitemap and a service worker. It now runs as a **Laravel 13 + Blade + Filament 5** application:
 
-## Features
+- the public site renders from Blade views rebuilt from the original HTML, so URLs, CSS hooks and JavaScript contracts are unchanged;
+- articles and services live in the database and are editable in the admin panel;
+- contact and quote submissions are stored as requests with a light workflow;
+- English and Persian share the same URLs, switched client-side with RTL support.
 
-- Public homepage (`/`) with the original section IDs (`#hero` … `#contact`) and a database-driven service catalog
-- Six service **landing** pages at `/services/{slug}` (hero → included → pricing → process → FAQ → quote CTA; form hidden until request; legacy `/services/{slug}.html` 301s once)
-- 23 published English articles at `/articles/{slug}` with 301 redirects from `*.html`
-- Article search (`/articles?q=`) and tag filters (`/articles?tag=`) with pagination; listing queries omit article HTML bodies
-- Tags, related articles, share links (LinkedIn / WhatsApp / Telegram / copy), breadcrumbs + BreadcrumbList JSON-LD
-- Category filters on the homepage and `/articles` listing
-- Bilingual UI via `data-en` / `data-fa` (English LTR, Persian RTL)
-- Contact and service-request forms: CSRF token endpoint, honeypot, validation, rate limit, database persistence (`requests.service_id` when a service is selected)
-- Filament admin: articles, categories, tags, services (admin-only), contact request pipeline (admin-only), users (admin-only)
-- SEO: canonical, Open Graph, Twitter, JSON-LD (Article + BreadcrumbList), `/sitemap.xml`, `/robots.txt`
-- PWA: `manifest.json`, `sw.js`, `/offline.html`
-- Overlay stylesheet `assets/css/visual-upgrade.css` (shared design tokens, service landings, no Tailwind)
-
-German is **not** a public language. `/de` returns 404. German article rows cannot be published.
-
-## Design system
-
-Public chrome is unified in `assets/css/visual-upgrade.css` (cache `v=1314`): Article visual DNA (blue `#2563eb`, Poppins/Vazirmatn, 12px buttons, H2 bars). Homepage is editorial (skills lists, resume timeline); services are landings with CTA-gated quote forms. Cards are for grouping only. See [docs/article-visual-dna.md](docs/current/ARTICLE-VISUAL-DNA.md) and [docs/design-system.md](docs/current/DESIGN-SYSTEM.md). Do not add Tailwind, React, Vue, or extra CDNs.
-
-## Technology stack
-
-Verified 2026-09-16 from `composer.lock` and `php artisan about` on this workstation:
-
-| Component | Version |
-|-----------|---------|
-| PHP | 8.4.25 (constraint `^8.4`) |
-| Laravel | 13.31.0 |
-| Filament | 5.8.2 |
-| Livewire | 4.4.5 |
-| PHPUnit | 11.5.56 |
-| Database (local) | SQLite (`database/database.sqlite`) |
-| Database (intended production) | MySQL / MariaDB |
-| Frontend | Blade, Bootstrap 5 (vendored), custom CSS/JS |
-
-There is **no** `package.json`. Node/npm is not required to build or run the site.
+The original HTML in the repository root remains the import and rollback source. It is deliberately **outside** the web document root.
 
 ## Architecture
 
 ```
-Browser
-   │
-   ▼
-Laravel 13 (public/ front controller)
-   │
-   ├── Blade views  →  services / presentation JSON  →  SQLite or MySQL
-   │
-   └── /admin  →  Filament 5  →  Livewire 4  →  models / policies  →  database
+Browser → public/index.php → Laravel 13 → Blade → Eloquent → SQLite (local) / MySQL (intended production)
+Admin   → /admin → Filament 5 → Livewire 4 → models + policies → same database
 ```
 
-Document root in production must be **`public/`**, not the repository root.
+No SPA, no Node build step, no queue worker, no Redis, no scheduler. Detail: [docs/current/ARCHITECTURE.md](docs/current/ARCHITECTURE.md).
 
-## Public website
+## Technology stack
 
-| URL | Purpose |
-|-----|---------|
-| `/` | Homepage (EN default markup; FA via client switcher) |
-| `/index.html` | 301 → `/` |
-| `/articles` | Article listing (same filters/cards as `#portfolio`) |
-| `/articles/{slug}` | Article detail |
-| `/articles/{slug}.html` | 301 → clean slug (query string preserved) |
-| `/services/{slug}` | Service detail (published English only) |
-| `/services/{slug}.html` | 301 → `/services/{slug}` (query string preserved) |
-| `GET /forms/get-csrf-token.php` | JSON `{ token, success }` |
-| `POST /forms/contact.php` | Plain-text `OK` / `400` / `429` |
-| `/sitemap.xml`, `/robots.txt` | SEO |
-| `/manifest.json`, `/sw.js`, `/offline.html` | PWA |
+| Component | Version |
+|-----------|---------|
+| Laravel | 13.31.0 |
+| PHP | 8.4.25 |
+| Filament | 5.8.2 |
+| Livewire | 4.4.5 |
+| PHPUnit | 11.5.56 |
+| Database | SQLite locally, MySQL/MariaDB intended in production |
+| Front end | Blade with the original CSS/JS; no Tailwind, no Vite, no npm |
 
-Languages: **EN production**, **FA production** (same URLs, `dir`/`lang` swapped in the browser). **DE** has no public routes.
+## Requirements
 
-## CMS
+- PHP **8.4** with `bcmath`, `ctype`, `curl`, `fileinfo`, `gd`, `intl`, `json`, `mbstring`, `openssl`, `pdo`, `pdo_mysql` (or `pdo_sqlite` locally), `session`, `tokenizer`, `xml`, `zip`
+- Composer 2
+- MySQL/MariaDB for production, or SQLite for local work
+- A web server whose document root is the `public/` directory
 
-`/admin` (Filament login at `/admin/login`).
-
-| Resource | Who | Notes |
-|----------|-----|--------|
-| Articles | Admin + editor | CRUD, publish/draft, SEO, image upload, slug 301 history |
-| Categories | Admin + editor | Per-language slug uniqueness |
-| Services | Admin only | Catalog, prices, publish/draft, SEO. See [docs/SERVICES.md](docs/current/SERVICES.md) |
-| Tags | Admin + editor | Unique name/slug; attach to articles |
-| Requests | Admin only | CRM-lite statuses (New → Cancelled) plus internal notes (never public) |
-| Users | Admin only | Sidebar **Administration** group. Table shows name/email/role, never hashes. Create accounts with `php artisan cms:create-user` |
-
-Roles: `admin`, `editor`. Passwords: hashed, minimum 12 characters. No default password is shipped.
-
-## Articles
-
-- Importer: `php artisan articles:import-legacy` reads `articles/*.html`
-- 23 legacy articles, unique `(language, slug)` and `(translation_key, language)`
-- Public listing/detail query **published English** rows (`language = en`)
-- Persian copy lives in `data-fa` attributes inside HTML (not separate FA URLs)
-- Categories: Microsoft, Linux, MikroTik, VMware, Others (filter classes)
-- Tags: DevOps, Linux, Microsoft, MikroTik, Networking, Security, VMware, Windows Server (from real content; `articles:sync-tags`)
-- Slug changes write `article_redirects` (`cascadeOnDelete` with the article)
-- Do not run `--refresh` on a database that already has editorial edits
-
-## Contact
-
-Contract is unchanged from the static site:
-
-1. `GET /forms/get-csrf-token.php` — session CSRF JSON, `Cache-Control: no-store`
-2. `POST /forms/contact.php` — field `csrf_token` (also accepted via `AcceptLegacyCsrfToken`)
-3. Honeypot field `website`: if filled, response is still `OK` and **nothing is stored**
-4. Validation failures: HTTP 400, first error as `text/plain`
-5. Rate limit: 5 posts per IP per hour → HTTP 429 (`throttle:30,1` on the route plus `RateLimiter` 5/hour)
-6. Success: row in `requests`, body `OK`
-7. Email: optional `CONTACT_NOTIFICATION_EMAIL`. If unset or SMTP fails, the row is still saved
-
-## Languages
-
-See [docs/MULTILINGUAL.md](docs/current/MULTILINGUAL.md). Switcher: compact `#lang-switcher` listbox (`#lang-toggle` button), `localStorage` / cookie `lang` (`en` \| `fa`), stylesheet `rtl.css`. Placeholders with `data-fa-placeholder` are applied by `assets/js/i18n.js`. DE is injected only if the page has `[data-de]` (public pages do not).
-
-## URL migration
-
-| Legacy | Current |
-|--------|---------|
-| `/index.html` | `/` (301) |
-| `/articles/{slug}.html` | `/articles/{slug}` (301) |
-| `/services/{slug}.html` | `/services/{slug}` (301) |
+There is no Node.js requirement.
 
 ## Installation
-
-Requirements: PHP 8.4 with extensions used by Laravel (including `pdo_sqlite` locally and `pdo_mysql` for production), Composer 2, and write access to `storage/` and `bootstrap/cache`.
 
 ```bash
 composer install
 cp .env.example .env
 php artisan key:generate
-# Set DB_* in .env (sqlite file or mysql)
-php artisan migrate
 php artisan storage:link
-php artisan site:publish-assets --views
-php artisan articles:import-legacy
-php artisan services:import-legacy
+```
+
+On a machine where `php` is not on PATH, prefix commands with the interpreter you have, for example `.\.runtime\php84\php.exe artisan about`.
+
+## Environment configuration
+
+`.env.example` is for local development; `.env.production.example` is the production template. Keys that matter:
+
+| Key | Local | Production |
+|-----|-------|------------|
+| `APP_ENV` | `local` | `production` |
+| `APP_DEBUG` | `true` | **`false`** |
+| `APP_URL` | `http://127.0.0.1:8000` | `https://meetaj.ir` |
+| `APP_TIMEZONE` | your choice | `Asia/Tehran` |
+| `DB_CONNECTION` | `sqlite` | `mysql` |
+| `SESSION_DRIVER`, `CACHE_STORE` | `file` | `file` |
+| `QUEUE_CONNECTION` | `sync` | `sync` |
+| `SESSION_SECURE_COOKIE` | — | `true` |
+| `CONTACT_NOTIFICATION_EMAIL` | optional | optional; empty disables notification mail |
+
+Never commit `.env`.
+
+## Database setup
+
+### Migration
+
+```bash
+php artisan migrate            # production: php artisan migrate --force
+php artisan migrate:status
+```
+
+Nine migrations create eleven tables: `users`, `password_reset_tokens`, `sessions`, `categories`, `articles`, `article_redirects`, `tags`, `article_tag`, `requests`, `services`, plus Laravel's `migrations`. Full schema: [docs/current/DATABASE.md](docs/current/DATABASE.md).
+
+### Seeding
+
+```bash
+php artisan db:seed
+```
+
+`DatabaseSeeder` rebuilds the Blade views from the original HTML, then imports articles and services. You can also run the importers directly:
+
+```bash
+php artisan articles:import-legacy      # 23 articles + 23 redirects
+php artisan services:import-legacy      # 6 services with their AED prices
+php artisan articles:sync-tags          # tag vocabulary and links
+```
+
+Both importers accept `--dry-run` and `--refresh`. **`--refresh` deletes existing rows** and discards editorial changes — never run it on a database with edits.
+
+## Local development
+
+```bash
+php artisan site:publish-assets --views   # copy assets into public/ and rebuild Blade
+php artisan serve                          # http://127.0.0.1:8000
+```
+
+`php artisan optimize:clear` after changing routes, config or views.
+
+## Admin panel
+
+`/admin`, built with Filament 5. Guests are redirected to `/admin/login`. No default account ships with the repository:
+
+```bash
 php artisan cms:create-user
 ```
 
-Do not invent Node steps. Do not commit `.env`.
+Roles are `admin` and `editor`; passwords need at least 12 characters.
 
-On this Windows workstation `php` is not on PATH; the verified binary is `.runtime/php84/php.exe`.
+| Section | Resources |
+|---------|-----------|
+| Content | Articles, Categories, Tags, Services (admin only) |
+| Communications | Requests (admin only) |
+| Administration | Users (admin only) |
 
-## Development
+Detail: [docs/current/ADMIN.md](docs/current/ADMIN.md).
 
-```bash
-php artisan serve --host=127.0.0.1 --port=8000
-```
+## Articles
 
-Public assets are copies under `public/assets/` produced by `site:publish-assets`. Edit sources in `assets/` (and `index.html` / `articles/` / `services/`) then publish.
+23 published English articles with 23 legacy `.html` → clean-URL redirects, 10 categories (5 concepts × EN/FA), 8 tags and 38 tag links. The library at `/articles` supports `?q=` search and `?tag=` filtering with 9 results per page, and each article page has breadcrumbs, tags, share links and up to three related articles. Content integrity against the original HTML is verified by `php artisan site:compare-content` (currently **Failures: 0**). Detail: [docs/current/ARTICLES.md](docs/current/ARTICLES.md).
+
+## Services
+
+Six database-driven services rendered on the homepage and at `/services/{slug}`, with `/services/{slug}.html` issuing a single 301. Prices are editorial data held in the `services` table (AED 2,500–6,900) and are never hardcoded in Blade. Detail: [docs/current/SERVICES.md](docs/current/SERVICES.md).
+
+## Requests
+
+`GET /forms/get-csrf-token.php` and `POST /forms/contact.php` keep the original contract: CSRF via the legacy `csrf_token` field, a `website` honeypot, validation with plain-text errors, and a limit of 5 submissions per IP per hour. Submissions become `requests` rows with a seven-stage status workflow and admin-only internal notes. Detail: [docs/current/REQUESTS.md](docs/current/REQUESTS.md).
+
+## Languages
+
+English and Persian are public on the **same** URLs, applied client-side through `data-en` / `data-fa` attributes, `assets/js/i18n.js` and `assets/css/rtl.css`. German exists in the CMS language list for drafts only: publishing a German article or service throws a validation error, and `/de` returns 404. `hreflang` is not implemented. Detail: [docs/current/MULTILINGUAL.md](docs/current/MULTILINGUAL.md).
+
+## SEO
+
+Canonical URLs, Open Graph, Twitter cards, JSON-LD (Person/WebSite on the homepage, `Service` with a real `Offer`, `Article` with `BreadcrumbList`), a dynamic `/sitemap.xml` listing clean URLs only, `/robots.txt` disallowing `/admin`, `/livewire` and `/forms`, and 301s for `/index.html` and every legacy `.html` path. Detail: [docs/current/SEO.md](docs/current/SEO.md).
+
+## PWA
+
+`public/manifest.json`, `public/sw.js` (cache `meet-aj-v2.0.0-cms-3`) and `public/offline.html`. The worker serves documents network-first and static assets cache-then-network, and never touches `/admin`, `/livewire`, `/forms`, `/storage/livewire-tmp` or `.php` paths. Install and offline behaviour have **not** been tested in a browser. Detail: [docs/current/PWA.md](docs/current/PWA.md).
 
 ## Testing
 
-Default suite uses SQLite `:memory:` (`phpunit.xml`):
-
 ```bash
-php artisan test
-# or: vendor/bin/phpunit
+php artisan test                                                    # 39 tests, 647 assertions, 1 skipped
+vendor/bin/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest     # MySQL schema check
+php artisan site:compare-content                                     # Failures: 0
 ```
 
-MariaDB/MySQL schema suite (separate config, skipped in the default run):
-
-```bash
-vendor/bin/phpunit -c phpunit.mysql.xml
-```
-
-Content compare against original HTML (uses the live configured database):
-
-```bash
-php artisan site:compare-content
-```
-
-Latest default-suite result on this machine: **39 tests, 647 assertions, 1 skipped** (`MysqlSchemaTest` unless MySQL is bound), **0 failures**. `site:compare-content`: **Failures: 0**.
-
-## Article import
-
-```bash
-php artisan articles:import-legacy            # insert missing
-php artisan articles:import-legacy --dry-run  # report only
-php artisan articles:import-legacy --refresh  # deletes articles + redirects, then re-imports
-php artisan articles:sync-tags                # catalog tags from live titles/categories (no invented topics)
-```
-
-## Service import
-
-```bash
-php artisan services:import-legacy            # insert missing
-php artisan services:import-legacy --dry-run  # report only
-php artisan services:import-legacy --refresh  # deletes services, then re-imports from HTML
-```
-
-Do not run `--refresh` after editorial price or copy changes. Details: [docs/SERVICES.md](docs/current/SERVICES.md).
-
-## Admin user
-
-```bash
-php artisan cms:create-user
-php artisan cms:create-user --name="…" --email="…" --role=admin
-```
-
-Password is prompted unless `--password=` is passed. Minimum 12 characters. Never commit passwords.
+The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Detail: [docs/current/TESTING.md](docs/current/TESTING.md); per-URL evidence: [docs/qa/QA-MATRIX.md](docs/qa/QA-MATRIX.md).
 
 ## Deployment
 
-See [DEPLOYMENT.md](docs/current/DEPLOYMENT.md). DirectAdmin production cutover is **documented, not executed** in this environment.
+### DirectAdmin
+
+The full procedure — PHP 8.4 selector, Composer or a pre-built `vendor/`, MySQL creation, file layout above the web root, document root set to `.../laravel/public`, `.env`, permissions, `storage:link`, migrate, import, caches, SSL, post-deploy checks and rollback — is in [docs/current/DEPLOYMENT.md](docs/current/DEPLOYMENT.md).
+
+**Deployment has not been executed.** Nothing in this repository proves that meetaj.ir is running this application.
+
+### Scheduler
+
+Laravel's scheduler is **not used** and no cron entry is required. If a future feature needs it, add `* * * * * php /path/to/artisan schedule:run >> /dev/null 2>&1` at that point and not before.
 
 ## Security
 
-Production must use `APP_DEBUG=false`, HTTPS, `SESSION_SECURE_COOKIE=true`, and a unique `APP_KEY`. Details: [docs/SECURITY.md](docs/current/SECURITY.md). This repository has **not** been penetration-tested.
+CSRF (including the legacy field contract), a honeypot, two layers of rate limiting, centralised validation in `StoreContactRequest`, hashed passwords with a 12-character minimum, Filament session auth, six policies, and a `SecurityHeaders` middleware (`nosniff`, `Referrer-Policy`, `SAMEORIGIN`, HSTS on HTTPS, `no-store` on admin/Livewire/forms). `APP_DEBUG` must be `false` in production. No penetration test has been performed. Detail: [docs/current/SECURITY.md](docs/current/SECURITY.md).
 
-## Documentation
+## Project structure
 
-Start here:
+```
+app/          Laravel code (Filament resources, controllers, models, policies, services, commands)
+articles/     23 original article HTML files (import source)
+assets/       Original CSS / JS / images (publish source)
+config/       Configuration, including cms.php
+database/     9 migrations, seeders, local SQLite file
+design-system/ Visual language notes
+docs/         Documentation (see the index below)
+forms/        Original static PHP endpoints, kept as reference
+public/       Web document root — the only directory a server should expose
+resources/    Blade views and admin CSS
+routes/       web.php, console.php
+scripts/      validate-environment.php, verify-originals.php
+services/     6 original service HTML files (import source)
+tests/        7 feature test files, 39 tests
+```
 
-| File | Role |
-|------|------|
-| [docs/DOCUMENTATION-INDEX.md](docs/historical/DOCUMENTATION-INDEX.md) | Index of every project Markdown file |
-| [docs/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md) | Authoritative current status |
-| [docs/QA-MATRIX.md](docs/qa/QA-MATRIX.md) | Authoritative QA evidence |
-| [docs/SERVICES.md](docs/current/SERVICES.md) | Service catalog + CMS |
-| [docs/features.md](docs/current/FEATURES.md) | Search, tags, related, share, request pipeline |
-| [docs/admin-ui-qa.md](docs/qa/ADMIN-QA.md) | Filament UI QA (code + PHPUnit; browser login BLOCKED) |
-| [docs/article-visual-dna.md](docs/current/ARTICLE-VISUAL-DNA.md) | Article detail visual reference (do not restyle those pages) |
-| [docs/design-system.md](docs/current/DESIGN-SYSTEM.md) | Public overlay tokens |
-| [docs/full-site-design-audit.md](docs/qa/DESIGN-AUDIT.md) | Visual system audit vs Article DNA |
-| [docs/full-site-visual-qa.md](docs/qa/VISUAL-QA.md) | Rendered visual QA |
-| [docs/service-detail-ui-qa.md](docs/historical/service-detail-ui-qa.md) | Six service landing QA |
-| [docs/final-project-qa-report.md](docs/qa/FINAL-QA-REPORT.md) | Acceptance PASS/FAIL |
-| [DEPLOYMENT.md](docs/current/DEPLOYMENT.md) | DirectAdmin / production |
-| [docs/historical/README.md](docs/historical/README.md) | Superseded plans and snapshots |
+Detail: [docs/current/PROJECT-STRUCTURE.md](docs/current/PROJECT-STRUCTURE.md).
 
-## Git
+## Documentation index
 
-Git is handled separately after visual approval. This workspace copy is **not** used for `git init` / commit / push in the visual redesign pass.
+Full navigation map: [docs/README.md](docs/README.md).
+
+| Area | Start here |
+|------|------------|
+| Current state | [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md) |
+| Architecture | [docs/current/ARCHITECTURE.md](docs/current/ARCHITECTURE.md) |
+| Database | [docs/current/DATABASE.md](docs/current/DATABASE.md) |
+| Admin | [docs/current/ADMIN.md](docs/current/ADMIN.md) |
+| Features | [docs/current/FEATURES.md](docs/current/FEATURES.md) |
+| Design system | [docs/current/DESIGN-SYSTEM.md](docs/current/DESIGN-SYSTEM.md) |
+| QA evidence | [docs/qa/FINAL-QA-REPORT.md](docs/qa/FINAL-QA-REPORT.md) |
+| Decisions | [docs/decisions/ADR/README.md](docs/decisions/ADR/README.md) |
+| History | [docs/phases/phase-01-environment.md](docs/phases/phase-01-environment.md), [docs/historical/README.md](docs/historical/README.md) |
+
+## Known limitations
+
+1. **Not deployed.** DirectAdmin cutover, production database, SMTP and HTTPS verification are all outstanding.
+2. **No CMS user exists locally**, so interactive admin QA is blocked until `php artisan cms:create-user` is run.
+3. **No performance measurement** of any kind has been made — no Lighthouse, no load test.
+4. **PWA install and offline behaviour** have never been exercised in a browser.
+5. **`hreflang` is not implemented**; English and Persian share canonical URLs.
+6. **German is draft-only** and no German content exists.
+7. **Scheduled publishing is query-based**: a future `published_at` simply stays hidden, with nothing to flip it later.
+8. **`/admin/users` and `/admin/cms-users`** resolve to the same Users screen; that is one feature at two paths.
+9. **Six unused per-service Blade templates** remain in `resources/views/services/` with stale asset versions; only `services/show.blade.php` is routed.
+10. **Imported article images** still point at `/assets/...` unless an editor uploads a replacement.
+
+Every limitation above is tracked with a status in [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).

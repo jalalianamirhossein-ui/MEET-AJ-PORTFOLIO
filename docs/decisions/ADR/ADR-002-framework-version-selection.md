@@ -1,8 +1,11 @@
-> **HISTORICAL DECISION (still in force).** Pre-install version evidence. Live versions: [PROJECT-STATUS.md](../../current/PROJECT-STATUS.md). ADR: [architecture-decision-record.md](ADR-001-laravel-13-filament-5-stack.md).
+> **HISTORICAL DECISION (still in force).** Pre-install version evidence. Live versions: [PROJECT-STATUS.md](../../current/PROJECT-STATUS.md). Stack decision: [ADR-001](ADR-001-laravel-13-filament-5-stack.md).
 
-# Framework version decision
+# ADR-002 — Framework version selection
 
-Canonical architecture after installation: `docs/architecture-decision-record.md`. This file remains the pre-install version evidence.
+Status: **Accepted**  
+Date: 2026-09-15 (before dependencies were installed)
+
+Canonical architecture after installation: [ADR-001](ADR-001-laravel-13-filament-5-stack.md). This file remains the pre-install version evidence.
 
 Verified 2026-09-15, before installing dependencies. The user subsequently upgraded the target PHP to **8.4**. This supersedes the initial PHP 8.2 constraint.
 

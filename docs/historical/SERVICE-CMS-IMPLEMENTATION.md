@@ -1,3 +1,9 @@
+> **HISTORICAL / SUPERSEDED.**
+> **Original date:** 2026-09-16.
+> **Original purpose:** implementation report for the service catalog CMS, including the test counts and git state of that day.
+> **Superseded by:** [../current/SERVICES.md](../current/SERVICES.md) and [../phases/phase-07-service-cms.md](../phases/phase-07-service-cms.md).
+> Current status: [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md). Test counts below (30 tests / 584 assertions, 35 routes) are from that date and were **not** rewritten.
+
 # Service CMS implementation — Meet AJ
 
 **Date:** 2026-09-16  

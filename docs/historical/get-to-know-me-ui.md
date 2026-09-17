@@ -1,3 +1,9 @@
+> **HISTORICAL / SUPERSEDED.**
+> **Original date:** 2026-09-16.
+> **Original purpose:** UI report for the homepage “Get to Know Me” section, with screenshot evidence (now in `screenshots/get-to-know-me/`).
+> **Superseded by:** [../qa/VISUAL-QA.md](../qa/VISUAL-QA.md) and [../qa/DESIGN-AUDIT.md](../qa/DESIGN-AUDIT.md).
+> Current status: [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md).
+
 # Get to Know Me — UI report
 
 **Date:** 2026-09-16  

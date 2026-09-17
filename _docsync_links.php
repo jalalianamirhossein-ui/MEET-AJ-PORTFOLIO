@@ -93,7 +93,7 @@ foreach ($files as $file) {
 
     $text = preg_replace_callback('/\]\(([^)\s]+)\)/', function (array $m) use ($dir, $map, $root, &$fixed, &$broken, $file) {
         $target = $m[1];
-        if (preg_match('#^(https?:|mailto:|#)#i', $target)) {
+        if (preg_match('~^(https?:|mailto:|tel:|#)~i', $target)) {
             return $m[0];
         }
         [$path, $frag] = array_pad(explode('#', $target, 2), 2, null);

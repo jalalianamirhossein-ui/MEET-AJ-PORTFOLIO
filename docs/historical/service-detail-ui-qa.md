@@ -1,3 +1,9 @@
+> **HISTORICAL / SUPERSEDED.**
+> **Original date:** 2026-09-17 (before the master design audit of the same day).
+> **Original purpose:** QA of the service detail template at overlay `v=1310`.
+> **Superseded by:** [../qa/VISUAL-QA.md](../qa/VISUAL-QA.md) at overlay `v=1314`, and [../current/SERVICES.md](../current/SERVICES.md).
+> Current status: [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md).
+
 # Service detail UI QA — Meet AJ
 
 **Date:** 2026-09-17  

@@ -1,7 +1,13 @@
+﻿> **HISTORICAL / SUPERSEDED.**
+> **Original date:** 2026-09-16.
+> **Original purpose:** catalog and classify every Markdown file after the first documentation rebuild, when all documents lived flat in `docs/`.
+> **Superseded by:** [README.md](../README.md) — the current documentation index for the `current/ qa/ decisions/ phases/ historical/` structure.
+> Current status: [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md). The classifications below describe the **old** layout; paths have been repointed so the links still resolve, but the "Current" labels in this file are historical.
+
 # Documentation index — Meet AJ
 
-**Authority:** AUTHORITATIVE catalog of Markdown in this repository after the 2026-09-16 documentation rebuild.  
-**Source of truth for current state:** [README.md](../README.md), [DEPLOYMENT.md](../current/DEPLOYMENT.md), [PROJECT-STATUS.md](../current/PROJECT-STATUS.md), [QA-MATRIX.md](../qa/QA-MATRIX.md).
+**Authority:** superseded catalog of Markdown in this repository after the 2026-09-16 documentation rebuild.  
+**Source of truth for current state:** [README.md](../../README.md), [DEPLOYMENT.md](../current/DEPLOYMENT.md), [PROJECT-STATUS.md](../current/PROJECT-STATUS.md), [QA-MATRIX.md](../qa/QA-MATRIX.md).
 
 Classifications: **AUTHORITATIVE** | **REFERENCE** | **HISTORICAL** | **DEPLOYMENT** | **VENDOR** (not project docs).
 
@@ -11,7 +17,7 @@ Classifications: **AUTHORITATIVE** | **REFERENCE** | **HISTORICAL** | **DEPLOYME
 
 | File | Purpose | Status | Authority |
 |------|---------|--------|-----------|
-| [README.md](../README.md) | GitHub onboarding, stack, install, commands | Current | AUTHORITATIVE |
+| [README.md](../../README.md) | GitHub onboarding, stack, install, commands | Current | AUTHORITATIVE |
 | [DEPLOYMENT.md](../current/DEPLOYMENT.md) | DirectAdmin production procedure | Current procedure; cutover not executed | DEPLOYMENT |
 | [PROJECT-STATUS.md](../current/PROJECT-STATUS.md) | Live implementation/test/blocker status | Current | AUTHORITATIVE |
 | [ARCHITECTURE.md](../current/ARCHITECTURE.md) | Runtime paths, routes, services | Current | AUTHORITATIVE |
@@ -39,23 +45,23 @@ Classifications: **AUTHORITATIVE** | **REFERENCE** | **HISTORICAL** | **DEPLOYME
 
 ## Historical / superseded (retained)
 
-Moved to [historical/](historical/README.md) so `docs/` current-state files stay uncluttered. Bodies were not rewritten.
+Moved to [historical/](README.md) so `docs/` current-state files stay uncluttered. Bodies were not rewritten.
 
 | File | Purpose | Status | Authority |
 |------|---------|--------|-----------|
-| [historical/AUDIT_REPORT.md](historical/AUDIT_REPORT.md) | Static-site audit 2026-09-09 | HISTORICAL | HISTORICAL |
+| [historical/AUDIT_REPORT.md](AUDIT_REPORT.md) | Static-site audit 2026-09-09 | HISTORICAL | HISTORICAL |
 | [architecture-decision-record.md](../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md) | Why Laravel 13 / PHP 8.4 / Filament 5 | Decision still in force | HISTORICAL |
 | [framework-version-decision.md](../decisions/ADR/ADR-002-framework-version-selection.md) | Pre-install version evidence | Decision still in force | HISTORICAL |
-| [historical/laravel-implementation-plan.md](historical/laravel-implementation-plan.md) | Original implementation plan (Laravel 11 era) | SUPERSEDED | HISTORICAL |
-| [historical/laravel-migration-plan.md](historical/laravel-migration-plan.md) | Original migration plan | SUPERSEDED | HISTORICAL |
-| [historical/content-migration-analysis.md](historical/content-migration-analysis.md) | Static content inventory | HISTORICAL | HISTORICAL |
-| [historical/current-site-analysis.md](historical/current-site-analysis.md) | Pre-CMS site analysis | HISTORICAL | HISTORICAL |
-| [historical/cursor-review-report.md](historical/cursor-review-report.md) | Read-only docs review before docs rebuild | HISTORICAL | HISTORICAL |
-| [historical/design-audit.md](historical/design-audit.md) | Visual audit before overlay | HISTORICAL | HISTORICAL |
-| [historical/visual-upgrade-report.md](historical/visual-upgrade-report.md) | Overlay implementation notes | HISTORICAL | HISTORICAL |
-| [historical/content-integrity-fixes.md](historical/content-integrity-fixes.md) | Compare/repair log | HISTORICAL | HISTORICAL |
-| [historical/implementation-report.md](historical/implementation-report.md) | Point-in-time CMS report | SUPERSEDED by PROJECT-STATUS | HISTORICAL |
-| [historical/final-site-qa-report.md](historical/final-site-qa-report.md) | CMS QA snapshot | SUPERSEDED by QA-MATRIX | HISTORICAL |
+| [historical/laravel-implementation-plan.md](laravel-implementation-plan.md) | Original implementation plan (Laravel 11 era) | SUPERSEDED | HISTORICAL |
+| [historical/laravel-migration-plan.md](laravel-migration-plan.md) | Original migration plan | SUPERSEDED | HISTORICAL |
+| [historical/content-migration-analysis.md](content-migration-analysis.md) | Static content inventory | HISTORICAL | HISTORICAL |
+| [historical/current-site-analysis.md](current-site-analysis.md) | Pre-CMS site analysis | HISTORICAL | HISTORICAL |
+| [historical/cursor-review-report.md](cursor-review-report.md) | Read-only docs review before docs rebuild | HISTORICAL | HISTORICAL |
+| [historical/design-audit.md](design-audit.md) | Visual audit before overlay | HISTORICAL | HISTORICAL |
+| [historical/visual-upgrade-report.md](visual-upgrade-report.md) | Overlay implementation notes | HISTORICAL | HISTORICAL |
+| [historical/content-integrity-fixes.md](content-integrity-fixes.md) | Compare/repair log | HISTORICAL | HISTORICAL |
+| [historical/implementation-report.md](implementation-report.md) | Point-in-time CMS report | SUPERSEDED by PROJECT-STATUS | HISTORICAL |
+| [historical/final-site-qa-report.md](final-site-qa-report.md) | CMS QA snapshot | SUPERSEDED by QA-MATRIX | HISTORICAL |
 | [final-ui-qa.md](final-ui-qa.md) | Latest UI/UX browser QA | Keep as evidence | REFERENCE |
 | [phases/phase-1-environment.md](../phases/phase-01-environment.md) | Phase 1 log | SUPERSEDED | HISTORICAL |
 | [phases/phase-2-database.md](../phases/phase-02-database.md) | Phase 2 log | SUPERSEDED | HISTORICAL |

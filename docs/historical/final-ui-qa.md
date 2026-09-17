@@ -1,4 +1,8 @@
-> **REFERENCE.** Latest UI/UX browser QA (2026-09-16). Authoritative overall QA status: [QA-MATRIX.md](../qa/QA-MATRIX.md).
+> **HISTORICAL / SUPERSEDED.**
+> **Original date:** 2026-09-16.
+> **Original purpose:** UI/UX browser QA pass, including the 10-viewport matrix that has not been re-measured since.
+> **Superseded by:** [../qa/VISUAL-QA.md](../qa/VISUAL-QA.md), [../qa/RESPONSIVE-QA.md](../qa/RESPONSIVE-QA.md), [../qa/ACCESSIBILITY-QA.md](../qa/ACCESSIBILITY-QA.md).
+> Authoritative per-URL QA: [../qa/QA-MATRIX.md](../qa/QA-MATRIX.md). Current status: [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md).
 
 # Final UI/UX QA — Meet AJ
 

@@ -1,3 +1,9 @@
+> **HISTORICAL / SUPERSEDED.**
+> **Original date:** 2026-09-16.
+> **Original purpose:** report the first documentation cleanup pass against the running Laravel CMS.
+> **Superseded by:** [../qa/DOCUMENTATION-QA.md](../qa/DOCUMENTATION-QA.md) (2026-09-17 reorganisation) and [../README.md](../README.md).
+> Current status: [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md).
+
 # Documentation cleanup report
 
 Date: 2026-09-16  
