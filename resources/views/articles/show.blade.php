@@ -39,7 +39,7 @@
     <link href="/assets/css/lang-toggle.css?v=1301" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1703" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1810" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1811" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @if (!empty($seo['breadcrumb']))
       <script type="application/ld+json">{!! json_encode($seo['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
@@ -148,28 +148,135 @@
       </section>
     </main>
     <footer id="footer" class="footer position-relative">
-      <div class="footer-background"><div class="footer-pattern"></div></div>
+      <div class="footer-background">
+        <div class="footer-pattern"></div>
+      </div>
       <div class="container">
         <div class="footer-content">
+          <!-- Footer Main Content -->
           <div class="footer-main">
+            <!-- Brand Section -->
             <div class="footer-brand">
-              <h3 class="brand-name"><span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان">AmirHossein Jalalian</span></h3>
-              <p class="brand-title" data-en="IT Infrastructure Specialist" data-fa="متخصص زیرساخت فناوری اطلاعات">IT Infrastructure Specialist</p>
-              <p class="brand-description" data-en="Delivering reliable, secure, and scalable IT solutions for your business success." data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما.">Delivering reliable, secure, and scalable IT solutions for your business success.</p>
+              <h3 class="brand-name">
+                <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
+                  >AmirHossein Jalalian</span
+                >
+              </h3>
+              <p
+                class="brand-title"
+                data-en="IT Infrastructure Specialist"
+                data-fa="متخصص زیرساخت فناوری اطلاعات"
+              >
+                IT Infrastructure Specialist
+              </p>
+              <p
+                class="brand-description"
+                data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
+                data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
+              >
+                Delivering reliable, secure, and scalable IT solutions for your
+                business success.
+              </p>
             </div>
+
+            <!-- Contact Info -->
             <div class="footer-contact">
-              <h4 class="contact-title" data-en="Get In Touch" data-fa="تماس با من">Get In Touch</h4>
+              <h4
+                class="contact-title"
+                data-en="Get In Touch"
+                data-fa="تماس با من"
+              >
+                Get In Touch
+              </h4>
               <div class="contact-info">
-                <div class="contact-item"><i class="bi bi-geo-alt"></i><span data-en="Tehran, Iran" data-fa="تهران، ایران">Tehran, Iran</span></div>
-                <div class="contact-item"><i class="bi bi-telephone"></i><a href="tel:+989197276219" data-en="+98 9197276219" data-fa="09197276219">+98 9197276219</a></div>
-                <div class="contact-item"><i class="bi bi-envelope"></i><a href="mailto:jalalian.amirhossein@gmail.com">jalalian.amirhossein@gmail.com</a></div>
+                <div class="contact-item">
+                  <i class="bi bi-geo-alt"></i>
+                  <span data-en="Tehran, Iran" data-fa="تهران، ایران"
+                    >Tehran, Iran</span
+                  >
+                </div>
+                <div class="contact-item">
+                  <i class="bi bi-telephone"></i>
+                  <a
+                    href="tel:+989197276219"
+                    data-en="+98 9197276219"
+                    data-fa="09197276219"
+                    >+98 9197276219</a
+                  >
+                </div>
+                <div class="contact-item">
+                  <i class="bi bi-envelope"></i>
+                  <a href="mailto:jalalian.amirhossein@gmail.com"
+                    >jalalian.amirhossein@gmail.com</a
+                  >
+                </div>
+              </div>
+
+              <!-- Social Links -->
+              <div class="social-links">
+                <h5
+                  class="social-title"
+                  data-en="Follow Me"
+                  data-fa="دنبال کنید"
+                >
+                  Follow Me
+                </h5>
+                <div class="social-icons">
+                  <a
+                    href="https://wa.me/989197276219"
+                    target="_blank"
+                    rel="noopener"
+                    class="social-link whatsapp"
+                    aria-label="WhatsApp"
+                  >
+                    <i class="bi bi-whatsapp"></i>
+                  </a>
+                  <a
+                    href="https://t.me/Aj_mercury"
+                    target="_blank"
+                    rel="noopener"
+                    class="social-link telegram"
+                    aria-label="Telegram"
+                  >
+                    <i class="bi bi-telegram"></i>
+                  </a>
+                  <a
+                    href="mailto:jalalian.amirhossein@gmail.com"
+                    class="social-link email"
+                    aria-label="Email"
+                  >
+                    <i class="bi bi-envelope"></i>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
+
+          <!-- Footer Bottom -->
           <div class="footer-bottom">
             <div class="footer-bottom-content">
-              <div class="copyright"><p>© <span>2025</span> <strong data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان">AmirHossein Jalalian</strong> <span data-en="All Rights Reserved" data-fa="تمام حقوق محفوظ است">All Rights Reserved</span></p></div>
-              <div class="footer-heart"><span data-en="Made with" data-fa="ساخته شده با">Made with</span> <i class="bi bi-heart-fill"></i> <span data-en="in Iran" data-fa="در ایران">in Iran</span></div>
+              <div class="copyright">
+                <p>
+                  © <span>2025</span>
+                  <strong
+                    data-en="AmirHossein Jalalian"
+                    data-fa="امیرحسین جلالیان"
+                    >AmirHossein Jalalian</strong
+                  >
+                  <span
+                    data-en="All Rights Reserved"
+                    data-fa="تمام حقوق محفوظ است"
+                    >All Rights Reserved</span
+                  >
+                </p>
+              </div>
+              <div class="footer-heart">
+                <span data-en="Made with" data-fa="ساخته شده با"
+                  >Made with</span
+                >
+                <i class="bi bi-heart-fill"></i>
+                <span data-en="in Iran" data-fa="در ایران">in Iran</span>
+              </div>
             </div>
           </div>
         </div>

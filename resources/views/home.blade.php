@@ -239,7 +239,7 @@
       disabled
     />
     <link href="/assets/css/visual-upgrade.css?v=1703" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1807" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1811" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -2187,21 +2187,21 @@
             <!-- Brand Section -->
             <div class="footer-brand">
               <h3 class="brand-name">
-                <span data-en="AmirHossein Jalalian" data-fa="???????? ???????"
+                <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
                   >AmirHossein Jalalian</span
                 >
               </h3>
               <p
                 class="brand-title"
                 data-en="IT Infrastructure Specialist"
-                data-fa="????? ??????? ?????? ???????"
+                data-fa="متخصص زیرساخت فناوری اطلاعات"
               >
                 IT Infrastructure Specialist
               </p>
               <p
                 class="brand-description"
                 data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
-                data-fa="????? ????????? IT ??????? ??? ? ?????????? ???? ?????? ???????? ???."
+                data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
               >
                 Delivering reliable, secure, and scalable IT solutions for your
                 business success.
@@ -2213,14 +2213,14 @@
               <h4
                 class="contact-title"
                 data-en="Get In Touch"
-                data-fa="???? ?? ??"
+                data-fa="تماس با من"
               >
                 Get In Touch
               </h4>
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>
-                  <span data-en="Tehran, Iran" data-fa="?????? ?????"
+                  <span data-en="Tehran, Iran" data-fa="تهران، ایران"
                     >Tehran, Iran</span
                   >
                 </div>
@@ -2246,7 +2246,7 @@
                 <h5
                   class="social-title"
                   data-en="Follow Me"
-                  data-fa="?? ?? ????? ????"
+                  data-fa="دنبال کنید"
                 >
                   Follow Me
                 </h5>
@@ -2286,25 +2286,25 @@
             <div class="footer-bottom-content">
               <div class="copyright">
                 <p>
-                  ? <span>2025</span>
+                  © <span>2025</span>
                   <strong
                     data-en="AmirHossein Jalalian"
-                    data-fa="???????? ???????"
+                    data-fa="امیرحسین جلالیان"
                     >AmirHossein Jalalian</strong
                   >
                   <span
                     data-en="All Rights Reserved"
-                    data-fa="???? ???? ????? ???"
+                    data-fa="تمام حقوق محفوظ است"
                     >All Rights Reserved</span
                   >
                 </p>
               </div>
               <div class="footer-heart">
-                <span data-en="Made with" data-fa="????? ??? ??"
+                <span data-en="Made with" data-fa="ساخته شده با"
                   >Made with</span
                 >
                 <i class="bi bi-heart-fill"></i>
-                <span data-en="in Iran" data-fa="?? ?????">in Iran</span>
+                <span data-en="in Iran" data-fa="در ایران">in Iran</span>
               </div>
             </div>
           </div>
