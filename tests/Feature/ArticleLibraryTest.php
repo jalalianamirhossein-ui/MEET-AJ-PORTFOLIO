@@ -99,6 +99,8 @@ class ArticleLibraryTest extends TestCase
         $this->assertStringContainsString('article-share-btn', $html);
         $this->assertStringContainsString('article-hero-layout', $html);
         $this->assertStringContainsString('article-hero-media', $html);
+        $this->assertStringContainsString('article-shell', $html);
+        $this->assertStringContainsString('article-toc', $html);
         $this->assertStringNotContainsString('figure class="article-cover"', $html);
         $this->assertStringContainsString('linkedin.com/sharing', $html);
         $this->assertStringContainsString('twitter.com/intent/tweet', $html);

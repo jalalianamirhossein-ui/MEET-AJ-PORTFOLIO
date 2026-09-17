@@ -39,7 +39,7 @@
     <link href="/assets/css/lang-toggle.css?v=1301" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1703" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1807" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1808" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @if (!empty($seo['breadcrumb']))
       <script type="application/ld+json">{!! json_encode($seo['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
@@ -80,7 +80,7 @@
           <a href="tel:+989197276219" class="google-plus" aria-label="Phone"><i class="bi bi-telephone"></i></a>
         </div>
       </div>
-      <nav id="navmenu" class="navmenu navmenu--article-toc" aria-label="Article navigation" data-en-aria-label="Article navigation" data-fa-aria-label="ناوبری مقاله">
+      <nav id="navmenu" class="navmenu" aria-label="Site navigation" data-en-aria-label="Site navigation" data-fa-aria-label="ناوبری سایت">
         <ul>
           <li>
             <a href="/#hero"><i class="bi bi-house navicon" aria-hidden="true"></i><span data-en="Home" data-fa="صفحه اصلی">Home</span></a>
@@ -88,7 +88,6 @@
           <li>
             <a href="/articles"><i class="bi bi-journal-text navicon" aria-hidden="true"></i><span data-en="Articles" data-fa="مقالات">Articles</span></a>
           </li>
-          {!! data_get($article->presentation, 'toc_html') !!}
         </ul>
       </nav>
     </header>
@@ -98,40 +97,52 @@
           <div class="article-hero-layout">
             <div class="article-hero-copy">
               @include('articles.partials.breadcrumbs')
-              <h1 class="article-title hero-title" data-en="{{ data_get($article->presentation, 'hero_title_en', $article->title) }}" data-fa="{{ data_get($article->presentation, 'hero_title_fa', $article->title) }}">{{ $article->title }}</h1>
               <div class="article-meta">
-                <span class="article-category" data-en="{{ $article->categoryLabelEn() }}" data-fa="{{ $article->categoryLabelFa() }}">{{ $article->categoryLabelEn() }}</span>
                 @if ($article->published_at)
                   <time class="meta-date article-date" datetime="{{ $article->published_at->toAtomString() }}">{{ $article->published_at->timezone(config('cms.display_timezone', config('app.timezone')))->format('M j, Y') }}</time>
                 @endif
                 <span class="article-readtime">{{ $article->readingMinutes() }} <span data-en="min read" data-fa="دقیقه مطالعه">min read</span></span>
               </div>
-              @if ($article->tags->isNotEmpty())
-                <ul class="article-tags">
-                  @foreach ($article->tags as $tag)
-                    <li><a href="{{ $tag->path() }}">{{ $tag->name }}</a></li>
-                  @endforeach
-                </ul>
-              @endif
-              <p class="article-excerpt hero-subtitle" data-en="{{ $article->excerpt }}" data-fa="{{ data_get($article->presentation, 'excerpt_translations.fa', $article->excerpt) }}">{{ $article->excerpt }}</p>
-              <div class="article-actions">
-                <a href="#article-content" class="btn btn-primary btn-lg action-btn"><span class="btn-content"><i class="bi bi-play-circle" aria-hidden="true"></i><span data-en="Start reading" data-fa="شروع مطالعه">Start reading</span></span></a>
+              <div class="article-kicker">
+                <span class="article-category" data-en="{{ $article->categoryLabelEn() }}" data-fa="{{ $article->categoryLabelFa() }}">{{ $article->categoryLabelEn() }}</span>
+                @if ($article->tags->isNotEmpty())
+                  <ul class="article-tags">
+                    @foreach ($article->tags as $tag)
+                      <li><a href="{{ $tag->path() }}">{{ $tag->name }}</a></li>
+                    @endforeach
+                  </ul>
+                @endif
               </div>
+              <h1 class="article-title hero-title" data-en="{{ data_get($article->presentation, 'hero_title_en', $article->title) }}" data-fa="{{ data_get($article->presentation, 'hero_title_fa', $article->title) }}">{{ $article->title }}</h1>
+              <p class="article-excerpt hero-subtitle" data-en="{{ $article->excerpt }}" data-fa="{{ data_get($article->presentation, 'excerpt_translations.fa', $article->excerpt) }}">{{ $article->excerpt }}</p>
             </div>
             <figure class="article-hero-media">
-              <img class="article-hero-thumbnail" src="{{ $article->galleryUrl() }}" width="500" height="500" decoding="async" fetchpriority="high" alt="{{ data_get($article->presentation, 'image_alt') ?: $article->title }}" />
+              <img class="article-hero-thumbnail" src="{{ $article->galleryUrl() }}" decoding="async" fetchpriority="high" alt="{{ data_get($article->presentation, 'image_alt') ?: $article->title }}" />
             </figure>
           </div>
         </div>
       </section>
       <section id="article-content" class="article-content article-container" aria-label="Article content" data-en-aria-label="Article content" data-fa-aria-label="متن مقاله">
         <div class="container">
-          <div class="article-reading">
-            <article class="article-body">
-              {!! $article->content !!}
-            </article>
-            @include('articles.partials.share')
-            @include('articles.partials.related')
+          @php $tocHtml = data_get($article->presentation, 'toc_html'); @endphp
+          <div class="article-shell{{ $tocHtml ? ' article-shell--with-toc' : '' }}">
+            <div class="article-reading">
+              <article class="article-body">
+                {!! $article->content !!}
+              </article>
+              @include('articles.partials.share')
+              @include('articles.partials.related')
+            </div>
+            @if ($tocHtml)
+              <aside class="article-toc" aria-label="Table of contents" data-en-aria-label="Table of contents" data-fa-aria-label="فهرست مطالب">
+                <p class="article-toc-title" data-en="On this page" data-fa="در این مقاله">On this page</p>
+                <nav class="article-toc-nav">
+                  <ul class="article-toc-list">
+                    {!! $tocHtml !!}
+                  </ul>
+                </nav>
+              </aside>
+            @endif
           </div>
         </div>
       </section>
