@@ -169,6 +169,10 @@ BLADE;
 
     private function replaceServicesGrid(string $html): string
     {
+        if (str_contains($html, '@forelse ($services as $service)')) {
+            return $html;
+        }
+
         $end = strpos($html, '<!-- End Service Catalog -->');
         $marker = strpos($html, 'id="service-catalog"');
         if ($end === false || $marker === false) {
@@ -193,8 +197,56 @@ BLADE;
         return substr($html, 0, $open).$loop.substr($html, $end + strlen('<!-- End Service Catalog -->'));
     }
 
+    private function replaceTestimonials(string $html): string
+    {
+        $include = <<<'BLADE'
+@endverbatim
+      @include('partials.testimonials')
+@verbatim
+      <!-- /Testimonials Section -->
+BLADE;
+
+        if (str_contains($html, "@include('partials.testimonials')")) {
+            return $html;
+        }
+
+        $start = strpos($html, '<section id="testimonials"');
+        $end = strpos($html, '<!-- /Testimonials Section -->');
+        if ($start === false || $end === false) {
+            throw new \RuntimeException('Unable to locate testimonials section');
+        }
+
+        return substr($html, 0, $start).$include.substr($html, $end + strlen('<!-- /Testimonials Section -->'));
+    }
+
+    private function replaceTestimonials(string $html): string
+    {
+        $include = <<<'BLADE'
+@endverbatim
+      @include('partials.testimonials')
+@verbatim
+      <!-- /Testimonials Section -->
+BLADE;
+
+        if (str_contains($html, "@include('partials.testimonials')")) {
+            return $html;
+        }
+
+        $start = strpos($html, '<section id="testimonials"');
+        $end = strpos($html, '<!-- /Testimonials Section -->');
+        if ($start === false || $end === false) {
+            throw new \RuntimeException('Unable to locate testimonials section');
+        }
+
+        return substr($html, 0, $start).$include.substr($html, $end + strlen('<!-- /Testimonials Section -->'));
+    }
+
     private function replacePortfolioGrid(string $html): string
     {
+        if (str_contains($html, '@foreach ($articles as $article)')) {
+            return $html;
+        }
+
         $startNeedle = 'class="row gy-4 isotope-container"';
         $start = strpos($html, $startNeedle);
         $end = strpos($html, '<!-- End Articles Grid -->');
@@ -222,6 +274,10 @@ BLADE;
 
     private function replaceCategoryFilters(string $html): string
     {
+        if (str_contains($html, "@include('articles.partials.library-toolbar'")) {
+            return $html;
+        }
+
         $startNeedle = '==================== FILTER BUTTONS =================';
         $endNeedle = '<!-- End Filter Buttons -->';
         $start = strpos($html, $startNeedle);
@@ -247,6 +303,10 @@ BLADE;
 
     private function injectArticleLibrary(string $html, bool $allowSearchResults): string
     {
+        if ($allowSearchResults && str_contains($html, '@if ($searching)')) {
+            return $html;
+        }
+
         if ($allowSearchResults) {
             $toolbar = <<<'BLADE'
         <!-- End Section Title -->
@@ -275,6 +335,10 @@ BLADE;
         $html = $this->replaceCategoryFilters($html);
 
         if (! $allowSearchResults) {
+            return $html;
+        }
+
+        if (str_contains($html, '@if ($searching)')) {
             return $html;
         }
 
