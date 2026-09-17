@@ -76,9 +76,11 @@ Eight tags: Linux, Microsoft, MikroTik, VMware, Windows Server, Networking, Secu
 
 ## Search
 
-`Article::scopeSearch()` matches the term against title, excerpt and slug (not the full HTML body), combined with `scopeWithTag()` for the tag filter. `ArticleController@index` paginates filtered results 9 per page with `withQueryString()`. The unfiltered library loads all published articles at once through `scopeForListing()`, which selects only the card columns and never loads `content`.
+`Article::scopeSearch()` runs `LIKE` comparisons against `title`, `excerpt`, `content`, the related category `name`, and related tag `name` / `slug`. `scopeWithTag()` adds the tag filter. `ArticleController@index` paginates filtered results 9 per page with `withQueryString()`.
 
-Do not describe this as full-text search of article bodies.
+Both the library and the results use `scopeForListing()`, which selects only the card columns, so article HTML is searched in the database but never sent to the browser in listings.
+
+This is SQL `LIKE` matching, not a search engine: there is no Meilisearch, Algolia, or MySQL full-text index.
 
 ## Related articles
 

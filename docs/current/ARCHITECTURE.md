@@ -1,7 +1,8 @@
-# Architecture — Meet AJ Laravel CMS
+# Architecture — Meet AJ
 
-**Authority:** AUTHORITATIVE description of the running application.  
-**Verified:** 2026-09-17 against `app/`, `routes/`, `config/`, `public/`, `composer.lock`.
+**Authority:** AUTHORITATIVE description of the running application.
+**Verified:** 2026-09-17 against `app/`, `routes/web.php`, `config/`, `resources/views/`, `public/`, and `php artisan route:list` after `optimize:clear`.
+**Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md). Decision record: [../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md](../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md).
 
 ## Request flow
 
@@ -9,135 +10,147 @@
 Browser
    │
    ▼
-Apache / DirectAdmin (document root = public/)
+Apache / DirectAdmin  (document root = public/)
    │
    ▼
-public/index.php  →  Laravel 13 HTTP kernel
+public/index.php → Laravel 13 HTTP kernel
    │
-   ├── GET  / , /articles , /articles?q= , /articles?tag= , /articles/{slug} , /services/{slug} (and .html 301)
-   │         Blade views
-   │         App\Services (SEO, share links, tag assigner, importer, publisher)
-   │         Eloquent models (`scopeSearch`, `relatedArticles`)
-   │         SQLite or MySQL/MariaDB
+   ├── GET  /, /articles, /articles?q=, /articles?tag=, /articles/{slug},
+   │         /services/{slug}  (plus .html → 301)
+   │         → controllers → Eloquent (scopes, relations) → Blade
    │
-   ├── GET/POST  /forms/*.php
-   │         ContactController  →  requests table  →  optional mail
+   ├── GET  /forms/get-csrf-token.php   POST /forms/contact.php
+   │         → ContactController → requests table → optional mail
    │
-   └── /admin  →  Filament 5  →  Livewire 4  →  models / policies  →  database
+   ├── GET  /sitemap.xml, /robots.txt
+   │
+   └── /admin/* → Filament 5 → Livewire 4 → models + policies → same database
 ```
 
-There is no separate SPA, no Node build, and no queue worker. Cache and sessions are **file** drivers in the intended production config.
+No SPA, no Node build, no queue worker, no scheduler, no Redis. Cache and sessions use the **file** driver; `QUEUE_CONNECTION=sync`.
 
-## Laravel
+## Laravel layout
 
-- Application root: repository root (contains `artisan`, `app/`, `composer.json`).
+- Application root is the repository root (`artisan`, `app/`, `composer.json`).
 - Front controller: `public/index.php`.
-- Web routes: `routes/web.php`. After `optimize:clear` on 2026-09-17, `php artisan route:list` showed **36** routes including `/admin/tags`.
-- Console: `app/Console/Commands/`.
-- Config: `config/*.php`; CMS-specific: `config/cms.php`.
-- Local runtime used for verification: `.runtime/php84/php.exe` (PHP 8.4.25) because `php` is not on PATH.
+- Web routes: `routes/web.php`; console routes: `routes/console.php`.
+- Config: `config/*.php`, with CMS-specific values in `config/cms.php` (`languages`, `public_languages`, `display_timezone`, `contact_email`, `mail_is_optional`).
+- Local runtime for verification: `.runtime/php84/php.exe` (PHP 8.4.25), because `php` is not on PATH on this workstation.
 
-## Blade (public site)
+## Routes
 
-Views live in `resources/views/`:
+`php artisan route:list` reports **36** routes: 11 application routes, 14 Filament `/admin` routes, and 11 Livewire / Filament asset and export routes.
 
-| View | Source |
-|------|--------|
-| `home.blade.php` | rebuilt from `index.html` |
-| `articles/index.blade.php` | listing chrome from homepage `#portfolio` |
-| `articles/show.blade.php` | `articles/{slug}.html` |
-| `services/show.blade.php` | dynamic catalog detail from `services` table |
-| `components/article-card.blade.php` | shared article card (EN defaults + `data-fa`) |
-| `components/service-card.blade.php` | homepage catalog card |
-| `seo/sitemap.blade.php` | XML sitemap |
-| `vendor/filament/**` | admin UI (vendor + panel provider) |
-
-Rebuild command: `php artisan site:publish-assets --views` (`App\Services\LegacySitePublisher`).
-
-Public copies of CSS/JS/images: `public/assets/` (copied from `assets/`). Overlay stylesheet `assets/css/visual-upgrade.css` is loaded after `rtl.css`.
-
-## Filament / Livewire
-
-- Provider: `app/Providers/Filament/AdminPanelProvider.php`
-- Path: `/admin` (login `/admin/login`)
-- Resources: `app/Filament/Resources/{Article,Category,Service,Request}Resource.php` plus `Users/UserResource.php` (navigation disabled)
-- Widgets: `CmsStatsOverview`, `RecentArticles`, `RecentRequests`
-- Livewire 4 is a Filament 5 dependency; public pages do not use Livewire components
-
-## Database
-
-See [DATABASE.md](DATABASE.md). Eloquent models: `app/Models/{User,Article,Category,Request,ArticleRedirect}.php`.
-
-## Public document root
-
-Production and `php artisan serve` must expose **`public/`** only. Original `index.html`, `articles/`, `services/`, `assets/`, `forms/` at the repository root are **sources**, not the live document root. Copying them into `public/` would bypass Laravel.
-
-## Storage
-
-- `storage/app/public` — Filament image uploads (symlink `public/storage`)
-- Imported featured images often remain under `/assets/...` and are not rewritten unless an editor uploads a replacement
-- `storage/framework/{cache,sessions,views}` — file cache/sessions/compiled Blade
-- Do not upload `.runtime/` to production
-
-## Routes (`routes/web.php`)
-
-| Method | Path | Name | Controller |
-|--------|------|------|------------|
+| Method | Path | Name | Handler |
+|--------|------|------|---------|
 | GET | `/` | `home` | `HomeController@index` |
-| GET | `/index.html` | (closure) | 301 → `/` |
-| GET | `/services/{slug}.html` | `services.legacy` | `ServiceController@legacy` (301) |
-| GET | `/services/{slug}` | `services.show` | `ServiceController@show` |
-| GET | `/articles/{slug}.html` | `articles.legacy` | `ArticleController@legacy` |
-| GET | `/articles/{slug}` | `articles.show` | `ArticleController@show` |
+| GET | `/index.html` | — | closure, 301 → `/` |
 | GET | `/articles` | `articles.index` | `ArticleController@index` |
+| GET | `/articles/{slug}` | `articles.show` | `ArticleController@show` |
+| GET | `/articles/{slug}.html` | `articles.legacy` | `ArticleController@legacy` (301) |
+| GET | `/services/{slug}` | `services.show` | `ServiceController@show` |
+| GET | `/services/{slug}.html` | `services.legacy` | `ServiceController@legacy` (301) |
 | GET | `/forms/get-csrf-token.php` | `contact.token` | `ContactController@token` |
 | POST | `/forms/contact.php` | `contact.store` | `ContactController@store` + `throttle:30,1` |
 | GET | `/sitemap.xml` | `sitemap` | `SitemapController` |
 | GET | `/robots.txt` | `robots` | `RobotsController` |
 
-Filament registers `/admin/*` and Livewire routes. There is **no** `/de` route.
+There is no `/de` route.
 
-## Services
+## Controllers
 
-| Class | Role |
-|-------|------|
-| `App\Services\LegacyArticleImporter` | Parse `articles/*.html` into `articles` + `article_redirects` |
-| `App\Services\LegacyServiceImporter` | Parse `services/*.html` into `services` |
-| `App\Services\LegacySitePublisher` | Copy allowlisted assets; rebuild Blade from original HTML |
-| `App\Services\ArticleSeo` | Canonical, OG, Twitter, JSON-LD for article detail |
-| `App\Services\ArticleHtmlSanitizer` | Allowed HTML for stored article bodies |
+| Controller | Responsibility |
+|------------|----------------|
+| `HomeController` | Homepage, including the published service catalog |
+| `ArticleController` | Library, search and tag filter, detail, legacy 301 |
+| `ServiceController` | Service detail plus catalog sidebar, legacy 301 |
+| `ContactController` | CSRF token endpoint and contact submission |
+| `SitemapController`, `RobotsController` | SEO endpoints |
 
 ## Models and policies
 
-| Model | Policy | Ability |
-|-------|--------|---------|
-| `Article` | `ArticlePolicy` | admin + editor (`canManageContent`) |
-| `Category` | `CategoryPolicy` | admin + editor |
-| `Request` (table `requests`) | `RequestPolicy` | admin only; create from Filament is false |
-| `Service` | `ServicePolicy` | admin only |
-| `User` | `UserPolicy` | admin only |
+| Model | Table | Policy | Who may manage |
+|-------|-------|--------|----------------|
+| `Article` | `articles` | `ArticlePolicy` | admin + editor |
+| `Category` | `categories` | `CategoryPolicy` | admin + editor |
+| `Tag` | `tags` | `TagPolicy` | admin + editor |
+| `Service` | `services` | `ServicePolicy` | admin only |
+| `Request` | `requests` | `RequestPolicy` | admin only, create denied |
+| `User` | `users` | `UserPolicy` | admin only |
+| `ArticleRedirect` | `article_redirects` | — | managed by the importer and slug changes |
 
-Registered in `AppServiceProvider`.
+Policies are registered in `App\Providers\AppServiceProvider`.
 
-## Commands
+## Domain services
 
-| Command | Class |
-|---------|-------|
-| `articles:import-legacy` | `ImportLegacyArticles` |
-| `services:import-legacy` | `ImportLegacyServices` |
-| `site:publish-assets` | `PublishLegacyAssets` |
-| `site:compare-content` | `CompareLegacyContent` |
-| `cms:create-user` | `CreateCmsUser` |
-| `test` | `RunTests` (wraps PHPUnit; **does not** accept `--filter`) |
+| Class | Role |
+|-------|------|
+| `LegacyArticleImporter` | Parse `articles/*.html` into `articles` + `article_redirects` |
+| `LegacyServiceImporter` | Parse `services/*.html` into `services` |
+| `LegacySitePublisher` | Copy allowlisted assets into `public/` and rebuild Blade views from the original HTML |
+| `ArticleSeo` | Canonical, Open Graph, Twitter and JSON-LD for article detail |
+| `ArticleShareLinks` | Share URLs on the article page |
+| `ArticleHtmlSanitizer` | Allowed HTML for stored article bodies |
+| `ArticleTagAssigner` | Derive the tag vocabulary and article links |
 
-## PWA
+## Console commands
 
-Static files under `public/`: `manifest.json`, `sw.js`, `offline.html`. Registered from homepage markup. See [PWA.md](PWA.md).
+| Command | Class | Options |
+|---------|-------|---------|
+| `articles:import-legacy` | `ImportLegacyArticles` | `--dry-run`, `--refresh` |
+| `services:import-legacy` | `ImportLegacyServices` | `--dry-run`, `--refresh` |
+| `articles:sync-tags` | `SyncArticleTags` | — |
+| `site:publish-assets` | `PublishLegacyAssets` | `--views` |
+| `site:compare-content` | `CompareLegacyContent` | — |
+| `cms:create-user` | `CreateCmsUser` | interactive |
+| `test` | `RunTests` | forwards arguments to PHPUnit |
+
+## Blade (public site)
+
+| View | Origin |
+|------|--------|
+| `home.blade.php` | rebuilt from the original `index.html` |
+| `articles/index.blade.php` | library chrome from the homepage portfolio section |
+| `articles/show.blade.php` | from `articles/{slug}.html` |
+| `articles/partials/*` | breadcrumbs, library toolbar, related, search results, share |
+| `services/show.blade.php` | dynamic catalog detail rendered from the `services` table |
+| `components/article-card.blade.php`, `components/service-card.blade.php` | shared cards, English defaults with `data-fa` |
+| `seo/sitemap.blade.php` | XML sitemap |
+| `errors/{404,419,500}.blade.php` | error pages |
+
+Rebuild with `php artisan site:publish-assets --views`.
+
+Six per-service Blade files (`services/network-design.blade.php` and siblings) remain on disk but are **not routed** — `ServiceController@show` always renders `services.show`. They are dead templates carrying stale asset versions; see the limitations list in [PROJECT-STATUS.md](PROJECT-STATUS.md).
+
+## Filament / Livewire
+
+- Provider: `app/Providers/Filament/AdminPanelProvider.php`, panel path `/admin`
+- Resources: `ArticleResource`, `CategoryResource`, `TagResource`, `ServiceResource`, `RequestResource`, `Users/UserResource`
+- Widgets: `CmsStatsOverview`, `RecentArticles`, `RecentRequests`
+- Livewire 4 is a Filament dependency; the public pages use no Livewire components
+
+Detail: [ADMIN.md](ADMIN.md).
+
+## Middleware
+
+| Middleware | Effect |
+|------------|--------|
+| `SecurityHeaders` | `nosniff`, `Referrer-Policy`, `SAMEORIGIN`, HSTS on HTTPS, `no-store` on `/admin`, `/livewire`, `/forms` and POST responses |
+| `AcceptLegacyCsrfToken` | Maps the legacy `csrf_token` field onto Laravel's CSRF check |
+
+## Assets and document root
+
+Original CSS/JS/images live in `assets/` and are copied into `public/assets/` by the publisher. The overlay stylesheet `assets/css/visual-upgrade.css` loads after `rtl.css`. Current cache-busting versions in the Blade heads: `visual-upgrade.css?v=1314`, `main.js?v=1119`, `i18n.js?v=1116`.
+
+Only `public/` may be exposed by the web server. The root-level `index.html`, `articles/`, `services/`, `assets/`, `forms/` and `partials/` are **sources**; serving them directly would bypass Laravel.
+
+## Storage
+
+- `storage/app/public` → Filament uploads, symlinked as `public/storage`
+- Imported `featured_image` values usually stay under `/assets/...` unless replaced
+- `storage/framework/{cache,sessions,views}` → file cache, sessions, compiled Blade
+- `.runtime/` is a local PHP runtime and must never be uploaded to production
 
 ## What this architecture is not
 
-- Not Laravel 11 / PHP 8.2 / Filament 3
-- Not a `pages` table CMS
-- Not a `contact_requests` table
-- Not a public German site (`/de`)
-- Not a Node/Vite/Tailwind app
+Not Laravel 11 or 12, not PHP 8.2, not Filament 3, not React or Next.js, not a `pages`-table CMS, not a `contact_requests` table, not a public German site, and not a Node/Vite/Tailwind build.
