@@ -315,6 +315,7 @@
   align-items: stretch;
   gap: 0.55rem;
   min-width: 0;
+  width: 100%;
   padding-inline-start: 0.85rem;
   border-inline-start: 3px solid var(--article-primary, #2563eb);
   text-align: start;
@@ -337,6 +338,7 @@
 .article-hero-copy .article-title {
   max-width: none !important;
   width: 100%;
+  text-align: start;
   color: var(--article-text, #1e293b);
 }
 
@@ -365,15 +367,13 @@
   width: 100%;
   max-width: none;
   margin: 0;
-  padding: 0.55rem;
+  padding: 0;
   aspect-ratio: auto;
   overflow: visible;
-  border-radius: var(--article-radius, 1rem);
-  border: 1px solid color-mix(in srgb, var(--article-primary, #2563eb) 22%, var(--article-border, #dce5f1));
-  background:
-    radial-gradient(circle at 12% 18%, var(--article-bg-accent, rgba(37, 99, 235, 0.13)), transparent 42%),
-    var(--article-surface-muted, #eef4ff);
-  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.07);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .article-hero-media img,
@@ -391,9 +391,10 @@
   object-fit: contain !important;
   object-position: center !important;
   margin-inline: auto !important;
-  border: 0 !important;
-  border-radius: 0.7rem !important;
-  box-shadow: none !important;
+  border: 1px solid color-mix(in srgb, var(--article-primary, #2563eb) 22%, var(--article-border, #dce5f1)) !important;
+  border-radius: var(--article-radius, 1rem) !important;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.07) !important;
+  background: var(--article-surface-muted, #eef4ff);
   flex: none !important;
 }
 
@@ -840,10 +841,12 @@ html[dir="rtl"] .testimonial-card cite {
   }
 }
 
-@media (max-width: 1023px) {
-  aside.article-toc .article-nav-item a {
-    min-height: 2.75rem;
-    padding-block: 0.55rem;
+@media (min-width: 600px) and (max-width: 1023px) {
+  aside.article-toc .article-toc-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.15rem 0.65rem;
+    max-height: 12rem;
   }
 }
 
