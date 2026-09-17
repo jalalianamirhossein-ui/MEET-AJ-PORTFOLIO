@@ -62,7 +62,7 @@
                     @if ($cardTags->isNotEmpty())
                       <ul class="article-teaser-tags">
                         @foreach ($cardTags as $tag)
-                          <li>{{ $tag->name }}</li>
+                          <li><a href="{{ $tag->path() }}">{{ $tag->name }}</a></li>
                         @endforeach
                       </ul>
                     @endif

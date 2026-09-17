@@ -29,6 +29,15 @@ class PublicSiteTest extends TestCase
         $this->assertSame(301, $this->get('/index.html')->baseResponse->getStatusCode());
     }
 
+    public function test_homepage_renders_each_primary_section_once(): void
+    {
+        $html = $this->get('/')->assertOk()->getContent();
+        foreach (['hero', 'about', 'skills', 'resume', 'services', 'portfolio', 'testimonials', 'contact'] as $id) {
+            $this->assertSame(1, substr_count($html, 'id="'.$id.'"'), $id.' should appear once');
+        }
+        $this->assertSame(1, substr_count($html, 'id="articles-load-more"'));
+    }
+
     public function test_service_pages_redirect_once_and_render(): void
     {
         foreach ([
@@ -61,6 +70,8 @@ class PublicSiteTest extends TestCase
             $this->get('/articles/'.$article->slug)
                 ->assertOk()
                 ->assertSee($article->slug, false)
+                ->assertSee($article->galleryUrl(), false)
+                ->assertSee('article-hero-thumbnail', false)
                 ->assertSee('rel="canonical"', false)
                 ->assertSee('application/ld+json', false)
                 ->assertSee('data-fa=', false)

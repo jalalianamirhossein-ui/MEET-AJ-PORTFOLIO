@@ -94,9 +94,9 @@ class LegacySitePublisher
     <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
     <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
-    <link href="/assets/css/lang-toggle.css?v=1116" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1201" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1314" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1401" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">
 BLADE;
@@ -107,8 +107,8 @@ BLADE;
     <script src="/assets/vendor/glightbox/js/glightbox.min.js" defer></script>
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1119" defer></script>
-    <script src="/assets/js/i18n.js?v=1116" defer></script>
+    <script src="/assets/js/main.js?v=1201" defer></script>
+    <script src="/assets/js/i18n.js?v=1201" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {

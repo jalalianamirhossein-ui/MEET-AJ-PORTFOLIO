@@ -363,122 +363,195 @@
     const glightbox = GLightbox(config);
   }
 
-  function initPortfolio() {
-    document
-      .querySelectorAll(".isotope-layout")
-      .forEach(function (isotopeItem) {
-        let layout = isotopeItem.getAttribute("data-layout") ?? "masonry";
-        let filter = isotopeItem.getAttribute("data-default-filter") ?? "*";
-        let sort = isotopeItem.getAttribute("data-sort") ?? "original-order";
-
-        let initIsotope;
-        const container = isotopeItem.querySelector(".isotope-container");
-
-        if (container && window.imagesLoaded && window.Isotope) {
-          // Initialize before below-the-fold images arrive. Waiting for every
-          // lazy thumbnail delayed filtering and encouraged an unnecessary
-          // 30 MB image fetch on first visit.
-          let transitionDuration = "0.6s";
-          if (window.innerWidth <= 768) {
-            transitionDuration = "0.4s";
-          }
-
-          initIsotope = new Isotope(container, {
-            itemSelector: ".isotope-item",
-            layoutMode: layout,
-            filter: filter,
-            sortBy: sort,
-            transitionDuration: transitionDuration,
-            isOriginLeft: document.documentElement.dir !== "rtl",
-          });
-          container._isotopeInstance = initIsotope;
-          container.classList.add("isotope-ready");
-
-          // Relayout incrementally as images and fonts settle instead of
-          // blocking initialization on all lazy media.
-          imagesLoaded(container).on("progress", () => {
-            if (container._isotopeInstance) initIsotope.arrange();
-          });
-          setTimeout(() => initIsotope.arrange(), 150);
-          if (document.fonts && document.fonts.ready) {
-            document.fonts.ready.then(() => {
-              if (container._isotopeInstance) initIsotope.arrange();
-            });
-          }
-
-          // After initializing Isotope, refresh AOS
-          if (typeof aosInit === "function") {
-            setTimeout(aosInit, 100);
-          }
-
-          // Event listeners for filters
-          isotopeItem
-            .querySelectorAll(".isotope-filters [data-filter]")
-            .forEach(function (filters) {
-              filters.setAttribute("role", "button");
-              filters.setAttribute("tabindex", "0");
-              filters.setAttribute(
-                "aria-pressed",
-                String(filters.classList.contains("filter-active")),
-              );
-
-              const activateFilter = function () {
-                const activeFilter = isotopeItem.querySelector(
-                  ".isotope-filters .filter-active",
-                );
-                if (activeFilter) {
-                  activeFilter.classList.remove("filter-active");
-                  activeFilter.setAttribute("aria-pressed", "false");
-                }
-                this.classList.add("filter-active");
-                this.setAttribute("aria-pressed", "true");
-                if (initIsotope) {
-                  initIsotope.arrange({
-                    filter: this.getAttribute("data-filter"),
-                  });
-                  const filterValue = this.getAttribute("data-filter") || "*";
-                  const grid = isotopeItem.querySelector(".isotope-container");
-                  if (grid) {
-                    grid.querySelectorAll(".portfolio-item").forEach((item) => {
-                      const match =
-                        filterValue === "*" || item.matches(filterValue);
-                      item.classList.toggle("is-filtered-out", !match);
-                    });
-                  }
-                  setTimeout(function () {
-                    if (typeof aosInit === "function") aosInit();
-                  }, 200);
-                }
-              };
-
-              filters.addEventListener("click", activateFilter, false);
-              filters.addEventListener("keydown", function (event) {
-                if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  this.click();
-                }
-              });
-            });
-        } else if (container) {
-          // Keep the Bootstrap grid usable if an optional enhancement fails to
-          // load. Retrying forever creates an unnecessary timer on every page.
-          console.warn("Portfolio enhancements are unavailable; using the static grid.");
-        }
-      });
+  function prefersReducedMotion() {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }
 
-  // Run Portfolio after complete DOM load
-  window.addEventListener("load", initPortfolio);
+  function initPortfolio() {
+    document.querySelectorAll(".isotope-layout").forEach((layout) => {
+      const container = layout.querySelector(".isotope-container");
+      if (!container) return;
 
-  // Safeguard: relayout isotope on resize/orientation to keep articles grid aligned
-  window.addEventListener(
-    "resize",
-    debounce(() => {
-      document.querySelectorAll(".isotope-container").forEach((container) => {
-        if (container._isotopeInstance) container._isotopeInstance.arrange();
+      container.classList.add("isotope-ready");
+      const inPortfolio = Boolean(layout.closest("#portfolio"));
+      const state = {
+        filter: layout.getAttribute("data-default-filter") || "*",
+        batchSize: inPortfolio ? 6 : Number.POSITIVE_INFINITY,
+        visibleCount: inPortfolio ? 6 : Number.POSITIVE_INFINITY,
+        booted: false,
+      };
+      container._flipState = state;
+
+      const items = () =>
+        Array.from(container.querySelectorAll(".isotope-item"));
+      const matchesFilter = (el) =>
+        state.filter === "*" || el.matches(state.filter);
+      const nextVisible = () => {
+        const matched = items().filter(matchesFilter);
+        return new Set(matched.slice(0, state.visibleCount));
+      };
+
+      const capture = () => {
+        const map = new Map();
+        items().forEach((el) => {
+          if (
+            el.classList.contains("is-filtered-out") &&
+            !el.classList.contains("is-flip-leave")
+          ) {
+            return;
+          }
+          const box = el.getBoundingClientRect();
+          if (box.width === 0 && box.height === 0) return;
+          map.set(el, {
+            left: box.left,
+            top: box.top,
+            width: box.width,
+            height: box.height,
+          });
+        });
+        return map;
+      };
+
+      const clearInlineMotion = (el) => {
+        el.style.transform = "";
+        el.style.opacity = "";
+        el.style.position = "";
+        el.style.left = "";
+        el.style.top = "";
+        el.style.width = "";
+        el.style.zIndex = "";
+        el.classList.remove("is-flip-leave", "is-flip-enter", "is-flip-move");
+      };
+
+      const updateLoadMore = () => {
+        const button = document.getElementById("articles-load-more");
+        if (!button || !inPortfolio) return;
+        const matched = items().filter(matchesFilter).length;
+        button.style.display =
+          state.visibleCount >= matched ? "none" : "inline-flex";
+      };
+
+      const applyVisibility = (visible) => {
+        items().forEach((el) => {
+          const show = visible.has(el);
+          el.classList.toggle("is-filtered-out", !show);
+          el.classList.toggle("is-hidden", !show);
+        });
+      };
+
+      const animateFilter = () => {
+        const reduce = prefersReducedMotion() || !state.booted;
+        const duration = 380;
+        const first = reduce ? new Map() : capture();
+        const visible = nextVisible();
+
+        items().forEach(clearInlineMotion);
+        applyVisibility(visible);
+        updateLoadMore();
+        state.booted = true;
+        if (reduce || typeof container.animate !== "function") return;
+
+        const parent = container.getBoundingClientRect();
+        const last = capture();
+
+        first.forEach((box, el) => {
+          if (last.has(el)) return;
+          el.classList.remove("is-filtered-out", "is-hidden");
+          el.classList.add("is-flip-leave");
+          el.style.position = "absolute";
+          el.style.left = `${box.left - parent.left}px`;
+          el.style.top = `${box.top - parent.top}px`;
+          el.style.width = `${box.width}px`;
+          el.style.zIndex = "0";
+          const leave = el.animate(
+            [
+              { transform: "translate3d(0,0,0)", opacity: 1 },
+              { transform: "translate3d(0,14px,0)", opacity: 0 },
+            ],
+            {
+              duration,
+              easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+              fill: "forwards",
+            },
+          );
+          leave.onfinish = () => {
+            el.classList.add("is-filtered-out", "is-hidden");
+            clearInlineMotion(el);
+          };
+        });
+
+        last.forEach((box, el) => {
+          const prev = first.get(el);
+          if (!prev) {
+            el.animate(
+              [
+                { transform: "translate3d(0,16px,0)", opacity: 0 },
+                { transform: "translate3d(0,0,0)", opacity: 1 },
+              ],
+              { duration, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+            );
+            return;
+          }
+          const dx = prev.left - box.left;
+          const dy = prev.top - box.top;
+          if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+          el.animate(
+            [
+              { transform: `translate3d(${dx}px, ${dy}px, 0)` },
+              { transform: "translate3d(0,0,0)" },
+            ],
+            { duration, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+          );
+        });
+      };
+
+      layout.querySelectorAll(".isotope-filters [data-filter]").forEach((btn) => {
+        if (btn.tagName !== "BUTTON") {
+          btn.setAttribute("role", "button");
+          btn.tabIndex = 0;
+        }
+        btn.setAttribute(
+          "aria-pressed",
+          String(btn.classList.contains("filter-active")),
+        );
+
+        const activate = () => {
+          layout
+            .querySelectorAll(".isotope-filters [data-filter]")
+            .forEach((other) => {
+              const on = other === btn;
+              other.classList.toggle("filter-active", on);
+              other.setAttribute("aria-pressed", String(on));
+            });
+          state.filter = btn.getAttribute("data-filter") || "*";
+          state.visibleCount = Number.isFinite(state.batchSize)
+            ? state.batchSize
+            : Number.POSITIVE_INFINITY;
+          animateFilter();
+        };
+
+        btn.addEventListener("click", activate);
+        btn.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            activate();
+          }
+        });
       });
-    }, 150),
-  );
+
+      const loadMore = document.getElementById("articles-load-more");
+      if (loadMore && inPortfolio) {
+        loadMore.addEventListener("click", () => {
+          state.visibleCount += state.batchSize;
+          animateFilter();
+        });
+      }
+
+      animateFilter();
+    });
+  }
+
+  window.addEventListener("load", initPortfolio);
 
   function initTypedText() {
     const typedElement = document.querySelector(".typed");
@@ -855,74 +928,7 @@
 
   // Load-more for articles (portfolio) section
   function initArticlesLoadMore() {
-    const container = document.querySelector("#portfolio .isotope-container");
-    const loadMoreBtn = document.getElementById("articles-load-more");
-    if (!container || !loadMoreBtn) return;
-
-    const items = Array.from(container.querySelectorAll(".portfolio-item"));
-    const batchSize = 6;
-    let visibleCount = batchSize;
-    let ready = false;
-    let attempts = 0;
-
-    const getFilteredItems = () => {
-      const iso = container._isotopeInstance;
-      if (iso && Array.isArray(iso.filteredItems)) {
-        return iso.filteredItems.map((entry) => entry.element);
-      }
-      return items;
-    };
-
-    const updateVisibility = () => {
-      const filtered = getFilteredItems();
-
-      // Reset hidden state on all items first
-      items.forEach((item) => item.classList.remove("is-hidden"));
-
-      filtered.forEach((item, index) => {
-        const show = index < visibleCount;
-        item.classList.toggle("is-hidden", !show);
-      });
-
-      if (container._isotopeInstance) {
-        container._isotopeInstance.arrange();
-      }
-
-      loadMoreBtn.style.display =
-        visibleCount >= filtered.length ? "none" : "inline-flex";
-    };
-
-    const kickOff = () => {
-      if (ready) return;
-      if (container._isotopeInstance) {
-        ready = true;
-        updateVisibility();
-      } else if (attempts++ < 20) {
-        // Give the optional layout plugin one second to finish initialization.
-        setTimeout(kickOff, 50);
-      } else {
-        // Graceful fallback for pages where the optional plugin is unavailable.
-        ready = true;
-        updateVisibility();
-      }
-    };
-
-    kickOff();
-
-    loadMoreBtn.addEventListener("click", () => {
-      visibleCount += batchSize;
-      updateVisibility();
-    });
-
-    // Reset and recalc when filters change
-    document.querySelectorAll(".portfolio-filters li").forEach((filterBtn) => {
-      filterBtn.addEventListener("click", () => {
-        visibleCount = batchSize;
-        // Give Isotope a moment to apply the filter
-        setTimeout(updateVisibility, 50);
-      });
-    });
-
+    // Load-more and filtering are handled by initPortfolio (FLIP layout).
   }
 
   window.addEventListener("load", initArticlesLoadMore);

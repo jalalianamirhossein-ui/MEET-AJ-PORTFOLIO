@@ -13,7 +13,7 @@ class HomeController extends Controller
     {
         $articles = Article::published()
             ->forListing()
-            ->with('category')
+            ->with(['category', 'tags'])
             ->orderBy('sort_order')
             ->orderBy('id')
             ->get();

@@ -36,9 +36,9 @@
     <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
     <link href="/assets/css/articles.css?v=1013" rel="stylesheet" />
-    <link href="/assets/css/lang-toggle.css?v=1116" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1201" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1314" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1401" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @if (!empty($seo['breadcrumb']))
       <script type="application/ld+json">{!! json_encode($seo['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
@@ -114,7 +114,7 @@
               <p class="article-excerpt hero-subtitle" data-en="{{ $article->excerpt }}" data-fa="{{ data_get($article->presentation, 'excerpt_translations.fa', $article->excerpt) }}">{{ $article->excerpt }}</p>
               <div class="article-banner">
                 <div class="banner-card">
-                  <img class="article-hero-thumbnail" src="{{ $article->galleryUrl() }}" alt="{{ data_get($article->presentation, 'image_alt') ?: $article->title }}" />
+                  <img class="article-hero-thumbnail" src="{{ $article->galleryUrl() }}" width="1200" height="750" decoding="async" fetchpriority="high" alt="{{ data_get($article->presentation, 'image_alt') ?: $article->title }}" />
                   <div class="banner-content">
                     <h2 class="banner-title" data-en="{{ data_get($article->presentation, 'category_label_en') }}" data-fa="{{ data_get($article->presentation, 'category_label_fa') }}">{{ data_get($article->presentation, 'category_label_en') }}</h2>
                     <p class="banner-subtitle" data-en="Meet AJ technical article" data-fa="مقاله فنی Meet AJ">Meet AJ technical article</p>
@@ -185,8 +185,8 @@
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1119" defer></script>
-    <script src="/assets/js/i18n.js?v=1116" defer></script>
+    <script src="/assets/js/main.js?v=1201" defer></script>
+    <script src="/assets/js/i18n.js?v=1201" defer></script>
     <script>
       document.querySelectorAll("[data-copy-link]").forEach(function (button) {
         button.addEventListener("click", function () {

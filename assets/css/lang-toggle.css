@@ -1,140 +1,91 @@
 /**
- * Language switcher — solid compact listbox (Article DNA).
+ * Language switch — single 44px control. No dropdown, no menu.
  * Loaded before rtl.css / visual-upgrade.css.
  */
 
 .lang-switcher {
   position: relative;
   z-index: 10002;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: stretch;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .lang-switcher.is-floating {
   position: fixed;
   top: max(1rem, env(safe-area-inset-top, 0px));
   inset-inline-start: max(1rem, env(safe-area-inset-left, 0px));
-}
-
-.lang-switcher-toggle,
-.lang-switcher-option {
-  min-height: 44px;
-  min-width: 44px;
-  margin: 0;
-  border: 1px solid #dce5f1;
-  background: #ffffff;
-  color: #0f172a;
-  font-family: inherit;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
+  width: auto;
 }
 
 .lang-switcher-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  padding: 0 0.85rem;
+  gap: 0.45rem;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 0.9rem;
+  margin: 0;
+  border: 1px solid #dce5f1;
   border-radius: 0.75rem;
+  background: #ffffff;
+  color: #0f172a;
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
-  transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
 }
 
-.lang-switcher-chevron {
-  width: 0.4rem;
-  height: 0.4rem;
-  border-inline-end: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
-  transform: rotate(45deg) translateY(-1px);
-  opacity: 0.7;
+.lang-switcher-current {
+  font-variant: all-small-caps;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
 }
 
-.lang-switcher.is-open .lang-switcher-chevron {
-  transform: rotate(225deg) translateY(-1px);
+.lang-switcher-swap {
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1;
+  opacity: 0.72;
 }
 
 .lang-switcher-toggle:hover {
   border-color: rgba(37, 99, 235, 0.45);
   background: #eef4ff;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+  color: #1d4ed8;
 }
 
-.lang-switcher-toggle:focus-visible,
-.lang-switcher-option:focus-visible {
+.lang-switcher-toggle:hover .lang-switcher-swap {
+  opacity: 1;
+}
+
+.lang-switcher-toggle:focus-visible {
   outline: 2px solid #2563eb;
   outline-offset: 3px;
 }
 
-.lang-switcher-menu {
-  position: absolute;
-  top: calc(100% + 0.4rem);
-  inset-inline-start: 0;
-  min-width: 100%;
-  padding: 0.3rem;
-  border: 1px solid rgba(148, 163, 184, 0.35);
-  border-radius: 0.75rem;
-  background: #ffffff;
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.1);
-  display: grid;
-  gap: 0.2rem;
+.lang-switcher-toggle:active {
+  transform: translateY(1px);
 }
 
-.lang-switcher-menu[hidden] {
-  display: none;
-}
-
-.lang-switcher.is-open .lang-switcher-menu {
-  animation: lang-menu-in 180ms ease;
-}
-
-.lang-switcher-option {
-  width: 100%;
-  border-radius: 8px;
-  background: transparent;
-  box-shadow: none;
-  letter-spacing: 0.1em;
-}
-
-.lang-switcher-option:hover {
-  background: rgba(37, 99, 235, 0.08);
-}
-
-.lang-switcher-option.is-active {
-  background: rgba(37, 99, 235, 0.14);
-  color: #1d4ed8;
-  box-shadow: inset 3px 0 0 #2563eb;
-}
-
-html[dir="rtl"] .lang-switcher-option.is-active {
-  box-shadow: inset -3px 0 0 #2563eb;
-}
-
-@keyframes lang-menu-in {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.lang-switcher.is-floating .lang-switcher-toggle {
+  background: rgba(15, 23, 42, 0.88);
+  color: #f8fafc;
+  border-color: rgba(148, 163, 184, 0.35);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lang-switcher-toggle,
-  .lang-switcher-option,
-  .lang-switcher.is-open .lang-switcher-menu {
+  .lang-switcher-toggle {
     transition: none;
-    animation: none;
   }
-}
 
-@media print {
-  .lang-switcher {
-    display: none;
+  .lang-switcher-toggle:active {
+    transform: none;
   }
 }

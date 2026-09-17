@@ -49,11 +49,19 @@ class ArticleLibraryTest extends TestCase
         $response = $this->get('/articles?q=linux');
         $response->assertOk()
             ->assertSee('article-result-list', false)
+            ->assertSee('article-teaser', false)
+            ->assertSee('article-teaser-media', false)
             ->assertDontSee('isotope-container', false)
             ->assertDontSee('HiddenDraftNeedleXYZ', false)
             ->assertSee('linux', false);
 
         $this->get('/articles/hidden-draft-needle-xyz')->assertNotFound();
+
+        $published = Article::published()->search('linux')->first();
+        $this->assertNotNull($published);
+        $this->get('/articles?q=linux')
+            ->assertSee($published->thumbnailUrl(), false)
+            ->assertSee('Read article', false);
     }
 
     public function test_tag_filter_and_related_articles_use_published_tagged_peers(): void
