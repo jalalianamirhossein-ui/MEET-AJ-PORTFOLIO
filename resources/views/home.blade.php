@@ -236,7 +236,7 @@
       rel="stylesheet"
       disabled
     />
-    <link href="/assets/css/visual-upgrade.css?v=1602" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1701" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -2877,11 +2877,11 @@
     =============================================== -->
 
     <!-- Main Application JavaScript -->
-    <script src="/assets/js/main.js?v=1300" defer></script>
+    <script src="/assets/js/main.js?v=1400" defer></script>
 
     <!-- Internationalization (i18n) Support -->
     <!-- Language Toggle JavaScript -->
-    <script src="/assets/js/i18n.js?v=1203" defer></script>
+    <script src="/assets/js/i18n.js?v=1300" defer></script>
 
     <!-- Progressive image loading for non-critical media -->
     <script>

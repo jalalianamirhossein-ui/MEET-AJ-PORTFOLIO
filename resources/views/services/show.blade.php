@@ -56,7 +56,7 @@
     <link rel="stylesheet" href="/assets/css/services.css?v=1000" />
     <link href="/assets/css/lang-toggle.css?v=1300" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1602" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1701" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" />
     <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>

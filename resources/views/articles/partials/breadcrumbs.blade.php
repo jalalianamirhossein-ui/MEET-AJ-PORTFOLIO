@@ -1,10 +1,20 @@
-              <nav class="article-breadcrumb" aria-label="Breadcrumb">
+              @php
+                  $crumbCategoryEn = data_get($article->presentation, 'category_label_en') ?: $article->category?->name;
+                  $crumbCategoryFa = data_get($article->presentation, 'category_label_fa') ?: $crumbCategoryEn;
+              @endphp
+              <nav
+                class="article-breadcrumb"
+                aria-label="Breadcrumb"
+                data-en-aria-label="Breadcrumb"
+                data-fa-aria-label="مسیر صفحه"
+              >
                 <ol>
-                  <li><a href="/" data-en="Home" data-fa="خانه">Home</a></li>
+                  <li><a href="/" data-en="Home" data-fa="صفحه اصلی">Home</a></li>
                   <li><a href="/articles" data-en="Articles" data-fa="مقالات">Articles</a></li>
-                  @if ($article->category)
-                    <li><a href="/articles">{{ $article->category->name }}</a></li>
+                  @if ($crumbCategoryEn)
+                    <li aria-current="page">
+                      <span data-en="{{ $crumbCategoryEn }}" data-fa="{{ $crumbCategoryFa }}">{{ $crumbCategoryEn }}</span>
+                    </li>
                   @endif
-                  <li aria-current="page">{{ $article->title }}</li>
                 </ol>
               </nav>

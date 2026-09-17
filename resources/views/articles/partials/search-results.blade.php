@@ -13,7 +13,7 @@
               @endforeach
             </div>
             @if ($results->hasPages())
-              <nav class="article-pagination" aria-label="Search results pages">
+              <nav class="article-pagination" aria-label="Search results pages" data-en-aria-label="Search results pages" data-fa-aria-label="صفحات نتایج جستجو">
                 @if ($results->onFirstPage())
                   <span class="article-page-link is-disabled" aria-disabled="true" data-en="Previous" data-fa="قبلی">Previous</span>
                 @else

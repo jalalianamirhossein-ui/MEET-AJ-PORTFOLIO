@@ -139,6 +139,19 @@
       }
     });
 
+    document.querySelectorAll("[data-en-aria-label]").forEach((el) => {
+      const attr =
+        next === "fa"
+          ? "data-fa-aria-label"
+          : next === "de"
+            ? "data-de-aria-label"
+            : "data-en-aria-label";
+      const value = el.getAttribute(attr) || el.getAttribute("data-en-aria-label");
+      if (value) {
+        el.setAttribute("aria-label", value);
+      }
+    });
+
     const btn = document.getElementById("lang-toggle");
     const current = btn?.querySelector(".lang-switcher-current");
     const upcoming = nextLanguage(langs, next);

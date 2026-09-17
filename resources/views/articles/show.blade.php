@@ -35,10 +35,10 @@
     <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
     <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
-    <link href="/assets/css/articles.css?v=1013" rel="stylesheet" />
+    <link href="/assets/css/articles.css?v=1100" rel="stylesheet" />
     <link href="/assets/css/lang-toggle.css?v=1300" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1602" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1701" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @if (!empty($seo['breadcrumb']))
       <script type="application/ld+json">{!! json_encode($seo['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
@@ -53,6 +53,7 @@
       <span class="sr-only" data-en="Open menu" data-fa="باز کردن منو">Open menu</span>
     </button>
     <header id="header" class="header dark-background d-flex flex-column">
+      <div class="brand-lang" id="lang-mount"></div>
       <div class="profile-img">
         <img src="/assets/img/my-profile-img.jpg" loading="lazy" alt="AmirHossein Jalalian Profile Picture" class="img-fluid rounded-circle" />
       </div>
@@ -62,7 +63,6 @@
           <p class="sitename">Meet AJ</p>
         </a>
       </div>
-      <div class="brand-lang" id="lang-mount"></div>
       <div class="social-links text-center">
         <div class="social-row social-row-main">
           <a href="https://www.linkedin.com/in/amirhussein-jalalian-050702188/" class="linkedin" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
@@ -79,13 +79,13 @@
           <a href="tel:+989197276219" class="google-plus" aria-label="Phone"><i class="bi bi-telephone"></i></a>
         </div>
       </div>
-      <nav id="navmenu" class="navmenu navmenu--article-toc" aria-label="Article navigation">
+      <nav id="navmenu" class="navmenu navmenu--article-toc" aria-label="Article navigation" data-en-aria-label="Article navigation" data-fa-aria-label="ناوبری مقاله">
         <ul>
           <li>
-            <a href="/#hero"><i class="bi bi-house navicon" aria-hidden="true"></i><span data-en="Home" data-fa="خانه">Home</span></a>
+            <a href="/#hero"><i class="bi bi-house navicon" aria-hidden="true"></i><span data-en="Home" data-fa="صفحه اصلی">Home</span></a>
           </li>
           <li>
-            <a href="/#portfolio"><i class="bi bi-journal-text navicon" aria-hidden="true"></i><span data-en="Articles" data-fa="مقالات">Articles</span></a>
+            <a href="/articles"><i class="bi bi-journal-text navicon" aria-hidden="true"></i><span data-en="Articles" data-fa="مقالات">Articles</span></a>
           </li>
           {!! data_get($article->presentation, 'toc_html') !!}
         </ul>
@@ -98,7 +98,7 @@
             <div class="col-lg-10 mx-auto">
               @include('articles.partials.breadcrumbs')
               <div class="article-meta">
-                <span class="article-category" data-en="{{ data_get($article->presentation, 'category_label_en', $article->category->name ?? 'Article') }}" data-fa="{{ data_get($article->presentation, 'category_label_fa', $article->category->name ?? 'مقاله') }}">{{ data_get($article->presentation, 'category_label_en', $article->category->name ?? 'Article') }}</span>
+                <span class="article-category" data-en="{{ data_get($article->presentation, 'category_label_en', $article->category->name ?? 'Article') }}" data-fa="{{ data_get($article->presentation, 'category_label_fa', $article->category->name ?? 'Article') }}">{{ data_get($article->presentation, 'category_label_en', $article->category->name ?? 'Article') }}</span>
                 @if ($article->published_at)
                   <time class="meta-date article-date" datetime="{{ $article->published_at->toAtomString() }}">{{ $article->published_at->timezone(config('cms.display_timezone', config('app.timezone')))->format('M j, Y') }}</time>
                 @endif
@@ -113,15 +113,6 @@
               @endif
               <h1 class="article-title hero-title" data-en="{{ data_get($article->presentation, 'hero_title_en', $article->title) }}" data-fa="{{ data_get($article->presentation, 'hero_title_fa', $article->title) }}">{{ $article->title }}</h1>
               <p class="article-excerpt hero-subtitle" data-en="{{ $article->excerpt }}" data-fa="{{ data_get($article->presentation, 'excerpt_translations.fa', $article->excerpt) }}">{{ $article->excerpt }}</p>
-              <div class="article-banner">
-                <div class="banner-card">
-                  <img class="article-hero-thumbnail" src="{{ $article->galleryUrl() }}" width="1200" height="750" decoding="async" fetchpriority="high" alt="{{ data_get($article->presentation, 'image_alt') ?: $article->title }}" />
-                  <div class="banner-content">
-                    <h2 class="banner-title" data-en="{{ data_get($article->presentation, 'category_label_en') }}" data-fa="{{ data_get($article->presentation, 'category_label_fa') }}">{{ data_get($article->presentation, 'category_label_en') }}</h2>
-                    <p class="banner-subtitle" data-en="Meet AJ technical article" data-fa="مقاله فنی Meet AJ">Meet AJ technical article</p>
-                  </div>
-                </div>
-              </div>
               <div class="article-actions">
                 <a href="#article-content" class="btn btn-primary btn-lg action-btn"><span class="btn-content"><i class="bi bi-play-circle" aria-hidden="true"></i><span data-en="Start reading" data-fa="شروع مطالعه">Start reading</span></span></a>
               </div>
@@ -134,16 +125,17 @@
           <div class="bg-shape bg-shape-3"></div>
         </div>
       </section>
-      <section id="article-content" class="article-content article-container" aria-label="Article content">
+      <section id="article-content" class="article-content article-container" aria-label="Article content" data-en-aria-label="Article content" data-fa-aria-label="متن مقاله">
         <div class="container">
-          <div class="row">
-            <div class="col-lg-8 mx-auto">
-              <article class="article-body">
-                {!! $article->content !!}
-              </article>
-              @include('articles.partials.share')
-              @include('articles.partials.related')
-            </div>
+          <div class="article-reading">
+            <figure class="article-cover">
+              <img class="article-hero-thumbnail" src="{{ $article->galleryUrl() }}" width="500" height="500" decoding="async" fetchpriority="high" alt="{{ data_get($article->presentation, 'image_alt') ?: $article->title }}" />
+            </figure>
+            <article class="article-body">
+              {!! $article->content !!}
+            </article>
+            @include('articles.partials.share')
+            @include('articles.partials.related')
           </div>
         </div>
       </section>
@@ -186,29 +178,9 @@
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1300" defer></script>
-    <script src="/assets/js/i18n.js?v=1203" defer></script>
+    <script src="/assets/js/main.js?v=1400" defer></script>
+    <script src="/assets/js/i18n.js?v=1300" defer></script>
     <script>
-      document.querySelectorAll("[data-copy-link]").forEach(function (button) {
-        button.addEventListener("click", function () {
-          var url = button.getAttribute("data-copy-link") || "";
-          var status = button.closest(".article-share") && button.closest(".article-share").querySelector(".article-share-status");
-          var done = function () {
-            if (!status) return;
-            status.hidden = false;
-            status.textContent = "Link copied";
-            status.setAttribute("data-en", "Link copied");
-            status.setAttribute("data-fa", "پیوند کپی شد");
-          };
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(url).then(done).catch(function () {
-              window.prompt("Copy link", url);
-            });
-          } else {
-            window.prompt("Copy link", url);
-          }
-        });
-      });
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {
           navigator.serviceWorker.register("/sw.js").catch(function () {});

@@ -14,7 +14,44 @@
     $excerptEn = data_get($article->presentation, 'card_excerpt_en') ?: $article->excerpt;
     $excerptFa = data_get($article->presentation, 'card_excerpt_fa') ?: $excerptEn;
     $cardTags = $article->relationLoaded('tags') ? $article->tags->take(3) : collect();
+    $variant = $variant ?? 'library';
+    $isRelated = $variant === 'related';
 @endphp
+              @if ($isRelated)
+                <article class="article-teaser article-teaser--related" data-topic="{{ $topic }}">
+                  <a class="article-teaser-link" href="{{ $article->path() }}">
+                    <div class="article-teaser-media">
+                      <img
+                        src="{{ $article->thumbnailUrl() }}"
+                        width="500"
+                        height="500"
+                        decoding="async"
+                        loading="lazy"
+                        class="img-fluid"
+                        alt="{{ data_get($article->presentation, 'image_alt') ?: $article->title }}"
+                      />
+                    </div>
+                    <div class="portfolio-info">
+                      @if ($categoryEn)
+                        <p class="article-teaser-category"
+                          data-en="{{ $categoryEn }}"
+                          data-fa="{{ $categoryFa }}"
+                        >{{ $categoryEn }}</p>
+                      @endif
+                      <h3 class="article-teaser-title"
+                        data-en="{{ $titleEn }}"
+                        data-fa="{{ $titleFa }}"
+                      >{{ $titleEn }}</h3>
+                      @if ($article->published_at)
+                        <p class="article-teaser-meta">
+                          <i class="bi bi-calendar3" aria-hidden="true"></i>
+                          <time datetime="{{ $article->published_at->toDateString() }}">{{ $article->published_at->format('M j, Y') }}</time>
+                        </p>
+                      @endif
+                    </div>
+                  </a>
+                </article>
+              @else
               <div
                 class="col-lg-4 col-md-6 portfolio-item isotope-item article-grid-item {{ $article->filterClass() }}"
                 data-topic="{{ $topic }}"
@@ -23,8 +60,8 @@
                   <div class="portfolio-content article-teaser-media">
                     <img
                       src="{{ $article->thumbnailUrl() }}"
-                      width="720"
-                      height="450"
+                      width="500"
+                      height="500"
                       decoding="async"
                       loading="lazy"
                       class="img-fluid"
@@ -36,6 +73,8 @@
                       data-gallery="portfolio-gallery-{{ $article->slug }}"
                       class="glightbox preview-link"
                       aria-label="{{ 'Preview image: '.$titleEn }}"
+                      data-en-aria-label="{{ 'Preview image: '.$titleEn }}"
+                      data-fa-aria-label="{{ 'پیش‌نمایش تصویر: '.$titleFa }}"
                       ><i class="bi bi-zoom-in" aria-hidden="true"></i
                     ></a>
                   </div>
@@ -85,3 +124,4 @@
                   </div>
                 </article>
               </div>
+              @endif

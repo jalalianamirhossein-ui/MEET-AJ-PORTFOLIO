@@ -1196,6 +1196,37 @@
 
   window.addEventListener("load", initScrollProgress);
 
+  function initArticleShare() {
+    document.querySelectorAll("[data-copy-link]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const url = button.getAttribute("data-copy-link") || "";
+        const status = button.closest(".article-share")?.querySelector(".article-share-status");
+        const isFa = document.documentElement.lang === "fa";
+        const copied = isFa ? "پیوند کپی شد" : "Link copied";
+        const promptLabel = isFa ? "کپی لینک" : "Copy link";
+        const done = () => {
+          if (!status) return;
+          status.hidden = false;
+          status.textContent = copied;
+          status.setAttribute("data-en", "Link copied");
+          status.setAttribute("data-fa", "پیوند کپی شد");
+        };
+        try {
+          if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(url);
+            done();
+          } else {
+            window.prompt(promptLabel, url);
+          }
+        } catch (error) {
+          window.prompt(promptLabel, url);
+        }
+      });
+    });
+  }
+
+  window.addEventListener("load", initArticleShare);
+
   const aboutCore = document.querySelector("[data-about-core]");
   if (aboutCore) {
     const nodes = aboutCore.querySelectorAll(".about-node");

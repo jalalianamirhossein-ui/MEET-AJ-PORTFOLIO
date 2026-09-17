@@ -16,12 +16,10 @@
                     type="button"
                     data-filter="*"
                     data-topic="all"
-                    class="filter-active"
+                    class="article-chip filter-active"
                     aria-pressed="true"
-                    data-en="All articles"
-                    data-fa="همه مقالات"
                   >
-                    All articles
+                    <span class="article-chip-label" data-en="All articles" data-fa="همه مقالات">All articles</span>
                   </button>
                 </li>
                 <li>
@@ -29,11 +27,10 @@
                     type="button"
                     data-filter=".filter-microsoft"
                     data-topic="microsoft"
+                    class="article-chip"
                     aria-pressed="false"
-                    data-en="Microsoft"
-                    data-fa="مایکروسافت"
                   >
-                    Microsoft
+                    <span class="article-chip-label" data-en="Microsoft" data-fa="مایکروسافت">Microsoft</span>
                   </button>
                 </li>
                 <li>
@@ -41,11 +38,10 @@
                     type="button"
                     data-filter=".filter-linux"
                     data-topic="linux"
+                    class="article-chip"
                     aria-pressed="false"
-                    data-en="Linux"
-                    data-fa="لینوکس"
                   >
-                    Linux
+                    <span class="article-chip-label" data-en="Linux" data-fa="لینوکس">Linux</span>
                   </button>
                 </li>
                 <li>
@@ -53,11 +49,10 @@
                     type="button"
                     data-filter=".filter-mikrotik"
                     data-topic="mikrotik"
+                    class="article-chip"
                     aria-pressed="false"
-                    data-en="MikroTik"
-                    data-fa="میکروتیک"
                   >
-                    MikroTik
+                    <span class="article-chip-label" data-en="MikroTik" data-fa="میکروتیک">MikroTik</span>
                   </button>
                 </li>
                 <li>
@@ -65,11 +60,10 @@
                     type="button"
                     data-filter=".filter-vmware"
                     data-topic="vmware"
+                    class="article-chip"
                     aria-pressed="false"
-                    data-en="VMware"
-                    data-fa="مجازی‌سازی"
                   >
-                    VMware
+                    <span class="article-chip-label" data-en="VMware" data-fa="مجازی‌سازی">VMware</span>
                   </button>
                 </li>
                 <li>
@@ -77,11 +71,10 @@
                     type="button"
                     data-filter=".filter-others"
                     data-topic="other"
+                    class="article-chip"
                     aria-pressed="false"
-                    data-en="Other"
-                    data-fa="سایر مقالات"
                   >
-                    Other
+                    <span class="article-chip-label" data-en="Other" data-fa="سایر مقالات">Other</span>
                   </button>
                 </li>
               </ul>

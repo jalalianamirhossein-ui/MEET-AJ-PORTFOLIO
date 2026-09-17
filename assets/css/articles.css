@@ -23,7 +23,7 @@
   --article-code-text: #e2e8f0;
   --article-shadow: 0 18px 45px rgba(15, 23, 42, 0.1);
   --article-radius: 1rem;
-  --article-content-width: 56rem;
+  --article-content-width: 52.5rem;
   --article-motion-duration: 560ms;
   --article-transition-duration: 180ms;
   --article-motion-easing: cubic-bezier(0.22, 1, 0.36, 1);
@@ -1279,8 +1279,15 @@
 }
 
 .article-page .related-articles {
+  display: grid;
   grid-template-columns: minmax(0, 1fr);
+  gap: 1.75rem;
   margin-top: 1.25rem;
+}
+
+.article-page .related-image {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
 }
 
 .article-page .related-card {
@@ -1302,7 +1309,7 @@
 }
 
 .article-page .related-image {
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
 }
 

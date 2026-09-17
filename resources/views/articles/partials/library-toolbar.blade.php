@@ -39,23 +39,21 @@
             </div>
           </form>
           @if (isset($tags) && $tags->isNotEmpty())
-          <nav class="article-tag-nav" aria-label="Filter by tag">
+          <nav class="article-tag-nav" aria-label="Filter by tag" data-en-aria-label="Filter by tag" data-fa-aria-label="فیلتر بر اساس برچسب">
               <span class="article-tag-nav-label" data-en="Tags" data-fa="برچسب‌ها">Tags</span>
               <div class="article-chip-row">
               <a
-                class="article-tag{{ $tagSlug === '' ? ' is-active' : '' }}"
+                class="article-tag article-chip{{ $tagSlug === '' ? ' is-active' : '' }}"
                 href="{{ url('/articles') }}"
                 @if ($tagSlug === '') aria-current="page" @endif
-                data-en="All tags"
-                data-fa="همه برچسب‌ها"
-              >All tags</a>
+              ><span class="article-chip-label" data-en="All tags" data-fa="همه برچسب‌ها">All tags</span></a>
               @foreach ($tags as $tag)
                 <a
-                  class="article-tag{{ $tagSlug === $tag->slug ? ' is-active' : '' }}"
+                  class="article-tag article-chip{{ $tagSlug === $tag->slug ? ' is-active' : '' }}"
                   data-topic="{{ $tagTopics[$tag->slug] ?? 'other' }}"
                   href="{{ url('/articles') }}?tag={{ urlencode($tag->slug) }}"
                   @if ($tagSlug === $tag->slug) aria-current="page" @endif
-                >{{ $tag->name }}</a>
+                ><span class="article-chip-label">{{ $tag->name }}</span></a>
               @endforeach
               </div>
             </nav>
