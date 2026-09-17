@@ -9,7 +9,7 @@
 | Surface | Result | Evidence |
 |---------|--------|----------|
 | `/admin/login` | PASS (a11y tree) | Title “Login - Meet AJ CMS”. Textboxes named Email address / Password (required). Show password. Remember me. Sign in. HTTP 200 |
-| Login visual PNG | BLOCKED | Screenshot tool returned a stale articles-index frame |
+| Login visual PNG | PASS | Desktop Filament sign-in card, labelled Email/Password, Remember me, Sign in |
 | Dashboard / Articles / Categories / Tags / Requests / Users (authenticated) | **BLOCKED** | No production credentials used. Throwaway local QA user was created earlier then **deleted**. Auto-review previously blocked password fill |
 | Admin responsive 414 / 768 / 1024 / 1280 | **BLOCKED** | Requires authenticated session |
 

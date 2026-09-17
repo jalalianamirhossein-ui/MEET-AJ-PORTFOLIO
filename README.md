@@ -211,7 +211,7 @@ Full navigation map: [docs/README.md](docs/README.md).
 | Admin | [docs/current/ADMIN.md](docs/current/ADMIN.md) |
 | Features | [docs/current/FEATURES.md](docs/current/FEATURES.md) |
 | Design system | [docs/current/DESIGN-SYSTEM.md](docs/current/DESIGN-SYSTEM.md) |
-| QA evidence | [docs/qa/FINAL-QA-REPORT.md](docs/qa/FINAL-QA-REPORT.md) |
+| QA evidence | [docs/qa/FINAL-QA-REPORT.md](docs/qa/FINAL-QA-REPORT.md), [docs/qa/VISUAL-UX-FINAL-REPORT.md](docs/qa/VISUAL-UX-FINAL-REPORT.md) |
 | Decisions | [docs/decisions/ADR/README.md](docs/decisions/ADR/README.md) |
 | History | [docs/phases/phase-01-environment.md](docs/phases/phase-01-environment.md), [docs/historical/README.md](docs/historical/README.md) |
 
