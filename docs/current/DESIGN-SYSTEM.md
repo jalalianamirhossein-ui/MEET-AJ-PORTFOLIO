@@ -1,8 +1,9 @@
 # Design system — Meet AJ public site
 
-**Authority:** [design-system/meet-aj/MASTER.md](../design-system/meet-aj/MASTER.md). Live overlay `assets/css/visual-upgrade.css?v=1314`.  
-**Visual DNA:** [article-visual-dna.md](article-visual-dna.md) (Article detail pages are the reference; they are not restyled from this file).  
-**Date:** 2026-09-17
+**Authority:** [design-system/meet-aj/MASTER.md](../../design-system/meet-aj/MASTER.md). Live overlay `assets/css/visual-upgrade.css?v=1314`.  
+**Visual DNA:** [ARTICLE-VISUAL-DNA.md](ARTICLE-VISUAL-DNA.md) (Article detail pages are the reference; they are not restyled from this file).  
+**Date:** 2026-09-17  
+**Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md)
 
 ui-ux-pro-max catalogs were read directly (Python is not installed, so `search.py` was not executed): Portfolio/Personal + B2B Service; Swiss Modernism 2.0 + Editorial Grid; primary `#2563EB`; Poppins + Vazirmatn; 150–200ms micro-interaction and 400–560ms reveal. frontend-design: Article DNA is the distinctive language — not a SaaS card kit, not cream/terracotta, not glass everywhere.
 

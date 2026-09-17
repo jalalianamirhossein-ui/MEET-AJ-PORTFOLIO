@@ -1,10 +1,26 @@
-# DirectAdmin deployment — Meet AJ Laravel CMS
+# Deployment — Meet AJ
 
-**Authority:** AUTHORITATIVE production procedure.  
-**Cutover status:** documented, **not executed** from this environment (BLOCKED / NOT TESTED on DirectAdmin).
+**Authority:** AUTHORITATIVE deployment procedure.
+**Verified:** 2026-09-17 against `.env.example`, `.env.production.example`, `composer.json`, `config/`, and the console commands that exist.
+**Cutover status:** documented, **NOT executed** from this environment. Every production claim below is BLOCKED / NOT TESTED.
+**Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md)
 
-Stack: **Laravel 13**, **PHP 8.4**, **Filament 5**, **MySQL/MariaDB**, **Blade**.  
-Do not select PHP 8.2. Do not install Redis, Supervisor, Node, or a queue worker. This application uses file cache, file sessions, and `QUEUE_CONNECTION=sync`.
+Stack: **Laravel 13.31.0**, **PHP 8.4**, **Filament 5.8.2**, **Blade**, **MySQL/MariaDB in production**.
+Do not select PHP 8.2. Do not install Redis, Supervisor, Node, or a queue worker: this application uses file cache, file sessions and `QUEUE_CONNECTION=sync`.
+
+## Environments
+
+| | LOCAL | TEST | PRODUCTION |
+|---|-------|------|------------|
+| Where | This workstation | PHPUnit suites | DirectAdmin on meetaj.ir |
+| PHP | `.runtime/php84/php.exe` 8.4.25 | same runtime | PHP 8.4 selector (**unverified**) |
+| Database | SQLite `database/database.sqlite` | SQLite `:memory:` (default) or MariaDB `127.0.0.1:3307` via `phpunit.mysql.xml` | MySQL / MariaDB (**not created**) |
+| `APP_ENV` / `APP_DEBUG` | `local` / **true** | `testing` | `production` / **false** |
+| Mail | `log` | none | SMTP (**not configured**) |
+| Document root | `php artisan serve` on `public/` | n/a | must be `.../laravel/public` |
+| Status | PASS | PASS (39 tests) | BLOCKED · NOT TESTED |
+
+The sections below describe the PRODUCTION procedure only. Nothing in them has been executed.
 
 This file does not assume DirectAdmin features that a given shared plan may lack (SSH, Composer CLI, `cron`, `nodejs`). Use the path that the account actually provides.
 

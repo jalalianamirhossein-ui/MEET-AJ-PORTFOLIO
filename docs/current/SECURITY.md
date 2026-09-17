@@ -1,8 +1,9 @@
 # Security — Meet AJ
 
 **Authority:** AUTHORITATIVE security-controls document.  
-**Verified:** 2026-09-16 against middleware, contact stack, Filament policies, `.env.example`, `.env.production.example`.  
-**No penetration test was performed.**
+**Verified:** 2026-09-17 against middleware, the contact stack, Filament policies, `.env.example` and `.env.production.example`.  
+**No penetration test was performed.**  
+**Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md)
 
 ## CSRF
 
@@ -33,7 +34,7 @@ Filament session login. Passwords hashed by Laravel (`Hash`). `cms:create-user` 
 
 ## Authorization
 
-Policies: articles/categories for `canManageContent()` (admin + editor); services and requests admin-only; Filament Users `canViewAny` admin-only (Users nav hidden). Guest `/admin` redirected. Public users may read published services and create requests; they cannot create/edit/publish services or change prices.
+Policies: articles, categories and tags for `canManageContent()` (admin + editor); services, requests and users admin-only. `UserResource::canViewAny()` and `shouldRegisterNavigation()` both return true only for admins, so the Users screen is visible to admins and hidden from editors. Guest `/admin` redirected. Public users may read published services and create requests; they cannot create/edit/publish services or change prices.
 
 ## Password hashing
 
