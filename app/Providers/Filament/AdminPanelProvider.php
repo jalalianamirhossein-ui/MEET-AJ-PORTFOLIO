@@ -3,7 +3,6 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Dashboard;
-use App\Filament\Resources\Users\Pages\ManageUsers;
 use App\Filament\Widgets\CmsStatsOverview;
 use App\Filament\Widgets\RecentArticles;
 use App\Filament\Widgets\RecentRequests;
@@ -23,7 +22,6 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\HtmlString;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
@@ -55,9 +53,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->pages([Dashboard::class])
-            ->authenticatedRoutes(function (): void {
-                Route::get('/cms-users', ManageUsers::class)->name('resources.users.index');
-            })
             ->widgets([
                 CmsStatsOverview::class,
                 RecentArticles::class,
