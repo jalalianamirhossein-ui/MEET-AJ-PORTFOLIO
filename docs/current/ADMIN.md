@@ -1,123 +1,137 @@
-# Admin (Filament) — Meet AJ
+# Admin panel — Meet AJ
 
-**Authority:** AUTHORITATIVE Filament 5 description.  
-**Verified:** 2026-09-16 against `app/Filament/**`, policies, `php artisan route:list`, and PHPUnit (`CmsOperationsTest`, `PublicSiteTest`, `ServiceCatalogTest`).
+**Authority:** AUTHORITATIVE Filament description.
+**Verified:** 2026-09-17 against `app/Filament/**`, `app/Policies/**`, `app/Providers/Filament/AdminPanelProvider.php`, `php artisan route:list` (after `optimize:clear`), and PHPUnit (`CmsOperationsTest`, `ServiceCatalogTest`, `RequestWorkflowTest`, `PublicSiteTest`).
+**Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
-Panel URL: **`/admin`**. Guest hitting `/admin` is redirected to login. `/admin/login` is public (HTTP 200).
+Panel: **Filament v5.8.2** on **Livewire v4.4.5**, mounted at `/admin`, brand name “Meet AJ CMS”, primary colour `#2563eb`, gray palette Slate, collapsible sidebar, collapsible navigation groups, unsaved-changes alerts, and global search enabled.
 
-Authentication: Filament session auth against `users`. Roles: `admin`, `editor`. Password: hashed, minimum **12** characters. Create accounts with `php artisan cms:create-user` (see README). No default password is shipped.
+A guest hitting `/admin` is redirected to `/admin/login`; the login page itself returns HTTP 200.
 
-Brand: `#2563eb`, logo from existing site assets. Navigation groups: **Content**, **Communications**, **Administration**.
+## Authentication
+
+Filament session authentication on the `web` guard against the `users` table. Roles are `admin` and `editor` (`users.role`). Passwords are hashed with the Laravel hasher and must be at least 12 characters (enforced by both `cms:create-user` and the Users form). No default account ships with the repository.
+
+```bash
+php artisan cms:create-user
+```
+
+**The local `users` table currently has 0 rows**, so there is no account to log in with until that command is run. Every check below that needs an authenticated browser session is therefore marked BLOCKED.
+
+## Navigation
 
 ```
 Content
 ├── Articles
 ├── Categories
 ├── Tags
-└── Services
+└── Services        (admins only)
 Communications
-└── Requests
+└── Requests        (admins only, badge = count of new requests)
 Administration
-└── Users (admins only)
+└── Users           (admins only)
 ```
 
-Interactive browser login as an editor was **not** repeated in the documentation verification pass. PHPUnit covers login page visibility, panel protection, article CRUD, service CRUD authorization, and request authorization.
+`ServiceResource`, `RequestResource` and `UserResource` gate themselves through `canViewAny()`; `UserResource::shouldRegisterNavigation()` returns true for admins, so Users **is** in the sidebar for an admin.
 
-## Resources actually implemented
+## Routes
 
-### Articles (`ArticleResource`) — Content
+`php artisan route:list` reports 14 `/admin` routes:
 
-CRUD for `articles`. Admin and editor (`ArticlePolicy` / `canManageContent()`).
+| Route | Name |
+|-------|------|
+| `GET /admin` | `filament.admin.pages.dashboard` |
+| `GET /admin/login`, `POST /admin/logout` | `filament.admin.auth.login`, `filament.admin.auth.logout` |
+| `GET /admin/articles`, `/admin/articles/create`, `/admin/articles/{record}/edit` | `filament.admin.resources.articles.*` |
+| `GET /admin/categories` | `filament.admin.resources.categories.index` |
+| `GET /admin/tags` | `filament.admin.resources.tags.index` |
+| `GET /admin/services`, `/admin/services/create`, `/admin/services/{record}/edit` | `filament.admin.resources.services.*` |
+| `GET /admin/requests` | `filament.admin.resources.requests.index` |
+| `GET /admin/users` and `GET /admin/cms-users` | both `filament.admin.resources.users.index` |
 
-Form sections:
+The duplicate Users URL exists because `AdminPanelProvider` registers an extra `authenticatedRoutes` entry pointing at the same `ManageUsers` page with the same route name. It is one feature reachable at two paths, not two features.
 
-- **Identity:** title, slug, language (`en`/`fa`/`de`), category, tags (multi), excerpt
-- **Image:** optional upload (JPEG/PNG/WebP, max 5 MB). Paths already under `/assets/` stay unless replaced
-- **Body:** HTML or Filament RichEditor (`content` required)
-- **SEO (collapsed):** `meta_title`, `meta_description`, `canonical_url` (blank → public article URL)
-- **Publishing:** `status` draft/published, `published_at` in `config('cms.display_timezone')`. Helper text: German must remain draft. Future `published_at` is not visible on the public site without a queue (visibility is query-based)
+## Dashboard
 
-Table: searchable/sortable title, language badge, category name, status, `published_at`, `updated_at` (toggleable). Filters and default sort exist on the resource. Slug changes write `article_redirects`.
+`app/Filament/Pages/Dashboard.php` with three widgets registered in the panel provider: `CmsStatsOverview`, `RecentArticles`, `RecentRequests`. There is no `NewRequests` widget on disk.
 
-Do not claim a public preview button or media library beyond this upload field.
+## Articles (`ArticleResource`) — Content
 
-### Tags (`TagResource`) — Content
+CRUD on `articles` for admins and editors (`ArticlePolicy` → `User::canManageContent()`).
 
-CRUD for `tags`. Admin and editor (`TagPolicy` / `canManageContent()`). Unique `name` and `slug`. Table shows article count. Seed/repair with `php artisan articles:sync-tags` (catalog is derived from live article titles/categories; Docker is not included).
+Form sections: Identity (title, slug, language `en`/`fa`/`de`, category, multi-select tags, excerpt); Image (optional upload, JPEG/PNG/WebP, max 5 MB); Body (`content`, required); SEO, collapsed (`meta_title`, `meta_description`, `canonical_url`); Publishing (`status`, `published_at` in `config('cms.display_timezone')`, with helper text that German rows must stay draft).
 
-### Categories (`CategoryResource`) — Content
+Table: searchable and sortable title, language badge, category, status, `published_at`, toggleable `updated_at`, plus filters and a default sort. Changing a slug writes a new `article_redirects` row.
 
-CRUD for `categories`. Unique `(language, slug)` and `(translation_key, language)`. Admin and editor.
+There is no public preview button and no media library beyond the single upload field.
 
-### Services (`ServiceResource`) — Content
+## Categories (`CategoryResource`) — Content
 
-CRUD for `services`. **Admin only** (`ServicePolicy`). Editors receive authorization failure (PHPUnit).
+Simple CRUD on `categories` for admins and editors, respecting the unique `(language, slug)` and `(translation_key, language)` constraints.
 
-Form sections: General, Content (repeaters for features / process / FAQ), Pricing, Media, SEO, Publishing.
+## Tags (`TagResource`) — Content
 
-Table: title, language, status, price (formatted), currency, sort order, published at, updated at. Filters: language, status, price type. Actions: preview (published EN), edit, replicate, publish, unpublish, delete (confirmed). Bulk publish skips German rows.
+CRUD on `tags` for admins and editors (`TagPolicy`). `name` and `slug` are unique; the table shows an article count. The vocabulary can be rebuilt from article content with `php artisan articles:sync-tags`.
 
-Prices are edited here only — never hardcoded in Blade. See [SERVICES.md](SERVICES.md).
+## Services (`ServiceResource`) — Content
 
-### Requests (`RequestResource`) — Communications
+**Admin only** (`ServicePolicy`). Editors receive an authorization failure, asserted in PHPUnit.
 
-Admin **only** (`RequestPolicy`). Editors receive authorization failure (PHPUnit).
+Form sections: General, Content (repeaters for features, process, FAQ), Pricing, Media, SEO, Publishing.
+Table: title, language, status, formatted price, currency, sort order, published at, updated at. Filters: language, status, price type. Actions: preview, edit, replicate as draft, publish, unpublish, delete with confirmation; bulk publish skips German rows. Prices live here and nowhere else ([SERVICES.md](SERVICES.md)).
 
-- Inbound fields (`name`, `email`, `phone`, `subject`, `message`) are **read-only**
-- Linked service title is shown when `service_id` is set; homepage contacts show “no service”
-- Filter by service, status, and received date
-- `status` workflow: `new`, `contacted`, `in_discussion`, `quoted`, `approved`, `completed`, `cancelled`
-- `internal_notes` (admin only; `$hidden` on the model; never in contact mail or public JSON)
-- Filament **create** of requests is denied (`create` policy false)
-- No claim of reply-from-admin or SMTP from this screen
+## Requests (`RequestResource`) — Communications
 
-### Users (`Users\UserResource`) — Administration
+**Admin only** (`RequestPolicy`); `create` is denied, so requests can only arrive from the public form.
 
-The class exists (`app/Filament/Resources/Users/UserResource.php`) with form fields for name, email, role, password and `canViewAny` = admin.
+- The **Inbound message** section (`name`, `email`, `phone`, `subject`, `message`, and the linked service title) is disabled and not dehydrated — inbound data cannot be edited. Homepage submissions show “Homepage contact (no service)”.
+- The **Handling** section exposes `status` and `internal_notes` only.
+- Status options come from `Request::STATUSES`: New, Contacted, In discussion, Quoted, Approved, Completed, Cancelled, rendered as coloured badges.
+- Table columns: name, email, service, phone (hidden by default), subject, message (hidden by default), status, received date, updated (hidden by default). Default sort is newest first, and rows with status `new` get the `meetaj-request-new` CSS class.
+- Filters: status, service relationship, and a received-date range (from / until).
+- Bulk actions: mark completed, mark cancelled, both with confirmation.
+- The sidebar badge shows the number of `new` requests in red.
 
-**`shouldRegisterNavigation()` returns true for admins**, so Users appears in the Administration group.
+Detail: [REQUESTS.md](REQUESTS.md).
 
-After `php artisan optimize:clear` (2026-09-16), `route:list` **does** include:
+## Users (`Users\UserResource`) — Administration
 
-- `GET /admin/users` → `filament.admin.resources.users.index`
-- `GET /admin/cms-users` → the same route name (extra `authenticatedRoutes` registration in `AdminPanelProvider`)
+**Admin only**: both `canViewAny()` and `shouldRegisterNavigation()` return `auth()->user()?->isAdmin()`.
 
-Create users with:
+Form: name, email (unique), role (Admin / Editor, default Editor), password with `Password::min(12)->max(72)`, dehydrated only when filled so editing without a new password keeps the old one.
+Table: name, email, role badge, created-at (relative), role filter, edit action, and a delete action hidden for your own account. The empty state suggests `php artisan cms:create-user`.
 
-```bash
-php artisan cms:create-user
-```
-
-Interactive Filament Users CRUD in a browser remains **NOT TESTED**. Do not treat the duplicate index URL as a second product feature.
-
-## Widgets
-
-Registered in `AdminPanelProvider`: `CmsStatsOverview`, `RecentArticles`, `RecentRequests`.
+Interactive browser CRUD on this screen is **BLOCKED / NOT TESTED** (no CMS user exists locally).
 
 ## Authorization summary
 
-| Action | Admin | Editor |
-|--------|-------|--------|
-| Articles / categories CRUD | yes | yes |
-| Services CRUD / prices / publish | yes | no |
-| View/update/delete requests | yes | no |
-| Filament Users UI | intended admin-only; **UI not routed** | no |
-| `cms:create-user` | CLI (any operator with shell) | CLI |
+| Capability | Admin | Editor |
+|------------|-------|--------|
+| Articles, Categories, Tags CRUD | yes | yes |
+| Services CRUD, pricing, publishing | yes | no |
+| Requests view, status, internal notes | yes | no |
+| Users CRUD | yes | no |
+| `php artisan cms:create-user` | any operator with shell access | any operator with shell access |
 
-## Search, filters, sorting
+Policies are registered in `AppServiceProvider`: `ArticlePolicy`, `CategoryPolicy`, `TagPolicy`, `ServicePolicy`, `RequestPolicy`, `UserPolicy`.
 
-Articles table: title search, language/status columns sortable, category shown. Do not claim full-text search of HTML bodies.
+## Search, filters, pagination
 
-Services table: title search, language/status/price type filters, `sort_order` default.
+Filament global search is enabled panel-wide. Table search is column-scoped (article titles, request name/email/subject, user name/email) — it is not full-text search over article HTML. Filters are listed per resource above. Pagination uses Filament table defaults; no custom page size is configured.
 
-## Image handling
+## Styling
 
-Uploads go through Filament file upload into public storage. Imported `featured_image` values often remain `/assets/...`. Max 5 MB, JPEG/PNG/WebP. Service model rejects executable suffixes.
+A small stylesheet is registered twice by design: as a Filament asset (`resources/css/filament-admin.css`) and through a `HEAD_END` render hook that links `css/meet-aj-admin.css?v=2003`.
 
-## What is not implemented
+## Testing status
 
-- Public `/de` admin preview
-- Users navigation / registered users index route
-- Filament-created contact rows
-- Queue-based scheduled publishing (visibility is `published_at <= now()` in queries)
-- Penetration-tested admin hardening
+| Check | Method | Status |
+|-------|--------|--------|
+| `/admin` guest redirect, `/admin/login` 200 | PHPUnit + HTTP | PASS |
+| Article create / update / slug redirect | PHPUnit `CmsOperationsTest` | PASS |
+| Editor denied on services | PHPUnit `ServiceCatalogTest` | PASS |
+| Editor denied on requests, status workflow, internal notes hidden | PHPUnit `RequestWorkflowTest` | PASS |
+| Interactive login and editing in a browser | — | BLOCKED (no CMS user) |
+| Admin responsive layout on small screens | — | NOT TESTED |
+
+Evidence: [../qa/ADMIN-QA.md](../qa/ADMIN-QA.md).

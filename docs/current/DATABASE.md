@@ -1,193 +1,242 @@
-# Database — Meet AJ Laravel CMS
+# Database — Meet AJ
 
-**Authority:** AUTHORITATIVE schema document.  
-**Source:** `database/migrations/2026_09_15_000001` … `000006` plus `2026_09_16_000007` (services), `000008` (`requests.service_id`), and `2026_09_17_000009` (`tags`, `article_tag`, `requests.internal_notes`).  
-**Verified:** 2026-09-17 against those files, PHPUnit (`MysqlSchemaTest` skipped on SQLite default suite), and local SQLite migrate.
+**Authority:** AUTHORITATIVE schema document.
+**Verified:** 2026-09-17 by reading the live SQLite schema (`Schema::getTables()`, `getColumns()`, `getIndexes()`, `getForeignKeys()`) plus the nine migration files in `database/migrations/`.
+**Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
-`users`, `password_reset_tokens`, `sessions`, `categories`, `articles`, `article_redirects`, `article_tag`, `tags`, `requests`, `services`.
+Column types below are the SQLite types actually reported by the database. The migrations declare portable Laravel types (`string`, `text`, `decimal`, `json`), so MySQL/MariaDB will report `varchar`, `longtext`, `decimal(12,2)` and `json` for the same columns.
 
 ## Engines
 
 | Context | Connection | Status |
 |---------|------------|--------|
-| Local `php artisan serve` | SQLite `database/database.sqlite` (`php artisan about`, 2026-09-16) | LOCAL TESTED |
-| Default PHPUnit (`phpunit.xml`) | SQLite `:memory:` | LOCAL TESTED |
-| `phpunit.mysql.xml` | MySQL/MariaDB `127.0.0.1:3307`, database `meetaj_test` | INTEGRATION TESTED (`MysqlSchemaTest` OK) |
-| DirectAdmin production | Intended `mysql` / MariaDB | BLOCKED · NOT TESTED |
+| Local `php artisan serve` / artisan commands | SQLite `database/database.sqlite` | PASS |
+| Default PHPUnit suite (`phpunit.xml`) | SQLite `:memory:` | PASS |
+| `phpunit.mysql.xml` | MySQL / MariaDB `127.0.0.1:3307`, database `meetaj_test` | PASS (`MysqlSchemaTest`, last run 2026-09-16) |
+| DirectAdmin production | intended MySQL / MariaDB | BLOCKED · NOT TESTED |
 
-PHPUnit 11 ignores forced env vars from XML in some cases; `tests/TestCase.php` plus `.env.testing` isolate the default suite from the live SQLite file. Use `phpunit.mysql.xml` when MySQL must be bound.
+`tests/TestCase.php` plus `.env.testing` keep the default suite off the live SQLite file. Bind MySQL explicitly with `phpunit.mysql.xml`.
 
-## Tables
+## Migrations
 
-### `users`
+| Migration | Batch | Status |
+|-----------|-------|--------|
+| `2026_09_15_000001_create_users_table` | 1 | Ran |
+| `2026_09_15_000002_create_categories_table` | 1 | Ran |
+| `2026_09_15_000003_create_articles_table` | 1 | Ran |
+| `2026_09_15_000004_create_article_redirects_table` | 1 | Ran |
+| `2026_09_15_000005_create_requests_table` | 1 | Ran |
+| `2026_09_15_000006_create_sessions_table` | 1 | Ran |
+| `2026_09_16_000007_create_services_table` | 2 | Ran |
+| `2026_09_16_000008_add_service_id_to_requests_table` | 2 | Ran |
+| `2026_09_17_000009_create_tags_and_request_workflow` | 3 | Ran |
 
-Purpose: Filament login accounts.
+The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the eleventh table.
 
-| Column | Notes |
-|--------|--------|
-| `id` | PK |
-| `name` | display name |
-| `email` | **unique** |
-| `email_verified_at` | nullable (not used by the public site) |
-| `password` | hashed |
-| `role` | `admin` or `editor`, default `editor` |
-| `remember_token` | Laravel remember-me |
-| `timestamps` | |
+## Table overview
 
-Relationships: sessions `user_id` → `users.id` (`nullOnDelete`). No FK from articles.
+| Table | Purpose | Rows (2026-09-17) |
+|-------|---------|-------------------|
+| `users` | Filament login accounts | 0 |
+| `password_reset_tokens` | Laravel password reset store | 0 |
+| `sessions` | Session rows when the database session driver is selected | 0 |
+| `categories` | Article taxonomy, one row per language | 10 |
+| `articles` | Article content and SEO | 23 |
+| `article_redirects` | 301 map from old paths to articles | 23 |
+| `tags` | Flat public tag vocabulary | 8 |
+| `article_tag` | Article ↔ tag pivot | 38 |
+| `requests` | Inbound contact submissions | 0 |
+| `services` | Public service catalog and pricing | 6 |
+| `migrations` | Laravel migration ledger | 9 |
 
-### `password_reset_tokens`
+There is **no** `pages` table and **no** `contact_requests` table.
 
-Laravel password-reset store (`email` PK, `token`, `created_at`). Created in the users migration. Public site does not expose a custom reset UI beyond Filament defaults.
+---
 
-### `sessions`
+## `users`
 
-File vs database: production example uses `SESSION_DRIVER=file`. The table exists for `database` driver if selected.
+Filament login accounts. Created by `php artisan cms:create-user` or by an admin in the Users resource.
 
-| Column | Notes |
-|--------|--------|
-| `id` | PK string |
-| `user_id` | nullable FK → `users`, **nullOnDelete** |
-| `ip_address` | 45 chars |
-| `user_agent` | text |
-| `payload` | longText |
-| `last_activity` | indexed |
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | integer | primary key |
+| `name` | varchar | display name |
+| `email` | varchar | **unique** (`users_email_unique`) |
+| `email_verified_at` | datetime, nullable | not used by the public site |
+| `password` | varchar | hashed |
+| `role` | varchar | `admin` or `editor`, default `editor` |
+| `remember_token` | varchar, nullable | |
+| `created_at`, `updated_at` | datetime, nullable | |
 
-### `categories`
+Indexes: primary `id`, unique `email`. Foreign keys: none.
+Referenced by `sessions.user_id` with **nullOnDelete**.
 
-Purpose: article taxonomy (Microsoft, Linux, MikroTik, VMware, Others, plus language variants).
+## `password_reset_tokens`
 
-| Column | Notes |
-|--------|--------|
-| `id` | PK |
-| `translation_key` | UUID grouping translations |
-| `name` | label |
-| `slug` | 180 chars |
-| `language` | 2 chars, default `en` |
-| `timestamps` | |
+| Column | Type | Notes |
+|--------|------|-------|
+| `email` | varchar | primary key (`sqlite_autoindex`, unique) |
+| `token` | varchar | |
+| `created_at` | datetime, nullable | |
 
-Constraints: **unique** `(language, slug)`, **unique** `(translation_key, language)`.
+No foreign keys. The public site exposes no custom reset UI beyond Filament defaults.
 
-Articles: `category_id` **nullOnDelete** (article kept if category deleted).
+## `sessions`
 
-### `articles`
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | varchar | primary key |
+| `user_id` | integer, nullable | FK → `users.id`, **set null** on delete |
+| `ip_address` | varchar, nullable | |
+| `user_agent` | text, nullable | |
+| `payload` | text | |
+| `last_activity` | integer | indexed (`sessions_last_activity_index`) |
 
-Purpose: CMS article records. Public listing/detail query **published English** rows.
+Production configuration uses `SESSION_DRIVER=file`, so this table is normally empty. Deleting a user leaves their session rows with `user_id = NULL`.
 
-| Column | Notes |
-|--------|--------|
-| `id` | PK |
-| `translation_key` | UUID |
-| `title`, `slug` | slug 180 chars |
-| `language` | `en` / `fa` / `de` |
-| `excerpt` | nullable text |
-| `content` | longText (HTML) |
-| `featured_image` | path or URL, nullable |
-| `category_id` | nullable FK → `categories`, **nullOnDelete** |
-| `meta_title`, `meta_description`, `canonical_url` | SEO overrides |
-| `seo_data` | JSON (OG/Twitter/schema leftovers from import) |
-| `presentation` | JSON (card labels, dates, filter class, hero fields) |
-| `sort_order` | unsigned int, default 0 |
-| `status` | `draft` / `published` |
-| `published_at` | nullable; future dates are not shown as published |
-| `timestamps` | |
+## `categories`
 
-Constraints: **unique** `(language, slug)`, **unique** `(translation_key, language)`.  
+Article taxonomy. Each concept exists once per language and the two rows share a `translation_key`: Microsoft / مایکروسافت, Linux / لینوکس, MikroTik / میکروتیک, VMware / مجازی‌سازی, Others / سایر.
+
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | integer | primary key |
+| `translation_key` | varchar | UUID grouping translations |
+| `name` | varchar | label |
+| `slug` | varchar | max 180 |
+| `language` | varchar | 2 characters, default `en` |
+| `created_at`, `updated_at` | datetime, nullable | |
+
+Unique: `(language, slug)`, `(translation_key, language)`. Foreign keys: none.
+Deleting a category sets `articles.category_id` to `NULL`; the article survives.
+
+## `articles`
+
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | integer | primary key |
+| `translation_key` | varchar | UUID grouping translations |
+| `title` | varchar | |
+| `slug` | varchar | max 180 |
+| `language` | varchar | `en`, `fa` or `de` |
+| `excerpt` | text, nullable | |
+| `content` | text | article HTML |
+| `featured_image` | varchar, nullable | path or URL |
+| `category_id` | integer, nullable | FK → `categories.id`, **set null** on delete |
+| `meta_title` | varchar, nullable | SEO override |
+| `meta_description` | text, nullable | SEO override |
+| `canonical_url` | varchar, nullable | overrides the generated canonical |
+| `seo_data` | text, nullable | JSON: `og_*`, `twitter_*`, `robots`, `original_canonical`, `schema`, `date_provenance` |
+| `presentation` | text, nullable | JSON: `source_file`, `source_hash`, `toc_html`, `hero_title_en/fa`, `card_*`, `category_label_*`, `thumbnail`, `image_alt` and similar import metadata |
+| `sort_order` | integer | default 0 |
+| `status` | varchar | `draft` or `published` |
+| `published_at` | datetime, nullable | future values stay invisible |
+| `created_at`, `updated_at` | datetime, nullable | |
+
+Unique: `(language, slug)`, `(translation_key, language)`.
 Indexes: `(language, status, published_at)`, `(status, published_at)`.
+Foreign keys: `category_id` → `categories(id)` **set null**.
+Deleting an article cascades to `article_redirects` and `article_tag`.
 
-Publishing German (`language = de` + `published`) is rejected in the `Article` model.
+`Article::scopePublished()` restricts to `language IN (en, fa)`, `status = published`, non-null `published_at` that is not in the future. Publishing a German row throws `ValidationException` in the model.
 
-### `article_redirects`
+## `article_redirects`
 
-Purpose: 301 map from a previous path to the current article.
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | integer | primary key |
+| `old_path` | varchar | **unique** (`article_redirects_old_path_unique`), for example `/articles/enable-ssh-linux-complete-guide.html` |
+| `article_id` | integer | FK → `articles.id`, **cascade** on delete |
+| `created_at`, `updated_at` | datetime, nullable | |
 
-| Column | Notes |
-|--------|--------|
-| `id` | PK |
-| `old_path` | **unique** (example `/articles/{slug}.html`) |
-| `article_id` | FK → `articles`, **cascadeOnDelete** |
-| `timestamps` | |
+23 rows, one per imported article. Renaming a slug adds a new row rather than replacing the old one.
 
-Deleting an article removes its redirect rows.
+## `tags`
 
-### `tags`
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | integer | primary key |
+| `name` | varchar | **unique**, max 80 |
+| `slug` | varchar | **unique**, max 180 |
+| `created_at`, `updated_at` | datetime, nullable | |
 
-Purpose: public article taxonomy used for filters, related articles, and search.
+Current vocabulary (8): Linux, Microsoft, MikroTik, VMware, Windows Server, Networking, Security, DevOps.
 
-| Column | Notes |
-|--------|--------|
-| `id` | PK |
-| `name` | **unique**, max 80 |
-| `slug` | 180 chars, **unique** |
-| `timestamps` | |
+## `article_tag`
 
-### `article_tag`
+| Column | Type | Notes |
+|--------|------|-------|
+| `article_id` | integer | FK → `articles.id`, **cascade** on delete |
+| `tag_id` | integer | FK → `tags.id`, **cascade** on delete, indexed |
+| `created_at`, `updated_at` | datetime, nullable | |
 
-Purpose: article ↔ tag pivot.
+Composite primary key `(article_id, tag_id)` (unique). 38 links across 23 articles.
 
-| Column | Notes |
-|--------|--------|
-| `article_id` | FK → `articles`, **cascadeOnDelete**, part of composite PK |
-| `tag_id` | FK → `tags`, **cascadeOnDelete**, indexed |
-| `timestamps` | |
+## `requests`
 
-Primary key `(article_id, tag_id)`.
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | integer | primary key |
+| `name` | varchar | max 100 |
+| `email` | varchar | |
+| `phone` | varchar, nullable | max 40 |
+| `subject` | varchar, nullable | the form still requires it at validation time |
+| `message` | text | |
+| `status` | varchar | default `new`; allowed values `new`, `contacted`, `in_discussion`, `quoted`, `approved`, `completed`, `cancelled` (`Request::STATUSES`) |
+| `service_id` | integer, nullable | FK → `services.id`, **set null** on delete, indexed |
+| `internal_notes` | text, nullable | admin-only, `$hidden` on the model |
+| `created_at`, `updated_at` | datetime, nullable | |
 
-### `requests`
+Indexes: `(status, created_at)`, `service_id`.
+Migration `000009` remapped the earlier `in_progress` / `resolved` / `spam` values onto the current workflow. There is no user foreign key: submissions are anonymous.
 
-Purpose: inbound contact form submissions.
+## `services`
 
-| Column | Notes |
-|--------|--------|
-| `id` | PK |
-| `name` | 100 chars |
-| `email` | |
-| `phone` | nullable, 40 chars |
-| `subject` | nullable (form still requires subject at validation) |
-| `message` | text |
-| `status` | `new`, `contacted`, `in_discussion`, `quoted`, `approved`, `completed`, `cancelled` (legacy `in_progress`/`resolved`/`spam` remapped in 000009) |
-| `internal_notes` | nullable text, **hidden from serialization**, never public |
-| `service_id` | nullable FK → `services`, **nullOnDelete** |
-| `timestamps` | |
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | integer | primary key |
+| `translation_key` | varchar | UUID grouping translations |
+| `title` | varchar | |
+| `slug` | varchar | max 180 |
+| `language` | varchar | `en`, `fa` or `de` |
+| `short_description` | text, nullable | homepage card |
+| `description` | text, nullable | hero subtitle |
+| `content` | text, nullable | longer overview |
+| `features`, `process`, `faq` | text, nullable | JSON arrays |
+| `price` | numeric, nullable | `decimal(12,2)` in the migration |
+| `price_currency` | varchar | default `AED` |
+| `price_label` | varchar, nullable | badge text |
+| `price_type` | varchar | `fixed`, `starting_from` or `custom_quote` |
+| `featured_image` | varchar, nullable | executable suffixes rejected by the model |
+| `seo_title`, `seo_description`, `og_title`, `og_description` | varchar / text, nullable | |
+| `presentation` | text, nullable | JSON: `icon`, `*_fa` strings, `deliverables`, `exclusions`, `sla`, `addons`, `form_subject`, `source_file` |
+| `sort_order` | integer | homepage order |
+| `status` | varchar | `draft` or `published` |
+| `published_at` | datetime, nullable | required when published |
+| `created_at`, `updated_at` | datetime, nullable | |
 
-Index: `(status, created_at)`, `service_id`. No user FK.
+Unique: `(language, slug)`, `(translation_key, language)`.
+Indexes: `(language, status, published_at)`, `(status, sort_order)`.
+Foreign keys: none outbound. Referenced by `requests.service_id` with **set null**.
 
-### `services`
-
-Purpose: public service catalog. Homepage and `/services/{slug}` query **published English** rows (`Service::publicCatalog()`).
-
-| Column | Notes |
-|--------|--------|
-| `id` | PK |
-| `translation_key` | UUID grouping translations |
-| `title`, `slug` | slug 180 chars |
-| `language` | `en` / `fa` / `de` |
-| `short_description`, `description` | card + hero |
-| `content` | longer overview |
-| `features`, `process`, `faq`, `presentation` | JSON |
-| `price` | decimal(12,2), nullable (required unless `price_type = custom_quote`) |
-| `price_currency` | default `AED` |
-| `price_label` | optional badge |
-| `price_type` | `fixed` / `starting_from` / `custom_quote` |
-| `featured_image` | path, nullable; executable suffixes rejected |
-| `seo_title`, `seo_description`, `og_title`, `og_description` | SEO |
-| `sort_order` | homepage order |
-| `status` | `draft` / `published` |
-| `published_at` | required when published |
-| `timestamps` | |
-
-Constraints: **unique** `(language, slug)`, **unique** `(translation_key, language)`.  
-Publishing German is rejected in the `Service` model.
-
-## Relationships (summary)
+## Relationship summary
 
 ```
-categories 1 ──< articles (nullOnDelete)
-articles    1 ──< article_redirects (cascadeOnDelete)
-users       1 ──< sessions (nullOnDelete)
-services    1 ──< requests (nullOnDelete)
+categories 1 ──< articles              (category_id, set null)
+articles   1 ──< article_redirects     (article_id, cascade)
+articles   * >──< tags                 (article_tag, cascade both sides)
+services   1 ──< requests              (service_id, set null)
+users      1 ──< sessions              (user_id, set null)
 ```
 
-## Production database status
+## Delete behaviour in plain words
 
-Not created or migrated on DirectAdmin from this environment. Do not claim production schema validation.
+- Delete a **category** → its articles stay, uncategorised.
+- Delete an **article** → its redirects and tag links disappear with it.
+- Delete a **tag** → the pivot rows disappear; articles stay.
+- Delete a **service** → linked requests stay, with `service_id` cleared.
+- Delete a **user** → their session rows stay, detached.
+
+## Production database
+
+Not created, not migrated, not validated on DirectAdmin from this environment: **BLOCKED / NOT TESTED**.
