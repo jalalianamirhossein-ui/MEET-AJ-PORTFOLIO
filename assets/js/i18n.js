@@ -187,19 +187,10 @@
 
   const mountSwitcher = (root) => {
     const desktop = window.matchMedia("(min-width: 1200px)").matches;
-    const slot = document.getElementById("lang-mount");
-    const inHeader = Boolean(desktop && slot);
 
-    root.classList.toggle("is-header-slot", inHeader);
-    root.classList.toggle("is-floating", !inHeader);
+    root.classList.remove("is-header-slot");
+    root.classList.add("is-floating");
     root.classList.toggle("is-desktop-chrome", desktop);
-
-    if (inHeader) {
-      if (root.parentElement !== slot) {
-        slot.appendChild(root);
-      }
-      return;
-    }
 
     if (root.parentElement !== document.body) {
       document.body.appendChild(root);

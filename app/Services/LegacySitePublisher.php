@@ -49,6 +49,7 @@ class LegacySitePublisher
             throw new \RuntimeException('Unable to read index.html');
         }
         $html = $this->toBlade($html);
+        $html = $this->injectCsrfTokens($html);
         $html = $this->replacePortfolioGrid($html);
         $html = $this->replaceServicesGrid($html);
         $html = $this->replaceTestimonials($html);
@@ -95,10 +96,10 @@ class LegacySitePublisher
     <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
     <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
-    <link href="/assets/css/lang-toggle.css?v=1300" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1301" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1703" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1806" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1807" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">
 BLADE;
@@ -109,8 +110,9 @@ BLADE;
     <script src="/assets/vendor/glightbox/js/glightbox.min.js" defer></script>
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1402" defer></script>
-    <script src="/assets/js/i18n.js?v=1300" defer></script>
+    <script src="/assets/js/contact-form.js?v=1403" defer></script>
+    <script src="/assets/js/main.js?v=1403" defer></script>
+    <script src="/assets/js/i18n.js?v=1301" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {
@@ -363,6 +365,45 @@ BLADE;
         // mailto: addresses as @@gmail in the compiled HTML because Blade
         // treats @gmail as a directive. @verbatim preserves JSON-LD @type too.
         return "@verbatim\n".$html."\n@endverbatim";
+    }
+
+    private function injectCsrfTokens(string $html): string
+    {
+        if (! str_contains($html, 'content="{{ csrf_token() }}"')) {
+            $meta = <<<'BLADE'
+@endverbatim
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+@verbatim
+BLADE;
+            $html = preg_replace('/<meta charset="utf-8"\s*\/?>/i', '$0'.$meta, $html, 1, $metaCount);
+            if (! is_string($html) || $metaCount !== 1) {
+                throw new \RuntimeException('Unable to inject CSRF meta tag');
+            }
+        }
+
+        $input = <<<'BLADE'
+@endverbatim
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
+@verbatim
+BLADE;
+
+        if (str_contains($html, 'name="_token"') && str_contains($html, 'value="{{ csrf_token() }}"')) {
+            return $html;
+        }
+
+        $html = preg_replace(
+            '/<input\s+type="hidden"\s+name="csrf_token"[^>]*>/s',
+            $input,
+            $html,
+            1,
+            $replaced
+        );
+        if (! is_string($html) || $replaced !== 1) {
+            throw new \RuntimeException('Unable to inject CSRF form fields');
+        }
+
+        return $html;
     }
 
     private function writeServiceWorker(): void

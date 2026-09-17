@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Validator;
@@ -30,9 +31,44 @@ class Request extends Model
         return $this->belongsTo(Service::class);
     }
 
+    public function isServiceRequest(): bool
+    {
+        return $this->service_id !== null;
+    }
+
+    public function typeLabel(): string
+    {
+        return $this->isServiceRequest() ? 'Service request' : 'Contact request';
+    }
+
+    public function inboxLabel(): string
+    {
+        return $this->status === 'new' ? 'New' : 'Processed';
+    }
+
     public function statusLabel(): string
     {
         return self::STATUSES[$this->status] ?? $this->status;
+    }
+
+    public function scopeContacts(Builder $query): Builder
+    {
+        return $query->whereNull('service_id');
+    }
+
+    public function scopeServiceRequests(Builder $query): Builder
+    {
+        return $query->whereNotNull('service_id');
+    }
+
+    public function scopeUnread(Builder $query): Builder
+    {
+        return $query->where('status', 'new');
+    }
+
+    public function scopeProcessed(Builder $query): Builder
+    {
+        return $query->where('status', '!=', 'new');
     }
 
     protected static function booted(): void

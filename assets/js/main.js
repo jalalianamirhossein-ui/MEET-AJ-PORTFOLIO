@@ -1016,8 +1016,6 @@
         return;
       }
 
-      const formData = new FormData(form);
-
       // Show loading state
       submitBtn.disabled = true;
       submitBtn.innerHTML =
@@ -1027,62 +1025,29 @@
       errorEl?.classList.remove("visible");
       sentEl?.classList.remove("visible");
 
-      // Get CSRF token - must succeed before submitting
-      let csrfToken = null;
       try {
-        const csrfResponse = await fetch("/forms/get-csrf-token.php", {
-          cache: "no-store",
-          credentials: "same-origin",
-        });
-        if (!csrfResponse.ok) {
-          throw new Error("CSRF endpoint returned " + csrfResponse.status);
+        if (!window.MeetAjForms?.postForm) {
+          throw new Error("form-helper");
         }
-        const csrfData = await csrfResponse.json();
-        if (csrfData.token) {
-          csrfToken = csrfData.token;
-        } else {
-          throw new Error("No CSRF token in response");
-        }
-      } catch (err) {
-        console.error("Could not fetch CSRF token:", err);
+        const result = await window.MeetAjForms.postForm(form);
         setLoading(false);
-        showError("Security token error. Please refresh and try again.");
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
-        submitBtn.removeAttribute("aria-busy");
-        return;
-      }
-
-      formData.set("csrf_token", csrfToken);
-
-      try {
-        const response = await fetch("/forms/contact.php", {
-          method: "POST",
-          body: formData,
-          credentials: "same-origin",
-        });
-
-        // Read response body to check for "OK"
-        const responseText = await response.text();
-
-        if (response.ok && responseText.trim() === "OK") {
-          // Show success
-          setLoading(false);
+        if (result.ok) {
           sentEl?.classList.add("visible");
           form.reset();
-
-          // Hide success message after 5 seconds
           setTimeout(() => {
             sentEl?.classList.remove("visible");
           }, 5000);
         } else {
-          setLoading(false);
-          showError(responseText || "Error sending message. Please try again.");
+          showError(result.message || "Error sending message. Please try again.");
         }
       } catch (error) {
         console.error("Form submission error:", error);
         setLoading(false);
-        showError("An error occurred. Please try again later.");
+        showError(
+          error?.message === "token-http" || error?.message === "token-empty"
+            ? "Security token error. Please refresh and try again."
+            : "An error occurred. Please try again later.",
+        );
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;

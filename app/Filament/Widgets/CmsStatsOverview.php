@@ -4,7 +4,9 @@ namespace App\Filament\Widgets;
 
 use App\Filament\Resources\ArticleResource;
 use App\Filament\Resources\CategoryResource;
+use App\Filament\Resources\ContactRequestResource;
 use App\Filament\Resources\RequestResource;
+use App\Filament\Resources\ServiceRequestResource;
 use App\Filament\Resources\TagResource;
 use App\Models\Article;
 use App\Models\Category;
@@ -42,11 +44,14 @@ class CmsStatsOverview extends StatsOverviewWidget
         ];
 
         if (auth()->user()?->isAdmin()) {
-            $stats[] = Stat::make('Requests', ContactRequest::query()->count())
-                ->description('All inbound messages')
-                ->url(RequestResource::getUrl());
-            $stats[] = Stat::make('New requests', ContactRequest::query()->where('status', 'new')->count())
-                ->description('Unread inbound contact')
+            $stats[] = Stat::make('Contact requests', ContactRequest::query()->contacts()->count())
+                ->description('Homepage contact form')
+                ->url(ContactRequestResource::getUrl());
+            $stats[] = Stat::make('Service requests', ContactRequest::query()->serviceRequests()->count())
+                ->description('Service quote forms')
+                ->url(ServiceRequestResource::getUrl());
+            $stats[] = Stat::make('New / unread', ContactRequest::query()->unread()->count())
+                ->description('Awaiting a first response')
                 ->color('danger')
                 ->url(RequestResource::getUrl());
         }

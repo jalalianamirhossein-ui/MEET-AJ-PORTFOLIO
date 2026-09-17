@@ -13,6 +13,11 @@ class StoreContactRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $this->replace($this->except(['status', 'internal_notes', 'service_id', 'id']));
+    }
+
     public function rules(): array
     {
         return [

@@ -21,7 +21,37 @@
   transition:
     transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 280ms cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 280ms cubic-bezier(0.22, 1, 0.36, 1);
+    border-color 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.article-teaser[data-topic="microsoft"] {
+  background: color-mix(in srgb, var(--topic-microsoft, #2563eb) 9%, #fff);
+}
+
+.article-teaser[data-topic="linux"] {
+  background: color-mix(in srgb, var(--topic-linux, #15803d) 9%, #fff);
+}
+
+.article-teaser[data-topic="mikrotik"],
+.article-teaser[data-topic="networking"] {
+  background: color-mix(in srgb, var(--topic-mikrotik, #c2410c) 9%, #fff);
+}
+
+.article-teaser[data-topic="vmware"] {
+  background: color-mix(in srgb, var(--topic-vmware, #6d28d9) 9%, #fff);
+}
+
+.article-teaser[data-topic="security"] {
+  background: color-mix(in srgb, var(--topic-security, #be123c) 9%, #fff);
+}
+
+.article-teaser[data-topic="devops"] {
+  background: color-mix(in srgb, var(--topic-devops, #0e7490) 9%, #fff);
+}
+
+.article-teaser[data-topic="other"] {
+  background: color-mix(in srgb, var(--topic-other, #a16207) 9%, #fff);
 }
 
 .article-teaser:hover,
@@ -718,17 +748,39 @@ html[dir="rtl"] .testimonial-card cite {
 
 .header .brand-lang,
 .header #lang-mount {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin: 0.55rem 0 0;
-  padding: 0;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
 }
 
 .lang-switcher,
 .lang-switcher.is-header-slot,
 .lang-switcher.is-floating {
   z-index: 10002;
+}
+
+.lang-switcher.is-floating {
+  position: fixed;
+  width: auto;
+}
+
+@media (min-width: 1200px) {
+  .lang-switcher.is-floating {
+    top: max(1rem, env(safe-area-inset-top, 0px));
+    inset-inline-end: max(1.15rem, env(safe-area-inset-right, 0px));
+    inset-inline-start: auto;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  .lang-switcher.is-floating {
+    top: max(0.85rem, env(safe-area-inset-top, 0px));
+    inset-inline-start: max(0.85rem, env(safe-area-inset-left, 0px));
+    inset-inline-end: auto;
+  }
 }
 
 body .lang-switcher-toggle,
@@ -944,6 +996,76 @@ body.index-page .stats .stats-item p {
   color: var(--color-text, #1e293b);
   font-size: 0.8rem;
   font-weight: 600;
+}
+
+.skill-group .progress,
+.skills-board .progress {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: 0.75rem;
+  row-gap: 0.4rem;
+  margin: 0;
+  padding: 0.55rem 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--color-border, #dce5f1);
+  box-shadow: none;
+}
+
+.skill-group .progress:last-child,
+.skills-board .progress:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.skill-group .progress .skill {
+  display: contents;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-text, #1e293b);
+}
+
+.skill-group .progress .val {
+  display: inline-flex;
+  justify-content: flex-end;
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--color-primary, #2563eb);
+}
+
+.skill-group .progress-bar-wrap,
+.skills-board .progress-bar-wrap {
+  display: block;
+  grid-column: 1 / -1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-surface-muted, #eef4ff);
+  overflow: hidden;
+}
+
+.skill-group .progress-bar,
+.skills-board .progress-bar {
+  display: block;
+  width: 0;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-primary, #2563eb);
+  max-width: 100%;
+}
+
+#header.header .navmenu a:hover,
+#header.header .navmenu a:focus-visible {
+  background: rgba(37, 99, 235, 0.16);
+  border-color: rgba(37, 99, 235, 0.42);
+  color: var(--primary, #2563eb);
+  box-shadow: inset 3px 0 0 var(--primary, #2563eb);
+}
+
+html[dir="rtl"] #header.header .navmenu a:hover,
+html[dir="rtl"] #header.header .navmenu a:focus-visible {
+  box-shadow: inset -3px 0 0 var(--primary, #2563eb);
 }
 
 body.index-page .resume .row {

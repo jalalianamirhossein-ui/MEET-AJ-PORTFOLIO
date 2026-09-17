@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 $basePath = dirname(__DIR__);
 foreach ([
@@ -26,6 +27,7 @@ foreach ([
 return Application::configure(basePath: $basePath)
     ->withRouting(web: __DIR__.'/../routes/web.php', commands: __DIR__.'/../routes/console.php')
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->trustProxies(at: '*');
         $middleware->web(prepend: [
             AcceptLegacyCsrfToken::class,
         ]);
@@ -35,5 +37,18 @@ return Application::configure(basePath: $basePath)
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->shouldRenderJsonWhen(fn (Request $request, Throwable $e) => $request->expectsJson());
+        $exceptions->render(function (HttpException $e, Request $request) {
+            if ($e->getStatusCode() !== 419) {
+                return null;
+            }
+
+            if ($request->is('forms/*') || $request->routeIs('contact.*')) {
+                return response('Security token expired. Please refresh and try again.', 419)
+                    ->header('Content-Type', 'text/plain; charset=UTF-8')
+                    ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+            }
+
+            return null;
+        });
     })
     ->create();

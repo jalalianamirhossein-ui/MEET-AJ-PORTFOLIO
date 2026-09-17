@@ -36,6 +36,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title data-en="{{ $seoTitle }}" data-fa="{{ data_get($service->presentation, 'seo_title_fa') ?: $seoTitle }}">{{ $seoTitle }}</title>
     <meta name="description" content="{{ $seoDesc }}" />
@@ -54,10 +55,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/css/services.css?v=1000" />
-    <link href="/assets/css/lang-toggle.css?v=1300" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1301" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1703" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1806" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1807" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" />
     <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
@@ -283,7 +284,8 @@
               <textarea name="message" id="contact-message" rows="7" placeholder=" " required minlength="10" maxlength="1000"></textarea>
               <label for="contact-message" data-en="Project Details" data-fa="جزئیات پروژه">Project Details</label>
             </div>
-            <input type="hidden" name="csrf_token" id="csrf_token" value="" />
+            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+            <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}" />
             <div class="form-error form-span" id="form-error" role="alert" aria-live="assertive" hidden></div>
             <button type="submit" class="btn btn-primary form-span" data-en="Submit Request" data-fa="ارسال درخواست">Submit Request</button>
           </form>
@@ -292,7 +294,8 @@
     </main>
     <div id="toast" class="toast" hidden role="status" aria-live="polite" aria-atomic="true" data-en="Request submitted successfully! We'll contact you soon." data-fa="درخواست با موفقیت ارسال شد.">Request submitted successfully! We'll contact you soon.</div>
     <script src="/assets/vendor/aos/aos.js"></script>
-    <script src="/assets/js/i18n.js?v=1203"></script>
+    <script src="/assets/js/contact-form.js?v=1403"></script>
+    <script src="/assets/js/i18n.js?v=1301"></script>
     <script>
       AOS.init({ once: true, disable: window.matchMedia('(prefers-reduced-motion: reduce)').matches });
       function copyText(en, fa) {
@@ -344,16 +347,11 @@
         submitBtn.setAttribute("aria-busy", "true");
         submitBtn.textContent = copyText("Sending...", "در حال ارسال...");
         try {
-          const csrfResponse = await fetch("/forms/get-csrf-token.php", { cache: "no-store", credentials: "same-origin" });
-          if (!csrfResponse.ok) {
-            showError("Security token error. Please refresh and try again.", "خطای امنیتی. صفحه را تازه‌سازی کنید و دوباره تلاش کنید.");
-            return;
+          if (!window.MeetAjForms?.postForm) {
+            throw new Error("form-helper");
           }
-          const csrfData = await csrfResponse.json();
-          formData.set("csrf_token", csrfData.token);
-          const response = await fetch("/forms/contact.php", { method: "POST", body: formData, credentials: "same-origin" });
-          const responseText = await response.text();
-          if (response.ok && responseText.trim() === "OK") {
+          const result = await window.MeetAjForms.postForm(form);
+          if (result.ok) {
             form.reset();
             document.getElementById("contact-service").value = "{{ $service->slug }}";
             document.getElementById("contact-subject").value = @json($formSubject);
@@ -363,11 +361,11 @@
               toast.classList.remove("show");
               toast.hidden = true;
             }, 5000);
-          } else if (response.status === 419) {
+          } else if (result.status === 419) {
             showError("Security token error. Please refresh and try again.", "خطای امنیتی. صفحه را تازه‌سازی کنید و دوباره تلاش کنید.");
           } else {
             errorEl.hidden = false;
-            errorEl.textContent = responseText || copyText("Request failed.", "ارسال درخواست ناموفق بود.");
+            errorEl.textContent = result.message || copyText("Request failed.", "ارسال درخواست ناموفق بود.");
           }
         } catch (e) {
           showError("Network error. Please try again.", "خطای شبکه. دوباره تلاش کنید.");

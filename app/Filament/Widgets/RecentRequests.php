@@ -2,7 +2,8 @@
 
 namespace App\Filament\Widgets;
 
-use App\Filament\Resources\RequestResource;
+use App\Filament\Resources\ContactRequestResource;
+use App\Filament\Resources\ServiceRequestResource;
 use App\Models\Request as ContactRequest;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -29,6 +30,10 @@ class RecentRequests extends TableWidget
             ->paginated(false)
             ->columns([
                 TextColumn::make('name')->limit(24),
+                TextColumn::make('type')
+                    ->label('Type')
+                    ->state(fn (ContactRequest $record): string => $record->typeLabel())
+                    ->badge(),
                 TextColumn::make('subject')->limit(32)->wrap(),
                 TextColumn::make('status')->badge()->color(fn (string $state): string => match ($state) {
                     'new' => 'danger',
@@ -40,7 +45,11 @@ class RecentRequests extends TableWidget
                 }),
                 TextColumn::make('created_at')->since()->label('Received'),
             ])
-            ->recordUrl(fn (): string => RequestResource::getUrl())
+            ->recordUrl(function (ContactRequest $record): string {
+                return $record->isServiceRequest()
+                    ? ServiceRequestResource::getUrl('view', ['record' => $record])
+                    : ContactRequestResource::getUrl('view', ['record' => $record]);
+            })
             ->emptyStateHeading('No contact requests')
             ->emptyStateDescription('Inbound homepage and service quote forms appear here.');
     }

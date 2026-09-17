@@ -10,11 +10,11 @@ class ManageRequests extends ManageRecords
 
     public function getTitle(): string
     {
-        return 'Contact requests';
+        return 'All requests';
     }
 
     public function getSubheading(): string | \Illuminate\Contracts\Support\Htmlable | null
     {
-        return 'Inbound messages from the public site. Status is the only editable field.';
+        return 'All inbound contact and service quote submissions.';
     }
 }
