@@ -1,5 +1,5 @@
 @verbatim
-?<!doctype html>
+<!doctype html>
 <html lang="en" dir="ltr">
   <head>
     <!-- ===============================================
@@ -237,7 +237,7 @@
       disabled
     />
     <link href="/assets/css/visual-upgrade.css?v=1703" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1803" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1806" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -375,7 +375,7 @@
   =============================================== -->
 
   <body class="index-page">
-    <a class="skip-link" href="#main-content" data-en="Skip to main content" data-fa="???? ?? ?????? ????">Skip to main content</a>
+    <a class="skip-link" href="#main-content" data-en="Skip to main content" data-fa="رفتن به محتوای اصلی">Skip to main content</a>
     <!-- ===============================================
     ==================== HEADER SECTION ================
     =============================================== -->
@@ -875,7 +875,7 @@
                 <li data-en="Firewall &amp; security rules" data-fa="??????? ? ?????? ??????">Firewall &amp; security rules</li>
                 <li>Active Directory</li>
                 <li>VPN</li>
-                <li data-en="Backup (Veeam)" data-fa="???????????? (Veeam)">Backup (Veeam)</li>
+                <li data-en="Backup (Veeam)" data-fa="پشتیبان‌گیری (Veeam)">Backup (Veeam)</li>
               </ul>
             </section>
           </div>
@@ -1035,7 +1035,7 @@
                 <li>Windows Server</li>
                 <li>Active Directory</li>
                 <li>DNS / DFS / WSUS</li>
-                <li data-en="Backup (Veeam)" data-fa="پشتیبان‌گیری (Veeam)">Backup (Veeam)</li>
+                <li data-en="Backup (Veeam)" data-fa="???????????? (Veeam)">Backup (Veeam)</li>
               </ul>
             </article>
             <article class="skill-group">
@@ -1696,10 +1696,10 @@
                 class="btn btn-primary load-more-btn"
                 type="button"
                 data-en="Load more articles"
-                data-fa="????? ?????? ?????"
+                data-fa="نمایش مقالات بیشتر"
                 aria-label="Load more articles"
                 data-en-aria-label="Load more articles"
-                data-fa-aria-label="????? ?????? ?????"
+                data-fa-aria-label="نمایش مقالات بیشتر"
               >
                 Load more articles
               </button>

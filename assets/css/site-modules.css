@@ -746,8 +746,9 @@ body .lang-switcher-toggle,
 }
 
 body.index-page .section,
-body.articles-index-page .section {
-  padding-block: var(--section-y);
+body.articles-index-page .section,
+body.index-page section.section {
+  padding-block: var(--section-y) !important;
 }
 
 body.index-page .section-title {
@@ -771,6 +772,29 @@ body.index-page .hero {
   min-height: min(68vh, 38rem) !important;
   height: auto !important;
   padding: clamp(3.5rem, 6vh, 5rem) 0 clamp(2.5rem, 4.5vh, 3.75rem) !important;
+}
+
+body.index-page .hero .container,
+body.index-page .hero-wrapper {
+  min-height: 0 !important;
+  min-block-size: 0 !important;
+  height: auto !important;
+}
+
+@media (max-width: 991px) {
+  body.index-page .hero-wrapper {
+    padding: clamp(3.25rem, 8vw, 4.5rem) 0 clamp(2.25rem, 5vw, 3.25rem) !important;
+    justify-content: flex-start !important;
+  }
+
+  body.index-page .hero-content-section {
+    position: relative !important;
+    inset: auto !important;
+    top: auto !important;
+    transform: none !important;
+    width: min(100%, 32rem) !important;
+    max-width: 100% !important;
+  }
 }
 
 body.index-page .hero-content {
@@ -941,8 +965,12 @@ body.index-page .resume .resume-title {
 }
 
 body.index-page .resume .resume-item {
-  padding: 0.55rem 0 0.55rem 1rem;
+  padding: 0.4rem 0 0.4rem 0.9rem;
   margin: 0;
+}
+
+body.index-page .resume .row > [class*="col-"]:first-child .resume-item:nth-child(n + 6) {
+  display: none;
 }
 
 body.index-page .resume .resume-item h4 {
@@ -978,10 +1006,6 @@ body.index-page .resume .resume-item li {
 }
 
 body.index-page .resume .resume-item li:nth-child(n + 4) {
-  display: none;
-}
-
-body.index-page .resume .row > [class*="col-"]:first-child .resume-item:nth-child(n + 8) {
   display: none;
 }
 
@@ -1122,10 +1146,22 @@ body.index-page #portfolio .article-filter-panel {
   height: 120px !important;
 }
 
-.contact .form-textarea,
-.contact textarea.form-textarea {
-  min-height: 7rem;
-  max-height: 8.5rem;
+.contact .php-email-form {
+  display: flex !important;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 1.25rem 1.35rem;
+}
+
+.contact .form-row {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.contact .map-container,
+.location-info iframe {
+  display: none !important;
 }
 
 .footer {
@@ -1176,5 +1212,9 @@ body.index-page #portfolio .article-filter-panel {
 
   body.index-page .stats .stats-item .purecounter {
     font-size: clamp(2.2rem, 9vw, 2.8rem);
+  }
+
+  .contact .form-row {
+    grid-template-columns: 1fr;
   }
 }

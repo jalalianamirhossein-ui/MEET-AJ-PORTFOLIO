@@ -98,7 +98,7 @@ class LegacySitePublisher
     <link href="/assets/css/lang-toggle.css?v=1300" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1703" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1803" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1806" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">
 BLADE;
@@ -348,6 +348,7 @@ BLADE;
         $html = preg_replace('/\xEF\xBB\xBF/', '', $html) ?? $html;
         $html = preg_replace('/^\s*@verbatim\s*/', '', $html) ?? $html;
         $html = preg_replace('/\s*@endverbatim\s*$/', '', $html) ?? $html;
+        $html = preg_replace('/^\s*\?\s*(?=<!doctype)/i', '', $html) ?? $html;
         $html = str_replace('../assets/', '/assets/', $html);
         $html = preg_replace('#(?<![\w./])assets/#', '/assets/', $html) ?? $html;
         $html = str_replace('href="../index.html', 'href="/', $html);

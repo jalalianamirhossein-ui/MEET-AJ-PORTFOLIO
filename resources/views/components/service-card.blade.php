@@ -22,7 +22,7 @@
     <p class="service-catalog-price" data-en="{{ $service->displayPrice('en') }}" data-fa="{{ $service->displayPrice('fa') }}">{{ $service->displayPrice('en') }}</p>
     <div class="service-catalog-actions">
       <a class="btn btn-primary service-catalog-cta" href="{{ $service->path() }}" data-en="View Details" data-fa="مشاهده جزئیات">View Details</a>
-      <a class="btn btn-outline-primary service-catalog-cta" href="{{ $service->path() }}#service-request" data-en="Request" data-fa="درخواست">Request</a>
+      <a class="btn btn-outline-primary service-catalog-cta" href="{{ $service->path() }}#service-request" data-en="Request Service" data-fa="درخواست خدمت">Request Service</a>
     </div>
   </div>
 </article>

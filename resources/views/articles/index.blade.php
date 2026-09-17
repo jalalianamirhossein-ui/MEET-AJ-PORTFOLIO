@@ -18,10 +18,10 @@
     <link href="/assets/css/lang-toggle.css?v=1300" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1703" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1803" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1806" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">@verbatim
-<a class="skip-link" href="#portfolio" data-en="Skip to main content" data-fa="???? ?? ?????? ????">Skip to main content</a>
+<a class="skip-link" href="#portfolio" data-en="Skip to main content" data-fa="رفتن به محتوای اصلی">Skip to main content</a>
     <!-- ===============================================
     ==================== HEADER SECTION ================
     =============================================== -->
@@ -300,10 +300,10 @@
                 class="btn btn-primary load-more-btn"
                 type="button"
                 data-en="Load more articles"
-                data-fa="????? ?????? ?????"
+                data-fa="نمایش مقالات بیشتر"
                 aria-label="Load more articles"
                 data-en-aria-label="Load more articles"
-                data-fa-aria-label="????? ?????? ?????"
+                data-fa-aria-label="نمایش مقالات بیشتر"
               >
                 Load more articles
               </button>
