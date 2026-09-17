@@ -29,4 +29,6 @@ When a file here disagrees with `docs/current/`, the current document wins.
 
 Several files describe **Laravel 11**, **PHP 8.2**, **Filament 3**, a `pages` table, a `contact_requests` table, or public `/de` routes. None of those exist. They were rejected in [ADR-001](../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md) and [ADR-002](../decisions/ADR/ADR-002-framework-version-selection.md). Older test counts (for example 23 or 30 tests) are also historical; the current suite is 39 tests with 647 assertions.
 
+Several files also say “Git was not initialized, committed, or pushed.” The accurate statement is that **no git command was executed** during those passes; a `.git` directory has existed in the repository throughout, with `HEAD` on `feature/laravel-migration`. The wording in those records was left as written; the authoritative statement is section 18 of [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md).
+
 Do not delete files here because they are old. Do not cite them as current.
