@@ -1,45 +1,50 @@
 # Full-site visual QA — Meet AJ
 
-**Date:** 2026-09-16  
-**Environment:** `http://127.0.0.1:8000` · overlay `visual-upgrade.css?v=1120`  
-**Language during browser pass:** Persian (`localStorage` `lang=fa`). English markup is the default; FA strings come from `data-fa`.  
-**Screenshot canvas** is wider than the emulated viewport; overflow is measured with `scrollWidth - clientWidth`, not the white remainder.
+**Date:** 2026-09-17  
+**Overlay:** `assets/css/visual-upgrade.css?v=1306`  
+**Git:** not initialized / not committed.
 
-## Viewports actually tested
+## Method
 
-| Width | Height | Surfaces | Overflow | Visual screenshot |
-|-------|--------|----------|----------|-------------------|
-| 320 | 800 | Homepage | 0 | overflow only |
-| 375 | 812 | Home, mobile menu, articles index, article detail, service | 0 | yes (home, menu, articles, service) |
-| 390 | 844 | Article detail | 0 | overflow only |
-| 414 | 896 | Article detail | 0 | overflow only |
-| 768 | 1024 | Homepage | 0 | overflow only |
-| 1024 | 768 | Homepage | 0 | overflow only |
-| 1280 | 800 | Homepage | 0 | overflow only |
-| 1366 | 768 | Service | 0 | overflow only |
-| 1440 | 900 | Home, network-design, form open | 0 | yes |
-| 1920 | 1080 | devops-automation | 0 | yes |
+Mandatory skill order was executed:
 
-## Surfaces
+1. **frontend-design** — Article DNA direction (editorial, left-aligned, one blue accent, photo as the memorable element).
+2. **using-ui-stack / Laravel** — Blade + CSS component families (buttons, pills, grouping cards). No Tailwind/shadcn added.
+3. **responsive-testing** — 375 / 428 / 768 / 1280 / 1536 overflow + screenshots.
+4. **accessibility-auditing** — aria snapshots, skip link, FAQ `aria-expanded`, Escape on mobile menu, 44px menu/arrow targets, form labels.
+5. **visual-qa-testing** — implement → render → screenshot → fix → re-render. Screenshot-visible issues were fixed even when DOM overflow was 0.
 
-| Surface | Result | Notes |
-|---------|--------|-------|
-| Homepage hero | PASS | Static role line visible; name/role/typed/CTAs. Typed.js cursor can overlap FA typed string (`\|\|VMwar…`) — remaining. |
-| Get to Know Me | PASS | Existing premium layout kept; token-aligned. |
-| Stats / Skills / Resume | PASS | Skill bars `rgb(37, 99, 235)` both columns. Resume wraps; no page overflow. |
-| Services index | PASS | Six catalog cards; CTAs 44px. |
-| Service landings (all six HTML) | PASS | Fetch+DOM: h1, hidden form, CSRF, JSON-LD, canonical. Network + DevOps screenshotted. |
-| Quote form | PASS | Hidden until CTA; click revealed form, focused `#contact-name`, overflow 0. |
-| Articles index | PASS | 23 cards, 6 `<button>` filters, 375 overflow 0. |
-| Article detail | PASS | Chrome only; `pre` scrolls internally (`maxPreOverflow` 697 at 375); page overflow 0. |
-| Testimonials | PASS | Existing pause on focus / `document.hidden` / reduced motion (code + interactive bullets present). Autoplay not re-timed in this pass. |
-| Contact / Footer | PASS | Two-column desktop already in `main.css`; footer aliased to primary. Map `max-height: 200px`. |
-| Navigation | PASS | Desktop sidebar; mobile fullscreen `opacity:1`, `navTop` 213 / `socialTop` 692 at 375. |
-| Language switcher | PASS | Options `en`, `fa` only. No `[data-de]`. |
-| Reduced motion | PASS | CSS `@media (prefers-reduced-motion: reduce)` on overlay + AOS `disable` on service pages. OS setting not toggled in browser. |
+Article pages are the DNA reference and were not redesigned.
 
-## Failures / remaining
+## Stage results
 
-1. Typed.js FA overlap on the hero subtitle (source animation, not a layout overflow).
-2. Exhaustive Chromium console/ARIA audit across every URL: **not captured** this pass (see final report BROWSER QA).
-3. Filament `/admin` interactive login: **not opened** (no credentials in this pass).
+| Stage | Rendered? | Result | Notes |
+|-------|-----------|--------|-------|
+| A Homepage | Yes 1280/768/375 | PASS | White hero name, editorial about map, skills lists, resume timeline, catalog cards as grouping |
+| B Services index | Homepage `#services` | PASS | There is no `/services` route (404 by design). Catalog lives on the homepage |
+| C Six service details | Yes all 6 heroes | PASS | Flattened blocks; form hidden until CTA; prices unchanged |
+| D Articles index | Yes 1280 | PASS | Compact category pills, Article H2 bar |
+| E Nav / language | Desktop + mobile | PASS | Sidebar desktop; fullscreen mobile menu; EN/FA |
+| F Contact | Yes 1280 | PASS | Info flattened; form remains one grouping card |
+| G Mobile | 375/428/768 | PASS overflow 0 | Menu Escape closes; service blocks inset from language chip |
+
+## Visual problems found and fixed this pass
+
+1. Hero first name washed gray on the photo — solid white + shadow (both name lines).
+2. About “Infrastructure Core” was a dark dashboard card that clipped node labels — restyled to Article surface + inset nodes.
+3. About map animations ignored reduced-motion — grid/flow/pulse now respect `prefers-reduced-motion`.
+4. SLA/add-on lists used a 2-column grid that left a leftover third item — single editorial column.
+5. Testimonial prev/next sat on top of quotes — arrows moved under the carousel (44×44).
+6. Floating EN overlapped service section kickers while scrolling — service blocks inset 5rem.
+7. Overlay cache stale in the browser — bumped to `v=1306` and copied to `public/`.
+
+## Remaining issues (not blockers)
+
+- Cursor’s screenshot panel is narrower than emulated 1280/1440, so the right column can look cropped in captures even when `scrollWidth - clientWidth === 0`.
+- Typed line still uses “I'm a” + “IT Consultant” (existing copy).
+- Articles index heading jump h2 → h4 is pre-existing; Article detail was not redesigned.
+- At 375 the EN chip still sits close to the FAQ kicker; content is readable and overflow is 0.
+
+## Console / network
+
+No JS errors collected on homepage (`window.__qaErrors` empty). Overlay loaded as `visual-upgrade.css?v=1306`. Service form stays hidden until Request a Quote; after click, labeled fields (Full Name, Email, Phone, Service, Subject, Project Details) appear in the accessibility tree.

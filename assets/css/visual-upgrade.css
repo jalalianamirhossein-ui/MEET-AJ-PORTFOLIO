@@ -162,9 +162,32 @@ h6 {
 /*--------------------------------------------------------------
 # Homepage hero
 --------------------------------------------------------------*/
-.hero .hero-title,
-.hero-title {
-  text-shadow: 0 8px 32px rgba(15, 23, 42, 0.35);
+body.index-page .hero .hero-title,
+body.index-page .hero-title {
+  background: none;
+  animation: none;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+  text-shadow:
+    0 1px 1px rgba(15, 23, 42, 0.55),
+    0 8px 28px rgba(15, 23, 42, 0.72);
+}
+
+body.index-page .hero .title-line-1,
+body.index-page .hero .title-line-2 {
+  background: none;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+}
+
+/* Article DNA restore: homepage hero fill must never leak into article titles. */
+body.article-page .article-title,
+body.article-page .hero-title {
+  background: none;
+  animation: none;
+  color: var(--article-text, #1e293b);
+  -webkit-text-fill-color: var(--article-text, #1e293b);
+  text-shadow: none;
 }
 
 .hero-title:hover {
@@ -304,14 +327,9 @@ body.index-page .section-title h2::after {
   display: none;
 }
 
-.profile-card,
-.about-card,
-.stats .stats-item,
 .services .service-item,
 .services .service-catalog-card,
 .testimonials .testimonial-item,
-.resume .resume-item,
-.contact-card,
 .contact-form-section {
   border-radius: var(--radius-panel);
   border: 1px solid var(--color-border);
@@ -319,12 +337,10 @@ body.index-page .section-title h2::after {
   background: var(--color-surface-elevated);
 }
 
-.profile-card:hover,
-.stats .stats-item:hover,
 .services .service-item:hover,
-.card:hover {
+.services .service-catalog-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-card);
 }
 
 .profile-card::before,
@@ -477,6 +493,9 @@ body.index-page .section-title h2::after {
 .article-teaser-category {
   display: inline-flex;
   align-items: center;
+  align-self: flex-start;
+  width: auto;
+  max-width: 100%;
   margin: 0 0 var(--space-2) !important;
   min-height: 2rem !important;
   padding: 0.35rem 0.8rem;
@@ -1134,11 +1153,27 @@ html[dir="rtl"] .service-landing .back-button {
 }
 
 .about-copy h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
   margin: 0 0 0.75rem;
-  font-size: clamp(1.6rem, 2.4vw, 2.15rem);
+  padding-bottom: 0.55rem;
+  border-bottom: 2px solid var(--color-border);
+  font-size: clamp(1.45rem, 2.6vw, 2rem);
   font-weight: 700;
-  color: var(--text-primary, #0f172a);
+  letter-spacing: -0.025em;
+  color: var(--color-text);
   line-height: 1.2;
+}
+
+.about-copy h2::before {
+  content: "";
+  display: block;
+  flex: 0 0 auto;
+  width: 0.3rem;
+  height: 1.2em;
+  border-radius: 999px;
+  background: linear-gradient(var(--primary), var(--accent));
 }
 
 .about-headline {
@@ -1204,8 +1239,8 @@ html[dir="rtl"] .service-landing .back-button {
   margin: 0 0 0.9rem;
   max-width: 40rem;
   font-size: 1rem;
-  line-height: 1.7;
-  color: var(--text-secondary, #64748b);
+  line-height: 1.85;
+  color: var(--color-text);
 }
 
 .about-facts {
@@ -1216,10 +1251,12 @@ html[dir="rtl"] .service-landing .back-button {
 }
 
 .about-facts > div {
-  padding: 0.75rem 0.85rem;
-  border: 1px solid var(--color-border);
-  border-radius: 0.8rem;
-  background: var(--color-surface-muted);
+  padding: 0 0.25rem 0.5rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  border-inline-start: 2px solid var(--color-border);
+  padding-inline-start: 0.85rem;
 }
 
 .about-facts dt {
@@ -1267,13 +1304,13 @@ html[dir="rtl"] .service-landing .back-button {
 
 .about-core {
   position: relative;
-  border: 1px solid #1e293b;
-  border-radius: var(--radius-lg);
-  background: #0f172a;
-  color: #e2e8f0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+  color: var(--color-text);
   padding: 1rem 1rem 1.15rem;
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
+  box-shadow: none;
+  overflow: visible;
 }
 
 .about-core-label {
@@ -1284,7 +1321,7 @@ html[dir="rtl"] .service-landing .back-button {
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #7dd3fc;
+  color: var(--color-primary);
 }
 
 .about-core-canvas {
@@ -1293,6 +1330,7 @@ html[dir="rtl"] .service-landing .back-button {
   isolation: isolate;
   direction: ltr;
   unicode-bidi: isolate;
+  overflow: visible;
 }
 
 .about-core-canvas .about-node {
@@ -1317,8 +1355,8 @@ html[dir="rtl"] .main .about-core-canvas .about-node {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+    linear-gradient(rgba(37, 99, 235, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.06) 1px, transparent 1px);
   background-size: 28px 28px;
   mask-image: radial-gradient(ellipse at center, #000 40%, transparent 78%);
   animation: about-grid-drift 14s linear infinite;
@@ -1332,7 +1370,7 @@ html[dir="rtl"] .main .about-core-canvas .about-node {
 }
 
 .about-link {
-  stroke: rgba(56, 189, 248, 0.35);
+  stroke: rgba(37, 99, 235, 0.28);
   stroke-width: 1.4;
   stroke-linecap: round;
   fill: none;
@@ -1358,10 +1396,10 @@ html[dir="rtl"] .main .about-core-canvas .about-node {
   min-height: 44px;
   min-width: 44px;
   padding: 0.4rem 0.7rem;
-  border: 1px solid rgba(148, 163, 184, 0.35);
+  border: 1px solid var(--color-border);
   border-radius: 999px;
-  background: rgba(15, 23, 42, 0.92);
-  color: #f8fafc;
+  background: var(--color-surface);
+  color: var(--color-text);
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -1369,6 +1407,7 @@ html[dir="rtl"] .main .about-core-canvas .about-node {
   align-items: center;
   gap: 0.4rem;
   cursor: pointer;
+  white-space: nowrap;
   transition: border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
 }
 
@@ -1389,17 +1428,18 @@ html[dir="rtl"] .main .about-core-canvas .about-node {
   top: 50%;
   padding: 0.7rem 1rem;
   font-size: 0.85rem;
-  border-color: var(--primary, #2563eb);
-  background: #1e3a8a;
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.18);
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--text-on-primary, #ffffff);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 
-.about-node--infra { left: 50%; top: 12%; }
-.about-node--devops { left: 16%; top: 30%; }
-.about-node--net { left: 84%; top: 30%; }
-.about-node--virt { left: 16%; top: 72%; }
-.about-node--mon { left: 84%; top: 72%; }
-.about-node--auto { left: 50%; top: 88%; }
+.about-node--infra { left: 50%; top: 14%; }
+.about-node--devops { left: 24%; top: 32%; }
+.about-node--net { left: 76%; top: 32%; }
+.about-node--virt { left: 24%; top: 70%; }
+.about-node--mon { left: 76%; top: 70%; }
+.about-node--auto { left: 50%; top: 86%; }
 
 .about-node:hover,
 .about-node.is-active {
@@ -1413,12 +1453,12 @@ html[dir="rtl"] .main .about-core-canvas .about-node {
   min-height: 3.4rem;
   margin-top: 0.85rem;
   padding: 0.75rem 0.85rem;
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  border-radius: var(--radius-md);
-  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface-muted);
   font-size: 0.88rem;
   line-height: 1.55;
-  color: #cbd5e1;
+  color: var(--color-text-muted);
 }
 
 .about-core-detail p {
@@ -1449,10 +1489,10 @@ html[dir="rtl"] .main .about-core-canvas .about-node {
 }
 
 .about-domain {
-  padding: 0.9rem 1rem;
-  border: 1px solid var(--divider-border, #e2e8f0);
-  border-radius: var(--radius-md);
-  background: var(--surface, #f8fafc);
+  padding: 0 0.25rem 0.25rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
 .about-domain h4 {
@@ -2107,7 +2147,7 @@ a.btn {
   pointer-events: none;
 }
 
-.hero-role {
+body.index-page .hero-role {
   margin: 0.35rem 0 0.85rem;
   max-width: 36rem;
   font-family: var(--font-heading);
@@ -2119,14 +2159,61 @@ a.btn {
   text-shadow: 0 8px 28px rgba(15, 23, 42, 0.55);
 }
 
-.hero .hero-title {
+body.index-page .hero .hero-title {
   margin-bottom: 0;
 }
 
+body.index-page .hero img,
+body.index-page .hero-img,
+body.index-page .hero-bg {
+  object-fit: cover;
+  object-position: 78% 22%;
+}
+
+body.index-page .hero.dark-background::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(15, 23, 42, 0.58) 0%,
+    rgba(15, 23, 42, 0.32) 36%,
+    rgba(15, 23, 42, 0.1) 56%,
+    transparent 76%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+body.index-page .hero .container {
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  body.index-page .hero img,
+  body.index-page .hero-img,
+  body.index-page .hero-bg {
+    object-position: 58% 10%;
+  }
+
+  body.index-page .hero.dark-background::after {
+    background: linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.2) 0%,
+      rgba(15, 23, 42, 0.55) 55%,
+      rgba(15, 23, 42, 0.72) 100%
+    );
+  }
+}
+
 .stats .stats-item {
-  padding: var(--space-6);
-  background: var(--color-surface-elevated);
-  border: 1px solid var(--color-border);
+  padding: var(--space-4) 0;
+  background: transparent;
+  border: 0;
+  border-inline-start: 2px solid var(--color-primary);
+  box-shadow: none;
+  border-radius: 0;
 }
 
 .stats .stats-item i {
@@ -2197,13 +2284,13 @@ html .skills .col-lg-6:last-child .progress-bar {
 
 .resume .resume-item {
   position: relative;
-  padding: var(--space-5) var(--space-5) var(--space-5) var(--space-8);
-  margin-bottom: var(--space-6);
+  padding: 0 0 var(--space-8) var(--space-8);
+  margin-bottom: 0;
   overflow: visible;
-  background: var(--color-surface-elevated);
-  border: 1px solid var(--color-border);
-  border-left: 3px solid var(--color-primary);
-  box-shadow: var(--shadow-subtle);
+  background: transparent;
+  border: 0;
+  border-left: 2px solid var(--color-border);
+  box-shadow: none;
 }
 
 .resume .resume-item h4 {
@@ -2215,11 +2302,14 @@ html .skills .col-lg-6:last-child .progress-bar {
 
 .resume .resume-item h5 {
   font-size: var(--text-sm);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.02em;
-  background: var(--color-primary-soft);
-  color: var(--color-primary-hover);
+  background: none;
+  color: var(--color-primary);
   box-shadow: none;
+  padding: 0;
+  display: inline-block;
+  margin-bottom: 0.35rem;
 }
 
 .resume .resume-item p,
@@ -2231,9 +2321,9 @@ html .skills .col-lg-6:last-child .progress-bar {
 }
 
 html[dir="rtl"] .resume .resume-item {
-  padding: var(--space-5) var(--space-8) var(--space-5) var(--space-5);
-  border-left: 1px solid var(--color-border);
-  border-right: 3px solid var(--color-primary);
+  padding: 0 var(--space-8) var(--space-8) 0;
+  border-left: 0;
+  border-right: 2px solid var(--color-border);
 }
 
 .contact .contact-intro-title {
@@ -2430,9 +2520,21 @@ body.service-landing .btn-primary:hover {
 
 .service-block:not(.service-quote) {
   width: min(56rem, calc(100% - 2rem));
-  background: var(--color-surface-elevated);
-  border-inline: 1px solid var(--color-border);
-  padding-inline: clamp(1.15rem, 3.2vw, 2.5rem);
+  background: transparent;
+  border-inline: 0;
+  padding-inline: 0;
+}
+
+html[dir="ltr"] body.service-landing .service-block {
+  width: min(56rem, calc(100% - 7.5rem));
+  margin-inline-start: 6.5rem;
+  margin-inline-end: auto;
+}
+
+html[dir="rtl"] body.service-landing .service-block {
+  width: min(56rem, calc(100% - 7.5rem));
+  margin-inline-end: 6.5rem;
+  margin-inline-start: auto;
 }
 
 .service-hero-inner {
@@ -2566,13 +2668,13 @@ body.service-landing.service-page .service-title {
 
 .service-block:not(.service-quote):nth-child(2) {
   border-top: 1px solid var(--color-border);
-  border-radius: 1rem 1rem 0 0;
-  box-shadow: var(--shadow-card);
-  margin-top: -1.25rem;
+  border-radius: 0;
+  box-shadow: none;
+  margin-top: 0;
 }
 
 .service-block:not(.service-quote):nth-last-child(2) {
-  border-radius: 0 0 1rem 1rem;
+  border-radius: 0;
   margin-bottom: 1.75rem;
 }
 
@@ -2741,10 +2843,11 @@ html[dir="ltr"] .service-lines li::before {
   grid-template-columns: 3.5rem 1fr;
   gap: 1rem;
   align-items: start;
-  padding: 0.85rem 1rem;
-  background: var(--color-surface-elevated);
-  border: 1px solid var(--color-border);
-  border-radius: 0.8rem;
+  padding: 0.85rem 0;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  border-radius: 0;
   box-shadow: none;
 }
 
@@ -2777,15 +2880,16 @@ html[dir="ltr"] .service-lines li::before {
 .service-compact {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0.75rem 2rem;
+  gap: 0;
 }
 
 .service-compact li {
   margin: 0;
-  padding: 0.85rem 1rem;
-  background: var(--color-surface-muted);
-  border: 1px solid var(--color-border);
-  border-radius: 0.8rem;
+  padding: 0.85rem 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 0;
   box-shadow: none;
   font-size: 0.95rem;
   line-height: 1.5;
@@ -3051,10 +3155,6 @@ body.service-landing.service-page .form-float textarea:focus {
     column-gap: 3.5rem;
   }
 
-  .service-compact {
-    grid-template-columns: 1fr 1fr;
-  }
-
   .service-landing .php-email-form {
     grid-template-columns: 1fr 1fr;
   }
@@ -3079,8 +3179,9 @@ body.service-landing.service-page .form-float textarea:focus {
 
   .service-process li {
     grid-template-columns: 1fr;
-    padding: 0.85rem 1rem;
-    border: 1px solid var(--color-border);
+    padding: 0.85rem 0 1.25rem;
+    border: 0;
+    border-top: 1px solid var(--color-border);
   }
 
   .service-process li::before {
@@ -3089,11 +3190,6 @@ body.service-landing.service-page .form-float textarea:focus {
 
   .service-process li::after {
     display: none;
-  }
-
-  .service-compact {
-    grid-template-columns: 1fr 1fr;
-    column-gap: 2.5rem;
   }
 }
 
@@ -3107,7 +3203,7 @@ body.service-landing.service-page .form-float textarea:focus {
   }
 
   .service-block:not(.service-quote) {
-    width: min(72rem, calc(100% - 2.5rem));
+    width: min(72rem, calc(100% - 6.25rem));
   }
 
   .service-quote {
@@ -3121,8 +3217,14 @@ body.service-landing.service-page .form-float textarea:focus {
 
   .service-landing .back-button {
     position: static;
-    margin: 0.75rem 1rem 0;
+    width: fit-content;
+    max-width: calc(100% - 6.5rem);
+    margin: 0.75rem 1.25rem 0;
     inset: auto;
+  }
+
+  html[dir="ltr"] .service-landing .back-button {
+    margin-inline-start: 5.5rem;
   }
 
   html[dir="rtl"] body.service-landing .lang-switcher.is-floating {
@@ -3151,6 +3253,131 @@ html[dir="rtl"] .service-process-num {
   font-weight: 700;
 }
 
+.resume .resume-item::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: -0.3rem;
+  top: 0.35rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--color-primary);
+}
+
+html[dir="rtl"] .resume .resume-item::before {
+  inset-inline-start: auto;
+  inset-inline-end: -0.3rem;
+}
+
+.skills-domains {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .skills-domains {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem 4rem;
+  }
+}
+
+.skill-domain h3 {
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 2px solid var(--color-border);
+  font-size: clamp(1.2rem, 2.1vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+}
+
+.skill-domain .progress,
+body.index-page .skills .progress {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+  padding: 0.75rem 0;
+  background: transparent !important;
+  border: 0;
+  border-bottom: 1px solid var(--color-border) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+body.index-page .skills .progress:hover {
+  transform: none;
+  box-shadow: none;
+  background: transparent;
+  border-color: var(--color-border);
+}
+
+.skill-domain .progress-bar-wrap,
+body.index-page .skills .progress-bar-wrap {
+  display: none;
+}
+
+.skill-domain .skill,
+body.index-page .skills .progress .skill {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.skill-domain .val,
+body.index-page .skills .progress .skill .val {
+  display: none;
+}
+
+body.index-page .skills .progress:hover .skill .val {
+  background: none;
+  transform: none;
+}
+
+.contact-card {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+body.index-page .contact-card,
+body.index-page .location-card {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  border-radius: 0;
+  padding-inline: 0;
+}
+
+.testimonials .swiper {
+  padding-bottom: 3.5rem;
+}
+
+.testimonials .swiper-button-prev,
+.testimonials .swiper-button-next {
+  top: auto;
+  bottom: 0.35rem;
+  margin-top: 0;
+}
+
+.testimonials .swiper-button-prev {
+  left: 0.25rem;
+}
+
+.testimonials .swiper-button-next {
+  right: 0.25rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-role,
   .stats .stats-item,
@@ -3160,7 +3387,10 @@ html[dir="rtl"] .service-process-num {
   .btn,
   .service-hero-mark,
   .service-hero-copy,
-  .service-hero-aside {
+  .service-hero-aside,
+  .about-core-grid,
+  .about-link,
+  .about-node-status {
     transition: none;
     animation: none;
     transform: none;

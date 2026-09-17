@@ -36,9 +36,9 @@
     <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
     <link href="/assets/css/articles.css?v=1013" rel="stylesheet" />
-    <link href="/assets/css/visual-upgrade.css?v=1120" rel="stylesheet" />
     <link href="/assets/css/lang-toggle.css?v=1115" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
+    <link href="/assets/css/visual-upgrade.css?v=1310" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
   </head>
   <body class="{{ data_get($article->presentation, 'body_class', 'article-page theme-other') }}">

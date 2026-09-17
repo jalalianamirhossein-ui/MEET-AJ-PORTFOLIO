@@ -25,7 +25,7 @@ German is **not** a public language. `/de` returns 404. German article rows cann
 
 ## Design system
 
-Public chrome is unified in `assets/css/visual-upgrade.css` (cache `v=1120`): blue primary `#2563eb`, Poppins/Vazirmatn, 44px controls, shared cards/buttons, service landing layout, CTA-gated quote form. See [docs/design-system.md](docs/design-system.md). Do not add Tailwind, React, Vue, or extra CDNs.
+Public chrome is unified in `assets/css/visual-upgrade.css` (cache `v=1310`): Article visual DNA (blue `#2563eb`, Poppins/Vazirmatn, 12px buttons, H2 bars). Homepage is editorial (skills lists, resume timeline); services are landings with CTA-gated quote forms. Cards are for grouping only. See [docs/article-visual-dna.md](docs/article-visual-dna.md) and [docs/design-system.md](docs/design-system.md). Do not add Tailwind, React, Vue, or extra CDNs.
 
 ## Technology stack
 
