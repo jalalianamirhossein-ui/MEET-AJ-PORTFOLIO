@@ -13,7 +13,7 @@ Earlier reorganisation history (2026-09-17 moves, deletes = 0, link repair) rema
 |---------------------|---------|---------------|
 | Suite “39 / 647” or “55 / 1067” as current | **58 tests, 1124 assertions, 1 skipped** | `PROJECT-STATUS`, `TESTING`, `PROJECT-STRUCTURE`, `DEPLOYMENT`, `QA-MATRIX`, `FINAL-QA-REPORT`, `historical/README` |
 | 9 migrations / no `accent_color` | **10** app migrations; `categories.accent_color` nullable | `DATABASE` (already), `PROJECT-STRUCTURE`, `QA-MATRIX` |
-| Overlay `site-modules?v=1820` / `main.js?v=1406` / `visual-upgrade?v=1707` | `site-modules?v=1832`, `main.js?v=1412`, `visual-upgrade?v=1710`, `lang-toggle?v=1403`, `i18n?v=1403` | `FINAL-QA-REPORT`, `VISUAL-QA`, `FEATURES`, `ARCHITECTURE`, `DESIGN-SYSTEM`, `PROJECT-STATUS` |
+| Overlay `site-modules?v=1820` / `main.js?v=1406` / `visual-upgrade?v=1707` | `site-modules?v=1840`, `main.js?v=1412`, `visual-upgrade?v=1711`, `lang-toggle?v=1403`, `i18n?v=1403` | `FINAL-QA-REPORT`, `VISUAL-QA`, `FEATURES`, `ARCHITECTURE`, `DESIGN-SYSTEM`, `PROJECT-STATUS` |
 | Admin authenticated BLOCKED / 0 users | Local QA users exist; White/Red + contrast PASS | `ADMIN-QA`, `PROJECT-STATUS`, `ADMIN`, `FINAL-QA-REPORT` |
 | Expertise described as plain blue uppercase columns | Pastel pills, icons, LTR/RTL markers, reveal JS | `FEATURES`, `DESIGN-SYSTEM`, `VISUAL-QA`, `PROJECT-STATUS` |
 | Duplicate “Article library” row in status table | Removed | `PROJECT-STATUS` |
@@ -36,7 +36,7 @@ Archive under `docs/archive/2026-09-18/` was **left as historical** (blue admin,
 
 | Check | Result |
 |-------|--------|
-| Live Blade cache strings | `site-modules.css?v=1832`, `main.js?v=1412` in home/articles/services + publisher |
+| Live Blade cache strings | `site-modules.css?v=1840`, `main.js?v=1412` in home/articles/services + publisher |
 | Feature test inventory | 58 `test_*` methods across 10 Feature files |
 | Migrations | `2026_09_18_000010_add_accent_color_to_categories_table` present |
 | Expertise markup | `data-expertise` on five columns in `home.blade.php` / `index.html` |

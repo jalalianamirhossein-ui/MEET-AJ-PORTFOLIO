@@ -86,7 +86,7 @@ Routes: **42 total** from `php artisan route:list` after `optimize:clear` — ap
 | Contact endpoints `/forms/get-csrf-token.php` and `/forms/contact.php` | PASS (local) |
 | Production rendering on meetaj.ir | NOT TESTED |
 
-Feature-by-feature description: [FEATURES.md](FEATURES.md). Asset cache versions currently in the Blade heads: `visual-upgrade.css?v=1710`, `site-modules.css?v=1832`, `lang-toggle.css?v=1403`, `main.js?v=1412`, `i18n.js?v=1403`.
+Feature-by-feature description: [FEATURES.md](FEATURES.md). Asset cache versions currently in the Blade heads: `visual-upgrade.css?v=1711`, `site-modules.css?v=1840`, `lang-toggle.css?v=1403`, `main.js?v=1412`, `i18n.js?v=1403`.
 
 ## 6. CMS / Admin
 

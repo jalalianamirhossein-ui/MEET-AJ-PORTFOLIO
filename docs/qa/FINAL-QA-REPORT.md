@@ -1,7 +1,7 @@
 # Final project QA report — Meet AJ
 
 **Date verified:** 2026-09-18 (evening sync)  
-**Overlay:** `visual-upgrade.css?v=1710` · `site-modules.css?v=1832` · `lang-toggle.css?v=1403` · `rtl.css?v=1405` · `main.css?v=1002`  
+**Overlay:** `visual-upgrade.css?v=1711` · `site-modules.css?v=1840` · `lang-toggle.css?v=1403` · `rtl.css?v=1405` · `main.css?v=1002`  
 **Scripts:** `i18n.js?v=1403`, `main.js?v=1412`, `contact-form.js?v=1403`, `service-catalog.js?v=1813`  
 **Admin CSS:** `resources/css/filament-admin.css` → `public/css/app/meet-aj-admin.css` (White + Red; contrast lock)  
 **Git:** no add, no commit, no push.  

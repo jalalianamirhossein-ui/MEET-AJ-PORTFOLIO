@@ -25,4 +25,4 @@ They are kept for history. They do **not** describe the application as it exists
 | ADMIN-QA-blue-theme.md | Authenticated admin marked BLOCKED (`users` = 0) |
 | FINAL-QA-REPORT-blue-admin.md | Master QA claiming blue/cyan/slate admin |
 
-**After this archive folder was created**, the live docs in `docs/current/` and `docs/qa/` were synced again on 2026-09-18 evening for: Filament contrast fix, category `accent_color`, Homepage Expertise redesign, and asset versions `site-modules.css?v=1832` / `main.js?v=1412`. Do not treat files in this archive as current.
+**After this archive folder was created**, the live docs in `docs/current/` and `docs/qa/` were synced again on 2026-09-18 evening for: Filament contrast fix, category `accent_color`, Homepage Expertise redesign, and asset versions `site-modules.css?v=1840` / `main.js?v=1412`. Do not treat files in this archive as current.

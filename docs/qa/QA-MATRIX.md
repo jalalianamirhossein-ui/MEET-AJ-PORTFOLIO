@@ -25,7 +25,7 @@ Skipped in default sqlite suite: `MysqlSchemaTest` (runs only when MySQL is boun
 
 | URL / Feature | Expected | Actual | Test method | Status | Notes |
 |---------------|----------|--------|-------------|--------|-------|
-| `GET /` | 200, section IDs, EN default | 200, IDs present | PHPUnit `test_homepage_and_index_redirect`; `site:compare-content`; browser QA | PASS · LOCAL TESTED | Overlay `site-modules.css?v=1832`; Expertise 5 columns |
+| `GET /` | 200, section IDs, EN default | 200, IDs present | PHPUnit `test_homepage_and_index_redirect`; `site:compare-content`; browser QA | PASS · LOCAL TESTED | Overlay `site-modules.css?v=1840`; Expertise 5 columns |
 | `GET /index.html` | 301 → `/` | 301 | PHPUnit | PASS · LOCAL TESTED | Master prompt listed 200; implementation and tests use 301 |
 | `GET /articles` | 200, 23 cards, filters | 200 | PHPUnit + browser | PASS · LOCAL TESTED | Filter controls are `<button type="button">` |
 | `GET /services/{slug}` | 200, landing + hidden quote form | 200 | PHPUnit `ServiceCatalogTest` / `PublicSiteTest`; browser | PASS · LOCAL TESTED | Form revealed by CTA |
@@ -84,7 +84,7 @@ Slugs: `creating-a-bootable-usb`, `downgrade-mikrotik-routeros-firmware-safely`,
 | Users resource in sidebar | admin only | `shouldRegisterNavigation` true for admins | code + browser | PASS · LOCAL TESTED | Hidden from editor nav |
 | Browser login + White/Red chrome | usable + WCAG 4.5:1 type | Admin contrast re-test 2026-09-18 | Cursor browser | PASS · LOCAL TESTED | Login labels `#1e293b`; sidebar inactive slate / active crimson; see [ADMIN-QA.md](ADMIN-QA.md) |
 | `/admin/categories` Accent color | ColorPicker + fallback | ColorPicker, Preview, Reset; empty Linux `#15803d` | PHPUnit `AdminThemeTest` + browser | PASS · LOCAL TESTED | `categories.accent_color` nullable; public `--topic` |
-| Homepage Expertise EN/FA | 5 pastel columns; RTL right accent | verified | browser + `ProductionAuditTest` markup | PASS · LOCAL TESTED | `site-modules.css?v=1832`, `initExpertiseReveal` |
+| Homepage Expertise EN/FA | 5 pastel columns; RTL right accent | verified | browser + `ProductionAuditTest` markup | PASS · LOCAL TESTED | `site-modules.css?v=1840`, `initExpertiseReveal` |
 
 ## German
 

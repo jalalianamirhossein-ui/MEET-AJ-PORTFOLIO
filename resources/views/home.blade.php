@@ -238,8 +238,8 @@
       rel="stylesheet"
       disabled
     />
-    <link href="/assets/css/visual-upgrade.css?v=1710" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1832" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1711" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1840" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -314,27 +314,27 @@
       @media (max-width: 768px) {
         .hero {
           flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          padding: 3rem 1.5rem;
-          gap: 1.25rem;
+          align-items: flex-end;
+          justify-content: flex-end;
+          text-align: start;
+          padding: 0;
+          gap: 0;
         }
 
         .hero-title {
           font-size: 2.2rem;
-          color: #1e40af;
+          color: #f8fafc;
         }
 
         .hero-subtitle {
           font-size: 1rem;
-          color: #374151;
+          color: #e2e8f0;
         }
 
         .hero .hero-actions {
           display: flex;
           flex-direction: column;
-          align-items: center;
+          align-items: stretch;
           width: 100%;
           gap: 0.75rem;
         }
@@ -347,15 +347,17 @@
 
       @media (max-width: 480px) {
         .hero {
-          padding: 2.5rem 1rem;
+          padding: 0;
         }
 
         .hero-title {
           font-size: 1.8rem;
+          color: #f8fafc;
         }
 
         .hero-subtitle {
           font-size: 0.95rem;
+          color: #e2e8f0;
         }
 
         .btn {
@@ -481,7 +483,6 @@
         <img
           src="/assets/img/hero-bg.jpg"
           alt="Network infrastructure inspired hero background"
-          data-aos="fade-in"
           class="hero-bg"
           width="1920"
           height="1080"

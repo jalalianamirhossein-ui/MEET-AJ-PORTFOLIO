@@ -1,6 +1,6 @@
 # Meet AJ — documentation
 
-Navigation map for every document in this repository. Last updated **2026-09-18** (evening sync: category accents, Expertise redesign, White/Red admin, asset versions `site-modules?v=1832` / `main.js?v=1412`).
+Navigation map for every document in this repository. Last updated **2026-09-19** (Hero soft blue About transition + mobile face-safe composition; asset versions `site-modules?v=1840` / `visual-upgrade?v=1711` / `main.js?v=1412`).
 
 **Start here:** [current/PROJECT-STATUS.md](current/PROJECT-STATUS.md) — the single authoritative statement of what exists today.
 

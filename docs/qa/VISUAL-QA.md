@@ -2,7 +2,7 @@
 
 **Date verified:** 2026-09-18  
 **Method:** Cursor browser on `http://127.0.0.1:8000/` (lock → navigate → CDP `Runtime.evaluate` + a11y snapshots). Not a Lighthouse run.  
-**Assets:** `main.css?v=1002`, `lang-toggle.css?v=1403`, `rtl.css?v=1405`, `visual-upgrade.css?v=1710`, `site-modules.css?v=1832`, `main.js?v=1412`, `i18n.js?v=1403`  
+**Assets:** `main.css?v=1002`, `lang-toggle.css?v=1403`, `rtl.css?v=1405`, `visual-upgrade.css?v=1711`, `site-modules.css?v=1840`, `main.js?v=1412`, `i18n.js?v=1403`  
 **Superseded:** [../archive/2026-09-18/VISUAL-QA.md](../archive/2026-09-18/VISUAL-QA.md)  
 **Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md)
 

@@ -36,7 +36,7 @@ Also run on 2026-09-18: `php artisan optimize:clear`, `php artisan route:list` (
 | `ContentRulesTest.php` | Language rules, German publishing rejection, publication gates |
 | `RequestWorkflowTest.php` | Request statuses, admin-only access, hidden internal notes |
 | `FormCsrfAndAdminRequestsTest.php` | CSRF contracts, homepage + service quote persistence, `/admin/requests` inbox |
-| `ProductionAuditTest.php` | Contact → Request → admin inbox; editor 403; first-load Testimonials + Contact; FA encoding; English article titles + importer repair; Expertise `data-expertise` + `initExpertiseReveal`; asset versions `site-modules.css?v=1832` / `main.js?v=1412` |
+| `ProductionAuditTest.php` | Contact → Request → admin inbox; editor 403; first-load Testimonials + Contact; FA encoding; English article titles + importer repair; Expertise `data-expertise` + `initExpertiseReveal`; asset versions `site-modules.css?v=1840` / `main.js?v=1412` |
 | `AdminThemeTest.php` | White/Red admin tokens + contrast lock; published `meet-aj-admin.css`; `categories.accent_color` override/fallback/invalid hex; public `--topic` from `Category::accentColor()`; ColorPicker source asserts; editor denied Requests |
 | `MysqlSchemaTest.php` | Schema creation on MySQL/MariaDB (skipped on SQLite) |
 
