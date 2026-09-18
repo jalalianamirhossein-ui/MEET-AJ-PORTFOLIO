@@ -238,8 +238,8 @@
       rel="stylesheet"
       disabled
     />
-    <link href="/assets/css/visual-upgrade.css?v=1711" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1840" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1712" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1841" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
