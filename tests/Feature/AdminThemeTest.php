@@ -27,6 +27,11 @@ class AdminThemeTest extends TestCase
     {
         $css = (string) file_get_contents(resource_path('css/filament-admin.css'));
         $this->assertStringContainsString('--color-primary: #be123c', $css);
+        $this->assertStringContainsString('--primary-400: #be123c !important', $css);
+        $this->assertStringContainsString('.fi-fo-field-label-content', $css);
+        $this->assertStringContainsString('.fi-sidebar-item-label', $css);
+        $this->assertStringContainsString('color: #1e293b !important', $css);
+        $this->assertStringContainsString('.fi-btn.fi-color-primary.fi-bg-color-400', $css);
         $this->assertStringContainsString('--color-danger: #7f1d1d', $css);
         $this->assertStringContainsString('background: #ffffff', $css);
         $this->assertStringContainsString('--color-primary-soft: #fff1f2', $css);
@@ -35,6 +40,8 @@ class AdminThemeTest extends TestCase
 
         $provider = (string) file_get_contents(app_path('Providers/Filament/AdminPanelProvider.php'));
         $this->assertStringContainsString("Color::hex('#be123c')", $provider);
+        $this->assertStringContainsString('->darkMode(false)', $provider);
+        $this->assertStringContainsString('->themeSwitcher(false)', $provider);
         $this->assertStringContainsString("Color::hex('#7f1d1d')", $provider);
         $this->assertStringNotContainsString("Color::hex('#2563eb')", $provider);
         $this->assertStringNotContainsString("Color::hex('#0ea5e9')", $provider);
@@ -84,6 +91,8 @@ class AdminThemeTest extends TestCase
         $this->assertFileExists($published);
         $served = (string) file_get_contents($published);
         $this->assertStringContainsString('--color-primary: #be123c', $served);
+        $this->assertStringContainsString('--primary-400: #be123c !important', $served);
+        $this->assertStringContainsString('.fi-fo-field-label-content', $served);
         $this->assertStringContainsString('.meetaj-category-chip', $served);
     }
 }

@@ -28,22 +28,36 @@ html {
   --topic-security: #be123c;
   --topic-devops: #0e7490;
   --topic-other: #a16207;
-  /* Filament Color::hex('#be123c') makes 400 a candy pink. Flatten the live scale. */
-  --primary-300: #e11d48;
-  --primary-400: #be123c;
-  --primary-500: #be123c;
-  --primary-600: #9f1239;
-  --primary-700: #881337;
+  /* Filament Color::hex('#be123c') makes 400 a candy pink. Flatten the live
+     scale with !important because filament/app.css loads AFTER this file. */
+  --primary-50: #fff1f2 !important;
+  --primary-100: #ffe4e6 !important;
+  --primary-200: #fecdd3 !important;
+  --primary-300: #e11d48 !important;
+  --primary-400: #be123c !important;
+  --primary-500: #be123c !important;
+  --primary-600: #9f1239 !important;
+  --primary-700: #881337 !important;
+  --primary-800: #9f1239 !important;
+  --primary-900: #881337 !important;
+  --primary-950: #4c0519 !important;
   --color-primary-300: #e11d48;
   --color-primary-400: #be123c;
   --color-primary-500: #be123c;
   --color-primary-600: #9f1239;
   --color-primary-700: #881337;
+  color-scheme: light;
+}
+
+html.dark,
+.dark,
+.fi.dark {
+  color-scheme: light;
 }
 
 .fi-body {
   font-feature-settings: "ss01" on;
-  color: #334155;
+  color: #1e293b;
   background: #ffffff;
 }
 
@@ -112,15 +126,17 @@ html {
 
 .fi-sidebar-item a,
 .fi-sidebar-item-button,
+.fi-sidebar-item-btn,
 .fi-sidebar-item > a,
 .fi-sidebar-item button {
   border-radius: 0.7rem;
   min-height: 2.45rem;
-  color: #334155;
+  color: #1e293b;
 }
 
 .fi-sidebar-item a:hover,
 .fi-sidebar-item-button:hover,
+.fi-sidebar-item-btn:hover,
 .fi-sidebar-item > a:hover,
 .fi-sidebar-item button:hover {
   background: var(--color-primary-soft);
@@ -129,6 +145,7 @@ html {
 
 .fi-sidebar-item a:hover .fi-sidebar-item-icon,
 .fi-sidebar-item a:hover svg,
+.fi-sidebar-item-btn:hover svg,
 .fi-sidebar-item-button:hover svg {
   color: var(--color-primary);
 }
@@ -137,6 +154,7 @@ html {
 .fi-sidebar-item-active > button,
 .fi-sidebar-item.fi-active > a,
 .fi-sidebar-item.fi-active > button,
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
 .fi-sidebar-item [aria-current="page"] {
   background: var(--color-primary-soft) !important;
   color: var(--color-primary-hover) !important;
@@ -155,6 +173,7 @@ html {
 [dir="rtl"] .fi-sidebar-item-active > button,
 [dir="rtl"] .fi-sidebar-item.fi-active > a,
 [dir="rtl"] .fi-sidebar-item.fi-active > button,
+[dir="rtl"] .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
 [dir="rtl"] .fi-sidebar-item [aria-current="page"] {
   box-shadow: inset -3px 0 0 var(--color-primary);
 }
@@ -373,10 +392,12 @@ html {
   border-color: color-mix(in srgb, var(--color-primary) 35%, var(--color-border));
 }
 
-.fi-fo-field-wrp-label {
+.fi-fo-field-wrp-label,
+.fi-fo-field-label,
+.fi-fo-field-label-content {
   font-size: 0.8rem;
   font-weight: 650;
-  color: #334155;
+  color: #1e293b;
 }
 
 .fi-fo-field-wrp-error,
@@ -404,11 +425,12 @@ html {
 .fi-ac-btn-action-primary,
 .fi-btn.fi-color-primary,
 .fi-ac-btn-action.fi-color-primary,
-.fi-color-primary.fi-bg-color-400,
-.fi-color-primary.fi-bg-color-500,
-.fi-color-primary.fi-bg-color-600,
 .fi-btn.fi-color-primary.fi-bg-color-400,
-.fi-ac-btn-action.fi-color-primary.fi-bg-color-400 {
+.fi-btn.fi-color-primary.fi-bg-color-500,
+.fi-btn.fi-color-primary.fi-bg-color-600,
+.fi-ac-btn-action.fi-color-primary.fi-bg-color-400,
+.fi-ac-btn-action.fi-color-primary.fi-bg-color-500,
+.fi-ac-btn-action.fi-color-primary.fi-bg-color-600 {
   background: var(--color-primary) !important;
   background-color: var(--color-primary) !important;
   color: #ffffff !important;
@@ -579,4 +601,163 @@ a .meetaj-category-chip {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/*--------------------------------------------------------------
+  Contrast lock for White/Red admin (Filament 5.8)
+
+  Root cause: filament/app.css loads AFTER this file and paints dark-variant
+  type onto our forced white surfaces:
+
+  .fi-fo-field .fi-fo-field-label-content:where(.dark,.dark *) {
+    color: var(--color-white);
+  }
+  .fi-sidebar-item-label:where(.dark,.dark *) {
+    color: var(--gray-200);
+  }
+
+  The previous wrapper selector .fi-fo-field-wrp-label does not exist on
+  Filament 5.8 login/forms (live class is .fi-fo-field-label-content), so
+  only the red required mark stayed visible.
+
+  White is a SURFACE. Crimson is an ACCENT. Normal type is slate.
+  These selectors are scoped to Filament components, not Tailwind utilities.
+--------------------------------------------------------------*/
+.fi,
+.fi-simple-layout,
+.fi-layout,
+.fi-simple-page,
+.fi-main,
+.fi-sidebar,
+.fi-modal-window,
+.fi-dropdown-panel {
+  color: #1e293b;
+}
+
+.fi .fi-fo-field-label,
+.fi .fi-fo-field-label-content,
+.fi .fi-fo-field-wrp-label,
+.fi-simple-layout .fi-fo-field-label,
+.fi-simple-layout .fi-fo-field-label-content,
+.fi-simple-page .fi-fo-field-label,
+.fi-simple-page .fi-fo-field-label-content,
+.fi-fo-field .fi-fo-field-label-content,
+.fi-fo-field .fi-fo-field-label-content:where(.dark, .dark *) {
+  color: #1e293b !important;
+  -webkit-text-fill-color: #1e293b !important;
+}
+
+.fi .fi-fo-field-label-required-mark,
+.fi-fo-field .fi-fo-field-label-content .fi-fo-field-label-required-mark {
+  color: #be123c !important;
+  -webkit-text-fill-color: #be123c !important;
+}
+
+.fi .fi-fo-field-wrp-helper-text,
+.fi .fi-fo-field-hint,
+.fi .fi-fo-field-wrp-hint,
+.fi .fi-header-subheading,
+.fi .fi-ta-empty-state,
+.fi .fi-ta-empty-state-heading,
+.fi .fi-ta-empty-state-description,
+.fi .fi-pagination,
+.fi .fi-global-search-field,
+.fi .fi-sidebar-group-label,
+.fi .fi-sidebar-group-btn {
+  color: #475569 !important;
+}
+
+.fi .fi-fo-field-wrp-error-message,
+.fi .fi-fo-field-wrp-error-list,
+.fi [data-validation-error] {
+  color: #7f1d1d !important;
+}
+
+.fi .fi-input,
+.fi .fi-select-input,
+.fi .fi-textarea,
+.fi .fi-input input,
+.fi input.fi-input,
+.fi select,
+.fi textarea {
+  color: #0f172a !important;
+  background-color: #ffffff !important;
+}
+
+.fi .fi-input::placeholder,
+.fi .fi-select-input::placeholder,
+.fi .fi-textarea::placeholder,
+.fi input.fi-input::placeholder,
+.fi textarea::placeholder {
+  color: #64748b !important;
+  opacity: 1;
+}
+
+.fi .fi-sidebar-item-label,
+.fi-sidebar-item-label,
+.fi-sidebar-item-label:where(.dark, .dark *) {
+  color: #1e293b !important;
+}
+
+.fi .fi-sidebar-item-icon,
+.fi .fi-sidebar-item .fi-icon,
+.fi .fi-sidebar-item svg {
+  color: #475569 !important;
+}
+
+.fi .fi-sidebar-item-btn:hover .fi-sidebar-item-label,
+.fi .fi-sidebar-item a:hover .fi-sidebar-item-label {
+  color: #9f1239 !important;
+}
+
+.fi .fi-sidebar-item-btn:hover .fi-icon,
+.fi .fi-sidebar-item-btn:hover svg,
+.fi .fi-sidebar-item a:hover svg {
+  color: #be123c !important;
+}
+
+.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-label,
+.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label,
+.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label:where(.dark, .dark *),
+.fi .fi-sidebar-item-active .fi-sidebar-item-label {
+  color: #9f1239 !important;
+}
+
+.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-icon,
+.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn svg {
+  color: #be123c !important;
+}
+
+.fi .fi-ta-header-cell,
+.fi .fi-ta-header-cell-label {
+  color: #475569 !important;
+}
+
+.fi .fi-ta-cell,
+.fi .fi-ta-text,
+.fi .fi-dropdown-list-item,
+.fi .fi-dropdown-list-item-label,
+.fi .fi-modal-heading,
+.fi .fi-modal-description,
+.fi .fi-modal-content,
+.fi .fi-fo-component-ctn,
+.fi .fi-section-header-heading,
+.fi .fi-section-header-description,
+.fi .fi-wi-widget-heading {
+  color: #1e293b !important;
+}
+
+.fi .fi-pagination-overview,
+.fi .fi-pagination-records-per-page-select,
+.fi .fi-ta-search-field input,
+.fi .fi-global-search-field input {
+  color: #1e293b !important;
+}
+
+.fi .fi-disabled,
+.fi [disabled],
+.fi .fi-input:disabled,
+.fi input:disabled {
+  color: #64748b !important;
+  opacity: 0.72;
 }

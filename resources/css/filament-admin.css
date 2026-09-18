@@ -173,6 +173,7 @@ html.dark,
 [dir="rtl"] .fi-sidebar-item-active > button,
 [dir="rtl"] .fi-sidebar-item.fi-active > a,
 [dir="rtl"] .fi-sidebar-item.fi-active > button,
+[dir="rtl"] .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
 [dir="rtl"] .fi-sidebar-item [aria-current="page"] {
   box-shadow: inset -3px 0 0 var(--color-primary);
 }
@@ -600,4 +601,163 @@ a .meetaj-category-chip {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/*--------------------------------------------------------------
+  Contrast lock for White/Red admin (Filament 5.8)
+
+  Root cause: filament/app.css loads AFTER this file and paints dark-variant
+  type onto our forced white surfaces:
+
+  .fi-fo-field .fi-fo-field-label-content:where(.dark,.dark *) {
+    color: var(--color-white);
+  }
+  .fi-sidebar-item-label:where(.dark,.dark *) {
+    color: var(--gray-200);
+  }
+
+  The previous wrapper selector .fi-fo-field-wrp-label does not exist on
+  Filament 5.8 login/forms (live class is .fi-fo-field-label-content), so
+  only the red required mark stayed visible.
+
+  White is a SURFACE. Crimson is an ACCENT. Normal type is slate.
+  These selectors are scoped to Filament components, not Tailwind utilities.
+--------------------------------------------------------------*/
+.fi,
+.fi-simple-layout,
+.fi-layout,
+.fi-simple-page,
+.fi-main,
+.fi-sidebar,
+.fi-modal-window,
+.fi-dropdown-panel {
+  color: #1e293b;
+}
+
+.fi .fi-fo-field-label,
+.fi .fi-fo-field-label-content,
+.fi .fi-fo-field-wrp-label,
+.fi-simple-layout .fi-fo-field-label,
+.fi-simple-layout .fi-fo-field-label-content,
+.fi-simple-page .fi-fo-field-label,
+.fi-simple-page .fi-fo-field-label-content,
+.fi-fo-field .fi-fo-field-label-content,
+.fi-fo-field .fi-fo-field-label-content:where(.dark, .dark *) {
+  color: #1e293b !important;
+  -webkit-text-fill-color: #1e293b !important;
+}
+
+.fi .fi-fo-field-label-required-mark,
+.fi-fo-field .fi-fo-field-label-content .fi-fo-field-label-required-mark {
+  color: #be123c !important;
+  -webkit-text-fill-color: #be123c !important;
+}
+
+.fi .fi-fo-field-wrp-helper-text,
+.fi .fi-fo-field-hint,
+.fi .fi-fo-field-wrp-hint,
+.fi .fi-header-subheading,
+.fi .fi-ta-empty-state,
+.fi .fi-ta-empty-state-heading,
+.fi .fi-ta-empty-state-description,
+.fi .fi-pagination,
+.fi .fi-global-search-field,
+.fi .fi-sidebar-group-label,
+.fi .fi-sidebar-group-btn {
+  color: #475569 !important;
+}
+
+.fi .fi-fo-field-wrp-error-message,
+.fi .fi-fo-field-wrp-error-list,
+.fi [data-validation-error] {
+  color: #7f1d1d !important;
+}
+
+.fi .fi-input,
+.fi .fi-select-input,
+.fi .fi-textarea,
+.fi .fi-input input,
+.fi input.fi-input,
+.fi select,
+.fi textarea {
+  color: #0f172a !important;
+  background-color: #ffffff !important;
+}
+
+.fi .fi-input::placeholder,
+.fi .fi-select-input::placeholder,
+.fi .fi-textarea::placeholder,
+.fi input.fi-input::placeholder,
+.fi textarea::placeholder {
+  color: #64748b !important;
+  opacity: 1;
+}
+
+.fi .fi-sidebar-item-label,
+.fi-sidebar-item-label,
+.fi-sidebar-item-label:where(.dark, .dark *) {
+  color: #1e293b !important;
+}
+
+.fi .fi-sidebar-item-icon,
+.fi .fi-sidebar-item .fi-icon,
+.fi .fi-sidebar-item svg {
+  color: #475569 !important;
+}
+
+.fi .fi-sidebar-item-btn:hover .fi-sidebar-item-label,
+.fi .fi-sidebar-item a:hover .fi-sidebar-item-label {
+  color: #9f1239 !important;
+}
+
+.fi .fi-sidebar-item-btn:hover .fi-icon,
+.fi .fi-sidebar-item-btn:hover svg,
+.fi .fi-sidebar-item a:hover svg {
+  color: #be123c !important;
+}
+
+.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-label,
+.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label,
+.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label:where(.dark, .dark *),
+.fi .fi-sidebar-item-active .fi-sidebar-item-label {
+  color: #9f1239 !important;
+}
+
+.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-icon,
+.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn svg {
+  color: #be123c !important;
+}
+
+.fi .fi-ta-header-cell,
+.fi .fi-ta-header-cell-label {
+  color: #475569 !important;
+}
+
+.fi .fi-ta-cell,
+.fi .fi-ta-text,
+.fi .fi-dropdown-list-item,
+.fi .fi-dropdown-list-item-label,
+.fi .fi-modal-heading,
+.fi .fi-modal-description,
+.fi .fi-modal-content,
+.fi .fi-fo-component-ctn,
+.fi .fi-section-header-heading,
+.fi .fi-section-header-description,
+.fi .fi-wi-widget-heading {
+  color: #1e293b !important;
+}
+
+.fi .fi-pagination-overview,
+.fi .fi-pagination-records-per-page-select,
+.fi .fi-ta-search-field input,
+.fi .fi-global-search-field input {
+  color: #1e293b !important;
+}
+
+.fi .fi-disabled,
+.fi [disabled],
+.fi .fi-input:disabled,
+.fi input:disabled {
+  color: #64748b !important;
+  opacity: 0.72;
 }
