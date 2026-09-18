@@ -1,10 +1,12 @@
 # Meet AJ — documentation
 
-Navigation map for every document in this repository. Last updated **2026-09-18**.
+Navigation map for every document in this repository. Last updated **2026-09-18** (evening sync: category accents, Expertise redesign, White/Red admin, asset versions `site-modules?v=1832` / `main.js?v=1412`).
 
 **Start here:** [current/PROJECT-STATUS.md](current/PROJECT-STATUS.md) — the single authoritative statement of what exists today.
 
 Status vocabulary used throughout: **PASS**, **FAIL**, **BLOCKED**, **NOT TESTED**, plus **UNKNOWN / NOT VERIFIED** where code cannot prove a claim.
+
+Documentation sync evidence: [qa/DOCUMENTATION-QA.md](qa/DOCUMENTATION-QA.md).
 
 ## Current documentation
 
@@ -45,7 +47,7 @@ Evidence, not intentions. Each file names its method and marks BLOCKED work hone
 | [qa/ADMIN-QA.md](qa/ADMIN-QA.md) | Filament QA, including what is blocked |
 | [qa/CONTENT-INTEGRITY.md](qa/CONTENT-INTEGRITY.md) | `site:compare-content` result across 23 articles |
 | [qa/DESIGN-AUDIT.md](qa/DESIGN-AUDIT.md) | Full-site design audit findings |
-| [qa/DOCUMENTATION-QA.md](qa/DOCUMENTATION-QA.md) | This reorganisation: what moved, merged, and why |
+| [qa/DOCUMENTATION-QA.md](qa/DOCUMENTATION-QA.md) | Doc reorganisation (2026-09-17) + evening sync to match live app (2026-09-18) |
 
 ## Archive
 

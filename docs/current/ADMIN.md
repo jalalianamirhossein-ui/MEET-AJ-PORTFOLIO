@@ -152,7 +152,7 @@ Filament `Color::hex('#be123c')` generates a light 400 swatch; `filament-admin.c
 | Editor denied on services | PHPUnit `ServiceCatalogTest` | PASS |
 | Editor denied on requests, status workflow, internal notes hidden | PHPUnit `RequestWorkflowTest` + `ProductionAuditTest` + browser 403 | PASS |
 | Contact form creates a Request visible at `/admin/requests` | PHPUnit `ProductionAuditTest` + live POST 2026-09-18 | PASS |
-| White/Red theme + contrast lock + category chips | PHPUnit `AdminThemeTest` + browser | PASS (re-verified after contrast regression) |
+| White/Red theme + contrast lock + category chips + `accent_color` | PHPUnit `AdminThemeTest` + browser ColorPicker | PASS |
 | Interactive login (Admin) | Cursor browser 2026-09-18 | PASS — labels/sidebar readable including forced `html.dark` |
 | Admin responsive layout 1024 / 768 / 390 | Cursor browser | PASS |
 

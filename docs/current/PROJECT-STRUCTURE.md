@@ -64,7 +64,7 @@ app/
 
 ```
 database/
-├── migrations/          9 migrations (users → tags and request workflow)
+├── migrations/          10 migrations (users → tags/request workflow → `categories.accent_color`)
 ├── seeders/             DatabaseSeeder: rebuild views, then import articles and services
 └── database.sqlite      Local development database (not for production)
 ```
@@ -75,13 +75,14 @@ Migration list and schema: [DATABASE.md](DATABASE.md).
 
 ```
 resources/
-├── css/                 filament-admin.css (admin panel styling)
+├── css/                 filament-admin.css (White/Red Filament overlay; published via filament:assets)
 └── views/
-    ├── home.blade.php
+    ├── home.blade.php   (includes Expertise / تخصص‌ها)
     ├── articles/        index, show, partials/(breadcrumbs, library-toolbar, related,
-    │                    search-results, share)
+    │                    search-results, share, category-filters)
     ├── services/        show.blade.php (routed) + six unused per-service templates
-    ├── components/      article-card, service-card
+    ├── components/      article-card, service-card, site-sidebar
+    ├── partials/        testimonials, site-sidebar-chrome, service-drawer
     ├── errors/          404, 419, 500
     └── seo/             sitemap.blade.php
 ```
@@ -126,16 +127,19 @@ None of these are inside `public/`, so Apache cannot serve them directly.
 tests/
 ├── TestCase.php
 └── Feature/
-    ├── ArticleLibraryTest.php     5 tests
-    ├── CmsOperationsTest.php      8 tests
-    ├── ContentRulesTest.php       5 tests
-    ├── MysqlSchemaTest.php        1 test (skipped unless MySQL is bound)
-    ├── PublicSiteTest.php         9 tests
-    ├── RequestWorkflowTest.php    3 tests
-    └── ServiceCatalogTest.php     8 tests
+    ├── AdminThemeTest.php               6 tests
+    ├── ArticleLibraryTest.php           5 tests
+    ├── CmsOperationsTest.php            8 tests
+    ├── ContentRulesTest.php             5 tests
+    ├── FormCsrfAndAdminRequestsTest.php 6 tests
+    ├── MysqlSchemaTest.php              1 test (skipped unless MySQL is bound)
+    ├── ProductionAuditTest.php          6 tests
+    ├── PublicSiteTest.php              10 tests
+    ├── RequestWorkflowTest.php          3 tests
+    └── ServiceCatalogTest.php           8 tests
 ```
 
-39 tests in total. Detail: [TESTING.md](TESTING.md).
+**58 tests** in total (1124 assertions on the last green run). Detail: [TESTING.md](TESTING.md).
 
 ## `scripts/`
 

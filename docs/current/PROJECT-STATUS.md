@@ -80,7 +80,6 @@ Routes: **42 total** from `php artisan route:list` after `optimize:clear` — ap
 | Shared public sidebar + icy-blue mobile menu (`<1200px`) | PASS (browser) |
 | Shared Testimonials Swiper (one slider; RTL via `html[dir]`, not a second FA carousel) | PASS (PHPUnit + browser) |
 | Article library `/articles` with search and tag filter | PASS (local) |
-| Article library `/articles` with search and tag filter | PASS (local) |
 | 23 article detail pages | PASS (local) |
 | 6 service detail pages | PASS (local) |
 | Legacy `.html` URLs 301 to clean URLs | PASS (local) |

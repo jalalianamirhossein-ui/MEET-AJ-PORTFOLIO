@@ -2,7 +2,7 @@
 
 Personal portfolio and technical article site for **AmirHossein Jalalian** (infrastructure, networking, virtualization and DevOps), running as a Laravel application with a Filament admin panel.
 
-Verified against the running code on **2026-09-17**. Single source of truth for project state: [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).
+Verified against the running code on **2026-09-18**. Single source of truth for project state: [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).
 
 ## Overview
 
@@ -155,7 +155,7 @@ Canonical URLs, Open Graph, Twitter cards, JSON-LD (Person/WebSite on the homepa
 ## Testing
 
 ```bash
-php artisan test                                                    # 40 tests, 708 assertions, 1 skipped
+php artisan test                                                    # 58 tests, 1124 assertions, 1 skipped
 vendor/bin/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest     # MySQL schema check
 php artisan site:compare-content                                     # Failures: 0
 ```
@@ -194,7 +194,7 @@ resources/    Blade views and admin CSS
 routes/       web.php, console.php
 scripts/      validate-environment.php, verify-originals.php
 services/     6 original service HTML files (import source)
-tests/        7 feature test files, 40 tests
+tests/        10 feature test files, 58 tests
 ```
 
 Detail: [docs/current/PROJECT-STRUCTURE.md](docs/current/PROJECT-STRUCTURE.md).

@@ -1,25 +1,26 @@
 # Performance — Meet AJ
 
 **Authority:** AUTHORITATIVE statement of what is known about performance.
-**Verified:** 2026-09-17 by reading query scopes, view code, the service worker, and measuring published asset sizes on disk.
+**Verified:** 2026-09-18 by reading query scopes, view code, the service worker, and measuring published asset sizes on disk after `site:publish-assets`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
 > **No performance measurement has ever been run on this project.** There is no Lighthouse report, no WebPageTest run, no load test, and no query profiling. Everything below is either a code-level fact or a file measurement. Treat every timing claim elsewhere as **UNKNOWN / NOT VERIFIED**.
 
 ## Measured facts
 
-Published asset sizes in `public/assets/` (147 files, measured on disk 2026-09-17):
+Published asset sizes in `public/assets/` (measured on disk 2026-09-18 after `site:publish-assets`):
 
-| File | Size |
-|------|------|
-| `css/main.css` | 195.1 KB |
-| `css/visual-upgrade.css` | 84.0 KB |
-| `js/main.js` | 38.3 KB |
-| `css/articles.css` | 33.4 KB |
-| `css/rtl.css` | 19.9 KB |
-| `css/services.css` | 13.9 KB |
-| `js/i18n.js` | 11.3 KB |
-| `css/lang-toggle.css` | 3.0 KB |
+| File | Size | Live cache bust |
+|------|------|-----------------|
+| `css/main.css` | 195.1 KB | `?v=1002` |
+| `css/visual-upgrade.css` | 116.4 KB | `?v=1710` |
+| `css/site-modules.css` | 65.1 KB | `?v=1832` (last overlay) |
+| `js/main.js` | 49.1 KB | `?v=1412` |
+| `css/articles.css` | 33.5 KB | article detail |
+| `css/rtl.css` | 20.1 KB | `?v=1405` |
+| `css/services.css` | 13.9 KB | service landings |
+| `js/i18n.js` | 9.1 KB | `?v=1403` |
+| `css/lang-toggle.css` | 2.8 KB | `?v=1403` |
 
 Images under `public/assets/img/` total roughly **38.9 MB** on disk. That is the full library, not the per-page payload, but it is the largest asset category by a wide margin and the most likely place to find real wins.
 

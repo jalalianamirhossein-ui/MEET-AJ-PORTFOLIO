@@ -12,9 +12,9 @@ Runtime:       PHP 8.4.25
 Configuration: phpunit.xml
 ```
 
-**Status: PASS** after the White/Red admin pass (`AdminThemeTest` included). The single skip is `MysqlSchemaTest`, which only runs when a MySQL/MariaDB connection is bound. Exact assertion count is recorded in [PROJECT-STATUS.md](PROJECT-STATUS.md) from the last green `php artisan test`.
+**Status: PASS — 58 tests, 1124 assertions, 1 skipped, 0 failures** (includes `AdminThemeTest` for White/Red + category accents, and `ProductionAuditTest` for contact inbox / FA / Expertise markup). The single skip is `MysqlSchemaTest`, which only runs when a MySQL/MariaDB connection is bound.
 
-Also run on 2026-09-18: `php artisan optimize:clear`, `php artisan route:list` (42 routes), `php artisan site:compare-content` (**Failures: 0**).
+Also run on 2026-09-18: `php artisan optimize:clear`, `php artisan route:list` (42 routes), `php artisan site:compare-content` (**Failures: 0**), `php artisan site:publish-assets`, `php artisan filament:assets`.
 
 ## Suites and configuration
 
@@ -36,8 +36,8 @@ Also run on 2026-09-18: `php artisan optimize:clear`, `php artisan route:list` (
 | `ContentRulesTest.php` | Language rules, German publishing rejection, publication gates |
 | `RequestWorkflowTest.php` | Request statuses, admin-only access, hidden internal notes |
 | `FormCsrfAndAdminRequestsTest.php` | CSRF contracts, homepage + service quote persistence, `/admin/requests` inbox |
-| `ProductionAuditTest.php` | Contact → Request → admin inbox; editor 403; first-load Testimonials + Contact; FA encoding; English article titles + importer repair |
-| `AdminThemeTest.php` | White/Red admin tokens, published `meet-aj-admin.css`, public topic chips, editor denied Requests |
+| `ProductionAuditTest.php` | Contact → Request → admin inbox; editor 403; first-load Testimonials + Contact; FA encoding; English article titles + importer repair; Expertise `data-expertise` + `initExpertiseReveal`; asset versions `site-modules.css?v=1832` / `main.js?v=1412` |
+| `AdminThemeTest.php` | White/Red admin tokens + contrast lock; published `meet-aj-admin.css`; `categories.accent_color` override/fallback/invalid hex; public `--topic` from `Category::accentColor()`; ColorPicker source asserts; editor denied Requests |
 | `MysqlSchemaTest.php` | Schema creation on MySQL/MariaDB (skipped on SQLite) |
 
 ## Commands
@@ -65,6 +65,8 @@ php artisan route:list                                        # route inventory
 | FA switch | `dir=rtl`, Persian nav, typed roles in Arabic script, 0 visible `????` nodes |
 | Contact from Homepage and from `/articles` | `#contact` in viewport |
 | Viewports 1920 / 1440 / 1024 / 768 / 390 | no horizontal overflow |
+| Homepage Expertise EN + FA | 5 pastel columns; LTR left / RTL right 3px markers |
+| `/admin/categories` Accent color | ColorPicker, helper, Preview, Reset; empty Linux `#15803d` |
 
 ## MySQL integration
 

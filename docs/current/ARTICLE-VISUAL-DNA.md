@@ -3,8 +3,9 @@
 **Status:** REFERENCE ONLY. Article detail pages must not be redesigned.  
 **Sources:** live `/articles/{slug}` (desktop 1440, mobile 375) + `assets/css/articles.css`.  
 **Inspected representatives:** Linux SSH guide (theme-linux), Microsoft CMD article (theme-microsoft), MikroTik article (theme-mikrotik).  
-**Date:** 2026-09-17  
-**Overlay at last DNA check:** `visual-upgrade.css?v=1314`
+**Date:** 2026-09-17 (DNA still authoritative for article **body** themes)  
+**Overlay at last DNA check:** `visual-upgrade.css?v=1314` (article chrome also loads newer cascade heads; body theme classes in `articles.css` are unchanged)  
+**Note:** Editable `categories.accent_color` drives library cards/filters/badges via inline `--topic`. Article **page** themes (`.theme-linux` etc. in `articles.css`) remain the reading-document DNA below and were not redesigned.
 
 Homepage hero fill must stay scoped to `body.index-page`. Article H1 is `#1e293b` with no text-shadow (verified on `/articles/enable-ssh-linux-complete-guide`: computed `rgb(30, 41, 59)`).
 
