@@ -737,13 +737,21 @@ html[lang="fa"] .lang-switcher-toggle {
   cursor: grabbing;
 }
 
+.testimonials-slider.swiper {
+  padding-bottom: 0;
+}
+
 .testimonials-slider .swiper-wrapper {
   align-items: stretch;
+  height: auto;
 }
 
 .testimonials-slider .swiper-slide {
   height: auto;
-  width: 100% !important;
+  box-sizing: border-box;
+  max-width: 100%;
+  opacity: 1;
+  visibility: visible;
 }
 
 .testimonial-card {
@@ -803,6 +811,7 @@ html[lang="fa"] .lang-switcher-toggle {
   justify-content: center;
   gap: 0.85rem;
   margin-top: 1.15rem;
+  direction: ltr;
 }
 
 .testimonials-prev,
@@ -863,6 +872,51 @@ html[dir="rtl"] .testimonial-card,
 html[dir="rtl"] .testimonial-card p,
 html[dir="rtl"] .testimonial-card cite {
   text-align: start;
+}
+
+/*
+ * Last overlay: isolate the Swiper track from html[dir=rtl] and from
+ * rtl.css `div { direction: rtl !important }`. Swiper owns transforms.
+ */
+/*
+ * Last overlay: while html is rtl but the slider has not remounted yet,
+ * keep the track LTR so the leftover LTR Swiper instance stays visible.
+ * After remount, .swiper-rtl is present and the wrapper inherits RTL.
+ */
+html[dir="rtl"] .testimonials-slider:not(.swiper-rtl) .swiper-wrapper,
+html[dir="rtl"] .testimonials-slider:not(.swiper-rtl) .swiper-slide {
+  direction: ltr !important;
+  text-align: start !important;
+}
+
+html[dir="rtl"] .testimonials-slider .testimonial-card,
+html[dir="rtl"] .testimonials-slider .testimonial-card p,
+html[dir="rtl"] .testimonials-slider .testimonial-card cite,
+html[dir="rtl"] .testimonials-slider .testimonial-card footer,
+html[dir="rtl"] .testimonials-slider .testimonial-card span,
+html[dir="rtl"] .testimonials-slider .testimonial-card strong {
+  direction: rtl !important;
+  text-align: start !important;
+}
+
+.testimonials.is-empty {
+  padding-block: 0;
+  min-height: 0;
+}
+
+.testimonials.is-empty .testimonials-slider,
+.testimonials.is-empty .testimonials-nav {
+  display: none;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.testimonials-slider .testimonial-card,
+.testimonials-slider .swiper-slide-active .testimonial-card,
+.testimonials-slider .swiper-slide-duplicate-active .testimonial-card {
+  opacity: 1;
+  visibility: visible;
 }
 
 @media (max-width: 1199px) {

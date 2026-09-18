@@ -43,7 +43,7 @@
     /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(String(val || ""));
 
   const isCorrupted = (val) => {
-    if (val == null) return true;
+    if (!String(val || "").trim()) return true;
     if (val.indexOf("\uFFFD") !== -1 || /[\u0000-\u001f]/.test(val)) return true;
     if (/^[?\u061F\s.]+$/.test(val)) return true;
     if (/\?{3,}/.test(val) && !hasArabic(val)) return true;
@@ -90,19 +90,19 @@
   };
 
   const translationFor = (el, lang) => {
+    const english = el.getAttribute("data-en");
     if (lang === "fa") {
-      let fa = el.getAttribute("data-fa");
-      if (isCorrupted(fa)) {
-        fa = el.getAttribute("data-en") || fa || "";
-        el.setAttribute("data-fa", fa);
+      const fa = el.getAttribute("data-fa");
+      if (fa && !isCorrupted(fa) && String(fa).trim()) {
+        return fa;
       }
-      return fa;
+      return english;
     }
     if (lang === "de") {
       const de = el.getAttribute("data-de");
-      return de && !isCorrupted(de) ? de : el.getAttribute("data-en");
+      return de && !isCorrupted(de) ? de : english;
     }
-    return el.getAttribute("data-en");
+    return english;
   };
 
   const nextLanguage = (langs, current) => {

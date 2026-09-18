@@ -50,6 +50,23 @@ html[dir="rtl"] .main span {
   direction: rtl !important;
 }
 
+/*
+ * Swiper positions slides with translate3d in physical coordinates.
+ * The blanket div { direction:rtl } rule above would reverse the flex
+ * track and park the active slide off-canvas. Keep the track LTR;
+ * card copy stays RTL via the rules further down.
+ */
+/*
+ * Swiper RTL math expects the wrapper to inherit [dir=rtl] from the
+ * slider root after remount. Only force LTR while the instance is still
+ * the pre-i18n LTR slider (no .swiper-rtl), so the first paint stays on canvas.
+ */
+html[dir="rtl"] .testimonials-slider:not(.swiper-rtl) .swiper-wrapper,
+html[dir="rtl"] .testimonials-slider:not(.swiper-rtl) .swiper-slide {
+  direction: ltr !important;
+  text-align: start !important;
+}
+
 /* Hero action buttons: reverse hover direction for RTL */
 html[dir="rtl"] .hero-actions .btn-modern:hover .btn-icon {
   transform: translateX(-4px);
@@ -409,16 +426,9 @@ html[dir="rtl"] .resume .resume-item ul li {
   line-height: 1.7;
 }
 
-/* RTL testimonials swiper direction */
-html[dir="rtl"] .testimonials .swiper {
-  direction: rtl;
-}
-
-html[dir="rtl"] .testimonials .swiper-wrapper {
-  direction: rtl;
-}
-
-html[dir="rtl"] .testimonials .swiper-slide {
+/* RTL testimonials: only the card copy is RTL. The Swiper track follows [dir] on the root. */
+html[dir="rtl"] .testimonials .testimonial-card,
+html[dir="rtl"] .testimonials .testimonial-item {
   direction: rtl;
 }
 

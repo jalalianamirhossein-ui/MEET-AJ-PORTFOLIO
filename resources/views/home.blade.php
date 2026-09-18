@@ -234,12 +234,12 @@
     <!-- RTL Support Stylesheet -->
     <link
       id="rtl-style"
-      href="/assets/css/rtl.css?v=1000"
+      href="/assets/css/rtl.css?v=1403"
       rel="stylesheet"
       disabled
     />
     <link href="/assets/css/visual-upgrade.css?v=1707" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1820" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1821" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -2403,12 +2403,12 @@
 
     <!-- Main Application JavaScript -->
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
-    <script src="/assets/js/main.js?v=1406" defer></script>
+    <script src="/assets/js/main.js?v=1407" defer></script>
     <script src="/assets/js/service-catalog.js?v=1813" defer></script>
 
     <!-- Internationalization (i18n) Support -->
     <!-- Language Toggle JavaScript -->
-    <script src="/assets/js/i18n.js?v=1402" defer></script>
+    <script src="/assets/js/i18n.js?v=1403" defer></script>
 
     <!-- Progressive image loading for non-critical media -->
     <script>

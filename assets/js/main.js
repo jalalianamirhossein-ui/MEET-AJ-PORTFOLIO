@@ -226,6 +226,7 @@
 
   window.addEventListener("meetaj:languagechange", () => {
     setToggleState(header?.classList.contains("header-show"));
+    syncTestimonialsSwipers();
   });
 
   // scroll top is managed at the end of the file
@@ -704,6 +705,12 @@
       return;
     }
     let userPaused = false;
+    const controls = new AbortController();
+    const { signal } = controls;
+    if (swiperElement._meetajAutoplayAbort) {
+      swiperElement._meetajAutoplayAbort.abort();
+    }
+    swiperElement._meetajAutoplayAbort = controls;
 
     const labels = () =>
       document.documentElement.lang === "fa"
@@ -736,29 +743,41 @@
 
     const pause = () => swiper.autoplay.stop();
     const resume = () => {
-      if (!userPaused && !document.hidden) {
+      if (!userPaused && !document.hidden && !swiper.destroyed) {
         swiper.autoplay.start();
       }
     };
 
     updateToggle();
 
-    toggle.addEventListener("click", () => {
-      userPaused = !userPaused;
-      if (userPaused) pause();
-      else resume();
-      updateToggle();
-    });
+    toggle.addEventListener(
+      "click",
+      () => {
+        userPaused = !userPaused;
+        if (userPaused) pause();
+        else resume();
+        updateToggle();
+      },
+      { signal },
+    );
 
-    testimonials.addEventListener("focusin", pause);
-    testimonials.addEventListener("focusout", (event) => {
-      if (!testimonials.contains(event.relatedTarget)) resume();
-    });
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) pause();
-      else resume();
-    });
-    document.addEventListener("meetaj:languagechange", updateToggle);
+    testimonials.addEventListener("focusin", pause, { signal });
+    testimonials.addEventListener(
+      "focusout",
+      (event) => {
+        if (!testimonials.contains(event.relatedTarget)) resume();
+      },
+      { signal },
+    );
+    document.addEventListener(
+      "visibilitychange",
+      () => {
+        if (document.hidden) pause();
+        else resume();
+      },
+      { signal },
+    );
+    document.addEventListener("meetaj:languagechange", updateToggle, { signal });
   }
 
   function enhanceSwiperPagination(swiper) {
@@ -782,105 +801,207 @@
     swiper.on("paginationUpdate", labelBullets);
   }
 
-  function initSwiper() {
-    if (window.Swiper) {
-      document
-        .querySelectorAll(".init-swiper")
-        .forEach(function (swiperElement) {
-          const configElement = swiperElement.querySelector(".swiper-config");
-          if (configElement) {
-            try {
-              let config = JSON.parse(configElement.innerHTML.trim());
+  function readSwiperConfig(swiperElement) {
+    const configElement = swiperElement.querySelector(".swiper-config");
+    if (!configElement) return null;
+    return JSON.parse(configElement.innerHTML.trim());
+  }
 
-              const isRtl = document.documentElement.dir === "rtl";
-              const isTestimonialsSlider =
-                swiperElement.closest(".testimonials");
-
-              // Keep Swiper aware of document direction for testimonials
-              if (isTestimonialsSlider) {
-                swiperElement.setAttribute("dir", isRtl ? "rtl" : "ltr");
-                swiperElement.classList.toggle("swiper-rtl", isRtl);
-              }
-
-              const hasBreakpoints =
-                config.breakpoints &&
-                Object.keys(config.breakpoints).length > 0;
-
-              if (!hasBreakpoints && !isTestimonialsSlider) {
-                if (window.innerWidth <= 768) {
-                  config.slidesPerView = 1;
-                  config.spaceBetween = 20;
-                } else if (window.innerWidth <= 991) {
-                  config.slidesPerView = 2;
-                  config.spaceBetween = 30;
-                } else {
-                  config.slidesPerView = 3;
-                  config.spaceBetween = 30;
-                }
-              }
-
-              if (
-                isTestimonialsSlider &&
-                isRtl &&
-                config.navigation &&
-                config.navigation.nextEl &&
-                config.navigation.prevEl
-              ) {
-                const originalNext = config.navigation.nextEl;
-                config.navigation.nextEl = config.navigation.prevEl;
-                config.navigation.prevEl = originalNext;
-              }
-
-              const reducedMotion = window.matchMedia?.(
-                "(prefers-reduced-motion: reduce)",
-              ).matches;
-              if (isTestimonialsSlider) {
-                config.slidesPerView = 1;
-                if (reducedMotion) {
-                  config.autoplay = false;
-                } else if (config.autoplay && typeof config.autoplay === "object") {
-                  config.autoplay.pauseOnMouseEnter = true;
-                  config.autoplay.disableOnInteraction = false;
-                }
-              } else if (reducedMotion) {
-                config.autoplay = false;
-              } else if (window.innerWidth <= 768 && config.autoplay) {
-                config.autoplay = Object.assign({}, config.autoplay, {
-                  delay: config.autoplay.delay || 4000,
-                  disableOnInteraction: false,
-                });
-              }
-
-              if (swiperElement.classList.contains("swiper-tab")) {
-                if (typeof initSwiperWithCustomPagination === "function") {
-                  initSwiperWithCustomPagination(swiperElement, config);
-                }
-              } else {
-                const swiper = new Swiper(swiperElement, config);
-                if (isTestimonialsSlider) {
-                  if (!swiperElement.id) swiperElement.id = "testimonials-carousel";
-                  const toggle = isTestimonialsSlider.querySelector(
-                    "[data-swiper-autoplay-toggle]",
-                  );
-                  toggle?.setAttribute("aria-controls", swiperElement.id);
-                  enhanceSwiperPagination(swiper);
-                  if (swiper.autoplay) {
-                    swiperElement.addEventListener("mouseenter", () => {
-                      swiper.autoplay.stop();
-                    });
-                    swiperElement.addEventListener("mouseleave", () => {
-                      swiper.autoplay.start();
-                    });
-                  }
-                  bindSwiperAutoplayControls(swiperElement, swiper);
-                }
-              }
-            } catch (e) {
-              console.warn("Invalid Swiper config:", e);
-            }
-          }
-        });
+  function disconnectTestimonialsObservers(swiperElement) {
+    if (swiperElement._meetajSliderAbort) {
+      swiperElement._meetajSliderAbort.abort();
+      swiperElement._meetajSliderAbort = null;
     }
+    if (swiperElement._meetajAutoplayAbort) {
+      swiperElement._meetajAutoplayAbort.abort();
+      swiperElement._meetajAutoplayAbort = null;
+    }
+    if (swiperElement._meetajHeightObserver) {
+      swiperElement._meetajHeightObserver.disconnect();
+      swiperElement._meetajHeightObserver = null;
+    }
+  }
+
+  function mountTestimonialsSwiper(swiperElement) {
+    if (!window.Swiper) return;
+
+    disconnectTestimonialsObservers(swiperElement);
+
+    const previous = swiperElement.swiper;
+    const realIndex =
+      previous && typeof previous.realIndex === "number" ? previous.realIndex : 0;
+    if (previous && typeof previous.destroy === "function") {
+      previous.destroy(true, true);
+    }
+
+    const slides = swiperElement.querySelectorAll(".swiper-wrapper > .swiper-slide");
+    const nav = swiperElement.querySelector(".testimonials-nav");
+    const section = swiperElement.closest(".testimonials");
+    if (!slides.length) {
+      swiperElement.hidden = true;
+      nav?.setAttribute("hidden", "");
+      section?.classList.add("is-empty");
+      return;
+    }
+
+    swiperElement.hidden = false;
+    nav?.removeAttribute("hidden");
+    section?.classList.remove("is-empty");
+
+    const config = readSwiperConfig(swiperElement);
+    if (!config) return;
+
+    const isRtl = document.documentElement.getAttribute("dir") === "rtl";
+    swiperElement.setAttribute("dir", isRtl ? "rtl" : "ltr");
+    swiperElement.classList.toggle("swiper-rtl", isRtl);
+
+    config.rtl = isRtl;
+    config.autoHeight = true;
+    config.watchOverflow = true;
+    config.observer = true;
+    config.observeParents = true;
+    config.observeSlideChildren = true;
+    config.slidesPerView = 1;
+    config.nested = false;
+    if (!config.navigation) config.navigation = {};
+    config.navigation.nextEl = ".testimonials-next";
+    config.navigation.prevEl = ".testimonials-prev";
+    const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      config.autoplay = false;
+    } else if (config.autoplay && typeof config.autoplay === "object") {
+      config.autoplay.pauseOnMouseEnter = true;
+      config.autoplay.disableOnInteraction = false;
+    }
+
+    const swiper = new Swiper(swiperElement, config);
+    if (!swiperElement.id) swiperElement.id = "testimonials-carousel";
+
+    const relabelNav = () => {
+      const lang = document.documentElement.lang;
+      nav?.querySelectorAll("[data-en-aria-label]").forEach((el) => {
+        const value =
+          lang === "fa"
+            ? el.getAttribute("data-fa-aria-label") || el.getAttribute("data-en-aria-label")
+            : el.getAttribute("data-en-aria-label");
+        if (value) el.setAttribute("aria-label", value);
+      });
+    };
+    relabelNav();
+    swiper.on("lock", relabelNav);
+    swiper.on("unlock", relabelNav);
+
+    const maxIndex = Math.max(slides.length - 1, 0);
+    const targetIndex = Math.min(realIndex, maxIndex);
+    try {
+      swiper.slideToLoop(targetIndex, 0, false);
+    } catch (error) {
+      swiper.slideTo(targetIndex, 0, false);
+    }
+
+    let heightFrame = 0;
+    const syncHeight = () => {
+      if (!swiper || swiper.destroyed) return;
+      if (heightFrame) return;
+      heightFrame = requestAnimationFrame(() => {
+        heightFrame = 0;
+        if (!swiper || swiper.destroyed) return;
+        swiper.update();
+        if (typeof swiper.updateAutoHeight === "function") {
+          swiper.updateAutoHeight(0);
+        }
+      });
+    };
+    syncHeight();
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(syncHeight).catch(() => {});
+    }
+
+    if (typeof ResizeObserver === "function") {
+      const heightObserver = new ResizeObserver(() => syncHeight());
+      swiperElement._meetajHeightObserver = heightObserver;
+      slides.forEach((slide) => {
+        const card = slide.querySelector(".testimonial-card") || slide;
+        heightObserver.observe(card);
+      });
+    }
+
+    const toggle = section?.querySelector("[data-swiper-autoplay-toggle]");
+    toggle?.setAttribute("aria-controls", swiperElement.id);
+    enhanceSwiperPagination(swiper);
+
+    if (swiper.autoplay) {
+      const hover = new AbortController();
+      swiperElement._meetajSliderAbort = hover;
+      swiperElement.addEventListener("mouseenter", () => {
+        if (!swiper.destroyed) swiper.autoplay.stop();
+      }, { signal: hover.signal });
+      swiperElement.addEventListener("mouseleave", () => {
+        if (!swiper.destroyed) swiper.autoplay.start();
+      }, { signal: hover.signal });
+    }
+    bindSwiperAutoplayControls(swiperElement, swiper);
+  }
+
+  function syncTestimonialsSwipers() {
+    document.querySelectorAll(".testimonials .init-swiper").forEach((el) => {
+      try {
+        mountTestimonialsSwiper(el);
+      } catch (error) {
+        console.warn("Testimonials slider sync failed:", error);
+      }
+    });
+  }
+
+  function initSwiper() {
+    if (!window.Swiper) return;
+    document.querySelectorAll(".init-swiper").forEach(function (swiperElement) {
+      if (swiperElement.closest(".testimonials")) {
+        try {
+          mountTestimonialsSwiper(swiperElement);
+        } catch (error) {
+          console.warn("Invalid Swiper config:", error);
+        }
+        return;
+      }
+
+      const configElement = swiperElement.querySelector(".swiper-config");
+      if (!configElement) return;
+      try {
+        let config = JSON.parse(configElement.innerHTML.trim());
+        const hasBreakpoints = config.breakpoints && Object.keys(config.breakpoints).length > 0;
+        if (!hasBreakpoints) {
+          if (window.innerWidth <= 768) {
+            config.slidesPerView = 1;
+            config.spaceBetween = 20;
+          } else if (window.innerWidth <= 991) {
+            config.slidesPerView = 2;
+            config.spaceBetween = 30;
+          } else {
+            config.slidesPerView = 3;
+            config.spaceBetween = 30;
+          }
+        }
+        const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+        if (reducedMotion) {
+          config.autoplay = false;
+        } else if (window.innerWidth <= 768 && config.autoplay) {
+          config.autoplay = Object.assign({}, config.autoplay, {
+            delay: config.autoplay.delay || 4000,
+            disableOnInteraction: false,
+          });
+        }
+        if (swiperElement.classList.contains("swiper-tab")) {
+          if (typeof initSwiperWithCustomPagination === "function") {
+            initSwiperWithCustomPagination(swiperElement, config);
+          }
+        } else {
+          new Swiper(swiperElement, config);
+        }
+      } catch (e) {
+        console.warn("Invalid Swiper config:", e);
+      }
+    });
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initSwiper, { once: true });

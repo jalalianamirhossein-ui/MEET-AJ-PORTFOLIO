@@ -56,9 +56,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/css/services.css?v=1000" />
     <link href="/assets/css/lang-toggle.css?v=1401" rel="stylesheet" />
-    <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
+    <link id="rtl-style" href="/assets/css/rtl.css?v=1403" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1707" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1820" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1821" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" />
     <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
@@ -295,7 +295,7 @@
     <div id="toast" class="toast" hidden role="status" aria-live="polite" aria-atomic="true" data-en="Request submitted successfully! We'll contact you soon." data-fa="درخواست با موفقیت ارسال شد.">Request submitted successfully! We'll contact you soon.</div>
     <script src="/assets/vendor/aos/aos.js"></script>
     <script src="/assets/js/contact-form.js?v=1403"></script>
-    <script src="/assets/js/i18n.js?v=1402"></script>
+    <script src="/assets/js/i18n.js?v=1403"></script>
     <script>
       AOS.init({ once: true, disable: window.matchMedia('(prefers-reduced-motion: reduce)').matches });
       function copyText(en, fa) {

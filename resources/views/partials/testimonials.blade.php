@@ -19,6 +19,7 @@
                 "watchOverflow": true,
                 "observer": true,
                 "observeParents": true,
+                "autoHeight": true,
                 "slidesPerView": 1,
                 "spaceBetween": 20,
                 "autoplay": {

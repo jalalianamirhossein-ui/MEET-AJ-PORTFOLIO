@@ -129,4 +129,40 @@ class ProductionAuditTest extends TestCase
         $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', $article->title);
         $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', (string) $article->meta_title);
     }
+
+    public function test_persian_testimonials_use_shared_rtl_safe_slider(): void
+    {
+        $home = $this->get('/')->assertOk()->getContent();
+        $this->assertSame(1, substr_count($home, 'id="testimonials"'));
+        $this->assertSame(1, substr_count($home, 'id="testimonials-carousel"'));
+        $this->assertSame(5, substr_count($home, 'class="testimonial-card"'));
+        $this->assertStringNotContainsString('testimonials-slider-fa', $home);
+        $this->assertStringNotContainsString('id="testimonials-fa"', $home);
+        $this->assertStringContainsString('data-fa="نظرات"', $home);
+        $this->assertStringContainsString('site-modules.css?v=1821', $home);
+        $this->assertStringContainsString('main.js?v=1407', $home);
+        $this->assertStringContainsString('i18n.js?v=1403', $home);
+        $this->assertStringContainsString('rtl.css?v=1403', $home);
+
+        $main = (string) file_get_contents(base_path('assets/js/main.js'));
+        $this->assertStringContainsString('function syncTestimonialsSwipers', $main);
+        $this->assertStringContainsString('meetaj:languagechange', $main);
+        $this->assertStringContainsString('config.rtl = isRtl', $main);
+        $this->assertStringContainsString('config.autoHeight = true', $main);
+        $this->assertStringContainsString('navigation.nextEl = ".testimonials-next"', $main);
+        $this->assertStringNotContainsString('nextEl: ".testimonials-prev"', $main);
+
+        $i18n = (string) file_get_contents(base_path('assets/js/i18n.js'));
+        $this->assertStringContainsString('return english', $i18n);
+        $this->assertStringNotContainsString('setAttribute("data-fa"', $i18n);
+
+        $rtl = (string) file_get_contents(base_path('assets/css/rtl.css'));
+        $this->assertStringContainsString('.testimonials-slider:not(.swiper-rtl) .swiper-wrapper', $rtl);
+        $this->assertStringContainsString('direction: ltr !important', $rtl);
+
+        $modules = (string) file_get_contents(base_path('assets/css/site-modules.css'));
+        $this->assertStringContainsString('.testimonials-slider:not(.swiper-rtl) .swiper-wrapper', $modules);
+        $this->assertStringContainsString('direction: ltr !important', $modules);
+        $this->assertStringContainsString('.testimonials.is-empty', $modules);
+    }
 }
