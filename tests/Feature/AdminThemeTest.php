@@ -57,6 +57,42 @@ class AdminThemeTest extends TestCase
         $this->assertSame('#a16207', Category::query()->where('slug', 'others')->first()?->accentColor());
         $this->assertStringContainsString('meetaj-category-chip', Category::query()->where('slug', 'linux')->first()?->accentChipHtml());
         $this->assertStringContainsString('#15803d', Category::query()->where('slug', 'linux')->first()?->accentChipHtml());
+        $this->assertTrue(\Illuminate\Support\Facades\Schema::hasColumn('categories', 'accent_color'));
+        $this->assertNull(Category::query()->where('slug', 'linux')->first()?->accent_color);
+    }
+
+    public function test_stored_category_accent_overrides_slug_fallback_and_rejects_invalid_hex(): void
+    {
+        $linux = Category::query()->where('slug', 'linux')->where('language', 'en')->first();
+        $this->assertNotNull($linux);
+        $linux->forceFill(['accent_color' => '#0EA5E9'])->save();
+        $linux->refresh();
+        $this->assertSame('#0ea5e9', $linux->accent_color);
+        $this->assertSame('#0ea5e9', $linux->accentColor());
+
+        $linux->forceFill(['accent_color' => null])->save();
+        $linux->refresh();
+        $this->assertNull($linux->accent_color);
+        $this->assertSame('#15803d', $linux->accentColor());
+
+        $this->expectException(\Illuminate\Validation\ValidationException::class);
+        $linux->forceFill(['accent_color' => 'burgundy'])->save();
+    }
+
+    public function test_public_article_surfaces_use_category_accent_color(): void
+    {
+        $linux = Category::query()->where('slug', 'linux')->where('language', 'en')->first();
+        $this->assertNotNull($linux);
+        $linux->forceFill(['accent_color' => '#0ea5e9'])->save();
+
+        $home = $this->get('/')->assertOk()->getContent();
+        $this->assertStringContainsString('--topic: #0ea5e9', $home);
+        $this->assertStringContainsString("style=\"--topic: #0ea5e9;\"", $this->get('/articles')->assertOk()->getContent());
+
+        $source = (string) file_get_contents(app_path('Filament/Resources/CategoryResource.php'));
+        $this->assertStringContainsString("ColorPicker::make('accent_color')", $source);
+        $this->assertStringContainsString("->label('Accent color')", $source);
+        $this->assertStringContainsString('clearAccentColor', $source);
     }
 
     public function test_admin_sees_category_color_chips_editor_is_denied_requests(): void

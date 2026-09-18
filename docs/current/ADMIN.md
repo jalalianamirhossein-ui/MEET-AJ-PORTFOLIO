@@ -16,7 +16,7 @@ Filament session authentication on the `web` guard against the `users` table. Ro
 php artisan cms:create-user
 ```
 
-**The local `users` table currently has 2 rows** (one `admin`, one `editor`), created with `cms:create-user` for White/Red visual QA. Passwords are not stored in documentation.
+**The local `users` table currently has 3 rows** (admin / editor QA accounts plus a throwaway contrast-QA admin created 2026-09-18). Passwords are not stored in documentation.
 
 ## Navigation
 
@@ -63,7 +63,7 @@ Form sections: Identity (title, slug, language `en`/`fa`/`de`, category, multi-s
 
 Table: searchable and sortable title, gray language badge, **category colour chip** (dot + tinted pill + readable name from the public topic palette), gray tag badges, status, `published_at`, toggleable `updated_at`, plus filters and a default sort. Preview/Edit are gray; Delete stays danger. Changing a slug writes a new `article_redirects` row.
 
-The category select on create/edit uses `allowHtml()` chips from `Category::accentChipHtml()`. Helper text states that the chip uses the public topic accent for that slug. There is no extra colour column.
+The category select on create/edit uses `allowHtml()` chips from `Category::accentChipHtml()`. The chip uses `Category::accentColor()` (stored `accent_color` when valid, otherwise the slug palette).
 
 Public preview is the “Preview” / “View public page” action on published rows. There is no media library beyond the single upload field.
 
@@ -71,13 +71,17 @@ Public preview is the “Preview” / “View public page” action on published
 
 Simple CRUD on `categories` for admins and editors, respecting the unique `(language, slug)` and `(translation_key, language)` constraints.
 
-The table shows a colour chip on **Name** and an **Accent** hex badge. Colour is **not stored**. `Category::accentColor()` maps the existing public topic slug to the same hex used on the site:
+The form includes an **Accent color** `ColorPicker` (`#RRGGBB`, nullable) with a live chip preview, hex readout, and a reset action that clears the field. Helper text: “Used for article cards, badges and category accents on the public site.” Empty values keep the slug fallback. Invalid values are rejected.
 
-| Topic key (from slug) | Hex |
-|-----------------------|-----|
+The table shows a colour chip on **Name** and an **Accent** hex badge of the **effective** colour (`Category::accentColor()`).
+
+`Category::accentColor()` returns stored `accent_color` when it is valid `#RRGGBB`; otherwise it maps the public topic slug:
+
+| Topic key (from slug) | Fallback hex |
+|-----------------------|--------------|
 | microsoft / windows-server | `#2563eb` |
 | linux | `#15803d` |
-| mikrotik | `#c2410c` |
+| mikrotik / networking | `#c2410c` |
 | vmware | `#6d28d9` |
 | security | `#be123c` |
 | devops | `#0e7490` |
@@ -135,9 +139,9 @@ Filament global search is enabled panel-wide. Table search is column-scoped (art
 
 ## Styling
 
-Admin branding is loaded **once**: `AdminPanelProvider` registers `Css::make('meet-aj-admin', resource_path('css/filament-admin.css'))`, which Filament publishes to `public/css/app/meet-aj-admin.css`. After CSS edits run `php artisan filament:assets`. Meet AJ **admin** tokens are white canvas, slate type, crimson `#be123c`, soft selected `#fff1f2`, danger `#7f1d1d`. The public site remains blue. `public/css/meet-aj-admin.css` is retired (comment-only, no rules) so a second cascade cannot fight Filament/Livewire. Sidebar, topbar, navigation groups, widgets, tables, forms, badges, buttons, unread request rows (`.meetaj-request-new`), category chips (`.meetaj-category-chip`), focus rings and compact breakpoints live in that single source file.
+Admin branding is loaded **once as source**: `AdminPanelProvider` registers `Css::make('meet-aj-admin', resource_path('css/filament-admin.css'))`, which Filament publishes to `public/css/app/meet-aj-admin.css`. After CSS edits run `php artisan filament:assets`. The same published file is linked again on `PanelsRenderHook::STYLES_AFTER` so it wins against `filament/app.css` (which otherwise loads later and paints Filament 5.8 dark-variant white/`--gray-200` type onto our white surfaces). Meet AJ **admin** tokens are white canvas, slate type `#0f172a`/`#1e293b`, secondary `#475569`, muted `#64748b`, borders `#e2e8f0`, crimson `#be123c`, soft selected `#fff1f2`, danger `#7f1d1d`. Contrast locks are scoped as `html.fi` / `html.dark` on real Filament 5.8 classes (`.fi-fo-field-label-content`, `.fi-sidebar-item-label`, `.fi-fo-field-label` for Remember me) — not unscoped `.text-gray-*` utilities. The public site remains blue. `public/css/meet-aj-admin.css` is retired (comment-only, no rules). Sidebar, topbar, navigation groups, widgets, tables, forms, badges, buttons, unread request rows (`.meetaj-request-new`), category chips (`.meetaj-category-chip`), focus rings and compact breakpoints live in that single source file.
 
-Filament `Color::hex('#be123c')` generates a light 400 swatch; `filament-admin.css` flattens primary buttons to solid crimson so Sign in / New article are not candy-pink.
+Filament `Color::hex('#be123c')` generates a light 400 swatch; `filament-admin.css` flattens primary buttons to solid crimson so Sign in / New article are not candy-pink. White is a **surface**; crimson is an **accent**. A 2026-09-18 contrast regression (invisible login labels and sidebar items) is documented and closed in [../qa/ADMIN-QA.md](../qa/ADMIN-QA.md).
 
 ## Testing status
 
@@ -148,8 +152,8 @@ Filament `Color::hex('#be123c')` generates a light 400 swatch; `filament-admin.c
 | Editor denied on services | PHPUnit `ServiceCatalogTest` | PASS |
 | Editor denied on requests, status workflow, internal notes hidden | PHPUnit `RequestWorkflowTest` + `ProductionAuditTest` + browser 403 | PASS |
 | Contact form creates a Request visible at `/admin/requests` | PHPUnit `ProductionAuditTest` + live POST 2026-09-18 | PASS |
-| White/Red theme + category chips | PHPUnit `AdminThemeTest` + browser | PASS |
-| Interactive login (Admin + Editor) | Cursor browser 2026-09-18 | PASS |
+| White/Red theme + contrast lock + category chips | PHPUnit `AdminThemeTest` + browser | PASS (re-verified after contrast regression) |
+| Interactive login (Admin) | Cursor browser 2026-09-18 | PASS — labels/sidebar readable including forced `html.dark` |
 | Admin responsive layout 1024 / 768 / 390 | Cursor browser | PASS |
 
 Evidence: [../qa/ADMIN-QA.md](../qa/ADMIN-QA.md).

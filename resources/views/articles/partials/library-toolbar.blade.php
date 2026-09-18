@@ -51,6 +51,7 @@
                 <a
                   class="article-tag article-chip{{ $tagSlug === $tag->slug ? ' is-active' : '' }}"
                   data-topic="{{ $tagTopics[$tag->slug] ?? 'other' }}"
+                  style="--topic: {{ \App\Models\Category::accentColorForSlug($tagTopics[$tag->slug] ?? 'others') }};"
                   href="{{ url('/articles') }}?tag={{ urlencode($tag->slug) }}"
                   @if ($tagSlug === $tag->slug) aria-current="page" @endif
                 ><span class="article-chip-label">{{ $tag->name }}</span></a>

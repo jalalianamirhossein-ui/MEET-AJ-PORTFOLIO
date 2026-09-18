@@ -586,13 +586,8 @@ html[dir="rtl"] .header .logo img {
   margin-inline-end: 0;
 }
 html[dir="rtl"] .header .header-toggle {
-  inset-inline-start: auto;
-  inset-inline-end: 15px;
-}
-
-html[dir="rtl"] .menu-toggle {
-  left: auto !important;
-  right: 20px !important;
+  inset-inline-start: max(0.85rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+  inset-inline-end: auto;
 }
 
 /* i18n-rtl-navicon-spacing */
@@ -605,12 +600,6 @@ html[dir="rtl"] .about .content ul strong {
 
 /* Mobile-specific RTL fixes */
 @media (max-width: 768px) {
-  /* RTL mobile menu toggle positioning - در سمت چپ */
-  html[dir="rtl"] .menu-toggle {
-    left: 20px !important;
-    right: auto !important;
-  }
-
   /* RTL mobile header positioning */
   html[dir="rtl"] .header {
     border-right: 1px solid rgba(15, 23, 42, 0.06);

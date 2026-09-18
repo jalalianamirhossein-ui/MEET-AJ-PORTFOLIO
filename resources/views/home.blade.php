@@ -196,7 +196,7 @@
     =============================================== -->
 
     <!-- Preload main stylesheet for faster first paint -->
-    <link href="/assets/css/main.css?v=1000" rel="preload" as="style" />
+    <link href="/assets/css/main.css?v=1002" rel="preload" as="style" />
 
     <!-- Bootstrap CSS Framework -->
     <link
@@ -226,20 +226,20 @@
     ==================== MAIN CSS ======================
     =============================================== -->
     <!-- Main Stylesheet -->
-    <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
+    <link href="/assets/css/main.css?v=1002" rel="stylesheet" />
 
     <!-- Language Toggle Stylesheet -->
-    <link href="/assets/css/lang-toggle.css?v=1401" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1403" rel="stylesheet" />
 
     <!-- RTL Support Stylesheet -->
     <link
       id="rtl-style"
-      href="/assets/css/rtl.css?v=1404"
+      href="/assets/css/rtl.css?v=1405"
       rel="stylesheet"
       disabled
     />
-    <link href="/assets/css/visual-upgrade.css?v=1707" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1824" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1710" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1831" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -2280,7 +2280,7 @@
 
     <!-- Main Application JavaScript -->
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
-    <script src="/assets/js/main.js?v=1408" defer></script>
+    <script src="/assets/js/main.js?v=1411" defer></script>
     <script src="/assets/js/service-catalog.js?v=1813" defer></script>
 
     <!-- Internationalization (i18n) Support -->

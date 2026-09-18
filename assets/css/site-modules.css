@@ -25,33 +25,8 @@
     background-color 280ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.article-teaser[data-topic="microsoft"] {
-  background: color-mix(in srgb, var(--topic-microsoft, #2563eb) 9%, #fff);
-}
-
-.article-teaser[data-topic="linux"] {
-  background: color-mix(in srgb, var(--topic-linux, #15803d) 9%, #fff);
-}
-
-.article-teaser[data-topic="mikrotik"],
-.article-teaser[data-topic="networking"] {
-  background: color-mix(in srgb, var(--topic-mikrotik, #c2410c) 9%, #fff);
-}
-
-.article-teaser[data-topic="vmware"] {
-  background: color-mix(in srgb, var(--topic-vmware, #6d28d9) 9%, #fff);
-}
-
-.article-teaser[data-topic="security"] {
-  background: color-mix(in srgb, var(--topic-security, #be123c) 9%, #fff);
-}
-
-.article-teaser[data-topic="devops"] {
-  background: color-mix(in srgb, var(--topic-devops, #0e7490) 9%, #fff);
-}
-
-.article-teaser[data-topic="other"] {
-  background: color-mix(in srgb, var(--topic-other, #a16207) 9%, #fff);
+.article-teaser[data-topic] {
+  background: color-mix(in srgb, var(--topic, var(--color-primary, #2563eb)) 9%, #fff);
 }
 
 .article-teaser:hover,
@@ -811,7 +786,14 @@ html[lang="fa"] .lang-switcher-toggle {
   justify-content: center;
   gap: 0.85rem;
   margin-top: 1.15rem;
-  direction: ltr;
+}
+
+html[dir="rtl"] .testimonials-prev .bi-chevron-left::before {
+  content: "\f285";
+}
+
+html[dir="rtl"] .testimonials-next .bi-chevron-right::before {
+  content: "\f284";
 }
 
 .testimonials-prev,
@@ -1116,7 +1098,13 @@ html[dir="rtl"] .testimonials-slider .testimonial-card strong {
 @media (max-width: 1199.98px) {
   .lang-switcher.is-floating {
     top: max(0.85rem, env(safe-area-inset-top, 0px));
-    inset-inline-start: max(0.85rem, env(safe-area-inset-left, 0px));
+    inset-inline-end: max(0.85rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+    inset-inline-start: auto;
+  }
+
+  .menu-toggle {
+    top: max(0.85rem, env(safe-area-inset-top, 0px));
+    inset-inline-start: max(0.85rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
     inset-inline-end: auto;
   }
 }
@@ -2206,7 +2194,8 @@ body .header .social-links a.whatsapp:hover {
 }
 
 #header.header .social-links a.whatsapp:hover,
-#header.header .social-links a.whatsapp:focus-visible {
+#header.header .social-links a.whatsapp:focus-visible,
+#header.header .social-links a.whatsapp:active {
   color: #16a34a;
   background: rgba(22, 163, 74, 0.12);
   border-color: rgba(22, 163, 74, 0.38);
@@ -2214,7 +2203,8 @@ body .header .social-links a.whatsapp:hover {
 }
 
 #header.header .social-links a.instagram:hover,
-#header.header .social-links a.instagram:focus-visible {
+#header.header .social-links a.instagram:focus-visible,
+#header.header .social-links a.instagram:active {
   color: #e1306c;
   background:
     linear-gradient(135deg, rgba(253, 29, 29, 0.12), rgba(225, 48, 108, 0.14) 52%, rgba(252, 175, 69, 0.12));
@@ -2223,7 +2213,8 @@ body .header .social-links a.whatsapp:hover {
 }
 
 #header.header .social-links a.twitter:hover,
-#header.header .social-links a.twitter:focus-visible {
+#header.header .social-links a.twitter:focus-visible,
+#header.header .social-links a.twitter:active {
   color: #0f172a;
   background: rgba(15, 23, 42, 0.08);
   border-color: rgba(15, 23, 42, 0.28);
@@ -2231,7 +2222,8 @@ body .header .social-links a.whatsapp:hover {
 }
 
 #header.header .social-links a.linkedin:hover,
-#header.header .social-links a.linkedin:focus-visible {
+#header.header .social-links a.linkedin:focus-visible,
+#header.header .social-links a.linkedin:active {
   color: #0a66c2;
   background: rgba(10, 102, 194, 0.12);
   border-color: rgba(10, 102, 194, 0.38);
@@ -2239,7 +2231,8 @@ body .header .social-links a.whatsapp:hover {
 }
 
 #header.header .social-links a.github:hover,
-#header.header .social-links a.github:focus-visible {
+#header.header .social-links a.github:focus-visible,
+#header.header .social-links a.github:active {
   color: #24292f;
   background: rgba(36, 41, 47, 0.1);
   border-color: rgba(36, 41, 47, 0.32);
@@ -2247,7 +2240,8 @@ body .header .social-links a.whatsapp:hover {
 }
 
 #header.header .social-links a.telegram:hover,
-#header.header .social-links a.telegram:focus-visible {
+#header.header .social-links a.telegram:focus-visible,
+#header.header .social-links a.telegram:active {
   color: #229ed9;
   background: rgba(34, 158, 217, 0.12);
   border-color: rgba(34, 158, 217, 0.38);
@@ -2255,7 +2249,8 @@ body .header .social-links a.whatsapp:hover {
 }
 
 #header.header .social-links a.facebook:hover,
-#header.header .social-links a.facebook:focus-visible {
+#header.header .social-links a.facebook:focus-visible,
+#header.header .social-links a.facebook:active {
   color: #1877f2;
   background: rgba(24, 119, 242, 0.12);
   border-color: rgba(24, 119, 242, 0.38);
@@ -2263,7 +2258,8 @@ body .header .social-links a.whatsapp:hover {
 }
 
 #header.header .social-links a.stackoverflow:hover,
-#header.header .social-links a.stackoverflow:focus-visible {
+#header.header .social-links a.stackoverflow:focus-visible,
+#header.header .social-links a.stackoverflow:active {
   color: #f48024;
   background: rgba(244, 128, 36, 0.12);
   border-color: rgba(244, 128, 36, 0.4);
@@ -2385,12 +2381,31 @@ html[dir="rtl"] #header.header .navmenu a.active:focus {
 @media (max-width: 1199.98px) {
   #header.header .navmenu {
     padding-inline: 0.35rem;
+    overflow: auto !important;
+    min-height: 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  html[dir="ltr"] #header.header .navmenu a.active,
+  html[dir="ltr"] #header.header .navmenu a.active:focus {
+    background: rgba(37, 99, 235, 0.10);
+    border-color: rgba(37, 99, 235, 0.30);
+    color: #2563eb;
+    box-shadow: inset 3px 0 0 #2563eb;
+  }
+
+  html[dir="rtl"] #header.header .navmenu a.active,
+  html[dir="rtl"] #header.header .navmenu a.active:focus {
+    background: rgba(37, 99, 235, 0.10);
+    border-color: rgba(37, 99, 235, 0.30);
+    color: #2563eb;
+    box-shadow: inset -3px 0 0 #2563eb;
   }
 
   #header.header .social-links a {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.16);
-    color: #e2e8f0;
+    background: rgba(255, 255, 255, 0.86);
+    border-color: rgba(37, 99, 235, 0.16);
+    color: #475569;
   }
 }
 

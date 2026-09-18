@@ -9,7 +9,7 @@
 **Superseded 2026-09-17 snapshot:** [../archive/2026-09-18/FINAL-QA-REPORT.md](../archive/2026-09-18/FINAL-QA-REPORT.md)  
 **Superseded blue-admin QA:** [../archive/2026-09-18/FINAL-QA-REPORT-blue-admin.md](../archive/2026-09-18/FINAL-QA-REPORT-blue-admin.md)
 
-This is **not** a claim that every Filament form control was submitted. Authenticated chrome **was** clicked: login, dashboard, Articles, Categories, article edit (category chips, no save), Requests inbox, 1024/768/390, Editor session. PASS below names that evidence.
+**Later Filament contrast regression (login labels / sidebar nearly invisible) was found and fixed the same day.** Current admin evidence: [ADMIN-QA.md](ADMIN-QA.md). This file’s White/Red “PASS” predates that fix.
 
 ## Executive summary
 

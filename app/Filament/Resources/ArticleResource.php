@@ -72,7 +72,7 @@ class ArticleResource extends Resource
                         ->preload()
                         ->allowHtml()
                         ->getOptionLabelFromRecordUsing(fn (Category $record): string => $record->accentChipHtml())
-                        ->helperText('Category language must match the article language. The chip uses the public topic accent for that slug.'),
+                        ->helperText('Category language must match the article language. The chip uses the category accent color.'),
                     Select::make('tags')->relationship('tags', 'name')->multiple()->preload()->searchable()->columnSpanFull(),
                     Textarea::make('excerpt')->rows(3)->columnSpanFull(),
                 ]),

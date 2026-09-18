@@ -82,7 +82,7 @@ Slugs: `creating-a-bootable-usb`, `downgrade-mikrotik-routeros-firmware-safely`,
 | Request statuses + hidden notes | 7 statuses; public cannot set notes | enforced | PHPUnit | PASS · LOCAL TESTED | |
 | Tags admin | editors can open | Livewire 200 | PHPUnit | PASS · LOCAL TESTED | |
 | Users resource in sidebar | admin only | `shouldRegisterNavigation` true for admins | code + browser | PASS · LOCAL TESTED | Hidden from editor nav |
-| Browser login + White/Red chrome | usable | Admin + Editor sessions | Cursor browser 2026-09-18 | PASS · LOCAL TESTED | Category chips; Requests badge; editor 403 |
+| Browser login + White/Red chrome | usable + WCAG 4.5:1 type | Admin contrast re-test 2026-09-18 | Cursor browser | PASS · LOCAL TESTED | Login labels `#1e293b`; sidebar inactive slate / active crimson; see [ADMIN-QA.md](ADMIN-QA.md) |
 
 ## German
 

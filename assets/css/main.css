@@ -7406,7 +7406,8 @@ html {
 .menu-toggle {
   position: fixed;
   top: 20px;
-  right: 20px;
+  inset-inline-start: 20px;
+  inset-inline-end: auto;
   z-index: 10001;
   width: 44px;
   height: 44px;
@@ -9718,7 +9719,8 @@ body.menu-open {
     min-inline-size: 48px;
     min-block-size: 48px;
     inset-block-start: max(1rem, env(safe-area-inset-top));
-    inset-inline-end: max(1rem, env(safe-area-inset-right));
+    inset-inline-start: max(1rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+    inset-inline-end: auto;
   }
 }
 

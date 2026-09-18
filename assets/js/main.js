@@ -807,6 +807,19 @@
     return JSON.parse(configElement.innerHTML.trim());
   }
 
+  function syncTestimonialsNavIcons(nav, isRtl) {
+    const prevIcon = nav?.querySelector(".testimonials-prev i");
+    const nextIcon = nav?.querySelector(".testimonials-next i");
+    if (!prevIcon || !nextIcon) return;
+    prevIcon.classList.remove("bi-chevron-left", "bi-chevron-right");
+    nextIcon.classList.remove("bi-chevron-left", "bi-chevron-right");
+    /* RTL: Previous sits on the right and must point right; Next sits on the
+       left and must point left. Classes stay .testimonials-prev / -next so
+       Swiper handlers are not swapped (that would double-reverse). */
+    prevIcon.classList.add(isRtl ? "bi-chevron-right" : "bi-chevron-left");
+    nextIcon.classList.add(isRtl ? "bi-chevron-left" : "bi-chevron-right");
+  }
+
   function disconnectTestimonialsObservers(swiperElement) {
     if (swiperElement._meetajSliderAbort) {
       swiperElement._meetajSliderAbort.abort();
@@ -854,6 +867,7 @@
     const isRtl = document.documentElement.getAttribute("dir") === "rtl";
     swiperElement.setAttribute("dir", isRtl ? "rtl" : "ltr");
     swiperElement.classList.toggle("swiper-rtl", isRtl);
+    syncTestimonialsNavIcons(nav, isRtl);
 
     config.rtl = isRtl;
     config.autoHeight = true;
@@ -863,6 +877,7 @@
     config.observeSlideChildren = true;
     config.slidesPerView = 1;
     config.nested = false;
+    config.keyboard = { enabled: true, onlyInViewport: true };
     if (!config.navigation) config.navigation = {};
     config.navigation.nextEl = ".testimonials-next";
     config.navigation.prevEl = ".testimonials-prev";
@@ -876,6 +891,7 @@
 
     const swiper = new Swiper(swiperElement, config);
     if (!swiperElement.id) swiperElement.id = "testimonials-carousel";
+    syncTestimonialsNavIcons(nav, isRtl);
 
     const relabelNav = () => {
       const lang = document.documentElement.lang;

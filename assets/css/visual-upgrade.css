@@ -94,13 +94,6 @@
   --focus-ring: 2px solid var(--color-primary);
   --control-height: 2.95rem;
   --text-on-primary: #ffffff;
-  --menu-burgundy: #4a1524;
-  --menu-burgundy-deep: #2a0c14;
-  --menu-burgundy-glass: rgba(58, 16, 28, 0.88);
-  --menu-burgundy-line: rgba(248, 196, 208, 0.32);
-  --menu-burgundy-text: #fdecef;
-  --menu-burgundy-muted: #f4b8c6;
-  --menu-burgundy-accent: #93c5fd;
 
   --topic-microsoft: #2563eb;
   --topic-linux: #15803d;
@@ -2013,19 +2006,10 @@ html[dir="rtl"] #header.header .navmenu a.active:focus {
   transform: rotate(-45deg);
 }
 
-html[dir="ltr"] .menu-toggle {
-  top: max(1rem, env(safe-area-inset-top, 0px)) !important;
-  right: max(1rem, env(safe-area-inset-right, 0px)) !important;
-  left: auto !important;
-}
-
-html[dir="rtl"] .menu-toggle {
-  top: max(1rem, env(safe-area-inset-top, 0px)) !important;
-  left: max(1rem, env(safe-area-inset-left, 0px)) !important;
-  right: auto !important;
-}
-
 .menu-toggle {
+  top: max(0.85rem, env(safe-area-inset-top, 0px));
+  inset-inline-start: max(0.85rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+  inset-inline-end: auto;
   z-index: 10003;
 }
 
@@ -2089,10 +2073,8 @@ html[dir="rtl"] .lang-switcher.is-floating .lang-switcher-option.is-active {
       max(1.25rem, env(safe-area-inset-left, 0px));
     border: 0 !important;
     border-radius: 0;
-    background:
-      linear-gradient(180deg, rgba(74, 21, 36, 0.94), rgba(42, 12, 20, 0.9)),
-      #3a101c;
-    color: var(--menu-burgundy-text);
+    background: linear-gradient(145deg, #f8fbff 0%, #eef6ff 55%, #e8f3ff 100%);
+    color: #0f172a;
     box-shadow: none;
     display: grid !important;
     grid-template-rows: auto 1fr auto;
@@ -2109,7 +2091,12 @@ html[dir="rtl"] .lang-switcher.is-floating .lang-switcher-option.is-active {
   @supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
     html[dir="ltr"] #header.header,
     html[dir="rtl"] #header.header {
-      background: var(--menu-burgundy-glass);
+      background: linear-gradient(
+        145deg,
+        rgba(248, 251, 255, 0.96) 0%,
+        rgba(238, 246, 255, 0.94) 55%,
+        rgba(232, 243, 255, 0.96) 100%
+      );
       -webkit-backdrop-filter: blur(22px);
       backdrop-filter: blur(22px);
     }
@@ -2122,8 +2109,8 @@ html[dir="rtl"] .lang-switcher.is-floating .lang-switcher-option.is-active {
     z-index: 0;
     pointer-events: none;
     background-image:
-      linear-gradient(rgba(244, 184, 198, 0.08) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(244, 184, 198, 0.08) 1px, transparent 1px);
+      linear-gradient(rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14, 165, 233, 0.04) 1px, transparent 1px);
     background-size: 28px 28px;
     mask-image: radial-gradient(ellipse at center, #000 35%, transparent 78%);
   }
@@ -2156,8 +2143,8 @@ html[dir="rtl"] .lang-switcher.is-floating .lang-switcher-option.is-active {
 
   #header.header .logo .sitename {
     background: none;
-    -webkit-text-fill-color: var(--menu-burgundy-text);
-    color: var(--menu-burgundy-text);
+    -webkit-text-fill-color: #0f172a;
+    color: #0f172a;
   }
 
   #header.header .navmenu {
@@ -2173,21 +2160,21 @@ html[dir="rtl"] .lang-switcher.is-floating .lang-switcher-option.is-active {
 
   #header.header .navmenu a,
   #header.header .navmenu a:focus {
-    color: var(--menu-burgundy-text);
+    color: #0f172a;
     padding: 0.85rem 1rem;
   }
 
   #header.header .navmenu a .navicon {
-    color: var(--menu-burgundy-muted);
+    color: #475569;
   }
 
   #header.header .navmenu a:hover,
   #header.header .navmenu a.active,
   #header.header .navmenu a.active:focus {
-    background: rgba(37, 99, 235, 0.32);
-    border-color: rgba(147, 197, 253, 0.5);
-    color: #fff;
-    box-shadow: inset 3px 0 0 var(--menu-burgundy-accent);
+    background: rgba(37, 99, 235, 0.10);
+    border-color: rgba(37, 99, 235, 0.30);
+    color: #2563eb;
+    box-shadow: inset 3px 0 0 #2563eb;
   }
 
   #header.header .navmenu a:hover .navicon,
@@ -2196,13 +2183,13 @@ html[dir="rtl"] .lang-switcher.is-floating .lang-switcher-option.is-active {
   #header.header .navmenu a.active span,
   #header.header .navmenu a.active:focus .navicon,
   #header.header .navmenu a.active:focus span {
-    color: #dbeafe;
+    color: #2563eb;
   }
 
   html[dir="rtl"] #header.header .navmenu a:hover,
   html[dir="rtl"] #header.header .navmenu a.active,
   html[dir="rtl"] #header.header .navmenu a.active:focus {
-    box-shadow: inset -3px 0 0 var(--menu-burgundy-accent);
+    box-shadow: inset -3px 0 0 #2563eb;
   }
 
   #header.header.header-show .navmenu li {
@@ -2220,9 +2207,9 @@ html[dir="rtl"] .lang-switcher.is-floating .lang-switcher-option.is-active {
   #header.header.header-show .navmenu li:nth-child(n+8) { animation-delay: 300ms; }
 
   #header.header .social-links a {
-    color: var(--menu-burgundy-text);
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--menu-burgundy-line);
+    color: #475569;
+    background: rgba(255, 255, 255, 0.86);
+    border-color: rgba(37, 99, 235, 0.16);
   }
 
   html.menu-open,
@@ -4127,15 +4114,6 @@ html[dir="rtl"] .hero-actions .btn-modern:hover .btn-text {
   box-shadow: var(--shadow-card);
 }
 
-.article-teaser[data-topic="microsoft"] { --topic: var(--topic-microsoft); }
-.article-teaser[data-topic="linux"] { --topic: var(--topic-linux); }
-.article-teaser[data-topic="mikrotik"],
-.article-teaser[data-topic="networking"] { --topic: var(--topic-mikrotik); }
-.article-teaser[data-topic="vmware"] { --topic: var(--topic-vmware); }
-.article-teaser[data-topic="security"] { --topic: var(--topic-security); }
-.article-teaser[data-topic="devops"] { --topic: var(--topic-devops); }
-.article-teaser[data-topic="other"] { --topic: var(--topic-other); }
-
 .article-teaser {
   border-block-start: 3px solid var(--topic);
 }
@@ -4244,20 +4222,6 @@ html[dir="rtl"] .hero-actions .btn-modern:hover .btn-text {
 .article-teaser:hover {
   box-shadow: 0 18px 40px color-mix(in srgb, var(--topic) 18%, rgba(15, 23, 42, 0.08));
 }
-
-.portfolio .portfolio-filters button[data-topic="microsoft"].filter-active,
-.article-tag[data-topic="microsoft"].is-active { --topic: var(--topic-microsoft); }
-.portfolio .portfolio-filters button[data-topic="linux"].filter-active,
-.article-tag[data-topic="linux"].is-active { --topic: var(--topic-linux); }
-.portfolio .portfolio-filters button[data-topic="mikrotik"].filter-active,
-.article-tag[data-topic="mikrotik"].is-active,
-.article-tag[data-topic="networking"].is-active { --topic: var(--topic-mikrotik); }
-.portfolio .portfolio-filters button[data-topic="vmware"].filter-active,
-.article-tag[data-topic="vmware"].is-active { --topic: var(--topic-vmware); }
-.article-tag[data-topic="security"].is-active { --topic: var(--topic-security); }
-.article-tag[data-topic="devops"].is-active { --topic: var(--topic-devops); }
-.portfolio .portfolio-filters button[data-topic="other"].filter-active,
-.article-tag[data-topic="other"].is-active { --topic: var(--topic-other); }
 
 .portfolio .portfolio-filters button.filter-active,
 .article-tag.is-active {
@@ -4597,10 +4561,10 @@ body.index-page .hero {
   .menu-toggle,
   .menu-toggle:hover,
   .menu-toggle:active {
-    background: var(--menu-burgundy-glass);
-    color: var(--menu-burgundy-text);
-    border-color: var(--menu-burgundy-line);
-    box-shadow: 0 10px 24px rgba(42, 12, 20, 0.22);
+    background: rgba(255, 255, 255, 0.92);
+    color: #2563eb;
+    border-color: rgba(37, 99, 235, 0.28);
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
     -webkit-backdrop-filter: blur(16px);
     backdrop-filter: blur(16px);
   }

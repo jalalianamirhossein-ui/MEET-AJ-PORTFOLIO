@@ -25,7 +25,7 @@ Cards are for **grouping**. They are not a default wrapper.
 | Motion | `--duration-fast` 180ms, `--duration-slow` 560ms, `--ease-out` `cubic-bezier(0.22, 1, 0.36, 1)` |
 | Layout | `--container` 56rem (reading), homepage catalog ~70rem, `--control-height` 2.75–2.95rem |
 
-| Topic accents | `--topic-microsoft` `#2563eb`, `--topic-linux` `#15803d`, `--topic-mikrotik` `#c2410c`, `--topic-vmware` `#6d28d9`, `--topic-security` `#be123c`, `--topic-devops` `#0e7490`, `--topic-other` `#a16207` — badge, 3px edge, CTA and active filter only. Card fill stays white. |
+| Topic accents | Fallback palette `--topic-microsoft` `#2563eb`, `--topic-linux` `#15803d`, `--topic-mikrotik` `#c2410c`, `--topic-vmware` `#6d28d9`, `--topic-security` `#be123c`, `--topic-devops` `#0e7490`, `--topic-other` `#a16207`. Live cards/filters/badges set `--topic` from `Category::accentColor()` (editable `categories.accent_color` or that fallback). |
 
 Green is success / availability only (hero “Available for Work”, form success). Skills use primary blue meters, never a rainbow of bar colors.
 

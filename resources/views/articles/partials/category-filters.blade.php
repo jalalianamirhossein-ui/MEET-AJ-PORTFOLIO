@@ -18,6 +18,7 @@
                     data-topic="all"
                     class="article-chip filter-active"
                     aria-pressed="true"
+                    style="--topic: var(--color-primary, #2563eb);"
                   >
                     <span class="article-chip-label" data-en="All articles" data-fa="همه مقالات">All articles</span>
                   </button>
@@ -29,6 +30,7 @@
                     data-topic="microsoft"
                     class="article-chip"
                     aria-pressed="false"
+                    style="--topic: {{ \App\Models\Category::accentColorForSlug('microsoft') }};"
                   >
                     <span class="article-chip-label" data-en="Microsoft" data-fa="مایکروسافت">Microsoft</span>
                   </button>
@@ -40,6 +42,7 @@
                     data-topic="linux"
                     class="article-chip"
                     aria-pressed="false"
+                    style="--topic: {{ \App\Models\Category::accentColorForSlug('linux') }};"
                   >
                     <span class="article-chip-label" data-en="Linux" data-fa="لینوکس">Linux</span>
                   </button>
@@ -51,6 +54,7 @@
                     data-topic="mikrotik"
                     class="article-chip"
                     aria-pressed="false"
+                    style="--topic: {{ \App\Models\Category::accentColorForSlug('mikrotik') }};"
                   >
                     <span class="article-chip-label" data-en="MikroTik" data-fa="میکروتیک">MikroTik</span>
                   </button>
@@ -62,6 +66,7 @@
                     data-topic="vmware"
                     class="article-chip"
                     aria-pressed="false"
+                    style="--topic: {{ \App\Models\Category::accentColorForSlug('vmware') }};"
                   >
                     <span class="article-chip-label" data-en="VMware" data-fa="مجازی‌سازی">VMware</span>
                   </button>
@@ -73,6 +78,7 @@
                     data-topic="other"
                     class="article-chip"
                     aria-pressed="false"
+                    style="--topic: {{ \App\Models\Category::accentColorForSlug('others') }};"
                   >
                     <span class="article-chip-label" data-en="Other" data-fa="سایر مقالات">Other</span>
                   </button>

@@ -34,4 +34,4 @@ Homepage nav `تماس با من` → URL `#contact`, section `top ≈ 96px`, in
 
 ## Remaining visual issues
 
-Authenticated Filament screens not photographed (no CMS user). Unused per-service Blade files are not in the public route.
+Authenticated Filament contrast is documented in [ADMIN-QA.md](ADMIN-QA.md) (login labels, sidebar, tables). This file covers the public site only.

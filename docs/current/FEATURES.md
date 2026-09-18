@@ -26,7 +26,7 @@
 | Resource | Who | What |
 |----------|-----|------|
 | Articles | admin, editor | Create/edit/delete, language, category, tags, status, slug, published date. Trusted HTML is not sanitized destructively |
-| Categories | admin, editor | Unique `(language, slug)` |
+| Categories | admin, editor | Unique `(language, slug)`. Editable `accent_color` ColorPicker; empty keeps the slug palette |
 | Tags | admin, editor | Unique name and slug. `php artisan articles:sync-tags` seeds the catalog from real titles/categories |
 | Services | admin | Catalog CMS; editors forbidden |
 | Requests | admin | CRM-lite statuses: New, Contacted, In discussion, Quoted, Approved, Completed, Cancelled. Internal notes never leave Filament (`$hidden`, not in contact mail, not in the public `create()` payload) |

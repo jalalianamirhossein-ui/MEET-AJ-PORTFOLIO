@@ -40,11 +40,11 @@ Local environment reported by `php artisan about`: environment `local`, debug **
 
 Engine in use locally: **SQLite** at `database/database.sqlite`. Intended production engine: **MySQL / MariaDB** (not provisioned).
 
-Nine migrations, all **Ran** (batches 1–3). Eleven tables exist, including Laravel's `migrations` table:
+Ten migrations, all **Ran** (batches 1–4). Eleven tables exist, including Laravel's `migrations` table:
 
 | Table | Rows (2026-09-18) |
 |-------|-------------------|
-| `users` | 2 (local QA admin + editor; passwords not documented) |
+| `users` | 3 (local QA admin + editor + throwaway contrast-QA admin; passwords not documented) |
 | `password_reset_tokens` | 0 |
 | `sessions` | (local session files; not counted here) |
 | `categories` | 10 |
@@ -54,11 +54,11 @@ Nine migrations, all **Ran** (batches 1–3). Eleven tables exist, including Lar
 | `article_tag` | 38 |
 | `requests` | 5 (includes live production-audit contact POST) |
 | `services` | 6 |
-| `migrations` | 9 |
+| `migrations` | 10 |
 
 There is **no** `pages` table and **no** `contact_requests` table. Full column, index, foreign-key and delete-behaviour detail: [DATABASE.md](DATABASE.md).
 
-**`users` currently holds 2 rows on this workstation** (admin + editor). Interactive Filament login was exercised on 2026-09-18.
+**`users` currently holds 3 rows on this workstation** (admin + editor + throwaway contrast-QA admin). Interactive Filament login was exercised on 2026-09-18.
 
 ## 4. Architecture
 
@@ -83,7 +83,7 @@ Routes: **42 total** from `php artisan route:list` after `optimize:clear` — ap
 | Contact endpoints `/forms/get-csrf-token.php` and `/forms/contact.php` | PASS (local) |
 | Production rendering on meetaj.ir | NOT TESTED |
 
-Feature-by-feature description: [FEATURES.md](FEATURES.md). Asset cache versions currently in the Blade heads: `visual-upgrade.css?v=1707`, `site-modules.css?v=1820`, `lang-toggle.css?v=1401`, `main.js?v=1406`, `i18n.js?v=1402`.
+Feature-by-feature description: [FEATURES.md](FEATURES.md). Asset cache versions currently in the Blade heads: `visual-upgrade.css?v=1710`, `site-modules.css?v=1831`, `lang-toggle.css?v=1403`, `main.js?v=1411`, `i18n.js?v=1403`.
 
 ## 6. CMS / Admin
 
@@ -93,7 +93,7 @@ Filament 5 panel at `/admin`, **White + Red** admin identity (canvas `#ffffff`, 
 |----------|-------|--------|--------|
 | Dashboard (3 widgets) | — | any authenticated CMS user | PASS (routes + code + browser) |
 | Articles | Content | admin + editor | PASS (PHPUnit CRUD + browser chips) |
-| Categories | Content | admin + editor | PASS (PHPUnit + browser colour chips) |
+| Categories | Content | admin + editor | PASS (PHPUnit + editable `accent_color` ColorPicker; slug fallback until a colour is saved) |
 | Tags | Content | admin + editor | PASS (route + code + editor nav) |
 | Services | Content | admin only | PASS (PHPUnit authorization; hidden from editor nav) |
 | Requests | Communications | admin only | PASS (PHPUnit + browser; editor 403) |
@@ -138,7 +138,7 @@ CSRF (including the legacy `csrf_token` field contract), honeypot, two-layer rat
 | `php artisan site:compare-content` | **Failures: 0** | PASS |
 | Live `POST /forms/contact.php` | HTTP 200 `OK`; SQLite row id 5 | PASS |
 | Cursor browser first-load + FA + Contact hash + 1920/1440/1024/768/390 | Testimonials + Contact visible; no horizontal overflow; English article titles in FA UI | PASS |
-| Cursor browser Admin White/Red + Editor permissions + 1024/768/390 | Login crimson Sign in; category chips; Requests badge; editor 403 on `/admin/requests` | PASS |
+| Cursor browser Admin White/Red + contrast re-test | Login/sidebar/table type `#1e293b`; active crimson; forced `html.dark` still readable; Requests PHP unchanged | PASS |
 | `vendor/bin/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest` | 1 test, 7 assertions, OK (last run 2026-09-16 against MariaDB on `127.0.0.1:3307`) | PASS (not re-run today) |
 | Lighthouse / performance budget | never executed | NOT TESTED |
 | Production smoke tests | no production environment | BLOCKED |
@@ -161,7 +161,7 @@ Documented DirectAdmin procedure exists and is complete, but **no deployment has
 1. **`hreflang` is not implemented.** EN and FA share canonical URLs.
 2. **German is draft-only.** No German content exists; `/de` is 404 by design.
 3. **Scheduled publishing is query-based.** A future `published_at` simply stays invisible; there is no queue or cron to flip it.
-4. **Authenticated Filament visual QA is PASS** for White/Red chrome, category chips, Requests badge, and Admin vs Editor nav (2026-09-18). Users resource CRUD remains NOT TESTED.
+4. **Authenticated Filament visual QA is PASS** after the 2026-09-18 contrast fix (login labels, sidebar, tables, filters). Evidence: [../qa/ADMIN-QA.md](../qa/ADMIN-QA.md). Users resource CRUD remains NOT TESTED.
 5. **Six unused static service Blade files** remain in `resources/views/services/` (`devops-automation.blade.php`, `monitoring-security.blade.php`, `network-design.blade.php`, `system-administration.blade.php`, `technical-consulting.blade.php`, `virtualization-solutions.blade.php`). `ServiceController@show` renders `services.show` only, so these files are dead templates and still reference stale asset versions (`visual-upgrade.css?v=1108`, `i18n.js?v=1000`). They were **not** deleted because this pass is documentation-only.
 6. **Imported `featured_image` values still point at `/assets/...`** rather than Filament storage unless an editor uploads a replacement.
 7. **Source-content leftovers** (not CMS defects): a generic overlay category label on some cards, and the service page “Back to Services” link staying English in FA.

@@ -211,6 +211,28 @@ class Article extends Model
         return (string) (data_get($this->presentation, 'filter_class') ?: 'filter-others');
     }
 
+    public function accentColor(): string
+    {
+        if ($this->category) {
+            return $this->category->accentColor();
+        }
+
+        $slug = strtolower(str_replace('filter-', '', $this->filterClass()));
+
+        return Category::accentColorForSlug($slug);
+    }
+
+    public function accentCustomProperties(): string
+    {
+        if ($this->category) {
+            return $this->category->accentCustomProperties();
+        }
+
+        $color = $this->accentColor();
+
+        return '--topic: '.$color.'; --meetaj-topic: '.$color.'; --article-primary: '.$color.'; --article-primary-strong: color-mix(in srgb, '.$color.' 78%, #0f172a); --article-bg-accent: color-mix(in srgb, '.$color.' 14%, transparent);';
+    }
+
     public function categoryLabelEn(): string
     {
         $stored = trim((string) data_get($this->presentation, 'category_label_en'));

@@ -139,18 +139,22 @@ class ProductionAuditTest extends TestCase
         $this->assertStringNotContainsString('testimonials-slider-fa', $home);
         $this->assertStringNotContainsString('id="testimonials-fa"', $home);
         $this->assertStringContainsString('data-fa="نظرات"', $home);
-        $this->assertStringContainsString('site-modules.css?v=1824', $home);
-        $this->assertStringContainsString('main.js?v=1408', $home);
+        $this->assertStringContainsString('site-modules.css?v=1831', $home);
+        $this->assertStringContainsString('main.js?v=1411', $home);
         $this->assertStringContainsString('i18n.js?v=1403', $home);
-        $this->assertStringContainsString('rtl.css?v=1404', $home);
+        $this->assertStringContainsString('rtl.css?v=1405', $home);
 
         $main = (string) file_get_contents(base_path('assets/js/main.js'));
         $this->assertStringContainsString('function syncTestimonialsSwipers', $main);
+        $this->assertStringContainsString('function syncTestimonialsNavIcons', $main);
         $this->assertStringContainsString('meetaj:languagechange', $main);
         $this->assertStringContainsString('config.rtl = isRtl', $main);
         $this->assertStringContainsString('config.autoHeight = true', $main);
+        $this->assertStringContainsString('config.keyboard = { enabled: true, onlyInViewport: true }', $main);
         $this->assertStringContainsString('navigation.nextEl = ".testimonials-next"', $main);
+        $this->assertStringContainsString('navigation.prevEl = ".testimonials-prev"', $main);
         $this->assertStringNotContainsString('nextEl: ".testimonials-prev"', $main);
+        $this->assertStringNotContainsString('prevEl: ".testimonials-next"', $main);
 
         $i18n = (string) file_get_contents(base_path('assets/js/i18n.js'));
         $this->assertStringContainsString('return english', $i18n);
@@ -164,6 +168,11 @@ class ProductionAuditTest extends TestCase
         $this->assertStringContainsString('.testimonials-slider:not(.swiper-rtl) .swiper-wrapper', $modules);
         $this->assertStringContainsString('direction: ltr !important', $modules);
         $this->assertStringContainsString('.testimonials.is-empty', $modules);
+        $this->assertDoesNotMatchRegularExpression('/\.testimonials-nav\s*\{[^}]*direction:\s*ltr/s', $modules);
+        $this->assertStringNotContainsString('.testimonials-nav { direction: ltr', str_replace(["\r\n", "\n"], ' ', $modules));
+        $this->assertStringNotContainsString('testimonials-prev { transform: scaleX(-1)', $modules);
+        $this->assertStringContainsString('html[dir="rtl"] .testimonials-prev .bi-chevron-left::before', $modules);
+        $this->assertStringContainsString('content: "\\f285"', $modules);
     }
 
     public function test_public_sidebar_chrome_has_no_phone_and_platform_social_hover(): void

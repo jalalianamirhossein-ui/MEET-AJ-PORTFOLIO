@@ -55,10 +55,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/css/services.css?v=1000" />
-    <link href="/assets/css/lang-toggle.css?v=1401" rel="stylesheet" />
-    <link id="rtl-style" href="/assets/css/rtl.css?v=1404" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1707" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1824" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1403" rel="stylesheet" />
+    <link id="rtl-style" href="/assets/css/rtl.css?v=1405" rel="stylesheet" disabled />
+    <link href="/assets/css/visual-upgrade.css?v=1710" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1831" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" />
     <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>

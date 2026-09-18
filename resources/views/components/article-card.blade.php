@@ -7,6 +7,8 @@
         'filter-others' => 'other',
     ];
     $topic = $topics[$article->filterClass()] ?? 'other';
+    $accent = $article->accentColor();
+    $accentStyle = '--topic: '.$accent.'; --article-primary: '.$accent.';';
     $categoryEn = $article->categoryLabelEn();
     $categoryFa = $article->categoryLabelFa();
     $titleEn = data_get($article->presentation, 'card_title_en') ?: $article->title;
@@ -18,7 +20,7 @@
     $isRelated = $variant === 'related';
 @endphp
               @if ($isRelated)
-                <article class="article-teaser article-teaser--related" data-topic="{{ $topic }}">
+                <article class="article-teaser article-teaser--related" data-topic="{{ $topic }}" style="{{ $accentStyle }}">
                   <a class="article-teaser-link" href="{{ $article->path() }}">
                     <div class="article-teaser-media">
                       <img
@@ -55,8 +57,9 @@
               <div
                 class="col-lg-4 col-md-6 portfolio-item isotope-item article-grid-item {{ $article->filterClass() }}"
                 data-topic="{{ $topic }}"
-              >
-                <article class="article-teaser" data-topic="{{ $topic }}">
+                style="{{ $accentStyle }}"
+                >
+                <article class="article-teaser" data-topic="{{ $topic }}" style="{{ $accentStyle }}">
                   <div class="portfolio-content article-teaser-media">
                     <img
                       src="{{ $article->thumbnailUrl() }}"

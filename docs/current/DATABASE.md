@@ -30,8 +30,9 @@ Column types below are the SQLite types actually reported by the database. The m
 | `2026_09_16_000007_create_services_table` | 2 | Ran |
 | `2026_09_16_000008_add_service_id_to_requests_table` | 2 | Ran |
 | `2026_09_17_000009_create_tags_and_request_workflow` | 3 | Ran |
+| `2026_09_18_000010_add_accent_color_to_categories_table` | 4 | Ran |
 
-The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the eleventh table.
+The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the eleventh table. Ten application migrations exist after `2026_09_18_000010_add_accent_color_to_categories_table`.
 
 ## Table overview
 
@@ -105,6 +106,7 @@ Article taxonomy. Each concept exists once per language and the two rows share a
 | `name` | varchar | label |
 | `slug` | varchar | max 180 |
 | `language` | varchar | 2 characters, default `en` |
+| `accent_color` | varchar, nullable | optional `#RRGGBB`. Empty uses the slug fallback in `Category::accentColor()`. Existing rows were not backfilled. |
 | `created_at`, `updated_at` | datetime, nullable | |
 
 Unique: `(language, slug)`, `(translation_key, language)`. Foreign keys: none.
