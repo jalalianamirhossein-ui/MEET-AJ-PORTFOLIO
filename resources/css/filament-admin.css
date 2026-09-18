@@ -28,22 +28,36 @@ html {
   --topic-security: #be123c;
   --topic-devops: #0e7490;
   --topic-other: #a16207;
-  /* Filament Color::hex('#be123c') makes 400 a candy pink. Flatten the live scale. */
-  --primary-300: #e11d48;
-  --primary-400: #be123c;
-  --primary-500: #be123c;
-  --primary-600: #9f1239;
-  --primary-700: #881337;
+  /* Filament Color::hex('#be123c') makes 400 a candy pink. Flatten the live
+     scale with !important because filament/app.css loads AFTER this file. */
+  --primary-50: #fff1f2 !important;
+  --primary-100: #ffe4e6 !important;
+  --primary-200: #fecdd3 !important;
+  --primary-300: #e11d48 !important;
+  --primary-400: #be123c !important;
+  --primary-500: #be123c !important;
+  --primary-600: #9f1239 !important;
+  --primary-700: #881337 !important;
+  --primary-800: #9f1239 !important;
+  --primary-900: #881337 !important;
+  --primary-950: #4c0519 !important;
   --color-primary-300: #e11d48;
   --color-primary-400: #be123c;
   --color-primary-500: #be123c;
   --color-primary-600: #9f1239;
   --color-primary-700: #881337;
+  color-scheme: light;
+}
+
+html.dark,
+.dark,
+.fi.dark {
+  color-scheme: light;
 }
 
 .fi-body {
   font-feature-settings: "ss01" on;
-  color: #334155;
+  color: #1e293b;
   background: #ffffff;
 }
 
@@ -112,11 +126,12 @@ html {
 
 .fi-sidebar-item a,
 .fi-sidebar-item-button,
+.fi-sidebar-item-btn,
 .fi-sidebar-item > a,
 .fi-sidebar-item button {
   border-radius: 0.7rem;
   min-height: 2.45rem;
-  color: #334155;
+  color: #1e293b;
 }
 
 .fi-sidebar-item a:hover,
@@ -373,10 +388,12 @@ html {
   border-color: color-mix(in srgb, var(--color-primary) 35%, var(--color-border));
 }
 
-.fi-fo-field-wrp-label {
+.fi-fo-field-wrp-label,
+.fi-fo-field-label,
+.fi-fo-field-label-content {
   font-size: 0.8rem;
   font-weight: 650;
-  color: #334155;
+  color: #1e293b;
 }
 
 .fi-fo-field-wrp-error,
@@ -404,11 +421,12 @@ html {
 .fi-ac-btn-action-primary,
 .fi-btn.fi-color-primary,
 .fi-ac-btn-action.fi-color-primary,
-.fi-color-primary.fi-bg-color-400,
-.fi-color-primary.fi-bg-color-500,
-.fi-color-primary.fi-bg-color-600,
 .fi-btn.fi-color-primary.fi-bg-color-400,
-.fi-ac-btn-action.fi-color-primary.fi-bg-color-400 {
+.fi-btn.fi-color-primary.fi-bg-color-500,
+.fi-btn.fi-color-primary.fi-bg-color-600,
+.fi-ac-btn-action.fi-color-primary.fi-bg-color-400,
+.fi-ac-btn-action.fi-color-primary.fi-bg-color-500,
+.fi-ac-btn-action.fi-color-primary.fi-bg-color-600 {
   background: var(--color-primary) !important;
   background-color: var(--color-primary) !important;
   color: #ffffff !important;

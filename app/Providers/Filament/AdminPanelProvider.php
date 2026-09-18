@@ -44,6 +44,8 @@ class AdminPanelProvider extends PanelProvider
                 'danger' => Color::hex('#7f1d1d'),
                 'info' => Color::hex('#0f766e'),
             ])
+            ->darkMode(false)
+            ->themeSwitcher(false)
             ->sidebarCollapsibleOnDesktop()
             ->collapsibleNavigationGroups()
             ->unsavedChangesAlerts()
