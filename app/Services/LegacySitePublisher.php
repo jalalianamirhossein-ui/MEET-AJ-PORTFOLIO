@@ -98,7 +98,7 @@ class LegacySitePublisher
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
     <link href="/assets/css/lang-toggle.css?v=1400" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1705" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1706" rel="stylesheet" />
     <link href="/assets/css/site-modules.css?v=1819" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">

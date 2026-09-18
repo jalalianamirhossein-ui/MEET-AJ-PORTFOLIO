@@ -15,10 +15,10 @@
     <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
     <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
-    <link href="/assets/css/lang-toggle.css?v=1301" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1400" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1705" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1818" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1706" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1819" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">@verbatim
 <a class="skip-link" href="#portfolio" data-en="Skip to main content" data-fa="رفتن به محتوای اصلی">Skip to main content</a>
@@ -156,13 +156,13 @@
       <!-- ===============================================
       ==================== NAVIGATION MENU ================
       =============================================== -->
-      <nav id="navmenu" class="navmenu" role="navigation" aria-label="Primary" data-en-aria-label="Primary" data-fa-aria-label="???? ????">
+      <nav id="navmenu" class="navmenu" role="navigation" aria-label="Primary" data-en-aria-label="Primary" data-fa-aria-label="ناوبری اصلی">
         <ul>
           <!-- Home Section -->
           <li>
             <a href="/#hero"
               ><i class="bi bi-house navicon"></i
-              ><span data-en="Home" data-fa="???? ????">Home</span></a
+              ><span data-en="Home" data-fa="صفحه اصلی">Home</span></a
             >
           </li>
 
@@ -170,7 +170,7 @@
           <li>
             <a href="/#about"
               ><i class="bi bi-person navicon"></i
-              ><span data-en="About" data-fa="?????? ??">About</span></a
+              ><span data-en="About" data-fa="درباره من">About</span></a
             >
           </li>
 
@@ -178,7 +178,7 @@
           <li>
             <a href="/#resume"
               ><i class="bi bi-file-earmark-text navicon"></i
-              ><span data-en="Resume" data-fa="????? ????">Resume</span></a
+              ><span data-en="Resume" data-fa="رزومه">Resume</span></a
             >
           </li>
 
@@ -186,7 +186,7 @@
           <li>
             <a href="/#services"
               ><i class="bi bi-hdd-stack navicon"></i
-              ><span data-en="Services" data-fa="?????">Services</span></a
+              ><span data-en="Services" data-fa="خدمات">Services</span></a
             >
           </li>
 
@@ -194,7 +194,7 @@
           <li>
             <a href="/articles" class="active" aria-current="page"
               ><i class="bi bi-images navicon"></i
-              ><span data-en="Articles" data-fa="??????">Articles</span></a
+              ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
 
@@ -202,7 +202,7 @@
           <li>
             <a href="/#testimonials"
               ><i class="bi bi-menu-button navicon"></i
-              ><span data-en="Testimonials" data-fa="?????"
+              ><span data-en="Testimonials" data-fa="نظرات"
                 >Testimonials</span
               ></a
             >
@@ -212,7 +212,7 @@
           <li>
             <a href="/#contact"
               ><i class="bi bi-envelope navicon"></i
-              ><span data-en="Contact" data-fa="???? ?? ??">Contact</span></a
+              ><span data-en="Contact" data-fa="تماس با من">Contact</span></a
             >
           </li>
         </ul>
@@ -228,12 +228,12 @@
       type="button"
       aria-label="Open menu"
       data-en-aria-label="Open menu"
-      data-fa-aria-label="??? ???? ???"
+      data-fa-aria-label="باز کردن منو"
       aria-expanded="false"
       aria-controls="header"
     >
       <span class="menu-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
-      <span class="sr-only" data-en="Open menu" data-fa="??? ???? ???">Open menu</span>
+      <span class="sr-only" data-en="Open menu" data-fa="باز کردن منو">Open menu</span>
     </button>
     <main id="main-content" class="main" role="main">
 <section id="portfolio" class="portfolio section light-background">
@@ -241,10 +241,10 @@
         ==================== SECTION TITLE ==================
         =============================================== -->
         <div class="container section-title" data-aos="fade-up">
-          <h2 data-en="Articles" data-fa="??????">Articles</h2>
+          <h2 data-en="Articles" data-fa="مقالات">Articles</h2>
           <p
             data-en="A collection of my technical articles and insights on network infrastructure, system administration, and DevOps solutions."
-            data-fa="????????? ?? ?????? ??? ? ???????? ?? ?? ????? ??????? ????? ?????? ????? ? ????????? DevOps."
+            data-fa="مجموعه‌ای از مقالات فنی و بینش‌های من در زمینه زیرساخت شبکه، مدیریت سیستم و راهکارهای DevOps."
           >
             A collection of my technical articles and insights on network
             infrastructure, system administration, and DevOps solutions.
@@ -459,9 +459,9 @@
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
-    <script src="/assets/js/main.js?v=1403" defer></script>
+    <script src="/assets/js/main.js?v=1404" defer></script>
     <script src="/assets/js/service-catalog.js?v=1813" defer></script>
-    <script src="/assets/js/i18n.js?v=1301" defer></script>
+    <script src="/assets/js/i18n.js?v=1400" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {

@@ -36,10 +36,10 @@
     <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
     <link href="/assets/css/articles.css?v=1100" rel="stylesheet" />
-    <link href="/assets/css/lang-toggle.css?v=1301" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1400" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1705" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1818" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1706" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1819" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @if (!empty($seo['breadcrumb']))
       <script type="application/ld+json">{!! json_encode($seo['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
@@ -307,8 +307,8 @@
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1403" defer></script>
-    <script src="/assets/js/i18n.js?v=1301" defer></script>
+    <script src="/assets/js/main.js?v=1404" defer></script>
+    <script src="/assets/js/i18n.js?v=1400" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {

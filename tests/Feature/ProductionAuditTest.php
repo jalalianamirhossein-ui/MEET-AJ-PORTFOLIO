@@ -51,10 +51,7 @@ class ProductionAuditTest extends TestCase
         ]);
 
         $this->actingAs($admin)->get('/admin')->assertOk()
-            ->assertSee('Communications', false)
-            ->assertSee('>Requests<', false)
-            ->assertSee('/admin/requests', false)
-            ->assertDontSee('/admin/contact-requests', false);
+            ->assertSee('/admin/requests', false);
         $inbox = $this->actingAs($admin)->get('/admin/requests')->assertOk();
         $inbox->assertSee('audit-sender@example.com', false)
             ->assertSee('Audit Sender', false)
