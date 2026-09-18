@@ -17,6 +17,8 @@ class ServiceRequestResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Service requests';
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static string | \UnitEnum | null $navigationGroup = 'Communications';
 
     protected static ?int $navigationSort = 2;

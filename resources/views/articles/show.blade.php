@@ -86,7 +86,22 @@
             <a href="/#hero"><i class="bi bi-house navicon" aria-hidden="true"></i><span data-en="Home" data-fa="صفحه اصلی">Home</span></a>
           </li>
           <li>
+            <a href="/#about"><i class="bi bi-person navicon" aria-hidden="true"></i><span data-en="About" data-fa="درباره من">About</span></a>
+          </li>
+          <li>
+            <a href="/#resume"><i class="bi bi-file-earmark-text navicon" aria-hidden="true"></i><span data-en="Resume" data-fa="رزومه">Resume</span></a>
+          </li>
+          <li>
+            <a href="/#services"><i class="bi bi-hdd-stack navicon" aria-hidden="true"></i><span data-en="Services" data-fa="خدمات">Services</span></a>
+          </li>
+          <li>
             <a href="/articles"><i class="bi bi-journal-text navicon" aria-hidden="true"></i><span data-en="Articles" data-fa="مقالات">Articles</span></a>
+          </li>
+          <li>
+            <a href="/#testimonials"><i class="bi bi-chat-quote navicon" aria-hidden="true"></i><span data-en="Testimonials" data-fa="نظرات">Testimonials</span></a>
+          </li>
+          <li>
+            <a href="/#contact"><i class="bi bi-envelope navicon" aria-hidden="true"></i><span data-en="Contact" data-fa="تماس با من">Contact</span></a>
           </li>
         </ul>
       </nav>
@@ -113,7 +128,7 @@
                   </ul>
                 @endif
               </div>
-              <h1 class="article-title hero-title" data-en="{{ data_get($article->presentation, 'hero_title_en', $article->title) }}" data-fa="{{ data_get($article->presentation, 'hero_title_fa', $article->title) }}">{{ $article->title }}</h1>
+              <h1 class="article-title hero-title" data-i18n-lock data-en="{{ $article->title }}">{{ $article->title }}</h1>
               <p class="article-excerpt hero-subtitle" data-en="{{ $article->excerpt }}" data-fa="{{ data_get($article->presentation, 'excerpt_translations.fa', $article->excerpt) }}">{{ $article->excerpt }}</p>
             </div>
             <figure class="article-hero-media">

@@ -39,8 +39,16 @@
     document.cookie = `lang=${lang}; Path=/; Max-Age=31536000; SameSite=Lax`;
   };
 
-  const isCorrupted = (val) =>
-    val == null || val.indexOf("\uFFFD") !== -1 || /[\u0000-\u001f]/.test(val);
+  const isCorrupted = (val) => {
+    if (val == null) return true;
+    if (val.indexOf("\uFFFD") !== -1 || /[\u0000-\u001f]/.test(val)) return true;
+    if (/^[?\u061F\s.]+$/.test(val)) return true;
+    if (/\?{3,}/.test(val) && !/\p{Arabic}/u.test(val)) return true;
+    return false;
+  };
+
+  const isLockedEnglish = (el) =>
+    el.hasAttribute("data-i18n-lock") || Boolean(el.closest("[data-i18n-lock]"));
 
   const getRtlStyle = () => {
     const existing = document.getElementById("rtl-style");
@@ -120,6 +128,11 @@
     }
 
     document.querySelectorAll("[data-en]").forEach((el) => {
+      if (isLockedEnglish(el)) {
+        const english = el.getAttribute("data-en");
+        if (english != null) setElementText(el, english);
+        return;
+      }
       const translation = translationFor(el, next);
       if (translation != null) {
         setElementText(el, translation);

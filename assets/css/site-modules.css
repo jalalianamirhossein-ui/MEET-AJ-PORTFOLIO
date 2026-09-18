@@ -685,6 +685,30 @@ body.index-page #portfolio.section,
 body.index-page #testimonials.section,
 body.index-page #contact.section {
   padding-block: clamp(2.1rem, 3.8vw, 3.1rem);
+  scroll-margin-top: 5.25rem;
+}
+
+@media (min-width: 1200px) {
+  body.index-page #testimonials.section,
+  body.index-page #contact.section,
+  body.index-page #about.section,
+  body.index-page #resume.section,
+  body.index-page #services.section,
+  body.index-page #portfolio.section {
+    scroll-margin-top: 1.25rem;
+  }
+}
+
+#testimonials [data-aos],
+#contact [data-aos] {
+  opacity: 1 !important;
+  transform: none !important;
+  pointer-events: auto;
+}
+
+#testimonials,
+#contact {
+  visibility: visible;
 }
 
 .testimonials {

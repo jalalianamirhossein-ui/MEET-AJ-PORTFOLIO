@@ -30,13 +30,15 @@ class RequestResource extends Resource
 
     protected static ?string $modelLabel = 'Request';
 
-    protected static ?string $pluralModelLabel = 'All requests';
+    protected static ?string $pluralModelLabel = 'Requests';
 
-    protected static bool $shouldRegisterNavigation = false;
+    protected static ?string $navigationLabel = 'Requests';
+
+    protected static bool $shouldRegisterNavigation = true;
 
     protected static string | \UnitEnum | null $navigationGroup = 'Communications';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 1;
 
     protected static string | \BackedEnum | null $navigationIcon = Heroicon::OutlinedInbox;
 

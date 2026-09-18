@@ -1,7 +1,6 @@
 /**
- * Language switch — single 44px control. No dropdown, no menu.
- * Shares chrome with the mobile menu toggle (burgundy glass).
- * Loaded before rtl.css / visual-upgrade.css.
+ * Language switch — shared Meet AJ control.
+ * Blue / cyan / slate. No burgundy. Same component on every public page.
  */
 
 .lang-switcher {
@@ -37,6 +36,18 @@
   }
 }
 
+html[dir="rtl"] .lang-switcher.is-floating {
+  inset-inline-start: max(0.85rem, env(safe-area-inset-right, 0px));
+  inset-inline-end: auto;
+}
+
+@media (min-width: 1200px) {
+  html[dir="rtl"] .lang-switcher.is-floating {
+    inset-inline-start: auto;
+    inset-inline-end: max(1.15rem, env(safe-area-inset-left, 0px));
+  }
+}
+
 .lang-switcher-toggle {
   display: inline-flex;
   flex-direction: row;
@@ -47,13 +58,13 @@
   min-height: 44px;
   min-width: 44px;
   height: 44px;
-  padding: 0 0.85rem;
+  padding: 0 0.9rem;
   margin: 0;
-  border: 1px solid var(--menu-burgundy-line, rgba(248, 196, 208, 0.32));
+  border: 1px solid rgba(37, 99, 235, 0.28);
   border-radius: 0.75rem;
-  background: var(--menu-burgundy-glass, rgba(58, 16, 28, 0.88));
-  color: var(--menu-burgundy-text, #fdecef);
-  box-shadow: 0 10px 24px rgba(42, 12, 20, 0.22);
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f172a;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
   font-family: inherit;
   font-size: 0.78rem;
   font-weight: 700;
@@ -70,19 +81,26 @@
   font-variant: all-small-caps;
   font-size: 0.85rem;
   letter-spacing: 0.12em;
+  color: #2563eb;
 }
 
 .lang-switcher-swap {
   font-size: 1.05rem;
   font-weight: 500;
   line-height: 1;
-  opacity: 0.8;
+  color: #0891b2;
+  opacity: 0.9;
 }
 
 .lang-switcher-toggle:hover {
-  border-color: rgba(147, 197, 253, 0.55);
-  background: rgba(74, 21, 36, 0.96);
-  color: #ffffff;
+  border-color: rgba(14, 165, 233, 0.55);
+  background: #eff6ff;
+  color: #0f172a;
+  box-shadow: 0 12px 26px rgba(37, 99, 235, 0.14);
+}
+
+.lang-switcher-toggle:hover .lang-switcher-current {
+  color: #1d4ed8;
 }
 
 .lang-switcher-toggle:hover .lang-switcher-swap {
@@ -96,6 +114,18 @@
 
 .lang-switcher-toggle:active {
   transform: translateY(1px);
+}
+
+.lang-switcher-toggle[aria-pressed="true"],
+html[lang="fa"] .lang-switcher-toggle {
+  background: #2563eb;
+  border-color: #1d4ed8;
+  color: #ffffff;
+}
+
+html[lang="fa"] .lang-switcher-current,
+html[lang="fa"] .lang-switcher-swap {
+  color: #e0f2fe;
 }
 
 @media (prefers-reduced-motion: reduce) {

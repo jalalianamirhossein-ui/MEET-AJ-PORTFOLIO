@@ -17,6 +17,8 @@ class ContactRequestResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Contact requests';
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static string | \UnitEnum | null $navigationGroup = 'Communications';
 
     protected static ?int $navigationSort = 1;

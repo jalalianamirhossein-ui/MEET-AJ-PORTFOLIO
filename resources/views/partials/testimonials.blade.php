@@ -17,6 +17,8 @@
                 "grabCursor": true,
                 "simulateTouch": true,
                 "watchOverflow": true,
+                "observer": true,
+                "observeParents": true,
                 "slidesPerView": 1,
                 "spaceBetween": 20,
                 "autoplay": {

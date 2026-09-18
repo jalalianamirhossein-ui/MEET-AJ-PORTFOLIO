@@ -10,7 +10,7 @@ class ManageRequests extends ManageRecords
 
     public function getTitle(): string
     {
-        return 'All requests';
+        return 'Requests';
     }
 
     public function getSubheading(): string | \Illuminate\Contracts\Support\Htmlable | null

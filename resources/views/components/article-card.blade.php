@@ -38,10 +38,7 @@
                           data-fa="{{ $categoryFa }}"
                         >{{ $categoryEn }}</p>
                       @endif
-                      <h3 class="article-teaser-title"
-                        data-en="{{ $titleEn }}"
-                        data-fa="{{ $titleFa }}"
-                      >{{ $titleEn }}</h3>
+                      <h3 class="article-teaser-title" data-i18n-lock data-en="{{ $titleEn }}">{{ $titleEn }}</h3>
                       <p class="article-teaser-meta">
                         @if ($article->published_at)
                           <span>
@@ -88,11 +85,10 @@
                         data-fa="{{ $categoryFa }}"
                       >{{ $categoryEn }}</p>
                     @endif
-                    <h3 class="article-teaser-title">
+                    <h3 class="article-teaser-title" data-i18n-lock>
                       <a
                         href="{{ $article->path() }}"
                         data-en="{{ $titleEn }}"
-                        data-fa="{{ $titleFa }}"
                       >{{ $titleEn }}</a>
                     </h3>
                     @if ($excerptEn)

@@ -231,28 +231,43 @@
   // scroll top is managed at the end of the file
 
   function aosInit() {
-    if (window.AOS) {
-      // Improve mobile settings for AOS
-      let config = {
-        duration: 560,
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const revealPageSections = () => {
+      document.querySelectorAll("#testimonials [data-aos], #contact [data-aos]").forEach((el) => {
+        el.classList.add("aos-init", "aos-animate");
+      });
+    };
+
+    if (window.AOS && !prefersReduced) {
+      const config = {
+        duration: window.innerWidth <= 768 ? 400 : 560,
         easing: "ease-out-cubic",
         once: true,
         mirror: false,
+        offset: window.innerWidth <= 768 ? 24 : 80,
+        startEvent: "DOMContentLoaded",
       };
-
-      if (window.innerWidth <= 768) {
-        config.duration = 400; // Reduce duration for mobile
-        config.offset = 50; // Reduce offset for mobile
-      }
-
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        config.disable = true;
-      }
-
-      AOS.init(config);
+      window.AOS.init(config);
+      window.AOS.refreshHard();
     }
+
+    revealPageSections();
+    document.querySelectorAll(".init-swiper").forEach((swiperElement) => {
+      if (swiperElement.swiper && typeof swiperElement.swiper.update === "function") {
+        swiperElement.swiper.update();
+      }
+    });
   }
-  window.addEventListener("load", aosInit);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", aosInit, { once: true });
+  } else {
+    aosInit();
+  }
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) {
+      aosInit();
+    }
+  });
 
   if (window.PureCounter) {
     // Improve mobile settings for PureCounter
@@ -859,23 +874,60 @@
     initSwiper();
   }
 
+  const scrollToHash = (hash) => {
+    if (!hash || hash === "#") return false;
+    let section = null;
+    try {
+      section = document.querySelector(hash);
+    } catch (error) {
+      return false;
+    }
+    if (!section) return false;
+    if (window.AOS) {
+      window.AOS.refresh();
+    }
+    document.querySelectorAll("#testimonials [data-aos], #contact [data-aos]").forEach((el) => {
+      el.classList.add("aos-init", "aos-animate");
+    });
+    section.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "start",
+    });
+    return true;
+  };
+
+  window.addEventListener("hashchange", () => {
+    scrollToHash(window.location.hash);
+  });
+
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest('a[href*="#"]');
+    if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+      return;
+    }
+    const url = new URL(link.href, window.location.href);
+    const sameDocument =
+      url.pathname.replace(/\/+$/, "") === window.location.pathname.replace(/\/+$/, "") ||
+      (url.pathname === "/" && (window.location.pathname === "/" || window.location.pathname === ""));
+    if (!sameDocument || !url.hash) {
+      return;
+    }
+    if (!document.querySelector(url.hash)) {
+      return;
+    }
+    event.preventDefault();
+    if (url.hash !== window.location.hash) {
+      window.history.pushState(null, "", url.hash);
+    }
+    scrollToHash(url.hash);
+    if (typeof closeMenu === "function") {
+      closeMenu();
+    }
+  });
+
   window.addEventListener("load", function () {
-    if (window.location.hash && document.querySelector(window.location.hash)) {
-      setTimeout(() => {
-        let section = document.querySelector(window.location.hash);
-        let scrollMarginTop = getComputedStyle(section).scrollMarginTop;
-        let offset = parseInt(scrollMarginTop) || 0;
-
-        // Improve mobile performance for scroll
-        if (window.innerWidth <= 768) {
-          offset += 20; // Add more margin for mobile
-        }
-
-        window.scrollTo({
-          top: section.offsetTop - offset,
-          behavior: "smooth",
-        });
-      }, 100);
+    if (window.location.hash) {
+      scrollToHash(window.location.hash);
     }
   });
 
