@@ -2,7 +2,7 @@
 
 **Authority:** SINGLE authoritative current-state document. Everything else in `docs/current/` expands one section of this file.
 **Date verified:** 2026-09-18
-**Verification method:** `php artisan about`, `php artisan optimize:clear`, `php artisan route:list`, `php artisan test` (55 tests / 1067 assertions / 1 skipped), `php artisan site:compare-content` (Failures: 0), live `POST /forms/contact.php` against SQLite, Cursor browser first-load + FA + Contact hash + viewports 1920/1440/1024/768/390, authenticated Admin/Editor Filament White/Red QA, and reading `app/`, `routes/`, `resources/`, `assets/`, `tests/`.
+**Verification method:** `php artisan about`, `php artisan optimize:clear`, `php artisan route:list`, `php artisan test` (**58 tests / 1124 assertions / 1 skipped**), `php artisan site:compare-content` (Failures: 0), live `POST /forms/contact.php` against SQLite, Cursor browser first-load + FA + Contact hash + viewports 1920/1440/1024/768/390, authenticated Admin/Editor Filament White/Red QA, homepage Expertise EN/FA, `/admin/categories` ColorPicker, and reading `app/`, `routes/`, `resources/`, `assets/`, `tests/`.
 **Runtime used:** `.runtime/php84/php.exe` (PHP is not on PATH on this workstation).
 
 Status vocabulary used in every document: **PASS** | **FAIL** | **BLOCKED** | **NOT TESTED**.
@@ -76,6 +76,10 @@ Routes: **42 total** from `php artisan route:list` after `optimize:clear` — ap
 | Area | Status |
 |------|--------|
 | Homepage `/` with original section IDs, hero, about, services catalog, articles teaser, contact | PASS (local) |
+| Homepage Expertise / تخصص‌ها (5 pastel category columns, LTR left / RTL right accents) | PASS (browser EN+FA + PHPUnit markup) |
+| Shared public sidebar + icy-blue mobile menu (`<1200px`) | PASS (browser) |
+| Shared Testimonials Swiper (one slider; RTL via `html[dir]`, not a second FA carousel) | PASS (PHPUnit + browser) |
+| Article library `/articles` with search and tag filter | PASS (local) |
 | Article library `/articles` with search and tag filter | PASS (local) |
 | 23 article detail pages | PASS (local) |
 | 6 service detail pages | PASS (local) |
@@ -134,11 +138,13 @@ CSRF (including the legacy `csrf_token` field contract), honeypot, two-layer rat
 
 | Command | Result (2026-09-18) | Status |
 |---------|---------------------|--------|
-| `php artisan test` | **55 tests, 1067 assertions, 1 skipped, 0 failures** | PASS |
+| `php artisan test` | **58 tests, 1124 assertions, 1 skipped, 0 failures** | PASS |
 | `php artisan site:compare-content` | **Failures: 0** | PASS |
 | Live `POST /forms/contact.php` | HTTP 200 `OK`; SQLite row id 5 | PASS |
 | Cursor browser first-load + FA + Contact hash + 1920/1440/1024/768/390 | Testimonials + Contact visible; no horizontal overflow; English article titles in FA UI | PASS |
 | Cursor browser Admin White/Red + contrast re-test | Login/sidebar/table type `#1e293b`; active crimson; forced `html.dark` still readable; Requests PHP unchanged | PASS |
+| Cursor browser `/admin/categories` Accent color | ColorPicker + helper + Preview + Reset; empty Linux stays `#15803d` | PASS |
+| Cursor browser homepage Expertise EN + FA | 5 columns; pastel pills; LTR left / RTL right 3px markers | PASS |
 | `vendor/bin/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest` | 1 test, 7 assertions, OK (last run 2026-09-16 against MariaDB on `127.0.0.1:3307`) | PASS (not re-run today) |
 | Lighthouse / performance budget | never executed | NOT TESTED |
 | Production smoke tests | no production environment | BLOCKED |

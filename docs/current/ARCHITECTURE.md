@@ -39,7 +39,7 @@ No SPA, no Node build, no queue worker, no scheduler, no Redis. Cache and sessio
 
 ## Routes
 
-`php artisan route:list` reports **36** routes: 11 application routes, 14 Filament `/admin` routes, and 11 Livewire / Filament asset and export routes.
+`php artisan route:list` reports **42** routes after `optimize:clear` — application routes (`/`, `/index.html`, three article routes, two service routes, two `/forms/*.php` routes, `/sitemap.xml`, `/robots.txt`, `/manifest.json`), Filament `/admin` routes (dashboard, login/logout, Articles, Categories, Tags, Services, Requests, Users, plus hidden ContactRequest/ServiceRequest view URLs), and Livewire / Filament asset and export routes.
 
 | Method | Path | Name | Handler |
 |--------|------|------|---------|
@@ -72,7 +72,7 @@ There is no `/de` route.
 | Model | Table | Policy | Who may manage |
 |-------|-------|--------|----------------|
 | `Article` | `articles` | `ArticlePolicy` | admin + editor |
-| `Category` | `categories` | `CategoryPolicy` | admin + editor |
+| `Category` | `categories` | `CategoryPolicy` | admin + editor. `accentColor()` = valid `accent_color` or slug palette |
 | `Tag` | `tags` | `TagPolicy` | admin + editor |
 | `Service` | `services` | `ServicePolicy` | admin only |
 | `Request` | `requests` | `RequestPolicy` | admin only, create denied |
@@ -109,12 +109,14 @@ Policies are registered in `App\Providers\AppServiceProvider`.
 
 | View | Origin |
 |------|--------|
-| `home.blade.php` | rebuilt from the original `index.html` |
+| `home.blade.php` | rebuilt from the original `index.html` (homepage Expertise markup lives here and in `index.html`) |
 | `articles/index.blade.php` | library chrome from the homepage portfolio section |
 | `articles/show.blade.php` | from `articles/{slug}.html` |
-| `articles/partials/*` | breadcrumbs, library toolbar, related, search results, share |
+| `articles/partials/*` | breadcrumbs, library toolbar, related, search results, share, category filters |
 | `services/show.blade.php` | dynamic catalog detail rendered from the `services` table |
 | `components/article-card.blade.php`, `components/service-card.blade.php` | shared cards, English defaults with `data-fa` |
+| `components/site-sidebar.blade.php`, `partials/site-sidebar-chrome.blade.php` | shared public sidebar |
+| `partials/testimonials.blade.php` | shared EN/FA Swiper |
 | `seo/sitemap.blade.php` | XML sitemap |
 | `errors/{404,419,500}.blade.php` | error pages |
 
@@ -140,7 +142,7 @@ Detail: [ADMIN.md](ADMIN.md).
 
 ## Assets and document root
 
-Original CSS/JS/images live in `assets/` and are copied into `public/assets/` by the publisher. The overlay stylesheet `assets/css/visual-upgrade.css` loads after `rtl.css`; `assets/css/site-modules.css` is last. Current cache-busting versions in the Blade heads: `visual-upgrade.css?v=1707`, `site-modules.css?v=1820`, `lang-toggle.css?v=1401`, `main.js?v=1406`, `i18n.js?v=1402`. Admin CSS is **not** in this public overlay — Filament loads `resources/css/filament-admin.css` once.
+Original CSS/JS/images live in `assets/` and are copied into `public/assets/` by `php artisan site:publish-assets`. Public cascade: `main.css?v=1002` → `lang-toggle.css?v=1403` → `rtl.css?v=1405` → `visual-upgrade.css?v=1710` → **`site-modules.css?v=1832` last**. Scripts: `main.js?v=1412`, `i18n.js?v=1403`. Admin CSS is **not** in this public overlay — Filament loads `resources/css/filament-admin.css` (published as `public/css/app/meet-aj-admin.css`).
 
 Only `public/` may be exposed by the web server. The root-level `index.html`, `articles/`, `services/`, `assets/`, `forms/` and `partials/` are **sources**; serving them directly would bypass Laravel.
 
