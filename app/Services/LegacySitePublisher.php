@@ -96,10 +96,10 @@ class LegacySitePublisher
     <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
     <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
-    <link href="/assets/css/lang-toggle.css?v=1400" rel="stylesheet" />
+    <link href="/assets/css/lang-toggle.css?v=1401" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1706" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1819" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1707" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1820" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">
 BLADE;
@@ -111,9 +111,9 @@ BLADE;
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
-    <script src="/assets/js/main.js?v=1404" defer></script>
+    <script src="/assets/js/main.js?v=1405" defer></script>
     <script src="/assets/js/service-catalog.js?v=1813" defer></script>
-    <script src="/assets/js/i18n.js?v=1400" defer></script>
+    <script src="/assets/js/i18n.js?v=1401" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {

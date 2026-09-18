@@ -257,6 +257,17 @@
         swiperElement.swiper.update();
       }
     });
+    const hash = window.location.hash;
+    if (hash && hash !== "#") {
+      try {
+        const section = document.querySelector(hash);
+        if (section) {
+          section.scrollIntoView({ behavior: "auto", block: "start" });
+        }
+      } catch (error) {
+        // Invalid hash — ignore.
+      }
+    }
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", aosInit, { once: true });
@@ -874,7 +885,12 @@
     initSwiper();
   }
 
-  const scrollToHash = (hash) => {
+  const isHomePath = (pathname) => {
+    const path = String(pathname || "/").replace(/\/+$/, "") || "/";
+    return path === "/" || path === "/index.html";
+  };
+
+  const scrollToHash = (hash, instant) => {
     if (!hash || hash === "#") return false;
     let section = null;
     try {
@@ -889,8 +905,9 @@
     document.querySelectorAll("#testimonials [data-aos], #contact [data-aos]").forEach((el) => {
       el.classList.add("aos-init", "aos-animate");
     });
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     section.scrollIntoView({
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      behavior: instant || reduceMotion ? "auto" : "smooth",
       block: "start",
     });
     return true;
@@ -908,7 +925,7 @@
     const url = new URL(link.href, window.location.href);
     const sameDocument =
       url.pathname.replace(/\/+$/, "") === window.location.pathname.replace(/\/+$/, "") ||
-      (url.pathname === "/" && (window.location.pathname === "/" || window.location.pathname === ""));
+      (isHomePath(url.pathname) && isHomePath(window.location.pathname));
     if (!sameDocument || !url.hash) {
       return;
     }
@@ -927,7 +944,12 @@
 
   window.addEventListener("load", function () {
     if (window.location.hash) {
-      scrollToHash(window.location.hash);
+      scrollToHash(window.location.hash, true);
+    }
+  });
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted && window.location.hash) {
+      scrollToHash(window.location.hash, true);
     }
   });
 

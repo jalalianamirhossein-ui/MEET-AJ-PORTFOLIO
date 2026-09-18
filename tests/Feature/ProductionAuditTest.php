@@ -54,7 +54,9 @@ class ProductionAuditTest extends TestCase
         $this->actingAs($admin)->get('/admin/requests')->assertOk()
             ->assertSee('audit-sender@example.com', false)
             ->assertSee('Audit Sender', false)
-            ->assertSee('Need help with network', false);
+            ->assertSee('Need help with network', false)
+            ->assertSee('Communications', false)
+            ->assertSee('Requests', false);
         \Livewire\Livewire::actingAs($admin)
             ->test(\App\Filament\Resources\RequestResource\Pages\ManageRequests::class)
             ->assertOk()
@@ -79,6 +81,8 @@ class ProductionAuditTest extends TestCase
         $this->assertDoesNotMatchRegularExpression('/id="contact"[^>]*hidden/', $html);
         $this->assertStringContainsString('aos.js', $html);
         $this->assertStringContainsString('aos.css', $html);
+        $home = $this->get('/');
+        $this->assertStringContainsString('charset=utf-8', strtolower((string) $home->headers->get('content-type')));
     }
 
     public function test_persian_homepage_attributes_are_not_question_marks(): void
@@ -87,6 +91,8 @@ class ProductionAuditTest extends TestCase
         $this->assertStringContainsString('data-fa="صفحه اصلی"', $html);
         $this->assertStringContainsString('data-fa="تماس با من"', $html);
         $this->assertStringContainsString('data-fa="نظرات"', $html);
+        $this->assertStringContainsString('راه‌حل‌های قابل اعتماد', $html);
+        $this->assertStringContainsString('مانیتورینگ Zabbix', $html);
         $this->assertDoesNotMatchRegularExpression('/data-fa="[?؟]{3,}"/u', $html);
         $this->get('/articles')->assertOk()
             ->assertSee('data-fa="صفحه اصلی"', false)
@@ -108,5 +114,17 @@ class ProductionAuditTest extends TestCase
         $this->assertStringContainsString('data-i18n-lock', $listing);
         $first = Article::query()->orderBy('slug')->first();
         $this->assertStringContainsString($first->title, $listing);
+
+        $article = Article::query()->orderBy('slug')->first();
+        $english = $article->title;
+        $article->forceFill([
+            'title' => 'آموزش تست',
+            'meta_title' => 'آموزش تست',
+        ])->save();
+        app(LegacyArticleImporter::class)->import(false);
+        $article->refresh();
+        $this->assertSame($english, $article->title);
+        $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', $article->title);
+        $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', (string) $article->meta_title);
     }
 }
