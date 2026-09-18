@@ -139,7 +139,7 @@ class ProductionAuditTest extends TestCase
         $this->assertStringNotContainsString('testimonials-slider-fa', $home);
         $this->assertStringNotContainsString('id="testimonials-fa"', $home);
         $this->assertStringContainsString('data-fa="نظرات"', $home);
-        $this->assertStringContainsString('site-modules.css?v=1823', $home);
+        $this->assertStringContainsString('site-modules.css?v=1824', $home);
         $this->assertStringContainsString('main.js?v=1408', $home);
         $this->assertStringContainsString('i18n.js?v=1403', $home);
         $this->assertStringContainsString('rtl.css?v=1404', $home);
