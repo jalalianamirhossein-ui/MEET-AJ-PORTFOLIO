@@ -16,6 +16,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\HtmlString;
 
 class CategoryResource extends Resource
 {
@@ -27,7 +28,7 @@ class CategoryResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
-    protected static string | \BackedEnum | null $navigationIcon = Heroicon::OutlinedTag;
+    protected static string | \BackedEnum | null $navigationIcon = Heroicon::OutlinedSquares2x2;
 
     public static function canViewAny(): bool
     {
@@ -41,7 +42,11 @@ class CategoryResource extends Resource
                 ->description('Used to group articles. Language cannot change after articles are assigned.')
                 ->schema([
                     TextInput::make('name')->required()->maxLength(255),
-                    TextInput::make('slug')->required()->maxLength(180)->regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/'),
+                    TextInput::make('slug')
+                        ->required()
+                        ->maxLength(180)
+                        ->regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/')
+                        ->helperText('Public topic color is derived from this slug: microsoft #2563eb, linux #15803d, mikrotik #c2410c, vmware #6d28d9, others #a16207. It is not stored as a separate column.'),
                     Select::make('language')->options(['en' => 'English', 'fa' => 'فارسی', 'de' => 'Deutsch'])->default('en')->required(),
                     TextInput::make('translation_key')->disabled()->dehydrated(false)->helperText('Assigned automatically. Unique per language.'),
                 ]),
@@ -53,7 +58,19 @@ class CategoryResource extends Resource
         return $table
             ->striped()
             ->columns([
-                TextColumn::make('name')->searchable()->sortable(),
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable()
+                    ->html()
+                    ->formatStateUsing(fn (string $state, Category $record): HtmlString => new HtmlString($record->accentChipHtml($state))),
+                TextColumn::make('accent')
+                    ->label('Accent')
+                    ->state(fn (Category $record): string => $record->accentColor())
+                    ->badge()
+                    ->extraAttributes(fn (Category $record): array => [
+                        'class' => 'meetaj-category-hex',
+                        'style' => '--meetaj-topic: '.$record->accentColor(),
+                    ]),
                 TextColumn::make('slug')->searchable(),
                 TextColumn::make('language')->badge()->sortable(),
                 TextColumn::make('articles_count')->counts('articles')->label('Articles'),
@@ -70,7 +87,7 @@ class CategoryResource extends Resource
             ])
             ->emptyStateHeading('No categories yet')
             ->emptyStateDescription('Create a category before assigning it to an article.')
-            ->emptyStateIcon(Heroicon::OutlinedTag)
+            ->emptyStateIcon(Heroicon::OutlinedSquares2x2)
             ->emptyStateActions([CreateAction::make()]);
     }
 

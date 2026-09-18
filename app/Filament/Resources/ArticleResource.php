@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Models\Article;
+use App\Models\Category;
 use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
@@ -25,6 +26,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\HtmlString;
 use Illuminate\Validation\ValidationException;
 
 class ArticleResource extends Resource
@@ -37,7 +39,7 @@ class ArticleResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static string | \BackedEnum | null $navigationIcon = Heroicon::OutlinedDocumentText;
+    protected static string | \BackedEnum | null $navigationIcon = Heroicon::OutlinedNewspaper;
 
     public static function canViewAny(): bool
     {
@@ -64,7 +66,13 @@ class ArticleResource extends Resource
                     TextInput::make('title')->required()->maxLength(255)->columnSpanFull(),
                     TextInput::make('slug')->required()->maxLength(180)->regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/')->helperText('Lowercase words separated by hyphens.'),
                     Select::make('language')->options(['en' => 'English', 'fa' => 'فارسی', 'de' => 'Deutsch (draft only)'])->default('en')->required()->disabled(fn (?Article $record) => $record !== null)->dehydrated(),
-                    Select::make('category_id')->relationship('category', 'name')->searchable()->preload()->helperText('Category language must match the article language.'),
+                    Select::make('category_id')
+                        ->relationship('category', 'name')
+                        ->searchable()
+                        ->preload()
+                        ->allowHtml()
+                        ->getOptionLabelFromRecordUsing(fn (Category $record): string => $record->accentChipHtml())
+                        ->helperText('Category language must match the article language. The chip uses the public topic accent for that slug.'),
                     Select::make('tags')->relationship('tags', 'name')->multiple()->preload()->searchable()->columnSpanFull(),
                     Textarea::make('excerpt')->rows(3)->columnSpanFull(),
                 ]),
@@ -113,7 +121,18 @@ class ArticleResource extends Resource
             ->columns([
                 TextColumn::make('title')->searchable()->sortable()->wrap()->limit(48),
                 TextColumn::make('language')->badge()->sortable(),
-                TextColumn::make('category.name')->placeholder('—')->toggleable(),
+                TextColumn::make('category.name')
+                    ->label('Category')
+                    ->placeholder('—')
+                    ->html()
+                    ->formatStateUsing(function (?string $state, Article $record): HtmlString {
+                        if (! $record->category) {
+                            return new HtmlString('<span class="text-gray-500">—</span>');
+                        }
+
+                        return new HtmlString($record->category->accentChipHtml($state));
+                    })
+                    ->toggleable(),
                 TextColumn::make('tags.name')->badge()->separator(',')->toggleable(),
                 TextColumn::make('status')->badge()->color(fn (string $state): string => $state === 'published' ? 'success' : 'gray')->sortable(),
                 TextColumn::make('published_at')->dateTime()->sortable()->placeholder('—'),

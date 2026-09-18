@@ -8,6 +8,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\HtmlString;
 
 class RecentArticles extends TableWidget
 {
@@ -20,10 +21,21 @@ class RecentArticles extends TableWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(fn (): Builder => Article::query()->latest('updated_at')->limit(8))
+            ->query(fn (): Builder => Article::query()->with('category')->latest('updated_at')->limit(8))
             ->paginated(false)
             ->columns([
                 TextColumn::make('title')->limit(40)->wrap(),
+                TextColumn::make('category.name')
+                    ->label('Category')
+                    ->placeholder('—')
+                    ->html()
+                    ->formatStateUsing(function (?string $state, Article $record): HtmlString {
+                        if (! $record->category) {
+                            return new HtmlString('—');
+                        }
+
+                        return new HtmlString($record->category->accentChipHtml($state));
+                    }),
                 TextColumn::make('status')->badge()->color(fn (string $state): string => $state === 'published' ? 'success' : 'gray'),
                 TextColumn::make('updated_at')->since()->label('Updated'),
             ])

@@ -37,12 +37,12 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('1.75rem')
             ->favicon(asset('assets/img/favicon.png'))
             ->colors([
-                'primary' => Color::hex('#2563eb'),
+                'primary' => Color::hex('#be123c'),
                 'gray' => Color::Slate,
                 'success' => Color::hex('#16a34a'),
                 'warning' => Color::hex('#d97706'),
-                'danger' => Color::hex('#dc2626'),
-                'info' => Color::hex('#0ea5e9'),
+                'danger' => Color::hex('#7f1d1d'),
+                'info' => Color::hex('#0f766e'),
             ])
             ->sidebarCollapsibleOnDesktop()
             ->collapsibleNavigationGroups()
