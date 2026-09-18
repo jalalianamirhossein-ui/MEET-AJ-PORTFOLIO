@@ -239,7 +239,7 @@
       disabled
     />
     <link href="/assets/css/visual-upgrade.css?v=1710" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1831" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1832" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -707,11 +707,16 @@
           </div>
         </div>
 
-        <div class="container about-domains" data-aos="fade-up">
+        <div class="container about-domains">
           <h3 class="about-domains-title" data-en="Expertise" data-fa="تخصص‌ها">Expertise</h3>
           <div class="about-domain-grid">
-            <section class="about-domain">
-              <h4 data-en="Infrastructure" data-fa="زیرساخت">Infrastructure</h4>
+            <section class="about-domain" data-expertise="infrastructure">
+              <h4>
+                <span class="about-domain-label">
+                  <i class="bi bi-hdd-stack about-domain-icon" aria-hidden="true"></i>
+                  <span data-en="Infrastructure" data-fa="زیرساخت">Infrastructure</span>
+                </span>
+              </h4>
               <ul>
                 <li>Linux</li>
                 <li>Windows Server</li>
@@ -719,8 +724,13 @@
                 <li>KVM</li>
               </ul>
             </section>
-            <section class="about-domain">
-              <h4 data-en="Networking" data-fa="شبکه">Networking</h4>
+            <section class="about-domain" data-expertise="networking">
+              <h4>
+                <span class="about-domain-label">
+                  <i class="bi bi-diagram-3 about-domain-icon" aria-hidden="true"></i>
+                  <span data-en="Networking" data-fa="شبکه">Networking</span>
+                </span>
+              </h4>
               <ul>
                 <li>Cisco</li>
                 <li>MikroTik</li>
@@ -728,8 +738,13 @@
                 <li>VoIP</li>
               </ul>
             </section>
-            <section class="about-domain">
-              <h4 data-en="DevOps" data-fa="دواپس">DevOps</h4>
+            <section class="about-domain" data-expertise="devops">
+              <h4>
+                <span class="about-domain-label">
+                  <i class="bi bi-gear about-domain-icon" aria-hidden="true"></i>
+                  <span data-en="DevOps" data-fa="دواپس">DevOps</span>
+                </span>
+              </h4>
               <ul>
                 <li>Docker</li>
                 <li>CI/CD</li>
@@ -739,8 +754,13 @@
                 <li>Terraform</li>
               </ul>
             </section>
-            <section class="about-domain">
-              <h4 data-en="Monitoring" data-fa="مانیتورینگ">Monitoring</h4>
+            <section class="about-domain" data-expertise="monitoring">
+              <h4>
+                <span class="about-domain-label">
+                  <i class="bi bi-graph-up about-domain-icon" aria-hidden="true"></i>
+                  <span data-en="Monitoring" data-fa="مانیتورینگ">Monitoring</span>
+                </span>
+              </h4>
               <ul>
                 <li>Zabbix</li>
                 <li>Grafana</li>
@@ -748,8 +768,13 @@
                 <li>Redgate</li>
               </ul>
             </section>
-            <section class="about-domain">
-              <h4 data-en="Security" data-fa="امنیت">Security</h4>
+            <section class="about-domain" data-expertise="security">
+              <h4>
+                <span class="about-domain-label">
+                  <i class="bi bi-shield-check about-domain-icon" aria-hidden="true"></i>
+                  <span data-en="Security" data-fa="امنیت">Security</span>
+                </span>
+              </h4>
               <ul>
                 <li data-en="Firewall &amp; security rules" data-fa="قوانین فایروال و امنیت">Firewall &amp; security rules</li>
                 <li>Active Directory</li>
@@ -2280,7 +2305,7 @@
 
     <!-- Main Application JavaScript -->
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
-    <script src="/assets/js/main.js?v=1411" defer></script>
+    <script src="/assets/js/main.js?v=1412" defer></script>
     <script src="/assets/js/service-catalog.js?v=1813" defer></script>
 
     <!-- Internationalization (i18n) Support -->

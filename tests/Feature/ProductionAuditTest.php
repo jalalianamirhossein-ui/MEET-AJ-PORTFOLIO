@@ -94,6 +94,8 @@ class ProductionAuditTest extends TestCase
         $this->assertStringContainsString('راه‌حل‌های قابل اعتماد', $html);
         $this->assertStringContainsString('مانیتورینگ Zabbix', $html);
         $this->assertStringContainsString('متخصص شبکه', $html);
+        $this->assertStringContainsString('data-expertise="infrastructure"', $html);
+        $this->assertStringContainsString('data-expertise="security"', $html);
         $this->assertDoesNotMatchRegularExpression('/data-fa="[?؟]{3,}"/u', $html);
         $this->assertDoesNotMatchRegularExpression('/data-typed-items-fa="[?؟,\s]+"/u', $html);
         $this->get('/articles')->assertOk()
@@ -139,13 +141,13 @@ class ProductionAuditTest extends TestCase
         $this->assertStringNotContainsString('testimonials-slider-fa', $home);
         $this->assertStringNotContainsString('id="testimonials-fa"', $home);
         $this->assertStringContainsString('data-fa="نظرات"', $home);
-        $this->assertStringContainsString('site-modules.css?v=1831', $home);
-        $this->assertStringContainsString('main.js?v=1411', $home);
+        $this->assertStringContainsString('site-modules.css?v=1832', $home);
+        $this->assertStringContainsString('main.js?v=1412', $home);
         $this->assertStringContainsString('i18n.js?v=1403', $home);
         $this->assertStringContainsString('rtl.css?v=1405', $home);
 
         $main = (string) file_get_contents(base_path('assets/js/main.js'));
-        $this->assertStringContainsString('function syncTestimonialsSwipers', $main);
+        $this->assertStringContainsString('function initExpertiseReveal', $main);
         $this->assertStringContainsString('function syncTestimonialsNavIcons', $main);
         $this->assertStringContainsString('meetaj:languagechange', $main);
         $this->assertStringContainsString('config.rtl = isRtl', $main);

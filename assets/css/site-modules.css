@@ -2423,3 +2423,240 @@ html[dir="rtl"] #header.header .navmenu a.active:focus {
     transform: none;
   }
 }
+
+/*--------------------------------------------------------------
+# Homepage Expertise / تخصص‌ها — tinted titles, not heavy cards
+--------------------------------------------------------------*/
+body.index-page .about-domains {
+  --expertise-infrastructure: #15803d;
+  --expertise-networking: #2563eb;
+  --expertise-devops: #6d28d9;
+  --expertise-monitoring: #0f766e;
+  --expertise-security: #c2410c;
+  margin-top: 1.75rem;
+}
+
+body.index-page .about-domains-title {
+  margin: 0 0 1.15rem;
+  font-size: clamp(1.2rem, 1.6vw, 1.4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-text, #1e293b);
+}
+
+body.index-page .about-domain-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1.35rem 1.5rem;
+  align-items: start;
+}
+
+body.index-page .about-domain {
+  --expertise-accent: var(--expertise-networking);
+  --expertise-col: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.index-page .about-domain[data-expertise="infrastructure"] {
+  --expertise-accent: var(--expertise-infrastructure);
+  --expertise-col: 0;
+}
+
+body.index-page .about-domain[data-expertise="networking"] {
+  --expertise-accent: var(--expertise-networking);
+  --expertise-col: 1;
+}
+
+body.index-page .about-domain[data-expertise="devops"] {
+  --expertise-accent: var(--expertise-devops);
+  --expertise-col: 2;
+}
+
+body.index-page .about-domain[data-expertise="monitoring"] {
+  --expertise-accent: var(--expertise-monitoring);
+  --expertise-col: 3;
+}
+
+body.index-page .about-domain[data-expertise="security"] {
+  --expertise-accent: var(--expertise-security);
+  --expertise-col: 4;
+}
+
+body.index-page .about-domain h4 {
+  display: flex;
+  margin: 0 0 0.7rem;
+  padding: 0;
+  border: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.3;
+  color: var(--expertise-accent);
+}
+
+body.index-page .about-domain-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: 100%;
+  min-height: 2rem;
+  padding: 0.28rem 0.72rem 0.28rem 0.48rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--expertise-accent) 12%, #ffffff);
+  box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--expertise-accent) 42%, transparent);
+  color: var(--expertise-accent);
+}
+
+body.index-page .about-domain-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 1.1rem;
+  height: 1.1rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--expertise-accent) 18%, #ffffff);
+  font-size: 0.7rem;
+  line-height: 1;
+  color: var(--expertise-accent);
+}
+
+body.index-page .about-domain ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+body.index-page .about-domain li {
+  --expertise-row: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  margin: 0 0 0.22rem;
+  padding: 0.34rem 0.55rem 0.34rem 0.5rem;
+  border: 0;
+  border-radius: 0.45rem;
+  border-inline-start: 3px solid color-mix(in srgb, var(--expertise-accent) 38%, #ffffff);
+  background: transparent;
+  color: var(--color-text, #1e293b);
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.45;
+  transition:
+    background-color 250ms ease,
+    border-color 250ms ease,
+    color 250ms ease;
+}
+
+body.index-page .about-domain li:last-child {
+  margin-bottom: 0;
+}
+
+body.index-page .about-domain li::before {
+  content: "";
+  display: block;
+  width: 0.34rem;
+  height: 0.34rem;
+  flex: 0 0 0.34rem;
+  margin-top: 0.42em;
+  border-radius: 999px;
+  background: var(--expertise-accent);
+  opacity: 0.78;
+}
+
+body.index-page .about-domain li:nth-child(1) { --expertise-row: 0; }
+body.index-page .about-domain li:nth-child(2) { --expertise-row: 1; }
+body.index-page .about-domain li:nth-child(3) { --expertise-row: 2; }
+body.index-page .about-domain li:nth-child(4) { --expertise-row: 3; }
+body.index-page .about-domain li:nth-child(5) { --expertise-row: 4; }
+body.index-page .about-domain li:nth-child(6) { --expertise-row: 5; }
+
+body.index-page .about-domain li:hover,
+body.index-page .about-domain li:focus-visible {
+  background: color-mix(in srgb, var(--expertise-accent) 9%, #ffffff);
+  border-inline-start-color: var(--expertise-accent);
+}
+
+html[dir="rtl"] body.index-page .about-domains-title,
+html[dir="rtl"] body.index-page .about-domain,
+html[dir="rtl"] body.index-page .about-domain-label,
+html[dir="rtl"] body.index-page .about-domain li {
+  font-family: "Vazirmatn", var(--persian-font, sans-serif);
+  text-align: start;
+}
+
+html[dir="rtl"] body.index-page .about-domain-label {
+  padding: 0.28rem 0.48rem 0.28rem 0.72rem;
+}
+
+html[dir="rtl"] body.index-page .about-domain li {
+  padding: 0.34rem 0.5rem 0.34rem 0.55rem;
+}
+
+@media (max-width: 1199px) {
+  body.index-page .about-domain-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.35rem 1.4rem;
+  }
+}
+
+@media (max-width: 899px) {
+  body.index-page .about-domain-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem 1.15rem;
+  }
+}
+
+@media (max-width: 559px) {
+  body.index-page .about-domain-grid {
+    grid-template-columns: 1fr;
+    gap: 1.05rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body.index-page .about-domains.is-pending .about-domain h4,
+  body.index-page .about-domains.is-pending .about-domain li {
+    opacity: 0;
+    transform: translateY(0.55rem);
+  }
+
+  body.index-page .about-domains.is-inview .about-domain h4,
+  body.index-page .about-domains.is-inview .about-domain li {
+    animation: expertise-rise 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  body.index-page .about-domains.is-inview .about-domain h4 {
+    animation-delay: calc(var(--expertise-col) * 70ms);
+  }
+
+  body.index-page .about-domains.is-inview .about-domain li {
+    animation-delay: calc(var(--expertise-col) * 70ms + 90ms + var(--expertise-row) * 38ms);
+  }
+}
+
+@keyframes expertise-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.55rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.index-page .about-domain h4,
+  body.index-page .about-domain li {
+    opacity: 1;
+    transform: none;
+    animation: none !important;
+    transition: none;
+  }
+}

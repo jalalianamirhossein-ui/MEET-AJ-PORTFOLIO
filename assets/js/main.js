@@ -373,6 +373,41 @@
 
   initSkillMeters();
 
+  function initExpertiseReveal() {
+    const roots = document.querySelectorAll(".about-domains");
+    if (!roots.length) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const reveal = (root) => {
+      root.classList.add("is-inview");
+      root.classList.remove("is-pending");
+    };
+
+    if (reduceMotion.matches || !("IntersectionObserver" in window)) {
+      roots.forEach(reveal);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          reveal(entry.target);
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.18, rootMargin: "0px 0px -8% 0px" },
+    );
+
+    roots.forEach((root) => {
+      root.classList.add("is-pending");
+      observer.observe(root);
+    });
+  }
+
+  initExpertiseReveal();
+
   if (window.GLightbox) {
     // Improve mobile settings for GLightbox
     let config = {
