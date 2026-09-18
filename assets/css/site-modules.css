@@ -2100,3 +2100,305 @@ body.index-page #portfolio .article-filter-panel {
     border-inline-end: 0;
   }
 }
+
+/*--------------------------------------------------------------
+# Shared public sidebar — profile, social, nav (last overlay)
+# Root cause of clipped hover: .header overflow:hidden (desktop)
+# plus .navmenu a overflow:hidden and translateX(4–6px) on hover.
+# overflow-y:auto also forces overflow-x to compute as auto, clipping
+# the leading accent and the trailing edge of the shifted pill.
+--------------------------------------------------------------*/
+#header.header {
+  align-items: stretch;
+}
+
+#header.header .profile-img,
+#header.header .logo-section,
+#header.header .social-links {
+  align-self: center;
+}
+
+#header.header .profile-img {
+  overflow: visible;
+  width: 5.25rem;
+  height: 5.25rem;
+  flex: 0 0 5.25rem;
+  animation: none;
+}
+
+#header.header .profile-img img {
+  width: 5.25rem;
+  height: 5.25rem;
+  object-fit: cover;
+  border-radius: 50%;
+  transform: scale(1);
+  transform-origin: center;
+  transition:
+    transform 300ms ease,
+    box-shadow 300ms ease,
+    border-color 300ms ease;
+}
+
+#header.header .profile-img:hover img,
+#header.header .profile-img:focus-within img {
+  transform: scale(1.04);
+  border-color: color-mix(in srgb, var(--primary, #2563eb) 55%, #ffffff);
+  box-shadow:
+    0 8px 22px rgba(15, 23, 42, 0.12),
+    0 0 0 3px rgba(37, 99, 235, 0.16),
+    0 0 22px rgba(14, 165, 233, 0.32);
+}
+
+#header.header .social-links a.google-plus,
+#header.header .social-links a[aria-label="Phone"],
+#header.header .social-links a[href^="tel:"] {
+  display: none !important;
+}
+
+#header.header .social-links,
+#header.header .social-links .social-row {
+  gap: 0.4rem;
+}
+
+#header.header .social-links a,
+body .header .social-links a,
+#header.header .social-links a:hover,
+body .header .social-links a:hover,
+body .header .social-links a:hover.twitter,
+body .header .social-links a:hover.facebook,
+body .header .social-links a:hover.instagram,
+body .header .social-links a:hover.google-plus,
+body .header .social-links a:hover.whatsapp,
+body .header .social-links a.twitter:hover,
+body .header .social-links a.facebook:hover,
+body .header .social-links a.instagram:hover,
+body .header .social-links a.google-plus:hover,
+body .header .social-links a.whatsapp:hover {
+  overflow: visible;
+  transform: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+#header.header .social-links a {
+  color: #475569;
+  background: #f8fafc;
+  background-image: none;
+  border: 1px solid #e2e8f0;
+  box-shadow: none;
+  transition:
+    color 250ms ease,
+    background 250ms ease,
+    background-image 250ms ease,
+    border-color 250ms ease,
+    box-shadow 250ms ease;
+}
+
+#header.header .social-links a:hover,
+#header.header .social-links a:focus-visible {
+  transform: none;
+}
+
+#header.header .social-links a.whatsapp:hover,
+#header.header .social-links a.whatsapp:focus-visible {
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.12);
+  border-color: rgba(22, 163, 74, 0.38);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.12);
+}
+
+#header.header .social-links a.instagram:hover,
+#header.header .social-links a.instagram:focus-visible {
+  color: #e1306c;
+  background:
+    linear-gradient(135deg, rgba(253, 29, 29, 0.12), rgba(225, 48, 108, 0.14) 52%, rgba(252, 175, 69, 0.12));
+  border-color: rgba(225, 48, 108, 0.42);
+  box-shadow: 0 0 0 3px rgba(225, 48, 108, 0.12);
+}
+
+#header.header .social-links a.twitter:hover,
+#header.header .social-links a.twitter:focus-visible {
+  color: #0f172a;
+  background: rgba(15, 23, 42, 0.08);
+  border-color: rgba(15, 23, 42, 0.28);
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+}
+
+#header.header .social-links a.linkedin:hover,
+#header.header .social-links a.linkedin:focus-visible {
+  color: #0a66c2;
+  background: rgba(10, 102, 194, 0.12);
+  border-color: rgba(10, 102, 194, 0.38);
+  box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.12);
+}
+
+#header.header .social-links a.github:hover,
+#header.header .social-links a.github:focus-visible {
+  color: #24292f;
+  background: rgba(36, 41, 47, 0.1);
+  border-color: rgba(36, 41, 47, 0.32);
+  box-shadow: 0 0 0 3px rgba(36, 41, 47, 0.1);
+}
+
+#header.header .social-links a.telegram:hover,
+#header.header .social-links a.telegram:focus-visible {
+  color: #229ed9;
+  background: rgba(34, 158, 217, 0.12);
+  border-color: rgba(34, 158, 217, 0.38);
+  box-shadow: 0 0 0 3px rgba(34, 158, 217, 0.12);
+}
+
+#header.header .social-links a.facebook:hover,
+#header.header .social-links a.facebook:focus-visible {
+  color: #1877f2;
+  background: rgba(24, 119, 242, 0.12);
+  border-color: rgba(24, 119, 242, 0.38);
+  box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.12);
+}
+
+#header.header .social-links a.stackoverflow:hover,
+#header.header .social-links a.stackoverflow:focus-visible {
+  color: #f48024;
+  background: rgba(244, 128, 36, 0.12);
+  border-color: rgba(244, 128, 36, 0.4);
+  box-shadow: 0 0 0 3px rgba(244, 128, 36, 0.12);
+}
+
+#header.header .navmenu,
+#header.header .navmenu ul,
+#header.header .navmenu li,
+#header.header .navmenu a,
+#header.header .navmenu a:hover,
+#header.header .navmenu a.active,
+#header.header .navmenu a:focus {
+  overflow: visible !important;
+}
+
+#header.header .navmenu {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0.2rem 0.85rem 0.9rem;
+  align-self: stretch;
+}
+
+#header.header .navmenu ul {
+  width: 100%;
+}
+
+#header.header .navmenu a,
+#header.header .navmenu a:focus {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  transform: none !important;
+  border-radius: 0.7rem;
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  transition:
+    background-color 280ms ease,
+    color 280ms ease,
+    border-color 280ms ease,
+    box-shadow 280ms ease;
+}
+
+#header.header .navmenu a .navicon,
+#header.header .navmenu a span {
+  transition: color 280ms ease;
+}
+
+#header.header .navmenu a .navicon {
+  margin-inline-end: 0.65rem;
+  margin-inline-start: 0;
+}
+
+#header.header .navmenu a::before,
+#header.header .navmenu a::after,
+#header.header .navmenu a:hover::before,
+#header.header .navmenu a.active::before {
+  display: none !important;
+  content: none !important;
+}
+
+html[dir="ltr"] #header.header .navmenu a:hover,
+html[dir="ltr"] #header.header .navmenu a:focus-visible {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.2);
+  color: var(--primary, #2563eb);
+  box-shadow: inset 3px 0 0 var(--primary, #2563eb);
+  transform: none !important;
+}
+
+html[dir="rtl"] #header.header .navmenu a:hover,
+html[dir="rtl"] #header.header .navmenu a:focus-visible {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.2);
+  color: var(--primary, #2563eb);
+  box-shadow: inset -3px 0 0 var(--primary, #2563eb);
+  transform: none !important;
+}
+
+html[dir="ltr"] #header.header .navmenu a.active,
+html[dir="ltr"] #header.header .navmenu a.active:focus {
+  background: rgba(37, 99, 235, 0.16);
+  border-color: rgba(37, 99, 235, 0.38);
+  color: var(--primary, #2563eb);
+  box-shadow: inset 3px 0 0 var(--primary, #2563eb);
+  font-weight: 700;
+  transform: none !important;
+}
+
+html[dir="rtl"] #header.header .navmenu a.active,
+html[dir="rtl"] #header.header .navmenu a.active:focus {
+  background: rgba(37, 99, 235, 0.16);
+  border-color: rgba(37, 99, 235, 0.38);
+  color: var(--primary, #2563eb);
+  box-shadow: inset -3px 0 0 var(--primary, #2563eb);
+  font-weight: 700;
+  transform: none !important;
+}
+
+#header.header .navmenu a:hover .navicon,
+#header.header .navmenu a:hover span,
+#header.header .navmenu a.active .navicon,
+#header.header .navmenu a.active span,
+#header.header .navmenu a:focus-visible .navicon,
+#header.header .navmenu a:focus-visible span {
+  color: var(--primary, #2563eb);
+}
+
+@media (min-width: 1200px) {
+  html[dir="ltr"] #header.header,
+  html[dir="rtl"] #header.header,
+  .header {
+    overflow: visible !important;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  #header.header .navmenu {
+    padding-inline: 0.35rem;
+  }
+
+  #header.header .social-links a {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.16);
+    color: #e2e8f0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #header.header .profile-img img,
+  #header.header .social-links a,
+  #header.header .navmenu a,
+  #header.header .navmenu a .navicon,
+  #header.header .navmenu a span {
+    transition: none !important;
+  }
+
+  #header.header .profile-img:hover img,
+  #header.header .profile-img:focus-within img {
+    transform: none;
+  }
+}

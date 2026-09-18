@@ -2,7 +2,7 @@
 
 **Authority:** SINGLE authoritative current-state document. Everything else in `docs/current/` expands one section of this file.
 **Date verified:** 2026-09-18
-**Verification method:** `php artisan about`, `php artisan optimize:clear`, `php artisan route:list`, `php artisan test` (55 tests / 1064+ assertions / 1 skipped), `php artisan site:compare-content` (Failures: 0), live `POST /forms/contact.php` against SQLite, Cursor browser first-load + FA + Contact hash + viewports 1920/1440/1024/768/390, authenticated Admin/Editor Filament White/Red QA, and reading `app/`, `routes/`, `resources/`, `assets/`, `tests/`.
+**Verification method:** `php artisan about`, `php artisan optimize:clear`, `php artisan route:list`, `php artisan test` (55 tests / 1067 assertions / 1 skipped), `php artisan site:compare-content` (Failures: 0), live `POST /forms/contact.php` against SQLite, Cursor browser first-load + FA + Contact hash + viewports 1920/1440/1024/768/390, authenticated Admin/Editor Filament White/Red QA, and reading `app/`, `routes/`, `resources/`, `assets/`, `tests/`.
 **Runtime used:** `.runtime/php84/php.exe` (PHP is not on PATH on this workstation).
 
 Status vocabulary used in every document: **PASS** | **FAIL** | **BLOCKED** | **NOT TESTED**.
@@ -134,7 +134,7 @@ CSRF (including the legacy `csrf_token` field contract), honeypot, two-layer rat
 
 | Command | Result (2026-09-18) | Status |
 |---------|---------------------|--------|
-| `php artisan test` | **55 tests, 1064 assertions, 1 skipped, 0 failures** (re-run after White/Red CSS publish) | PASS |
+| `php artisan test` | **55 tests, 1067 assertions, 1 skipped, 0 failures** | PASS |
 | `php artisan site:compare-content` | **Failures: 0** | PASS |
 | Live `POST /forms/contact.php` | HTTP 200 `OK`; SQLite row id 5 | PASS |
 | Cursor browser first-load + FA + Contact hash + 1920/1440/1024/768/390 | Testimonials + Contact visible; no horizontal overflow; English article titles in FA UI | PASS |

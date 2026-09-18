@@ -16,7 +16,7 @@ This is **not** a claim that every Filament form control was submitted. Authenti
 Meet AJ remains Laravel 13 + PHP 8.4 + Filament 5 + Livewire 4 + Blade. This audit repaired the Contact → Requests inbox, Homepage first-load visibility, Persian encoding, the language switcher, English article titles, and Filament CSS cascade.
 
 `php artisan site:compare-content` → **Failures: 0**.  
-`php artisan test` → **55 tests, 1064 assertions, 1 skipped (`MysqlSchemaTest`), 0 failures** after the White/Red admin pass (includes `AdminThemeTest`).  
+`php artisan test` → **55 tests, 1067 assertions, 1 skipped (`MysqlSchemaTest`), 0 failures** after the White/Red admin pass (includes `AdminThemeTest`).  
 Live contact POST → SQLite `requests.id = 5`, HTTP 200 `OK`.
 
 ## Acceptance matrix

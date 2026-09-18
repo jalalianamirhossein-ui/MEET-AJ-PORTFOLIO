@@ -99,7 +99,7 @@ class LegacySitePublisher
     <link href="/assets/css/lang-toggle.css?v=1401" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1404" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1707" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1822" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1823" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">
 BLADE;

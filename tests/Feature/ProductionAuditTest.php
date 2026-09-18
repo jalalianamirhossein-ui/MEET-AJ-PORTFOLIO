@@ -139,7 +139,7 @@ class ProductionAuditTest extends TestCase
         $this->assertStringNotContainsString('testimonials-slider-fa', $home);
         $this->assertStringNotContainsString('id="testimonials-fa"', $home);
         $this->assertStringContainsString('data-fa="نظرات"', $home);
-        $this->assertStringContainsString('site-modules.css?v=1822', $home);
+        $this->assertStringContainsString('site-modules.css?v=1823', $home);
         $this->assertStringContainsString('main.js?v=1408', $home);
         $this->assertStringContainsString('i18n.js?v=1403', $home);
         $this->assertStringContainsString('rtl.css?v=1404', $home);
@@ -164,5 +164,30 @@ class ProductionAuditTest extends TestCase
         $this->assertStringContainsString('.testimonials-slider:not(.swiper-rtl) .swiper-wrapper', $modules);
         $this->assertStringContainsString('direction: ltr !important', $modules);
         $this->assertStringContainsString('.testimonials.is-empty', $modules);
+    }
+
+    public function test_public_sidebar_chrome_has_no_phone_and_platform_social_hover(): void
+    {
+        $home = $this->get('/')->assertOk()->getContent();
+        $this->assertStringContainsString('partials.site-sidebar-chrome', file_get_contents(base_path('resources/views/home.blade.php')) ?: '');
+        $this->assertStringNotContainsString('class="google-plus"', $home);
+        $this->assertStringNotContainsString('aria-label="Phone"', $home);
+        $this->assertSame(1, preg_match('/<header id="header"[\s\S]*?<\/header>/', $home, $header));
+        $this->assertStringNotContainsString('href="tel:', $header[0]);
+
+        $articles = $this->get('/articles')->assertOk()->getContent();
+        $this->assertStringNotContainsString('class="google-plus"', $articles);
+        $this->assertStringNotContainsString('aria-label="Phone"', $articles);
+
+        $modules = (string) file_get_contents(base_path('assets/css/site-modules.css'));
+        $this->assertStringContainsString('a.whatsapp:hover', $modules);
+        $this->assertStringContainsString('#16a34a', $modules);
+        $this->assertStringContainsString('#e1306c', $modules);
+        $this->assertStringContainsString('#0a66c2', $modules);
+        $this->assertStringContainsString('#229ed9', $modules);
+        $this->assertStringContainsString('#1877f2', $modules);
+        $this->assertStringContainsString('#f48024', $modules);
+        $this->assertStringContainsString('inset 3px 0 0', $modules);
+        $this->assertStringContainsString('inset -3px 0 0', $modules);
     }
 }
