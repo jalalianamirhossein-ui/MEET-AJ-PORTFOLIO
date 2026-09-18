@@ -16,6 +16,7 @@ use Filament\PanelProvider;
 use Filament\Support\Assets\Css;
 use Filament\Support\Colors\Color;
 use Filament\Support\Icons\Heroicon;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -65,6 +66,10 @@ class AdminPanelProvider extends PanelProvider
             ->assets([
                 Css::make('meet-aj-admin', resource_path('css/filament-admin.css')),
             ])
+            ->renderHook(
+                PanelsRenderHook::STYLES_AFTER,
+                fn (): string => '<link rel="stylesheet" href="'.e(asset('css/app/meet-aj-admin.css')).'" data-meetaj="admin-contrast-late">',
+            )
             ->authGuard('web')
             ->middleware([
                 EncryptCookies::class,

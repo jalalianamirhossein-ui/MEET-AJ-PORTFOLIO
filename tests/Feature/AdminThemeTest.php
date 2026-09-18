@@ -28,8 +28,9 @@ class AdminThemeTest extends TestCase
         $css = (string) file_get_contents(resource_path('css/filament-admin.css'));
         $this->assertStringContainsString('--color-primary: #be123c', $css);
         $this->assertStringContainsString('--primary-400: #be123c !important', $css);
-        $this->assertStringContainsString('.fi-fo-field-label-content', $css);
-        $this->assertStringContainsString('.fi-sidebar-item-label', $css);
+        $this->assertStringContainsString('html.dark .fi-fo-field-label-content', $css);
+        $this->assertStringContainsString('html.fi .fi-sidebar-item-label', $css);
+        $this->assertStringContainsString('html.fi .fi-checkbox-label', $css);
         $this->assertStringContainsString('color: #1e293b !important', $css);
         $this->assertStringContainsString('.fi-btn.fi-color-primary.fi-bg-color-400', $css);
         $this->assertStringContainsString('--color-danger: #7f1d1d', $css);
@@ -85,6 +86,7 @@ class AdminThemeTest extends TestCase
         $html = $this->get('/admin/login')->assertOk()->getContent();
         $this->assertStringContainsString('Meet AJ CMS', $html);
         $this->assertStringContainsString('/css/app/meet-aj-admin.css', $html);
+        $this->assertStringContainsString('data-meetaj="admin-contrast-late"', $html);
         $this->assertStringContainsString('--primary-500:oklch(0.68270588235294 0.17009090909091 16.935)', $html);
 
         $published = public_path('css/app/meet-aj-admin.css');
@@ -92,7 +94,8 @@ class AdminThemeTest extends TestCase
         $served = (string) file_get_contents($published);
         $this->assertStringContainsString('--color-primary: #be123c', $served);
         $this->assertStringContainsString('--primary-400: #be123c !important', $served);
-        $this->assertStringContainsString('.fi-fo-field-label-content', $served);
+        $this->assertStringContainsString('html.dark .fi-fo-field-label-content', $served);
+        $this->assertStringContainsString('html.fi .fi-checkbox-label', $served);
         $this->assertStringContainsString('.meetaj-category-chip', $served);
     }
 }

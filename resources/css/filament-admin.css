@@ -50,9 +50,55 @@ html {
 }
 
 html.dark,
-.dark,
-.fi.dark {
-  color-scheme: light;
+html.fi.dark,
+.dark {
+  color-scheme: light !important;
+}
+
+/* Contrast lock (Filament 5.8). filament/app.css loads after this file and
+   paints dark-variant white/gray-200 type onto our forced white surfaces.
+   Do not put CSS examples inside comments: a "*" can close the comment early.
+   Selectors use html.fi / html.dark so they beat Filament dark variants without
+   globally overriding Tailwind utilities. White is a SURFACE. Red is an ACCENT. */
+html.fi .fi-simple-header-heading,
+html.dark .fi-simple-header-heading,
+html.fi .fi-header-heading,
+html.dark .fi-header-heading {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+}
+
+html.fi .fi-fo-field-label,
+html.fi .fi-fo-field-label-content,
+html.fi .fi-fo-field-wrp-label,
+html.dark .fi-fo-field-label,
+html.dark .fi-fo-field-label-content,
+html.dark .fi-fo-field-wrp-label,
+html.fi.dark .fi-fo-field-label-content,
+html.fi .fi-simple-page .fi-fo-field-label-content,
+html.fi .fi-fo-field .fi-fo-field-label-content,
+html.dark .fi-fo-field .fi-fo-field-label-content {
+  color: #1e293b !important;
+  -webkit-text-fill-color: #1e293b !important;
+}
+
+html.fi .fi-checkbox-label,
+html.fi .fi-fo-checkbox-label,
+html.fi .fi-fo-checkbox .fi-checkbox-label,
+html.dark .fi-checkbox-label,
+html.dark .fi-fo-checkbox-label,
+html.fi.dark .fi-checkbox-label,
+html.fi .fi-simple-page .fi-checkbox-label {
+  color: #1e293b !important;
+  -webkit-text-fill-color: #1e293b !important;
+}
+
+html.fi .fi-sidebar-item-label,
+html.dark .fi-sidebar-item-label,
+html.fi.dark .fi-sidebar-item-label,
+html.fi .fi-sidebar-nav .fi-sidebar-item-label {
+  color: #1e293b !important;
+  -webkit-text-fill-color: #1e293b !important;
 }
 
 .fi-body {
@@ -159,7 +205,7 @@ html.dark,
   background: var(--color-primary-soft) !important;
   color: var(--color-primary-hover) !important;
   box-shadow: inset 3px 0 0 var(--color-primary);
-  font-weight: 650;
+  font-weight: 600;
 }
 
 .fi-sidebar-item-active > a .fi-sidebar-item-icon,
@@ -194,6 +240,7 @@ html.dark,
   min-width: 1.35rem;
   justify-content: center;
   color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
   background: var(--color-danger) !important;
   background-color: var(--color-danger) !important;
   box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px color-mix(in srgb, var(--color-danger) 28%, #fff);
@@ -396,7 +443,7 @@ html.dark,
 .fi-fo-field-label,
 .fi-fo-field-label-content {
   font-size: 0.8rem;
-  font-weight: 650;
+  font-weight: 600;
   color: #1e293b;
 }
 
@@ -417,7 +464,7 @@ html.dark,
 .fi-btn {
   min-height: 2.4rem;
   border-radius: 0.7rem;
-  font-weight: 650;
+  font-weight: 600;
 }
 
 .fi-btn-color-primary,
@@ -434,6 +481,7 @@ html.dark,
   background: var(--color-primary) !important;
   background-color: var(--color-primary) !important;
   color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
 
 .fi-btn-color-primary:hover,
@@ -444,12 +492,14 @@ html.dark,
   background: var(--color-primary-hover) !important;
   background-color: var(--color-primary-hover) !important;
   color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
   filter: none;
 }
 
 .fi-btn.fi-color-primary.fi-text-color-950,
 .fi-ac-btn-action.fi-color-primary.fi-text-color-950 {
   color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
 
 .fi-btn-color-danger,
@@ -460,6 +510,7 @@ html.dark,
   background: var(--color-danger) !important;
   background-color: var(--color-danger) !important;
   color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
 }
 
@@ -469,7 +520,7 @@ html.dark,
 
 .fi-badge {
   border-radius: 999px;
-  font-weight: 650;
+  font-weight: 600;
 }
 
 .fi-modal-window,
@@ -489,7 +540,7 @@ html.dark,
 .fi-ta-row.meetaj-request-new,
 tr.meetaj-request-new {
   background: var(--color-primary-soft);
-  font-weight: 650;
+  font-weight: 600;
 }
 
 .meetaj-category-chip,
@@ -507,7 +558,7 @@ a .meetaj-category-chip {
   background: color-mix(in srgb, var(--meetaj-topic, var(--color-primary)) 18%, #ffffff);
   color: #0f172a !important;
   font-size: 0.78rem;
-  font-weight: 650;
+  font-weight: 600;
   line-height: 1.2;
   text-decoration: none;
 }
@@ -603,161 +654,147 @@ a .meetaj-category-chip {
   }
 }
 
-/*--------------------------------------------------------------
-  Contrast lock for White/Red admin (Filament 5.8)
-
-  Root cause: filament/app.css loads AFTER this file and paints dark-variant
-  type onto our forced white surfaces:
-
-  .fi-fo-field .fi-fo-field-label-content:where(.dark,.dark *) {
-    color: var(--color-white);
-  }
-  .fi-sidebar-item-label:where(.dark,.dark *) {
-    color: var(--gray-200);
-  }
-
-  The previous wrapper selector .fi-fo-field-wrp-label does not exist on
-  Filament 5.8 login/forms (live class is .fi-fo-field-label-content), so
-  only the red required mark stayed visible.
-
-  White is a SURFACE. Crimson is an ACCENT. Normal type is slate.
-  These selectors are scoped to Filament components, not Tailwind utilities.
---------------------------------------------------------------*/
-.fi,
-.fi-simple-layout,
-.fi-layout,
-.fi-simple-page,
-.fi-main,
-.fi-sidebar,
-.fi-modal-window,
-.fi-dropdown-panel {
+html.fi,
+html.fi .fi-simple-layout,
+html.fi .fi-layout,
+html.fi .fi-simple-page,
+html.fi .fi-main,
+html.fi .fi-sidebar,
+html.fi .fi-modal-window,
+html.fi .fi-dropdown-panel,
+html.dark .fi-simple-layout,
+html.dark .fi-layout {
   color: #1e293b;
 }
 
-.fi .fi-fo-field-label,
-.fi .fi-fo-field-label-content,
-.fi .fi-fo-field-wrp-label,
-.fi-simple-layout .fi-fo-field-label,
-.fi-simple-layout .fi-fo-field-label-content,
-.fi-simple-page .fi-fo-field-label,
-.fi-simple-page .fi-fo-field-label-content,
-.fi-fo-field .fi-fo-field-label-content,
-.fi-fo-field .fi-fo-field-label-content:where(.dark, .dark *) {
-  color: #1e293b !important;
-  -webkit-text-fill-color: #1e293b !important;
-}
-
-.fi .fi-fo-field-label-required-mark,
-.fi-fo-field .fi-fo-field-label-content .fi-fo-field-label-required-mark {
+html.fi .fi-fo-field-label-required-mark,
+html.dark .fi-fo-field-label-required-mark,
+html.fi .fi-fo-field-label-content .fi-fo-field-label-required-mark {
   color: #be123c !important;
   -webkit-text-fill-color: #be123c !important;
 }
 
-.fi .fi-fo-field-wrp-helper-text,
-.fi .fi-fo-field-hint,
-.fi .fi-fo-field-wrp-hint,
-.fi .fi-header-subheading,
-.fi .fi-ta-empty-state,
-.fi .fi-ta-empty-state-heading,
-.fi .fi-ta-empty-state-description,
-.fi .fi-pagination,
-.fi .fi-global-search-field,
-.fi .fi-sidebar-group-label,
-.fi .fi-sidebar-group-btn {
+html.fi .fi-fo-field-wrp-helper-text,
+html.fi .fi-fo-field-hint,
+html.fi .fi-fo-field-wrp-hint,
+html.fi .fi-header-subheading,
+html.fi .fi-ta-empty-state,
+html.fi .fi-ta-empty-state-heading,
+html.fi .fi-ta-empty-state-description,
+html.fi .fi-pagination,
+html.fi .fi-global-search-field,
+html.fi .fi-sidebar-group-label,
+html.fi .fi-sidebar-group-btn,
+html.dark .fi-sidebar-group-label,
+html.dark .fi-header-subheading,
+html.dark .fi-ta-empty-state-description {
   color: #475569 !important;
+  -webkit-text-fill-color: #475569 !important;
 }
 
-.fi .fi-fo-field-wrp-error-message,
-.fi .fi-fo-field-wrp-error-list,
-.fi [data-validation-error] {
+html.fi .fi-fo-field-wrp-error-message,
+html.fi .fi-fo-field-wrp-error-list,
+html.fi [data-validation-error],
+html.dark .fi-fo-field-wrp-error-message {
   color: #7f1d1d !important;
+  -webkit-text-fill-color: #7f1d1d !important;
 }
 
-.fi .fi-input,
-.fi .fi-select-input,
-.fi .fi-textarea,
-.fi .fi-input input,
-.fi input.fi-input,
-.fi select,
-.fi textarea {
+html.fi .fi-input,
+html.fi .fi-select-input,
+html.fi .fi-textarea,
+html.fi .fi-input input,
+html.fi input.fi-input,
+html.fi select,
+html.fi textarea,
+html.dark .fi-input,
+html.dark input.fi-input {
   color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
   background-color: #ffffff !important;
 }
 
-.fi .fi-input::placeholder,
-.fi .fi-select-input::placeholder,
-.fi .fi-textarea::placeholder,
-.fi input.fi-input::placeholder,
-.fi textarea::placeholder {
+html.fi .fi-input::placeholder,
+html.fi .fi-select-input::placeholder,
+html.fi .fi-textarea::placeholder,
+html.fi input.fi-input::placeholder,
+html.fi textarea::placeholder,
+html.dark .fi-input::placeholder,
+html.dark input.fi-input::placeholder {
   color: #64748b !important;
+  -webkit-text-fill-color: #64748b !important;
   opacity: 1;
 }
 
-.fi .fi-sidebar-item-label,
-.fi-sidebar-item-label,
-.fi-sidebar-item-label:where(.dark, .dark *) {
-  color: #1e293b !important;
-}
-
-.fi .fi-sidebar-item-icon,
-.fi .fi-sidebar-item .fi-icon,
-.fi .fi-sidebar-item svg {
+html.fi .fi-sidebar-item-icon,
+html.fi .fi-sidebar-item .fi-icon,
+html.fi .fi-sidebar-item svg,
+html.dark .fi-sidebar-item-icon,
+html.dark .fi-sidebar-item svg {
   color: #475569 !important;
 }
 
-.fi .fi-sidebar-item-btn:hover .fi-sidebar-item-label,
-.fi .fi-sidebar-item a:hover .fi-sidebar-item-label {
+html.fi .fi-sidebar-item-btn:hover .fi-sidebar-item-label,
+html.fi .fi-sidebar-item a:hover .fi-sidebar-item-label,
+html.dark .fi-sidebar-item-btn:hover .fi-sidebar-item-label {
   color: #9f1239 !important;
+  -webkit-text-fill-color: #9f1239 !important;
 }
 
-.fi .fi-sidebar-item-btn:hover .fi-icon,
-.fi .fi-sidebar-item-btn:hover svg,
-.fi .fi-sidebar-item a:hover svg {
+html.fi .fi-sidebar-item-btn:hover .fi-icon,
+html.fi .fi-sidebar-item-btn:hover svg,
+html.fi .fi-sidebar-item a:hover svg {
   color: #be123c !important;
 }
 
-.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-label,
-.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label,
-.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label:where(.dark, .dark *),
-.fi .fi-sidebar-item-active .fi-sidebar-item-label {
+html.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-label,
+html.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label,
+html.dark .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label,
+html.fi .fi-sidebar-item-active .fi-sidebar-item-label {
   color: #9f1239 !important;
+  -webkit-text-fill-color: #9f1239 !important;
 }
 
-.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-icon,
-.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn svg {
+html.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-icon,
+html.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn svg {
   color: #be123c !important;
 }
 
-.fi .fi-ta-header-cell,
-.fi .fi-ta-header-cell-label {
+html.fi .fi-ta-header-cell,
+html.fi .fi-ta-header-cell-label,
+html.dark .fi-ta-header-cell-label {
   color: #475569 !important;
+  -webkit-text-fill-color: #475569 !important;
 }
 
-.fi .fi-ta-cell,
-.fi .fi-ta-text,
-.fi .fi-dropdown-list-item,
-.fi .fi-dropdown-list-item-label,
-.fi .fi-modal-heading,
-.fi .fi-modal-description,
-.fi .fi-modal-content,
-.fi .fi-fo-component-ctn,
-.fi .fi-section-header-heading,
-.fi .fi-section-header-description,
-.fi .fi-wi-widget-heading {
+html.fi .fi-ta-cell,
+html.fi .fi-ta-text,
+html.fi .fi-dropdown-list-item-label,
+html.fi .fi-modal-heading,
+html.fi .fi-modal-description,
+html.fi .fi-section-header-heading,
+html.fi .fi-section-header-description,
+html.fi .fi-wi-widget-heading,
+html.dark .fi-ta-text,
+html.dark .fi-modal-heading,
+html.dark .fi-dropdown-list-item-label {
   color: #1e293b !important;
 }
 
-.fi .fi-pagination-overview,
-.fi .fi-pagination-records-per-page-select,
-.fi .fi-ta-search-field input,
-.fi .fi-global-search-field input {
+html.fi .fi-pagination-overview,
+html.fi .fi-pagination-records-per-page-select,
+html.fi .fi-ta-search-field input,
+html.fi .fi-global-search-field input,
+html.dark .fi-ta-search-field input {
   color: #1e293b !important;
+  -webkit-text-fill-color: #1e293b !important;
 }
 
-.fi .fi-disabled,
-.fi [disabled],
-.fi .fi-input:disabled,
-.fi input:disabled {
+html.fi .fi-disabled,
+html.fi [disabled],
+html.fi .fi-input:disabled,
+html.fi input:disabled {
   color: #64748b !important;
+  -webkit-text-fill-color: #64748b !important;
   opacity: 0.72;
 }
