@@ -41,6 +41,10 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::hex('#2563eb'),
                 'gray' => Color::Slate,
+                'success' => Color::hex('#16a34a'),
+                'warning' => Color::hex('#d97706'),
+                'danger' => Color::hex('#dc2626'),
+                'info' => Color::hex('#0ea5e9'),
             ])
             ->sidebarCollapsibleOnDesktop()
             ->collapsibleNavigationGroups()
@@ -63,7 +67,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
-                fn (): HtmlString => new HtmlString('<link rel="stylesheet" href="'.e(asset('css/meet-aj-admin.css')).'?v=2004">')
+                fn (): HtmlString => new HtmlString('<link rel="stylesheet" href="'.e(asset('css/meet-aj-admin.css')).'?v=2006">')
             )
             ->authGuard('web')
             ->middleware([

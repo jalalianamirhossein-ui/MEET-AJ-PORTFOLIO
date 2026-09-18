@@ -17,12 +17,13 @@ class Service extends Model
         'title', 'slug', 'language', 'translation_key', 'short_description', 'description',
         'content', 'features', 'process', 'faq', 'price', 'price_currency', 'price_label',
         'price_type', 'featured_image', 'seo_title', 'seo_description', 'og_title',
-        'og_description', 'presentation', 'sort_order', 'status', 'published_at',
+        'og_description', 'presentation', 'sort_order', 'status', 'show_in_catalog', 'published_at',
     ];
 
     protected $attributes = [
         'language' => 'en',
         'status' => 'draft',
+        'show_in_catalog' => true,
         'sort_order' => 0,
         'price_currency' => 'AED',
         'price_type' => 'fixed',
@@ -36,6 +37,7 @@ class Service extends Model
             'process' => 'array',
             'faq' => 'array',
             'presentation' => 'array',
+            'show_in_catalog' => 'boolean',
             'price' => 'decimal:2',
         ];
     }
@@ -55,7 +57,11 @@ class Service extends Model
 
     public function scopePublicCatalog(Builder $query): Builder
     {
-        return $query->published()->where('language', 'en')->orderBy('sort_order')->orderBy('id');
+        return $query->published()
+            ->where('language', 'en')
+            ->where('show_in_catalog', true)
+            ->orderBy('sort_order')
+            ->orderBy('id');
     }
 
     public function path(): string
@@ -172,6 +178,7 @@ class Service extends Model
                 'price_currency' => ['required', 'string', 'max:8'],
                 'price' => ['nullable', 'numeric', 'min:0', 'required_unless:price_type,custom_quote'],
                 'status' => ['required', Rule::in(['draft', 'published'])],
+                'show_in_catalog' => ['boolean'],
                 'published_at' => ['nullable', 'date', 'required_if:status,published'],
                 'featured_image' => ['nullable', 'string', 'max:2048', 'not_regex:/\.(php|phtml|phar|exe|js)$/i'],
             ])->validate();

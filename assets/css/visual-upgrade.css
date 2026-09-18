@@ -105,11 +105,26 @@
   --topic-microsoft: #2563eb;
   --topic-linux: #15803d;
   --topic-mikrotik: #c2410c;
-  --topic-networking: #c2410c;
-  --topic-vmware: #6d28d9;
-  --topic-security: #be123c;
-  --topic-devops: #0e7490;
+  --topic-networking: #2563eb;
+  --topic-vmware: #4f46e5;
+  --topic-security: #ea580c;
+  --topic-devops: #7c3aed;
   --topic-other: #a16207;
+
+  --color-info: #0ea5e9;
+  --skill-networking: #2563eb;
+  --skill-devops: #7c3aed;
+  --skill-server: #16a34a;
+  --skill-cloud: #0891b2;
+  --skill-security: #ea580c;
+  --skill-database: #d97706;
+  --skill-monitoring: #0f766e;
+  --skill-virtualization: #4f46e5;
+  --resume-experience: var(--skill-networking);
+  --resume-education: var(--skill-devops);
+  --resume-certification: var(--skill-server);
+  --resume-projects: var(--skill-security);
+  --resume-achievements: var(--skill-cloud);
 }
 
 html {
@@ -2436,7 +2451,7 @@ body.index-page .hero .container {
 html .skills .progress-bar,
 html .skills .col-lg-6:first-child .progress-bar,
 html .skills .col-lg-6:last-child .progress-bar {
-  background: var(--color-primary);
+  background: var(--skill-accent, var(--color-primary));
 }
 
 .skills .progress-bar-wrap {
@@ -3460,12 +3475,12 @@ html[dir="rtl"] .service-process-num {
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 999px;
-  background: var(--color-primary);
+  background: var(--resume-accent, var(--color-primary));
 }
 
 html[dir="rtl"] .resume .resume-item::before {
-  inset-inline-start: auto;
-  inset-inline-end: -0.3rem;
+  inset-inline-start: -0.3rem;
+  inset-inline-end: auto;
 }
 
 .skills-domains {
@@ -3520,7 +3535,7 @@ body.index-page .skills .progress-bar-wrap {
   grid-column: 1 / -1;
   height: 8px;
   border-radius: var(--radius-pill);
-  background: var(--color-surface-muted);
+  background: color-mix(in srgb, var(--skill-accent, var(--color-primary)) 16%, var(--color-surface-muted));
   overflow: hidden;
 }
 
@@ -3543,7 +3558,7 @@ body.index-page .skills .progress .skill .val {
   font-variant-numeric: tabular-nums;
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--skill-accent, var(--color-primary));
   background: none;
 }
 

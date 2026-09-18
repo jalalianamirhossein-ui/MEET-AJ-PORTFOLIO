@@ -17,6 +17,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
@@ -68,6 +69,7 @@ class ServiceResource extends Resource
                     Select::make('language')->options(['en' => 'English', 'fa' => 'فارسی', 'de' => 'Deutsch (draft only)'])->default('en')->required()->disabled(fn (?Service $record) => $record !== null)->dehydrated(),
                     TextInput::make('translation_key')->label('Translation key')->helperText('Leave blank to generate. Pairs EN/FA/DE rows of the same service.')->maxLength(36),
                     TextInput::make('sort_order')->numeric()->default(0)->required()->helperText('Homepage order. Lower numbers first.'),
+                    Toggle::make('show_in_catalog')->label('Show on homepage catalog')->default(true)->helperText('Keeps the service page and data even when hidden from the homepage grid.'),
                 ]),
             Section::make('Content')
                 ->icon(Heroicon::OutlinedDocumentText)

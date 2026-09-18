@@ -66,6 +66,10 @@ class LegacyServiceImporter
             $report[] = ['slug' => $meta['slug'], 'status' => 'imported'];
         }
 
+        if (! $dryRun) {
+            app(HomepageServiceCatalog::class)->sync();
+        }
+
         return compact('imported', 'skipped', 'report');
     }
 

@@ -98,8 +98,8 @@ class LegacySitePublisher
     <link href="/assets/css/main.css?v=1000" rel="stylesheet" />
     <link href="/assets/css/lang-toggle.css?v=1301" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1703" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1811" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1705" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1818" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">
 BLADE;
@@ -112,6 +112,7 @@ BLADE;
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
     <script src="/assets/js/main.js?v=1403" defer></script>
+    <script src="/assets/js/service-catalog.js?v=1813" defer></script>
     <script src="/assets/js/i18n.js?v=1301" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
@@ -192,6 +193,7 @@ BLADE;
             @empty
             @endforelse
           </div>
+          @include('partials.service-drawer')
           <!-- End Service Catalog -->
 @verbatim
 BLADE;

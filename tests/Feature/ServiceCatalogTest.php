@@ -21,28 +21,49 @@ class ServiceCatalogTest extends TestCase
         app(LegacyServiceImporter::class)->import(false);
     }
 
-    public function test_six_published_services_are_imported_from_source_html(): void
+    public function test_homepage_catalog_migrates_existing_services_without_deleting_them(): void
     {
-        $this->assertSame(6, Service::query()->count());
-        $this->assertSame(6, Service::query()->publicCatalog()->count());
+        $this->assertSame(13, Service::query()->count());
+        $this->assertSame(12, Service::query()->publicCatalog()->count());
         $this->assertSame([
             'network-design',
+            'mikrotik-routing-multi-wan',
             'system-administration',
-            'devops-automation',
-            'monitoring-security',
             'virtualization-solutions',
-            'technical-consulting',
+            'hp-enterprise-server',
+            'sql-server-high-availability',
+            'jira-implementation',
+            'monitoring-security',
+            'devops-automation',
+            'voip-infrastructure',
+            'cctv-surveillance',
+            'network-security',
         ], Service::query()->publicCatalog()->pluck('slug')->all());
+
+        $consulting = Service::query()->where('slug', 'technical-consulting')->firstOrFail();
+        $this->assertFalse($consulting->show_in_catalog);
+        $this->assertSame('published', $consulting->status);
+        $this->assertNotSame('', (string) $consulting->title);
+        $this->assertNotEmpty(data_get($consulting->presentation, 'legacy_features') ?? $consulting->features);
     }
 
-    public function test_homepage_lists_published_prices_and_hides_drafts(): void
+    public function test_homepage_lists_implementation_cards_and_hides_unpublished_rows(): void
     {
         $home = $this->get('/')->assertOk();
         $home->assertSee('id="service-catalog"', false);
-        $home->assertSee('AED 4,900', false);
-        $home->assertSee('/services/network-design', false);
+        $home->assertSee('id="service-drawer"', false);
+        $home->assertSee('Enterprise Network Design &amp; Implementation', false);
+        $home->assertSee('MikroTik Routing &amp; Multi-WAN', false);
+        $home->assertSee('SQL Server Infrastructure &amp; High Availability', false);
+        $home->assertSee('CCTV &amp; Surveillance Infrastructure', false);
+        $home->assertSee('VoIP Infrastructure', false);
         $home->assertSee('View Details', false);
-        $home->assertSee('Request Service', false);
+        $home->assertSee('Contact Me', false);
+        $home->assertSee('data-fa="مشاهده جزئیات"', false);
+        $home->assertSee('data-fa="تماس با من"', false);
+        $home->assertDontSee('AED 4,900', false);
+        $home->assertDontSee('Request Service', false);
+        $home->assertDontSee('Technical Consulting', false);
 
         $draft = Service::query()->where('slug', 'technical-consulting')->firstOrFail();
         $draft->status = 'draft';
@@ -118,7 +139,7 @@ class ServiceCatalogTest extends TestCase
         $service->save();
 
         $this->get('/services/network-design')->assertOk()->assertSee('Starting from 500 AED', false);
-        $this->get('/')->assertOk()->assertSee('Starting from 500 AED', false);
+        $this->get('/')->assertOk()->assertDontSee('Starting from 500 AED', false);
 
         $this->expectException(ValidationException::class);
         Service::create([

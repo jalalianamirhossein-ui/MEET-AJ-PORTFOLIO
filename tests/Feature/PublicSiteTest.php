@@ -41,12 +41,19 @@ class PublicSiteTest extends TestCase
     public function test_service_pages_redirect_once_and_render(): void
     {
         foreach ([
+            'cctv-surveillance',
             'devops-automation',
+            'hp-enterprise-server',
+            'jira-implementation',
+            'mikrotik-routing-multi-wan',
             'monitoring-security',
             'network-design',
+            'network-security',
+            'sql-server-high-availability',
             'system-administration',
             'technical-consulting',
             'virtualization-solutions',
+            'voip-infrastructure',
         ] as $slug) {
             $legacy = $this->get('/services/'.$slug.'.html');
             $legacy->assertRedirect('/services/'.$slug);
