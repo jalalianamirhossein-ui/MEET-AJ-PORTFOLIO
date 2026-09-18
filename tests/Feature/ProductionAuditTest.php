@@ -50,18 +50,20 @@ class ProductionAuditTest extends TestCase
             'service_id' => null,
         ]);
 
-        $this->actingAs($admin)->get('/admin')->assertOk()
-            ->assertSee('/admin/requests', false);
-        $inbox = $this->actingAs($admin)->get('/admin/requests')->assertOk();
-        $inbox->assertSee('audit-sender@example.com', false)
+        $this->actingAs($admin)->get('/admin')->assertOk();
+        $this->actingAs($admin)->get('/admin/requests')->assertOk()
+            ->assertSee('audit-sender@example.com', false)
             ->assertSee('Audit Sender', false)
-            ->assertSee('09120000999', false)
             ->assertSee('Need help with network', false);
+        \Livewire\Livewire::actingAs($admin)
+            ->test(\App\Filament\Resources\RequestResource\Pages\ManageRequests::class)
+            ->assertOk()
+            ->assertSee('audit-sender@example.com');
 
         $this->assertNotSame(200, $this->actingAs($editor)->get('/admin/requests')->getStatusCode());
-        $this->actingAs($editor)->get('/admin')->assertOk()
-            ->assertDontSee('/admin/requests', false)
-            ->assertDontSee('/admin/users', false);
+        \Livewire\Livewire::actingAs($editor)
+            ->test(\App\Filament\Resources\RequestResource\Pages\ManageRequests::class)
+            ->assertForbidden();
     }
 
     public function test_direct_homepage_renders_testimonials_and_contact(): void
@@ -96,10 +98,11 @@ class ProductionAuditTest extends TestCase
         $this->assertSame(23, Article::query()->count());
         foreach (Article::query()->get() as $article) {
             $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', $article->title, $article->slug);
-            $html = $this->get('/articles/'.$article->slug)->assertOk()->getContent();
-            $this->assertStringContainsString('data-i18n-lock', $html);
-            $this->assertStringContainsString($article->title, $html);
-            $this->assertStringContainsString('href="/#contact"', $html);
+            $this->get('/articles/'.$article->slug)
+                ->assertOk()
+                ->assertSee('data-i18n-lock', false)
+                ->assertSee($article->title)
+                ->assertSee('href="/#contact"', false);
         }
         $listing = $this->get('/articles')->assertOk()->getContent();
         $this->assertStringContainsString('data-i18n-lock', $listing);

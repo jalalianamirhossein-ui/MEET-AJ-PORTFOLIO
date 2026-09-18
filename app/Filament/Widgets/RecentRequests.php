@@ -2,8 +2,7 @@
 
 namespace App\Filament\Widgets;
 
-use App\Filament\Resources\ContactRequestResource;
-use App\Filament\Resources\ServiceRequestResource;
+use App\Filament\Resources\RequestResource;
 use App\Models\Request as ContactRequest;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -45,11 +44,7 @@ class RecentRequests extends TableWidget
                 }),
                 TextColumn::make('created_at')->since()->label('Received'),
             ])
-            ->recordUrl(function (ContactRequest $record): string {
-                return $record->isServiceRequest()
-                    ? ServiceRequestResource::getUrl('view', ['record' => $record])
-                    : ContactRequestResource::getUrl('view', ['record' => $record]);
-            })
+            ->recordUrl(fn (ContactRequest $record): string => RequestResource::getUrl())
             ->emptyStateHeading('No contact requests')
             ->emptyStateDescription('Inbound homepage and service quote forms appear here.');
     }

@@ -222,7 +222,7 @@ class LegacyArticleImporter
                 'content' => $body,
                 'featured_image' => $card['thumbnail'] ?? $heroImage,
                 'category_id' => $category?->id,
-                'meta_title' => $title,
+                'meta_title' => $heroTitle,
                 'meta_description' => $description,
                 'canonical_url' => null,
                 'seo_data' => $seo,

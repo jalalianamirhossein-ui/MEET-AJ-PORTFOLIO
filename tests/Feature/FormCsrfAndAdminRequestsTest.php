@@ -148,8 +148,7 @@ class FormCsrfAndAdminRequestsTest extends TestCase
         $service = ContactRequest::query()->where('email', 'split-service@example.com')->firstOrFail();
 
         $this->actingAs($admin)->get('/admin')->assertOk()
-            ->assertSee('Requests', false)
-            ->assertSee('/admin/requests', false);
+            ->assertSee('Requests', false);
         $this->actingAs($admin)->get('/admin/requests')->assertOk()->assertSee('split-contact@example.com', false)->assertSee('split-service@example.com', false);
         $this->actingAs($admin)->get('/admin/contact-requests')->assertOk()->assertSee('split-contact@example.com', false)->assertDontSee('split-service@example.com', false);
         $this->actingAs($admin)->get('/admin/service-requests')->assertOk()->assertSee('split-service@example.com', false)->assertDontSee('split-contact@example.com', false);

@@ -1,4 +1,6 @@
-/* Meet AJ CMS — compact enterprise overlay. Native Filament chrome; brand tokens only. */
+/* Meet AJ CMS — SINGLE admin stylesheet.
+   Loaded once by AdminPanelProvider via Filament Css::make (resources/css/filament-admin.css).
+   public/css/meet-aj-admin.css is retired and must not be linked. */
 
 :root {
   --color-primary: #2563eb;
@@ -359,6 +361,61 @@
 
   .fi-ta-cell {
     padding-block: 0.5rem;
+  }
+}
+
+.fi-sidebar-item .fi-badge,
+.fi-sidebar-item-badge {
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.fi-main-ctn,
+.fi-page {
+  padding-inline: clamp(0.85rem, 2vw, 1.5rem);
+}
+
+.fi-ta-row.meetaj-request-new,
+tr.meetaj-request-new {
+  background: rgba(14, 165, 233, 0.06);
+  font-weight: 650;
+}
+
+.fi-input:hover,
+.fi-select-input:hover,
+.fi-textarea:hover {
+  border-color: rgba(37, 99, 235, 0.35);
+}
+
+.fi-btn:focus-visible,
+.fi-ac-btn-action:focus-visible,
+.fi-sidebar-item a:focus-visible,
+.fi-sidebar-item button:focus-visible {
+  outline: 2px solid rgba(37, 99, 235, 0.45);
+  outline-offset: 2px;
+}
+
+.fi-dropdown-panel,
+.fi-dropdown-list {
+  border: 1px solid #dce5f1;
+  border-radius: 0.85rem;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+}
+
+@media (max-width: 640px) {
+  .fi-header-heading {
+    font-size: 1.1rem;
+  }
+
+  .fi-wi-stats-overview-stats {
+    gap: 0.65rem;
+  }
+
+  .fi-sidebar-item a,
+  .fi-sidebar-item-button,
+  .fi-btn {
+    min-height: 44px;
   }
 }
 

@@ -11,7 +11,7 @@ class ArticleSeo
         $seo = $article->seo_data ?? [];
         $canonical = $article->canonicalUrl();
         $image = $article->imageUrl();
-        $title = $article->meta_title ?: $article->title;
+        $title = $this->englishHeadline($article, $article->meta_title ?: $article->title);
         $description = $article->meta_description ?: $article->excerpt;
 
         $schema = $seo['schema'] ?? null;
@@ -37,13 +37,13 @@ class ArticleSeo
             'title' => $title,
             'description' => $description,
             'canonical' => $canonical,
-            'og_title' => $seo['og_title'] ?? $title,
+            'og_title' => $this->englishHeadline($article, $seo['og_title'] ?? $title),
             'og_description' => $seo['og_description'] ?? $description,
             'og_url' => $canonical,
             'og_type' => $seo['og_type'] ?? 'article',
             'og_image' => $this->absolute($seo['og_image'] ?? $image),
             'twitter_card' => $seo['twitter_card'] ?? 'summary',
-            'twitter_title' => $seo['twitter_title'] ?? $title,
+            'twitter_title' => $this->englishHeadline($article, $seo['twitter_title'] ?? $title),
             'twitter_description' => $seo['twitter_description'] ?? $description,
             'twitter_image' => isset($seo['twitter_image']) ? $this->absolute($seo['twitter_image']) : null,
             'schema' => $schema,
@@ -93,7 +93,7 @@ class ArticleSeo
         $items[] = [
             '@type' => 'ListItem',
             'position' => $position,
-            'name' => $article->title,
+            'name' => $this->englishHeadline($article, $article->title),
             'item' => $canonical,
         ];
 
@@ -102,6 +102,23 @@ class ArticleSeo
             '@type' => 'BreadcrumbList',
             'itemListElement' => $items,
         ];
+    }
+
+    private function englishHeadline(Article $article, ?string $preferred): string
+    {
+        $candidates = [
+            $preferred,
+            $article->title,
+            data_get($article->presentation, 'hero_title_en'),
+            data_get($article->presentation, 'card_title_en'),
+        ];
+        foreach ($candidates as $candidate) {
+            if (is_string($candidate) && $candidate !== '' && ! preg_match('/\p{Arabic}/u', $candidate)) {
+                return $candidate;
+            }
+        }
+
+        return $article->title;
     }
 
     private function absolute(?string $url): ?string
