@@ -54,8 +54,8 @@
                   <footer>
                     <img src="/assets/img/testimonials/testimonials-1.jpg" loading="lazy" class="testimonial-img" alt="" width="52" height="52" />
                     <cite>
-                      <strong data-en="IT Director" data-fa="مدیر فناوری اطلاعات">IT Director</strong>
-                      <span data-en="Newsha Drinks Co." data-fa="شرکت نوشیدنی نوشا">Newsha Drinks Co.</span>
+                      <strong class="testimonial-role" data-en="IT Director" data-fa="مدیر فناوری اطلاعات">IT Director</strong>
+                      <span class="testimonial-company" data-en="Newsha Drinks Co." data-fa="شرکت نوشیدنی نوشا">Newsha Drinks Co.</span>
                     </cite>
                   </footer>
                 </blockquote>
@@ -71,8 +71,8 @@
                   <footer>
                     <img src="/assets/img/testimonials/testimonials-2.jpg" loading="lazy" class="testimonial-img" alt="" width="52" height="52" />
                     <cite>
-                      <strong data-en="Project Manager" data-fa="مدیر پروژه">Project Manager</strong>
-                      <span data-en="Technology Solutions" data-fa="راهکارهای فناوری">Technology Solutions</span>
+                      <strong class="testimonial-role" data-en="Project Manager" data-fa="مدیر پروژه">Project Manager</strong>
+                      <span class="testimonial-company" data-en="Technology Solutions" data-fa="راهکارهای فناوری">Technology Solutions</span>
                     </cite>
                   </footer>
                 </blockquote>
@@ -88,8 +88,8 @@
                   <footer>
                     <img src="/assets/img/testimonials/testimonials-3.jpg" loading="lazy" class="testimonial-img" alt="" width="52" height="52" />
                     <cite>
-                      <strong data-en="System Administrator" data-fa="مدیر سیستم">System Administrator</strong>
-                      <span data-en="Enterprise Client" data-fa="مشتری سازمانی">Enterprise Client</span>
+                      <strong class="testimonial-role" data-en="System Administrator" data-fa="مدیر سیستم">System Administrator</strong>
+                      <span class="testimonial-company" data-en="Enterprise Client" data-fa="مشتری سازمانی">Enterprise Client</span>
                     </cite>
                   </footer>
                 </blockquote>
@@ -105,8 +105,8 @@
                   <footer>
                     <img src="/assets/img/testimonials/testimonials-4.jpg" loading="lazy" class="testimonial-img" alt="" width="52" height="52" />
                     <cite>
-                      <strong data-en="Network Engineer" data-fa="مهندس شبکه">Network Engineer</strong>
-                      <span data-en="Infrastructure Team" data-fa="تیم زیرساخت">Infrastructure Team</span>
+                      <strong class="testimonial-role" data-en="Network Engineer" data-fa="مهندس شبکه">Network Engineer</strong>
+                      <span class="testimonial-company" data-en="Infrastructure Team" data-fa="تیم زیرساخت">Infrastructure Team</span>
                     </cite>
                   </footer>
                 </blockquote>
@@ -122,8 +122,8 @@
                   <footer>
                     <img src="/assets/img/testimonials/testimonials-5.jpg" loading="lazy" class="testimonial-img" alt="" width="52" height="52" />
                     <cite>
-                      <strong data-en="DevOps Lead" data-fa="سرپرست DevOps">DevOps Lead</strong>
-                      <span data-en="Development Team" data-fa="تیم توسعه">Development Team</span>
+                      <strong class="testimonial-role" data-en="DevOps Lead" data-fa="سرپرست DevOps">DevOps Lead</strong>
+                      <span class="testimonial-company" data-en="Development Team" data-fa="تیم توسعه">Development Team</span>
                     </cite>
                   </footer>
                 </blockquote>

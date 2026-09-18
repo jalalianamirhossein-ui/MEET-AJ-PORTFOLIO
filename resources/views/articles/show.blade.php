@@ -102,8 +102,8 @@
                   </ul>
                 @endif
               </div>
-              <h1 class="article-title hero-title" data-i18n-lock data-en="{{ $article->title }}">{{ $article->title }}</h1>
-              <p class="article-excerpt hero-subtitle" data-en="{{ $article->excerpt }}" data-fa="{{ data_get($article->presentation, 'excerpt_translations.fa', $article->excerpt) }}">{{ $article->excerpt }}</p>
+              <h1 class="article-title hero-title" data-i18n-lock data-en="{{ $article->englishTitle() }}">{{ $article->englishTitle() }}</h1>
+              <p class="article-excerpt hero-subtitle" data-en="{{ $article->englishExcerpt() }}" data-fa="{{ data_get($article->presentation, 'excerpt_translations.fa', $article->englishExcerpt()) }}">{{ $article->englishExcerpt() }}</p>
             </div>
             <figure class="article-hero-media">
               <img class="article-hero-thumbnail" src="{{ $article->galleryUrl() }}" decoding="async" fetchpriority="high" alt="{{ data_get($article->presentation, 'image_alt') ?: $article->title }}" />
@@ -153,10 +153,10 @@
               </h3>
               <p
                 class="brand-title"
-                data-en="IT Infrastructure Specialist"
-                data-fa="متخصص زیرساخت فناوری اطلاعات"
+                data-en="Infrastructure &amp; DevOps Engineer"
+                data-fa="مهندس زیرساخت و DevOps"
               >
-                IT Infrastructure Specialist
+                Infrastructure &amp; DevOps Engineer
               </p>
               <p
                 class="brand-description"
@@ -246,7 +246,7 @@
             <div class="footer-bottom-content">
               <div class="copyright">
                 <p>
-                  © <span>2025</span>
+                  © <span>{{ now()->year }}</span>
                   <strong
                     data-en="AmirHossein Jalalian"
                     data-fa="امیرحسین جلالیان"
@@ -263,7 +263,7 @@
                 <span data-en="Made with" data-fa="ساخته شده با"
                   >Made with</span
                 >
-                <i class="bi bi-heart-fill"></i>
+                <span class="footer-heart-symbol" aria-hidden="true">♥</span>
                 <span data-en="in Iran" data-fa="در ایران">in Iran</span>
               </div>
             </div>

@@ -87,7 +87,7 @@ class LegacySitePublisher
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Articles | Meet AJ</title>
-    <meta name="description" content="Technical articles by AmirHossein Jalalian covering Linux, Microsoft, MikroTik, VMware and infrastructure." />
+    <meta name="description" content="Technical articles by AmirHossein Jalalian covering Linux, Microsoft, MikroTik, VMware, DevOps and infrastructure." />
     <link rel="canonical" href="{{ rtrim(config('app.url'), '/') }}/articles" />
     <meta property="og:title" content="Articles | Meet AJ" />
     <meta property="og:url" content="{{ rtrim(config('app.url'), '/') }}/articles" />

@@ -11,9 +11,9 @@
     $accentStyle = '--topic: '.$accent.'; --article-primary: '.$accent.';';
     $categoryEn = $article->categoryLabelEn();
     $categoryFa = $article->categoryLabelFa();
-    $titleEn = data_get($article->presentation, 'card_title_en') ?: $article->title;
+    $titleEn = $article->englishCardTitle();
     $titleFa = data_get($article->presentation, 'card_title_fa') ?: $article->title;
-    $excerptEn = data_get($article->presentation, 'card_excerpt_en') ?: $article->excerpt;
+    $excerptEn = $article->englishCardExcerpt();
     $excerptFa = data_get($article->presentation, 'card_excerpt_fa') ?: $excerptEn;
     $cardTags = $article->relationLoaded('tags') ? $article->tags->take(3) : collect();
     $variant = $variant ?? 'library';

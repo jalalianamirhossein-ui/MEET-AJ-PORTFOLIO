@@ -54,7 +54,7 @@
                   style="--topic: {{ \App\Models\Category::accentColorForSlug($tagTopics[$tag->slug] ?? 'others') }};"
                   href="{{ url('/articles') }}?tag={{ urlencode($tag->slug) }}"
                   @if ($tagSlug === $tag->slug) aria-current="page" @endif
-                ><span class="article-chip-label">{{ $tag->name }}</span></a>
+                ><span class="article-chip-label">{{ $tag->displayName() }}</span></a>
               @endforeach
               </div>
             </nav>
@@ -66,7 +66,7 @@
           <div class="article-search-status">
             <p class="article-search-summary" role="status">
               @if ($activeTag && $q === '')
-                <span data-en="Articles tagged {{ $activeTag->name }}" data-fa="مقالات با برچسب {{ $activeTag->name }}">Articles tagged {{ $activeTag->name }}</span>
+                <span data-en="Articles tagged {{ $activeTag->displayName() }}" data-fa="مقالات با برچسب {{ $activeTag->displayName() }}">Articles tagged {{ $activeTag->displayName() }}</span>
               @elseif ($q !== '')
                 <span data-en="{{ $results->total() }} result(s) for “{{ $q }}”" data-fa="{{ $results->total() }} نتیجه برای «{{ $q }}»">{{ $results->total() }} result(s) for “{{ $q }}”</span>
               @else

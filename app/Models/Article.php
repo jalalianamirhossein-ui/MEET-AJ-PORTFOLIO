@@ -237,7 +237,11 @@ class Article extends Model
     {
         $stored = trim((string) data_get($this->presentation, 'category_label_en'));
 
-        return $stored !== '' ? $stored : $this->localizedCategoryLabel('en');
+        if ($stored !== '' && preg_match('/\p{Arabic}/u', $stored)) {
+            $stored = '';
+        }
+
+        return $stored !== '' ? $this->canonicalTechnicalName($stored) : $this->localizedCategoryLabel('en');
     }
 
     public function categoryLabelFa(): string
@@ -273,6 +277,60 @@ class Article extends Model
         }
 
         return $this->categoryLabelEn();
+    }
+
+    public function englishTitle(): string
+    {
+        foreach ([
+            data_get($this->presentation, 'hero_title_en'),
+            data_get($this->presentation, 'card_title_en'),
+            $this->title,
+        ] as $candidate) {
+            if (is_string($candidate) && trim($candidate) !== '' && ! preg_match('/\p{Arabic}/u', $candidate)) {
+                return trim($candidate);
+            }
+        }
+
+        return trim((string) $this->title);
+    }
+
+    public function englishCardTitle(): string
+    {
+        return $this->englishText(data_get($this->presentation, 'card_title_en'), $this->englishTitle());
+    }
+
+    public function englishCardExcerpt(): string
+    {
+        return $this->englishText(data_get($this->presentation, 'card_excerpt_en'), (string) $this->excerpt);
+    }
+
+    public function englishExcerpt(): string
+    {
+        return $this->englishText((string) $this->excerpt, data_get($this->presentation, 'excerpt_en'));
+    }
+
+    protected function englishText(?string $preferred, ?string $fallback): string
+    {
+        foreach ([$preferred, $fallback] as $candidate) {
+            if (is_string($candidate) && trim($candidate) !== '' && ! preg_match('/\p{Arabic}/u', $candidate)) {
+                return trim($candidate);
+            }
+        }
+
+        return '';
+    }
+
+    protected function canonicalTechnicalName(string $value): string
+    {
+        return match (strtolower(trim($value))) {
+            'vmware' => 'VMware',
+            'mikrotik' => 'MikroTik',
+            'devops' => 'DevOps',
+            'linux' => 'Linux',
+            'microsoft' => 'Microsoft',
+            'windows server' => 'Windows Server',
+            default => $value,
+        };
     }
 
     public function translatedText(string $field, string $locale): string

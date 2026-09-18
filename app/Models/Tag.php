@@ -22,6 +22,19 @@ class Tag extends Model
         return '/articles?tag='.urlencode($this->slug);
     }
 
+    public function displayName(): string
+    {
+        return match (strtolower((string) $this->slug)) {
+            'vmware' => 'VMware',
+            'mikrotik' => 'MikroTik',
+            'devops' => 'DevOps',
+            'linux' => 'Linux',
+            'microsoft' => 'Microsoft',
+            'windows-server' => 'Windows Server',
+            default => (string) $this->name,
+        };
+    }
+
     protected static function booted(): void
     {
         static::saving(function (Tag $tag): void {

@@ -19,6 +19,8 @@ class HomepageServiceCatalog
                 'sort' => 1,
                 'title_en' => 'Enterprise Network Design & Implementation',
                 'title_fa' => 'طراحی و پیاده‌سازی شبکه سازمانی',
+                'card_title_en' => 'Enterprise Network Design',
+                'card_title_fa' => 'طراحی شبکه سازمانی',
                 'short_en' => 'Network design, Cisco/MikroTik, VLAN, STP, EtherChannel, routing, wireless, and branch connectivity.',
                 'short_fa' => 'طراحی شبکه، Cisco/MikroTik، VLAN، STP، EtherChannel، Routing، Wireless و ارتباط شعب.',
                 'features' => [
@@ -38,6 +40,8 @@ class HomepageServiceCatalog
                 'sort' => 2,
                 'title_en' => 'MikroTik Routing & Multi-WAN',
                 'title_fa' => 'روتینگ MikroTik و Multi-WAN',
+                'card_title_en' => 'MikroTik Multi-WAN / Routing',
+                'card_title_fa' => 'روتینگ و Multi-WAN MikroTik',
                 'short_en' => 'Load balancing, failover, ECMP, policy routing, VRF, NAT, and multiple ISPs.',
                 'short_fa' => 'Load Balancing، Failover، ECMP، Policy Routing، VRF، NAT و چند ISP.',
                 'features' => [
@@ -56,6 +60,8 @@ class HomepageServiceCatalog
                 'sort' => 3,
                 'title_en' => 'Server Infrastructure & Administration',
                 'title_fa' => 'زیرساخت و مدیریت سرور',
+                'card_title_en' => 'Server Infrastructure',
+                'card_title_fa' => 'زیرساخت سرور',
                 'short_en' => 'Windows Server, Ubuntu/Linux, DNS, DHCP, Nginx, hardening, and troubleshooting.',
                 'short_fa' => 'Windows Server، Ubuntu/Linux، DNS، DHCP، Nginx، Hardening و Troubleshooting.',
                 'features' => [
@@ -74,6 +80,8 @@ class HomepageServiceCatalog
                 'sort' => 4,
                 'title_en' => 'VMware & Virtualization',
                 'title_fa' => 'VMware و مجازی‌سازی',
+                'card_title_en' => 'VMware Virtualization',
+                'card_title_fa' => 'مجازی‌سازی VMware',
                 'short_en' => 'ESXi, VM migration, storage, resource optimization, snapshots, and virtual infrastructure design.',
                 'short_fa' => 'ESXi، VM Migration، Storage، Resource Optimization، Snapshot و طراحی زیرساخت مجازی.',
                 'features' => [
@@ -91,6 +99,8 @@ class HomepageServiceCatalog
                 'sort' => 5,
                 'title_en' => 'HP Enterprise Server Infrastructure',
                 'title_fa' => 'زیرساخت سرورهای سازمانی HP',
+                'card_title_en' => 'HPE Server Infrastructure',
+                'card_title_fa' => 'زیرساخت سرور HPE',
                 'short_en' => 'Deploy and maintain HPE ProLiant servers, RAID, storage, and performance.',
                 'short_fa' => 'راه‌اندازی و نگهداری HPE ProLiant، RAID، Storage و Performance.',
                 'features' => [
@@ -107,6 +117,8 @@ class HomepageServiceCatalog
                 'sort' => 6,
                 'title_en' => 'SQL Server Infrastructure & High Availability',
                 'title_fa' => 'زیرساخت SQL Server و دسترس‌پذیری بالا',
+                'card_title_en' => 'SQL Server / AlwaysOn',
+                'card_title_fa' => 'SQL Server / AlwaysOn',
                 'short_en' => 'SQL Server, Always On Availability Groups, backup/restore, performance, maintenance, and disaster recovery.',
                 'short_fa' => 'SQL Server، AlwaysOn AG، Backup/Restore، Performance، Maintenance و Disaster Recovery.',
                 'features' => [
@@ -124,6 +136,8 @@ class HomepageServiceCatalog
                 'sort' => 7,
                 'title_en' => 'Jira & Confluence Enterprise Solutions',
                 'title_fa' => 'راهکارهای سازمانی Jira و Confluence',
+                'card_title_en' => 'Jira & Confluence Enterprise',
+                'card_title_fa' => 'Jira و Confluence سازمانی',
                 'short_en' => 'Enterprise Jira installation, migration, workflow, permissions, upgrade, backup, and troubleshooting.',
                 'short_fa' => 'نصب Jira سازمانی، Migration، Workflow، Permission، Upgrade، Backup و Troubleshooting.',
                 'features' => [
@@ -142,6 +156,8 @@ class HomepageServiceCatalog
                 'sort' => 8,
                 'title_en' => 'Monitoring & Observability',
                 'title_fa' => 'مانیتورینگ و مشاهده‌پذیری',
+                'card_title_en' => 'Monitoring / Zabbix / Grafana',
+                'card_title_fa' => 'مانیتورینگ / Zabbix / Grafana',
                 'short_en' => 'Zabbix, Grafana, SNMP, JMX, and monitoring for servers, network, SQL, Docker, Redis, and MongoDB.',
                 'short_fa' => 'Zabbix، Grafana، SNMP، JMX و مانیتورینگ Server، Network، SQL، Docker، Redis و MongoDB.',
                 'features' => [
@@ -163,6 +179,8 @@ class HomepageServiceCatalog
                 'sort' => 9,
                 'title_en' => 'DevOps & Deployment Automation',
                 'title_fa' => 'دواپس و اتوماسیون استقرار',
+                'card_title_en' => 'DevOps / Docker / Jenkins / GitLab / Ansible',
+                'card_title_fa' => 'DevOps / Docker / Jenkins / GitLab / Ansible',
                 'short_en' => 'Docker, Jenkins, GitLab CI/CD, Ansible, Nginx, and automated deployment.',
                 'short_fa' => 'Docker، Jenkins، GitLab CI/CD، Ansible، Nginx و Automated Deployment.',
                 'features' => [
@@ -180,6 +198,8 @@ class HomepageServiceCatalog
                 'sort' => 10,
                 'title_en' => 'VoIP Infrastructure',
                 'title_fa' => 'زیرساخت VoIP',
+                'card_title_en' => 'VoIP',
+                'card_title_fa' => 'VoIP',
                 'short_en' => 'SIP, IP phones, call routing, branch connectivity, and VoIP troubleshooting.',
                 'short_fa' => 'SIP، IP Phone، Call Routing، ارتباط شعب و عیب‌یابی VoIP.',
                 'features' => [
@@ -196,6 +216,8 @@ class HomepageServiceCatalog
                 'sort' => 11,
                 'title_en' => 'CCTV & Surveillance Infrastructure',
                 'title_fa' => 'زیرساخت دوربین مداربسته و نظارت',
+                'card_title_en' => 'CCTV / Hikvision / ONVIF',
+                'card_title_fa' => 'CCTV / Hikvision / ONVIF',
                 'short_en' => 'Hikvision, NVR, ONVIF, VMS, PoE networking, and camera infrastructure design.',
                 'short_fa' => 'Hikvision، NVR، ONVIF، VMS، PoE Network و طراحی زیرساخت دوربین.',
                 'features' => [
@@ -213,6 +235,8 @@ class HomepageServiceCatalog
                 'sort' => 12,
                 'title_en' => 'Network Security & Remote Access',
                 'title_fa' => 'امنیت شبکه و دسترسی از راه دور',
+                'card_title_en' => 'Network Security',
+                'card_title_fa' => 'امنیت شبکه',
                 'short_en' => 'Firewall, VPN, segmentation, ACL, secure remote access, and hardening.',
                 'short_fa' => 'Firewall، VPN، Segmentation، ACL، Secure Remote Access و Hardening.',
                 'features' => [
@@ -292,6 +316,8 @@ class HomepageServiceCatalog
 
         $presentation['icon'] = $definition['icon'];
         $presentation['title_fa'] = $definition['title_fa'];
+        $presentation['card_title_en'] = $definition['card_title_en'] ?? $definition['title_en'];
+        $presentation['card_title_fa'] = $definition['card_title_fa'] ?? $definition['title_fa'];
         $presentation['short_description_fa'] = $detailFa;
         $presentation['description_fa'] = $detailFa;
         $presentation['show_in_catalog'] = (bool) ($definition['show_in_catalog'] ?? true);

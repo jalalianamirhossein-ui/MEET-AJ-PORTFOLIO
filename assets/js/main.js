@@ -17,6 +17,10 @@
 (function () {
   "use strict";
 
+  document.querySelectorAll("[data-current-year]").forEach((element) => {
+    element.textContent = String(new Date().getFullYear());
+  });
+
   const headerToggleBtn = document.querySelector("#menu-toggle");
   const header = document.querySelector("#header");
   let menuTrigger = null;

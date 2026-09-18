@@ -1,5 +1,7 @@
 @php
   $titleFa = data_get($service->presentation, 'title_fa') ?: $service->title;
+  $cardTitleEn = data_get($service->presentation, 'card_title_en') ?: $service->title;
+  $cardTitleFa = data_get($service->presentation, 'card_title_fa') ?: $titleFa;
   $shortFa = data_get($service->presentation, 'short_description_fa') ?: $service->short_description;
   $detailEn = $service->description ?: $service->short_description;
   $detailFa = data_get($service->presentation, 'description_fa') ?: $shortFa;
@@ -23,7 +25,8 @@
       <i class="{{ $icon }}"></i>
     @endif
   </div>
-  <h3 class="title" data-en="{{ $service->title }}" data-fa="{{ $titleFa }}">{{ $service->title }}</h3>
+  <h3 class="title" data-en="{{ $cardTitleEn }}" data-fa="{{ $cardTitleFa }}">{{ $cardTitleEn }}</h3>
+  <span class="service-detail-title" hidden>{{ $service->title }}</span>
   <p class="description" data-en="{{ $service->short_description }}" data-fa="{{ $shortFa }}">{{ $service->short_description }}</p>
   <div class="service-details-source" hidden aria-hidden="true">
     <p class="service-details-lead" data-en="{{ $detailEn }}" data-fa="{{ $detailFa }}">{{ $detailEn }}</p>

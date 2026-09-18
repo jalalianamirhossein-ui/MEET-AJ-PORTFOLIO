@@ -11,8 +11,8 @@ class ArticleSeo
         $seo = $article->seo_data ?? [];
         $canonical = $article->canonicalUrl();
         $image = $article->imageUrl();
-        $title = $this->englishHeadline($article, $article->meta_title ?: $article->title);
-        $description = $article->meta_description ?: $article->excerpt;
+        $title = $this->englishHeadline($article, $article->meta_title ?: $article->englishTitle());
+        $description = $article->meta_description ?: $article->englishExcerpt();
 
         $schema = $seo['schema'] ?? null;
         if (! is_array($schema) || ($schema['@type'] ?? '') !== 'Article') {
@@ -111,7 +111,7 @@ class ArticleSeo
     {
         $candidates = [
             $preferred,
-            $article->title,
+            $article->englishTitle(),
             data_get($article->presentation, 'hero_title_en'),
             data_get($article->presentation, 'card_title_en'),
         ];
@@ -121,7 +121,7 @@ class ArticleSeo
             }
         }
 
-        return $article->title;
+        return $article->englishTitle();
     }
 
     private function absolute(?string $url): ?string

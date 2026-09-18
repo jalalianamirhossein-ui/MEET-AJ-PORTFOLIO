@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Articles | Meet AJ</title>
-    <meta name="description" content="Technical articles by AmirHossein Jalalian covering Linux, Microsoft, MikroTik, VMware and infrastructure." />
+    <meta name="description" content="Technical articles by AmirHossein Jalalian covering Linux, Microsoft, MikroTik, VMware, DevOps and infrastructure." />
     <link rel="canonical" href="{{ rtrim(config('app.url'), '/') }}/articles" />
     <meta property="og:title" content="Articles | Meet AJ" />
     <meta property="og:url" content="{{ rtrim(config('app.url'), '/') }}/articles" />
@@ -212,10 +212,10 @@
               </h3>
               <p
                 class="brand-title"
-                data-en="IT Infrastructure Specialist"
-                data-fa="متخصص زیرساخت فناوری اطلاعات"
+                data-en="Infrastructure &amp; DevOps Engineer"
+                data-fa="مهندس زیرساخت و DevOps"
               >
-                IT Infrastructure Specialist
+                Infrastructure &amp; DevOps Engineer
               </p>
               <p
                 class="brand-description"
@@ -305,7 +305,7 @@
             <div class="footer-bottom-content">
               <div class="copyright">
                 <p>
-                  © <span>2025</span>
+                  © <span data-current-year>2026</span>
                   <strong
                     data-en="AmirHossein Jalalian"
                     data-fa="امیرحسین جلالیان"
@@ -322,7 +322,7 @@
                 <span data-en="Made with" data-fa="ساخته شده با"
                   >Made with</span
                 >
-                <i class="bi bi-heart-fill"></i>
+                <span class="footer-heart-symbol" aria-hidden="true">♥</span>
                 <span data-en="in Iran" data-fa="در ایران">in Iran</span>
               </div>
             </div>
