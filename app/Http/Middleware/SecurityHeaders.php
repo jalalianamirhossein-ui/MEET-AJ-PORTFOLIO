@@ -28,6 +28,11 @@ class SecurityHeaders
             $response->headers->set('Cache-Control', 'public, max-age=0, must-revalidate');
         }
 
+        $contentType = (string) $response->headers->get('Content-Type');
+        if ($contentType !== '' && str_contains($contentType, 'text/html') && ! str_contains(strtolower($contentType), 'charset')) {
+            $response->headers->set('Content-Type', 'text/html; charset=UTF-8');
+        }
+
         if ($request->secure()) {
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
         }

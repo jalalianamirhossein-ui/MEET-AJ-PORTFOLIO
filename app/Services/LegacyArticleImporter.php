@@ -43,8 +43,13 @@ class LegacyArticleImporter
 
                 $existing = Article::query()->where('language', 'en')->where('slug', $slug)->first();
                 if ($existing) {
+                    $repaired = $this->ensureEnglishTitles($existing, $parsed);
                     $skipped++;
-                    $report[] = ['slug' => $slug, 'status' => 'skipped', 'reason' => 'already exists'];
+                    $report[] = [
+                        'slug' => $slug,
+                        'status' => $repaired ? 'repaired_english_title' : 'skipped',
+                        'reason' => $repaired ? 'persian title restored to english' : 'already exists',
+                    ];
                     continue;
                 }
 
@@ -169,13 +174,13 @@ class LegacyArticleImporter
         $schema = $this->jsonLd($html);
         $publishedAt = $this->publishedAt($schema, $relative);
         $seo = [
-            'og_title' => $this->meta($html, 'og:title'),
+            'og_title' => $this->englishOrFallback($this->meta($html, 'og:title'), $heroTitle),
             'og_description' => $this->meta($html, 'og:description'),
             'og_type' => $this->meta($html, 'og:type'),
             'og_image' => $this->meta($html, 'og:image'),
             'og_url' => $this->meta($html, 'og:url'),
             'twitter_card' => $this->namedMeta($html, 'twitter:card'),
-            'twitter_title' => $this->namedMeta($html, 'twitter:title'),
+            'twitter_title' => $this->englishOrFallback($this->namedMeta($html, 'twitter:title'), $heroTitle),
             'twitter_description' => $this->namedMeta($html, 'twitter:description'),
             'twitter_image' => $this->namedMeta($html, 'twitter:image'),
             'robots' => $this->namedMeta($html, 'robots'),
@@ -450,5 +455,55 @@ class LegacyArticleImporter
         }
 
         return ['date' => \Carbon\Carbon::createFromTimestamp($mtime), 'provenance' => 'source_file_mtime'];
+    }
+
+    /**
+     * @param  array<string, mixed>  $parsed
+     */
+    private function ensureEnglishTitles(Article $article, array $parsed): bool
+    {
+        $english = $this->englishOrFallback($parsed['title'] ?? null, $article->title);
+        $changed = false;
+
+        if ($this->hasArabic((string) $article->title) && $english !== '') {
+            $article->title = $english;
+            $changed = true;
+        }
+        if ($this->hasArabic((string) $article->meta_title) && $english !== '') {
+            $article->meta_title = $english;
+            $changed = true;
+        }
+
+        $seo = is_array($article->seo_data) ? $article->seo_data : [];
+        foreach (['og_title', 'twitter_title'] as $key) {
+            if ($this->hasArabic((string) ($seo[$key] ?? '')) && $english !== '') {
+                $seo[$key] = $english;
+                $changed = true;
+            }
+        }
+        if (isset($seo['schema']['headline']) && $this->hasArabic((string) $seo['schema']['headline']) && $english !== '') {
+            $seo['schema']['headline'] = $english;
+            $changed = true;
+        }
+        if ($changed) {
+            $article->seo_data = $seo;
+            $article->save();
+        }
+
+        return $changed;
+    }
+
+    private function englishOrFallback(?string $value, ?string $fallback): string
+    {
+        if (is_string($value) && $value !== '' && ! $this->hasArabic($value)) {
+            return $value;
+        }
+
+        return is_string($fallback) ? $fallback : (string) $value;
+    }
+
+    private function hasArabic(string $value): bool
+    {
+        return (bool) preg_match('/\p{Arabic}/u', $value);
     }
 }

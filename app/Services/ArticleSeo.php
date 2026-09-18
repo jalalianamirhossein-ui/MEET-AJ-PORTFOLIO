@@ -31,6 +31,9 @@ class ArticleSeo
             ];
         } else {
             $schema = $this->absolutize($schema, $canonical, $image);
+            if (isset($schema['headline'])) {
+                $schema['headline'] = $this->englishHeadline($article, is_string($schema['headline']) ? $schema['headline'] : $title);
+            }
         }
 
         return [
