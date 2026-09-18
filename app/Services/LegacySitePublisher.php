@@ -113,7 +113,7 @@ BLADE;
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
     <script src="/assets/js/main.js?v=1405" defer></script>
     <script src="/assets/js/service-catalog.js?v=1813" defer></script>
-    <script src="/assets/js/i18n.js?v=1401" defer></script>
+    <script src="/assets/js/i18n.js?v=1402" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {

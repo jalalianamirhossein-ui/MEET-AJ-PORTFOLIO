@@ -593,10 +593,13 @@
     if (!typedElement || !window.Typed) return;
 
     const language = document.documentElement.lang === "fa" ? "fa" : "en";
-    const source =
+    let source =
       language === "fa"
         ? typedElement.getAttribute("data-typed-items-fa")
         : typedElement.getAttribute("data-typed-items");
+    if (language === "fa" && (!source || (/\?{3,}/.test(source) && !/[\u0600-\u06FF]/.test(source)))) {
+      source = typedElement.getAttribute("data-typed-items");
+    }
     const strings = (source || "")
       .split(",")
       .map((item) => item.trim())

@@ -308,7 +308,7 @@
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
     <script src="/assets/js/main.js?v=1405" defer></script>
-    <script src="/assets/js/i18n.js?v=1401" defer></script>
+    <script src="/assets/js/i18n.js?v=1402" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {

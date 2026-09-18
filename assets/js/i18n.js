@@ -39,11 +39,14 @@
     document.cookie = `lang=${lang}; Path=/; Max-Age=31536000; SameSite=Lax`;
   };
 
+  const hasArabic = (val) =>
+    /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(String(val || ""));
+
   const isCorrupted = (val) => {
     if (val == null) return true;
     if (val.indexOf("\uFFFD") !== -1 || /[\u0000-\u001f]/.test(val)) return true;
     if (/^[?\u061F\s.]+$/.test(val)) return true;
-    if (/\?{3,}/.test(val) && !/\p{Arabic}/u.test(val)) return true;
+    if (/\?{3,}/.test(val) && !hasArabic(val)) return true;
     return false;
   };
 

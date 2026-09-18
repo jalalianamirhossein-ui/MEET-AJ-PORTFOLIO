@@ -295,7 +295,7 @@
     <div id="toast" class="toast" hidden role="status" aria-live="polite" aria-atomic="true" data-en="Request submitted successfully! We'll contact you soon." data-fa="درخواست با موفقیت ارسال شد.">Request submitted successfully! We'll contact you soon.</div>
     <script src="/assets/vendor/aos/aos.js"></script>
     <script src="/assets/js/contact-form.js?v=1403"></script>
-    <script src="/assets/js/i18n.js?v=1401"></script>
+    <script src="/assets/js/i18n.js?v=1402"></script>
     <script>
       AOS.init({ once: true, disable: window.matchMedia('(prefers-reduced-motion: reduce)').matches });
       function copyText(en, fa) {
