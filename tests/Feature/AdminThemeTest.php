@@ -79,5 +79,11 @@ class AdminThemeTest extends TestCase
         $this->assertStringContainsString('Meet AJ CMS', $html);
         $this->assertStringContainsString('/css/app/meet-aj-admin.css', $html);
         $this->assertStringContainsString('--primary-500:oklch(0.68270588235294 0.17009090909091 16.935)', $html);
+
+        $published = public_path('css/app/meet-aj-admin.css');
+        $this->assertFileExists($published);
+        $served = (string) file_get_contents($published);
+        $this->assertStringContainsString('--color-primary: #be123c', $served);
+        $this->assertStringContainsString('.meetaj-category-chip', $served);
     }
 }

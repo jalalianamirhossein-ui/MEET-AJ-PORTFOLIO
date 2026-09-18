@@ -6,24 +6,23 @@
 **Admin CSS:** `resources/css/filament-admin.css` only (`public/css/meet-aj-admin.css` retired)  
 **Git:** no add, no commit, no push.  
 **Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md)  
-**Superseded 2026-09-17 snapshot:** [../archive/2026-09-18/FINAL-QA-REPORT.md](../archive/2026-09-18/FINAL-QA-REPORT.md)  
-**Superseded blue-admin QA:** [../archive/2026-09-18/FINAL-QA-REPORT-blue-admin.md](../archive/2026-09-18/FINAL-QA-REPORT-blue-admin.md)
+**Superseded 2026-09-17 snapshot:** [../archive/2026-09-18/FINAL-QA-REPORT.md](../archive/2026-09-18/FINAL-QA-REPORT.md)
 
-This is **not** a claim that every Filament form control was submitted. Authenticated chrome **was** clicked: login, dashboard, Articles, Categories, article edit (category chips, no save), Requests inbox, 1024/768/390, Editor session. PASS below names that evidence.
+This is **not** a claim that authenticated Filament screens were clicked in a browser. PASS below means verified with the evidence named.
 
 ## Executive summary
 
 Meet AJ remains Laravel 13 + PHP 8.4 + Filament 5 + Livewire 4 + Blade. This audit repaired the Contact → Requests inbox, Homepage first-load visibility, Persian encoding, the language switcher, English article titles, and Filament CSS cascade.
 
 `php artisan site:compare-content` → **Failures: 0**.  
-`php artisan test` → **55 tests, 1064 assertions, 1 skipped (`MysqlSchemaTest`), 0 failures** after the White/Red admin pass (includes `AdminThemeTest`).  
+`php artisan test` → **50 tests, 1008 assertions, 1 skipped (`MysqlSchemaTest`), 0 failures**.  
 Live contact POST → SQLite `requests.id = 5`, HTTP 200 `OK`.
 
 ## Acceptance matrix
 
 | Item | Status | Evidence |
 |------|--------|----------|
-| Filament admin CSS single source, White/Red | PASS (code + browser) | `AdminPanelProvider` loads `filament-admin.css`; published `public/css/app/meet-aj-admin.css`; primary `#be123c` |
+| Filament admin CSS single source, Meet AJ blue/cyan/slate | PASS (code) | `AdminPanelProvider` loads only `filament-admin.css`; public duplicate has no rules |
 | Communications → Requests in admin nav | PASS (PHPUnit) | `RequestResource` navigation registered; editor forbidden |
 | Contact form → validation → DB → `/admin/requests` | PASS | PHPUnit + live POST id 5 |
 | New/unread badge, read-only inbound fields, 7 statuses, notes, search, filters | PASS (code + PHPUnit) | `RequestResource` |
@@ -35,7 +34,7 @@ Live contact POST → SQLite `requests.id = 5`, HTTP 200 `OK`.
 | Article titles remain English in FA UI | PASS (browser + PHPUnit) | `data-i18n-lock`; 6 live DB titles repaired to English |
 | Admin sees Articles, Categories, Tags, Services, Requests, Users | PASS (code + PHPUnit) | editors denied Services/Requests/Users |
 | Viewports 1920 / 1440 / 1024 / 768 / 390 | PASS (browser CDP) | no horizontal overflow; sections remain visible at 390 |
-| Authenticated Filament visual click-test | PASS (browser) | Admin + Editor 2026-09-18; White/Red; category chips; editor 403 on Requests |
+| Authenticated Filament visual click-test | BLOCKED | `users` = 0 |
 | Production deploy / SMTP / Lighthouse | BLOCKED / NOT TESTED | unchanged |
 
 ## Root causes (this audit)
@@ -49,6 +48,7 @@ Live contact POST → SQLite `requests.id = 5`, HTTP 200 `OK`.
 
 ## Remaining known issues
 
+- No local CMS user, so authenticated Admin screenshots remain BLOCKED.
 - Six unused per-service Blade files still ship stale asset versions; `services.show` is what Laravel renders.
 - `hreflang` is not implemented. German stays draft-only.
 - No production deployment, SMTP, Lighthouse, or PWA install test.

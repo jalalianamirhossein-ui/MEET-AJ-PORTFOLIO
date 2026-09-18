@@ -50,4 +50,4 @@ fade-up / fade-in on section enter (560ms desktop / 400ms ≤768). Micro 180ms, 
 
 ## Out of scope
 
-Article body HTML, article URLs, service prices/copy, form contracts, git. Filament stays native Filament 5 with `#2563eb` branding.
+Article body HTML, article URLs, service prices/copy, form contracts, git. Filament admin is native Filament 5 with a **White + Red** overlay (`#be123c` / `#fff1f2` / `#7f1d1d`); the public site stays `#2563eb`.

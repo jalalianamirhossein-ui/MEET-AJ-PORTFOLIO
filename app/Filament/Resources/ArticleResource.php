@@ -120,7 +120,7 @@ class ArticleResource extends Resource
             ->striped()
             ->columns([
                 TextColumn::make('title')->searchable()->sortable()->wrap()->limit(48),
-                TextColumn::make('language')->badge()->sortable(),
+                TextColumn::make('language')->badge()->color('gray')->sortable(),
                 TextColumn::make('category.name')
                     ->label('Category')
                     ->placeholder('—')
@@ -133,7 +133,7 @@ class ArticleResource extends Resource
                         return new HtmlString($record->category->accentChipHtml($state));
                     })
                     ->toggleable(),
-                TextColumn::make('tags.name')->badge()->separator(',')->toggleable(),
+                TextColumn::make('tags.name')->badge()->separator(',')->color('gray')->toggleable(),
                 TextColumn::make('status')->badge()->color(fn (string $state): string => $state === 'published' ? 'success' : 'gray')->sortable(),
                 TextColumn::make('published_at')->dateTime()->sortable()->placeholder('—'),
                 TextColumn::make('updated_at')->since()->sortable()->toggleable(isToggledHiddenByDefault: true),
@@ -148,10 +148,11 @@ class ArticleResource extends Resource
                 Action::make('preview')
                     ->label('Preview')
                     ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
+                    ->color('gray')
                     ->url(fn (Article $record): string => $record->path())
                     ->openUrlInNewTab()
                     ->visible(fn (Article $record): bool => $record->status === 'published' && $record->published_at?->lte(now())),
-                EditAction::make(),
+                EditAction::make()->color('gray'),
                 DeleteAction::make()->requiresConfirmation(),
             ])
             ->toolbarActions([

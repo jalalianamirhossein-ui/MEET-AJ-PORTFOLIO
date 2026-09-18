@@ -2,7 +2,7 @@
 
 **Authority:** SINGLE authoritative current-state document. Everything else in `docs/current/` expands one section of this file.
 **Date verified:** 2026-09-18
-**Verification method:** `php artisan about`, `php artisan optimize:clear`, `php artisan route:list`, `php artisan test` (55 tests / 1064+ assertions / 1 skipped), `php artisan site:compare-content` (Failures: 0), live `POST /forms/contact.php` against SQLite, Cursor browser first-load + FA + Contact hash + viewports 1920/1440/1024/768/390, authenticated Admin/Editor Filament White/Red QA, and reading `app/`, `routes/`, `resources/`, `assets/`, `tests/`.
+**Verification method:** `php artisan about`, `php artisan optimize:clear`, `php artisan route:list`, `php artisan test` (50 tests / 1008 assertions / 1 skipped), `php artisan site:compare-content` (Failures: 0), live `POST /forms/contact.php` against SQLite, Cursor browser first-load + FA + Contact hash + viewports 1920/1440/1024/768/390, and reading `app/`, `routes/`, `resources/`, `assets/`, `tests/`.
 **Runtime used:** `.runtime/php84/php.exe` (PHP is not on PATH on this workstation).
 
 Status vocabulary used in every document: **PASS** | **FAIL** | **BLOCKED** | **NOT TESTED**.
@@ -44,7 +44,7 @@ Nine migrations, all **Ran** (batches 1–3). Eleven tables exist, including Lar
 
 | Table | Rows (2026-09-18) |
 |-------|-------------------|
-| `users` | 2 (local QA admin + editor; passwords not documented) |
+| `users` | 0 |
 | `password_reset_tokens` | 0 |
 | `sessions` | (local session files; not counted here) |
 | `categories` | 10 |
@@ -58,7 +58,7 @@ Nine migrations, all **Ran** (batches 1–3). Eleven tables exist, including Lar
 
 There is **no** `pages` table and **no** `contact_requests` table. Full column, index, foreign-key and delete-behaviour detail: [DATABASE.md](DATABASE.md).
 
-**`users` currently holds 2 rows on this workstation** (admin + editor). Interactive Filament login was exercised on 2026-09-18.
+**`users` currently holds 0 rows on this workstation**, so no interactive admin login is possible right now without running `php artisan cms:create-user`. This is why several admin UI checks are BLOCKED rather than PASS.
 
 ## 4. Architecture
 
@@ -87,17 +87,17 @@ Feature-by-feature description: [FEATURES.md](FEATURES.md). Asset cache versions
 
 ## 6. CMS / Admin
 
-Filament 5 panel at `/admin`, **White + Red** admin identity (canvas `#ffffff`, primary `#be123c`, gray Slate, danger `#7f1d1d`). The public site stays blue. Navigation groups **Content**, **Communications**, **Administration**.
+Filament 5 panel at `/admin`, brand colour `#2563eb`, navigation groups **Content**, **Communications**, **Administration**.
 
 | Resource | Group | Access | Status |
 |----------|-------|--------|--------|
-| Dashboard (3 widgets) | — | any authenticated CMS user | PASS (routes + code + browser) |
-| Articles | Content | admin + editor | PASS (PHPUnit CRUD + browser chips) |
-| Categories | Content | admin + editor | PASS (PHPUnit + browser colour chips) |
-| Tags | Content | admin + editor | PASS (route + code + editor nav) |
-| Services | Content | admin only | PASS (PHPUnit authorization; hidden from editor nav) |
-| Requests | Communications | admin only | PASS (PHPUnit + browser; editor 403) |
-| Users | Administration | admin only | PASS (routes + code + admin nav); user CRUD NOT TESTED |
+| Dashboard (3 widgets) | — | any authenticated CMS user | PASS (routes + code) |
+| Articles | Content | admin + editor | PASS (PHPUnit CRUD) |
+| Categories | Content | admin + editor | PASS (PHPUnit) |
+| Tags | Content | admin + editor | PASS (route + code) |
+| Services | Content | admin only | PASS (PHPUnit authorization) |
+| Requests | Communications | admin only | PASS (PHPUnit authorization) |
+| Users | Administration | admin only | PASS (routes + code); interactive CRUD NOT TESTED |
 
 Detail: [ADMIN.md](ADMIN.md).
 
@@ -134,11 +134,10 @@ CSRF (including the legacy `csrf_token` field contract), honeypot, two-layer rat
 
 | Command | Result (2026-09-18) | Status |
 |---------|---------------------|--------|
-| `php artisan test` | **55 tests, 1064 assertions, 1 skipped, 0 failures** (re-run after White/Red CSS publish) | PASS |
+| `php artisan test` | **50 tests, 1008 assertions, 1 skipped, 0 failures** | PASS |
 | `php artisan site:compare-content` | **Failures: 0** | PASS |
 | Live `POST /forms/contact.php` | HTTP 200 `OK`; SQLite row id 5 | PASS |
 | Cursor browser first-load + FA + Contact hash + 1920/1440/1024/768/390 | Testimonials + Contact visible; no horizontal overflow; English article titles in FA UI | PASS |
-| Cursor browser Admin White/Red + Editor permissions + 1024/768/390 | Login crimson Sign in; category chips; Requests badge; editor 403 on `/admin/requests` | PASS |
 | `vendor/bin/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest` | 1 test, 7 assertions, OK (last run 2026-09-16 against MariaDB on `127.0.0.1:3307`) | PASS (not re-run today) |
 | Lighthouse / performance budget | never executed | NOT TESTED |
 | Production smoke tests | no production environment | BLOCKED |
@@ -152,7 +151,7 @@ Documented DirectAdmin procedure exists and is complete, but **no deployment has
 ## 16. Known blockers
 
 1. **No production deployment.** DirectAdmin cutover, production database, SMTP, HTTPS and post-deploy verification are BLOCKED. Nothing in this repository proves meetaj.ir runs the Laravel CMS.
-2. **Interactive Users CRUD was not exercised** (create/delete accounts). Login and navigation for Admin and Editor **were** tested.
+2. **No CMS user exists locally** (`users` = 0 rows), so interactive Filament CRUD (article editing, Users screen, responsive admin tables) is BLOCKED until `php artisan cms:create-user` is run.
 3. **No performance measurement.** No Lighthouse, WebPageTest, or query profiling run exists. All performance claims are code-level only.
 4. **PWA install / offline behaviour** has never been exercised in a browser.
 
@@ -161,7 +160,7 @@ Documented DirectAdmin procedure exists and is complete, but **no deployment has
 1. **`hreflang` is not implemented.** EN and FA share canonical URLs.
 2. **German is draft-only.** No German content exists; `/de` is 404 by design.
 3. **Scheduled publishing is query-based.** A future `published_at` simply stays invisible; there is no queue or cron to flip it.
-4. **Authenticated Filament visual QA is PASS** for White/Red chrome, category chips, Requests badge, and Admin vs Editor nav (2026-09-18). Users resource CRUD remains NOT TESTED.
+4. **Authenticated Filament visual QA is BLOCKED** until `php artisan cms:create-user` is run (`users` = 0). PHPUnit covers authorization and the Requests inbox.
 5. **Six unused static service Blade files** remain in `resources/views/services/` (`devops-automation.blade.php`, `monitoring-security.blade.php`, `network-design.blade.php`, `system-administration.blade.php`, `technical-consulting.blade.php`, `virtualization-solutions.blade.php`). `ServiceController@show` renders `services.show` only, so these files are dead templates and still reference stale asset versions (`visual-upgrade.css?v=1108`, `i18n.js?v=1000`). They were **not** deleted because this pass is documentation-only.
 6. **Imported `featured_image` values still point at `/assets/...`** rather than Filament storage unless an editor uploads a replacement.
 7. **Source-content leftovers** (not CMS defects): a generic overlay category label on some cards, and the service page “Back to Services” link staying English in FA.

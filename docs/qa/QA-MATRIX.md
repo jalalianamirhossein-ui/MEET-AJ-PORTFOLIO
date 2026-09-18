@@ -12,10 +12,10 @@ Legend:
 - **PRODUCTION TESTED** — meetaj.ir / DirectAdmin (none in this matrix)
 - Status: **PASS** | **FAIL** | **NOT TESTED** | **BLOCKED**
 
-Latest default suite: **50 tests, 1008 assertions, 1 skipped, 0 failures**.  
+Latest default suite: **55 tests** including `AdminThemeTest`, 1 skipped, 0 failures.  
 `site:compare-content`: **Failures: 0**.  
 Live contact POST: HTTP 200 `OK`, SQLite `requests.id = 5`.  
-Browser: first-load Testimonials + Contact, FA RTL, Contact hash from Home and Articles, viewports 1920/1440/1024/768/390 with no horizontal overflow.
+Browser: first-load Testimonials + Contact, FA RTL, Contact hash from Home and Articles, viewports 1920/1440/1024/768/390 with no horizontal overflow, **authenticated Admin White/Red + Editor 403**.
 
 Skipped in default sqlite suite: `MysqlSchemaTest` (runs only when MySQL is bound).
 
@@ -81,8 +81,8 @@ Slugs: `creating-a-bootable-usb`, `downgrade-mikrotik-routeros-firmware-safely`,
 | Editor cannot open contact requests | denied | denied | PHPUnit `RequestWorkflowTest` | PASS · LOCAL TESTED | |
 | Request statuses + hidden notes | 7 statuses; public cannot set notes | enforced | PHPUnit | PASS · LOCAL TESTED | |
 | Tags admin | editors can open | Livewire 200 | PHPUnit | PASS · LOCAL TESTED | |
-| Users resource in sidebar | admin only | `shouldRegisterNavigation` true for admins | code | PASS · LOCAL TESTED | Interactive Filament UI BLOCKED |
-| Browser login + edit | usable | — | — | BLOCKED | No credentials used this pass |
+| Users resource in sidebar | admin only | `shouldRegisterNavigation` true for admins | code + browser | PASS · LOCAL TESTED | Hidden from editor nav |
+| Browser login + White/Red chrome | usable | Admin + Editor sessions | Cursor browser 2026-09-18 | PASS · LOCAL TESTED | Category chips; Requests badge; editor 403 |
 
 ## German
 

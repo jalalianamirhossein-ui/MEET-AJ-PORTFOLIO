@@ -1,10 +1,10 @@
 # Admin panel — Meet AJ
 
 **Authority:** AUTHORITATIVE Filament description.
-**Verified:** 2026-09-18 against `app/Filament/**`, `app/Policies/**`, `app/Providers/Filament/AdminPanelProvider.php`, `resources/css/filament-admin.css`, `public/css/app/meet-aj-admin.css`, `php artisan route:list` (after `optimize:clear`), PHPUnit (`CmsOperationsTest`, `ServiceCatalogTest`, `RequestWorkflowTest`, `PublicSiteTest`, `ProductionAuditTest`, `FormCsrfAndAdminRequestsTest`, `AdminThemeTest`), a live contact POST that appears at `/admin/requests`, and authenticated Cursor-browser sessions for Admin and Editor.
+**Verified:** 2026-09-18 against `app/Filament/**`, `app/Policies/**`, `app/Providers/Filament/AdminPanelProvider.php`, `resources/css/filament-admin.css`, `php artisan route:list` (after `optimize:clear`), PHPUnit (`CmsOperationsTest`, `ServiceCatalogTest`, `RequestWorkflowTest`, `PublicSiteTest`, `ProductionAuditTest`, `FormCsrfAndAdminRequestsTest`), and a live contact POST that appears at `/admin/requests`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
-Panel: **Filament v5.8.2** on **Livewire v4.4.5**, mounted at `/admin`, brand name “Meet AJ CMS”, **White + Red** identity (canvas `#ffffff`, primary `#be123c`, gray palette Slate, danger `#7f1d1d`), collapsible sidebar, collapsible navigation groups, unsaved-changes alerts, and global search enabled.
+Panel: **Filament v5.8.2** on **Livewire v4.4.5**, mounted at `/admin`, brand name “Meet AJ CMS”, primary colour `#2563eb`, gray palette Slate, collapsible sidebar, collapsible navigation groups, unsaved-changes alerts, and global search enabled.
 
 A guest hitting `/admin` is redirected to `/admin/login`; the login page itself returns HTTP 200.
 
@@ -16,22 +16,20 @@ Filament session authentication on the `web` guard against the `users` table. Ro
 php artisan cms:create-user
 ```
 
-**The local `users` table currently has 2 rows** (one `admin`, one `editor`), created with `cms:create-user` for White/Red visual QA. Passwords are not stored in documentation.
+**The local `users` table currently has 0 rows**, so there is no account to log in with until that command is run. Every check below that needs an authenticated browser session is therefore marked BLOCKED.
 
 ## Navigation
 
 ```
-Content (document icon)
-├── Articles        newspaper
-├── Categories      squares
-├── Tags            hashtag
-└── Services        briefcase (admins only)
-Communications (inbox icon)
-└── Requests        inbox; badge = count of `status=new` (white on `#7f1d1d`)
-Administration (cog icon)
-└── Users           users (admins only)
-
-Active item: light crimson `#fff1f2` fill, 3px `#be123c` inset bar, crimson label. Hover uses the same soft red, not a saturated fill.
+Content
+├── Articles
+├── Categories
+├── Tags
+└── Services        (admins only)
+Communications
+└── Requests        (admins only, badge = count of new requests)
+Administration
+└── Users           (admins only)
 ```
 
 `ServiceResource`, `RequestResource` and `UserResource` gate themselves through `canViewAny()`; `UserResource::shouldRegisterNavigation()` returns true for admins, so Users **is** in the sidebar for an admin.
@@ -61,27 +59,13 @@ CRUD on `articles` for admins and editors (`ArticlePolicy` → `User::canManageC
 
 Form sections: Identity (title, slug, language `en`/`fa`/`de`, category, multi-select tags, excerpt); Image (optional upload, JPEG/PNG/WebP, max 5 MB); Body (`content`, required); SEO, collapsed (`meta_title`, `meta_description`, `canonical_url`); Publishing (`status`, `published_at` in `config('cms.display_timezone')`, with helper text that German rows must stay draft).
 
-Table: searchable and sortable title, gray language badge, **category colour chip** (dot + tinted pill + readable name from the public topic palette), gray tag badges, status, `published_at`, toggleable `updated_at`, plus filters and a default sort. Preview/Edit are gray; Delete stays danger. Changing a slug writes a new `article_redirects` row.
+Table: searchable and sortable title, language badge, category, status, `published_at`, toggleable `updated_at`, plus filters and a default sort. Changing a slug writes a new `article_redirects` row.
 
-The category select on create/edit uses `allowHtml()` chips from `Category::accentChipHtml()`. Helper text states that the chip uses the public topic accent for that slug. There is no extra colour column.
-
-Public preview is the “Preview” / “View public page” action on published rows. There is no media library beyond the single upload field.
+There is no public preview button and no media library beyond the single upload field.
 
 ## Categories (`CategoryResource`) — Content
 
 Simple CRUD on `categories` for admins and editors, respecting the unique `(language, slug)` and `(translation_key, language)` constraints.
-
-The table shows a colour chip on **Name** and an **Accent** hex badge. Colour is **not stored**. `Category::accentColor()` maps the existing public topic slug to the same hex used on the site:
-
-| Topic key (from slug) | Hex |
-|-----------------------|-----|
-| microsoft / windows-server | `#2563eb` |
-| linux | `#15803d` |
-| mikrotik | `#c2410c` |
-| vmware | `#6d28d9` |
-| security | `#be123c` |
-| devops | `#0e7490` |
-| others (default) | `#a16207` |
 
 ## Tags (`TagResource`) — Content
 
@@ -115,7 +99,7 @@ Detail: [REQUESTS.md](REQUESTS.md).
 Form: name, email (unique), role (Admin / Editor, default Editor), password with `Password::min(12)->max(72)`, dehydrated only when filled so editing without a new password keeps the old one.
 Table: name, email, role badge, created-at (relative), role filter, edit action, and a delete action hidden for your own account. The empty state suggests `php artisan cms:create-user`.
 
-Interactive browser CRUD on this screen was exercised for login/navigation only; creating or deleting users was **not** part of this pass.
+Interactive browser CRUD on this screen is **BLOCKED / NOT TESTED** (no CMS user exists locally).
 
 ## Authorization summary
 
@@ -135,9 +119,7 @@ Filament global search is enabled panel-wide. Table search is column-scoped (art
 
 ## Styling
 
-Admin branding is loaded **once**: `AdminPanelProvider` registers `Css::make('meet-aj-admin', resource_path('css/filament-admin.css'))`, which Filament publishes to `public/css/app/meet-aj-admin.css`. After CSS edits run `php artisan filament:assets`. Meet AJ **admin** tokens are white canvas, slate type, crimson `#be123c`, soft selected `#fff1f2`, danger `#7f1d1d`. The public site remains blue. `public/css/meet-aj-admin.css` is retired (comment-only, no rules) so a second cascade cannot fight Filament/Livewire. Sidebar, topbar, navigation groups, widgets, tables, forms, badges, buttons, unread request rows (`.meetaj-request-new`), category chips (`.meetaj-category-chip`), focus rings and compact breakpoints live in that single source file.
-
-Filament `Color::hex('#be123c')` generates a light 400 swatch; `filament-admin.css` flattens primary buttons to solid crimson so Sign in / New article are not candy-pink.
+Admin branding is loaded **once**: `AdminPanelProvider` registers `Css::make('meet-aj-admin', resource_path('css/filament-admin.css'))`. Meet AJ tokens are blue `#2563eb`, cyan `#0ea5e9`, slate gray. `public/css/meet-aj-admin.css` is retired (comment-only, no rules) so a second cascade cannot fight Filament/Livewire. Sidebar, topbar, navigation groups, widgets, tables, forms, badges, buttons, unread request rows (`.meetaj-request-new`), focus rings and compact breakpoints live in that single file.
 
 ## Testing status
 
@@ -146,10 +128,9 @@ Filament `Color::hex('#be123c')` generates a light 400 swatch; `filament-admin.c
 | `/admin` guest redirect, `/admin/login` 200 | PHPUnit + HTTP | PASS |
 | Article create / update / slug redirect | PHPUnit `CmsOperationsTest` | PASS |
 | Editor denied on services | PHPUnit `ServiceCatalogTest` | PASS |
-| Editor denied on requests, status workflow, internal notes hidden | PHPUnit `RequestWorkflowTest` + `ProductionAuditTest` + browser 403 | PASS |
+| Editor denied on requests, status workflow, internal notes hidden | PHPUnit `RequestWorkflowTest` + `ProductionAuditTest` | PASS |
 | Contact form creates a Request visible at `/admin/requests` | PHPUnit `ProductionAuditTest` + live POST 2026-09-18 | PASS |
-| White/Red theme + category chips | PHPUnit `AdminThemeTest` + browser | PASS |
-| Interactive login (Admin + Editor) | Cursor browser 2026-09-18 | PASS |
-| Admin responsive layout 1024 / 768 / 390 | Cursor browser | PASS |
+| Interactive login and editing in a browser | — | BLOCKED (no CMS user) |
+| Admin responsive layout on small screens | code + overlay CSS; no authenticated session | NOT TESTED |
 
 Evidence: [../qa/ADMIN-QA.md](../qa/ADMIN-QA.md).

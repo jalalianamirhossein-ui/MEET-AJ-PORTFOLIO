@@ -46,7 +46,7 @@ class CategoryResource extends Resource
                         ->required()
                         ->maxLength(180)
                         ->regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/')
-                        ->helperText('Public topic color is derived from this slug: microsoft #2563eb, linux #15803d, mikrotik #c2410c, vmware #6d28d9, others #a16207. It is not stored as a separate column.'),
+                        ->helperText('Public topic color is derived from this slug: microsoft #2563eb, linux #15803d, mikrotik #c2410c, vmware #6d28d9, security #be123c, devops #0e7490, others #a16207. It is not stored as a separate column.'),
                     Select::make('language')->options(['en' => 'English', 'fa' => 'فارسی', 'de' => 'Deutsch'])->default('en')->required(),
                     TextInput::make('translation_key')->disabled()->dehydrated(false)->helperText('Assigned automatically. Unique per language.'),
                 ]),
@@ -72,14 +72,14 @@ class CategoryResource extends Resource
                         'style' => '--meetaj-topic: '.$record->accentColor(),
                     ]),
                 TextColumn::make('slug')->searchable(),
-                TextColumn::make('language')->badge()->sortable(),
+                TextColumn::make('language')->badge()->color('gray')->sortable(),
                 TextColumn::make('articles_count')->counts('articles')->label('Articles'),
             ])
             ->filters([
                 SelectFilter::make('language')->options(['en' => 'English', 'fa' => 'فارسی', 'de' => 'Deutsch']),
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()->color('gray'),
                 DeleteAction::make()->requiresConfirmation(),
             ])
             ->toolbarActions([

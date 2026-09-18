@@ -16,7 +16,7 @@ The public site is **one product**, not six coexisting templates.
 | Articles index | Library + search/tags | Implemented. H2 → H3 teasers. FA search placeholder applied |
 | Contact / Footer | Primary `#2563eb` footer, labelled form | Implemented |
 | Nav / i18n | Solid compact listbox + fullscreen mobile | Implemented (`main.js?v=1119` background inert) |
-| Admin | Native Filament 5 + `#2563eb` | Login labelled. Authenticated chrome **not visually inspected** this pass |
+| Admin | Native Filament 5 + White/Red `#be123c` | Authenticated chrome inspected 2026-09-18; see [ADMIN-QA.md](ADMIN-QA.md) |
 
 ## Hierarchy
 

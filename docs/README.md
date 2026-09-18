@@ -53,7 +53,7 @@ Superseded QA, admin, status and visual reports. **Not current.**
 
 | Location | Contents |
 |----------|----------|
-| [archive/2026-09-18/README.md](archive/2026-09-18/README.md) | 2026-09-17 snapshots moved aside by the 2026-09-18 production audit |
+| [archive/2026-09-18/README.md](archive/2026-09-18/README.md) | 2026-09-17 snapshots plus same-day blue-admin reports moved aside by the White/Red Filament pass |
 
 ## Architecture decisions
 

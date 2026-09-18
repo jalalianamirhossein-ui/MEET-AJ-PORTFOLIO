@@ -1,6 +1,6 @@
 # Archived reports — 2026-09-18
 
-These files are the **2026-09-17** (and earlier visual-upgrade) snapshots that were superseded by the 2026-09-18 production audit.
+These files are the **2026-09-17** (and earlier visual-upgrade) snapshots that were superseded by the 2026-09-18 production audit, plus the **blue Filament admin** snapshots superseded later the same day by the White/Red admin pass.
 
 They are kept for history. They do **not** describe the application as it exists after this audit.
 
@@ -19,3 +19,7 @@ They are kept for history. They do **not** describe the application as it exists
 | VISUAL-QA.md / RESPONSIVE-QA.md / QA-MATRIX.md | Pre-audit visual evidence |
 | VISUAL-UX-FINAL-REPORT.md | Older visual overlay pass |
 | pre-visual-upgrade-baseline.md | Baseline from before the visual overlay |
+| ADMIN-blue-theme.md | 2026-09-18 production-audit ADMIN.md (Filament primary `#2563eb`) |
+| PROJECT-STATUS-blue-admin.md | 2026-09-18 status before White/Red admin |
+| ADMIN-QA-blue-theme.md | Authenticated admin marked BLOCKED (`users` = 0) |
+| FINAL-QA-REPORT-blue-admin.md | Master QA claiming blue/cyan/slate admin |

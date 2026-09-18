@@ -2,28 +2,38 @@
 
 **Date verified:** 2026-09-18  
 **Panel:** `/admin` (Filament 5.8.2, Livewire 4.4.5)  
-**Brand:** `#2563eb` / cyan `#0ea5e9` / slate, existing logo, groups Content / Communications / Administration.  
-**Superseded:** [../archive/2026-09-18/ADMIN-QA.md](../archive/2026-09-18/ADMIN-QA.md)
+**Brand:** White surfaces, slate type, Meet AJ crimson `#be123c` accent, danger `#7f1d1d`.  
+**Superseded (blue admin):** [../archive/2026-09-18/ADMIN-QA-blue-theme.md](../archive/2026-09-18/ADMIN-QA-blue-theme.md)
+
+Local QA accounts exist (`qa-admin@meetaj.local` admin, `qa-editor@meetaj.local` editor). Passwords are not recorded here.
 
 ## Browser this pass
 
 | Surface | Result | Evidence |
 |---------|--------|----------|
-| `/admin/login` | PASS (open tab + HTTP) | Title “Login - Meet AJ CMS” |
-| Dashboard / Articles / Categories / Tags / Requests / Users (authenticated click) | **BLOCKED** | `users` table is empty |
-| Admin responsive 390 / 768 / 1024 | **BLOCKED** | Requires authenticated session |
+| `/admin/login` | PASS | White card, slate labels, Sign in solid `#be123c` (not candy-pink 400) |
+| Dashboard (admin) | PASS | White chrome; crimson active Dashboard; stats cards with 3px accent bar; Recent articles category chips |
+| Articles table | PASS | Category chips (dot + tint + label); gray language/tags; gray Preview/Edit; brick Delete; crimson New article |
+| Categories table | PASS | Name chips + Accent hex badges using public topic colours |
+| Article edit form | PASS | Category select selected chip + dropdown chips (Microsoft `#2563eb`, Linux `#15803d`, MikroTik `#c2410c`, …). Save/Delete not submitted |
+| Requests inbox | PASS | 5 rows, unread rose + crimson inset; View / Update status unchanged; sidebar badge `5` white-on-`#7f1d1d` |
+| 1024×768 | PASS | Sidebar + Requests badge visible; table scrolls inside card; page `scrollWidth` 1009 ≤ 1024 |
+| 768×1024 | PASS | Hamburger; no page overflow (`scrollWidth` 768) |
+| 390×844 | PASS | Hamburger; open sidebar shows Requests `5` on active light-red item |
+| Editor session | PASS | Nav = Dashboard + Articles/Categories/Tags only. `/admin/requests` → HTTP 403 |
 
 ## What was checked in code + PHPUnit (PASS)
 
 | Surface | Result | Notes |
 |---------|--------|--------|
-| Single admin stylesheet | PASS | `resources/css/filament-admin.css` only. `public/css/meet-aj-admin.css` is comment-only |
-| Dashboard widgets | PASS in code | Request stats/links go to `RequestResource` |
-| Communications → Requests | PASS PHPUnit | Nav + `/admin/requests` + Livewire `ManageRequests` |
-| New-message badge / unread rows | PASS in code | Badge = count of `status=new`; `.meetaj-request-new` |
-| Authorization | PASS PHPUnit | Editor forbidden on Requests, Services, Users |
-| Contact → inbox | PASS | PHPUnit + live row id 5 |
+| Single admin stylesheet | PASS | Source `resources/css/filament-admin.css`; published `public/css/app/meet-aj-admin.css` (HTTP 200). `public/css/meet-aj-admin.css` remains comment-only |
+| White/Red tokens | PASS | `AdminThemeTest`; primary `#be123c`, danger `#7f1d1d`, canvas `#ffffff` |
+| Category accents | PASS | Reuse public topic hex via `Category::accentColor()` (no DB column) |
+| Communications → Requests | PASS PHPUnit | Nav + `/admin/requests`; editor forbidden |
+| New-message badge / unread rows | PASS | Badge = count of `status=new`; `.meetaj-request-new` |
+| Authorization | PASS PHPUnit + browser | Editor forbidden on Requests, Services, Users |
+| Contact → inbox | PASS | PHPUnit + live row id 5 still listed |
 
 ## Failures
 
-None identified in code or PHPUnit. **Visual PASS is not claimed** for authenticated Admin chrome.
+None. Authenticated White/Red visual QA is **PASS** for Admin and Editor on this workstation.
