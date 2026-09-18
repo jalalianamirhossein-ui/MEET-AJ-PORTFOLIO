@@ -1,9 +1,9 @@
 # QA matrix — Meet AJ
 
 **Authority:** AUTHORITATIVE per-URL QA evidence.  
-**Date:** 2026-09-18  
+**Date:** 2026-09-17  
 **Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md)  
-**Superseded 2026-09-17 matrix:** [../archive/2026-09-18/QA-MATRIX.md](../archive/2026-09-18/QA-MATRIX.md)
+**Do not treat older phase reports as current PASS/FAIL.**
 
 Legend:
 
@@ -12,10 +12,9 @@ Legend:
 - **PRODUCTION TESTED** — meetaj.ir / DirectAdmin (none in this matrix)
 - Status: **PASS** | **FAIL** | **NOT TESTED** | **BLOCKED**
 
-Latest default suite: **50 tests, 1008 assertions, 1 skipped, 0 failures**.  
+Latest default suite: **39 tests, 647 assertions, 1 skipped, 0 failures**.  
 `site:compare-content`: **Failures: 0**.  
-Live contact POST: HTTP 200 `OK`, SQLite `requests.id = 5`.  
-Browser: first-load Testimonials + Contact, FA RTL, Contact hash from Home and Articles, viewports 1920/1440/1024/768/390 with no horizontal overflow.
+HTTP (curl against `127.0.0.1:8000`): `/` 200, `/index.html` 301, 23 articles 200, 23 legacy 301, 6 services 200, search/tag 200, sitemap/robots/manifest/sw.js 200.
 
 Skipped in default sqlite suite: `MysqlSchemaTest` (runs only when MySQL is bound).
 

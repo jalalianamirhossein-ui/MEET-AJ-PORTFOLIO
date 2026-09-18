@@ -1,6 +1,6 @@
 # Meet AJ — documentation
 
-Navigation map for every document in this repository. Last reorganised **2026-09-17**.
+Navigation map for every document in this repository. Last updated **2026-09-18**.
 
 **Start here:** [current/PROJECT-STATUS.md](current/PROJECT-STATUS.md) — the single authoritative statement of what exists today.
 
@@ -46,6 +46,14 @@ Evidence, not intentions. Each file names its method and marks BLOCKED work hone
 | [qa/CONTENT-INTEGRITY.md](qa/CONTENT-INTEGRITY.md) | `site:compare-content` result across 23 articles |
 | [qa/DESIGN-AUDIT.md](qa/DESIGN-AUDIT.md) | Full-site design audit findings |
 | [qa/DOCUMENTATION-QA.md](qa/DOCUMENTATION-QA.md) | This reorganisation: what moved, merged, and why |
+
+## Archive
+
+Superseded QA, admin, status and visual reports. **Not current.**
+
+| Location | Contents |
+|----------|----------|
+| [archive/2026-09-18/README.md](archive/2026-09-18/README.md) | 2026-09-17 snapshots moved aside by the 2026-09-18 production audit |
 
 ## Architecture decisions
 

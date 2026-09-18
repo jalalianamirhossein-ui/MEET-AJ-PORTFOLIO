@@ -1,166 +1,54 @@
-# Final project QA report — Meet AJ master audit
+# Final project QA report — Meet AJ production audit
 
-**Date:** 2026-09-17  
-**Overlay:** `visual-upgrade.css?v=1405`  
-**Scripts:** `i18n.js?v=1201`, `main.js?v=1201`, `lang-toggle.css?v=1202`  
-**Latest visual pass:** [VISUAL-UX-FINAL-REPORT.md](VISUAL-UX-FINAL-REPORT.md)  
-**Git:** no git command was run in this pass — no add, no commit, no push. (A `.git` directory already exists in the repository; it was not touched.)  
-**Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md) · **Detail:** [VISUAL-QA.md](VISUAL-QA.md), [RESPONSIVE-QA.md](RESPONSIVE-QA.md), [ACCESSIBILITY-QA.md](ACCESSIBILITY-QA.md), [ADMIN-QA.md](ADMIN-QA.md), [CONTENT-INTEGRITY.md](CONTENT-INTEGRITY.md), [QA-MATRIX.md](QA-MATRIX.md)
+**Date verified:** 2026-09-18  
+**Overlay:** `visual-upgrade.css?v=1707` · `site-modules.css?v=1820` · `lang-toggle.css?v=1401`  
+**Scripts:** `i18n.js?v=1402`, `main.js?v=1406`  
+**Admin CSS:** `resources/css/filament-admin.css` only (`public/css/meet-aj-admin.css` retired)  
+**Git:** no add, no commit, no push.  
+**Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md)  
+**Superseded 2026-09-17 snapshot:** [../archive/2026-09-18/FINAL-QA-REPORT.md](../archive/2026-09-18/FINAL-QA-REPORT.md)
 
-This is **not** a claim that every viewport screenshot and every authenticated admin screen was proven. PASS below means verified with the evidence named. BLOCKED means not tested. FAIL would mean a proven defect still open.
+This is **not** a claim that authenticated Filament screens were clicked in a browser. PASS below means verified with the evidence named.
 
 ## Executive summary
 
-Meet AJ remains Laravel 13 + PHP 8.4 + Filament 5 + Livewire 4 + Blade. Article detail pages stay the visual DNA (H1 `#1e293b` verified). Homepage, services, library, search, tags, related articles, share, breadcrumbs, request workflow, and Filament resources share that language.
+Meet AJ remains Laravel 13 + PHP 8.4 + Filament 5 + Livewire 4 + Blade. This audit repaired the Contact → Requests inbox, Homepage first-load visibility, Persian encoding, the language switcher, English article titles, and Filament CSS cascade.
 
-This pass fixed: FA search placeholders (`i18n.js`), article teaser heading skip (H4→H3), mobile menu background `inert` when open.
-
-`php artisan site:compare-content` → **Failures: 0** (23 articles, 6 services, home).  
-`php artisan test` → **40 tests, 708 assertions, 1 skipped (`MysqlSchemaTest`), 0 failures**.  
-HTTP: 68 URL checks, **0 unexpected** statuses.
-
-## Architecture
-
-| Question | Answer |
-|----------|--------|
-| 1. Business logic outside Blade? | YES — search, related, tags, share URLs, reading time, contact store |
-| 2. Validation centralized? | YES — `StoreContactRequest` + model `saving` validators |
-| 3. Authorization server-side? | YES — policies; Filament `canViewAny` / admin-only requests |
-| 4. Database constraints correct? | YES — unique tag name/slug, pivot FKs, request notes column |
-| 5. Queries efficient? | YES for 23 rows — listing omits `content`; LIKE search is enough |
-| 6. Public/private separated? | YES — `internal_notes` hidden; contact create does not accept notes/status |
-| 7. Filament only Admin UI? | YES |
-| 8. New articles without code changes? | YES — CMS + importer |
-| 9. Services managed cleanly? | YES — catalog CMS + one landing Blade |
-| 10. Search upgradable later? | YES — `Article::scopeSearch` |
-| 11. Design system maintainable? | YES — overlay tokens + MASTER.md |
-| 12. Languages handled correctly? | YES — EN/FA UI; DE only if `[data-de]`; no fake German articles |
+`php artisan site:compare-content` → **Failures: 0**.  
+`php artisan test` → **50 tests, 1008 assertions, 1 skipped (`MysqlSchemaTest`), 0 failures**.  
+Live contact POST → SQLite `requests.id = 5`, HTTP 200 `OK`.
 
 ## Acceptance matrix
 
-### Architecture
-| Item | Result |
-|------|--------|
-| Laravel 13 / PHP 8.4 / Filament 5 / Livewire 4 / Blade | PASS |
-| Database | PASS local SQLite. Production MariaDB **BLOCKED** (skipped test) |
-| Models / Controllers / Policies / Form Requests / Routes | PASS (`php artisan route:list` shows 36 routes) |
-
-### Database
-| Item | Result |
-|------|--------|
-| `tags` + `article_tag` FKs/unique | PASS (migration + PHPUnit) |
-| `requests.status` + `internal_notes` | PASS |
-| No duplicate `contact_requests` table | PASS |
-
-### Frontend / design system
-| Item | Result | Evidence |
+| Item | Status | Evidence |
 |------|--------|----------|
-| Article DNA not redesigned | PASS | H1 `rgb(30, 41, 59)`; body HTML compare-content PASS |
-| Overlay tokens | PASS | Live `visual-upgrade.css?v=1405` |
-| Homepage H2 700 | PASS | CDP on About heading |
-| Icon language | PASS | Bootstrap Icons (hero arrows replaced earlier) |
-| Motion / reduced-motion | PASS in CSS | Not re-toggled in OS settings this pass — WARN |
+| Filament admin CSS single source, Meet AJ blue/cyan/slate | PASS (code) | `AdminPanelProvider` loads only `filament-admin.css`; public duplicate has no rules |
+| Communications → Requests in admin nav | PASS (PHPUnit) | `RequestResource` navigation registered; editor forbidden |
+| Contact form → validation → DB → `/admin/requests` | PASS | PHPUnit + live POST id 5 |
+| New/unread badge, read-only inbound fields, 7 statuses, notes, search, filters | PASS (code + PHPUnit) | `RequestResource` |
+| Contact menu Homepage + Articles, EN/FA | PASS (browser) | `#contact` in viewport; `/articles` uses `/#contact` |
+| Testimonials + Contact on first Homepage load | PASS (browser + PHPUnit) | opacity 1, `aos-animate`, non-zero height; AOS 2.3.4 vendored |
+| FA encoding (no `????`) | PASS (browser + PHPUnit) | restored `data-fa`, typed FA roles; `i18n.js` Unicode-safe Arabic check |
+| FA RTL / EN LTR | PASS (browser) | `dir=rtl` after switch; switcher blue `#2563eb` |
+| Shared language switcher (not burgundy) | PASS (browser) | EN white/slate; FA filled blue; `site-modules.css` burgundy override removed |
+| Article titles remain English in FA UI | PASS (browser + PHPUnit) | `data-i18n-lock`; 6 live DB titles repaired to English |
+| Admin sees Articles, Categories, Tags, Services, Requests, Users | PASS (code + PHPUnit) | editors denied Services/Requests/Users |
+| Viewports 1920 / 1440 / 1024 / 768 / 390 | PASS (browser CDP) | no horizontal overflow; sections remain visible at 390 |
+| Authenticated Filament visual click-test | BLOCKED | `users` = 0 |
+| Production deploy / SMTP / Lighthouse | BLOCKED / NOT TESTED | unchanged |
 
-### Homepage
-| Item | Result |
-|------|--------|
-| Structure + tokens | PASS (snapshot + CDP overflow 0 at 320/412/1280) |
-| Get to Know Me / expertise / resume | PASS prior + still serving. Skill titles still `h4` — **WARN** a11y skip |
-| Services preview / articles / contact | PASS in snapshot |
+## Root causes (this audit)
 
-### Services
-| Item | Result |
-|------|--------|
-| Six URLs 200 | PASS HTTP |
-| Network Design landing + gated form | PASS a11y + CDP (0 visible fields) |
-| Services 2–6 independent screenshots | **BLOCKED** this pass (shared Blade; HTTP only) |
+1. **First-load Testimonials/Contact:** AOS 2.3.4 CSS was referenced while `aos.js`/`aos.css` were missing or incomplete, leaving `[data-aos]` at opacity 0 until a later navigation re-inited scripts. Hash scroll waited on `window.load` only.
+2. **FA `?????`:** `index.html` `data-fa` / `data-typed-items-fa` had been saved with CP1252 replacement question marks. `i18n.js` used `/\p{Arabic}/u`, which failed to parse in the embedded browser and prevented the switcher from mounting.
+3. **Burgundy language button:** `site-modules.css` last-layer `!important` still painted `.lang-switcher-toggle` with `--menu-burgundy-*`.
+4. **Requests inbox:** `RequestResource` had been hidden (`shouldRegisterNavigation false`) in favour of split Contact/Service inboxes.
+5. **Dual admin CSS:** Filament asset + `HEAD_END` `meet-aj-admin.css` loaded the same overlay twice.
+6. **Persian article titles:** `meta_title` / `og:title` came from legacy HTML `<title>` (often Persian) while `articles.title` was the English hero; FA UI also swapped H1 via `data-fa`.
 
-### Articles
-| Item | Result |
-|------|--------|
-| 23 kept | PASS compare-content + index H3 count 23 |
-| Search | PASS `?q=linux` → 8 results, labelled search |
-| Tags | PASS 8 catalog chips |
-| Related | PASS 3 on SSH guide (snapshot) |
-| Share | PASS LinkedIn / WhatsApp / Telegram / copy |
-| Breadcrumbs + JSON-LD | PASS nav + 2 ld+json scripts |
-| Related titles in FA session | **WARN** — English DB titles |
+## Remaining known issues
 
-### Search / tags / related / requests
-| Item | Result |
-|------|--------|
-| Laravel LIKE search | PASS |
-| Tag filter UI | PASS |
-| Request statuses + hidden notes | PASS code + PHPUnit |
-
-### Admin
-| Item | Result |
-|------|--------|
-| Login page | PASS a11y snapshot |
-| Authenticated dashboard/resources visual | **BLOCKED** |
-| PHPUnit admin/auth | PASS |
-
-### Security
-| Item | Result |
-|------|--------|
-| CSRF, honeypot, rate limit, headers | PASS code |
-| `APP_DEBUG` | **WARN** local `.env` is `true`. `.env.example` is `false`. Production must be false |
-| Secrets committed | PASS (`.env` not documented) |
-
-### Accessibility
-| Item | Result |
-|------|--------|
-| Skip link, landmarks, labelled search | PASS |
-| Article teaser H2→H3 | PASS (was H4) |
-| Mobile menu Escape + inert | PASS |
-| Homepage H2→H4 skills/certs | **WARN** |
-| axe CLI | **BLOCKED** (not run) |
-| Full Tab tour of every page | **BLOCKED** |
-
-### Responsive
-| Item | Result |
-|------|--------|
-| Overflow 0 at 320, 375, 412, 1280 (named pages) | PASS |
-| Full 10-width screenshot matrix | **BLOCKED** this pass |
-
-### SEO / PWA / performance
-| Item | Result |
-|------|--------|
-| Canonical/OG/JSON-LD/sitemap/robots | PASS compare-content + robots Disallow `/admin` `/livewire` `/forms` |
-| Fake German hreflang | PASS (absent) |
-| PWA exclusions | PASS in `sw.js` |
-| Offline page behaviour | **BLOCKED** (not network-throttled) |
-| N+1 at 23 articles | PASS for volume |
-
-### Documentation / structure / testing
-| Item | Result |
-|------|--------|
-| Required docs updated | PASS this file + DNA/design/features/visual/admin |
-| Unused-file deletion | Not performed (no proven-unused deletions this pass) |
-| PHPUnit | PASS 40 / 708 / 1 skipped |
-| Git | PASS — no git command executed |
-
-## Fixes applied this pass
-
-1. `assets/js/i18n.js` applies `data-*-placeholder` (FA search placeholder verified).
-2. Article teasers `h4` → `h3` + overlay selectors.
-3. Mobile menu `setBackgroundInert` so page content is not tabbable while open.
-4. Overlay cache `v=1405`; i18n `v=1201`; main `v=1201`; lang-toggle `v=1202`.
-5. Compare-content kernel `terminate()` so article 1 is not a false canonical FAIL.
-6. Brand lock `direction: ltr`; language is a single switch button in `#lang-mount`.
-
-## Open items (not hidden)
-
-- Authenticated Filament visual/responsive QA
-- Independent screenshots of five remaining service landings
-- Homepage heading skip on skill/value/cert `h4`
-- Related-article titles remain English in FA UI
-- Screenshot tool often stale; CDP used instead
-- Local `APP_DEBUG=true`
-- MySQL phpunit suite skipped
-- Offline PWA untested
-- Browser unlock after lock was blocked by auto-review
-
-## Git
-
-No git command was executed in this pass.
+- No local CMS user, so authenticated Admin screenshots remain BLOCKED.
+- Six unused per-service Blade files still ship stale asset versions; `services.show` is what Laravel renders.
+- `hreflang` is not implemented. German stays draft-only.
+- No production deployment, SMTP, Lighthouse, or PWA install test.

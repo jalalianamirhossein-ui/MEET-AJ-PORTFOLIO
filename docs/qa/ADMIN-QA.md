@@ -1,31 +1,29 @@
 # Admin UI QA — Meet AJ Filament 5
 
-**Date:** 2026-09-17  
+**Date verified:** 2026-09-18  
 **Panel:** `/admin` (Filament 5.8.2, Livewire 4.4.5)  
-**Brand:** `#2563eb`, existing logo, groups Content / Communications / Administration.
+**Brand:** `#2563eb` / cyan `#0ea5e9` / slate, existing logo, groups Content / Communications / Administration.  
+**Superseded:** [../archive/2026-09-18/ADMIN-QA.md](../archive/2026-09-18/ADMIN-QA.md)
 
 ## Browser this pass
 
 | Surface | Result | Evidence |
 |---------|--------|----------|
-| `/admin/login` | PASS (a11y tree) | Title “Login - Meet AJ CMS”. Textboxes named Email address / Password (required). Show password. Remember me. Sign in. HTTP 200 |
-| Login visual PNG | PASS | Desktop Filament sign-in card, labelled Email/Password, Remember me, Sign in |
-| Dashboard / Articles / Categories / Tags / Requests / Users (authenticated) | **BLOCKED** | No production credentials used. Throwaway local QA user was created earlier then **deleted**. Auto-review previously blocked password fill |
-| Admin responsive 414 / 768 / 1024 / 1280 | **BLOCKED** | Requires authenticated session |
+| `/admin/login` | PASS (open tab + HTTP) | Title “Login - Meet AJ CMS” |
+| Dashboard / Articles / Categories / Tags / Requests / Users (authenticated click) | **BLOCKED** | `users` table is empty |
+| Admin responsive 390 / 768 / 1024 | **BLOCKED** | Requires authenticated session |
 
 ## What was checked in code + PHPUnit (PASS)
 
 | Surface | Result | Notes |
 |---------|--------|--------|
-| Dashboard widgets | PASS in code | `CmsStatsOverview` (Articles, Published, Drafts, Categories, Tags, Requests, New requests), `RecentArticles`, `RecentRequests`. Counts query the live database |
-| Articles | PASS PHPUnit | Search, filters (language, status, category, tags), HTML body preserved |
-| Categories | PASS PHPUnit | Unique constraints in the model |
-| Tags | PASS PHPUnit | `TagResource` create/edit/delete/search, unique name+slug |
-| Requests | PASS PHPUnit | Search, filters, seven workflow statuses, internal notes, editor forbidden |
-| Users | PASS in code | `shouldRegisterNavigation()` true for admins. Table shows name/email/role, not password. Password dehydrated only when filled |
-| Authorization | PASS PHPUnit | Public contact cannot set `status` or `internal_notes` |
-| Native Filament | PASS | Light branding only (`filament-admin.css` / `meet-aj-admin.css`). Not a consumer landing page |
+| Single admin stylesheet | PASS | `resources/css/filament-admin.css` only. `public/css/meet-aj-admin.css` is comment-only |
+| Dashboard widgets | PASS in code | Request stats/links go to `RequestResource` |
+| Communications → Requests | PASS PHPUnit | Nav + `/admin/requests` + Livewire `ManageRequests` |
+| New-message badge / unread rows | PASS in code | Badge = count of `status=new`; `.meetaj-request-new` |
+| Authorization | PASS PHPUnit | Editor forbidden on Requests, Services, Users |
+| Contact → inbox | PASS | PHPUnit + live row id 5 |
 
 ## Failures
 
-None identified in code or PHPUnit. **Visual PASS is not claimed** for authenticated Admin.
+None identified in code or PHPUnit. **Visual PASS is not claimed** for authenticated Admin chrome.

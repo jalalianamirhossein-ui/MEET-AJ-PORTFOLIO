@@ -1,8 +1,8 @@
 # Project status — Meet AJ
 
 **Authority:** SINGLE authoritative current-state document. Everything else in `docs/current/` expands one section of this file.
-**Date verified:** 2026-09-18
-**Verification method:** `php artisan about`, `php artisan optimize:clear`, `php artisan route:list`, `php artisan test` (50 tests / 1008 assertions / 1 skipped), `php artisan site:compare-content` (Failures: 0), live `POST /forms/contact.php` against SQLite, Cursor browser first-load + FA + Contact hash + viewports 1920/1440/1024/768/390, and reading `app/`, `routes/`, `resources/`, `assets/`, `tests/`.
+**Date verified:** 2026-09-17
+**Verification method:** `php artisan about`, `php artisan migrate:status`, `php artisan route:list`, `php artisan test`, `php artisan site:compare-content`, direct SQLite schema/row inspection, and reading `app/`, `routes/`, `database/`, `resources/`, `config/`, `tests/`.
 **Runtime used:** `.runtime/php84/php.exe` (PHP is not on PATH on this workstation).
 
 Status vocabulary used in every document: **PASS** | **FAIL** | **BLOCKED** | **NOT TESTED**.
@@ -22,7 +22,7 @@ Where a statement cannot be proven from code or a command, it is marked **UNKNOW
 
 There is no semantic application version in the repository. Do not invent one. The service worker constant `meet-aj-v2.0.0-cms-3` is a **cache name**, not an application version.
 
-## 2. Technology versions (verified 2026-09-18)
+## 2. Technology versions (verified 2026-09-17)
 
 | Component | Version | Source |
 |-----------|---------|--------|
@@ -42,17 +42,17 @@ Engine in use locally: **SQLite** at `database/database.sqlite`. Intended produc
 
 Nine migrations, all **Ran** (batches 1–3). Eleven tables exist, including Laravel's `migrations` table:
 
-| Table | Rows (2026-09-18) |
+| Table | Rows (2026-09-17) |
 |-------|-------------------|
 | `users` | 0 |
 | `password_reset_tokens` | 0 |
-| `sessions` | (local session files; not counted here) |
+| `sessions` | 0 |
 | `categories` | 10 |
 | `articles` | 23 |
 | `article_redirects` | 23 |
 | `tags` | 8 |
 | `article_tag` | 38 |
-| `requests` | 5 (includes live production-audit contact POST) |
+| `requests` | 0 |
 | `services` | 6 |
 | `migrations` | 9 |
 
@@ -69,7 +69,7 @@ Admin   → /admin → Filament 5 → Livewire 4 → models + policies → same 
 
 No SPA, no Node build step, no queue worker, no Redis, no scheduler in use. Detail: [ARCHITECTURE.md](ARCHITECTURE.md).
 
-Routes: **42 total** from `php artisan route:list` after `optimize:clear` — application routes (`/`, `/index.html`, three article routes, two service routes, two `/forms/*.php` routes, `/sitemap.xml`, `/robots.txt`, `/manifest.json`), Filament `/admin` routes (dashboard, login/logout, Articles, Categories, Tags, Services, Requests, Users, plus hidden ContactRequest/ServiceRequest view URLs), and Livewire / Filament asset and export routes.
+Routes: **36 total** from `php artisan route:list` after `optimize:clear` — 11 application routes (`/`, `/index.html`, three article routes, two service routes, two `/forms/*.php` routes, `/sitemap.xml`, `/robots.txt`), 14 Filament `/admin` routes (including two URLs that resolve to the same Users index route name), and 11 Livewire / Filament asset and export routes.
 
 ## 5. Public website
 
@@ -83,7 +83,7 @@ Routes: **42 total** from `php artisan route:list` after `optimize:clear` — ap
 | Contact endpoints `/forms/get-csrf-token.php` and `/forms/contact.php` | PASS (local) |
 | Production rendering on meetaj.ir | NOT TESTED |
 
-Feature-by-feature description: [FEATURES.md](FEATURES.md). Asset cache versions currently in the Blade heads: `visual-upgrade.css?v=1707`, `site-modules.css?v=1820`, `lang-toggle.css?v=1401`, `main.js?v=1406`, `i18n.js?v=1402`.
+Feature-by-feature description: [FEATURES.md](FEATURES.md). Asset cache versions currently in the Blade heads: `visual-upgrade.css?v=1405`, `main.js?v=1201`, `i18n.js?v=1201`, `lang-toggle.css?v=1202`.
 
 ## 6. CMS / Admin
 
@@ -112,7 +112,7 @@ Six published English services, ordered by `sort_order`, prices read from the `s
 
 ## 9. Requests
 
-Inbound contact submissions are stored in `requests` with a seven-value status workflow and admin-only `internal_notes`. A live `POST /forms/contact.php` on 2026-09-18 stored row id 5 (`Production Audit Sender`) with `status = new`. Detail: [REQUESTS.md](REQUESTS.md).
+Inbound contact submissions are stored in `requests` with a seven-value status workflow and admin-only `internal_notes`. The table is **empty** on this workstation (0 rows). Detail: [REQUESTS.md](REQUESTS.md).
 
 ## 10. Languages
 
@@ -132,13 +132,11 @@ CSRF (including the legacy `csrf_token` field contract), honeypot, two-layer rat
 
 ## 14. Testing
 
-| Command | Result (2026-09-18) | Status |
+| Command | Result (2026-09-17) | Status |
 |---------|---------------------|--------|
-| `php artisan test` | **50 tests, 1008 assertions, 1 skipped, 0 failures** | PASS |
+| `php artisan test` | **39 tests, 647 assertions, 1 skipped, 0 failures** | PASS |
 | `php artisan site:compare-content` | **Failures: 0** | PASS |
-| Live `POST /forms/contact.php` | HTTP 200 `OK`; SQLite row id 5 | PASS |
-| Cursor browser first-load + FA + Contact hash + 1920/1440/1024/768/390 | Testimonials + Contact visible; no horizontal overflow; English article titles in FA UI | PASS |
-| `vendor/bin/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest` | 1 test, 7 assertions, OK (last run 2026-09-16 against MariaDB on `127.0.0.1:3307`) | PASS (not re-run today) |
+| `vendor/bin/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest` | 1 test, 7 assertions, OK (last run 2026-09-16 against MariaDB on `127.0.0.1:3307`) | PASS |
 | Lighthouse / performance budget | never executed | NOT TESTED |
 | Production smoke tests | no production environment | BLOCKED |
 
@@ -160,7 +158,7 @@ Documented DirectAdmin procedure exists and is complete, but **no deployment has
 1. **`hreflang` is not implemented.** EN and FA share canonical URLs.
 2. **German is draft-only.** No German content exists; `/de` is 404 by design.
 3. **Scheduled publishing is query-based.** A future `published_at` simply stays invisible; there is no queue or cron to flip it.
-4. **Authenticated Filament visual QA is BLOCKED** until `php artisan cms:create-user` is run (`users` = 0). PHPUnit covers authorization and the Requests inbox.
+4. **Two URLs resolve to the Users index** (`/admin/users` and `/admin/cms-users`) because `AdminPanelProvider` registers an extra `authenticatedRoutes` entry with the same route name. This is one feature, not two.
 5. **Six unused static service Blade files** remain in `resources/views/services/` (`devops-automation.blade.php`, `monitoring-security.blade.php`, `network-design.blade.php`, `system-administration.blade.php`, `technical-consulting.blade.php`, `virtualization-solutions.blade.php`). `ServiceController@show` renders `services.show` only, so these files are dead templates and still reference stale asset versions (`visual-upgrade.css?v=1108`, `i18n.js?v=1000`). They were **not** deleted because this pass is documentation-only.
 6. **Imported `featured_image` values still point at `/assets/...`** rather than Filament storage unless an editor uploads a replacement.
 7. **Source-content leftovers** (not CMS defects): a generic overlay category label on some cards, and the service page “Back to Services” link staying English in FA.

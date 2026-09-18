@@ -460,7 +460,7 @@
           ></a>
         </div>
 
-        <!-- ???? ???: ???? -->
+        <!-- Secondary social row -->
         <div class="social-row social-row-secondary">
           <a
             href="https://twitter.com/RealAjMercury"
@@ -683,7 +683,7 @@
                     <span
                       class="typed"
                       data-typed-items="Network Specialist, DevOps Engineer, IT Consultant, Systems Expert, VMware Administrator"
-                      data-typed-items-fa="????? ???? ????, ????? DevOps ????, ????? ?????? ??????? ????, ??????? ???????? ????, ???? ?????????? VMware ????"
+                      data-typed-items-fa="متخصص شبکه, مهندس DevOps, مشاور فناوری اطلاعات, کارشناس سیستم‌ها, مدیر VMware"
                       aria-live="polite"
                       aria-atomic="true"
                       >Systems Administrator</span
@@ -1966,7 +1966,7 @@
                           allowfullscreen=""
                           loading="lazy"
                           referrerpolicy="no-referrer-when-downgrade"
-                          title="?????? ????? - ?????? ?????"
+                          title="Google Maps - Meet AJ"
                         ></iframe>
                       </div>
                     </div>
@@ -2403,7 +2403,7 @@
 
     <!-- Main Application JavaScript -->
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
-    <script src="/assets/js/main.js?v=1405" defer></script>
+    <script src="/assets/js/main.js?v=1406" defer></script>
     <script src="/assets/js/service-catalog.js?v=1813" defer></script>
 
     <!-- Internationalization (i18n) Support -->

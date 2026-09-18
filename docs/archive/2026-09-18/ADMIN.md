@@ -1,7 +1,7 @@
 # Admin panel — Meet AJ
 
 **Authority:** AUTHORITATIVE Filament description.
-**Verified:** 2026-09-18 against `app/Filament/**`, `app/Policies/**`, `app/Providers/Filament/AdminPanelProvider.php`, `resources/css/filament-admin.css`, `php artisan route:list` (after `optimize:clear`), PHPUnit (`CmsOperationsTest`, `ServiceCatalogTest`, `RequestWorkflowTest`, `PublicSiteTest`, `ProductionAuditTest`, `FormCsrfAndAdminRequestsTest`), and a live contact POST that appears at `/admin/requests`.
+**Verified:** 2026-09-17 against `app/Filament/**`, `app/Policies/**`, `app/Providers/Filament/AdminPanelProvider.php`, `php artisan route:list` (after `optimize:clear`), and PHPUnit (`CmsOperationsTest`, `ServiceCatalogTest`, `RequestWorkflowTest`, `PublicSiteTest`).
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
 Panel: **Filament v5.8.2** on **Livewire v4.4.5**, mounted at `/admin`, brand name “Meet AJ CMS”, primary colour `#2563eb`, gray palette Slate, collapsible sidebar, collapsible navigation groups, unsaved-changes alerts, and global search enabled.
@@ -47,7 +47,9 @@ Administration
 | `GET /admin/tags` | `filament.admin.resources.tags.index` |
 | `GET /admin/services`, `/admin/services/create`, `/admin/services/{record}/edit` | `filament.admin.resources.services.*` |
 | `GET /admin/requests` | `filament.admin.resources.requests.index` |
-| `GET /admin/users` | `filament.admin.resources.users.index` |
+| `GET /admin/users` and `GET /admin/cms-users` | both `filament.admin.resources.users.index` |
+
+The duplicate Users URL exists because `AdminPanelProvider` registers an extra `authenticatedRoutes` entry pointing at the same `ManageUsers` page with the same route name. It is one feature reachable at two paths, not two features.
 
 ## Dashboard
 
@@ -119,7 +121,7 @@ Filament global search is enabled panel-wide. Table search is column-scoped (art
 
 ## Styling
 
-Admin branding is loaded **once**: `AdminPanelProvider` registers `Css::make('meet-aj-admin', resource_path('css/filament-admin.css'))`. Meet AJ tokens are blue `#2563eb`, cyan `#0ea5e9`, slate gray. `public/css/meet-aj-admin.css` is retired (comment-only, no rules) so a second cascade cannot fight Filament/Livewire. Sidebar, topbar, navigation groups, widgets, tables, forms, badges, buttons, unread request rows (`.meetaj-request-new`), focus rings and compact breakpoints live in that single file.
+A small stylesheet is registered twice by design: as a Filament asset (`resources/css/filament-admin.css`) and through a `HEAD_END` render hook that links `css/meet-aj-admin.css?v=2003`.
 
 ## Testing status
 
@@ -128,9 +130,8 @@ Admin branding is loaded **once**: `AdminPanelProvider` registers `Css::make('me
 | `/admin` guest redirect, `/admin/login` 200 | PHPUnit + HTTP | PASS |
 | Article create / update / slug redirect | PHPUnit `CmsOperationsTest` | PASS |
 | Editor denied on services | PHPUnit `ServiceCatalogTest` | PASS |
-| Editor denied on requests, status workflow, internal notes hidden | PHPUnit `RequestWorkflowTest` + `ProductionAuditTest` | PASS |
-| Contact form creates a Request visible at `/admin/requests` | PHPUnit `ProductionAuditTest` + live POST 2026-09-18 | PASS |
+| Editor denied on requests, status workflow, internal notes hidden | PHPUnit `RequestWorkflowTest` | PASS |
 | Interactive login and editing in a browser | — | BLOCKED (no CMS user) |
-| Admin responsive layout on small screens | code + overlay CSS; no authenticated session | NOT TESTED |
+| Admin responsive layout on small screens | — | NOT TESTED |
 
 Evidence: [../qa/ADMIN-QA.md](../qa/ADMIN-QA.md).

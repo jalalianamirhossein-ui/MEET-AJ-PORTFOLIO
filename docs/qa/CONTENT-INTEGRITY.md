@@ -1,6 +1,6 @@
 # Content integrity — Meet AJ
 
-**Date:** 2026-09-17
+**Date:** 2026-09-18 (re-run; still Failures: 0)
 **Command:** `php artisan site:compare-content` (`App\Console\Commands\CompareLegacyContent`)
 **Result:** **Failures: 0**
 **Related:** [../current/ARTICLES.md](../current/ARTICLES.md) · [QA-MATRIX.md](QA-MATRIX.md)

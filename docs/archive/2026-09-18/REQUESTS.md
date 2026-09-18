@@ -1,10 +1,10 @@
 # Requests (contact and quotes) — Meet AJ
 
 **Authority:** AUTHORITATIVE description of the inbound request pipeline.
-**Verified:** 2026-09-18 against `app/Http/Controllers/ContactController.php`, `app/Http/Requests/StoreContactRequest.php`, `app/Http/Middleware/AcceptLegacyCsrfToken.php`, `app/Models/Request.php`, `app/Filament/Resources/RequestResource.php`, `routes/web.php`, PHPUnit (`PublicSiteTest`, `RequestWorkflowTest`, `ProductionAuditTest`, `FormCsrfAndAdminRequestsTest`), and a live `POST /forms/contact.php` that stored SQLite row id 5.
+**Verified:** 2026-09-17 against `app/Http/Controllers/ContactController.php`, `app/Http/Requests/StoreContactRequest.php`, `app/Http/Middleware/AcceptLegacyCsrfToken.php`, `app/Models/Request.php`, `app/Filament/Resources/RequestResource.php`, `routes/web.php`, and PHPUnit (`PublicSiteTest`, `RequestWorkflowTest`).
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
-The local `requests` table currently holds **5 rows** on this workstation. The production-audit live submission is id **5**, name `Production Audit Sender`, status `new`, `service_id` null.
+The `requests` table currently holds **0 rows** on this workstation.
 
 ## Endpoints
 
@@ -58,7 +58,7 @@ Nothing enforces a linear transition; an admin can select any status. Migration 
 
 ## Admin handling
 
-Filament **Communications → Requests** (`/admin/requests`), admin only. `RequestResource::shouldRegisterNavigation()` is true; the split `ContactRequestResource` / `ServiceRequestResource` URLs remain for deep links but are hidden from the sidebar. Inbound fields are read-only; only `status` and `internal_notes` can be changed. The screen offers inbox/status/type/service/date filters, a “new” count badge in the sidebar, coloured status badges, unread row highlighting, search on name/email/phone/subject/message, and bulk “mark contacted” / “mark completed” / “mark cancelled” actions. Creating a request from Filament is denied by policy. Detail: [ADMIN.md](ADMIN.md).
+Filament **Communications → Requests**, admin only. Inbound fields are read-only; only `status` and `internal_notes` can be changed. The screen offers status/service/date filters, a “new” count badge in the sidebar, coloured status badges, and bulk “mark completed” / “mark cancelled” actions. Creating a request from Filament is denied by policy. Detail: [ADMIN.md](ADMIN.md).
 
 ## Mail
 
@@ -69,5 +69,4 @@ Mail is optional (`config('cms.mail_is_optional')` is true). Locally the mailer 
 | Token endpoint, persistence, honeypot, 400, 429 | PASS (PHPUnit) |
 | Service linking from a service page | PASS (PHPUnit) |
 | Mail transport failure keeps the row | PASS (PHPUnit) |
-| Homepage form → DB → `/admin/requests` (admin sees, editor 403) | PASS (PHPUnit `ProductionAuditTest` + live POST 2026-09-18) |
 | Real SMTP delivery on DirectAdmin | BLOCKED · NOT TESTED |

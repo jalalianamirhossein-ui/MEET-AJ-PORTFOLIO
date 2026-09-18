@@ -1,7 +1,7 @@
 # Testing — Meet AJ
 
 **Authority:** AUTHORITATIVE testing document.
-**Verified:** 2026-09-17 by running the suite and reading `phpunit.xml`, `phpunit.mysql.xml`, `tests/TestCase.php` and every file in `tests/Feature/`.
+**Verified:** 2026-09-18 by running the suite and reading `phpunit.xml`, `phpunit.mysql.xml`, `tests/TestCase.php` and every file in `tests/Feature/`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md). Per-URL evidence: [../qa/QA-MATRIX.md](../qa/QA-MATRIX.md).
 
 ## Latest run
@@ -11,13 +11,15 @@ PHPUnit 11.5.56 by Sebastian Bergmann and contributors.
 Runtime:       PHP 8.4.25
 Configuration: phpunit.xml
 
-..................S....................                           39 / 39 (100%)
+........................S.........................                50 / 50 (100%)
 
 OK, but some tests were skipped!
-Tests: 39, Assertions: 647, Skipped: 1.
+Tests: 50, Assertions: 1008, Skipped: 1.
 ```
 
 **Status: PASS.** The single skip is `MysqlSchemaTest`, which only runs when a MySQL/MariaDB connection is bound.
+
+Also run on 2026-09-18: `php artisan optimize:clear`, `php artisan route:list` (42 routes), `php artisan site:compare-content` (**Failures: 0**).
 
 ## Suites and configuration
 
@@ -30,17 +32,17 @@ Tests: 39, Assertions: 647, Skipped: 1.
 
 ## Test files
 
-| File | Tests | Covers |
-|------|-------|--------|
-| `PublicSiteTest.php` | 9 | Homepage, `/index.html` 301, all 23 articles and their legacy redirects, 404 on unknown slugs, contact endpoints, honeypot, validation, rate limit, sitemap, robots, German routes returning 404 |
-| `CmsOperationsTest.php` | 8 | Filament access control, article create/update, slug-change redirects, importer behaviour |
-| `ServiceCatalogTest.php` | 8 | Service catalog rendering, detail pages, `.html` 301, pricing output, editor authorization failure |
-| `ArticleLibraryTest.php` | 5 | Search, tag filter, pagination, related articles, share links |
-| `ContentRulesTest.php` | 5 | Language rules, German publishing rejection, publication gates |
-| `RequestWorkflowTest.php` | 3 | Request statuses, admin-only access, hidden internal notes |
-| `MysqlSchemaTest.php` | 1 | Schema creation on MySQL/MariaDB (7 assertions; skipped on SQLite) |
-
-Total: **39 tests, 647 assertions**.
+| File | Covers |
+|------|--------|
+| `PublicSiteTest.php` | Homepage, `/index.html` 301, all 23 articles and their legacy redirects, 404 on unknown slugs, contact endpoints, honeypot, validation, rate limit, sitemap, robots, German routes returning 404 |
+| `CmsOperationsTest.php` | Filament access control, article create/update, slug-change redirects, importer behaviour |
+| `ServiceCatalogTest.php` | Service catalog rendering, detail pages, `.html` 301, pricing output, editor authorization failure |
+| `ArticleLibraryTest.php` | Search, tag filter, pagination, related articles, share links |
+| `ContentRulesTest.php` | Language rules, German publishing rejection, publication gates |
+| `RequestWorkflowTest.php` | Request statuses, admin-only access, hidden internal notes |
+| `FormCsrfAndAdminRequestsTest.php` | CSRF contracts, homepage + service quote persistence, `/admin/requests` inbox |
+| `ProductionAuditTest.php` | Contact → Request → admin inbox; editor 403; first-load Testimonials + Contact; FA encoding; English article titles + importer repair |
+| `MysqlSchemaTest.php` | Schema creation on MySQL/MariaDB (skipped on SQLite) |
 
 ## Commands
 
@@ -52,25 +54,33 @@ php artisan migrate:status                                    # migration ledger
 php artisan route:list                                        # route inventory
 ```
 
-`php artisan test` is a project command (`App\Console\Commands\RunTests`) that forwards arguments to PHPUnit. On this workstation every command runs through `.runtime/php84/php.exe` because `php` is not on PATH.
+`php artisan test` is a project command (`App\Console\Commands\RunTests`) that forwards arguments to PHPUnit. On this workstation every command runs through `.runtime/php84/php.exe` because `php` is not on PATH. That wrapper does **not** accept `--filter`; use `php vendor/phpunit/phpunit/phpunit --filter …` for a subset.
 
 ## Content integrity
 
-`php artisan site:compare-content` renders each article through Laravel and compares it against the original HTML file for complete body, bilingual attributes, headings and SEO tokens.
+`php artisan site:compare-content` on 2026-09-18: **Failures: 0** across home, 6 services, articles index, and 23 articles. Evidence: [../qa/CONTENT-INTEGRITY.md](../qa/CONTENT-INTEGRITY.md).
 
-Result on 2026-09-17: **Failures: 0** across 23 articles. Evidence: [../qa/CONTENT-INTEGRITY.md](../qa/CONTENT-INTEGRITY.md).
+## Live HTTP (not PHPUnit)
+
+| Check | Result |
+|-------|--------|
+| `GET /forms/get-csrf-token.php` then `POST /forms/contact.php` | 200 `OK`; SQLite `requests.id = 5` |
+| Direct Homepage first load | `#testimonials` and `#contact` opacity 1, `aos-animate`, non-zero height |
+| FA switch | `dir=rtl`, Persian nav, typed roles in Arabic script, 0 visible `????` nodes |
+| Contact from Homepage and from `/articles` | `#contact` in viewport |
+| Viewports 1920 / 1440 / 1024 / 768 / 390 | no horizontal overflow |
 
 ## MySQL integration
 
-`MysqlSchemaTest` last ran green on 2026-09-16 against MariaDB on `127.0.0.1:3307` (1 test, 7 assertions). It was **not** re-run on 2026-09-17, so its status is carried forward from that date rather than re-verified today.
+`MysqlSchemaTest` last ran green on 2026-09-16 against MariaDB on `127.0.0.1:3307`. It was **not** re-run on 2026-09-18.
 
 ## What is not tested
 
 | Area | Status | Reason |
 |------|--------|--------|
 | Interactive Filament CRUD in a browser | BLOCKED | `users` table is empty; no account to log in with |
-| Admin responsive layout | NOT TESTED | depends on an authenticated session |
-| PWA install, offline browsing | NOT TESTED | never exercised in a browser |
+| Admin responsive layout (authenticated) | NOT TESTED | depends on an authenticated session |
+| PWA install, offline browsing | NOT TESTED | never exercised as an install |
 | Lighthouse or any performance budget | NOT TESTED | no run exists |
 | Production smoke tests on meetaj.ir | BLOCKED | no deployment |
 | SMTP delivery | BLOCKED | no production mail account |

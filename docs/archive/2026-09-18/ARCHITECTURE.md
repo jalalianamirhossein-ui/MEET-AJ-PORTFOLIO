@@ -1,7 +1,7 @@
 # Architecture — Meet AJ
 
 **Authority:** AUTHORITATIVE description of the running application.
-**Verified:** 2026-09-18 against `app/`, `routes/web.php`, `config/`, `resources/views/`, `public/`, and `php artisan route:list` after `optimize:clear`.
+**Verified:** 2026-09-17 against `app/`, `routes/web.php`, `config/`, `resources/views/`, `public/`, and `php artisan route:list` after `optimize:clear`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md). Decision record: [../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md](../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md).
 
 ## Request flow
@@ -140,7 +140,7 @@ Detail: [ADMIN.md](ADMIN.md).
 
 ## Assets and document root
 
-Original CSS/JS/images live in `assets/` and are copied into `public/assets/` by the publisher. The overlay stylesheet `assets/css/visual-upgrade.css` loads after `rtl.css`; `assets/css/site-modules.css` is last. Current cache-busting versions in the Blade heads: `visual-upgrade.css?v=1707`, `site-modules.css?v=1820`, `lang-toggle.css?v=1401`, `main.js?v=1406`, `i18n.js?v=1402`. Admin CSS is **not** in this public overlay — Filament loads `resources/css/filament-admin.css` once.
+Original CSS/JS/images live in `assets/` and are copied into `public/assets/` by the publisher. The overlay stylesheet `assets/css/visual-upgrade.css` loads after `rtl.css`. Current cache-busting versions in the Blade heads: `visual-upgrade.css?v=1405`, `main.js?v=1201`, `i18n.js?v=1201`, `lang-toggle.css?v=1202`.
 
 Only `public/` may be exposed by the web server. The root-level `index.html`, `articles/`, `services/`, `assets/`, `forms/` and `partials/` are **sources**; serving them directly would bypass Laravel.
 

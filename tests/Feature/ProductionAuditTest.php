@@ -93,7 +93,9 @@ class ProductionAuditTest extends TestCase
         $this->assertStringContainsString('data-fa="نظرات"', $html);
         $this->assertStringContainsString('راه‌حل‌های قابل اعتماد', $html);
         $this->assertStringContainsString('مانیتورینگ Zabbix', $html);
+        $this->assertStringContainsString('متخصص شبکه', $html);
         $this->assertDoesNotMatchRegularExpression('/data-fa="[?؟]{3,}"/u', $html);
+        $this->assertDoesNotMatchRegularExpression('/data-typed-items-fa="[?؟,\s]+"/u', $html);
         $this->get('/articles')->assertOk()
             ->assertSee('data-fa="صفحه اصلی"', false)
             ->assertSee('href="/#contact"', false);

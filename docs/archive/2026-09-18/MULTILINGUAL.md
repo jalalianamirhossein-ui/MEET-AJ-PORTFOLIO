@@ -1,7 +1,7 @@
 # Multilingual — Meet AJ
 
 **Authority:** AUTHORITATIVE language document.  
-**Verified:** 2026-09-18 against `config/cms.php`, `Article` model, views, `assets/js/i18n.js`, `assets/css/lang-toggle.css`, `assets/css/site-modules.css`, PHPUnit `ProductionAuditTest`, and a Cursor browser FA pass (RTL nav, typed roles, English article titles, 0 visible `????` nodes).
+**Verified:** 2026-09-16 against `config/cms.php`, `Article` model, views, `assets/js/i18n.js`, and `PublicSiteTest::test_german_routes_are_not_public`.
 
 ## Languages
 
@@ -33,11 +33,7 @@ Public listing does **not** show FA or DE rows as separate URLs.
 
 ## Language switcher
 
-One shared control (`#lang-switcher` / `#lang-toggle`) injected by `assets/js/i18n.js` on Homepage, Articles, article detail and service pages. Palette is Meet AJ white / blue `#2563eb` / cyan — **not** burgundy. `assets/css/lang-toggle.css` is the component stylesheet; `site-modules.css` last-layer rules match it (the previous `!important` burgundy override was removed on 2026-09-18). FA active state is filled blue with white type. EN is LTR; FA sets `html[dir=rtl][lang=fa]` and enables `rtl.css`.
-
 Client-side only. No Laravel locale middleware for FA. No URL prefix.
-
-Article **titles stay English** in FA UI (`data-i18n-lock` on H1 and cards). Persian titles that had been stored in `meta_title` / `seo_data` were repaired to the canonical English hero title by `LegacyArticleImporter::ensureEnglishTitles()` (6 live rows on 2026-09-18).
 
 ## hreflang
 
