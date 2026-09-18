@@ -51,12 +51,6 @@ html[dir="rtl"] .main span {
 }
 
 /*
- * Swiper positions slides with translate3d in physical coordinates.
- * The blanket div { direction:rtl } rule above would reverse the flex
- * track and park the active slide off-canvas. Keep the track LTR;
- * card copy stays RTL via the rules further down.
- */
-/*
  * Swiper RTL math expects the wrapper to inherit [dir=rtl] from the
  * slider root after remount. Only force LTR while the instance is still
  * the pre-i18n LTR slider (no .swiper-rtl), so the first paint stays on canvas.
