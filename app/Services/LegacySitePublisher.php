@@ -54,6 +54,7 @@ class LegacySitePublisher
         $html = $this->replaceServicesGrid($html);
         $html = $this->replaceTestimonials($html);
         $html = $this->injectArticleLibrary($html, false);
+        $html = $this->replaceSidebarChrome($html, '#hero');
         $target = resource_path('views/home.blade.php');
         file_put_contents($target, $html);
 
@@ -78,6 +79,7 @@ class LegacySitePublisher
         $assembled = $this->toBlade($assembled);
         $assembled = $this->replacePortfolioGrid($assembled);
         $assembled = $this->injectArticleLibrary($assembled, true);
+        $assembled = $this->replaceSidebarChrome($assembled, '/#hero');
         $page = <<<'BLADE'
 <!doctype html>
 <html lang="en" dir="ltr">
@@ -345,6 +347,68 @@ BLADE;
         }
 
         return $html;
+    }
+
+    private function replaceSidebarChrome(string $html, string $logoHref): string
+    {
+        if (str_contains($html, "partials.site-sidebar-chrome")) {
+            return $html;
+        }
+
+        $headerStart = strpos($html, 'id="header"');
+        $navStart = strpos($html, 'id="navmenu"');
+        if ($headerStart === false || $navStart === false || $navStart < $headerStart) {
+            throw new \RuntimeException('Unable to locate sidebar chrome bounds');
+        }
+
+        $start = strpos($html, '<div class="brand-lang"', $headerStart);
+        $social = strpos($html, '<div class="social-links', $headerStart);
+        if ($start === false || $social === false || $start > $navStart || $social > $navStart) {
+            throw new \RuntimeException('Unable to locate sidebar profile/social chrome');
+        }
+
+        $end = $this->findMatchingDivEnd($html, $social);
+        if ($end > $navStart) {
+            throw new \RuntimeException('Sidebar social block extends into nav');
+        }
+
+        $replacement = <<<BLADE
+@endverbatim
+      @include('partials.site-sidebar-chrome', ['logoHref' => '{$logoHref}'])
+@verbatim
+BLADE;
+
+        return substr($html, 0, $start).$replacement.substr($html, $end);
+    }
+
+    private function findMatchingDivEnd(string $html, int $openPos): int
+    {
+        $length = strlen($html);
+        $depth = 0;
+        $offset = $openPos;
+
+        while ($offset < $length) {
+            $nextOpen = stripos($html, '<div', $offset);
+            $nextClose = stripos($html, '</div>', $offset);
+            if ($nextClose === false) {
+                throw new \RuntimeException('Unclosed sidebar div');
+            }
+
+            if ($nextOpen !== false && $nextOpen < $nextClose) {
+                $depth++;
+                $offset = $nextOpen + 4;
+
+                continue;
+            }
+
+            $depth--;
+            $offset = $nextClose + 6;
+            if ($depth === 0) {
+                return $offset;
+            }
+        }
+
+        throw new \RuntimeException('Unable to close sidebar social div');
     }
 
     public function toBlade(string $html): string

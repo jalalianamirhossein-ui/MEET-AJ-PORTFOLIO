@@ -381,10 +381,11 @@
     <!-- ===============================================
     ==================== HEADER SECTION ================
     =============================================== -->
-@endverbatim
     <header id="header" class="header dark-background d-flex flex-column">
+      @endverbatim
       @include('partials.site-sidebar-chrome', ['logoHref' => '#hero'])
 @verbatim
+
       <!-- ===============================================
       ==================== NAVIGATION MENU ================
       =============================================== -->
@@ -449,9 +450,7 @@
           </li>
         </ul>
       </nav>
-@endverbatim
     </header>
-@verbatim
 
     <!-- ===============================================
     ==================== MOBILE MENU TOGGLE ==============
