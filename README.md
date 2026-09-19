@@ -223,7 +223,7 @@ Full navigation map: [docs/README.md](docs/README.md).
 6. **German is draft-only** and no German content exists.
 7. **Scheduled publishing is query-based**: a future `published_at` simply stays hidden, with nothing to flip it later.
 8. **`/admin/users` and `/admin/cms-users`** resolve to the same Users screen; that is one feature at two paths.
-9. **Standalone service detail pages** were removed; service records remain for the homepage catalog and the original HTML files remain only as importer sources.
+9. **Standalone service detail pages** were removed; service records remain for the homepage catalog and are synchronized from `HomepageServiceCatalog`.
 10. **Imported article images** still point at `/assets/...` unless an editor uploads a replacement.
 
 Every limitation above is tracked with a status in [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).

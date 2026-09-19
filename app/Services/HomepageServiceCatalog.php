@@ -254,6 +254,15 @@ class HomepageServiceCatalog
                 'sort' => 90,
                 'show_in_catalog' => false,
                 'preserve_existing_copy' => true,
+                'title_en' => 'Technical Consulting',
+                'title_fa' => 'مشاوره فنی',
+                'short_en' => 'Infrastructure assessment, architecture guidance, and practical technical planning.',
+                'short_fa' => 'ارزیابی زیرساخت، راهنمایی معماری و برنامه‌ریزی فنی عملی.',
+                'features' => [
+                    ['en' => 'Infrastructure assessment', 'fa' => 'ارزیابی زیرساخت'],
+                    ['en' => 'Architecture guidance', 'fa' => 'راهنمایی معماری'],
+                    ['en' => 'Technical planning', 'fa' => 'برنامه‌ریزی فنی'],
+                ],
             ],
         ];
     }

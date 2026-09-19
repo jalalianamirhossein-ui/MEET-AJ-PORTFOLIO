@@ -27,6 +27,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -45,6 +46,13 @@ class ServiceResource extends Resource
     public static function canViewAny(): bool
     {
         return auth()->user()?->isAdmin() ?? false;
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('language', 'en')
+            ->where('show_in_catalog', true);
     }
 
     public static function getGloballySearchableAttributes(): array
@@ -66,10 +74,9 @@ class ServiceResource extends Resource
                 ->schema([
                     TextInput::make('title')->required()->maxLength(255)->columnSpanFull(),
                     TextInput::make('slug')->required()->maxLength(180)->regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/')->helperText('Lowercase words separated by hyphens. Unique per language.'),
-                    Select::make('language')->options(['en' => 'English', 'fa' => 'فارسی', 'de' => 'Deutsch (draft only)'])->default('en')->required()->disabled(fn (?Service $record) => $record !== null)->dehydrated(),
+                    Select::make('language')->options(['en' => 'English'])->default('en')->required()->disabled()->dehydrated(),
                     TextInput::make('translation_key')->label('Translation key')->helperText('Leave blank to generate. Pairs EN/FA/DE rows of the same service.')->maxLength(36),
                     TextInput::make('sort_order')->numeric()->default(0)->required()->helperText('Homepage order. Lower numbers first.'),
-                    Toggle::make('show_in_catalog')->label('Show on homepage catalog')->default(true)->helperText('Keeps the service record and data even when hidden from the homepage grid.'),
                 ]),
             Section::make('Content')
                 ->icon(Heroicon::OutlinedDocumentText)

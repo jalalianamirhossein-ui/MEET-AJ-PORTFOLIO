@@ -63,7 +63,7 @@ MEET AJ PORTFOLIO/
 | `resources/css/filament-admin.css` | `public/css/app/meet-aj-admin.css` | `php artisan filament:assets` |
 | `resources/legacy/index.html` and `LegacySitePublisher` | `resources/views/home.blade.php`, `resources/views/articles/index.blade.php` | `php artisan site:publish-assets --views` |
 | `resources/legacy/articles/` | Article and redirect records | `php artisan articles:import-legacy` |
-| `resources/legacy/services/` | Service records | `php artisan services:import-legacy` |
+| `HomepageServiceCatalog` | Homepage service records and ordering | `php artisan services:import-legacy` |
 | `LegacySitePublisher::writeServiceWorker()` | `public/sw.js`, `public/offline.html` | `php artisan site:publish-assets` |
 
 Public URLs remain `/assets/...`, `/docs/netbox_installation_guide_v2.pdf`, `/manifest.json`, `/sw.js`, and the existing page routes. Filesystem moves do not change stored article source identifiers (`articles/*.html`) or legacy redirect URLs.
@@ -73,7 +73,7 @@ Keep `resources/` in deployment packages: asset publishing, imports, content com
 ## Placement rules
 
 - Follow Laravel's existing `app/`, `config/`, `database/`, `routes/`, and `tests/` conventions for new backend work.
-- Put active templates under `resources/views/`; service presentation lives in the homepage catalog and drawer. Legacy service HTML remains an importer source under `resources/legacy/services/`.
+- Put active templates under `resources/views/`; service presentation lives in the homepage catalog and drawer. Service catalog definitions live in `HomepageServiceCatalog`.
 - Edit asset sources in `resources/`, then publish them. Some generated public outputs are tracked for deployment compatibility; do not edit those copies directly.
 - Keep developer documentation in `docs/`, and downloadable visitor content in `resources/downloads/`.
 - Keep standalone diagnostics in `scripts/`. Use `storage/app/` or `storage/logs/` for temporary output; these are already ignored by Git.

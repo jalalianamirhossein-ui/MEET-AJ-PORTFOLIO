@@ -25,7 +25,8 @@ Content (document icon)
 ├── Articles        newspaper
 ├── Categories      squares
 ├── Tags            hashtag
-└── Services        briefcase (admins only)
+├── Services        briefcase (admins only)
+└── Testimonials    chat bubble
 Communications (inbox icon)
 └── Requests        inbox; badge = count of `status=new` (white on `#7f1d1d`)
 Administration (cog icon)
@@ -34,7 +35,7 @@ Administration (cog icon)
 Active item: light crimson `#fff1f2` fill, 3px `#be123c` inset bar, crimson label. Hover uses the same soft red, not a saturated fill.
 ```
 
-`ServiceResource`, `RequestResource` and `UserResource` gate themselves through `canViewAny()`; `UserResource::shouldRegisterNavigation()` returns true for admins, so Users **is** in the sidebar for an admin.
+`ServiceResource`, `RequestResource` and `UserResource` gate themselves through `canViewAny()`; the service resource is limited to English records shown in the homepage catalog. `UserResource::shouldRegisterNavigation()` returns true for admins, so Users **is** in the sidebar for an admin.
 
 ## Routes
 
@@ -98,10 +99,10 @@ CRUD on `tags` for admins and editors (`TagPolicy`). `name` and `slug` are uniqu
 
 ## Services (`ServiceResource`) — Content
 
-**Admin only** (`ServicePolicy`). Editors receive an authorization failure, asserted in PHPUnit.
+**Admin only** (`ServicePolicy`). The resource lists and edits only English records shown in the homepage service catalog; standalone public service pages are removed. Editors receive an authorization failure, asserted in PHPUnit.
 
 Form sections: General, Content (repeaters for features, process, FAQ), Pricing, Media, SEO, Publishing.
-Table: title, language, status, formatted price, currency, sort order, published at, updated at. Filters: language, status, price type. Actions: preview, edit, replicate as draft, publish, unpublish, delete with confirmation; bulk publish skips German rows. Prices live here and nowhere else ([SERVICES.md](SERVICES.md)).
+Table: title, language, status, formatted price, currency, sort order, published at, updated at. Filters: language, status, price type. Actions: edit, replicate as draft, publish, unpublish, delete with confirmation; bulk publish skips German rows. Prices live here and nowhere else ([SERVICES.md](SERVICES.md)).
 
 ## Requests (`RequestResource`) — Communications
 

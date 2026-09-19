@@ -115,6 +115,9 @@ class ServiceCatalogTest extends TestCase
 
     public function test_admin_can_manage_services_and_editors_cannot(): void
     {
+        $this->assertTrue(\App\Filament\Resources\ServiceResource::shouldRegisterNavigation());
+        $this->assertSame(12, \App\Filament\Resources\ServiceResource::getEloquentQuery()->count());
+
         $editor = User::create(['name' => 'Editor', 'email' => 'svc-editor@example.test', 'password' => 'password12chars']);
         $editor->forceFill(['role' => 'editor'])->save();
         $admin = User::create(['name' => 'Admin', 'email' => 'svc-admin@example.test', 'password' => 'password12chars']);

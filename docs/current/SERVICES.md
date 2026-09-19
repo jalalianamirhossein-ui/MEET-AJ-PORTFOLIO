@@ -40,13 +40,13 @@ The catalog is **database-driven**. English rows with `status = published`, `pub
 |-------|------|
 | `title`, `slug`, `language`, `translation_key` | Identity; unique `(language, slug)` and `(translation_key, language)` |
 | `short_description` | Homepage card text |
-| `description` | Detail hero subtitle |
-| `content` | Longer overview |
+| `description` | Optional extended homepage copy |
+| `content` | Longer stored overview |
 | `features`, `process`, `faq` | JSON arrays edited as Filament repeaters |
 | `price`, `price_currency`, `price_label`, `price_type` | Pricing, admin-controlled |
 | `featured_image` | Optional JPEG/PNG/WebP; cards fall back to an icon |
-| `presentation` | JSON: `icon`, Persian strings (`title_fa`, `short_description_fa`, `description_fa`, `price_label_fa`, `cta_fa`, …), `deliverables`, `exclusions`, `sla`, `addons`, `form_subject`, `source_file` |
-| `seo_title`, `seo_description`, `og_title`, `og_description` | Detail `<head>` |
+| `presentation` | JSON: `icon`, Persian strings (`title_fa`, `short_description_fa`, `description_fa`, `price_label_fa`, `cta_fa`, …), catalog features and `form_subject` |
+| `seo_title`, `seo_description`, `og_title`, `og_description` | Retained legacy metadata; no standalone service page emits it |
 | `sort_order` | Homepage order, lower first |
 | `status`, `published_at` | Publication gate |
 
@@ -68,7 +68,6 @@ A service is shown in the homepage catalog only when `language` is in `config('c
 
 English and Persian share the same URL. Persian copy comes from `presentation.*_fa` values rendered into `data-fa` attributes, applied client-side by `assets/js/i18n.js` with RTL styling from `rtl.css`. There is no German service content and no `/de` route.
 
-Known source leftover: the “Back to Services” link on the detail page stays English in the Persian view.
 
 ## Public placement
 
@@ -117,4 +116,4 @@ php artisan services:import-legacy --dry-run
 php artisan services:import-legacy --refresh
 ```
 
-Source files are the six original quote pages in `resources/legacy/services/*.html`. `--refresh` deletes existing service rows before re-importing, so it discards editorial price and copy changes. `DatabaseSeeder` runs the article and service importers after rebuilding Blade views.
+The importer now synchronizes the homepage catalog definitions directly; old service HTML is no longer required. `--refresh` deletes existing service rows before re-importing, so it discards editorial price and copy changes. `DatabaseSeeder` runs the article and service importers after rebuilding Blade views.

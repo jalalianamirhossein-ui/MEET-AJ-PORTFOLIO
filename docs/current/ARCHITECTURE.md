@@ -117,7 +117,7 @@ Policies are registered in `App\Providers\AppServiceProvider`.
 
 Rebuild with `php artisan site:publish-assets --views`.
 
-The homepage service catalog is the only public service presentation. The original service HTML files remain under `resources/legacy/services/` as importer sources, but there are no standalone public service routes or detail views.
+The homepage service catalog is the only public service presentation. Homepage catalog definitions are stored in `HomepageServiceCatalog`; there are no standalone public service routes or detail views.
 
 ## Filament / Livewire
 
