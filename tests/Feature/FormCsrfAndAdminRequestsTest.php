@@ -91,7 +91,7 @@ class FormCsrfAndAdminRequestsTest extends TestCase
             'message' => 'This is a valid test message.',
         ])->assertOk()->assertSee('OK', false);
 
-        $serviceToken = $this->get('/services/network-design')->assertOk();
+        $serviceToken = $this->get('/')->assertOk();
         preg_match('/name="csrf-token" content="([^"]+)"/', $serviceToken->getContent(), $serviceMatches);
         $this->assertNotEmpty($serviceMatches[1] ?? null);
 

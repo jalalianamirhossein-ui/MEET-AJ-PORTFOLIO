@@ -2,10 +2,8 @@
 
 namespace App\Filament\Resources\ServiceResource\Pages;
 
-use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
-use Filament\Support\Icons\Heroicon;
 
 class EditService extends EditRecord
 {
@@ -14,12 +12,6 @@ class EditService extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('preview')
-                ->label('View public page')
-                ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
-                ->url(fn (): string => $this->getRecord()->path())
-                ->openUrlInNewTab()
-                ->visible(fn (): bool => $this->getRecord()->status === 'published' && $this->getRecord()->published_at?->lte(now()) && $this->getRecord()->language !== 'de'),
             DeleteAction::make()->requiresConfirmation(),
         ];
     }

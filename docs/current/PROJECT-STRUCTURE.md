@@ -73,7 +73,7 @@ Keep `resources/` in deployment packages: asset publishing, imports, content com
 ## Placement rules
 
 - Follow Laravel's existing `app/`, `config/`, `database/`, `routes/`, and `tests/` conventions for new backend work.
-- Put active templates under `resources/views/`; only `services/show.blade.php` renders service detail pages. Retired templates live outside the active view search path.
+- Put active templates under `resources/views/`; service presentation lives in the homepage catalog and drawer. Legacy service HTML remains an importer source under `resources/legacy/services/`.
 - Edit asset sources in `resources/`, then publish them. Some generated public outputs are tracked for deployment compatibility; do not edit those copies directly.
 - Keep developer documentation in `docs/`, and downloadable visitor content in `resources/downloads/`.
 - Keep standalone diagnostics in `scripts/`. Use `storage/app/` or `storage/logs/` for temporary output; these are already ignored by Git.

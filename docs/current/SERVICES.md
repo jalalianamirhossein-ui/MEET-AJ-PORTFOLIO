@@ -1,7 +1,7 @@
 # Services — Meet AJ
 
 **Authority:** AUTHORITATIVE service catalog document.
-**Verified:** 2026-09-17 against the live `services` table, `app/Models/Service.php`, `app/Http/Controllers/ServiceController.php`, `app/Filament/Resources/ServiceResource.php`, `app/Policies/ServicePolicy.php`, `resources/views/services/show.blade.php`, and `resources/views/components/service-card.blade.php`.
+**Verified:** 2026-09-20 against the live `services` table, `app/Models/Service.php`, `app/Filament/Resources/ServiceResource.php`, `app/Policies/ServicePolicy.php`, and `resources/views/components/service-card.blade.php`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
 ## The six services
@@ -21,7 +21,7 @@ AED is the currency used by the original static pages and their JSON-LD. Prices 
 
 ## Architecture
 
-The catalog is **database-driven**. English rows with `status = published` and `published_at <= now()` appear on the homepage and at `/services/{slug}`.
+The catalog is **database-driven**. English rows with `status = published`, `published_at <= now()`, and `show_in_catalog = true` appear in the homepage catalog. Standalone service detail pages have been removed.
 
 | Layer | Class or file |
 |-------|---------------|
@@ -30,8 +30,8 @@ The catalog is **database-driven**. English rows with `status = published` and `
 | Policy | `App\Policies\ServicePolicy` (admin only) |
 | Admin | `App\Filament\Resources\ServiceResource` (Content group) |
 | Import | `php artisan services:import-legacy` → `App\Services\LegacyServiceImporter` |
-| Public | `HomeController@index` catalog + `ServiceController@show` |
-| View | `resources/views/services/show.blade.php`, card `components/service-card.blade.php` |
+| Public | `HomeController@index` catalog |
+| View | `components/service-card.blade.php` and the homepage service drawer |
 | Requests | `requests.service_id` nullable FK → `services`, set null on delete |
 
 ## Database model and fields
@@ -52,17 +52,17 @@ The catalog is **database-driven**. English rows with `status = published` and `
 
 ## Pricing
 
-`Service::displayPrice($locale)` decides what a visitor sees:
+`Service::displayPrice($locale)` decides what a visitor sees in the homepage catalog/drawer:
 
 - `price_type = fixed` → the formatted amount, for example `AED 4,900`
 - `price_type = starting_from` → a “starting from” phrasing
 - `price_type = custom_quote`, or an empty `price` → `price_label` if set, otherwise `Request a quote` (Persian: `درخواست پیش‌فاکتور` from `presentation.quote_label_fa`)
 
-No price is hardcoded in a Blade template. The JSON-LD `Offer` on the detail page uses the same `price` and `price_currency` values.
+No price is hardcoded in a Blade template.
 
 ## Publication
 
-A service is public only when `language` is in `config('cms.public_languages')` (`en`, `fa`), `status = published`, `published_at` is set and not in the future. Drafts, future dates and German rows never appear on the homepage, the detail route, or `/sitemap.xml`. Publishing `language = de` throws `ValidationException` in the model, and bulk publish in Filament skips German rows.
+A service is shown in the homepage catalog only when `language` is in `config('cms.public_languages')` (`en`, `fa`), `status = published`, `published_at` is set and not in the future, and `show_in_catalog = true`. Drafts, future dates, German rows, and hidden catalog rows never appear in the catalog. Publishing `language = de` throws `ValidationException` in the model.
 
 ## Translations
 
@@ -70,19 +70,19 @@ English and Persian share the same URL. Persian copy comes from `presentation.*_
 
 Known source leftover: the “Back to Services” link on the detail page stays English in the Persian view.
 
-## URLs
+## Public placement
 
 | URL | Behaviour |
 |-----|-----------|
 | `/#services` | Homepage catalog, ordered by `sort_order` |
-| `/services/{slug}` | Canonical detail page, published English rows only |
-| `/services/{slug}.html` | **301** to the canonical URL, query string preserved |
+| `/services/{slug}` | Removed; returns 404 |
+| `/services/{slug}.html` | Removed; returns 404 |
 
-`/sitemap.xml` lists the clean URLs only.
+Services are not listed in `/sitemap.xml`.
 
-## Requests from service pages
+## Requests from the homepage catalog
 
-The detail page renders a quote form that is hidden until the CTA is used. It posts to the existing contract at `POST /forms/contact.php` (CSRF, honeypot `website`, validation, rate limit) with an extra `service` field carrying the slug. `ContactController` stores `requests.service_id` when the slug matches a published English service; an unknown slug is ignored and the row is still saved with `service_id = NULL`. Detail: [REQUESTS.md](REQUESTS.md).
+The homepage service catalog opens the shared contact form and posts to `POST /forms/contact.php` (CSRF, honeypot `website`, validation, rate limit) with an extra `service` field carrying the slug. `ContactController` stores `requests.service_id` when the slug matches a published English service; an unknown slug is ignored and the row is still saved with `service_id = NULL`. Detail: [REQUESTS.md](REQUESTS.md).
 
 ## Filament management
 
@@ -91,7 +91,7 @@ Filament **Content → Services**, admin only (`ServicePolicy`); editors receive
 - Form sections: General, Content (repeaters for features, process, FAQ), Pricing, Media, SEO, Publishing
 - Table columns: title, language, status, formatted price, currency, sort order, published at, updated at
 - Filters: language, status, price type
-- Actions: preview (published English), edit, replicate as draft, publish, unpublish, delete with confirmation, bulk publish/unpublish
+- Actions: edit, replicate as draft, publish, unpublish, delete with confirmation, bulk publish/unpublish
 
 ## Authorization
 
@@ -107,7 +107,7 @@ Filament **Content → Services**, admin only (`ServicePolicy`); editors receive
 
 ## SEO
 
-Each detail page emits a canonical `{APP_URL}/services/{slug}`, Open Graph and Twitter tags from `og_*` / `seo_*`, and JSON-LD `Service` including the provider Person and an `Offer` with the real price and currency. No ratings or reviews are emitted. Detail: [SEO.md](SEO.md).
+Service records no longer emit standalone page metadata or sitemap URLs. Homepage SEO remains in `home.blade.php`.
 
 ## Import
 

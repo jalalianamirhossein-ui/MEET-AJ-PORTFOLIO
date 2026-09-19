@@ -34,27 +34,6 @@ class CompareLegacyContent extends Command
         $rows[] = $home;
         $fails += $home[1] === 'FAIL' ? 1 : 0;
 
-        foreach ([
-            'devops-automation', 'monitoring-security', 'network-design',
-            'system-administration', 'technical-consulting', 'virtualization-solutions',
-        ] as $service) {
-            $legacyRequest = \Illuminate\Http\Request::create('/services/'.$service.'.html', 'GET');
-            $legacy = $this->laravel->make(\Illuminate\Contracts\Http\Kernel::class)->handle($legacyRequest);
-            $this->laravel->make(\Illuminate\Contracts\Http\Kernel::class)->terminate($legacyRequest, $legacy);
-            if ($legacy->getStatusCode() !== 301) {
-                $rows[] = ['service-redirect:'.$service, 'FAIL', 'expected 301 from .html, got '.$legacy->getStatusCode()];
-                $fails++;
-            }
-            $row = $this->comparePage(
-                'service:'.$service,
-                resource_path('legacy/services/'.$service.'.html'),
-                $this->render('/services/'.$service),
-                ['<h1', 'data-fa=', 'php-email-form', 'csrf_token', 'application/ld+json', 'rel="canonical"']
-            );
-            $rows[] = $row;
-            $fails += $row[1] === 'FAIL' ? 1 : 0;
-        }
-
         $index = $this->comparePage('articles-index', resource_path('legacy/index.html'), $this->render('/articles'), [
             'id="portfolio"', 'data-fa=',
         ]);

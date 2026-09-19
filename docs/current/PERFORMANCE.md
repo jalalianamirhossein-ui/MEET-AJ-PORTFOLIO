@@ -18,7 +18,6 @@ Published asset sizes in `public/assets/` (measured on disk 2026-09-18 after `si
 | `js/main.js` | 49.1 KB | `?v=1412` |
 | `css/articles.css` | 33.5 KB | article detail |
 | `css/rtl.css` | 20.1 KB | `?v=1405` |
-| `css/services.css` | 13.9 KB | service landings |
 | `js/i18n.js` | 9.1 KB | `?v=1403` |
 | `css/lang-toggle.css` | 2.8 KB | `?v=1403` |
 
@@ -33,7 +32,7 @@ None of these files are minified or bundled: there is no Node, Vite or Tailwind 
 | `/articles` (unfiltered) | `Article::published()->forListing()->with(['category','tags'])` — `forListing()` selects only card columns, so article HTML bodies are never loaded for the grid |
 | `/articles?q=` / `?tag=` | Same scopes plus `search()` / `withTag()`, paginated **9 per page** with `withQueryString()` |
 | `/articles/{slug}` | Single row with `category` and `tags` eager-loaded, plus `relatedArticles(3)` |
-| `/` | Published service catalog ordered by `sort_order` |
+| `/` | Published service catalog and details drawer ordered by `sort_order` |
 | Filament Requests table | `modifyQueryUsing(fn ($q) => $q->with('service'))` to avoid N+1 on the service column |
 
 Relations are eager-loaded on the public paths, so no N+1 pattern is visible in the code. This has not been confirmed with a query profiler.

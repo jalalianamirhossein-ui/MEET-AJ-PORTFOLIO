@@ -155,7 +155,7 @@ class CmsOperationsTest extends TestCase
         $this->assertStringNotContainsString('/index.html', $xml);
         $this->assertStringNotContainsString('/articles/creating-a-bootable-usb.html', $xml);
         $this->assertStringNotContainsString('/services/network-design.html', $xml);
-        $this->assertStringContainsString('/services/network-design', $xml);
+        $this->assertStringNotContainsString('/services/network-design', $xml);
         $this->assertStringNotContainsString('/admin', $xml);
         $this->assertStringNotContainsString('/de/', $xml);
         $this->assertSame(24, Article::query()->count());
@@ -166,7 +166,7 @@ class CmsOperationsTest extends TestCase
 
     public function test_public_pages_do_not_reference_missing_local_assets(): void
     {
-        $pages = ['/', '/articles', '/services/devops-automation', '/articles/'.Article::query()->value('slug')];
+        $pages = ['/', '/articles', '/articles/'.Article::query()->value('slug')];
         foreach ($pages as $page) {
             $html = $this->get($page)->assertOk()->getContent();
             preg_match_all('/(?:href|src)="(\/assets\/[^"]+)"/', $html, $matches);

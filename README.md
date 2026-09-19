@@ -135,7 +135,7 @@ Detail: [docs/current/ADMIN.md](docs/current/ADMIN.md).
 
 ## Services
 
-Six database-driven services rendered on the homepage and at `/services/{slug}`, with `/services/{slug}.html` issuing a single 301. Prices are editorial data held in the `services` table (AED 2,500–6,900) and are never hardcoded in Blade. Detail: [docs/current/SERVICES.md](docs/current/SERVICES.md).
+Six database-driven services render in the homepage catalog and details drawer. Standalone `/services/{slug}` pages and legacy `.html` redirects were removed. Prices are editorial data held in the `services` table (AED 2,500–6,900) and are never hardcoded in Blade. Detail: [docs/current/SERVICES.md](docs/current/SERVICES.md).
 
 ## Requests
 
@@ -223,7 +223,7 @@ Full navigation map: [docs/README.md](docs/README.md).
 6. **German is draft-only** and no German content exists.
 7. **Scheduled publishing is query-based**: a future `published_at` simply stays hidden, with nothing to flip it later.
 8. **`/admin/users` and `/admin/cms-users`** resolve to the same Users screen; that is one feature at two paths.
-9. **Six retired per-service Blade templates** are archived in `resources/legacy/views/services/`; only `resources/views/services/show.blade.php` is active.
+9. **Standalone service detail pages** were removed; service records remain for the homepage catalog and the original HTML files remain only as importer sources.
 10. **Imported article images** still point at `/assets/...` unless an editor uploads a replacement.
 
 Every limitation above is tracked with a status in [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).

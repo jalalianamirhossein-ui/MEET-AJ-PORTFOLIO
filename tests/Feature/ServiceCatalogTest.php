@@ -71,6 +71,7 @@ class ServiceCatalogTest extends TestCase
 
         $this->get('/')->assertOk()->assertDontSee('/services/technical-consulting"', false);
         $this->get('/services/technical-consulting')->assertNotFound();
+        $this->get('/services/technical-consulting.html')->assertNotFound();
         $this->get('/sitemap.xml')->assertOk()->assertDontSee('/services/technical-consulting', false);
     }
 
@@ -138,7 +139,6 @@ class ServiceCatalogTest extends TestCase
         $service->price_currency = 'AED';
         $service->save();
 
-        $this->get('/services/network-design')->assertOk()->assertSee('Starting from 500 AED', false);
         $this->get('/')->assertOk()->assertDontSee('Starting from 500 AED', false);
 
         $this->expectException(ValidationException::class);
@@ -153,24 +153,9 @@ class ServiceCatalogTest extends TestCase
         ]);
     }
 
-    public function test_legacy_query_string_survives_service_redirect(): void
+    public function test_service_detail_urls_are_not_public(): void
     {
-        $this->get('/services/network-design.html?ref=nav')->assertRedirect('/services/network-design?ref=nav');
+        $this->get('/services/network-design.html?ref=nav')->assertNotFound();
         $this->get('/services/does-not-exist')->assertNotFound();
-    }
-
-    public function test_service_landing_keeps_quote_form_hidden_until_cta(): void
-    {
-        $html = $this->get('/services/network-design')->assertOk()->getContent();
-        $this->assertStringContainsString('<h1', $html);
-        $this->assertStringContainsString('php-email-form', $html);
-        $this->assertStringContainsString('csrf_token', $html);
-        $this->assertStringContainsString('Request a Quote', $html);
-        $this->assertStringContainsString('id="contactForm" hidden', $html);
-        $this->assertStringNotContainsString('class="contact-form show"', $html);
-        $this->assertStringContainsString('aria-live="assertive"', $html);
-        $this->assertStringContainsString('aria-live="polite"', $html);
-        $this->assertStringContainsString('data-en="Submit Request"', $html);
-        $this->assertStringContainsString('What is included', $html);
     }
 }

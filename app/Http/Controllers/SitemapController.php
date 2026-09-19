@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
-use App\Models\Service;
 use Illuminate\Http\Response;
 
 class SitemapController extends Controller
@@ -14,14 +13,6 @@ class SitemapController extends Controller
         $urls = [
             ['loc' => $origin.'/', 'lastmod' => $this->sourceLastmod(resource_path('legacy/index.html'))],
         ];
-
-        foreach (Service::query()->publicCatalog()->get() as $service) {
-            $urls[] = [
-                'loc' => $service->canonicalUrl(),
-                'lastmod' => $service->published_at?->toDateString()
-                    ?: $this->sourceLastmod(resource_path('legacy/services/'.$service->slug.'.html')),
-            ];
-        }
 
         $articles = Article::published()->where('language', 'en')->orderBy('sort_order')->get();
         foreach ($articles as $article) {

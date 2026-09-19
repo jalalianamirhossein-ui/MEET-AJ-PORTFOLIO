@@ -174,8 +174,7 @@ Use DirectAdmin Let’s Encrypt / SSL for `meetaj.ir` (and `www` if used). Set `
 
 - `https://meetaj.ir/` → 200
 - `https://meetaj.ir/index.html` → 301 `/`
-- One service `.html` URL → 301 `/services/{slug}`
-- One service clean URL → 200
+- One removed service URL → 404 (`/services/{slug}` and `.html`)
 - One article `.html` URL → 301 to the clean URL
 - `/sitemap.xml`, `/robots.txt`, `/manifest.json`, `/sw.js`
 - `/admin/login` → 200; `/admin` guest → redirect

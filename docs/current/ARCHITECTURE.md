@@ -15,8 +15,7 @@ Apache / DirectAdmin  (document root = public/)
    ▼
 public/index.php → Laravel 13 HTTP kernel
    │
-   ├── GET  /, /articles, /articles?q=, /articles?tag=, /articles/{slug},
-   │         /services/{slug}  (plus .html → 301)
+   ├── GET  /, /articles, /articles?q=, /articles?tag=, /articles/{slug}
    │         → controllers → Eloquent (scopes, relations) → Blade
    │
    ├── GET  /forms/get-csrf-token.php   POST /forms/contact.php
@@ -39,7 +38,7 @@ No SPA, no Node build, no queue worker, no scheduler, no Redis. Cache and sessio
 
 ## Routes
 
-`php artisan route:list` reports **42** routes after `optimize:clear` — application routes (`/`, `/index.html`, three article routes, two service routes, two `/forms/*.php` routes, `/sitemap.xml`, `/robots.txt`, `/manifest.json`), Filament `/admin` routes (dashboard, login/logout, Articles, Categories, Tags, Services, Requests, Users, plus hidden ContactRequest/ServiceRequest view URLs), and Livewire / Filament asset and export routes.
+`php artisan route:list` reports the application routes (`/`, `/index.html`, three article routes, two `/forms/*.php` routes, `/sitemap.xml`, `/robots.txt`, `/manifest.json`), Filament `/admin` routes (dashboard, login/logout, Articles, Categories, Tags, Services, Requests, Users, plus hidden ContactRequest/ServiceRequest view URLs), and Livewire / Filament asset and export routes.
 
 | Method | Path | Name | Handler |
 |--------|------|------|---------|
@@ -48,8 +47,6 @@ No SPA, no Node build, no queue worker, no scheduler, no Redis. Cache and sessio
 | GET | `/articles` | `articles.index` | `ArticleController@index` |
 | GET | `/articles/{slug}` | `articles.show` | `ArticleController@show` |
 | GET | `/articles/{slug}.html` | `articles.legacy` | `ArticleController@legacy` (301) |
-| GET | `/services/{slug}` | `services.show` | `ServiceController@show` |
-| GET | `/services/{slug}.html` | `services.legacy` | `ServiceController@legacy` (301) |
 | GET | `/forms/get-csrf-token.php` | `contact.token` | `ContactController@token` |
 | POST | `/forms/contact.php` | `contact.store` | `ContactController@store` + `throttle:30,1` |
 | GET | `/sitemap.xml` | `sitemap` | `SitemapController` |
@@ -63,7 +60,6 @@ There is no `/de` route.
 |------------|----------------|
 | `HomeController` | Homepage, including the published service catalog |
 | `ArticleController` | Library, search and tag filter, detail, legacy 301 |
-| `ServiceController` | Service detail plus catalog sidebar, legacy 301 |
 | `ContactController` | CSRF token endpoint and contact submission |
 | `SitemapController`, `RobotsController` | SEO endpoints |
 
@@ -113,7 +109,6 @@ Policies are registered in `App\Providers\AppServiceProvider`.
 | `articles/index.blade.php` | library chrome from the homepage portfolio section |
 | `articles/show.blade.php` | renders database content imported from `resources/legacy/articles/{slug}.html` |
 | `articles/partials/*` | breadcrumbs, library toolbar, related, search results, share, category filters |
-| `services/show.blade.php` | dynamic catalog detail rendered from the `services` table |
 | `components/article-card.blade.php`, `components/service-card.blade.php` | shared cards, English defaults with `data-fa` |
 | `components/site-sidebar.blade.php`, `partials/site-sidebar-chrome.blade.php` | shared public sidebar |
 | `partials/testimonials.blade.php` | shared EN/FA Swiper |
@@ -122,7 +117,7 @@ Policies are registered in `App\Providers\AppServiceProvider`.
 
 Rebuild with `php artisan site:publish-assets --views`.
 
-Six retired per-service Blade files are archived under `resources/legacy/views/services/`, outside Laravel's active view path. `ServiceController@show` renders `resources/views/services/show.blade.php`.
+The homepage service catalog is the only public service presentation. The original service HTML files remain under `resources/legacy/services/` as importer sources, but there are no standalone public service routes or detail views.
 
 ## Filament / Livewire
 

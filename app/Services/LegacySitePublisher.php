@@ -425,7 +425,7 @@ BLADE;
         $html = str_replace('href="manifest.json"', 'href="/manifest.json"', $html);
         $html = str_replace('register("sw.js")', 'register("/sw.js")', $html);
         $html = preg_replace('#href="(?:\.\./)?articles/([a-z0-9-]+)\.html#', 'href="/articles/$1', $html) ?? $html;
-        $html = preg_replace('#href="(?:\.\./)?services/([a-z0-9-]+)\.html#', 'href="/services/$1', $html) ?? $html;
+        $html = preg_replace('#href="(?:\.\./)?services/[a-z0-9-]+\.html#', 'href="/#services', $html) ?? $html;
 
         // Keep original @ and {{ characters. Escaping every @ as @@ left
         // mailto: addresses as @@gmail in the compiled HTML because Blade

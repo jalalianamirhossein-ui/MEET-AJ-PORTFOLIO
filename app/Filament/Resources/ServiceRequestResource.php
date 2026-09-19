@@ -66,7 +66,7 @@ class ServiceRequestResource extends Resource
     {
         return RequestResource::table($table)
             ->emptyStateHeading('No service requests yet')
-            ->emptyStateDescription('Quote requests from service pages appear here.');
+            ->emptyStateDescription('Quote requests from the homepage service catalog appear here.');
     }
 
     public static function getPages(): array

@@ -299,7 +299,7 @@ class LegacyArticleImporter
         $html = str_replace('../assets/', '/assets/', $html);
         $html = str_replace('href="../index.html', 'href="/', $html);
         $html = preg_replace('#href="(?:\.\./)?articles/([a-z0-9-]+)\.html#', 'href="/articles/$1', $html) ?? $html;
-        $html = preg_replace('#href="(?:\.\./)?services/([a-z0-9-]+\.html)#', 'href="/services/$1', $html) ?? $html;
+        $html = preg_replace('#href="(?:\.\./)?services/[a-z0-9-]+\.html#', 'href="/#services', $html) ?? $html;
 
         return $html;
     }

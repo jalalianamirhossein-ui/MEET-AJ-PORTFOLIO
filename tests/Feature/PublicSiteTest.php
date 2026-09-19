@@ -38,32 +38,14 @@ class PublicSiteTest extends TestCase
         $this->assertSame(1, substr_count($html, 'id="articles-load-more"'));
     }
 
-    public function test_service_pages_redirect_once_and_render(): void
+    public function test_service_detail_pages_are_removed(): void
     {
         foreach ([
-            'cctv-surveillance',
-            'devops-automation',
-            'hp-enterprise-server',
-            'jira-implementation',
-            'mikrotik-routing-multi-wan',
-            'monitoring-security',
             'network-design',
-            'network-security',
-            'sql-server-high-availability',
-            'system-administration',
-            'technical-consulting',
-            'virtualization-solutions',
-            'voip-infrastructure',
+            'devops-automation',
         ] as $slug) {
-            $legacy = $this->get('/services/'.$slug.'.html');
-            $legacy->assertRedirect('/services/'.$slug);
-            $this->assertSame(301, $legacy->baseResponse->getStatusCode());
-            $this->get('/services/'.$slug)
-                ->assertOk()
-                ->assertSee('csrf_token', false)
-                ->assertSee('rel="canonical"', false)
-                ->assertSee('application/ld+json', false)
-                ->assertSee('name="service"', false);
+            $this->get('/services/'.$slug)->assertNotFound();
+            $this->get('/services/'.$slug.'.html')->assertNotFound();
         }
     }
 
@@ -98,7 +80,7 @@ class PublicSiteTest extends TestCase
         $sitemap = $this->get('/sitemap.xml')->assertOk()->assertHeader('content-type', 'application/xml; charset=UTF-8');
         $sitemap->assertDontSee('/index.html', false);
         $sitemap->assertDontSee('/articles/creating-a-bootable-usb.html', false);
-        $sitemap->assertDontSee('/services/network-design.html', false);
+        $sitemap->assertDontSee('/services/', false);
         $sitemap->assertDontSee('/admin', false);
         $this->get('/robots.txt')->assertOk()->assertSee('Disallow: /admin', false)->assertSee('Sitemap:', false);
         $this->get('/manifest.json')->assertOk();

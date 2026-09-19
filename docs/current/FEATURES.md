@@ -22,7 +22,7 @@
 | Related articles | end of detail | Up to 3: matching tags → same category → same language published. Never the current row, never drafts |
 | Sharing | detail | LinkedIn / WhatsApp / Telegram / copy link. No tracking pixels |
 | Breadcrumbs | detail | Visible `nav[aria-label=Breadcrumb]` + separate `BreadcrumbList` JSON-LD (`$seo['breadcrumb']`) beside Article schema |
-| Services | `/services/{slug}` | Six landings from one Blade. Quote fields exist (8) but **0 visible** until Request a Quote |
+| Services | `/#services` | Database-driven homepage catalog and shared details drawer. Standalone service detail pages are removed |
 | Languages | EN / FA UI | Persian placeholder applied (`عنوان، موضوع یا فناوری`). German remains draft-only. No fake DE articles or hreflang |
 | Contact | `/forms/*.php` | CSRF + honeypot + throttle; rows land in Filament Requests |
 

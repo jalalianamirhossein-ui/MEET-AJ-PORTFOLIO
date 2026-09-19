@@ -10,21 +10,19 @@
 | Home | `https://meetaj.ir/` (hardcoded in `home.blade.php`) |
 | Articles index | `{APP_URL}/articles` |
 | Article detail | `Article::canonicalUrl()` (override `canonical_url` if set; otherwise `{APP_URL}/articles/{slug}` **without** `.html`) |
-| Services | `{APP_URL}/services/{slug}` (**without** `.html`) |
 
 `/index.html` is **not** canonical; it 301s to `/`.  
-`/services/{slug}.html` is **not** canonical; it 301s to `/services/{slug}` (query string preserved).
+Standalone `/services/{slug}` and `/services/{slug}.html` pages are removed and return 404. Services remain represented in the homepage section only.
 
 ## Open Graph and Twitter
 
 Article detail (`articles/show.blade.php` + `ArticleSeo`): `og:title`, `og:description`, `og:url`, `og:type` (default `article`), `og:image`; Twitter `twitter_card` (default `summary`), title, description, optional image.
 
-Homepage and service pages include original Open Graph tags from the static HTML (absolute `meetaj.ir` URLs). Articles index sets `og:title` “Articles | Meet AJ”.
+The homepage includes the original Open Graph tags from the static HTML (absolute `meetaj.ir` URLs). Articles index sets `og:title` “Articles | Meet AJ”.
 
 ## JSON-LD
 
 - Home: original Person / WebSite / etc. scripts from `index.html`
-- Services: `Service` schema from the published row (name, description, url, provider Person, `Offer` with actual `price`/`priceCurrency`). No ratings or reviews.
 - Articles: `Article` schema from import `seo_data.schema` or a generated `Article` object (`headline`, `description`, `image`, `author` Person AmirHossein Jalalian, `mainEntityOfPage`)
 
 ## sitemap.xml (`GET /sitemap.xml`)
@@ -32,8 +30,7 @@ Homepage and service pages include original Open Graph tags from the static HTML
 Includes:
 
 1. `{APP_URL}/`
-2. Each **published English** service canonical URL (`/services/{slug}`, not `.html`)
-3. Each **published English** article canonical URL
+2. Each **published English** article canonical URL
 
 Excludes:
 
@@ -41,6 +38,7 @@ Excludes:
 - `/articles/{slug}.html` legacy URLs
 - `/index.html`
 - `/articles` listing (not added by the controller)
+- Service detail URLs (removed)
 - German URLs
 - Draft / future / non-`en` articles
 

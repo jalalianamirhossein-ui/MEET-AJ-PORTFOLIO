@@ -26,14 +26,14 @@ Public listing does **not** show FA or DE rows as separate URLs.
 
 ## RTL / LTR
 
-- Switcher: `#lang-toggle` (homepage, listing, article, services)
+- Switcher: `#lang-toggle` (homepage, listing, and article pages)
 - Persistence: `localStorage` and cookie `lang` (`en` \| `fa`) — `assets/js/i18n.js`
 - Styles: `assets/css/rtl.css` then `assets/css/visual-upgrade.css`
 - `html[dir=rtl]` uses Vazirmatn; LTR uses Poppins (overlay)
 
 ## Language switcher
 
-One shared control (`#lang-switcher` / `#lang-toggle`) injected by `assets/js/i18n.js` on Homepage, Articles, article detail and service pages. Palette is Meet AJ white / blue `#2563eb` / cyan — **not** burgundy. `assets/css/lang-toggle.css` is the component stylesheet; `site-modules.css` last-layer rules match it (the previous `!important` burgundy override was removed on 2026-09-18). FA active state is filled blue with white type. EN is LTR; FA sets `html[dir=rtl][lang=fa]` and enables `rtl.css`.
+One shared control (`#lang-switcher` / `#lang-toggle`) injected by `assets/js/i18n.js` on the homepage, article listing, and article detail pages. Palette is Meet AJ white / blue `#2563eb` / cyan — **not** burgundy. `assets/css/lang-toggle.css` is the component stylesheet; `site-modules.css` last-layer rules match it (the previous `!important` burgundy override was removed on 2026-09-18). FA active state is filled blue with white type. EN is LTR; FA sets `html[dir=rtl][lang=fa]` and enables `rtl.css`.
 
 Client-side only. No Laravel locale middleware for FA. No URL prefix.
 

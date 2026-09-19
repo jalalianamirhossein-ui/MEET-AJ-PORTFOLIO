@@ -113,7 +113,7 @@ Detail: [ADMIN.md](ADMIN.md).
 
 ## 8. Services
 
-Six published English services, ordered by `sort_order`, prices read from the `services` table (AED): Network Design 4900, System Administration 3900, DevOps & Automation 6900, Monitoring & Security 4200, Virtualization Solutions 5900, Technical Consulting 2500. All six use `price_type = fixed` and `price_label = "Fixed Price"`. Detail: [SERVICES.md](SERVICES.md).
+Six published English services are shown in the homepage catalog, ordered by `sort_order`, with prices read from the `services` table (AED): Network Design 4900, System Administration 3900, DevOps & Automation 6900, Monitoring & Security 4200, Virtualization Solutions 5900, Technical Consulting 2500. Standalone service detail pages are removed. Detail: [SERVICES.md](SERVICES.md).
 
 ## 9. Requests
 
@@ -125,7 +125,7 @@ EN and FA are the public languages on the **same** URLs (`data-en` / `data-fa` a
 
 ## 11. SEO
 
-Canonical URLs, Open Graph, Twitter cards, JSON-LD (home, services, articles), `/sitemap.xml`, `/robots.txt`, 301 redirects for `/index.html` and all legacy `.html` paths. Status PASS locally (PHPUnit); production crawler behaviour NOT TESTED. Detail: [SEO.md](SEO.md).
+Canonical URLs, Open Graph, Twitter cards, JSON-LD (home and articles), `/sitemap.xml`, `/robots.txt`, and the `/index.html` 301. Service detail URLs return 404. Status PASS locally (PHPUnit); production crawler behaviour NOT TESTED. Detail: [SEO.md](SEO.md).
 
 ## 12. PWA
 
@@ -169,9 +169,9 @@ Documented DirectAdmin procedure exists and is complete, but **no deployment has
 2. **German is draft-only.** No German content exists; `/de` is 404 by design.
 3. **Scheduled publishing is query-based.** A future `published_at` simply stays invisible; there is no queue or cron to flip it.
 4. **Authenticated Filament visual QA is PASS** after the 2026-09-18 contrast fix (login labels, sidebar, tables, filters). Evidence: [../qa/ADMIN-QA.md](../qa/ADMIN-QA.md). Users resource CRUD remains NOT TESTED.
-5. **Retired static service Blade files** were moved to `resources/legacy/views/services/` on 2026-09-19. They are outside the active view path; `ServiceController@show` renders `resources/views/services/show.blade.php`. See [PROJECT-STRUCTURE.md](PROJECT-STRUCTURE.md).
+5. **Standalone service detail pages** were removed on 2026-09-20. Service records remain for the homepage catalog, while `resources/legacy/services/` remains an importer source. See [PROJECT-STRUCTURE.md](PROJECT-STRUCTURE.md).
 6. **Imported `featured_image` values still point at `/assets/...`** rather than Filament storage unless an editor uploads a replacement.
-7. **Source-content leftovers** (not CMS defects): a generic overlay category label on some cards, and the service page “Back to Services” link staying English in FA.
+7. **Source-content leftovers** (not CMS defects): a generic overlay category label on some cards.
 8. **Local `.env` runs with debug enabled and UTC**, unlike the documented production configuration.
 
 ## 18. Git

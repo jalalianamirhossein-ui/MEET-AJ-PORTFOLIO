@@ -67,7 +67,7 @@ Mail is optional (`config('cms.mail_is_optional')` is true). Locally the mailer 
 | Item | Status |
 |------|--------|
 | Token endpoint, persistence, honeypot, 400, 429 | PASS (PHPUnit) |
-| Service linking from a service page | PASS (PHPUnit) |
+| Service linking from the homepage catalog | PASS (PHPUnit) |
 | Mail transport failure keeps the row | PASS (PHPUnit) |
 | Homepage form → DB → `/admin/requests` (admin sees, editor 403) | PASS (PHPUnit `ProductionAuditTest` + live POST 2026-09-18) |
 | Real SMTP delivery on DirectAdmin | BLOCKED · NOT TESTED |

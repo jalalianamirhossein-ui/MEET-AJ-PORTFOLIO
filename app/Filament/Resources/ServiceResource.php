@@ -69,7 +69,7 @@ class ServiceResource extends Resource
                     Select::make('language')->options(['en' => 'English', 'fa' => 'فارسی', 'de' => 'Deutsch (draft only)'])->default('en')->required()->disabled(fn (?Service $record) => $record !== null)->dehydrated(),
                     TextInput::make('translation_key')->label('Translation key')->helperText('Leave blank to generate. Pairs EN/FA/DE rows of the same service.')->maxLength(36),
                     TextInput::make('sort_order')->numeric()->default(0)->required()->helperText('Homepage order. Lower numbers first.'),
-                    Toggle::make('show_in_catalog')->label('Show on homepage catalog')->default(true)->helperText('Keeps the service page and data even when hidden from the homepage grid.'),
+                    Toggle::make('show_in_catalog')->label('Show on homepage catalog')->default(true)->helperText('Keeps the service record and data even when hidden from the homepage grid.'),
                 ]),
             Section::make('Content')
                 ->icon(Heroicon::OutlinedDocumentText)
@@ -162,12 +162,6 @@ class ServiceResource extends Resource
                 ]),
             ])
             ->recordActions([
-                Action::make('preview')
-                    ->label('Preview')
-                    ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
-                    ->url(fn (Service $record): string => $record->path())
-                    ->openUrlInNewTab()
-                    ->visible(fn (Service $record): bool => $record->status === 'published' && $record->published_at?->lte(now()) && $record->language !== 'de'),
                 EditAction::make(),
                 ReplicateAction::make()
                     ->excludeAttributes(['slug', 'status', 'published_at'])
@@ -247,7 +241,7 @@ class ServiceResource extends Resource
                 ]),
             ])
             ->emptyStateHeading('No services yet')
-            ->emptyStateDescription('Import the original six HTML service pages or create a draft. Only published English services appear on the homepage.')
+            ->emptyStateDescription('Import the original six HTML sources or create a draft. Only published English services appear on the homepage.')
             ->emptyStateIcon(Heroicon::OutlinedBriefcase)
             ->emptyStateActions([CreateAction::make()])
             ->defaultSort('sort_order');
