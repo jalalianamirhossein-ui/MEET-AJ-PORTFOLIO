@@ -16,7 +16,7 @@
           "watchOverflow": true,
           "observer": true,
           "observeParents": true,
-          "autoHeight": true,
+          "autoHeight": false,
           "slidesPerView": 3,
           "spaceBetween": 24,
           "autoplay": { "delay": 5000, "pauseOnMouseEnter": true, "disableOnInteraction": false },

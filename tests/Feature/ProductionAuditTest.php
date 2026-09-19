@@ -147,8 +147,8 @@ class ProductionAuditTest extends TestCase
         $this->assertStringNotContainsString('testimonials-slider-fa', $home);
         $this->assertStringNotContainsString('id="testimonials-fa"', $home);
         $this->assertStringContainsString('data-fa="نظرات"', $home);
-        $this->assertStringContainsString('site-modules.css?v=1849', $home);
-        $this->assertStringContainsString('main.js?v=1413', $home);
+        $this->assertStringContainsString('site-modules.css?v=1850', $home);
+        $this->assertStringContainsString('main.js?v=1414', $home);
         $this->assertStringContainsString('i18n.js?v=1403', $home);
         $this->assertStringContainsString('rtl.css?v=1405', $home);
 
@@ -157,7 +157,7 @@ class ProductionAuditTest extends TestCase
         $this->assertStringContainsString('function syncTestimonialsNavIcons', $main);
         $this->assertStringContainsString('meetaj:languagechange', $main);
         $this->assertStringContainsString('config.rtl = isRtl', $main);
-        $this->assertStringContainsString('config.autoHeight = true', $main);
+        $this->assertStringContainsString('config.autoHeight = false', $main);
         $this->assertStringContainsString('config.keyboard = { enabled: true, onlyInViewport: true }', $main);
         $this->assertStringContainsString('navigation.nextEl = ".testimonials-next"', $main);
         $this->assertStringContainsString('navigation.prevEl = ".testimonials-prev"', $main);

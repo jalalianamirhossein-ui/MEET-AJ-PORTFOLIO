@@ -909,7 +909,7 @@
     syncTestimonialsNavIcons(nav, isRtl);
 
     config.rtl = isRtl;
-    config.autoHeight = true;
+    config.autoHeight = false;
     config.watchOverflow = true;
     config.observer = true;
     config.observeParents = true;
@@ -961,9 +961,6 @@
         heightFrame = 0;
         if (!swiper || swiper.destroyed) return;
         swiper.update();
-        if (typeof swiper.updateAutoHeight === "function") {
-          swiper.updateAutoHeight(0);
-        }
       });
     };
     syncHeight();
