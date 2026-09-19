@@ -46,6 +46,7 @@ Active item: light crimson `#fff1f2` fill, 3px `#be123c` inset bar, crimson labe
 | `GET /admin/login`, `POST /admin/logout` | `filament.admin.auth.login`, `filament.admin.auth.logout` |
 | `GET /admin/articles`, `/admin/articles/create`, `/admin/articles/{record}/edit` | `filament.admin.resources.articles.*` |
 | `GET /admin/categories` | `filament.admin.resources.categories.index` |
+| `GET /admin/testimonials` | `filament.admin.resources.testimonials.index` |
 | `GET /admin/tags` | `filament.admin.resources.tags.index` |
 | `GET /admin/services`, `/admin/services/create`, `/admin/services/{record}/edit` | `filament.admin.resources.services.*` |
 | `GET /admin/requests` | `filament.admin.resources.requests.index` |
@@ -74,6 +75,10 @@ Simple CRUD on `categories` for admins and editors, respecting the unique `(lang
 The form includes an **Accent color** `ColorPicker` (`#RRGGBB`, nullable) with a live chip preview, hex readout, and a reset action that clears the field. Helper text: “Used for article cards, badges and category accents on the public site.” Empty values keep the slug fallback. Invalid values are rejected.
 
 The table shows a colour chip on **Name**, an **Accent** hex badge of the **effective** colour (`Category::accentColor()`), and the filter `sort_order`.
+
+## Testimonials (`TestimonialResource`) — Content
+
+Testimonials are managed from **Content → Testimonials**. Each record stores English and Persian quote text, role/company labels, an optional avatar, `sort_order` (lower numbers first), and a public visibility toggle. The homepage renders all published records in the shared RTL-safe Swiper slider.
 
 `Category::accentColor()` returns stored `accent_color` when it is valid `#RRGGBB`; otherwise it maps the public topic slug:
 

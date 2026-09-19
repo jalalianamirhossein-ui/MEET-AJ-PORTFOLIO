@@ -914,7 +914,6 @@
     config.observer = true;
     config.observeParents = true;
     config.observeSlideChildren = true;
-    config.slidesPerView = 1;
     config.nested = false;
     config.keyboard = { enabled: true, onlyInViewport: true };
     if (!config.navigation) config.navigation = {};

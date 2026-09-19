@@ -1,7 +1,7 @@
 # Database — Meet AJ
 
 **Authority:** AUTHORITATIVE schema document.
-**Verified:** 2026-09-17 by reading the live SQLite schema (`Schema::getTables()`, `getColumns()`, `getIndexes()`, `getForeignKeys()`) plus the nine migration files in `database/migrations/`.
+**Verified:** 2026-09-20 by reading the live SQLite schema (`Schema::getTables()`, `getColumns()`, `getIndexes()`, `getForeignKeys()`) plus the migration files in `database/migrations/`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
 Column types below are the SQLite types actually reported by the database. The migrations declare portable Laravel types (`string`, `text`, `decimal`, `json`), so MySQL/MariaDB will report `varchar`, `longtext`, `decimal(12,2)` and `json` for the same columns.
@@ -31,9 +31,10 @@ Column types below are the SQLite types actually reported by the database. The m
 | `2026_09_16_000008_add_service_id_to_requests_table` | 2 | Ran |
 | `2026_09_17_000009_create_tags_and_request_workflow` | 3 | Ran |
 | `2026_09_18_000010_add_accent_color_to_categories_table` | 4 | Ran |
-| `2026_09_20_000011_add_sort_order_to_categories_table` | pending | Adds public filter order |
+| `2026_09_20_000011_add_sort_order_to_categories_table` | 2 | Ran |
+| `2026_09_20_000012_create_testimonials_table` | 2 | Ran |
 
-The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the eleventh table. Ten application migrations exist after `2026_09_18_000010_add_accent_color_to_categories_table`.
+The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the migration ledger. Twelve application migrations exist through `2026_09_20_000012_create_testimonials_table`.
 
 ## Table overview
 
@@ -49,7 +50,8 @@ The users migration also creates `password_reset_tokens`. Laravel's own `migrati
 | `article_tag` | Article ↔ tag pivot | 38 |
 | `requests` | Inbound contact submissions | 0 |
 | `services` | Public service catalog and pricing | 6 |
-| `migrations` | Laravel migration ledger | 9 |
+| `testimonials` | Bilingual homepage testimonials | 5 |
+| `migrations` | Laravel migration ledger | 12 |
 
 There is **no** `pages` table and **no** `contact_requests` table.
 
@@ -113,6 +115,22 @@ Article taxonomy. Each concept exists once per language and the two rows share a
 
 Unique: `(language, slug)`, `(translation_key, language)`. Foreign keys: none.
 Deleting a category sets `articles.category_id` to `NULL`; the article survives.
+
+## `testimonials`
+
+Homepage testimonials are stored once with bilingual copy and rendered when `is_published = true`, ordered by `sort_order` and then `id`.
+
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | integer | primary key |
+| `quote_en`, `quote_fa` | text, nullable | bilingual quote copy |
+| `author_name` | varchar | display name |
+| `role_en`, `role_fa` | varchar, nullable | bilingual role |
+| `company_en`, `company_fa` | varchar, nullable | bilingual company/team |
+| `avatar` | varchar, nullable | public asset or uploaded storage path |
+| `sort_order` | integer | homepage order; lower numbers first |
+| `is_published` | boolean | controls public visibility |
+| `created_at`, `updated_at` | datetime, nullable | |
 
 ## `articles`
 

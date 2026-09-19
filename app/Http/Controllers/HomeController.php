@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Category;
 use App\Models\Service;
 use App\Models\Tag;
+use App\Models\Testimonial;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -19,6 +20,7 @@ class HomeController extends Controller
             ->orderBy('id')
             ->get();
         $services = Service::query()->publicCatalog()->get();
+        $testimonials = Testimonial::published()->orderBy('sort_order')->orderBy('id')->get();
         $filterCategories = Category::query()
             ->whereIn('language', ['en', 'fa'])
             ->whereHas('articles', fn ($query) => $query->published())
@@ -35,6 +37,7 @@ class HomeController extends Controller
             'activeTag' => null,
             'tags' => Tag::query()->orderBy('name')->get(),
             'filterCategories' => $filterCategories,
+            'testimonials' => $testimonials,
         ]);
     }
 }

@@ -3,12 +3,14 @@
 namespace App\Providers;
 
 use App\Models\Article;
+use App\Models\Testimonial;
 use App\Models\Category;
 use App\Models\Request as ContactRequest;
 use App\Models\Service;
 use App\Models\Tag;
 use App\Models\User;
 use App\Policies\ArticlePolicy;
+use App\Policies\TestimonialPolicy;
 use App\Policies\CategoryPolicy;
 use App\Policies\RequestPolicy;
 use App\Policies\ServicePolicy;
@@ -24,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::policy(Article::class, ArticlePolicy::class);
+        Gate::policy(Testimonial::class, TestimonialPolicy::class);
         Gate::policy(Category::class, CategoryPolicy::class);
         Gate::policy(Tag::class, TagPolicy::class);
         Gate::policy(ContactRequest::class, RequestPolicy::class);

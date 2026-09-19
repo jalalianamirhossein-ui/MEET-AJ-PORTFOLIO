@@ -141,11 +141,14 @@ class ProductionAuditTest extends TestCase
         $this->assertSame(1, substr_count($home, 'id="testimonials"'));
         $this->assertSame(1, substr_count($home, 'id="testimonials-carousel"'));
         $this->assertSame(5, substr_count($home, 'class="testimonial-card"'));
+        $this->assertStringContainsString('"slidesPerView": 3', $home);
+        $this->assertStringContainsString('"768": { "slidesPerView": 2', $home);
+        $this->assertStringContainsString('"1200": { "slidesPerView": 3', $home);
         $this->assertStringNotContainsString('testimonials-slider-fa', $home);
         $this->assertStringNotContainsString('id="testimonials-fa"', $home);
         $this->assertStringContainsString('data-fa="نظرات"', $home);
         $this->assertStringContainsString('site-modules.css?v=1848', $home);
-        $this->assertStringContainsString('main.js?v=1412', $home);
+        $this->assertStringContainsString('main.js?v=1413', $home);
         $this->assertStringContainsString('i18n.js?v=1403', $home);
         $this->assertStringContainsString('rtl.css?v=1405', $home);
 
