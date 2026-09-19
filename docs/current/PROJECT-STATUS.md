@@ -82,7 +82,7 @@ Routes: **42 total** from `php artisan route:list` after `optimize:clear` — ap
 | Shared public sidebar + icy-blue mobile menu (`<1200px`) | PASS (browser) |
 | Shared Testimonials Swiper (one slider; RTL via `html[dir]`, not a second FA carousel) | PASS (PHPUnit + browser) |
 | Article library `/articles` with search and tag filter | PASS (local) |
-| 23 article detail pages | PASS (local) |
+| 24 article detail pages | PASS (local) |
 | 6 service detail pages | PASS (local) |
 | Legacy `.html` URLs 301 to clean URLs | PASS (local) |
 | Contact endpoints `/forms/get-csrf-token.php` and `/forms/contact.php` | PASS (local) |
@@ -108,8 +108,8 @@ Detail: [ADMIN.md](ADMIN.md).
 
 ## 7. Articles
 
-23 imported English articles, all `status = published` with a non-null `published_at`, 23 matching `article_redirects` rows, 10 categories (5 EN + 5 FA sharing `translation_key`), 8 tags, 38 article↔tag links.
-`php artisan site:compare-content` on 2026-09-17: **Failures: 0** across all 23 articles. Detail: [ARTICLES.md](ARTICLES.md).
+24 imported English articles, all `status = published` with a non-null `published_at`, 24 matching `article_redirects` rows, 10 categories (5 EN + 5 FA sharing `translation_key`), 8 tags, 38 article↔tag links.
+`php artisan site:compare-content` on 2026-09-19: **Failures: 0** across all 24 articles. Detail: [ARTICLES.md](ARTICLES.md).
 
 ## 8. Services
 

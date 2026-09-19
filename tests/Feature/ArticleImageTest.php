@@ -19,7 +19,7 @@ class ArticleImageTest extends TestCase
 
         $this->assertSame('/assets/img/portfolio/optimized/other-1.jpg', $article->thumbnailUrl());
         $this->assertSame('/assets/img/portfolio/other-1.png', $article->galleryUrl());
-        $this->assertSame('http://localhost/assets/img/portfolio/optimized/other-1.jpg', $article->imageUrl());
+        $this->assertSame(rtrim((string) config('app.url'), '/').'/assets/img/portfolio/optimized/other-1.jpg', $article->imageUrl());
         $this->assertLessThan(
             filesize(public_path('assets/img/portfolio/other-1.png')) / 10,
             filesize(public_path(ltrim($article->thumbnailUrl(), '/'))),
@@ -38,7 +38,7 @@ class ArticleImageTest extends TestCase
 
         $this->assertSame('/storage/articles/new-cover.webp', $article->thumbnailUrl());
         $this->assertSame('/storage/articles/new-cover.webp', $article->galleryUrl());
-        $this->assertSame('http://localhost/storage/articles/new-cover.webp', $article->imageUrl());
+        $this->assertSame(rtrim((string) config('app.url'), '/').'/storage/articles/new-cover.webp', $article->imageUrl());
     }
 
     public function test_remote_and_public_paths_are_not_rewritten_as_article_routes(): void

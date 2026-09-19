@@ -108,7 +108,7 @@ class ProductionAuditTest extends TestCase
 
     public function test_article_titles_remain_english(): void
     {
-        $this->assertSame(23, Article::query()->count());
+        $this->assertSame(24, Article::query()->count());
         foreach (Article::query()->get() as $article) {
             $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', $article->title, $article->slug);
             $this->get('/articles/'.$article->slug)

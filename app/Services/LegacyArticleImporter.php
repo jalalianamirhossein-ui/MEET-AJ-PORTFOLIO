@@ -19,8 +19,8 @@ class LegacyArticleImporter
     {
         $cards = $this->homepageCards();
         $files = $this->articleFiles();
-        if (count($files) !== 23) {
-            throw new \RuntimeException('Expected 23 article HTML files, found '.count($files));
+        if (count($files) < 1) {
+            throw new \RuntimeException('No article HTML files found in resources/legacy/articles');
         }
 
         $report = [];
