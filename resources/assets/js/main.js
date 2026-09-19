@@ -1211,14 +1211,16 @@
 
   window.addEventListener("load", initArticlesLoadMore);
 
-  // Modern Bilingual Preloader Animation
+  // Meet AJ ambient preloader reveal
   const preloader = document.querySelector("#preloader");
 
   if (preloader) {
     let preloaderDismissed = false;
+    preloader.setAttribute("aria-busy", "true");
     const hidePreloader = () => {
       if (preloaderDismissed) return;
       preloaderDismissed = true;
+      preloader.setAttribute("aria-busy", "false");
       preloader.classList.remove("visible");
       preloader.classList.add("hidden");
       window.setTimeout(() => {

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Preloader Component Example</title>
-    <link rel="stylesheet" href="preloader.css" />
+    <link rel="stylesheet" href="preloader.css?v=1848" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
       rel="stylesheet"
@@ -89,24 +89,26 @@
       <span id="toggle-text">فارسی</span>
     </button>
 
-    <!-- Preloader -->
-    <div id="preloader" class="preloader-overlay visible">
+    <!-- Meet AJ ambient preloader -->
+    <div id="preloader" class="preloader-overlay visible" role="status" aria-live="polite" aria-busy="true">
       <div id="preloader-container" class="preloader-container ltr">
-        <!-- Spinning Circle Animation -->
-        <div class="preloader-spinner">
-          <div class="spinner-circle">
-            <div class="spinner-inner"></div>
-          </div>
+        <div class="preloader-ambient preloader-ambient-a" aria-hidden="true"></div>
+        <div class="preloader-ambient preloader-ambient-b" aria-hidden="true"></div>
+        <div class="preloader-brandmark" aria-hidden="true">
+          <div class="preloader-brandmark-core"><span>AJ</span></div>
+          <span class="preloader-orbit-dot preloader-orbit-dot-a"></span>
+          <span class="preloader-orbit-dot preloader-orbit-dot-b"></span>
         </div>
-
-        <!-- Loading Text -->
-        <div class="preloader-text">
-          <span id="loading-text" class="loading-text">Loading...</span>
+        <div class="preloader-wordmark">
+          <strong>Meet AJ</strong>
+          <span>Infrastructure &amp; DevOps</span>
         </div>
-
-        <!-- Progress Line Animation -->
-        <div class="preloader-progress">
-          <div class="progress-line"></div>
+        <div class="preloader-status-line">
+          <span id="loading-text" class="loading-text">Preparing your experience</span>
+          <span class="preloader-status-dot" aria-hidden="true"></span>
+        </div>
+        <div class="preloader-progress" role="progressbar" aria-label="Loading">
+          <span class="progress-line"></span>
         </div>
       </div>
     </div>
@@ -142,7 +144,7 @@
           // RTL Layout
           preloaderContainer.className = "preloader-container rtl";
           mainContent.className = "main-content rtl";
-          loadingText.textContent = "در حال بارگذاری...";
+          loadingText.textContent = "در حال آماده‌سازی تجربه شما";
           welcomeText.textContent = "خوش آمدید!";
           contentText.textContent =
             "محتوای سایت شما اینجا نمایش داده می‌شود. کامپوننت preloader با موفقیت کار می‌کند.";
@@ -151,7 +153,7 @@
           // LTR Layout
           preloaderContainer.className = "preloader-container ltr";
           mainContent.className = "main-content ltr";
-          loadingText.textContent = "Loading...";
+          loadingText.textContent = "Preparing your experience";
           welcomeText.textContent = "Welcome!";
           contentText.textContent =
             "Your website content will be displayed here. The preloader component is working successfully.";
