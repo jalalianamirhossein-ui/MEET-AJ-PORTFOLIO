@@ -18,7 +18,7 @@
     <link href="/assets/css/lang-toggle.css?v=1403" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1405" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1851" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1852" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">@verbatim
 <a class="skip-link" href="#portfolio" data-en="Skip to main content" data-fa="رفتن به محتوای اصلی">Skip to main content</a>

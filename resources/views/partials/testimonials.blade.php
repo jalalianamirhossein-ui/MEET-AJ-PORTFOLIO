@@ -31,6 +31,21 @@
       </script>
       <div class="swiper-wrapper">
         @foreach ($testimonials as $testimonial)
+          @php
+            $authorName = trim((string) $testimonial->author_name);
+            $roleEn = trim((string) $testimonial->role_en);
+            $roleFa = trim((string) $testimonial->role_fa);
+            $companyEn = trim((string) $testimonial->company_en);
+            $companyFa = trim((string) $testimonial->company_fa);
+            $normalize = static fn (string $value): string => mb_strtolower(trim($value));
+            $authorKey = $normalize($authorName);
+            $roleKeys = array_filter([$normalize($roleEn), $normalize($roleFa)]);
+            $companyKeys = array_filter([$normalize($companyEn), $normalize($companyFa)]);
+            $showCompany = $companyKeys !== [] && ! in_array($authorKey, $companyKeys, true);
+            $showAuthor = $authorName !== ''
+              && ! in_array($authorKey, $roleKeys, true)
+              && ! in_array($authorKey, $companyKeys, true);
+          @endphp
           <div class="swiper-slide">
             <blockquote class="testimonial-card">
               <p>
@@ -42,10 +57,12 @@
                   @if ($testimonial->role_en || $testimonial->role_fa)
                     <strong class="testimonial-role" data-en="{{ $testimonial->role_en }}" data-fa="{{ $testimonial->role_fa ?: $testimonial->role_en }}">{{ $testimonial->role_en }}</strong>
                   @endif
-                  @if ($testimonial->company_en || $testimonial->company_fa)
+                  @if ($showCompany)
                     <span class="testimonial-company" data-en="{{ $testimonial->company_en }}" data-fa="{{ $testimonial->company_fa ?: $testimonial->company_en }}">{{ $testimonial->company_en }}</span>
                   @endif
-                  <span class="testimonial-author" data-en="{{ $testimonial->author_name }}" data-fa="{{ $testimonial->author_name }}">{{ $testimonial->author_name }}</span>
+                  @if ($showAuthor)
+                    <span class="testimonial-author" data-en="{{ $testimonial->author_name }}" data-fa="{{ $testimonial->author_name }}">{{ $testimonial->author_name }}</span>
+                  @endif
                 </cite>
               </footer>
             </blockquote>
