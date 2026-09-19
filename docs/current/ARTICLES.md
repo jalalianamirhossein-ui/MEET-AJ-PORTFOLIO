@@ -68,7 +68,7 @@ Changing a slug in Filament writes an additional `article_redirects` row, so old
 
 ## Categories
 
-Five concepts, each stored twice (English and Persian) sharing a `translation_key`: Microsoft / مایکروسافت, Linux / لینوکس, MikroTik / میکروتیک, VMware / مجازی‌سازی, Others / سایر. `articles.category_id` is nullable with **set null** on delete. Public cards, filters, badges and related teasers use `Category::accentColor()` (stored `accent_color` or the slug palette). `data-topic` remains only for Isotope filter keys.
+Categories are stored in the database per language and can be extended from Filament. `categories.sort_order` controls the public filter order; lower numbers appear first. `articles.category_id` is nullable with **set null** on delete. Public cards, filters, badges and related teasers use `Category::accentColor()` (stored `accent_color` or the slug palette). `data-topic` remains only for Isotope filter keys.
 
 ## Tags
 

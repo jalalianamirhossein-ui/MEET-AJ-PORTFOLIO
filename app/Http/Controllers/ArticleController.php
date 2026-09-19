@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\ArticleRedirect;
+use App\Models\Category;
 use App\Models\Tag;
 use App\Services\ArticleSeo;
 use App\Services\ArticleShareLinks;
@@ -27,6 +28,12 @@ class ArticleController extends Controller
 
         $results = null;
         $articles = collect();
+        $filterCategories = Category::query()
+            ->whereIn('language', ['en', 'fa'])
+            ->whereHas('articles', fn ($query) => $query->published())
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
 
         if ($searching) {
             $results = Article::published()
@@ -50,6 +57,7 @@ class ArticleController extends Controller
             'tagSlug' => $tagSlug,
             'activeTag' => $tagSlug !== '' ? Tag::query()->where('slug', $tagSlug)->first() : null,
             'tags' => Tag::query()->orderBy('name')->get(),
+            'filterCategories' => $filterCategories,
         ]);
     }
 

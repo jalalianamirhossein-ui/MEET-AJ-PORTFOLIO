@@ -6,7 +6,7 @@
         'filter-vmware' => 'vmware',
         'filter-others' => 'other',
     ];
-    $topic = $topics[$article->filterClass()] ?? 'other';
+    $topic = $article->category?->topicKey() ?? ($topics[$article->filterClass()] ?? 'other');
     $accent = $article->accentColor();
     $accentStyle = '--topic: '.$accent.'; --article-primary: '.$accent.';';
     $categoryEn = $article->categoryLabelEn();

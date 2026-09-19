@@ -12,8 +12,8 @@ class Category extends Model
 {
     public const ACCENT_PATTERN = '/^#[0-9A-Fa-f]{6}$/';
 
-    protected $fillable = ['name', 'slug', 'language', 'translation_key', 'accent_color'];
-    protected $attributes = ['language' => 'en'];
+    protected $fillable = ['name', 'slug', 'language', 'translation_key', 'accent_color', 'sort_order'];
+    protected $attributes = ['language' => 'en', 'sort_order' => 0];
     public function articles(): HasMany { return $this->hasMany(Article::class); }
 
     /**

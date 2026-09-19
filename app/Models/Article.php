@@ -232,7 +232,17 @@ class Article extends Model
 
     public function filterClass(): string
     {
-        return (string) (data_get($this->presentation, 'filter_class') ?: 'filter-others');
+        $slug = trim((string) $this->category?->slug);
+        if ($slug !== '') {
+            return 'filter-'.Str::slug($slug);
+        }
+
+        $stored = trim((string) data_get($this->presentation, 'filter_class'));
+        if ($stored !== '') {
+            return $stored;
+        }
+
+        return 'filter-others';
     }
 
     public function accentColor(): string

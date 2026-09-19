@@ -69,11 +69,11 @@ Public preview is the “Preview” / “View public page” action on published
 
 ## Categories (`CategoryResource`) — Content
 
-Simple CRUD on `categories` for admins and editors, respecting the unique `(language, slug)` and `(translation_key, language)` constraints.
+Simple CRUD on `categories` for admins and editors, respecting the unique `(language, slug)` and `(translation_key, language)` constraints. `sort_order` controls the public article filter order; lower numbers appear first.
 
 The form includes an **Accent color** `ColorPicker` (`#RRGGBB`, nullable) with a live chip preview, hex readout, and a reset action that clears the field. Helper text: “Used for article cards, badges and category accents on the public site.” Empty values keep the slug fallback. Invalid values are rejected.
 
-The table shows a colour chip on **Name** and an **Accent** hex badge of the **effective** colour (`Category::accentColor()`).
+The table shows a colour chip on **Name**, an **Accent** hex badge of the **effective** colour (`Category::accentColor()`), and the filter `sort_order`.
 
 `Category::accentColor()` returns stored `accent_color` when it is valid `#RRGGBB`; otherwise it maps the public topic slug:
 

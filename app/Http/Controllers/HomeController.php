@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Category;
 use App\Models\Service;
 use App\Models\Tag;
 use Illuminate\View\View;
@@ -18,6 +19,12 @@ class HomeController extends Controller
             ->orderBy('id')
             ->get();
         $services = Service::query()->publicCatalog()->get();
+        $filterCategories = Category::query()
+            ->whereIn('language', ['en', 'fa'])
+            ->whereHas('articles', fn ($query) => $query->published())
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
 
         return view('home', [
             'articles' => $articles,
@@ -27,6 +34,7 @@ class HomeController extends Controller
             'searching' => false,
             'activeTag' => null,
             'tags' => Tag::query()->orderBy('name')->get(),
+            'filterCategories' => $filterCategories,
         ]);
     }
 }

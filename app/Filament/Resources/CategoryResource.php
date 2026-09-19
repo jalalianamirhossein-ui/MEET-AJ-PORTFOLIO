@@ -54,6 +54,13 @@ class CategoryResource extends Resource
                         ->live(onBlur: true)
                         ->regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/')
                         ->helperText('If Accent color is empty, the public palette for this slug is used.'),
+                    TextInput::make('sort_order')
+                        ->numeric()
+                        ->integer()
+                        ->minValue(0)
+                        ->default(fn (?Category $record): int => $record?->sort_order ?? (((int) Category::max('sort_order')) + 10))
+                        ->required()
+                        ->helperText('Filter order. Lower numbers appear first.'),
                     Select::make('language')->options(['en' => 'English', 'fa' => 'فارسی', 'de' => 'Deutsch'])->default('en')->required(),
                     TextInput::make('translation_key')->disabled()->dehydrated(false)->helperText('Assigned automatically. Unique per language.'),
                     ColorPicker::make('accent_color')
@@ -153,6 +160,7 @@ HTML);
                     ]),
                 TextColumn::make('slug')->searchable(),
                 TextColumn::make('language')->badge()->color('gray')->sortable(),
+                TextColumn::make('sort_order')->label('Filter order')->sortable(),
                 TextColumn::make('articles_count')->counts('articles')->label('Articles'),
             ])
             ->filters([
@@ -168,7 +176,8 @@ HTML);
             ->emptyStateHeading('No categories yet')
             ->emptyStateDescription('Create a category before assigning it to an article.')
             ->emptyStateIcon(Heroicon::OutlinedSquares2x2)
-            ->emptyStateActions([CreateAction::make()]);
+            ->emptyStateActions([CreateAction::make()])
+            ->defaultSort('sort_order');
     }
 
     public static function getPages(): array

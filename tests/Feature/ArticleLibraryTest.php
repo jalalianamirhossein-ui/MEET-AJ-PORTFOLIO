@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Article;
+use App\Models\Category;
 use App\Models\Tag;
 use App\Models\User;
 use App\Services\LegacyArticleImporter;
@@ -36,6 +37,20 @@ class ArticleLibraryTest extends TestCase
             ->assertSee('data-fa="رفتن به محتوای اصلی"', false)
             ->assertSee('data-fa="نمایش مقالات بیشتر"', false)
             ->assertSee('article-chip-label', false);
+    }
+
+    public function test_category_filter_buttons_follow_category_sort_order(): void
+    {
+        Category::query()->where('language', 'en')->where('slug', 'linux')->update(['sort_order' => 90]);
+        Category::query()->where('language', 'en')->where('slug', 'microsoft')->update(['sort_order' => 10]);
+
+        $html = $this->get('/articles')->assertOk()->getContent();
+        $microsoft = strpos($html, 'data-filter=".filter-microsoft"');
+        $linux = strpos($html, 'data-filter=".filter-linux"');
+
+        $this->assertNotFalse($microsoft);
+        $this->assertNotFalse($linux);
+        $this->assertLessThan($linux, $microsoft);
     }
 
     public function test_article_search_filters_published_rows_without_loading_the_isotope_grid(): void

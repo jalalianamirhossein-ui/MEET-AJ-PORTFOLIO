@@ -1,3 +1,23 @@
+@php
+    $filterGroups = collect($filterCategories ?? [])
+        ->groupBy(fn ($category) => strtolower((string) $category->slug))
+        ->map(function ($group): array {
+            $english = $group->firstWhere('language', 'en') ?? $group->first();
+            $persian = $group->firstWhere('language', 'fa');
+
+            return [
+                'slug' => strtolower((string) $english->slug),
+                'en' => (string) $english->name,
+                'fa' => (string) ($persian?->name ?? $english->name),
+                'color' => $english->accentColor(),
+                'topic' => $english->topicKey(),
+                'sort_order' => (int) $group->min('sort_order'),
+                'id' => (int) $group->min('id'),
+            ];
+        })
+        ->sortBy(fn (array $filter): array => [$filter['sort_order'], $filter['id']])
+        ->values();
+@endphp
             <div class="article-filter-bar">
               <span
                 class="article-filter-label"
@@ -23,65 +43,19 @@
                     <span class="article-chip-label" data-en="All articles" data-fa="همه مقالات">All articles</span>
                   </button>
                 </li>
-                <li>
-                  <button
-                    type="button"
-                    data-filter=".filter-microsoft"
-                    data-topic="microsoft"
-                    class="article-chip"
-                    aria-pressed="false"
-                    style="--topic: {{ \App\Models\Category::accentColorForSlug('microsoft') }};"
-                  >
-                    <span class="article-chip-label" data-en="Microsoft" data-fa="مایکروسافت">Microsoft</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    data-filter=".filter-linux"
-                    data-topic="linux"
-                    class="article-chip"
-                    aria-pressed="false"
-                    style="--topic: {{ \App\Models\Category::accentColorForSlug('linux') }};"
-                  >
-                    <span class="article-chip-label" data-en="Linux" data-fa="لینوکس">Linux</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    data-filter=".filter-mikrotik"
-                    data-topic="mikrotik"
-                    class="article-chip"
-                    aria-pressed="false"
-                    style="--topic: {{ \App\Models\Category::accentColorForSlug('mikrotik') }};"
-                  >
-                    <span class="article-chip-label" data-en="MikroTik" data-fa="میکروتیک">MikroTik</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    data-filter=".filter-vmware"
-                    data-topic="vmware"
-                    class="article-chip"
-                    aria-pressed="false"
-                    style="--topic: {{ \App\Models\Category::accentColorForSlug('vmware') }};"
-                  >
-                    <span class="article-chip-label" data-en="VMware" data-fa="مجازی‌سازی">VMware</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    data-filter=".filter-others"
-                    data-topic="other"
-                    class="article-chip"
-                    aria-pressed="false"
-                    style="--topic: {{ \App\Models\Category::accentColorForSlug('others') }};"
-                  >
-                    <span class="article-chip-label" data-en="Other" data-fa="سایر مقالات">Other</span>
-                  </button>
-                </li>
+                @foreach ($filterGroups as $filter)
+                  <li>
+                    <button
+                      type="button"
+                      data-filter=".filter-{{ $filter['slug'] }}"
+                      data-topic="{{ $filter['topic'] }}"
+                      class="article-chip"
+                      aria-pressed="false"
+                      style="--topic: {{ $filter['color'] }};"
+                    >
+                      <span class="article-chip-label" data-en="{{ $filter['en'] }}" data-fa="{{ $filter['fa'] }}">{{ $filter['en'] }}</span>
+                    </button>
+                  </li>
+                @endforeach
               </ul>
             </div>
