@@ -238,8 +238,8 @@
       rel="stylesheet"
       disabled
     />
-    <link href="/assets/css/visual-upgrade.css?v=1712" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1841" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1842" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -616,7 +616,7 @@
           <div class="about-copy" data-aos="fade-up">
             <p class="about-kicker" data-en="Infrastructure &amp; DevOps Engineer" data-fa="مهندس زیرساخت و DevOps">Infrastructure &amp; DevOps Engineer</p>
             <h2 data-en="Get to Know Me" data-fa="با من آشنا شوید">Get to Know Me</h2>
-            <p class="about-headline" data-en="Designing, managing, and optimizing enterprise systems." data-fa="طراحی، مدیریت و بهینه‌سازی سیستم‌های سازمانی با رویکرد یک متخصص شبکه.">Designing, managing, and optimizing enterprise systems.</p>
+            <p class="about-headline" data-en="Designing, managing, and optimizing enterprise systems." data-fa="طراحی، مدیریت و بهینه‌سازی سیستم‌های سازمانی.">Designing, managing, and optimizing enterprise systems.</p>
             <div class="about-profile">
               <div class="about-photo">
                 <img src="/assets/img/my-profile-img-2.jpg" alt="Amirhossein Jalalian Profile" width="200" height="200" loading="lazy" sizes="120px" />

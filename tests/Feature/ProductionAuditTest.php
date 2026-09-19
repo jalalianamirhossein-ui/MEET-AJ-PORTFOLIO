@@ -93,7 +93,10 @@ class ProductionAuditTest extends TestCase
         $this->assertStringContainsString('data-fa="نظرات"', $html);
         $this->assertStringContainsString('راه‌حل‌های قابل اعتماد', $html);
         $this->assertStringContainsString('مانیتورینگ Zabbix', $html);
-        $this->assertStringContainsString('متخصص شبکه', $html);
+        $this->assertStringContainsString('مهندس زیرساخت و DevOps', $html);
+        $this->assertStringNotContainsString('متخصص شبکه', $html);
+        $this->assertStringNotContainsString('IT Infrastructure Specialist', $html);
+        $this->assertStringNotContainsString('Network Expert & DevOps Engineer', $html);
         $this->assertStringContainsString('data-expertise="infrastructure"', $html);
         $this->assertStringContainsString('data-expertise="security"', $html);
         $this->assertDoesNotMatchRegularExpression('/data-fa="[?؟]{3,}"/u', $html);
@@ -141,7 +144,7 @@ class ProductionAuditTest extends TestCase
         $this->assertStringNotContainsString('testimonials-slider-fa', $home);
         $this->assertStringNotContainsString('id="testimonials-fa"', $home);
         $this->assertStringContainsString('data-fa="نظرات"', $home);
-        $this->assertStringContainsString('site-modules.css?v=1841', $home);
+        $this->assertStringContainsString('site-modules.css?v=1842', $home);
         $this->assertStringContainsString('main.js?v=1412', $home);
         $this->assertStringContainsString('i18n.js?v=1403', $home);
         $this->assertStringContainsString('rtl.css?v=1405', $home);

@@ -100,8 +100,8 @@ class LegacySitePublisher
     <link href="/assets/css/main.css?v=1002" rel="stylesheet" />
     <link href="/assets/css/lang-toggle.css?v=1403" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1405" rel="stylesheet" disabled />
-    <link href="/assets/css/visual-upgrade.css?v=1712" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1841" rel="stylesheet" />
+    <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1842" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">
 BLADE;

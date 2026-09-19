@@ -37,7 +37,27 @@ body.index-page .hero + .about.about-premium,
     radial-gradient(circle at 12% 8%, rgba(14, 165, 233, 0.12), transparent 36%),
     radial-gradient(circle at 88% 18%, rgba(37, 99, 235, 0.09), transparent 34%),
     radial-gradient(circle at 50% 100%, rgba(14, 165, 233, 0.06), transparent 42%),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 23px,
+      rgba(37, 99, 235, 0.03) 23px,
+      rgba(37, 99, 235, 0.03) 24px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 23px,
+      rgba(14, 165, 233, 0.025) 23px,
+      rgba(14, 165, 233, 0.025) 24px
+    ),
     linear-gradient(180deg, #f8fbff 0%, #f2f7ff 45%, #edf5ff 100%) !important;
+}
+
+/* Soft seam from Hero photo into the tinted About plane */
+body.index-page .hero.section::after,
+body.index-page section.hero::after {
+  pointer-events: none;
 }
 
 body.index-page .hero + .about.about-premium::before,
@@ -66,6 +86,14 @@ body.index-page .hero + .about.about-premium::after,
   height: min(34vw, 24rem);
   inset: auto -8rem 6rem auto;
   background: rgba(37, 99, 235, 0.08);
+}
+
+/* Keep interactive About surfaces readable on the tinted wash */
+body.index-page .hero + .about.about-premium .about-facts > div,
+body.index-page .hero + .about.about-premium .about-values,
+body.index-page .hero + .about.about-premium .about-philosophy,
+body.index-page .hero + .about.about-premium .about-core-canvas {
+  background-color: color-mix(in srgb, #ffffff 94%, #e0f2fe);
 }
 
 /* LCP hero photo must never stay invisible if AOS fails to animate */

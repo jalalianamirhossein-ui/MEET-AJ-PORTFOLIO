@@ -22,11 +22,7 @@ class ArticleSeo
                 'headline' => $title,
                 'description' => $description,
                 'image' => $image,
-                'author' => [
-                    '@type' => 'Person',
-                    'name' => 'AmirHossein Jalalian',
-                    'url' => rtrim((string) config('app.url'), '/').'/',
-                ],
+                'author' => $this->personAuthor(),
                 'mainEntityOfPage' => $canonical,
             ];
         } else {
@@ -34,6 +30,7 @@ class ArticleSeo
             if (isset($schema['headline'])) {
                 $schema['headline'] = $this->englishHeadline($article, is_string($schema['headline']) ? $schema['headline'] : $title);
             }
+            $schema['author'] = $this->normalizeAuthor($schema['author'] ?? null);
         }
 
         return [
@@ -52,6 +49,41 @@ class ArticleSeo
             'schema' => $schema,
             'breadcrumb' => $this->breadcrumb($article, $canonical),
             'robots' => $seo['robots'] ?? 'index, follow',
+        ];
+    }
+
+    /**
+     * @return array{name: string, url: string, jobTitle: string, @type: string}
+     */
+    private function personAuthor(): array
+    {
+        return [
+            '@type' => 'Person',
+            'name' => 'AmirHossein Jalalian',
+            'url' => rtrim((string) config('app.url'), '/').'/',
+            'jobTitle' => 'Infrastructure & DevOps Engineer',
+        ];
+    }
+
+    /**
+     * @return array{name: string, url: string, jobTitle: string, @type: string}
+     */
+    private function normalizeAuthor(mixed $author): array
+    {
+        $canonical = $this->personAuthor();
+        if (! is_array($author)) {
+            return $canonical;
+        }
+
+        return [
+            '@type' => 'Person',
+            'name' => is_string($author['name'] ?? null) && $author['name'] !== ''
+                ? $author['name']
+                : $canonical['name'],
+            'url' => is_string($author['url'] ?? null) && $author['url'] !== ''
+                ? $this->absolute($author['url'])
+                : $canonical['url'],
+            'jobTitle' => 'Infrastructure & DevOps Engineer',
         ];
     }
 
