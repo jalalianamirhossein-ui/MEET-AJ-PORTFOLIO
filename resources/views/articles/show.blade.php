@@ -106,7 +106,7 @@
               <p class="article-excerpt hero-subtitle" data-en="{{ $article->englishExcerpt() }}" data-fa="{{ data_get($article->presentation, 'excerpt_translations.fa', $article->englishExcerpt()) }}">{{ $article->englishExcerpt() }}</p>
             </div>
             <figure class="article-hero-media">
-              <img class="article-hero-thumbnail" src="{{ $article->galleryUrl() }}" decoding="async" fetchpriority="high" alt="{{ data_get($article->presentation, 'image_alt') ?: $article->title }}" />
+              <img class="article-hero-thumbnail" src="{{ $article->thumbnailUrl() }}" decoding="async" fetchpriority="high" alt="{{ data_get($article->presentation, 'image_alt') ?: $article->title }}" />
             </figure>
           </div>
         </div>

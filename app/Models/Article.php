@@ -178,32 +178,56 @@ class Article extends Model
 
     public function imageUrl(): string
     {
-        $image = $this->featured_image ?: data_get($this->presentation, 'thumbnail') ?: '/assets/img/hero-bg.jpg';
-        if (str_starts_with((string) $image, 'http://') || str_starts_with((string) $image, 'https://')) {
+        $image = $this->thumbnailUrl();
+        if (preg_match('~^(?:https?:)?//~i', $image)) {
             return $image;
         }
-        if (str_starts_with((string) $image, '/')) {
-            return rtrim((string) config('app.url'), '/').$image;
-        }
 
-        return rtrim((string) config('app.url'), '/').'/storage/'.ltrim((string) $image, '/');
+        return rtrim((string) config('app.url'), '/').$image;
     }
 
     public function galleryUrl(): string
     {
-        $image = data_get($this->presentation, 'gallery') ?: $this->featured_image ?: '/assets/img/hero-bg.jpg';
-        if (str_starts_with((string) $image, '/')) {
-            return $image;
-        }
-
-        return '/'.ltrim((string) $image, '/');
+        return $this->publicImagePath($this->selectedImage('gallery'));
     }
 
     public function thumbnailUrl(): string
     {
-        $image = data_get($this->presentation, 'thumbnail') ?: $this->featured_image ?: '/assets/img/hero-bg.jpg';
+        $image = $this->publicImagePath($this->selectedImage('thumbnail'));
 
-        return str_starts_with((string) $image, '/') ? $image : '/'.ltrim((string) $image, '/');
+        // Older imports store the original PNG in both fields. Resolve the
+        // shipped small image at render time, without overwriting CMS records.
+        if (preg_match('~^/assets/img/portfolio/([a-z0-9-]+)\.png$~', $image, $match)) {
+            $optimized = '/assets/img/portfolio/optimized/'.$match[1].'.jpg';
+            if (is_file(public_path(ltrim($optimized, '/')))) {
+                return $optimized;
+            }
+        }
+
+        return $image;
+    }
+
+    private function selectedImage(string $variant): string
+    {
+        $featured = (string) $this->featured_image;
+        // A new CMS upload replaces the imported thumbnail AND gallery.
+        if ($featured !== '' && ! str_starts_with(ltrim($featured, '/'), 'assets/img/portfolio/')) {
+            return $featured;
+        }
+
+        return (string) (data_get($this->presentation, $variant) ?: $featured ?: '/assets/img/hero-bg.jpg');
+    }
+
+    private function publicImagePath(string $image): string
+    {
+        if (preg_match('~^(?:https?:)?//~i', $image) || str_starts_with($image, '/')) {
+            return $image;
+        }
+        if (str_starts_with($image, 'assets/') || str_starts_with($image, 'storage/')) {
+            return '/'.$image;
+        }
+
+        return '/storage/'.$image;
     }
 
     public function filterClass(): string

@@ -77,7 +77,7 @@ class PublicSiteTest extends TestCase
             $this->get('/articles/'.$article->slug)
                 ->assertOk()
                 ->assertSee($article->slug, false)
-                ->assertSee($article->galleryUrl(), false)
+                ->assertSee($article->thumbnailUrl(), false)
                 ->assertSee('article-hero-thumbnail', false)
                 ->assertSee('rel="canonical"', false)
                 ->assertSee('application/ld+json', false)
