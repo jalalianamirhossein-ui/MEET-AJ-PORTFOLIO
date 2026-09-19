@@ -3050,3 +3050,42 @@ body.index-page #hero .hero-title .title-line-2 {
     text-shadow: none;
   }
 }
+
+/* Persian Hero copy stays in the safe physical column, but its reading edge
+   is the right edge of that column. This keeps RTL typography natural without
+   moving the copy over the portrait. */
+html[dir="rtl"] body.index-page #hero .hero-content {
+  direction: rtl;
+  text-align: right;
+  /* In a column flexbox with RTL direction, flex-start is the physical
+     right edge. Keep the copy anchored there inside the portrait-safe column. */
+  align-items: flex-start;
+}
+
+html[dir="rtl"] body.index-page #hero .hero-badge,
+html[dir="rtl"] body.index-page #hero .hero-title,
+html[dir="rtl"] body.index-page #hero .title-line-1,
+html[dir="rtl"] body.index-page #hero .title-line-2,
+html[dir="rtl"] body.index-page #hero .hero-role,
+html[dir="rtl"] body.index-page #hero .hero-subtitle {
+  text-align: right;
+}
+
+html[dir="rtl"] body.index-page #hero .hero-badge {
+  align-self: flex-start;
+}
+
+html[dir="rtl"] body.index-page #hero .hero-actions {
+  direction: rtl;
+  justify-content: flex-start;
+}
+
+@media (max-width: 991px) {
+  html[dir="rtl"] body.index-page #hero .hero-content {
+    align-items: stretch;
+  }
+
+  html[dir="rtl"] body.index-page #hero .hero-badge {
+    align-self: flex-start;
+  }
+}

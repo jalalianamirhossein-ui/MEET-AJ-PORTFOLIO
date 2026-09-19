@@ -112,6 +112,6 @@ Filament **Content → Articles** (`ArticleResource`), available to admins and e
 - Image: optional upload, JPEG/PNG/WebP, max 5 MB
 - Body: `content` required, HTML or rich editor
 - SEO (collapsed): `meta_title`, `meta_description`, `canonical_url`
-- Publishing: `status`, `published_at` in `config('cms.display_timezone')`, with helper text that German must stay draft
+- Publishing: `sort_order` (lower numbers display first), `status`, `published_at` in `config('cms.display_timezone')`, with helper text that German must stay draft
 
 The table supports title search, sortable columns, language and status display, category, `published_at` and a toggleable `updated_at`. Detail: [ADMIN.md](ADMIN.md).

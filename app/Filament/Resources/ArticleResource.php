@@ -106,8 +106,15 @@ class ArticleResource extends Resource
                 ]),
             Section::make('Publishing')
                 ->icon(Heroicon::OutlinedCalendar)
-                ->columns(2)
+                ->columns(3)
                 ->schema([
+                    TextInput::make('sort_order')
+                        ->numeric()
+                        ->integer()
+                        ->minValue(0)
+                        ->default(0)
+                        ->required()
+                        ->helperText('Display order. Lower numbers appear first.'),
                     Select::make('status')->options(['draft' => 'Draft', 'published' => 'Published'])->default('draft')->required(),
                     DateTimePicker::make('published_at')->timezone(config('cms.display_timezone'))->seconds(false)->helperText('A future date schedules visibility without a queue worker. German must remain draft.'),
                 ]),
@@ -134,6 +141,7 @@ class ArticleResource extends Resource
                     })
                     ->toggleable(),
                 TextColumn::make('tags.name')->badge()->separator(',')->color('gray')->toggleable(),
+                TextColumn::make('sort_order')->label('Order')->sortable(),
                 TextColumn::make('status')->badge()->color(fn (string $state): string => $state === 'published' ? 'success' : 'gray')->sortable(),
                 TextColumn::make('published_at')->dateTime()->sortable()->placeholder('—'),
                 TextColumn::make('updated_at')->since()->sortable()->toggleable(isToggledHiddenByDefault: true),
@@ -201,7 +209,7 @@ class ArticleResource extends Resource
             ->emptyStateDescription('Import the original 23 HTML articles or create a draft. Published English and Persian URLs stay public.')
             ->emptyStateIcon(Heroicon::OutlinedDocumentText)
             ->emptyStateActions([CreateAction::make()])
-            ->defaultSort('updated_at', 'desc');
+            ->defaultSort('sort_order');
     }
 
     public static function getPages(): array
