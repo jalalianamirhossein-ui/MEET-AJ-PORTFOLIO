@@ -117,4 +117,4 @@ php artisan services:import-legacy --dry-run
 php artisan services:import-legacy --refresh
 ```
 
-Source files are the six original quote pages in `services/*.html`. `--refresh` deletes existing service rows before re-importing, so it discards editorial price and copy changes. `DatabaseSeeder` runs the article and service importers after rebuilding Blade views.
+Source files are the six original quote pages in `resources/legacy/services/*.html`. `--refresh` deletes existing service rows before re-importing, so it discards editorial price and copy changes. `DatabaseSeeder` runs the article and service importers after rebuilding Blade views.

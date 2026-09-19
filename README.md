@@ -2,7 +2,7 @@
 
 Personal portfolio and technical article site for **AmirHossein Jalalian** (infrastructure, networking, virtualization and DevOps), running as a Laravel application with a Filament admin panel.
 
-Verified against the running code on **2026-09-18**. Single source of truth for project state: [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).
+Application overview verified on **2026-09-18**; directory layout and checks updated on **2026-09-19**. Single source of truth for project state: [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).
 
 ## Overview
 
@@ -13,7 +13,7 @@ The site was originally a static English/Persian progressive web app: one homepa
 - contact and quote submissions are stored as requests with a light workflow;
 - English and Persian share the same URLs, switched client-side with RTL support.
 
-The original HTML in the repository root remains the import and rollback source. It is deliberately **outside** the web document root.
+The original HTML in `resources/legacy/` remains the import and view-generation source. It is deliberately **outside** the web document root.
 
 ## Architecture
 
@@ -104,7 +104,8 @@ Both importers accept `--dry-run` and `--refresh`. **`--refresh` deletes existin
 ## Local development
 
 ```bash
-php artisan site:publish-assets --views   # copy assets into public/ and rebuild Blade
+php artisan site:publish-assets --views   # publish resources/ assets and rebuild generated Blade views
+php artisan filament:assets               # publish admin CSS and Filament assets
 php artisan serve                          # http://127.0.0.1:8000
 ```
 
@@ -155,12 +156,12 @@ Canonical URLs, Open Graph, Twitter cards, JSON-LD (Person/WebSite on the homepa
 ## Testing
 
 ```bash
-php artisan test                                                    # 58 tests, 1124 assertions, 1 skipped
+php artisan test                                                    # 58 tests; latest result below
 vendor/bin/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest     # MySQL schema check
 php artisan site:compare-content                                     # Failures: 0
 ```
 
-The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Detail: [docs/current/TESTING.md](docs/current/TESTING.md); per-URL evidence: [docs/qa/QA-MATRIX.md](docs/qa/QA-MATRIX.md).
+Latest run (2026-09-19): **56 passed, 1 pre-existing CSRF failure, 1 skipped**; 1123 assertions. Content comparison reports zero failures. The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Detail: [docs/current/TESTING.md](docs/current/TESTING.md), [reorganization QA](docs/qa/PROJECT-REORGANIZATION.md).
 
 ## Deployment
 
@@ -181,20 +182,17 @@ CSRF (including the legacy field contract), a honeypot, two layers of rate limit
 ## Project structure
 
 ```
-app/          Laravel code (Filament resources, controllers, models, policies, services, commands)
-articles/     23 original article HTML files (import source)
-assets/       Original CSS / JS / images (publish source)
-config/       Configuration, including cms.php
-database/     9 migrations, seeders, local SQLite file
-design-system/ Visual language notes
-docs/         Documentation (see the index below)
-forms/        Original static PHP endpoints, kept as reference
-public/       Web document root — the only directory a server should expose
-resources/    Blade views and admin CSS
-routes/       web.php, console.php
-scripts/      validate-environment.php, verify-originals.php
-services/     6 original service HTML files (import source)
-tests/        10 feature test files, 58 tests
+app/          Laravel application and admin panel code
+bootstrap/    Application bootstrap and generated cache
+config/       Laravel and CMS configuration
+database/     Migrations, seeders, ignored local SQLite database
+docs/         Documentation, design system, QA and historical references
+public/       Web document root and published assets
+resources/    Asset sources, downloads, static files, legacy content and Blade views
+routes/       Web and console routes
+scripts/      Maintenance and diagnostic PHP scripts
+storage/      Uploads, caches, logs and temporary output
+tests/        PHPUnit feature tests
 ```
 
 Detail: [docs/current/PROJECT-STRUCTURE.md](docs/current/PROJECT-STRUCTURE.md).
@@ -225,7 +223,7 @@ Full navigation map: [docs/README.md](docs/README.md).
 6. **German is draft-only** and no German content exists.
 7. **Scheduled publishing is query-based**: a future `published_at` simply stays hidden, with nothing to flip it later.
 8. **`/admin/users` and `/admin/cms-users`** resolve to the same Users screen; that is one feature at two paths.
-9. **Six unused per-service Blade templates** remain in `resources/views/services/` with stale asset versions; only `services/show.blade.php` is routed.
+9. **Six retired per-service Blade templates** are archived in `resources/legacy/views/services/`; only `resources/views/services/show.blade.php` is active.
 10. **Imported article images** still point at `/assets/...` unless an editor uploads a replacement.
 
 Every limitation above is tracked with a status in [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).

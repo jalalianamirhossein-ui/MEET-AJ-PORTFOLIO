@@ -87,7 +87,7 @@ class LegacyArticleImporter
      */
     public function articleFiles(): array
     {
-        $files = glob(base_path('articles/*.html')) ?: [];
+        $files = glob(resource_path('legacy/articles/*.html')) ?: [];
         sort($files);
 
         return $files;
@@ -98,7 +98,7 @@ class LegacyArticleImporter
      */
     private function homepageCards(): array
     {
-        $html = file_get_contents(base_path('index.html'));
+        $html = file_get_contents(resource_path('legacy/index.html'));
         if ($html === false) {
             throw new \RuntimeException('Unable to read index.html');
         }
@@ -449,7 +449,7 @@ class LegacyArticleImporter
             }
         }
 
-        $mtime = filemtime(base_path($relative));
+        $mtime = filemtime(resource_path('legacy/'.$relative));
         if ($mtime === false) {
             throw new \RuntimeException('Unable to read source file time for '.$relative);
         }

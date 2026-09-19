@@ -111,11 +111,12 @@ Superseded snapshots, plans and audits. Kept on purpose: they hold measurements,
 | [historical/baseline-main-css.patch](historical/baseline-main-css.patch) | Preserved pre-migration CSS diff |
 | historical/screenshots/get-to-know-me/ | PNG evidence for the About section report |
 
-## Files that must stay at `docs/` root
+## Source files and design references
 
 | File | Why |
 |------|-----|
-| `baseline-files.json` | `scripts/verify-originals.php` reads this exact path for SHA-256 baselines |
-| `netbox_installation_guide_v2.pdf` | `App\Services\LegacySitePublisher` copies it to `public/docs/` to keep the public download URL alive |
+| [qa/baseline-files.json](qa/baseline-files.json) | Historical SHA-256 baseline; the verifier maps original paths to the reorganized layout |
+| [NetBox download source](../resources/downloads/netbox_installation_guide_v2.pdf) | Published to `public/docs/` with the same public URL |
+| [Design system](design-system/meet-aj/MASTER.md) | Visual design notes and page overrides |
 
-Do not move or rename either file without changing the code that points at it.
+See [the directory map](current/PROJECT-STRUCTURE.md) for source ownership and publishing commands.

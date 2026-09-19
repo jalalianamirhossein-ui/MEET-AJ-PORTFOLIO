@@ -149,7 +149,7 @@ class ProductionAuditTest extends TestCase
         $this->assertStringContainsString('i18n.js?v=1403', $home);
         $this->assertStringContainsString('rtl.css?v=1405', $home);
 
-        $main = (string) file_get_contents(base_path('assets/js/main.js'));
+        $main = (string) file_get_contents(resource_path('assets/js/main.js'));
         $this->assertStringContainsString('function initExpertiseReveal', $main);
         $this->assertStringContainsString('function syncTestimonialsNavIcons', $main);
         $this->assertStringContainsString('meetaj:languagechange', $main);
@@ -161,15 +161,15 @@ class ProductionAuditTest extends TestCase
         $this->assertStringNotContainsString('nextEl: ".testimonials-prev"', $main);
         $this->assertStringNotContainsString('prevEl: ".testimonials-next"', $main);
 
-        $i18n = (string) file_get_contents(base_path('assets/js/i18n.js'));
+        $i18n = (string) file_get_contents(resource_path('assets/js/i18n.js'));
         $this->assertStringContainsString('return english', $i18n);
         $this->assertStringNotContainsString('setAttribute("data-fa"', $i18n);
 
-        $rtl = (string) file_get_contents(base_path('assets/css/rtl.css'));
+        $rtl = (string) file_get_contents(resource_path('assets/css/rtl.css'));
         $this->assertStringContainsString('.testimonials-slider:not(.swiper-rtl) .swiper-wrapper', $rtl);
         $this->assertStringContainsString('direction: ltr !important', $rtl);
 
-        $modules = (string) file_get_contents(base_path('assets/css/site-modules.css'));
+        $modules = (string) file_get_contents(resource_path('assets/css/site-modules.css'));
         $this->assertStringContainsString('.testimonials-slider:not(.swiper-rtl) .swiper-wrapper', $modules);
         $this->assertStringContainsString('direction: ltr !important', $modules);
         $this->assertStringContainsString('.testimonials.is-empty', $modules);
@@ -193,7 +193,7 @@ class ProductionAuditTest extends TestCase
         $this->assertStringNotContainsString('class="google-plus"', $articles);
         $this->assertStringNotContainsString('aria-label="Phone"', $articles);
 
-        $modules = (string) file_get_contents(base_path('assets/css/site-modules.css'));
+        $modules = (string) file_get_contents(resource_path('assets/css/site-modules.css'));
         $this->assertStringContainsString('a.whatsapp:hover', $modules);
         $this->assertStringContainsString('#16a34a', $modules);
         $this->assertStringContainsString('#e1306c', $modules);

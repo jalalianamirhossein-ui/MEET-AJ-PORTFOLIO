@@ -31,7 +31,7 @@ class LegacyServiceImporter
         $report = [];
 
         foreach (self::CATALOG as $meta) {
-            $path = base_path('services/'.$meta['slug'].'.html');
+            $path = resource_path('legacy/services/'.$meta['slug'].'.html');
             if (! is_file($path)) {
                 $report[] = ['slug' => $meta['slug'], 'status' => 'missing source'];
                 $skipped++;
@@ -222,7 +222,7 @@ class LegacyServiceImporter
      */
     public function homepageCards(): array
     {
-        $html = file_get_contents(base_path('index.html'));
+        $html = file_get_contents(resource_path('legacy/index.html'));
         if ($html === false) {
             return [];
         }

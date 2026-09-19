@@ -26,7 +26,7 @@ class CompareLegacyContent extends Command
         $rows = [];
         $fails = 0;
 
-        $home = $this->comparePage('home', base_path('index.html'), $this->render('/'), [
+        $home = $this->comparePage('home', resource_path('legacy/index.html'), $this->render('/'), [
             'id="hero"', 'id="about"', 'id="stats"', 'id="skills"', 'id="resume"',
             'id="services"', 'id="portfolio"', 'id="testimonials"', 'id="contact"',
             'data-fa=', 'php-email-form', 'csrf_token', 'id="service-catalog"',
@@ -47,7 +47,7 @@ class CompareLegacyContent extends Command
             }
             $row = $this->comparePage(
                 'service:'.$service,
-                base_path('services/'.$service.'.html'),
+                resource_path('legacy/services/'.$service.'.html'),
                 $this->render('/services/'.$service),
                 ['<h1', 'data-fa=', 'php-email-form', 'csrf_token', 'application/ld+json', 'rel="canonical"']
             );
@@ -55,14 +55,14 @@ class CompareLegacyContent extends Command
             $fails += $row[1] === 'FAIL' ? 1 : 0;
         }
 
-        $index = $this->comparePage('articles-index', base_path('index.html'), $this->render('/articles'), [
+        $index = $this->comparePage('articles-index', resource_path('legacy/index.html'), $this->render('/articles'), [
             'id="portfolio"', 'data-fa=',
         ]);
         $rows[] = $index;
         $fails += $index[1] === 'FAIL' ? 1 : 0;
 
         foreach (Article::query()->orderBy('slug')->get() as $article) {
-            $source = File::get(base_path('articles/'.$article->slug.'.html'));
+            $source = File::get(resource_path('legacy/articles/'.$article->slug.'.html'));
             $sourceBody = $importer->articleBody($source);
             $missing = [];
             foreach (['<h2', 'data-fa=', 'data-en=', 'article-section'] as $token) {

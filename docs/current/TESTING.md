@@ -4,7 +4,11 @@
 **Verified:** 2026-09-18 by running the suite and reading `phpunit.xml`, `phpunit.mysql.xml`, `tests/TestCase.php` and every file in `tests/Feature/`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md). Per-URL evidence: [../qa/QA-MATRIX.md](../qa/QA-MATRIX.md).
 
-## Latest run
+## Latest run — 2026-09-19
+
+After the directory reorganization and asset publication: **58 tests, 1123 assertions, 56 passed, 1 failure, 1 skipped**. The remaining failure is `FormCsrfAndAdminRequestsTest::test_missing_csrf_token_returns_plain_419` (expected 419, received 200), which also failed before the reorganization. No new failures were observed. Content comparison reports **Failures: 0**. Full evidence: [project reorganization QA](../qa/PROJECT-REORGANIZATION.md).
+
+## Previous recorded run — 2026-09-18
 
 ```
 PHPUnit 11.5.56 by Sebastian Bergmann and contributors.

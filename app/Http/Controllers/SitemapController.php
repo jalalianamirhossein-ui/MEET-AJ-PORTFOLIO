@@ -12,14 +12,14 @@ class SitemapController extends Controller
     {
         $origin = rtrim((string) config('app.url'), '/');
         $urls = [
-            ['loc' => $origin.'/', 'lastmod' => $this->sourceLastmod(base_path('index.html'))],
+            ['loc' => $origin.'/', 'lastmod' => $this->sourceLastmod(resource_path('legacy/index.html'))],
         ];
 
         foreach (Service::query()->publicCatalog()->get() as $service) {
             $urls[] = [
                 'loc' => $service->canonicalUrl(),
                 'lastmod' => $service->published_at?->toDateString()
-                    ?: $this->sourceLastmod(base_path('services/'.$service->slug.'.html')),
+                    ?: $this->sourceLastmod(resource_path('legacy/services/'.$service->slug.'.html')),
             ];
         }
 

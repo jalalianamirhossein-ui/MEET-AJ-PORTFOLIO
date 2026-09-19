@@ -85,8 +85,8 @@ Policies are registered in `App\Providers\AppServiceProvider`.
 
 | Class | Role |
 |-------|------|
-| `LegacyArticleImporter` | Parse `articles/*.html` into `articles` + `article_redirects` |
-| `LegacyServiceImporter` | Parse `services/*.html` into `services` |
+| `LegacyArticleImporter` | Parse `resources/legacy/articles/*.html` into `articles` + `article_redirects` |
+| `LegacyServiceImporter` | Parse `resources/legacy/services/*.html` into `services` |
 | `LegacySitePublisher` | Copy allowlisted assets into `public/` and rebuild Blade views from the original HTML |
 | `ArticleSeo` | Canonical, Open Graph, Twitter and JSON-LD for article detail |
 | `ArticleShareLinks` | Share URLs on the article page |
@@ -109,9 +109,9 @@ Policies are registered in `App\Providers\AppServiceProvider`.
 
 | View | Origin |
 |------|--------|
-| `home.blade.php` | rebuilt from the original `index.html` (homepage Expertise markup lives here and in `index.html`) |
+| `home.blade.php` | rebuilt from `resources/legacy/index.html` (homepage Expertise markup originates there) |
 | `articles/index.blade.php` | library chrome from the homepage portfolio section |
-| `articles/show.blade.php` | from `articles/{slug}.html` |
+| `articles/show.blade.php` | renders database content imported from `resources/legacy/articles/{slug}.html` |
 | `articles/partials/*` | breadcrumbs, library toolbar, related, search results, share, category filters |
 | `services/show.blade.php` | dynamic catalog detail rendered from the `services` table |
 | `components/article-card.blade.php`, `components/service-card.blade.php` | shared cards, English defaults with `data-fa` |
@@ -122,7 +122,7 @@ Policies are registered in `App\Providers\AppServiceProvider`.
 
 Rebuild with `php artisan site:publish-assets --views`.
 
-Six per-service Blade files (`services/network-design.blade.php` and siblings) remain on disk but are **not routed** — `ServiceController@show` always renders `services.show`. They are dead templates carrying stale asset versions; see the limitations list in [PROJECT-STATUS.md](PROJECT-STATUS.md).
+Six retired per-service Blade files are archived under `resources/legacy/views/services/`, outside Laravel's active view path. `ServiceController@show` renders `resources/views/services/show.blade.php`.
 
 ## Filament / Livewire
 
@@ -142,9 +142,9 @@ Detail: [ADMIN.md](ADMIN.md).
 
 ## Assets and document root
 
-Original CSS/JS/images live in `assets/` and are copied into `public/assets/` by `php artisan site:publish-assets`. Public cascade: `main.css?v=1002` → `lang-toggle.css?v=1403` → `rtl.css?v=1405` → `visual-upgrade.css?v=1711` → **`site-modules.css?v=1840` last**. Scripts: `main.js?v=1412`, `i18n.js?v=1403`. Admin CSS is **not** in this public overlay — Filament loads `resources/css/filament-admin.css` (published as `public/css/app/meet-aj-admin.css`).
+Site CSS/JS/images live in `resources/assets/` and are copied into `public/assets/` by `php artisan site:publish-assets`. Public cascade: `main.css?v=1002` → `lang-toggle.css?v=1403` → `rtl.css?v=1405` → `visual-upgrade.css?v=1711` → **`site-modules.css?v=1840` last**. Scripts: `main.js?v=1412`, `i18n.js?v=1403`. Admin CSS is **not** in this public overlay — Filament loads `resources/css/filament-admin.css` (published as `public/css/app/meet-aj-admin.css`).
 
-Only `public/` may be exposed by the web server. The root-level `index.html`, `articles/`, `services/`, `assets/`, `forms/` and `partials/` are **sources**; serving them directly would bypass Laravel.
+Only `public/` may be exposed by the web server. Frontend assets, static files, downloads, and original HTML live under `resources/`. Importers and the publisher read those sources; public URL paths are unchanged. See [PROJECT-STRUCTURE.md](PROJECT-STRUCTURE.md).
 
 ## Storage
 

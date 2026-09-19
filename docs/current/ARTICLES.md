@@ -21,7 +21,7 @@ Every article row is `language = en`, `status = published`. Persian article copy
 
 ## Import
 
-Source of truth for content: the 23 original files in `articles/*.html` at the repository root. They are never deleted or rewritten by the CMS.
+Source of truth for content: the 23 original files in `resources/legacy/articles/*.html`. They are never deleted or rewritten by the CMS.
 
 ```bash
 php artisan articles:import-legacy             # import or update

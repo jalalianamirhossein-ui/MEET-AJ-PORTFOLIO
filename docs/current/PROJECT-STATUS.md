@@ -1,5 +1,7 @@
 # Project status — Meet AJ
 
+**2026-09-19 structure update:** Frontend and legacy sources now live under `resources/`; design notes are under `docs/design-system/`. See [the current directory map](PROJECT-STRUCTURE.md). Post-change verification: content comparison has zero failures; PHPUnit has 56 passing tests, one pre-existing CSRF failure, and one MySQL skip. [Reorganization QA](../qa/PROJECT-REORGANIZATION.md) supersedes older test totals below.
+
 **Authority:** SINGLE authoritative current-state document. Everything else in `docs/current/` expands one section of this file.
 **Date verified:** 2026-09-18
 **Verification method:** `php artisan about`, `php artisan optimize:clear`, `php artisan route:list`, `php artisan test` (**58 tests / 1124 assertions / 1 skipped**), `php artisan site:compare-content` (Failures: 0), live `POST /forms/contact.php` against SQLite, Cursor browser first-load + FA + Contact hash + viewports 1920/1440/1024/768/390, authenticated Admin/Editor Filament White/Red QA, homepage Expertise EN/FA, `/admin/categories` ColorPicker, and reading `app/`, `routes/`, `resources/`, `assets/`, `tests/`.
@@ -167,7 +169,7 @@ Documented DirectAdmin procedure exists and is complete, but **no deployment has
 2. **German is draft-only.** No German content exists; `/de` is 404 by design.
 3. **Scheduled publishing is query-based.** A future `published_at` simply stays invisible; there is no queue or cron to flip it.
 4. **Authenticated Filament visual QA is PASS** after the 2026-09-18 contrast fix (login labels, sidebar, tables, filters). Evidence: [../qa/ADMIN-QA.md](../qa/ADMIN-QA.md). Users resource CRUD remains NOT TESTED.
-5. **Six unused static service Blade files** remain in `resources/views/services/` (`devops-automation.blade.php`, `monitoring-security.blade.php`, `network-design.blade.php`, `system-administration.blade.php`, `technical-consulting.blade.php`, `virtualization-solutions.blade.php`). `ServiceController@show` renders `services.show` only, so these files are dead templates and still reference stale asset versions (`visual-upgrade.css?v=1108`, `i18n.js?v=1000`). They were **not** deleted because this pass is documentation-only.
+5. **Retired static service Blade files** were moved to `resources/legacy/views/services/` on 2026-09-19. They are outside the active view path; `ServiceController@show` renders `resources/views/services/show.blade.php`. See [PROJECT-STRUCTURE.md](PROJECT-STRUCTURE.md).
 6. **Imported `featured_image` values still point at `/assets/...`** rather than Filament storage unless an editor uploads a replacement.
 7. **Source-content leftovers** (not CMS defects): a generic overlay category label on some cards, and the service page “Back to Services” link staying English in FA.
 8. **Local `.env` runs with debug enabled and UTC**, unlike the documented production configuration.

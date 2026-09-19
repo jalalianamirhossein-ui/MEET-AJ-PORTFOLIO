@@ -71,7 +71,7 @@ Upload the Laravel project **above** the web root, for example:
 /home/ACCOUNT/domains/meetaj.ir/laravel/public/  ← document root
 ```
 
-Keep original static sources (`index.html`, `articles/`, `services/`, `assets/`, `forms/`) **outside** `public/` for rollback. Do not copy `articles/*.html` or `services/*.html` into `public/`.
+Include `resources/` in the release: `resources/legacy/` supplies imports and generated views, `resources/assets/` and `resources/static/` supply public assets, and `resources/downloads/` supplies visitor downloads. Keep these sources outside `public/`. Do not copy original article, service, or form files into the web root.
 
 Do not upload `.env` from git. Do not upload `.runtime/`.
 
@@ -183,7 +183,7 @@ Use DirectAdmin Let’s Encrypt / SSL for `meetaj.ir` (and `www` if used). Set `
 
 ## 12. Rollback
 
-1. Point the DirectAdmin document root back to the previous static site directory (original `index.html` / `assets/` still exist outside Laravel `public/`).
+1. Point the DirectAdmin document root back to a separately preserved, complete previous static release. The reorganized `resources/legacy/` directory is an import source, not a standalone web root; assets now live separately under `resources/assets/`.
 2. Or restore a filesystem + MySQL backup taken before cutover.
 3. Leave the Laravel tree in place until the static site is confirmed.
 
