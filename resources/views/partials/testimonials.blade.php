@@ -34,7 +34,7 @@
           <div class="swiper-slide">
             <blockquote class="testimonial-card">
               <p>
-                <span data-en="{{ $testimonial->quote_en }}" data-fa="{{ $testimonial->quote_fa ?: $testimonial->quote_en }}">{{ $testimonial->quote_en }}</span>
+                <span class="testimonial-quote" data-en="{{ $testimonial->quote_en }}" data-fa="{{ $testimonial->quote_fa ?: $testimonial->quote_en }}">{{ $testimonial->quote_en }}</span>
               </p>
               <footer>
                 <img src="{{ $testimonial->avatarUrl() }}" loading="lazy" class="testimonial-img" alt="{{ $testimonial->author_name }}" width="52" height="52" />

@@ -239,7 +239,7 @@
       disabled
     />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1850" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1851" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================

@@ -845,14 +845,20 @@ html[lang="fa"] .lang-switcher-toggle {
 }
 
 .testimonial-card p {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow: hidden;
   margin: 0;
   color: var(--color-text, #1e293b);
   font-size: clamp(0.92rem, 1.35vw, 1.02rem);
   line-height: 1.5;
+}
+
+.testimonial-card .testimonial-quote {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
 }
 
 .testimonial-card footer {
@@ -1057,6 +1063,10 @@ html[dir="rtl"] .testimonials-slider .testimonial-card strong {
   }
 
   .testimonial-card p {
+    flex-basis: auto;
+  }
+
+  .testimonial-card .testimonial-quote {
     -webkit-line-clamp: 5;
   }
 }
