@@ -9,6 +9,7 @@ use App\Models\Request as ContactRequest;
 use App\Models\Service;
 use App\Models\Tag;
 use App\Models\User;
+use App\Models\HomepageContent;
 use App\Policies\ArticlePolicy;
 use App\Policies\TestimonialPolicy;
 use App\Policies\CategoryPolicy;
@@ -16,6 +17,7 @@ use App\Policies\RequestPolicy;
 use App\Policies\ServicePolicy;
 use App\Policies\TagPolicy;
 use App\Policies\UserPolicy;
+use App\Policies\HomepageContentPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -32,5 +34,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(ContactRequest::class, RequestPolicy::class);
         Gate::policy(Service::class, ServicePolicy::class);
         Gate::policy(User::class, UserPolicy::class);
+        Gate::policy(HomepageContent::class, HomepageContentPolicy::class);
     }
 }

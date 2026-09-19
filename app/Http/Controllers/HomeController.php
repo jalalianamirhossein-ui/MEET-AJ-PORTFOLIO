@@ -7,12 +7,14 @@ use App\Models\Category;
 use App\Models\Service;
 use App\Models\Tag;
 use App\Models\Testimonial;
+use App\Services\HomepageContentCatalog;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function index(): View
+    public function index(HomepageContentCatalog $contentCatalog): View
     {
+        $homepageContent = $contentCatalog->forView();
         $articles = Article::published()
             ->forListing()
             ->with(['category', 'tags'])
@@ -38,6 +40,7 @@ class HomeController extends Controller
             'tags' => Tag::query()->orderBy('name')->get(),
             'filterCategories' => $filterCategories,
             'testimonials' => $testimonials,
+            'homepageContent' => $homepageContent,
         ]);
     }
 }

@@ -36,7 +36,10 @@ class LegacySitePublisher
     public function buildViews(): array
     {
         $written = [];
-        $written[] = $this->writeHome();
+        // The homepage is now a first-class Blade view backed by homepage_contents.
+        // Legacy publishing still builds the article listing, but must never
+        // overwrite the CMS-driven homepage with the old static export.
+        $written[] = resource_path('views/home.blade.php');
         $written[] = $this->writeArticleIndex();
 
         return $written;
@@ -44,6 +47,12 @@ class LegacySitePublisher
 
     private function writeHome(): string
     {
+        $target = resource_path('views/home.blade.php');
+        $existing = is_file($target) ? file_get_contents($target) : false;
+        if (is_string($existing) && str_contains($existing, '$homepageContent')) {
+            return $target;
+        }
+
         $html = file_get_contents(resource_path('legacy/index.html'));
         if ($html === false) {
             throw new \RuntimeException('Unable to read index.html');
@@ -55,7 +64,6 @@ class LegacySitePublisher
         $html = $this->replaceTestimonials($html);
         $html = $this->injectArticleLibrary($html, false);
         $html = $this->replaceSidebarChrome($html, '#hero');
-        $target = resource_path('views/home.blade.php');
         file_put_contents($target, $html);
 
         return $target;
