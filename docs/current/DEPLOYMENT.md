@@ -14,8 +14,8 @@ Do not select PHP 8.2. Do not install Redis, Supervisor, Node, or a queue worker
 |---|-------|------|------------|
 | Where | This workstation | PHPUnit suites | DirectAdmin on meetaj.ir |
 | PHP | `.runtime/php84/php.exe` 8.4.25 | same runtime | PHP 8.4 selector (**unverified**) |
-| Database | SQLite `database/database.sqlite` | SQLite `:memory:` (default) or MariaDB `127.0.0.1:3307` via `phpunit.mysql.xml` | MySQL / MariaDB (**not created**) |
-| `APP_ENV` / `APP_DEBUG` | `local` / **true** | `testing` | `production` / **false** |
+| Database | SQLite `.runtime/cms.sqlite` (local `DB_DATABASE`) | SQLite `:memory:` (default) or MariaDB `127.0.0.1:3307` via `phpunit.mysql.xml` | MySQL / MariaDB (**not created**) |
+| `APP_ENV` / `APP_DEBUG` | `local` / **false** | `testing` | `production` / **false** |
 | Mail | `log` | none | SMTP (**not configured**) |
 | Document root | `php artisan serve` on `public/` | n/a | must be `.../laravel/public` |
 | Status | PASS | PASS (67 tests / 1102 assertions, 1 skipped) | BLOCKED · NOT TESTED |
@@ -98,6 +98,7 @@ Edit `.env`:
 APP_ENV=production
 APP_DEBUG=false
 APP_URL=https://meetaj.ir
+APP_TIMEZONE=Asia/Tehran
 DB_CONNECTION=mysql
 DB_HOST=localhost
 DB_PORT=3306
@@ -143,6 +144,7 @@ From the application root:
 
 ```bash
 php artisan site:publish-assets --views
+php artisan filament:assets
 php artisan migrate --force
 php artisan articles:import-legacy
 php artisan services:import-legacy
@@ -154,7 +156,7 @@ php artisan view:cache
 
 Do not run `articles:import-legacy --refresh` or `services:import-legacy --refresh` on a database that already has editorial changes.
 
-Confirm `php artisan about` shows production, debug OFF, mysql, Laravel 13, PHP 8.4.
+Confirm `php artisan about` shows production, debug OFF, mysql, Laravel 13, PHP 8.4, the configured timezone, and linked public storage. Publish both site and Filament assets on every fresh deployment; generated public assets are excluded from Git.
 
 ## 9. Cron
 

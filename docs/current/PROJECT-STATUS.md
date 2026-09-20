@@ -4,6 +4,7 @@
 
 **Authority:** SINGLE authoritative current-state document. Everything else in `docs/current/` expands one section of this file.
 **Date verified:** 2026-09-20
+**Local environment recheck:** [2026-09-20 repair and verification](../qa/LOCAL-ENVIRONMENT-REPAIR.md). Counts below describe this checkout, not a production server.
 **Verification method:** `php artisan migrate:status`, `php artisan optimize:clear`, `php artisan route:list`, full `vendor/bin/phpunit` (**67 tests / 1102 assertions / 1 skipped / 0 failures**), targeted `HomepageContentTest`, `php artisan site:compare-content` (Failures: 0), and reading `app/`, `routes/`, `resources/`, `docs/`, and `tests/`.
 **Runtime used:** `.runtime/php84/php.exe` (PHP is not on PATH on this workstation).
 
@@ -35,34 +36,34 @@ There is no semantic application version in the repository. Do not invent one. T
 | PHPUnit | **11.5.56** | `php artisan test` header |
 | Node / npm | **not used** (no `package.json`, no Vite, no Tailwind build) | repository inspection |
 
-Local environment reported by `php artisan about`: environment `local`, debug **ENABLED**, timezone **UTC**, URL `127.0.0.1:8000`, cache/session drivers `file`, queue `sync`, mail `log`, database `sqlite`, `public/storage` **LINKED**, views **CACHED**, Filament views **NOT PUBLISHED**.
+Local environment reported by `php artisan about`: environment `local`, debug **OFF**, timezone **Asia/Tehran**, URL `127.0.0.1:8000`, cache/session drivers `file`, queue `sync`, mail `log`, database `sqlite`, `public/storage` **LINKED**, views **CACHED**, Filament views **NOT PUBLISHED**. The storage link was restored during the local recheck; `config/app.php` now reads `APP_TIMEZONE` (UTC fallback).
 `.env.example` / `.env.production.example` require `APP_DEBUG=false` and `APP_TIMEZONE=Asia/Tehran` for production. The local values are a development setting, not a code defect.
 
 ## 3. Database
 
-Engine in use locally: **SQLite** at `database/database.sqlite`. Intended production engine: **MySQL / MariaDB** (not provisioned).
+Engine in use locally: **SQLite** at `.runtime/cms.sqlite`, selected by the local `DB_DATABASE`. Intended production engine: **MySQL / MariaDB** (not provisioned).
 
 Fifteen application migrations, all **Ran** (batches 1–4), plus Laravel's `migrations` ledger:
 
 | Table | Rows (2026-09-20) |
 |-------|-------------------|
-| `users` | 3 (local QA admin + editor + throwaway contrast-QA admin; passwords not documented) |
+| `users` | 0 (create a personal account with `php artisan cms:create-user`) |
 | `password_reset_tokens` | 0 |
 | `sessions` | (local session files; not counted here) |
 | `categories` | 10 |
-| `articles` | 23 |
-| `article_redirects` | 23 |
+| `articles` | 25 (24 imported legacy articles plus one added during the recheck) |
+| `article_redirects` | 24 |
 | `tags` | 8 |
-| `article_tag` | 38 |
-| `requests` | 5 (includes live production-audit contact POST) |
-| `services` | 6 |
+| `article_tag` | 39 |
+| `requests` | 0 |
+| `services` | 13 published; 12 shown in the homepage catalog |
 | `testimonials` | 5 |
 | `homepage_contents` | 7 |
 | `migrations` | 15 |
 
 There is **no** `pages` table and **no** `contact_requests` table. Full column, index, foreign-key and delete-behaviour detail: [DATABASE.md](DATABASE.md).
 
-**`users` currently holds 3 rows on this workstation** (admin + editor + throwaway contrast-QA admin). Interactive Filament login was exercised on 2026-09-18.
+**`users` currently holds 0 rows in this checkout.** The login page was verified on 2026-09-20. Authenticated browser results from 2026-09-18 are historical evidence; current role/CRUD coverage is provided by the isolated PHPUnit suite.
 
 ## 4. Architecture
 
@@ -84,7 +85,7 @@ Routes include the homepage, article library/detail/legacy redirects, two form e
 | Shared public sidebar + icy-blue mobile menu (`<1200px`) | PASS (browser) |
 | Shared Testimonials Swiper (one slider; RTL via `html[dir]`, not a second FA carousel) | PASS (PHPUnit + browser) |
 | Article library `/articles` with search and tag filter | PASS (local) |
-| 24 article detail pages | PASS (local) |
+| 24 imported article detail pages | PASS (content comparison); one additional published article exists in the final local database |
 | Standalone service detail pages | Intentionally removed; services remain homepage catalog records |
 | Legacy `.html` URLs 301 to clean URLs | PASS (local) |
 | Contact endpoints `/forms/get-csrf-token.php` and `/forms/contact.php` | PASS (local) |
@@ -112,16 +113,16 @@ Detail: [ADMIN.md](ADMIN.md).
 
 ## 7. Articles
 
-24 imported English articles, all `status = published` with a non-null `published_at`, 24 matching `article_redirects` rows, 10 categories (5 EN + 5 FA sharing `translation_key`), 8 tags, 38 article↔tag links.
+24 imported English articles, all `status = published` with a non-null `published_at`, 24 matching `article_redirects` rows, 10 categories (5 EN + 5 FA sharing `translation_key`), 8 tags, 39 article↔tag links.
 `php artisan site:compare-content` on 2026-09-19: **Failures: 0** across all 24 articles. Detail: [ARTICLES.md](ARTICLES.md).
 
 ## 8. Services
 
-Six published English services are shown in the homepage catalog, ordered by `sort_order`, with prices read from the `services` table (AED): Network Design 4900, System Administration 3900, DevOps & Automation 6900, Monitoring & Security 4200, Virtualization Solutions 5900, Technical Consulting 2500. Standalone service detail pages are removed. Detail: [SERVICES.md](SERVICES.md).
+Thirteen published English service records exist; twelve have `show_in_catalog = true`. The six legacy services retain their fixed AED prices; seven additional services use custom quotes. Technical Consulting is retained but hidden from the homepage catalog. Standalone service detail pages are removed. Detail: [SERVICES.md](SERVICES.md).
 
 ## 9. Requests
 
-Inbound contact submissions are stored in `requests` with a seven-value status workflow and admin-only `internal_notes`. A live `POST /forms/contact.php` on 2026-09-18 stored row id 5 (`Production Audit Sender`) with `status = new`. Detail: [REQUESTS.md](REQUESTS.md).
+Inbound contact submissions are stored in `requests` with a seven-value status workflow and admin-only `internal_notes`. This checkout currently has no request rows. The earlier 2026-09-18 POST report describes a previous local database; current persistence coverage passes in isolated PHPUnit tests. Detail: [REQUESTS.md](REQUESTS.md).
 
 ## 10. Languages
 
@@ -176,7 +177,7 @@ Documented DirectAdmin procedure exists and is complete, but **no deployment has
 5. **Standalone service detail pages** were removed on 2026-09-20. Service records remain for the homepage catalog, while `resources/legacy/services/` remains an importer source. See [PROJECT-STRUCTURE.md](PROJECT-STRUCTURE.md).
 6. **Imported `featured_image` values still point at `/assets/...`** rather than Filament storage unless an editor uploads a replacement.
 7. **Source-content leftovers** (not CMS defects): a generic overlay category label on some cards.
-8. **Local `.env` runs with debug enabled and UTC**, unlike the documented production configuration.
+8. **No local admin account is provisioned.** Run `php artisan cms:create-user` to choose personal credentials. Debug is OFF and `APP_TIMEZONE=Asia/Tehran` is honored.
 
 ## 18. Git
 

@@ -135,7 +135,7 @@ Published English articles with legacy `.html` → clean-URL redirects, bilingua
 
 ## Services
 
-Six database-driven services render in the homepage catalog and details drawer. Standalone `/services/{slug}` pages and legacy `.html` redirects were removed. Prices are editorial data held in the `services` table (AED 2,500–6,900) and are never hardcoded in Blade. Detail: [docs/current/SERVICES.md](docs/current/SERVICES.md).
+The local database has thirteen published services; twelve render in the homepage catalog and details drawer. Six legacy records retain fixed AED prices (2,500–6,900); seven use custom quotes, and Technical Consulting is hidden from the catalog. Standalone `/services/{slug}` pages and their legacy `.html` redirects were removed. Prices are editorial data held in the `services` table and are never hardcoded in Blade. Detail: [docs/current/SERVICES.md](docs/current/SERVICES.md).
 
 ## Requests
 
@@ -147,7 +147,7 @@ English and Persian are public on the **same** URLs, applied client-side through
 
 ## SEO
 
-Canonical URLs, Open Graph, Twitter cards, JSON-LD (Person/WebSite on the homepage, `Service` with a real `Offer`, `Article` with `BreadcrumbList`), a dynamic `/sitemap.xml` listing clean URLs only, `/robots.txt` disallowing `/admin`, `/livewire` and `/forms`, and 301s for `/index.html` and every legacy `.html` path. Detail: [docs/current/SEO.md](docs/current/SEO.md).
+Canonical URLs, Open Graph, Twitter cards, JSON-LD on the homepage and articles, a dynamic `/sitemap.xml` listing clean URLs only, `/robots.txt` disallowing `/admin`, `/livewire` and `/forms`, and 301s for `/index.html` and legacy article `.html` paths. Removed service detail paths return 404. Detail: [docs/current/SEO.md](docs/current/SEO.md).
 
 ## PWA
 

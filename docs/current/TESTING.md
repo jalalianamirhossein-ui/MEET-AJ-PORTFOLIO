@@ -27,7 +27,7 @@ Also run on 2026-09-18: `php artisan optimize:clear`, `php artisan route:list` (
 | `phpunit.xml` (default) | SQLite `:memory:` | Full feature suite |
 | `phpunit.mysql.xml` | MySQL / MariaDB `127.0.0.1:3307`, database `meetaj_test` | Schema compatibility only |
 
-`tests/TestCase.php` together with `.env.testing` keeps the default suite away from the live `database/database.sqlite` file, because PHPUnit 11 does not always honour forced environment variables from XML.
+`tests/TestCase.php` synchronizes PHPUnit's configured `$_ENV` values into `$_SERVER` before bootstrapping Laravel, then explicitly sets SQLite `:memory:` for the default suite. This keeps an Artisan parent's `APP_ENV=local` and local database/cache/mail settings out of the test app, even without `.env.testing`. PHPUnit's XML `force="true"` updates `getenv()` and `$_ENV`, but leaves inherited `$_SERVER` entries untouched. MySQL is used only when selected in the test configuration. See [the repair verification](../qa/LOCAL-ENVIRONMENT-REPAIR.md).
 
 ## Test files
 

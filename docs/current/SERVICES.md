@@ -4,11 +4,11 @@
 **Verified:** 2026-09-20 against the live `services` table, `app/Models/Service.php`, `app/Filament/Resources/ServiceResource.php`, `app/Policies/ServicePolicy.php`, and `resources/views/components/service-card.blade.php`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
-## The six services
+## Current catalog
 
-All six rows are `language = en`, `status = published`, `price_type = fixed`, `price_currency = AED`, `price_label = "Fixed Price"`. Values below are read directly from the database, not from documentation.
+The 2026-09-20 local recheck found **13 published English service records, 12 visible in the homepage catalog**. The six legacy records below retain fixed AED prices. Technical Consulting has `show_in_catalog = false`; the other five and seven custom-quote records are visible. The custom-quote slugs are `mikrotik-routing-multi-wan`, `hp-enterprise-server`, `sql-server-high-availability`, `jira-implementation`, `voip-infrastructure`, `cctv-surveillance`, and `network-security`.
 
-| # (`sort_order`) | Slug | Title | Price |
+| Legacy # | Slug | Title | Price |
 |---|------|-------|-------|
 | 1 | `network-design` | Network Design & Implementation | AED 4,900 |
 | 2 | `system-administration` | System Administration | AED 3,900 |
@@ -116,4 +116,4 @@ php artisan services:import-legacy --dry-run
 php artisan services:import-legacy --refresh
 ```
 
-The importer now synchronizes the homepage catalog definitions directly; old service HTML is no longer required. `--refresh` deletes existing service rows before re-importing, so it discards editorial price and copy changes. `DatabaseSeeder` runs the article and service importers after rebuilding Blade views.
+The importer reads the six legacy service HTML sources for missing records, skips existing records, then synchronizes the extended homepage catalog through `HomepageServiceCatalog`. `--refresh` deletes existing service rows before re-importing, so it discards editorial price and copy changes. `DatabaseSeeder` runs the article and service importers after rebuilding Blade views.

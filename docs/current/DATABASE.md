@@ -10,12 +10,12 @@ Column types below are the SQLite types actually reported by the database. The m
 
 | Context | Connection | Status |
 |---------|------------|--------|
-| Local `php artisan serve` / artisan commands | SQLite `database/database.sqlite` | PASS |
+| Local `php artisan serve` / artisan commands | SQLite `.runtime/cms.sqlite` (local `DB_DATABASE`) | PASS |
 | Default PHPUnit suite (`phpunit.xml`) | SQLite `:memory:` | PASS |
 | `phpunit.mysql.xml` | MySQL / MariaDB `127.0.0.1:3307`, database `meetaj_test` | PASS (`MysqlSchemaTest`, last run 2026-09-16) |
 | DirectAdmin production | intended MySQL / MariaDB | BLOCKED · NOT TESTED |
 
-`tests/TestCase.php` plus `.env.testing` keep the default suite off the live SQLite file. Bind MySQL explicitly with `phpunit.mysql.xml`.
+`tests/TestCase.php` explicitly forces the default suite onto SQLite `:memory:` before boot; it does not require `.env.testing`. Bind MySQL explicitly with `phpunit.mysql.xml`.
 
 ## Migrations
 
@@ -27,15 +27,15 @@ Column types below are the SQLite types actually reported by the database. The m
 | `2026_09_15_000004_create_article_redirects_table` | 1 | Ran |
 | `2026_09_15_000005_create_requests_table` | 1 | Ran |
 | `2026_09_15_000006_create_sessions_table` | 1 | Ran |
-| `2026_09_16_000007_create_services_table` | 2 | Ran |
-| `2026_09_16_000008_add_service_id_to_requests_table` | 2 | Ran |
-| `2026_09_17_000009_create_tags_and_request_workflow` | 3 | Ran |
+| `2026_09_16_000007_create_services_table` | 1 | Ran |
+| `2026_09_16_000008_add_service_id_to_requests_table` | 1 | Ran |
+| `2026_09_17_000009_create_tags_and_request_workflow` | 1 | Ran |
 | `2026_09_17_184900_add_show_in_catalog_to_services_table` | 1 | Ran |
-| `2026_09_18_000010_add_accent_color_to_categories_table` | 4 | Ran |
+| `2026_09_18_000010_add_accent_color_to_categories_table` | 1 | Ran |
 | `2026_09_20_000011_add_sort_order_to_categories_table` | 2 | Ran |
 | `2026_09_20_000012_create_testimonials_table` | 2 | Ran |
 | `2026_09_20_000013_create_homepage_contents_table` | 3 | Ran |
-| `2026_09_20_000014_restore_resume_content` | 3 | Ran |
+| `2026_09_20_000014_restore_resume_content` | 4 | Ran |
 
 The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the migration ledger. Fifteen application migrations exist through `2026_09_20_000014_restore_resume_content`.
 
@@ -47,12 +47,12 @@ The users migration also creates `password_reset_tokens`. Laravel's own `migrati
 | `password_reset_tokens` | Laravel password reset store | 0 |
 | `sessions` | Session rows when the database session driver is selected | 0 |
 | `categories` | Article taxonomy, one row per language | 10 |
-| `articles` | Article content and SEO | 23 |
-| `article_redirects` | 301 map from old paths to articles | 23 |
+| `articles` | Article content and SEO (24 imported, one additional) | 25 |
+| `article_redirects` | 301 map from old paths to articles | 24 |
 | `tags` | Flat public tag vocabulary | 8 |
-| `article_tag` | Article ↔ tag pivot | 38 |
+| `article_tag` | Article ↔ tag pivot | 39 |
 | `requests` | Inbound contact submissions | 0 |
-| `services` | Public service catalog and pricing | 6 |
+| `services` | Service catalog and pricing (12 visible) | 13 |
 | `testimonials` | Bilingual homepage testimonials | 5 |
 | `homepage_contents` | Editable homepage sections | 7 |
 | `migrations` | Laravel migration ledger | 15 |
@@ -191,7 +191,7 @@ Deleting an article cascades to `article_redirects` and `article_tag`.
 | `article_id` | integer | FK → `articles.id`, **cascade** on delete |
 | `created_at`, `updated_at` | datetime, nullable | |
 
-23 rows, one per imported article. Renaming a slug adds a new row rather than replacing the old one.
+24 rows, one per imported article. Renaming a slug adds a new row rather than replacing the old one.
 
 ## `tags`
 
@@ -212,7 +212,7 @@ Current vocabulary (8): Linux, Microsoft, MikroTik, VMware, Windows Server, Netw
 | `tag_id` | integer | FK → `tags.id`, **cascade** on delete, indexed |
 | `created_at`, `updated_at` | datetime, nullable | |
 
-Composite primary key `(article_id, tag_id)` (unique). 38 links across 24 articles.
+Composite primary key `(article_id, tag_id)` (unique). 39 links across 24 articles.
 
 ## `requests`
 
