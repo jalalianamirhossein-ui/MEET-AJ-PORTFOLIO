@@ -23,6 +23,7 @@ class ArticleController extends Controller
         $listing = Article::published()
             ->forListing()
             ->with(['category', 'tags'])
+            ->orderByDesc('published_at')
             ->orderBy('sort_order')
             ->orderBy('id');
 
@@ -41,6 +42,7 @@ class ArticleController extends Controller
                 ->with(['category', 'tags'])
                 ->search($q)
                 ->withTag($tagSlug)
+                ->orderByDesc('published_at')
                 ->orderBy('sort_order')
                 ->orderBy('id')
                 ->paginate(9)

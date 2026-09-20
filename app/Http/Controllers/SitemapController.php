@@ -14,7 +14,7 @@ class SitemapController extends Controller
             ['loc' => $origin.'/', 'lastmod' => $this->sourceLastmod(resource_path('legacy/index.html'))],
         ];
 
-        $articles = Article::published()->where('language', 'en')->orderBy('sort_order')->get();
+        $articles = Article::published()->where('language', 'en')->orderByDesc('published_at')->orderBy('sort_order')->get();
         foreach ($articles as $article) {
             $urls[] = [
                 'loc' => $article->canonicalUrl(),

@@ -23,6 +23,20 @@ class ArticleTagAssigner
         'networking' => 'Networking',
         'security' => 'Security',
         'devops' => 'DevOps',
+        'ubuntu' => 'Ubuntu',
+        'netbox' => 'NetBox',
+        'network-backup' => 'Network Backup',
+        'nginx' => 'Nginx',
+        'sql-server' => 'SQL Server',
+        'virtualization' => 'Virtualization',
+        'ssh' => 'SSH',
+        'netplan' => 'Netplan',
+        'windows' => 'Windows',
+        'https' => 'HTTPS',
+        'backup' => 'Backup',
+        'email' => 'Email',
+        'hardware' => 'Hardware',
+        'usb' => 'USB',
     ];
 
     public function syncCatalog(): void
@@ -57,6 +71,37 @@ class ArticleTagAssigner
      */
     public function slugsFor(Article $article): array
     {
+        $specific = [
+            'netbox-installation-setup-ubuntu' => ['netbox', 'ubuntu', 'networking'],
+            'oxidized-network-device-configuration-backup' => ['network-backup', 'backup', 'ubuntu', 'networking'],
+            'nginx-installation-configuration-ubuntu' => ['nginx', 'ubuntu', 'devops', 'linux'],
+            'linux-security-account-access-management' => ['linux', 'security'],
+            'mikrotik-unequal-dual-wan-load-balancing-ecmp' => ['mikrotik', 'networking'],
+            'sql-server-automatic-backup-job' => ['sql-server', 'microsoft', 'backup'],
+            'vsphere-standard-switch-vs-distributed-switch' => ['vmware', 'virtualization', 'networking'],
+            'mikrotik-openvpn-setup-v7' => ['mikrotik', 'networking', 'security'],
+            'enable-ssh-linux-complete-guide' => ['ssh', 'linux', 'security'],
+            'set-static-ip-ubuntu-server-netplan' => ['ubuntu', 'netplan', 'linux', 'networking'],
+            'linux-cli-common-commands' => ['linux'],
+            'install-mikrotik-chr-vmware-workstation' => ['mikrotik', 'vmware', 'virtualization'],
+            'install-vmware-esxi-vmware-workstation-vmcisr' => ['vmware', 'virtualization'],
+            'install-dfs-server-windows-server' => ['windows-server', 'microsoft', 'backup'],
+            'http-vs-https-ssl-certificate-impact' => ['https', 'security'],
+            'mikrotik-block-port-scanners' => ['mikrotik', 'security', 'networking'],
+            'mikrotik-block-website' => ['mikrotik', 'security', 'networking'],
+            'downgrade-mikrotik-routeros-firmware-safely' => ['mikrotik', 'security'],
+            'windows-cmd-common-network-commands' => ['windows', 'microsoft', 'networking'],
+            'windows-password-reset-secure-access-recovery' => ['windows', 'microsoft', 'security'],
+            'ubuntu-date-time-settings' => ['ubuntu', 'linux'],
+            'imap-vs-pop3-email-protocol-comparison' => ['email', 'security'],
+            'windows-hardware-info-cmd-vs-dxdiag' => ['windows', 'microsoft', 'hardware'],
+            'vmware-esxi-8-installation-basic-configuration' => ['vmware', 'virtualization'],
+            'creating-a-bootable-usb' => ['usb', 'windows', 'linux'],
+        ];
+        if (isset($specific[$article->slug])) {
+            return $specific[$article->slug];
+        }
+
         $haystack = Str::lower(implode(' ', array_filter([
             $article->title,
             $article->slug,

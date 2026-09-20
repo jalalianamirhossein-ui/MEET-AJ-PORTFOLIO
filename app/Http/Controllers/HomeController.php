@@ -18,6 +18,7 @@ class HomeController extends Controller
         $articles = Article::published()
             ->forListing()
             ->with(['category', 'tags'])
+            ->orderByDesc('published_at')
             ->orderBy('sort_order')
             ->orderBy('id')
             ->get();

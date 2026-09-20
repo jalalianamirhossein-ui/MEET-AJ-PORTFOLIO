@@ -54,8 +54,8 @@ DB::transaction(function () use ($slugs): void {
     for ($i = 0; $i < count($slugs) - 1; $i++) {
         $timestamps[] = mt_rand($start, $end - 86400);
     }
-    sort($timestamps);
-    $timestamps[] = mt_rand(strtotime('today 00:00:00'), $end);
+    rsort($timestamps);
+    array_unshift($timestamps, mt_rand(strtotime('today 09:00:00'), $end));
 
     foreach ($slugs as $order => $slug) {
         $date = date('Y-m-d', $timestamps[$order]);
