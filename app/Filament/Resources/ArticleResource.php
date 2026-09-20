@@ -27,6 +27,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class ArticleResource extends Resource
@@ -59,12 +60,16 @@ class ArticleResource extends Resource
 
         return $schema->components([
             Section::make('Identity')
-                ->description('Slug changes keep the previous public URL as a 301 redirect.')
+                ->description('Enter the title and article details. The public URL and SEO defaults are generated when you save.')
                 ->icon(Heroicon::OutlinedIdentification)
                 ->columns(2)
                 ->schema([
                     TextInput::make('title')->required()->maxLength(255)->columnSpanFull(),
-                    TextInput::make('slug')->required()->maxLength(180)->regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/')->helperText('Lowercase words separated by hyphens.'),
+                    TextInput::make('slug')
+                        ->maxLength(180)
+                        ->regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/')
+                        ->placeholder('Generated automatically from the title')
+                        ->helperText('Optional. Leave blank to generate a lowercase URL slug. Changes keep the previous URL as a 301 redirect.'),
                     Select::make('language')->options(['en' => 'English', 'fa' => 'فارسی', 'de' => 'Deutsch (draft only)'])->default('en')->required()->disabled(fn (?Article $record) => $record !== null)->dehydrated(),
                     Select::make('category_id')
                         ->relationship('category', 'name')
@@ -99,6 +104,7 @@ class ArticleResource extends Resource
             Section::make('SEO')
                 ->icon(Heroicon::OutlinedMagnifyingGlass)
                 ->collapsed()
+                ->description('Optional. Leave these fields empty to use the title and excerpt automatically.')
                 ->schema([
                     TextInput::make('meta_title')->maxLength(255),
                     Textarea::make('meta_description')->rows(3),
@@ -106,17 +112,18 @@ class ArticleResource extends Resource
                 ]),
             Section::make('Publishing')
                 ->icon(Heroicon::OutlinedCalendar)
+                ->collapsed()
                 ->columns(3)
                 ->schema([
                     TextInput::make('sort_order')
                         ->numeric()
                         ->integer()
                         ->minValue(0)
-                        ->default(0)
+                        ->default(fn (): int => ((int) Article::query()->max('sort_order')) + 1)
                         ->required()
                         ->helperText('Display order. Lower numbers appear first.'),
                     Select::make('status')->options(['draft' => 'Draft', 'published' => 'Published'])->default('draft')->required(),
-                    DateTimePicker::make('published_at')->timezone(config('cms.display_timezone'))->seconds(false)->helperText('A future date schedules visibility without a queue worker. German must remain draft.'),
+                    DateTimePicker::make('published_at')->default(now())->timezone(config('cms.display_timezone'))->seconds(false)->helperText('Used when the article is published. German must remain draft.'),
                 ]),
         ]);
     }

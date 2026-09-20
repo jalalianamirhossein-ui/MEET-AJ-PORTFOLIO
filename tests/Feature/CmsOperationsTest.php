@@ -133,6 +133,30 @@ class CmsOperationsTest extends TestCase
         $this->get('/articles/draft-qa-article')->assertNotFound();
     }
 
+    public function test_new_article_form_generates_slug_and_seo_defaults(): void
+    {
+        $admin = User::create(['name' => 'Article Creator', 'email' => 'article-creator@example.test', 'password' => 'password12chars']);
+        $admin->forceFill(['role' => 'admin'])->save();
+
+        \Livewire\Livewire::actingAs($admin)
+            ->test(\App\Filament\Resources\ArticleResource\Pages\CreateArticle::class)
+            ->fillForm([
+                'title' => 'Quick CMS Article',
+                'language' => 'en',
+                'content' => '<h2>Article body</h2><p>Useful content for readers.</p>',
+                'status' => 'draft',
+                'sort_order' => 999,
+            ])
+            ->call('create')
+            ->assertHasNoFormErrors();
+
+        $article = Article::query()->where('title', 'Quick CMS Article')->firstOrFail();
+        $this->assertSame('quick-cms-article', $article->slug);
+        $this->assertSame('Article body Useful content for readers.', $article->excerpt);
+        $this->assertSame('Quick CMS Article', $article->meta_title);
+        $this->assertSame($article->excerpt, $article->meta_description);
+    }
+
     public function test_article_pages_have_complete_seo_and_clean_canonicals(): void
     {
         foreach (Article::query()->orderBy('slug')->get() as $article) {

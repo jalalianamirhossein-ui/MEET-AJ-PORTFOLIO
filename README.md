@@ -161,7 +161,7 @@ vendor/bin/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest     # MySQL sch
 php artisan site:compare-content                                     # Failures: 0
 ```
 
-Latest run (2026-09-20): **64 tests, 1082 assertions, 0 failures, 1 skipped**. The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Homepage CMS details: [docs/current/HOMEPAGE-CMS.md](docs/current/HOMEPAGE-CMS.md). Testing detail: [docs/current/TESTING.md](docs/current/TESTING.md).
+Latest run (2026-09-20): **65 tests, 1089 assertions, 0 failures, 1 skipped**. The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Homepage CMS details: [docs/current/HOMEPAGE-CMS.md](docs/current/HOMEPAGE-CMS.md). Testing detail: [docs/current/TESTING.md](docs/current/TESTING.md).
 
 ## Deployment
 
