@@ -261,6 +261,13 @@ class Article extends Model
         return 'filter-others';
     }
 
+    public function brandFilterClasses(): string
+    {
+        return $this->relationLoaded('tags')
+            ? $this->tags->filter(fn (Tag $tag) => $tag->isBrandFilter())->map(fn (Tag $tag) => 'filter-'.$tag->slug)->implode(' ')
+            : '';
+    }
+
     public function accentColor(): string
     {
         if ($this->category) {

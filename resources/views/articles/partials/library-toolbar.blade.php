@@ -48,7 +48,7 @@
                 @if ($tagSlug === '') aria-current="page" @endif
               ><span class="article-chip-label" data-en="All tags" data-fa="همه برچسب‌ها">All tags</span></a>
               @foreach ($tags as $tag)
-                @if ($tag->isBrandFilter())
+                @if (! $tag->isBrandFilter())
                 <a
                   class="article-tag article-chip{{ $tagSlug === $tag->slug ? ' is-active' : '' }}"
                   data-topic="{{ $tag->slug }}"

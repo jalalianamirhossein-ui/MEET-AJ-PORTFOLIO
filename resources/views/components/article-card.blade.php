@@ -55,7 +55,7 @@
                 </article>
               @else
               <div
-                class="col-lg-4 col-md-6 portfolio-item isotope-item article-grid-item {{ $article->filterClass() }}"
+                class="col-lg-4 col-md-6 portfolio-item isotope-item article-grid-item {{ $article->filterClass() }} {{ $article->brandFilterClasses() }}"
                 data-topic="{{ $topic }}"
                 style="{{ $accentStyle }}"
                 >

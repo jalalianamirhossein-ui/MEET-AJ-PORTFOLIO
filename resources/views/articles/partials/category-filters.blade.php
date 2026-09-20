@@ -1,5 +1,9 @@
 @php
-    $filterGroups = collect($filterCategories ?? [])
+    $brandFilters = \App\Models\Tag::query()->whereIn('slug', \App\Models\Tag::BRAND_FILTERS)->get();
+    $filterGroups = $brandFilters
+        ->map(fn ($tag): array => ['slug' => $tag->slug, 'en' => $tag->displayName(), 'fa' => $tag->displayName(), 'color' => $tag->accentColor(), 'topic' => $tag->slug, 'sort_order' => 0, 'id' => $tag->id])
+        ->sortBy(fn ($filter) => array_search($filter['slug'], \App\Models\Tag::BRAND_FILTERS, true))->values();
+    $legacyFilterGroups = collect($filterCategories ?? [])
         ->groupBy(fn ($category) => strtolower((string) $category->slug))
         ->map(function ($group): array {
             $english = $group->firstWhere('language', 'en') ?? $group->first();
