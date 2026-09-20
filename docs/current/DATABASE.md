@@ -30,15 +30,18 @@ Column types below are the SQLite types actually reported by the database. The m
 | `2026_09_16_000007_create_services_table` | 2 | Ran |
 | `2026_09_16_000008_add_service_id_to_requests_table` | 2 | Ran |
 | `2026_09_17_000009_create_tags_and_request_workflow` | 3 | Ran |
+| `2026_09_17_184900_add_show_in_catalog_to_services_table` | 1 | Ran |
 | `2026_09_18_000010_add_accent_color_to_categories_table` | 4 | Ran |
 | `2026_09_20_000011_add_sort_order_to_categories_table` | 2 | Ran |
 | `2026_09_20_000012_create_testimonials_table` | 2 | Ran |
+| `2026_09_20_000013_create_homepage_contents_table` | 3 | Ran |
+| `2026_09_20_000014_restore_resume_content` | 3 | Ran |
 
-The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the migration ledger. Twelve application migrations exist through `2026_09_20_000012_create_testimonials_table`.
+The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the migration ledger. Fifteen application migrations exist through `2026_09_20_000014_restore_resume_content`.
 
 ## Table overview
 
-| Table | Purpose | Rows (2026-09-17) |
+| Table | Purpose | Rows (2026-09-20) |
 |-------|---------|-------------------|
 | `users` | Filament login accounts | 0 |
 | `password_reset_tokens` | Laravel password reset store | 0 |
@@ -51,9 +54,10 @@ The users migration also creates `password_reset_tokens`. Laravel's own `migrati
 | `requests` | Inbound contact submissions | 0 |
 | `services` | Public service catalog and pricing | 6 |
 | `testimonials` | Bilingual homepage testimonials | 5 |
-| `migrations` | Laravel migration ledger | 12 |
+| `homepage_contents` | Editable homepage sections | 7 |
+| `migrations` | Laravel migration ledger | 15 |
 
-There is **no** `pages` table and **no** `contact_requests` table.
+There is **no** `pages` table and **no** `contact_requests` table. Homepage copy is stored in `homepage_contents`; articles, services, testimonials and requests remain dedicated relational resources.
 
 ---
 
@@ -132,6 +136,22 @@ Homepage testimonials are stored once with bilingual copy and rendered when `is_
 | `is_published` | boolean | controls public visibility |
 | `created_at`, `updated_at` | datetime, nullable | |
 
+## `homepage_contents`
+
+One row controls each editable homepage section. The stable `key` is consumed by `HomepageContentCatalog` and `resources/views/home.blade.php`.
+
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | integer | primary key |
+| `key` | varchar | unique section key: `site`, `hero`, `about`, `stats`, `skills`, `resume` or `contact` |
+| `label` | varchar | admin-facing section label |
+| `content` | text / JSON | bilingual copy and structured section data |
+| `is_published` | boolean | controls public visibility; default true |
+| `sort_order` | integer | lower values first; default 0 |
+| `created_at`, `updated_at` | datetime, nullable | |
+
+Indexes: unique `key`, plus `(is_published, sort_order)`.
+
 ## `articles`
 
 | Column | Type | Notes |
@@ -192,7 +212,7 @@ Current vocabulary (8): Linux, Microsoft, MikroTik, VMware, Windows Server, Netw
 | `tag_id` | integer | FK → `tags.id`, **cascade** on delete, indexed |
 | `created_at`, `updated_at` | datetime, nullable | |
 
-Composite primary key `(article_id, tag_id)` (unique). 38 links across 23 articles.
+Composite primary key `(article_id, tag_id)` (unique). 38 links across 24 articles.
 
 ## `requests`
 

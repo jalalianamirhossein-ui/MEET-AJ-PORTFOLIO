@@ -1,7 +1,7 @@
 # Architecture — Meet AJ
 
 **Authority:** AUTHORITATIVE description of the running application.
-**Verified:** 2026-09-18 against `app/`, `routes/web.php`, `config/`, `resources/views/`, `public/`, and `php artisan route:list` after `optimize:clear`.
+**Verified:** 2026-09-20 against `app/`, `routes/web.php`, `config/`, `resources/views/`, `public/`, and `php artisan route:list` after `optimize:clear`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md). Decision record: [../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md](../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md).
 
 ## Request flow
@@ -58,7 +58,7 @@ There is no `/de` route.
 
 | Controller | Responsibility |
 |------------|----------------|
-| `HomeController` | Homepage, including the published service catalog |
+| `HomeController` | Homepage content catalog, published services, articles, testimonials and filters |
 | `ArticleController` | Library, search and tag filter, detail, legacy 301 |
 | `ContactController` | CSRF token endpoint and contact submission |
 | `SitemapController`, `RobotsController` | SEO endpoints |
@@ -88,6 +88,8 @@ Policies are registered in `App\Providers\AppServiceProvider`.
 | `ArticleShareLinks` | Share URLs on the article page |
 | `ArticleHtmlSanitizer` | Allowed HTML for stored article bodies |
 | `ArticleTagAssigner` | Derive the tag vocabulary and article links |
+| `HomepageContentCatalog` | Seed and load the seven editable homepage sections without overwriting admin changes |
+| `HomepageServiceCatalog` | Define and import the homepage service catalog |
 
 ## Console commands
 
@@ -105,7 +107,7 @@ Policies are registered in `App\Providers\AppServiceProvider`.
 
 | View | Origin |
 |------|--------|
-| `home.blade.php` | rebuilt from `resources/legacy/index.html` (homepage Expertise markup originates there) |
+| `home.blade.php` | active CMS-backed homepage; legacy HTML is retained only as an article-library generation source |
 | `articles/index.blade.php` | library chrome from the homepage portfolio section |
 | `articles/show.blade.php` | renders database content imported from `resources/legacy/articles/{slug}.html` |
 | `articles/partials/*` | breadcrumbs, library toolbar, related, search results, share, category filters |
@@ -115,14 +117,14 @@ Policies are registered in `App\Providers\AppServiceProvider`.
 | `seo/sitemap.blade.php` | XML sitemap |
 | `errors/{404,419,500}.blade.php` | error pages |
 
-Rebuild with `php artisan site:publish-assets --views`.
+Rebuild the article listing with `php artisan site:publish-assets --views`. The CMS-backed homepage is maintained directly and is intentionally excluded from the legacy view writer.
 
 The homepage service catalog is the only public service presentation. Homepage catalog definitions are stored in `HomepageServiceCatalog`; there are no standalone public service routes or detail views.
 
 ## Filament / Livewire
 
 - Provider: `app/Providers/Filament/AdminPanelProvider.php`, panel path `/admin`
-- Resources: `ArticleResource`, `CategoryResource`, `TagResource`, `ServiceResource`, `RequestResource`, `Users/UserResource`
+- Resources: `ArticleResource`, `CategoryResource`, `TagResource`, `HomepageContentResource`, `ServiceResource`, `TestimonialResource`, `RequestResource`, `Users/UserResource`
 - Widgets: `CmsStatsOverview`, `RecentArticles`, `RecentRequests`
 - Livewire 4 is a Filament dependency; the public pages use no Livewire components
 

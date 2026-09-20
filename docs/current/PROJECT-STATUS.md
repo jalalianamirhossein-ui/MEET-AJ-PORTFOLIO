@@ -1,10 +1,10 @@
 # Project status — Meet AJ
 
-**2026-09-19 structure update:** Frontend and legacy sources now live under `resources/`; design notes are under `docs/design-system/`. See [the current directory map](PROJECT-STRUCTURE.md). Post-change verification: content comparison has zero failures; PHPUnit has 56 passing tests, one pre-existing CSRF failure, and one MySQL skip. [Reorganization QA](../qa/PROJECT-REORGANIZATION.md) supersedes older test totals below.
+**2026-09-20 CMS update:** Homepage identity, navigation, hero, About, stats, skills, resume, contact and footer content are database-backed through `homepage_contents`. See [the homepage CMS guide](HOMEPAGE-CMS.md) and [the current directory map](PROJECT-STRUCTURE.md).
 
 **Authority:** SINGLE authoritative current-state document. Everything else in `docs/current/` expands one section of this file.
-**Date verified:** 2026-09-18
-**Verification method:** `php artisan about`, `php artisan optimize:clear`, `php artisan route:list`, `php artisan test` (**58 tests / 1124 assertions / 1 skipped**), `php artisan site:compare-content` (Failures: 0), live `POST /forms/contact.php` against SQLite, Cursor browser first-load + FA + Contact hash + viewports 1920/1440/1024/768/390, authenticated Admin/Editor Filament White/Red QA, homepage Expertise EN/FA, `/admin/categories` ColorPicker, and reading `app/`, `routes/`, `resources/`, `assets/`, `tests/`.
+**Date verified:** 2026-09-20
+**Verification method:** `php artisan migrate:status`, `php artisan optimize:clear`, `php artisan route:list`, full `vendor/bin/phpunit` (**64 tests / 1082 assertions / 1 skipped / 0 failures**), targeted `HomepageContentTest`, `php artisan site:compare-content` (Failures: 0), and reading `app/`, `routes/`, `resources/`, `docs/`, and `tests/`.
 **Runtime used:** `.runtime/php84/php.exe` (PHP is not on PATH on this workstation).
 
 Status vocabulary used in every document: **PASS** | **FAIL** | **BLOCKED** | **NOT TESTED**.
@@ -24,7 +24,7 @@ Where a statement cannot be proven from code or a command, it is marked **UNKNOW
 
 There is no semantic application version in the repository. Do not invent one. The service worker constant `meet-aj-v2.0.0-cms-3` is a **cache name**, not an application version.
 
-## 2. Technology versions (verified 2026-09-18)
+## 2. Technology versions (verified 2026-09-20)
 
 | Component | Version | Source |
 |-----------|---------|--------|
@@ -42,9 +42,9 @@ Local environment reported by `php artisan about`: environment `local`, debug **
 
 Engine in use locally: **SQLite** at `database/database.sqlite`. Intended production engine: **MySQL / MariaDB** (not provisioned).
 
-Ten migrations, all **Ran** (batches 1–4). Eleven tables exist, including Laravel's `migrations` table:
+Fifteen application migrations, all **Ran** (batches 1–4), plus Laravel's `migrations` ledger:
 
-| Table | Rows (2026-09-18) |
+| Table | Rows (2026-09-20) |
 |-------|-------------------|
 | `users` | 3 (local QA admin + editor + throwaway contrast-QA admin; passwords not documented) |
 | `password_reset_tokens` | 0 |
@@ -56,7 +56,9 @@ Ten migrations, all **Ran** (batches 1–4). Eleven tables exist, including Lara
 | `article_tag` | 38 |
 | `requests` | 5 (includes live production-audit contact POST) |
 | `services` | 6 |
-| `migrations` | 10 |
+| `testimonials` | 5 |
+| `homepage_contents` | 7 |
+| `migrations` | 15 |
 
 There is **no** `pages` table and **no** `contact_requests` table. Full column, index, foreign-key and delete-behaviour detail: [DATABASE.md](DATABASE.md).
 
@@ -71,19 +73,19 @@ Admin   → /admin → Filament 5 → Livewire 4 → models + policies → same 
 
 No SPA, no Node build step, no queue worker, no Redis, no scheduler in use. Detail: [ARCHITECTURE.md](ARCHITECTURE.md).
 
-Routes: **42 total** from `php artisan route:list` after `optimize:clear` — application routes (`/`, `/index.html`, three article routes, two service routes, two `/forms/*.php` routes, `/sitemap.xml`, `/robots.txt`, `/manifest.json`), Filament `/admin` routes (dashboard, login/logout, Articles, Categories, Tags, Services, Requests, Users, plus hidden ContactRequest/ServiceRequest view URLs), and Livewire / Filament asset and export routes.
+Routes include the homepage, article library/detail/legacy redirects, two form endpoints, sitemap, robots and manifest; there are no standalone service detail routes. Filament adds the dashboard, login/logout, homepage sections, Articles, Categories, Tags, Services, Testimonials, Requests and Users, plus Livewire asset routes.
 
 ## 5. Public website
 
 | Area | Status |
 |------|--------|
-| Homepage `/` with original section IDs, hero, about, services catalog, articles teaser, contact | PASS (local) |
+| Homepage `/` with CMS-backed site chrome, hero, about, stats, skills, resume, services catalog, article teaser, testimonials and contact | PASS (local + PHPUnit) |
 | Homepage Expertise / تخصص‌ها (5 pastel category columns, LTR left / RTL right accents) | PASS (browser EN+FA + PHPUnit markup) |
 | Shared public sidebar + icy-blue mobile menu (`<1200px`) | PASS (browser) |
 | Shared Testimonials Swiper (one slider; RTL via `html[dir]`, not a second FA carousel) | PASS (PHPUnit + browser) |
 | Article library `/articles` with search and tag filter | PASS (local) |
 | 24 article detail pages | PASS (local) |
-| 6 service detail pages | PASS (local) |
+| Standalone service detail pages | Intentionally removed; services remain homepage catalog records |
 | Legacy `.html` URLs 301 to clean URLs | PASS (local) |
 | Contact endpoints `/forms/get-csrf-token.php` and `/forms/contact.php` | PASS (local) |
 | Production rendering on meetaj.ir | NOT TESTED |
@@ -100,7 +102,9 @@ Filament 5 panel at `/admin`, **White + Red** admin identity (canvas `#ffffff`, 
 | Articles | Content | admin + editor | PASS (PHPUnit CRUD + browser chips) |
 | Categories | Content | admin + editor | PASS (PHPUnit + editable `accent_color` ColorPicker; slug fallback until a colour is saved) |
 | Tags | Content | admin + editor | PASS (route + code + editor nav) |
+| Homepage sections | Content | admin + editor | PASS (7 records, bilingual JSON, publish toggle and sort order) |
 | Services | Content | admin only | PASS (PHPUnit authorization; hidden from editor nav) |
+| Testimonials | Content | admin + editor | PASS (bilingual copy, avatar, publish toggle and sort order) |
 | Requests | Communications | admin only | PASS (PHPUnit + browser; editor 403) |
 | Users | Administration | admin only | PASS (routes + code + admin nav); user CRUD NOT TESTED |
 
@@ -137,9 +141,9 @@ CSRF (including the legacy `csrf_token` field contract), honeypot, two-layer rat
 
 ## 14. Testing
 
-| Command | Result (2026-09-18) | Status |
+| Command | Result (2026-09-20) | Status |
 |---------|---------------------|--------|
-| `php artisan test` | **58 tests, 1124 assertions, 1 skipped, 0 failures** | PASS |
+| `vendor/bin/phpunit` | **64 tests, 1082 assertions, 1 skipped, 0 failures** | PASS |
 | `php artisan site:compare-content` | **Failures: 0** | PASS |
 | Live `POST /forms/contact.php` | HTTP 200 `OK`; SQLite row id 5 | PASS |
 | Cursor browser first-load + FA + Contact hash + 1920/1440/1024/768/390 | Testimonials + Contact visible; no horizontal overflow; English article titles in FA UI | PASS |

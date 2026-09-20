@@ -94,7 +94,7 @@ This is SQL `LIKE` matching, not a search engine: there is no Meilisearch, Algol
 
 `php artisan site:compare-content` compares rendered Laravel output against the original HTML for every article: complete body, bilingual attributes, headings, and SEO tokens.
 
-Result on 2026-09-17: **Failures: 0** for all 23 articles. Evidence: [../qa/CONTENT-INTEGRITY.md](../qa/CONTENT-INTEGRITY.md).
+Result on 2026-09-17: **Failures: 0** for all 24 articles. Evidence: [../qa/CONTENT-INTEGRITY.md](../qa/CONTENT-INTEGRITY.md).
 
 ## Languages
 

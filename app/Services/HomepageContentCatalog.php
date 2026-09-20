@@ -119,25 +119,7 @@ class HomepageContentCatalog
             ],
             [
                 'key' => 'resume', 'label' => 'Resume', 'sort' => 50,
-                'content' => [
-                    'title_en' => 'Resume', 'title_fa' => 'رزومه',
-                    'intro_en' => 'My academic background and professional work experience in computer networks and IT infrastructure.', 'intro_fa' => 'پیشینه تحصیلی و تجربه کاری حرفه‌ای من در شبکه‌های کامپیوتری و زیرساخت IT.',
-                    'education' => [
-                        ['title_en' => 'DevOps Engineering Program', 'title_fa' => 'برنامه مهندسی DevOps', 'period' => '2024', 'org_en' => 'Sanat Training Center', 'org_fa' => 'مرکز آموزش سانانت', 'url' => 'https://sananetco.com/en/home/'],
-                        ['title_en' => 'LPIC-2', 'title_fa' => 'LPIC-2', 'period' => '2023', 'org_en' => 'Arzhang Higher Education Institute', 'org_fa' => 'مؤسسه آموزش عالی ارژنگ', 'url' => 'https://arjang.ac.ir/'],
-                        ['title_en' => 'LPIC-1', 'title_fa' => 'LPIC-1', 'period' => '2023', 'org_en' => 'Arzhang Higher Education Institute', 'org_fa' => 'مؤسسه آموزش عالی ارژنگ', 'url' => 'https://arjang.ac.ir/'],
-                        ['title_en' => 'Comprehensive VMware vSphere', 'title_fa' => 'VMware vSphere جامع', 'period' => '2021', 'org_en' => 'Arzhang Higher Education Institute', 'org_fa' => 'مؤسسه آموزش عالی ارژنگ', 'url' => 'https://arjang.ac.ir/'],
-                        ['title_en' => "Bachelor's in Computer Networks & Internet", 'title_fa' => 'کارشناسی شبکه‌های کامپیوتری و اینترنت', 'period' => '2020 - 2022', 'org_en' => 'University of Applied Science and Technology', 'org_fa' => 'دانشگاه علمی و کاربردی', 'url' => 'https://iii.ac.ir/'],
-                        ['title_en' => 'MCSA & Network Plus', 'title_fa' => 'MCSA و Network Plus', 'period' => '2018', 'org_en' => 'Arzhang Higher Education Institute', 'org_fa' => 'مؤسسه آموزش عالی ارژنگ', 'url' => 'https://arjang.ac.ir/'],
-                        ['title_en' => 'CCNA 200-125', 'title_fa' => 'CCNA 200-125', 'period' => '2018', 'org_en' => 'Arzhang Higher Education Institute', 'org_fa' => 'مؤسسه آموزش عالی ارژنگ', 'url' => 'https://arjang.ac.ir/'],
-                        ['title_en' => 'Associate Degree in Software Engineering', 'title_fa' => 'کاردانی مهندسی نرم‌افزار', 'period' => '2016 - 2018', 'org_en' => 'Shahid Shamsipour Technical and Vocational University', 'org_fa' => 'دانشگاه فنی و حرفه‌ای شهید شمس‌پور', 'url' => 'https://shamsipour.nus.ac.ir/'],
-                        ['title_en' => 'Network Plus', 'title_fa' => 'Network Plus', 'period' => '2013', 'org_en' => 'Arzhang Higher Education Institute', 'org_fa' => 'مؤسسه آموزش عالی ارژنگ', 'url' => 'https://arjang.ac.ir/'],
-                    ],
-                    'experience' => [
-                        ['title_en' => 'Infrastructure & DevOps Engineer', 'title_fa' => 'مهندس زیرساخت و DevOps', 'period' => 'Sep 2018 – Present', 'org_en' => 'Newsha Drinks Co.', 'org_fa' => 'شرکت کشت و صنعت نیوشاداریان', 'url' => 'https://newshadrinks.com', 'body_en' => 'Designing, securing, and operating enterprise infrastructure, automation, monitoring, and deployment workflows.', 'body_fa' => 'طراحی، ایمن‌سازی و مدیریت زیرساخت سازمانی، اتوماسیون، مانیتورینگ و فرایندهای استقرار.'],
-                        ['title_en' => 'Network Administrator', 'title_fa' => 'ادمین شبکه', 'period' => 'Jul 2017 – Aug 2018', 'org_en' => 'University of Applied Science & Technology', 'org_fa' => 'دانشگاه علمی و کاربردی', 'url' => 'https://uast48ac.ir/fa/', 'body_en' => 'Installed and maintained network equipment, connectivity, CCTV systems, and security policies.', 'body_fa' => 'نصب و نگهداری تجهیزات شبکه، ارتباطات، سامانه‌های نظارتی و سیاست‌های امنیتی.'],
-                    ],
-                ],
+                'content' => $this->resumeDefaults(),
             ],
             [
                 'key' => 'contact', 'label' => 'Contact', 'sort' => 60,
@@ -153,6 +135,104 @@ class HomepageContentCatalog
                         ['icon' => 'bi bi-whatsapp', 'key' => 'whatsapp', 'title_en' => 'WhatsApp', 'title_fa' => 'واتساپ', 'body_en' => 'Quick messaging & support', 'body_fa' => 'پیام‌رسانی سریع و پشتیبانی', 'value' => 'https://wa.me/989197276219', 'href' => 'https://wa.me/989197276219', 'cta_en' => 'Start Chat', 'cta_fa' => 'شروع گفتگو'],
                         ['icon' => 'bi bi-envelope', 'key' => 'email', 'title_en' => 'Email Me', 'title_fa' => 'ایمیل', 'body_en' => 'Detailed project discussions', 'body_fa' => 'بحث‌های تفصیلی پروژه', 'value' => 'jalalian.amirhossein@gmail.com', 'href' => 'mailto:jalalian.amirhossein@gmail.com', 'cta_en' => 'jalalian.amirhossein@gmail.com', 'cta_fa' => 'jalalian.amirhossein@gmail.com'],
                         ['icon' => 'bi bi-telegram', 'key' => 'telegram', 'title_en' => 'Telegram', 'title_fa' => 'تلگرام', 'body_en' => 'Instant communication', 'body_fa' => 'ارتباط فوری', 'value' => 'https://t.me/Aj_mercury', 'href' => 'https://t.me/Aj_mercury', 'cta_en' => '@Aj_mercury', 'cta_fa' => '@Aj_mercury'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Canonical resume copy restored from the original homepage source.
+     *
+     * Keeping this in one place lets the CMS seed the complete bilingual
+     * timeline while preserving later editor changes in the database.
+     *
+     * @return array<string,mixed>
+     */
+    public function resumeDefaults(): array
+    {
+        $trainingCenter = [
+            'org_en' => 'Arzhang Higher Education Institute (Networking, Security, Virtualization, Storage, Programming, Web)',
+            'org_fa' => 'مؤسسه آموزش عالی ارژنگ (شبکه، امنیت، مجازی‌سازی، ذخیره‌سازی، برنامه‌نویسی، وب)',
+            'url' => 'https://arjang.ac.ir/',
+        ];
+
+        return [
+            'title_en' => 'Resume',
+            'title_fa' => 'رزومه',
+            'intro_en' => 'My academic background and professional work experience in computer networks and IT infrastructure.',
+            'intro_fa' => 'پیشینه تحصیلی و تجربه کاری حرفه‌ای من در شبکه‌های کامپیوتری و زیرساخت IT.',
+            'education' => [
+                ['kind' => 'certification', 'title_en' => 'DevOps Engineering Program', 'title_fa' => 'برنامه مهندسی DevOps', 'period' => '2024', 'org_en' => 'Sanat Training Center', 'org_fa' => 'مرکز آموزش سانانت', 'url' => 'https://sananetco.com/en/home/'],
+                ['kind' => 'certification', 'title_en' => 'LPIC-2', 'title_fa' => 'LPIC-2', 'period' => '2023', ...$trainingCenter],
+                ['kind' => 'certification', 'title_en' => 'LPIC-1', 'title_fa' => 'LPIC-1', 'period' => '2023', ...$trainingCenter],
+                ['kind' => 'certification', 'title_en' => 'Comprehensive VMware vSphere: Install, Configure, Manage', 'title_fa' => 'VMware vSphere جامع: نصب، پیکربندی، مدیریت', 'period' => '2021', ...$trainingCenter],
+                ['kind' => 'education', 'title_en' => "Bachelor's in Computer Networks & Internet", 'title_fa' => 'کارشناسی شبکه‌های کامپیوتری و اینترنت', 'period' => '2020 - 2022', 'org_en' => 'University of Applied Science and Technology (Iran Informatics Branch)', 'org_fa' => 'دانشگاه علمی و کاربردی (انفورماتیک ایران)', 'url' => 'https://iii.ac.ir/'],
+                ['kind' => 'certification', 'title_en' => 'MCSA & Network Plus', 'title_fa' => 'MCSA و Network Plus', 'period' => '2018', ...$trainingCenter],
+                ['kind' => 'certification', 'title_en' => 'CCNA 200-125', 'title_fa' => 'CCNA 200-125', 'period' => '2018', ...$trainingCenter],
+                ['kind' => 'education', 'title_en' => 'Associate Degree in Software Engineering', 'title_fa' => 'کاردانی مهندسی نرم‌افزار', 'period' => '2016 - 2018', 'org_en' => 'Shahid Shamsipour Technical and Vocational University', 'org_fa' => 'دانشگاه فنی و حرفه‌ای شهید شمس‌پور', 'url' => 'https://shamsipour.nus.ac.ir/'],
+                ['kind' => 'certification', 'title_en' => 'Network Plus', 'title_fa' => 'Network Plus', 'period' => '2013', ...$trainingCenter],
+            ],
+            'experience' => [
+                [
+                    'title_en' => 'Infrastructure & DevOps Engineer',
+                    'title_fa' => 'مهندس زیرساخت و DevOps',
+                    'period' => 'Sep 2018 – Present',
+                    'period_fa' => 'شهریور ۱۳۹۷ – تاکنون',
+                    'org_en' => 'Newsha Drinks Co.',
+                    'org_fa' => 'شرکت کشت و صنعت نیوشاداریان',
+                    'url' => 'https://newshadrinks.com',
+                    'body_en' => 'Designing, securing, and operating enterprise infrastructure, automation, monitoring, and deployment workflows.',
+                    'body_fa' => 'طراحی، ایمن‌سازی و مدیریت زیرساخت سازمانی، اتوماسیون، مانیتورینگ و فرایندهای استقرار.',
+                    'highlights' => [
+                        ['en' => 'Designed and implemented virtualization infrastructure for all enterprise servers', 'fa' => 'طراحی و پیاده‌سازی زیرساخت مجازی‌سازی برای تمام سرورهای سازمانی'],
+                        ['en' => 'Deployed SQL Server cluster with High Availability and Redgate monitoring', 'fa' => 'استقرار خوشه SQL Server با قابلیت دسترسی بالا و نظارت Redgate'],
+                        ['en' => 'Implemented core Windows infrastructure services: Active Directory, DNS, NTP, DFS, WDS, WSUS', 'fa' => 'پیاده‌سازی سرویس‌های اصلی زیرساخت Windows: Active Directory، DNS، NTP، DFS، WDS، WSUS'],
+                        ['en' => 'Deployed Nginx Proxy Manager for advanced HTTP/HTTPS traffic management and load balancing', 'fa' => 'استقرار Nginx Proxy Manager برای مدیریت پیشرفته ترافیک HTTP/HTTPS و تعادل بار'],
+                        ['en' => 'Redesigned LAN structure with segmented VLANs and removed direct static IPs', 'fa' => 'طراحی مجدد ساختار LAN با VLANهای مجزا و حذف IPهای استاتیک مستقیم'],
+                        ['en' => 'Configured advanced Cisco switching (STP, VTP, VLAN, Port-Channel, Port Security)', 'fa' => 'پیکربندی سوئیچینگ پیشرفته سیسکو (STP، VTP، VLAN، Port-Channel، Port Security)'],
+                        ['en' => 'Implemented secure Site-to-Site VPN tunnels between Tehran offices', 'fa' => 'پیاده‌سازی تونل‌های VPN امن Site-to-Site بین دفاتر تهران'],
+                        ['en' => 'Optimized Internet performance with MikroTik firewall and security rules', 'fa' => 'بهینه‌سازی عملکرد اینترنت با فایروال MikroTik و قوانین امنیتی'],
+                        ['en' => 'Installed Kaspersky Endpoint Security with centralized management console', 'fa' => 'نصب Kaspersky Endpoint Security با کنسول مدیریت متمرکز'],
+                        ['en' => 'Upgraded Jira from version 6 to 9 with full documentation', 'fa' => 'ارتقای Jira از نسخه ۶ به ۹ با مستندات کامل'],
+                        ['en' => 'Upgraded HQ infrastructure with fiber backbone and improved datacenter', 'fa' => 'ارتقای زیرساخت مرکز اصلی با ستون فقرات فیبرنوری و بهبود مرکز داده'],
+                        ['en' => 'Integrated CCTV surveillance system with stable infrastructure', 'fa' => 'یکپارچه‌سازی سیستم نظارت CCTV با زیرساخت پایدار'],
+                        ['en' => 'Enhanced VoIP infrastructure for reliable internal telephony', 'fa' => 'بهبود زیرساخت VoIP برای تلفن داخلی قابل اعتماد'],
+                        ['en' => 'Implemented Zabbix with Telegram API alerts', 'fa' => 'پیاده‌سازی Zabbix با هشدارهای Telegram API'],
+                        ['en' => 'Integrated Zabbix with Grafana for real-time dashboards', 'fa' => 'یکپارچه‌سازی Zabbix با Grafana برای داشبوردهای زمان واقعی'],
+                        ['en' => 'Deployed Cacti for graphical network traffic monitoring', 'fa' => 'استقرار Cacti برای نظارت گرافیکی ترافیک شبکه'],
+                        ['en' => 'Implemented NAS and automated backups with Veeam Backup', 'fa' => 'پیاده‌سازی NAS و پشتیبان‌گیری خودکار با Veeam Backup'],
+                        ['en' => 'Created technical diagrams, documentation, and asset inventory', 'fa' => 'ایجاد نمودارهای فنی، مستندات و فهرست دارایی‌ها'],
+                        ['en' => 'Configured CDN for improved website performance and security', 'fa' => 'پیکربندی CDN برای بهبود عملکرد و امنیت وب‌سایت'],
+                        ['en' => 'Configured ArvanCloud with CDN, caching, and access security policies', 'fa' => 'پیکربندی ArvanCloud با CDN، کش و سیاست‌های امنیت دسترسی'],
+                        ['en' => 'Deployed MongoDB for internal NoSQL services', 'fa' => 'استقرار MongoDB برای سرویس‌های داخلی NoSQL'],
+                        ['en' => 'Implemented ABS NG for user behavior analytics and reporting', 'fa' => 'پیاده‌سازی ABS NG برای تحلیل رفتار کاربر و گزارش‌گیری'],
+                        ['en' => 'Configured Xray for traffic control, tunneling, and bypassing restrictions', 'fa' => 'پیکربندی Xray برای کنترل ترافیک، تونل‌زنی و دور زدن محدودیت‌ها'],
+                        ['en' => 'Deployed Docker for isolated environments and faster service delivery', 'fa' => 'استقرار Docker برای محیط‌های مجزا و تحویل سریع‌تر سرویس'],
+                        ['en' => 'Configured Apache Maven for Java project build automation', 'fa' => 'پیکربندی Apache Maven برای اتوماسیون بیلد پروژه‌های Java'],
+                        ['en' => 'Installed n8n for workflow automation', 'fa' => 'نصب n8n برای اتوماسیون گردش کار'],
+                        ['en' => 'Developed Bash scripts for automation and server management', 'fa' => 'توسعه اسکریپت‌های Bash برای اتوماسیون و مدیریت سرور'],
+                        ['en' => 'Migrated Windows web servers to Linux for performance and cost optimization', 'fa' => 'مهاجرت وب‌سرورهای Windows به Linux برای بهینه‌سازی عملکرد و هزینه'],
+                        ['en' => 'Configured load balancing across 5 Internet connections for stability', 'fa' => 'پیکربندی تعادل بار بین ۵ اتصال اینترنت برای پایداری'],
+                    ],
+                ],
+                [
+                    'title_en' => 'Network Administrator',
+                    'title_fa' => 'ادمین شبکه',
+                    'period' => 'Jul 2017 – Aug 2018',
+                    'period_fa' => 'تیر ۱۳۹۶ – مرداد ۱۳۹۷',
+                    'org_en' => 'University of Applied Science & Technology – Culture & Arts Unit 48',
+                    'org_fa' => 'دانشگاه علمی و کاربردی – واحد فرهنگ و هنر ۴۸',
+                    'url' => 'https://uast48ac.ir/fa/',
+                    'body_en' => 'Installed and maintained network equipment, connectivity, CCTV systems, and security policies.',
+                    'body_fa' => 'نصب و نگهداری تجهیزات شبکه، ارتباطات، سامانه‌های نظارتی و سیاست‌های امنیتی.',
+                    'highlights' => [
+                        ['en' => 'Installed, configured, and maintained network equipment (switches, routers, servers)', 'fa' => 'نصب، پیکربندی و نگهداری تجهیزات شبکه (سوئیچ، روتر، سرور)'],
+                        ['en' => 'Performed passive networking tasks including cabling, termination, and rack installation', 'fa' => 'انجام وظایف شبکه‌سازی غیرفعال شامل کابل‌کشی، ترمینیشن و نصب رک'],
+                        ['en' => 'Troubleshot LAN/WAN/Internet connectivity issues', 'fa' => 'عیب‌یابی مشکلات اتصال LAN/WAN/اینترنت'],
+                        ['en' => 'Installed software and hardware for end-users', 'fa' => 'نصب نرم‌افزار و سخت‌افزار برای کاربران نهایی'],
+                        ['en' => 'Implemented CCTV surveillance systems', 'fa' => 'پیاده‌سازی سیستم‌های نظارت CCTV'],
+                        ['en' => 'Applied security policies and kept systems updated', 'fa' => 'اعمال سیاست‌های امنیتی و به‌روزرسانی سیستم‌ها'],
                     ],
                 ],
             ],

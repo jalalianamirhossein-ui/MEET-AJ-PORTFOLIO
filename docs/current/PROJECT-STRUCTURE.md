@@ -1,6 +1,6 @@
 # Project structure — Meet AJ
 
-**Verified:** 2026-09-19. This is the current directory map. Earlier layouts in `docs/historical/`, `docs/archive/`, and `docs/phases/` describe their original point in time.
+**Verified:** 2026-09-20. This is the current directory map. Earlier layouts in `docs/historical/`, `docs/archive/`, and `docs/phases/` describe their original point in time.
 
 ## Repository layout
 
@@ -31,10 +31,10 @@ MEET AJ PORTFOLIO/
 │   ├── assets/                Site CSS, JS, images, SCSS, third-party assets
 │   ├── css/                   Filament admin CSS source
 │   ├── downloads/             Public downloadable documents
-│   ├── legacy/                Static content used by importers and view generation
+│   ├── legacy/                Static content used by importers and article view generation
 │   │   ├── index.html         Homepage and article-library generation source
-│   │   ├── articles/          23 original articles
-│   │   ├── services/          Six original service pages
+│   │   ├── articles/          24 original articles
+│   │   ├── services/          Six original service sources
 │   │   ├── forms/             Former PHP endpoints, reference only
 │   │   ├── views/services/    Six retired Blade templates, reference only
 │   │   └── robots.txt, sitemap.xml, sw.js  Former static versions
@@ -61,14 +61,17 @@ MEET AJ PORTFOLIO/
 | `resources/static/` | `public/manifest.json`, `public/preloader.*`, `public/partials/lang-toggle.html` | `php artisan site:publish-assets` |
 | `resources/downloads/netbox_installation_guide_v2.pdf` | `public/docs/netbox_installation_guide_v2.pdf` | `php artisan site:publish-assets` |
 | `resources/css/filament-admin.css` | `public/css/app/meet-aj-admin.css` | `php artisan filament:assets` |
-| `resources/legacy/index.html` and `LegacySitePublisher` | `resources/views/home.blade.php`, `resources/views/articles/index.blade.php` | `php artisan site:publish-assets --views` |
+| `resources/legacy/index.html` and `LegacySitePublisher` | `resources/views/articles/index.blade.php` | `php artisan site:publish-assets --views` |
 | `resources/legacy/articles/` | Article and redirect records | `php artisan articles:import-legacy` |
 | `HomepageServiceCatalog` | Homepage service records and ordering | `php artisan services:import-legacy` |
+| `HomepageContentCatalog` + `homepage_contents` | `resources/views/home.blade.php` | Homepage request; admin sync |
 | `LegacySitePublisher::writeServiceWorker()` | `public/sw.js`, `public/offline.html` | `php artisan site:publish-assets` |
 
 Public URLs remain `/assets/...`, `/docs/netbox_installation_guide_v2.pdf`, `/manifest.json`, `/sw.js`, and the existing page routes. Filesystem moves do not change stored article source identifiers (`articles/*.html`) or legacy redirect URLs.
 
 Keep `resources/` in deployment packages: asset publishing, imports, content comparison, Blade rendering, and sitemap source timestamps depend on it. Never expose the repository root or `resources/` as the web document root. For a static rollback, use a separate complete static release; `resources/legacy/` alone is not a standalone website.
+
+The active homepage is `resources/views/home.blade.php`. Its copy is database-backed by `homepage_contents`; `resources/legacy/index.html` remains a source for the article-library publisher and must not overwrite the CMS view. `public/` contains published web output only. Do not edit generated public assets when the source exists under `resources/`.
 
 ## Placement rules
 

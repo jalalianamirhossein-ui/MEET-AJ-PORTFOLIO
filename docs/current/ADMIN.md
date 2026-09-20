@@ -1,7 +1,7 @@
 # Admin panel — Meet AJ
 
 **Authority:** AUTHORITATIVE Filament description.
-**Verified:** 2026-09-18 against `app/Filament/**`, `app/Policies/**`, `app/Providers/Filament/AdminPanelProvider.php`, `resources/css/filament-admin.css`, `public/css/app/meet-aj-admin.css`, `php artisan route:list` (after `optimize:clear`), PHPUnit (`CmsOperationsTest`, `ServiceCatalogTest`, `RequestWorkflowTest`, `PublicSiteTest`, `ProductionAuditTest`, `FormCsrfAndAdminRequestsTest`, `AdminThemeTest`), a live contact POST that appears at `/admin/requests`, and authenticated Cursor-browser sessions for Admin and Editor.
+**Verified:** 2026-09-20 against `app/Filament/**`, `app/Policies/**`, `app/Providers/Filament/AdminPanelProvider.php`, `resources/css/filament-admin.css`, `public/css/app/meet-aj-admin.css`, `php artisan route:list` (after `optimize:clear`), PHPUnit (`HomepageContentTest` plus the full feature suite), and the current resource definitions.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
 Panel: **Filament v5.8.2** on **Livewire v4.4.5**, mounted at `/admin`, brand name “Meet AJ CMS”, **White + Red** identity (canvas `#ffffff`, primary `#be123c`, gray palette Slate, danger `#7f1d1d`), collapsible sidebar, collapsible navigation groups, unsaved-changes alerts, and global search enabled.
@@ -25,6 +25,7 @@ Content (document icon)
 ├── Articles        newspaper
 ├── Categories      squares
 ├── Tags            hashtag
+├── Homepage sections (home icon)
 ├── Services        briefcase (admins only)
 └── Testimonials    chat bubble
 Communications (inbox icon)
@@ -46,6 +47,7 @@ Active item: light crimson `#fff1f2` fill, 3px `#be123c` inset bar, crimson labe
 | `GET /admin` | `filament.admin.pages.dashboard` |
 | `GET /admin/login`, `POST /admin/logout` | `filament.admin.auth.login`, `filament.admin.auth.logout` |
 | `GET /admin/articles`, `/admin/articles/create`, `/admin/articles/{record}/edit` | `filament.admin.resources.articles.*` |
+| `GET /admin/homepage-contents`, `/admin/homepage-contents/create`, `/admin/homepage-contents/{record}/edit` | `filament.admin.resources.homepage-contents.*` |
 | `GET /admin/categories` | `filament.admin.resources.categories.index` |
 | `GET /admin/testimonials` | `filament.admin.resources.testimonials.index` |
 | `GET /admin/tags` | `filament.admin.resources.tags.index` |
@@ -93,6 +95,12 @@ Testimonials are managed from **Content → Testimonials**. Each record stores E
 | devops | `#0e7490` |
 | others (default) | `#a16207` |
 
+## Homepage sections (`HomepageContentResource`) — Content
+
+The homepage CMS is available at **Content → Homepage section**. It stores seven stable records (`site`, `hero`, `about`, `stats`, `skills`, `resume`, `contact`) in `homepage_contents`. Admins and editors can update copy, bilingual values, structured repeaters, visibility and sort order. The public homepage reads only published records. The `key` is locked during editing because Blade uses it to select the section.
+
+Use the common title/intro/body fields for quick edits. Use **Section JSON** for navigation, social links, skill groups, education, experience, expertise domains, counters and contact cards. The form merges non-empty common fields into the JSON payload before saving. See [HOMEPAGE-CMS.md](HOMEPAGE-CMS.md) for the field map and deployment procedure.
+
 ## Tags (`TagResource`) — Content
 
 CRUD on `tags` for admins and editors (`TagPolicy`). `name` and `slug` are unique; the table shows an article count. The vocabulary can be rebuilt from article content with `php artisan articles:sync-tags`.
@@ -137,7 +145,7 @@ Interactive browser CRUD on this screen was exercised for login/navigation only;
 | Users CRUD | yes | no |
 | `php artisan cms:create-user` | any operator with shell access | any operator with shell access |
 
-Policies are registered in `AppServiceProvider`: `ArticlePolicy`, `CategoryPolicy`, `TagPolicy`, `ServicePolicy`, `RequestPolicy`, `UserPolicy`.
+Policies are registered in `AppServiceProvider`: `ArticlePolicy`, `CategoryPolicy`, `TagPolicy`, `HomepageContentPolicy`, `ServicePolicy`, `TestimonialPolicy`, `RequestPolicy`, `UserPolicy`.
 
 ## Search, filters, pagination
 

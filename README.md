@@ -2,14 +2,14 @@
 
 Personal portfolio and technical article site for **AmirHossein Jalalian** (infrastructure, networking, virtualization and DevOps), running as a Laravel application with a Filament admin panel.
 
-Application overview verified on **2026-09-18**; directory layout and checks updated on **2026-09-19**. Single source of truth for project state: [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).
+Application overview and directory layout verified on **2026-09-20**. Single source of truth for project state: [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).
 
 ## Overview
 
-The site was originally a static English/Persian progressive web app: one homepage, six service quote pages, 23 HTML articles, PHP contact endpoints, a sitemap and a service worker. It now runs as a **Laravel 13 + Blade + Filament 5** application:
+The site was originally a static English/Persian progressive web app: one homepage, six service quote pages, 24 HTML articles, PHP contact endpoints, a sitemap and a service worker. It now runs as a **Laravel 13 + Blade + Filament 5** application:
 
 - the public site renders from Blade views rebuilt from the original HTML, so URLs, CSS hooks and JavaScript contracts are unchanged;
-- articles and services live in the database and are editable in the admin panel;
+- homepage sections, articles, services and testimonials live in the database and are editable in the admin panel;
 - contact and quote submissions are stored as requests with a light workflow;
 - English and Persian share the same URLs, switched client-side with RTL support.
 
@@ -83,7 +83,7 @@ php artisan migrate            # production: php artisan migrate --force
 php artisan migrate:status
 ```
 
-Nine migrations create eleven tables: `users`, `password_reset_tokens`, `sessions`, `categories`, `articles`, `article_redirects`, `tags`, `article_tag`, `requests`, `services`, plus Laravel's `migrations`. Full schema: [docs/current/DATABASE.md](docs/current/DATABASE.md).
+Fifteen application migrations create the CMS schema, including `homepage_contents`, the resume-content repair, `testimonials`, `services`, articles, requests and taxonomy tables. Full schema: [docs/current/DATABASE.md](docs/current/DATABASE.md).
 
 ### Seeding
 
@@ -91,10 +91,10 @@ Nine migrations create eleven tables: `users`, `password_reset_tokens`, `session
 php artisan db:seed
 ```
 
-`DatabaseSeeder` rebuilds the Blade views from the original HTML, then imports articles and services. You can also run the importers directly:
+`DatabaseSeeder` synchronizes homepage sections, rebuilds the article-library view from the original HTML, then imports articles and services. The homepage view itself is CMS-backed and is never overwritten by the legacy publisher. You can also run the importers directly:
 
 ```bash
-php artisan articles:import-legacy      # 23 articles + 23 redirects
+php artisan articles:import-legacy      # 24 articles + 24 redirects
 php artisan services:import-legacy      # 6 services with their AED prices
 php artisan articles:sync-tags          # tag vocabulary and links
 ```
@@ -104,7 +104,7 @@ Both importers accept `--dry-run` and `--refresh`. **`--refresh` deletes existin
 ## Local development
 
 ```bash
-php artisan site:publish-assets --views   # publish resources/ assets and rebuild generated Blade views
+php artisan site:publish-assets --views   # publish assets and rebuild the generated article listing view
 php artisan filament:assets               # publish admin CSS and Filament assets
 php artisan serve                          # http://127.0.0.1:8000
 ```
@@ -123,7 +123,7 @@ Roles are `admin` and `editor`; passwords need at least 12 characters.
 
 | Section | Resources |
 |---------|-----------|
-| Content | Articles, Categories, Tags, Services (admin only) |
+| Content | Homepage sections, Articles, Categories, Tags, Testimonials, Services (admin only) |
 | Communications | Requests (admin only) |
 | Administration | Users (admin only) |
 
@@ -131,7 +131,7 @@ Detail: [docs/current/ADMIN.md](docs/current/ADMIN.md).
 
 ## Articles
 
-23 published English articles with 23 legacy `.html` → clean-URL redirects, 10 categories (5 concepts × EN/FA), 8 tags and 38 tag links. The library at `/articles` supports `?q=` search and `?tag=` filtering with 9 results per page, and each article page has breadcrumbs, tags, share links and up to three related articles. Content integrity against the original HTML is verified by `php artisan site:compare-content` (currently **Failures: 0**). Detail: [docs/current/ARTICLES.md](docs/current/ARTICLES.md).
+Published English articles with legacy `.html` → clean-URL redirects, bilingual categories, tags and related content. The library at `/articles` supports `?q=` search and `?tag=` filtering, and each article page has breadcrumbs, tags, share links and related articles. Content integrity against the original HTML is verified by `php artisan site:compare-content` (currently **Failures: 0**). Detail: [docs/current/ARTICLES.md](docs/current/ARTICLES.md).
 
 ## Services
 
@@ -156,12 +156,12 @@ Canonical URLs, Open Graph, Twitter cards, JSON-LD (Person/WebSite on the homepa
 ## Testing
 
 ```bash
-php artisan test                                                    # 58 tests; latest result below
+php artisan test                                                    # full feature suite
 vendor/bin/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest     # MySQL schema check
 php artisan site:compare-content                                     # Failures: 0
 ```
 
-Latest run (2026-09-19): **56 passed, 1 pre-existing CSRF failure, 1 skipped**; 1123 assertions. Content comparison reports zero failures. The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Detail: [docs/current/TESTING.md](docs/current/TESTING.md), [reorganization QA](docs/qa/PROJECT-REORGANIZATION.md).
+Latest run (2026-09-20): **64 tests, 1082 assertions, 0 failures, 1 skipped**. The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Homepage CMS details: [docs/current/HOMEPAGE-CMS.md](docs/current/HOMEPAGE-CMS.md). Testing detail: [docs/current/TESTING.md](docs/current/TESTING.md).
 
 ## Deployment
 
@@ -207,6 +207,7 @@ Full navigation map: [docs/README.md](docs/README.md).
 | Architecture | [docs/current/ARCHITECTURE.md](docs/current/ARCHITECTURE.md) |
 | Database | [docs/current/DATABASE.md](docs/current/DATABASE.md) |
 | Admin | [docs/current/ADMIN.md](docs/current/ADMIN.md) |
+| Homepage CMS | [docs/current/HOMEPAGE-CMS.md](docs/current/HOMEPAGE-CMS.md) |
 | Features | [docs/current/FEATURES.md](docs/current/FEATURES.md) |
 | Design system | [docs/current/DESIGN-SYSTEM.md](docs/current/DESIGN-SYSTEM.md) |
 | QA evidence | [docs/qa/FINAL-QA-REPORT.md](docs/qa/FINAL-QA-REPORT.md), [docs/qa/VISUAL-UX-FINAL-REPORT.md](docs/qa/VISUAL-UX-FINAL-REPORT.md) |

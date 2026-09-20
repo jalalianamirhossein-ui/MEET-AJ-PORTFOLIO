@@ -18,9 +18,14 @@ class HomepageContentTest extends TestCase
             ->assertSee('AmirHossein Jalalian', false)
             ->assertSee('Skills', false)
             ->assertSee('Professional Experience', false)
+            ->assertSee('Configured load balancing across 5 Internet connections for stability', false)
             ->assertSee("Let&#039;s Work Together", false);
 
         $this->assertSame(7, HomepageContent::query()->count());
+        $resume = HomepageContent::query()->where('key', 'resume')->firstOrFail();
+        $this->assertCount(9, data_get($resume->content, 'education'));
+        $this->assertCount(29, data_get($resume->content, 'experience.0.highlights'));
+        $this->assertCount(6, data_get($resume->content, 'experience.1.highlights'));
 
         $hero = HomepageContent::query()->where('key', 'hero')->firstOrFail();
         $hero->update(['content' => array_merge($hero->content, ['title_en' => 'Dynamic Meet AJ Title'])]);

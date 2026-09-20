@@ -899,7 +899,7 @@
             <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
               <h3 class="resume-title" data-en="Education" data-fa="تحصیلات">Education</h3>
               @foreach (data_get($resumeContent, 'education', []) as $item)
-                <div class="resume-item" data-resume-kind="education">
+                <div class="resume-item" data-resume-kind="{{ $item['kind'] ?? 'education' }}">
                   <h4 data-en="{{ $item['title_en'] ?? '' }}" data-fa="{{ $item['title_fa'] ?? ($item['title_en'] ?? '') }}">{{ $item['title_en'] ?? '' }}</h4>
                   <h5>{{ $item['period'] ?? '' }}</h5>
                   <p><em><a href="{{ $item['url'] ?? '#' }}" target="_blank" rel="noopener" data-en="{{ $item['org_en'] ?? '' }}" data-fa="{{ $item['org_fa'] ?? ($item['org_en'] ?? '') }}">{{ $item['org_en'] ?? '' }}</a></em></p>

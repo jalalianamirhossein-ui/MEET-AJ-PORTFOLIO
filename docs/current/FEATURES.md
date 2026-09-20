@@ -1,7 +1,7 @@
 # Features — Meet AJ
 
 **Authority:** AUTHORITATIVE description of public and CMS features.  
-**Verified:** 2026-09-18 against Blade heads, `Category` / Filament resources, homepage Expertise markup, and PHPUnit.  
+**Verified:** 2026-09-20 against Blade views, homepage content catalog, Filament resources, and the full PHPUnit suite.
 **Assets in live Blade heads:** `main.css?v=1002`, `lang-toggle.css?v=1403`, `rtl.css?v=1405`, `visual-upgrade.css?v=1711`, `site-modules.css?v=1840`, `main.js?v=1412`, `i18n.js?v=1403`, `contact-form.js?v=1403`, `service-catalog.js?v=1813`.  
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md) · **Detail:** [ARTICLES.md](ARTICLES.md), [SERVICES.md](SERVICES.md), [REQUESTS.md](REQUESTS.md), [ADMIN.md](ADMIN.md), [DESIGN-SYSTEM.md](DESIGN-SYSTEM.md)
 
@@ -9,7 +9,8 @@
 
 | Feature | Where | Notes |
 |---------|--------|--------|
-| Editorial homepage | `/` | Hero, Get to Know Me, Expertise / تخصص‌ها, resume, six service previews, article teasers, testimonials, contact |
+| Editorial homepage | `/` | CMS-backed site identity, hero, About, Expertise / تخصص‌ها, stats, skills, resume, six service previews, article teasers, testimonials and contact |
+| Homepage content catalog | `/admin/homepage-contents` | Seven editable sections: site, hero, about, stats, skills, resume and contact. Bilingual copy, ordering and publication are stored in `homepage_contents` |
 | Expertise / تخصص‌ها | Homepage About | Five columns (Infrastructure, Networking, DevOps, Monitoring, Security). Pastel title pills + icons. Skill rows use 3px `border-inline-start` (left LTR, right RTL). Data unchanged. Reveal via `initExpertiseReveal()` in `main.js` |
 | Shared sidebar | All public layouts | `resources/views/components/site-sidebar.blade.php` + `partials/site-sidebar-chrome.blade.php` |
 | Mobile menu | `<1200px` | Fullscreen `#header.header-show`, icy-blue header (not burgundy). Hamburger `inset-inline-start`, language `inset-inline-end`. Escape closes. Background `inert` when open. Closed header not in tab order |
@@ -36,6 +37,7 @@ White + Red admin (`#be123c` / `#fff1f2` / `#7f1d1d`). Public site stays blue.
 | Categories | admin, editor | Unique `(language, slug)`. Editable `accent_color` ColorPicker (live preview, hex, Reset). Empty keeps the slug palette. Invalid hex rejected |
 | Tags | admin, editor | Unique name and slug. `php artisan articles:sync-tags` seeds the catalog from real titles/categories |
 | Services | admin | Catalog CMS; editors forbidden |
+| Homepage sections | admin, editor | Site identity, navigation, hero, About, stats, skills, resume and contact copy/JSON |
 | Requests | admin | CRM-lite statuses: New, Contacted, In discussion, Quoted, Approved, Completed, Cancelled. Internal notes never leave Filament (`$hidden`, not in contact mail, not in the public `create()` payload) |
 | Users | admin | Sidebar registered for admins. Password hashed; hashes never shown in the table |
 | Dashboard | signed-in | Live counts: articles, published, drafts, categories, tags; admins also see total and new requests plus recent tables |
