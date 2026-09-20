@@ -18,7 +18,13 @@ class CreateHomepageContent extends CreateRecord
     private function normalizeContent(array $data): array
     {
         $content = json_decode((string) ($data['content_json'] ?? ''), true);
-        $data['content'] = is_array($content) ? $content : ($data['content'] ?? []);
+        $content = is_array($content) ? $content : [];
+        foreach (($data['content'] ?? []) as $key => $value) {
+            if ($value !== null && $value !== '') {
+                $content[$key] = $value;
+            }
+        }
+        $data['content'] = $content;
         unset($data['content_json']);
 
         return $data;

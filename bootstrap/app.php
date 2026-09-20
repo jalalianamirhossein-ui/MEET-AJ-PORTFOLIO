@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AcceptLegacyCsrfToken;
+use App\Http\Middleware\EnforceCsrfToken;
 use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -30,6 +31,8 @@ return Application::configure(basePath: $basePath)
         $middleware->trustProxies(at: '*');
         $middleware->web(prepend: [
             AcceptLegacyCsrfToken::class,
+        ], append: [
+            EnforceCsrfToken::class,
         ]);
         $middleware->appendToGroup('web', SecurityHeaders::class);
         $middleware->redirectGuestsTo('/admin/login');

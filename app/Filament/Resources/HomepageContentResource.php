@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Models\HomepageContent;
+use App\Services\HomepageContentCatalog;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -16,6 +17,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class HomepageContentResource extends Resource
 {
@@ -28,6 +30,13 @@ class HomepageContentResource extends Resource
     public static function canViewAny(): bool
     {
         return auth()->user()?->canManageContent() ?? false;
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        app(HomepageContentCatalog::class)->sync();
+
+        return parent::getEloquentQuery();
     }
 
     public static function form(Schema $schema): Schema

@@ -3,11 +3,13 @@
       return $homepageContent[$key]?->content ?? [];
   };
   $heroContent = $sectionContent('hero');
+  $siteContent = $sectionContent('site');
   $aboutContent = $sectionContent('about');
   $statsContent = $sectionContent('stats');
   $skillsContent = $sectionContent('skills');
   $resumeContent = $sectionContent('resume');
   $contactContent = $sectionContent('contact');
+  $contactItems = data_get($contactContent, 'items', []);
 @endphp
 <!doctype html>
 <html lang="en" dir="ltr">
@@ -403,63 +405,14 @@
       =============================================== -->
       <nav id="navmenu" class="navmenu" role="navigation" aria-label="Primary" data-en-aria-label="Primary" data-fa-aria-label="ناوبری اصلی">
         <ul>
-          <!-- Home Section -->
-          <li>
-            <a href="#hero" class="active" aria-current="page"
-              ><i class="bi bi-house navicon"></i
-              ><span data-en="Home" data-fa="صفحه اصلی">Home</span></a
-            >
-          </li>
-
-          <!-- About Section -->
-          <li>
-            <a href="#about"
-              ><i class="bi bi-person navicon"></i
-              ><span data-en="About" data-fa="درباره من">About</span></a
-            >
-          </li>
-
-          <!-- Resume Section -->
-          <li>
-            <a href="#resume"
-              ><i class="bi bi-file-earmark-text navicon"></i
-              ><span data-en="Resume" data-fa="رزومه">Resume</span></a
-            >
-          </li>
-
-          <!-- Services Section -->
-          <li>
-            <a href="#services"
-              ><i class="bi bi-hdd-stack navicon"></i
-              ><span data-en="Services" data-fa="خدمات">Services</span></a
-            >
-          </li>
-
-          <!-- Articles Section -->
-          <li>
-            <a href="#portfolio"
-              ><i class="bi bi-images navicon"></i
-              ><span data-en="Articles" data-fa="مقالات">Articles</span></a
-            >
-          </li>
-
-          <!-- Testimonials Section -->
-          <li>
-            <a href="#testimonials"
-              ><i class="bi bi-menu-button navicon"></i
-              ><span data-en="Testimonials" data-fa="نظرات"
-                >Testimonials</span
-              ></a
-            >
-          </li>
-
-          <!-- Contact Section -->
-          <li>
-            <a href="#contact"
-              ><i class="bi bi-envelope navicon"></i
-              ><span data-en="Contact" data-fa="تماس با من">Contact</span></a
-            >
-          </li>
+          @foreach (data_get($siteContent, 'navigation', []) as $item)
+            <li>
+              <a href="{{ $item['href'] ?? '#' }}" @class(['active' => $loop->first]) @if ($loop->first) aria-current="page" @endif>
+                <i class="{{ $item['icon'] ?? 'bi bi-link-45deg' }} navicon"></i>
+                <span data-en="{{ $item['label_en'] ?? '' }}" data-fa="{{ $item['label_fa'] ?? ($item['label_en'] ?? '') }}">{{ $item['label_en'] ?? '' }}</span>
+              </a>
+            </li>
+          @endforeach
         </ul>
       </nav>
     </header>
@@ -1419,24 +1372,23 @@
             <!-- Brand Section -->
             <div class="footer-brand">
               <h3 class="brand-name">
-                <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
-                  >AmirHossein Jalalian</span
+                <span data-en="{{ data_get($aboutContent, 'name_en', 'AmirHossein Jalalian') }}" data-fa="{{ data_get($aboutContent, 'name_fa', 'امیرحسین جلالیان') }}"
+                  >{{ data_get($aboutContent, 'name_en', 'AmirHossein Jalalian') }}</span
                 >
               </h3>
               <p
                 class="brand-title"
-                data-en="Infrastructure &amp; DevOps Engineer"
-                data-fa="مهندس زیرساخت و DevOps"
+                data-en="{{ data_get($heroContent, 'role_en', 'Infrastructure & DevOps Engineer') }}"
+                data-fa="{{ data_get($heroContent, 'role_fa', 'مهندس زیرساخت و DevOps') }}"
               >
-                Infrastructure &amp; DevOps Engineer
+                {{ data_get($heroContent, 'role_en', 'Infrastructure & DevOps Engineer') }}
               </p>
               <p
                 class="brand-description"
-                data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
-                data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
+                data-en="{{ data_get($contactContent, 'body_en', '') }}"
+                data-fa="{{ data_get($contactContent, 'body_fa', '') }}"
               >
-                Delivering reliable, secure, and scalable IT solutions for your
-                business success.
+                {{ data_get($contactContent, 'body_en', '') }}
               </p>
             </div>
 
@@ -1444,33 +1396,22 @@
             <div class="footer-contact">
               <h4
                 class="contact-title"
-                data-en="Get In Touch"
-                data-fa="تماس با من"
+                data-en="{{ data_get($contactContent, 'title_en', 'Contact') }}"
+                data-fa="{{ data_get($contactContent, 'title_fa', 'تماس با من') }}"
               >
-                Get In Touch
+                {{ data_get($contactContent, 'title_en', 'Contact') }}
               </h4>
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>
-                  <span data-en="Tehran, Iran" data-fa="تهران، ایران"
-                    >Tehran, Iran</span
-                  >
+                  <span data-en="{{ data_get($contactContent, 'location_en', 'Tehran, Iran') }}" data-fa="{{ data_get($contactContent, 'location_fa', 'تهران، ایران') }}">{{ data_get($contactContent, 'location_en', 'Tehran, Iran') }}</span>
                 </div>
-                <div class="contact-item">
-                  <i class="bi bi-telephone"></i>
-                  <a
-                    href="tel:+989197276219"
-                    data-en="+98 9197276219"
-                    data-fa="09197276219"
-                    >+98 9197276219</a
-                  >
-                </div>
-                <div class="contact-item">
-                  <i class="bi bi-envelope"></i>
-                  <a href="mailto:jalalian.amirhossein@gmail.com"
-                    >jalalian.amirhossein@gmail.com</a
-                  >
-                </div>
+                @foreach (array_slice($contactItems, 0, 3) as $card)
+                  <div class="contact-item">
+                    <i class="{{ $card['icon'] ?? 'bi bi-link-45deg' }}"></i>
+                    <a href="{{ $card['href'] ?? ($card['value'] ?? '#') }}" @if (str_starts_with((string) ($card['href'] ?? ''), 'http')) target="_blank" rel="noopener" @endif data-en="{{ $card['cta_en'] ?? ($card['value'] ?? '') }}" data-fa="{{ $card['cta_fa'] ?? ($card['value'] ?? '') }}">{{ $card['cta_en'] ?? ($card['value'] ?? '') }}</a>
+                  </div>
+                @endforeach
               </div>
 
               <!-- Social Links -->
@@ -1483,31 +1424,9 @@
                   Follow Me
                 </h5>
                 <div class="social-icons">
-                  <a
-                    href="https://wa.me/989197276219"
-                    target="_blank"
-                    rel="noopener"
-                    class="social-link whatsapp"
-                    aria-label="WhatsApp"
-                  >
-                    <i class="bi bi-whatsapp"></i>
-                  </a>
-                  <a
-                    href="https://t.me/Aj_mercury"
-                    target="_blank"
-                    rel="noopener"
-                    class="social-link telegram"
-                    aria-label="Telegram"
-                  >
-                    <i class="bi bi-telegram"></i>
-                  </a>
-                  <a
-                    href="mailto:jalalian.amirhossein@gmail.com"
-                    class="social-link email"
-                    aria-label="Email"
-                  >
-                    <i class="bi bi-envelope"></i>
-                  </a>
+                  @foreach (array_slice(data_get($siteContent, 'socials', []), 0, 4) as $social)
+                    <a href="{{ $social['url'] ?? '#' }}" target="_blank" rel="noopener" class="social-link {{ $social['key'] ?? 'social' }}" aria-label="{{ $social['label'] ?? '' }}"><i class="{{ $social['icon'] ?? 'bi bi-link-45deg' }}"></i></a>
+                  @endforeach
                 </div>
               </div>
             </div>
@@ -1520,9 +1439,9 @@
                 <p>
                   © <span data-current-year>2026</span>
                   <strong
-                    data-en="AmirHossein Jalalian"
-                    data-fa="امیرحسین جلالیان"
-                    >AmirHossein Jalalian</strong
+                    data-en="{{ data_get($aboutContent, 'name_en', 'AmirHossein Jalalian') }}"
+                    data-fa="{{ data_get($aboutContent, 'name_fa', 'امیرحسین جلالیان') }}"
+                    >{{ data_get($aboutContent, 'name_en', 'AmirHossein Jalalian') }}</strong
                   >
                   <span
                     data-en="All Rights Reserved"
@@ -1560,8 +1479,8 @@
         </div>
 
         <div class="preloader-wordmark">
-          <strong>Meet AJ</strong>
-          <span data-en="Infrastructure &amp; DevOps" data-fa="Infrastructure و DevOps">Infrastructure &amp; DevOps</span>
+          <strong>{{ data_get($siteContent, 'site_name', 'Meet AJ') }}</strong>
+          <span data-en="{{ data_get($heroContent, 'role_en', 'Infrastructure & DevOps') }}" data-fa="{{ data_get($heroContent, 'role_fa', 'Infrastructure و DevOps') }}">{{ data_get($heroContent, 'role_en', 'Infrastructure & DevOps') }}</span>
         </div>
 
         <div class="preloader-status-line">

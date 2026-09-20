@@ -33,6 +33,15 @@ class HomepageContentCatalog
                     'site_name' => 'Meet AJ',
                     'profile_image' => '/assets/img/my-profile-img.jpg',
                     'logo_image' => '/assets/img/logo.png',
+                    'navigation' => [
+                        ['key' => 'hero', 'href' => '#hero', 'icon' => 'bi bi-house', 'label_en' => 'Home', 'label_fa' => 'صفحه اصلی'],
+                        ['key' => 'about', 'href' => '#about', 'icon' => 'bi bi-person', 'label_en' => 'About', 'label_fa' => 'درباره من'],
+                        ['key' => 'resume', 'href' => '#resume', 'icon' => 'bi bi-file-earmark-text', 'label_en' => 'Resume', 'label_fa' => 'رزومه'],
+                        ['key' => 'services', 'href' => '#services', 'icon' => 'bi bi-hdd-stack', 'label_en' => 'Services', 'label_fa' => 'خدمات'],
+                        ['key' => 'articles', 'href' => '#portfolio', 'icon' => 'bi bi-images', 'label_en' => 'Articles', 'label_fa' => 'مقالات'],
+                        ['key' => 'testimonials', 'href' => '#testimonials', 'icon' => 'bi bi-menu-button', 'label_en' => 'Testimonials', 'label_fa' => 'نظرات'],
+                        ['key' => 'contact', 'href' => '#contact', 'icon' => 'bi bi-envelope', 'label_en' => 'Contact', 'label_fa' => 'تماس با من'],
+                    ],
                     'socials' => [
                         ['key' => 'linkedin', 'icon' => 'bi bi-linkedin', 'label' => 'LinkedIn', 'url' => 'https://www.linkedin.com/in/amirhussein-jalalian-050702188/'],
                         ['key' => 'github', 'icon' => 'bi bi-github', 'label' => 'GitHub', 'url' => 'https://github.com/jalalianamirhossein-ui'],
