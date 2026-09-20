@@ -35,7 +35,7 @@
     <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
     <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1002" rel="stylesheet" />
-    <link href="/assets/css/articles.css?v=1100" rel="stylesheet" />
+    <link href="/assets/css/articles.css?v=1101" rel="stylesheet" />
     <link href="/assets/css/lang-toggle.css?v=1403" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1405" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
