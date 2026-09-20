@@ -146,6 +146,34 @@ class Article extends Model
         return max(1, (int) ceil($words / 200));
     }
 
+    /**
+     * Return article markup in a renderable form.
+     *
+     * Rich editors can store pasted full HTML documents as escaped entities
+     * (`&lt;section&gt;`). Decode only when structural article markup is
+     * clearly present, leaving ordinary escaped text untouched.
+     */
+    public static function normalizeContentMarkup(string $content): string
+    {
+        $content = trim($content);
+        $hasEncodedMarkup = preg_match('~&lt;(?:!--|/?(?:article|section|div|h[1-6]|p|ul|ol|table)\b)~i', $content) === 1;
+
+        if (! $hasEncodedMarkup) {
+            return $content;
+        }
+
+        $decoded = html_entity_decode($content, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        return preg_match('~<(?:article|section|div|h[1-6]|p|ul|ol|table)\b~i', $decoded) === 1
+            ? $decoded
+            : $content;
+    }
+
+    public function displayContent(): string
+    {
+        return self::normalizeContentMarkup((string) $this->content);
+    }
+
     public function scopePublished(Builder $query): Builder
     {
         return $query->whereIn('language', ['en', 'fa'])

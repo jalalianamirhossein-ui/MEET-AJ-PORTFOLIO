@@ -56,7 +56,9 @@ class ArticleResource extends Resource
     {
         $content = $schema->getRecord()?->presentation
             ? Textarea::make('content')->label('Article HTML')->rows(22)->helperText('Keep existing classes, heading ids, code blocks, and data-en / data-fa attributes. Preview the public URL after saving.')
-            : RichEditor::make('content')->toolbarButtons(['bold', 'italic', 'h2', 'h3', 'blockquote', 'bulletList', 'orderedList', 'link', 'codeBlock', 'undo', 'redo']);
+            : RichEditor::make('content')
+                ->formatStateUsing(fn ($state): string => Article::normalizeContentMarkup((string) $state))
+                ->toolbarButtons(['bold', 'italic', 'h2', 'h3', 'blockquote', 'bulletList', 'orderedList', 'link', 'codeBlock', 'undo', 'redo']);
 
         return $schema->components([
             Section::make('Identity')

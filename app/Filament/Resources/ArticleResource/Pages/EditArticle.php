@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ArticleResource\Pages;
 
+use App\Models\Article;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
@@ -27,5 +28,13 @@ class EditArticle extends EditRecord
     protected function getSavedNotificationTitle(): ?string
     {
         return 'Article saved';
+    }
+
+    /** @param array<string, mixed> $data */
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $data['content'] = Article::normalizeContentMarkup((string) ($data['content'] ?? ''));
+
+        return $data;
     }
 }

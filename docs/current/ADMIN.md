@@ -63,7 +63,7 @@ Active item: light crimson `#fff1f2` fill, 3px `#be123c` inset bar, crimson labe
 
 CRUD on `articles` for admins and editors (`ArticlePolicy` → `User::canManageContent()`).
 
-Simple create flow: enter the title, language, category/tags, optional image and body. Slug, excerpt, meta title and meta description are generated automatically when left empty; SEO and Publishing are collapsed for advanced edits. Imported articles with legacy presentation still open in the raw HTML editor so their existing structure is preserved. Publishing uses `sort_order` (lower numbers displayed first), `status`, and `published_at` in `config('cms.display_timezone')`; German rows must stay draft. The article table defaults to this same `sort_order`.
+Simple create flow: enter the title, language, category/tags, optional image and body. Slug, excerpt, meta title and meta description are generated automatically when left empty; SEO and Publishing are collapsed for advanced edits. Imported articles with legacy presentation still open in the raw HTML editor so their existing structure is preserved. Pasted escaped article markup is normalized before saving and rendering, so `&lt;section&gt;` does not appear as visible text. Publishing uses `sort_order` (lower numbers displayed first), `status`, and `published_at` in `config('cms.display_timezone')`; German rows must stay draft. The article table defaults to this same `sort_order`.
 
 Table: searchable and sortable title, gray language badge, **category colour chip** (dot + tinted pill + readable name from the public topic palette), gray tag badges, status, `published_at`, toggleable `updated_at`, plus filters and a default sort. Preview/Edit are gray; Delete stays danger. Changing a slug writes a new `article_redirects` row.
 

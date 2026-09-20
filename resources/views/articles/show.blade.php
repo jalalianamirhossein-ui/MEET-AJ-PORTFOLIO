@@ -127,7 +127,7 @@
             @endif
             <div class="article-reading">
               <article class="article-body">
-                {!! $article->content !!}
+                {!! $article->displayContent() !!}
               </article>
               @include('articles.partials.share')
               @include('articles.partials.related')

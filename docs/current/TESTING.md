@@ -6,7 +6,7 @@
 
 ## Latest run — 2026-09-20
 
-After the homepage CMS, restored resume timeline, simplified article creation, dynamic testimonials and dynamic site chrome changes: **66 tests, 1098 assertions, 0 failures, 1 skipped**. The skipped test is `MysqlSchemaTest`, which only runs with an explicit MySQL connection. The homepage CMS is covered by `HomepageContentTest`; content comparison remains **Failures: 0**.
+After the homepage CMS, restored resume timeline, simplified article creation, dynamic testimonials, escaped article-markup repair and dynamic site chrome changes: **67 tests, 1102 assertions, 0 failures, 1 skipped**. The skipped test is `MysqlSchemaTest`, which only runs with an explicit MySQL connection. The homepage CMS is covered by `HomepageContentTest`; content comparison remains **Failures: 0**.
 
 ## Previous recorded run — 2026-09-18
 

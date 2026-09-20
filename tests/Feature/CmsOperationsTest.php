@@ -158,6 +158,24 @@ class CmsOperationsTest extends TestCase
         $this->assertSame($article->excerpt, $article->meta_description);
     }
 
+    public function test_escaped_pasted_article_markup_is_rendered_as_html(): void
+    {
+        Article::create([
+            'title' => 'Escaped Markup QA',
+            'slug' => 'escaped-markup-qa',
+            'language' => 'en',
+            'content' => '&lt;!-- Introduction --&gt;&lt;section id="introduction"&gt;&lt;h2&gt;Introduction&lt;/h2&gt;&lt;p&gt;Readable article text.&lt;/p&gt;&lt;/section&gt;',
+            'status' => 'published',
+            'published_at' => now()->subMinute(),
+        ]);
+
+        $this->get('/articles/escaped-markup-qa')
+            ->assertOk()
+            ->assertSee('<section id="introduction">', false)
+            ->assertSee('Introduction', false)
+            ->assertDontSee('&lt;section', false);
+    }
+
     public function test_testimonial_can_be_added_from_the_admin_and_reaches_homepage(): void
     {
         $admin = User::create(['name' => 'Testimonial Admin', 'email' => 'testimonial-admin@example.test', 'password' => 'password12chars']);

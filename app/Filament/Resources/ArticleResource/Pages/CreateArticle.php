@@ -26,6 +26,7 @@ class CreateArticle extends CreateRecord
             $slug .= '-'.Str::lower(Str::random(5));
         }
         $data['slug'] = $slug;
+        $data['content'] = Article::normalizeContentMarkup((string) ($data['content'] ?? ''));
 
         $plainContent = html_entity_decode(
             (string) preg_replace('/\s+/', ' ', strip_tags((string) preg_replace('/<[^>]+>/', ' ', (string) ($data['content'] ?? '')))),
