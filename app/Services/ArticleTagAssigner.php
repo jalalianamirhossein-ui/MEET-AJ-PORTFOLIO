@@ -26,6 +26,7 @@ class ArticleTagAssigner
         'avaya' => 'AVAYA',
         'qnap' => 'QNAP',
         'dell' => 'DELL',
+        'other' => 'Other',
         'linux' => 'Linux',
         'ubuntu' => 'Ubuntu',
         'mikrotik' => 'MikroTik',
@@ -91,17 +92,17 @@ class ArticleTagAssigner
             'install-mikrotik-chr-vmware-workstation' => ['mikrotik', 'vmware'],
             'install-vmware-esxi-vmware-workstation-vmcisr' => ['esxi', 'vmware'],
             'install-dfs-server-windows-server' => ['windows', 'microsoft'],
-            'http-vs-https-ssl-certificate-impact' => ['microsoft'],
+            'http-vs-https-ssl-certificate-impact' => ['other'],
             'mikrotik-block-port-scanners' => ['mikrotik'],
             'mikrotik-block-website' => ['mikrotik'],
             'downgrade-mikrotik-routeros-firmware-safely' => ['mikrotik'],
             'windows-cmd-common-network-commands' => ['windows', 'microsoft'],
             'windows-password-reset-secure-access-recovery' => ['windows', 'microsoft'],
             'ubuntu-date-time-settings' => ['ubuntu', 'linux'],
-            'imap-vs-pop3-email-protocol-comparison' => ['microsoft'],
+            'imap-vs-pop3-email-protocol-comparison' => ['other'],
             'windows-hardware-info-cmd-vs-dxdiag' => ['windows', 'microsoft'],
             'vmware-esxi-8-installation-basic-configuration' => ['esxi', 'vmware'],
-            'creating-a-bootable-usb' => ['windows', 'linux'],
+            'creating-a-bootable-usb' => ['other'],
         ];
         if (isset($specific[$article->slug])) {
             return $specific[$article->slug];
