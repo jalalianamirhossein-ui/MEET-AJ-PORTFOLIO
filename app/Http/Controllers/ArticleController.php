@@ -41,7 +41,7 @@ class ArticleController extends Controller
                 ->with(['category', 'tags'])
                 ->search($q)
                 ->withTag($tagSlug)
-                ->orderByDesc('published_at')
+                ->orderBy('sort_order')
                 ->orderBy('id')
                 ->paginate(9)
                 ->withQueryString();

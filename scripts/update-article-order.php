@@ -58,9 +58,13 @@ DB::transaction(function () use ($slugs): void {
     $timestamps[] = mt_rand(strtotime('today 00:00:00'), $end);
 
     foreach ($slugs as $order => $slug) {
+        $date = date('Y-m-d', $timestamps[$order]);
+        $hour = mt_rand(9, 21);
+        $minute = mt_rand(5, 55);
+        $second = mt_rand(0, 59);
         DB::table('articles')->where('slug', $slug)->update([
             'sort_order' => $order,
-            'published_at' => date('Y-m-d H:i:s', $timestamps[$order]),
+            'published_at' => sprintf('%s %02d:%02d:%02d', $date, $hour, $minute, $second),
         ]);
     }
 
