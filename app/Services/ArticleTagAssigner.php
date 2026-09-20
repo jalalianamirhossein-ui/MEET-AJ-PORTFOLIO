@@ -15,32 +15,37 @@ class ArticleTagAssigner
      * @var array<string, string>
      */
     public const CATALOG = [
-        'linux' => 'Linux',
         'microsoft' => 'Microsoft',
+        'windows' => 'Windows',
+        'cisco' => 'Cisco',
+        'fortinet' => 'Fortinet',
+        'supermicro' => 'Supermicro',
+        'hpe' => 'HPE',
+        'ubiquiti' => 'Ubiquiti',
+        'juniper' => 'Juniper',
+        'avaya' => 'AVAYA',
+        'qnap' => 'QNAP',
+        'dell' => 'DELL',
+        'linux' => 'Linux',
+        'ubuntu' => 'Ubuntu',
         'mikrotik' => 'MikroTik',
         'vmware' => 'VMware',
-        'windows-server' => 'Windows Server',
-        'networking' => 'Networking',
-        'security' => 'Security',
-        'devops' => 'DevOps',
-        'ubuntu' => 'Ubuntu',
+        'esxi' => 'VMware ESXi',
+        'vsphere' => 'VMware vSphere',
+        'nginx' => 'NGINX',
         'netbox' => 'NetBox',
-        'network-backup' => 'Network Backup',
-        'nginx' => 'Nginx',
-        'sql-server' => 'SQL Server',
-        'virtualization' => 'Virtualization',
-        'ssh' => 'SSH',
-        'netplan' => 'Netplan',
-        'windows' => 'Windows',
-        'https' => 'HTTPS',
-        'backup' => 'Backup',
-        'email' => 'Email',
-        'hardware' => 'Hardware',
-        'usb' => 'USB',
+        'oxidized' => 'Oxidized',
+        'sql-server' => 'Microsoft SQL Server',
+        'openvpn' => 'OpenVPN',
+        'ssh' => 'OpenSSH',
     ];
 
     public function syncCatalog(): void
     {
+        Tag::query()->whereNotIn('slug', array_keys(self::CATALOG))->get()->each(function (Tag $tag): void {
+            $tag->articles()->detach();
+            $tag->delete();
+        });
         foreach (self::CATALOG as $slug => $name) {
             Tag::query()->firstOrCreate(['slug' => $slug], ['name' => $name]);
         }
@@ -72,31 +77,31 @@ class ArticleTagAssigner
     public function slugsFor(Article $article): array
     {
         $specific = [
-            'netbox-installation-setup-ubuntu' => ['netbox', 'ubuntu', 'networking'],
-            'oxidized-network-device-configuration-backup' => ['network-backup', 'backup', 'ubuntu', 'networking'],
-            'nginx-installation-configuration-ubuntu' => ['nginx', 'ubuntu', 'devops', 'linux'],
-            'linux-security-account-access-management' => ['linux', 'security'],
-            'mikrotik-unequal-dual-wan-load-balancing-ecmp' => ['mikrotik', 'networking'],
-            'sql-server-automatic-backup-job' => ['sql-server', 'microsoft', 'backup'],
-            'vsphere-standard-switch-vs-distributed-switch' => ['vmware', 'virtualization', 'networking'],
-            'mikrotik-openvpn-setup-v7' => ['mikrotik', 'networking', 'security'],
-            'enable-ssh-linux-complete-guide' => ['ssh', 'linux', 'security'],
-            'set-static-ip-ubuntu-server-netplan' => ['ubuntu', 'netplan', 'linux', 'networking'],
+            'netbox-installation-setup-ubuntu' => ['netbox', 'ubuntu', 'linux'],
+            'oxidized-network-device-configuration-backup' => ['oxidized', 'ubuntu', 'linux'],
+            'nginx-installation-configuration-ubuntu' => ['nginx', 'ubuntu', 'linux'],
+            'linux-security-account-access-management' => ['linux'],
+            'mikrotik-unequal-dual-wan-load-balancing-ecmp' => ['mikrotik'],
+            'sql-server-automatic-backup-job' => ['sql-server', 'microsoft'],
+            'vsphere-standard-switch-vs-distributed-switch' => ['vsphere', 'vmware'],
+            'mikrotik-openvpn-setup-v7' => ['mikrotik', 'openvpn'],
+            'enable-ssh-linux-complete-guide' => ['ssh', 'linux'],
+            'set-static-ip-ubuntu-server-netplan' => ['ubuntu', 'linux'],
             'linux-cli-common-commands' => ['linux'],
-            'install-mikrotik-chr-vmware-workstation' => ['mikrotik', 'vmware', 'virtualization'],
-            'install-vmware-esxi-vmware-workstation-vmcisr' => ['vmware', 'virtualization'],
-            'install-dfs-server-windows-server' => ['windows-server', 'microsoft', 'backup'],
-            'http-vs-https-ssl-certificate-impact' => ['https', 'security'],
-            'mikrotik-block-port-scanners' => ['mikrotik', 'security', 'networking'],
-            'mikrotik-block-website' => ['mikrotik', 'security', 'networking'],
-            'downgrade-mikrotik-routeros-firmware-safely' => ['mikrotik', 'security'],
-            'windows-cmd-common-network-commands' => ['windows', 'microsoft', 'networking'],
-            'windows-password-reset-secure-access-recovery' => ['windows', 'microsoft', 'security'],
+            'install-mikrotik-chr-vmware-workstation' => ['mikrotik', 'vmware'],
+            'install-vmware-esxi-vmware-workstation-vmcisr' => ['esxi', 'vmware'],
+            'install-dfs-server-windows-server' => ['windows', 'microsoft'],
+            'http-vs-https-ssl-certificate-impact' => ['microsoft'],
+            'mikrotik-block-port-scanners' => ['mikrotik'],
+            'mikrotik-block-website' => ['mikrotik'],
+            'downgrade-mikrotik-routeros-firmware-safely' => ['mikrotik'],
+            'windows-cmd-common-network-commands' => ['windows', 'microsoft'],
+            'windows-password-reset-secure-access-recovery' => ['windows', 'microsoft'],
             'ubuntu-date-time-settings' => ['ubuntu', 'linux'],
-            'imap-vs-pop3-email-protocol-comparison' => ['email', 'security'],
-            'windows-hardware-info-cmd-vs-dxdiag' => ['windows', 'microsoft', 'hardware'],
-            'vmware-esxi-8-installation-basic-configuration' => ['vmware', 'virtualization'],
-            'creating-a-bootable-usb' => ['usb', 'windows', 'linux'],
+            'imap-vs-pop3-email-protocol-comparison' => ['microsoft'],
+            'windows-hardware-info-cmd-vs-dxdiag' => ['windows', 'microsoft'],
+            'vmware-esxi-8-installation-basic-configuration' => ['esxi', 'vmware'],
+            'creating-a-bootable-usb' => ['windows', 'linux'],
         ];
         if (isset($specific[$article->slug])) {
             return $specific[$article->slug];

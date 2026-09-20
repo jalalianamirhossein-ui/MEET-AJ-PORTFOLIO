@@ -48,13 +48,15 @@
                 @if ($tagSlug === '') aria-current="page" @endif
               ><span class="article-chip-label" data-en="All tags" data-fa="همه برچسب‌ها">All tags</span></a>
               @foreach ($tags as $tag)
+                @if ($tag->isBrandFilter())
                 <a
                   class="article-tag article-chip{{ $tagSlug === $tag->slug ? ' is-active' : '' }}"
-                  data-topic="{{ $tagTopics[$tag->slug] ?? 'other' }}"
-                  style="--topic: {{ \App\Models\Category::accentColorForSlug($tagTopics[$tag->slug] ?? 'others') }};"
+                  data-topic="{{ $tag->slug }}"
+                  style="--topic: {{ $tag->accentColor() }};"
                   href="{{ url('/articles') }}?tag={{ urlencode($tag->slug) }}"
                   @if ($tagSlug === $tag->slug) aria-current="page" @endif
                 ><span class="article-chip-label">{{ $tag->displayName() }}</span></a>
+                @endif
               @endforeach
               </div>
             </nav>
