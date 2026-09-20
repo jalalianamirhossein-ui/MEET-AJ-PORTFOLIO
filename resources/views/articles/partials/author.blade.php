@@ -3,7 +3,7 @@
     <div class="article-author-card">
       <img
         class="article-author-avatar"
-        src="{{ asset('assets/img/my-profile-img.jpg') }}"
+        src="{{ asset('assets/img/my-profile-img-2.jpg') }}"
         alt="AmirHossein Jalalian"
         loading="lazy"
         width="120"
