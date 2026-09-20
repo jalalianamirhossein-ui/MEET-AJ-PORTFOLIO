@@ -1,8 +1,8 @@
 # Meet AJ — documentation
 
-Navigation map for every document in this repository. Last updated **2026-09-20** (homepage CMS sections, dynamic navigation/footer, and full test suite sync).
+Navigation map for every document in this repository. Last updated **2026-09-21** after the full structural, documentation and test audit.
 
-**Start here:** [current/PROJECT-STATUS.md](current/PROJECT-STATUS.md) — the single authoritative statement of what exists today.
+**Start here:** [current/README.md](current/README.md), then [current/PROJECT-STATUS.md](current/PROJECT-STATUS.md) — the single authoritative statement of what exists today.
 
 Status vocabulary used throughout: **PASS**, **FAIL**, **BLOCKED**, **NOT TESTED**, plus **UNKNOWN / NOT VERIFIED** where code cannot prove a claim.
 
@@ -19,7 +19,7 @@ Describes the application as it is now. When one of these disagrees with `PROJEC
 | [current/DATABASE.md](current/DATABASE.md) | Every table, column, index, foreign key, delete behaviour |
 | [current/ADMIN.md](current/ADMIN.md) | Filament panel, resources, authorization |
 | [current/FEATURES.md](current/FEATURES.md) | Public and CMS feature inventory |
-| [current/ARTICLES.md](current/ARTICLES.md) | 24 articles, import, slugs, redirects, search, tags |
+| [current/ARTICLES.md](current/ARTICLES.md) | 25 articles, import, slugs, redirects, search, tags |
 | [current/SERVICES.md](current/SERVICES.md) | Six services, pricing, publication, requests |
 | [current/REQUESTS.md](current/REQUESTS.md) | Contact and quote pipeline, statuses, internal notes |
 | [current/MULTILINGUAL.md](current/MULTILINGUAL.md) | EN / FA / draft-only DE, RTL, hreflang status |
@@ -46,7 +46,7 @@ Evidence, not intentions. Each file names its method and marks BLOCKED work hone
 | [qa/RESPONSIVE-QA.md](qa/RESPONSIVE-QA.md) | Viewport overflow measurements |
 | [qa/ACCESSIBILITY-QA.md](qa/ACCESSIBILITY-QA.md) | Manual a11y audit, WARN items, untested areas |
 | [qa/ADMIN-QA.md](qa/ADMIN-QA.md) | Filament QA, including what is blocked |
-| [qa/CONTENT-INTEGRITY.md](qa/CONTENT-INTEGRITY.md) | `site:compare-content` result across 24 articles |
+| [qa/CONTENT-INTEGRITY.md](qa/CONTENT-INTEGRITY.md) | `site:compare-content` result across 25 articles |
 | [qa/DESIGN-AUDIT.md](qa/DESIGN-AUDIT.md) | Full-site design audit findings |
 | [qa/DOCUMENTATION-QA.md](qa/DOCUMENTATION-QA.md) | Doc reorganisation (2026-09-17) + evening sync to match live app (2026-09-18) |
 

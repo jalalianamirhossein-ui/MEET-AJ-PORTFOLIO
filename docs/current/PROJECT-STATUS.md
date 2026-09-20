@@ -1,10 +1,10 @@
 # Project status — Meet AJ
 
-**2026-09-20 CMS update:** Homepage identity, navigation, hero, About, stats, skills, resume, contact and footer content are database-backed through `homepage_contents`. See [the homepage CMS guide](HOMEPAGE-CMS.md) and [the current directory map](PROJECT-STRUCTURE.md).
+**2026-09-21 CMS update:** Homepage identity, navigation, hero, About, stats, skills, resume, contact and footer content are database-backed through `homepage_contents`. See [the homepage CMS guide](HOMEPAGE-CMS.md) and [the current directory map](PROJECT-STRUCTURE.md).
 
 **Authority:** SINGLE authoritative current-state document. Everything else in `docs/current/` expands one section of this file.
 **Date verified:** 2026-09-21
-**Local environment recheck:** [2026-09-20 repair and verification](../qa/LOCAL-ENVIRONMENT-REPAIR.md). Counts below describe this checkout, not a production server.
+**Local environment recheck:** [2026-09-21 full audit](../qa/FULL-AUDIT-2026-09-21.md). Counts below describe this checkout, not a production server.
 **Verification method:** `php artisan migrate:status`, `php artisan optimize:clear`, `php artisan route:list`, full `vendor/bin/phpunit` (**67 tests / 1127 assertions / 1 skipped / 0 failures**), targeted `HomepageContentTest`, `php artisan site:compare-content` (Failures: 0), and reading `app/`, `routes/`, `resources/`, `docs/`, and `tests/`.
 **Runtime used:** `.runtime/php84/php.exe` (PHP is not on PATH on this workstation).
 
@@ -25,7 +25,7 @@ Where a statement cannot be proven from code or a command, it is marked **UNKNOW
 
 There is no semantic application version in the repository. Do not invent one. The service worker constant `meet-aj-v2.0.0-cms-3` is a **cache name**, not an application version.
 
-## 2. Technology versions (verified 2026-09-20)
+## 2. Technology versions (verified 2026-09-21)
 
 | Component | Version | Source |
 |-----------|---------|--------|
@@ -43,9 +43,9 @@ Local environment reported by `php artisan about`: environment `local`, debug **
 
 Engine in use locally: **SQLite** at `.runtime/cms.sqlite`, selected by the local `DB_DATABASE`. Intended production engine: **MySQL / MariaDB** (not provisioned).
 
-Seventeen application migrations, all **Ran** (batches 1–6), plus Laravel's `migrations` ledger:
+Seventeen application migrations, all **Ran** (batches 1–7), plus Laravel's `migrations` ledger:
 
-| Table | Rows (2026-09-20) |
+| Table | Rows (2026-09-21) |
 |-------|-------------------|
 | `users` | 0 (create a personal account with `php artisan cms:create-user`) |
 | `password_reset_tokens` | 0 |
@@ -63,7 +63,7 @@ Seventeen application migrations, all **Ran** (batches 1–6), plus Laravel's `m
 
 There is **no** `pages` table and **no** `contact_requests` table. Full column, index, foreign-key and delete-behaviour detail: [DATABASE.md](DATABASE.md).
 
-**`users` currently holds 0 rows in this checkout.** The login page was verified on 2026-09-20. Authenticated browser results from 2026-09-18 are historical evidence; current role/CRUD coverage is provided by the isolated PHPUnit suite.
+**`users` currently holds 0 rows in this checkout.** The login page was verified during the 2026-09-21 audit. Authenticated browser results from 2026-09-18 are historical evidence; current role/CRUD coverage is provided by the isolated PHPUnit suite.
 
 ## 4. Architecture
 
@@ -91,7 +91,7 @@ Routes include the homepage, article library/detail/legacy redirects, two form e
 | Contact endpoints `/forms/get-csrf-token.php` and `/forms/contact.php` | PASS (local) |
 | Production rendering on meetaj.ir | NOT TESTED |
 
-Feature-by-feature description: [FEATURES.md](FEATURES.md). Asset cache versions currently in the Blade heads: `visual-upgrade.css?v=1711`, `site-modules.css?v=1840`, `lang-toggle.css?v=1403`, `main.js?v=1412`, `i18n.js?v=1403`.
+Feature-by-feature description: [FEATURES.md](FEATURES.md). Asset cache versions currently in the Blade heads: `visual-upgrade.css?v=1713`, `site-modules.css?v=1853`, `lang-toggle.css?v=1403`, `main.js?v=1414`, `i18n.js?v=1403`.
 
 ## 6. CMS / Admin
 
@@ -142,7 +142,7 @@ CSRF (including the legacy `csrf_token` field contract), honeypot, two-layer rat
 
 ## 14. Testing
 
-| Command | Result (2026-09-20) | Status |
+| Command | Result (2026-09-21) | Status |
 |---------|---------------------|--------|
 | `vendor/bin/phpunit` | **67 tests, 1127 assertions, 1 skipped, 0 failures** | PASS |
 | `php artisan site:compare-content` | **Failures: 0** | PASS |

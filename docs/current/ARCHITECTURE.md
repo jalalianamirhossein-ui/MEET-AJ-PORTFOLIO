@@ -1,7 +1,7 @@
 # Architecture — Meet AJ
 
 **Authority:** AUTHORITATIVE description of the running application.
-**Verified:** 2026-09-20 against `app/`, `routes/web.php`, `config/`, `resources/views/`, `public/`, and `php artisan route:list` after `optimize:clear`.
+**Verified:** 2026-09-21 against `app/`, `routes/web.php`, `config/`, `resources/views/`, `public/`, and `php artisan route:list` after `optimize:clear`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md). Decision record: [../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md](../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md).
 
 ## Request flow

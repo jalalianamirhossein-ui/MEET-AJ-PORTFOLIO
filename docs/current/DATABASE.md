@@ -1,7 +1,7 @@
 # Database — Meet AJ
 
 **Authority:** AUTHORITATIVE schema document.
-**Verified:** 2026-09-20 by reading the live SQLite schema (`Schema::getTables()`, `getColumns()`, `getIndexes()`, `getForeignKeys()`) plus the migration files in `database/migrations/`.
+**Verified:** 2026-09-21 by reading the live SQLite schema (`Schema::getTables()`, `getColumns()`, `getIndexes()`, `getForeignKeys()`) plus the migration files in `database/migrations/`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
 Column types below are the SQLite types actually reported by the database. The migrations declare portable Laravel types (`string`, `text`, `decimal`, `json`), so MySQL/MariaDB will report `varchar`, `longtext`, `decimal(12,2)` and `json` for the same columns.
@@ -36,12 +36,15 @@ Column types below are the SQLite types actually reported by the database. The m
 | `2026_09_20_000012_create_testimonials_table` | 2 | Ran |
 | `2026_09_20_000013_create_homepage_contents_table` | 3 | Ran |
 | `2026_09_20_000014_restore_resume_content` | 4 | Ran |
+| `2026_09_21_000015_refresh_testimonial_copy` | 5 | Ran |
+| `2026_09_21_000016_refresh_testimonials_full_set` | 6 | Ran |
+| `2026_09_21_000017_repair_missing_article_redirects` | 7 | Ran |
 
 The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the migration ledger. Seventeen application migrations exist through `2026_09_21_000017_repair_missing_article_redirects`.
 
 ## Table overview
 
-| Table | Purpose | Rows (2026-09-20) |
+| Table | Purpose | Rows (2026-09-21) |
 |-------|---------|-------------------|
 | `users` | Filament login accounts | 0 |
 | `password_reset_tokens` | Laravel password reset store | 0 |

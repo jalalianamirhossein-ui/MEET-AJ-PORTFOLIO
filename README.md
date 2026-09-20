@@ -2,11 +2,11 @@
 
 Personal portfolio and technical article site for **AmirHossein Jalalian** (infrastructure, networking, virtualization and DevOps), running as a Laravel application with a Filament admin panel.
 
-Application overview and directory layout verified on **2026-09-20**. Single source of truth for project state: [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).
+Application overview and directory layout verified on **2026-09-21**. Single source of truth for project state: [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).
 
 ## Overview
 
-The site was originally a static English/Persian progressive web app: one homepage, six service quote pages, 24 HTML articles, PHP contact endpoints, a sitemap and a service worker. It now runs as a **Laravel 13 + Blade + Filament 5** application:
+The site was originally a static English/Persian progressive web app: one homepage, legacy service sources, 25 HTML articles, PHP contact endpoints, a sitemap and a service worker. It now runs as a **Laravel 13 + Blade + Filament 5** application:
 
 - the public site renders from Blade views rebuilt from the original HTML, so URLs, CSS hooks and JavaScript contracts are unchanged;
 - homepage sections, articles, services and testimonials live in the database and are editable in the admin panel;

@@ -1,6 +1,6 @@
 # Content integrity — Meet AJ
 
-**Date:** 2026-09-18 (re-run; still Failures: 0)
+**Date:** 2026-09-21 (re-run; still Failures: 0)
 **Command:** `php artisan site:compare-content` (`App\Console\Commands\CompareLegacyContent`)
 **Result:** **Failures: 0**
 **Related:** [../current/ARTICLES.md](../current/ARTICLES.md) · [QA-MATRIX.md](QA-MATRIX.md)
@@ -16,7 +16,7 @@ For every imported article it renders the Laravel page and compares it against t
 
 ## Result
 
-All **23** articles reported `PASS` with the note “complete body, bilingual attributes, headings, seo”:
+All **25** articles reported `PASS` with the note “complete body, bilingual attributes, headings, seo”:
 
 `creating-a-bootable-usb`, `downgrade-mikrotik-routeros-firmware-safely`, `enable-ssh-linux-complete-guide`, `http-vs-https-ssl-certificate-impact`, `imap-vs-pop3-email-protocol-comparison`, `install-dfs-server-windows-server`, `install-mikrotik-chr-vmware-workstation`, `install-vmware-esxi-vmware-workstation-vmcisr`, `linux-cli-common-commands`, `linux-security-account-access-management`, `mikrotik-block-port-scanners`, `mikrotik-block-website`, `mikrotik-openvpn-setup-v7`, `mikrotik-unequal-dual-wan-load-balancing-ecmp`, `nginx-installation-configuration-ubuntu`, `set-static-ip-ubuntu-server-netplan`, `sql-server-automatic-backup-job`, `ubuntu-date-time-settings`, `vmware-esxi-8-installation-basic-configuration`, `vsphere-standard-switch-vs-distributed-switch`, `windows-cmd-common-network-commands`, `windows-hardware-info-cmd-vs-dxdiag`, `windows-password-reset-secure-access-recovery`.
 
@@ -30,7 +30,7 @@ The importer reads `articles/*.html` and `services/*.html` and never writes back
 
 | Item | Status |
 |------|--------|
-| 23 articles compared against source HTML | PASS |
+| 25 articles compared against source HTML | PASS |
 | Homepage and service pages | Covered by the same command run in the master audit pass on 2026-09-17 |
 | Persian rendering correctness (meaning, not markup) | NOT TESTED — the command checks that `data-fa` attributes survive, not translation quality |
 | Image files byte-compared | NOT TESTED |

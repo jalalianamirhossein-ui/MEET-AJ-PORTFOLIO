@@ -1,7 +1,7 @@
 # Admin panel — Meet AJ
 
 **Authority:** AUTHORITATIVE Filament description.
-**Verified:** 2026-09-20 against `app/Filament/**`, `app/Policies/**`, `app/Providers/Filament/AdminPanelProvider.php`, `resources/css/filament-admin.css`, `public/css/app/meet-aj-admin.css`, `php artisan route:list` (after `optimize:clear`), PHPUnit (`HomepageContentTest` plus the full feature suite), and the current resource definitions.
+**Verified:** 2026-09-21 against `app/Filament/**`, `app/Policies/**`, `app/Providers/Filament/AdminPanelProvider.php`, `resources/css/filament-admin.css`, `public/css/app/meet-aj-admin.css`, `php artisan route:list` (after `optimize:clear`), PHPUnit (`HomepageContentTest` plus the full feature suite), and the current resource definitions.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
 Panel: **Filament v5.8.2** on **Livewire v4.4.5**, mounted at `/admin`, brand name “Meet AJ CMS”, **White + Red** identity (canvas `#ffffff`, primary `#be123c`, gray palette Slate, danger `#7f1d1d`), collapsible sidebar, collapsible navigation groups, unsaved-changes alerts, and global search enabled.

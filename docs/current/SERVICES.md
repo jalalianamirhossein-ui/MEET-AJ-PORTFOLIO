@@ -6,7 +6,7 @@
 
 ## Current catalog
 
-The 2026-09-20 local recheck found **13 published English service records, 12 visible in the homepage catalog**. The six legacy records below retain fixed AED prices. Technical Consulting has `show_in_catalog = false`; the other five and seven custom-quote records are visible. The custom-quote slugs are `mikrotik-routing-multi-wan`, `hp-enterprise-server`, `sql-server-high-availability`, `jira-implementation`, `voip-infrastructure`, `cctv-surveillance`, and `network-security`.
+The 2026-09-21 local recheck found **13 published English service records, 12 visible in the homepage catalog**. The six legacy records below retain fixed AED prices. Technical Consulting has `show_in_catalog = false`; the other five and seven custom-quote records are visible. The custom-quote slugs are `mikrotik-routing-multi-wan`, `hp-enterprise-server`, `sql-server-high-availability`, `jira-implementation`, `voip-infrastructure`, `cctv-surveillance`, and `network-security`.
 
 | Legacy # | Slug | Title | Price |
 |---|------|-------|-------|

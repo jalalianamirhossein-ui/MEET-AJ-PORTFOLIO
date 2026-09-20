@@ -1,6 +1,6 @@
 # Project structure — Meet AJ
 
-**Verified:** 2026-09-20. This is the current directory map. Earlier layouts in `docs/historical/`, `docs/archive/`, and `docs/phases/` describe their original point in time.
+**Verified:** 2026-09-21. This is the current directory map. Earlier layouts in `docs/historical/`, `docs/archive/`, and `docs/phases/` describe their original point in time.
 
 ## Repository layout
 
@@ -33,8 +33,8 @@ MEET AJ PORTFOLIO/
 │   ├── downloads/             Public downloadable documents
 │   ├── legacy/                Static content used by importers and article view generation
 │   │   ├── index.html         Homepage and article-library generation source
-│   │   ├── articles/          24 original articles
-│   │   ├── services/          Six original service sources
+│   │   ├── articles/          25 original article sources
+│   │   ├── services/          Legacy service sources
 │   │   ├── forms/             Former PHP endpoints, reference only
 │   │   ├── views/services/    Six retired Blade templates, reference only
 │   │   └── robots.txt, sitemap.xml, sw.js  Former static versions
@@ -94,3 +94,15 @@ php scripts/verify-originals.php
 ```
 
 The originals verifier reads `docs/qa/baseline-files.json`, maps historical paths to the current layout, and preserves original SHA-256 values. That historical baseline already differs from current content; its nonzero exit is not a standalone regression test for this reorganization. Current content parity is checked with `php artisan site:compare-content`.
+
+## Documentation ownership
+
+| Directory | Ownership |
+|---|---|
+| `docs/current/` | Maintained current-state guides; `PROJECT-STATUS.md` is authoritative |
+| `docs/qa/` | Dated or living verification evidence |
+| `docs/decisions/ADR/` | Decisions that remain in force |
+| `docs/design-system/` | Design tokens and page-level visual references |
+| `docs/phases/` | Chronological implementation log |
+| `docs/historical/` | Superseded analysis and migration records |
+| `docs/archive/` | Frozen dated snapshots; never treat as current |

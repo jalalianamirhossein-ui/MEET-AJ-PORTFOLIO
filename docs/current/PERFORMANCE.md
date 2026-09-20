@@ -14,8 +14,8 @@ Published asset sizes in `public/assets/` (measured on disk 2026-09-18 after `si
 |------|------|-----------------|
 | `css/main.css` | 195.1 KB | `?v=1002` |
 | `css/visual-upgrade.css` | 116.5 KB | `?v=1711` |
-| `css/site-modules.css` | 75.4 KB | `?v=1840` (last overlay) |
-| `js/main.js` | 49.1 KB | `?v=1412` |
+| `css/site-modules.css` | 75.4 KB | `?v=1853` (last overlay) |
+| `js/main.js` | 49.1 KB | `?v=1414` |
 | `css/articles.css` | 33.5 KB | article detail |
 | `css/rtl.css` | 20.1 KB | `?v=1405` |
 | `js/i18n.js` | 9.1 KB | `?v=1403` |
