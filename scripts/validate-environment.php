@@ -5,7 +5,11 @@ foreach (['ctype', 'curl', 'dom', 'fileinfo', 'filter', 'hash', 'intl', 'mbstrin
     $checks['extension_'.$extension] = extension_loaded($extension);
 }
 foreach (['storage/app', 'storage/framework/cache/data', 'storage/framework/sessions', 'storage/framework/views', 'storage/logs', 'bootstrap/cache'] as $directory) {
-    $checks['writable_'.$directory] = is_dir(__DIR__.'/../'.$directory) && is_writable(__DIR__.'/../'.$directory);
+    $path = __DIR__.'/../'.$directory;
+    if (! is_dir($path)) {
+        mkdir($path, 0775, true);
+    }
+    $checks['writable_'.$directory] = is_dir($path) && is_writable($path);
 }
 echo json_encode(['php' => PHP_VERSION, 'checks' => $checks], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES).PHP_EOL;
 exit(in_array(false, $checks, true) ? 1 : 0);

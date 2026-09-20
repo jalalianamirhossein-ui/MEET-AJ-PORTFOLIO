@@ -1,13 +1,57 @@
 <?php
 
+use App\Http\Middleware\AcceptLegacyCsrfToken;
+use App\Http\Middleware\EnforceCsrfToken;
+use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
-return Application::configure(basePath: dirname(__DIR__))
-    ->withRouting(web: __DIR__.'/../routes/web.php', commands: __DIR__.'/../routes/console.php', health: '/up')
+$basePath = dirname(__DIR__);
+foreach ([
+    $basePath.'/storage/app',
+    $basePath.'/storage/app/public',
+    $basePath.'/storage/framework/cache/data',
+    $basePath.'/storage/framework/sessions',
+    $basePath.'/storage/framework/testing',
+    $basePath.'/storage/framework/views',
+    $basePath.'/storage/logs',
+    $basePath.'/bootstrap/cache',
+] as $directory) {
+    if (! is_dir($directory)) {
+        mkdir($directory, 0775, true);
+    }
+}
+
+return Application::configure(basePath: $basePath)
+    ->withRouting(web: __DIR__.'/../routes/web.php', commands: __DIR__.'/../routes/console.php')
     ->withMiddleware(function (Middleware $middleware) {
-        // Public CMS integration is registered in the later implementation phases.
+        $middleware->trustProxies(at: '*');
+        $middleware->web(prepend: [
+            AcceptLegacyCsrfToken::class,
+        ], append: [
+            EnforceCsrfToken::class,
+        ]);
+        $middleware->appendToGroup('web', SecurityHeaders::class);
+        $middleware->redirectGuestsTo('/admin/login');
+        $middleware->redirectUsersTo('/admin');
     })
-    ->withExceptions(function (Exceptions $exceptions) {})
+    ->withExceptions(function (Exceptions $exceptions) {
+        $exceptions->shouldRenderJsonWhen(fn (Request $request, Throwable $e) => $request->expectsJson());
+        $exceptions->render(function (HttpException $e, Request $request) {
+            if ($e->getStatusCode() !== 419) {
+                return null;
+            }
+
+            if ($request->is('forms/*') || $request->routeIs('contact.*')) {
+                return response('Security token expired. Please refresh and try again.', 419)
+                    ->header('Content-Type', 'text/plain; charset=UTF-8')
+                    ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+            }
+
+            return null;
+        });
+    })
     ->create();

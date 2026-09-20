@@ -1,6 +1,6 @@
 <?php
 namespace Tests\Feature;
-use App\Models\{Article, ArticleRedirect, Category, Request, User};
+use App\Models\{Article, ArticleRedirect, Category, Request, Service, User};
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
@@ -36,8 +36,10 @@ class ContentRulesTest extends TestCase
         $editor->forceFill(['role' => 'editor'])->save();
         $this->assertTrue(Gate::forUser($editor)->allows('create', Article::class));
         $this->assertFalse(Gate::forUser($editor)->allows('viewAny', Request::class));
+        $this->assertFalse(Gate::forUser($editor)->allows('viewAny', Service::class));
         $editor->forceFill(['role' => 'admin'])->save();
         $this->assertTrue(Gate::forUser($editor)->allows('viewAny', Request::class));
+        $this->assertTrue(Gate::forUser($editor)->allows('viewAny', Service::class));
         $this->assertNotSame('test-password', $editor->password);
     }
     public function test_deletion_cascades_redirects_and_preserves_category(): void {

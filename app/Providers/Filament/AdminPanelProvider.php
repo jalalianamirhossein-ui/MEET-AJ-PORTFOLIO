@@ -1,11 +1,24 @@
 <?php
+
 namespace App\Providers\Filament;
 
-use Filament\Http\Middleware\{Authenticate, AuthenticateSession, DisableBladeIconComponents, DispatchServingFilamentEvent};
-use Filament\Pages\Dashboard;
-use Filament\{Panel, PanelProvider};
+use App\Filament\Pages\Dashboard;
+use App\Filament\Widgets\CmsStatsOverview;
+use App\Filament\Widgets\RecentArticles;
+use App\Filament\Widgets\RecentRequests;
+use Filament\Http\Middleware\Authenticate;
+use Filament\Http\Middleware\AuthenticateSession;
+use Filament\Http\Middleware\DisableBladeIconComponents;
+use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
+use Filament\Panel;
+use Filament\PanelProvider;
+use Filament\Support\Assets\Css;
 use Filament\Support\Colors\Color;
-use Illuminate\Cookie\Middleware\{AddQueuedCookiesToResponse, EncryptCookies};
+use Filament\Support\Icons\Heroicon;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
@@ -13,13 +26,62 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
-    public function panel(Panel $panel): Panel {
-        return $panel->default()->id('admin')->path('admin')->login()->brandName('Meet AJ CMS')
-            ->colors(['primary' => Color::Blue])
+    public function panel(Panel $panel): Panel
+    {
+        return $panel
+            ->default()
+            ->id('admin')
+            ->path('admin')
+            ->login()
+            ->brandName('Meet AJ CMS')
+            ->brandLogo(asset('assets/img/logo.png'))
+            ->brandLogoHeight('1.75rem')
+            ->favicon(asset('assets/img/favicon.png'))
+            ->colors([
+                'primary' => Color::hex('#be123c'),
+                'gray' => Color::Slate,
+                'success' => Color::hex('#16a34a'),
+                'warning' => Color::hex('#d97706'),
+                'danger' => Color::hex('#7f1d1d'),
+                'info' => Color::hex('#0f766e'),
+            ])
+            ->darkMode(false)
+            ->themeSwitcher(false)
+            ->sidebarCollapsibleOnDesktop()
+            ->collapsibleNavigationGroups()
+            ->unsavedChangesAlerts()
+            ->globalSearch()
+            ->navigationGroups([
+                NavigationGroup::make('Content')->icon(Heroicon::OutlinedDocumentText),
+                NavigationGroup::make('Communications')->icon(Heroicon::OutlinedInbox),
+                NavigationGroup::make('Administration')->icon(Heroicon::OutlinedCog6Tooth),
+            ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->pages([Dashboard::class])
-            ->widgets([\App\Filament\Widgets\NewRequests::class])
-            ->middleware([EncryptCookies::class, AddQueuedCookiesToResponse::class, StartSession::class, AuthenticateSession::class, ShareErrorsFromSession::class, PreventRequestForgery::class, SubstituteBindings::class, DisableBladeIconComponents::class, DispatchServingFilamentEvent::class])
+            ->widgets([
+                CmsStatsOverview::class,
+                RecentArticles::class,
+                RecentRequests::class,
+            ])
+            ->assets([
+                Css::make('meet-aj-admin', resource_path('css/filament-admin.css')),
+            ])
+            ->renderHook(
+                PanelsRenderHook::STYLES_AFTER,
+                fn (): string => '<link rel="stylesheet" href="'.e(asset('css/app/meet-aj-admin.css')).'" data-meetaj="admin-contrast-late">',
+            )
+            ->authGuard('web')
+            ->middleware([
+                EncryptCookies::class,
+                AddQueuedCookiesToResponse::class,
+                StartSession::class,
+                AuthenticateSession::class,
+                ShareErrorsFromSession::class,
+                PreventRequestForgery::class,
+                SubstituteBindings::class,
+                DisableBladeIconComponents::class,
+                DispatchServingFilamentEvent::class,
+            ])
             ->authMiddleware([Authenticate::class]);
     }
 }

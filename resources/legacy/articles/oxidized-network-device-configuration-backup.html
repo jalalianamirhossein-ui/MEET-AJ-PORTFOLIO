@@ -1,0 +1,1007 @@
+<!doctype html><html lang="en" dir="ltr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Oxidized Network Configuration Backup on Ubuntu | Meet AJ</title><meta name="description" content="Complete guide to installing Oxidized on Ubuntu, backing up network devices, tracking changes with Git and integrating with NetBox."><meta name="robots" content="index, follow"><link rel="canonical" href="https://meetaj.ir/articles/oxidized-network-device-configuration-backup.html"><meta property="og:type" content="article"><meta property="og:title" content="Oxidized Network Configuration Backup on Ubuntu"><meta property="og:description" content="Complete guide to installing Oxidized on Ubuntu, backing up network devices, tracking changes with Git and integrating with NetBox."><meta property="og:image" content="../assets/img/portfolio/oxidized-banner.png"><meta property="og:url" content="https://meetaj.ir/articles/oxidized-network-device-configuration-backup.html"><script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Oxidized Network Configuration Backup on Ubuntu","description":"Complete guide to installing Oxidized on Ubuntu, backing up network devices, tracking changes with Git and integrating with NetBox.","datePublished":"2026-09-20T00:00:00+03:30","dateModified":"2026-09-20T00:00:00+03:30"}</script></head><body class="article-page theme-linux"><nav id="navmenu" class="navmenu navmenu--article-toc"><ul><li class="article-nav-item"><a href="#introduction"><span data-en="Introduction" data-fa="مقدمه">Introduction</span></a></li>
+<li class="article-nav-item"><a href="#backup-problems"><span data-en="Problems With Traditional Network Backup" data-fa="مشکلات Backup سنتی تجهیزات شبکه">Problems With Traditional Network Backup</span></a></li>
+<li class="article-nav-item"><a href="#oxidized"><span data-en="What is Oxidized?" data-fa="Oxidized چیست؟">What is Oxidized?</span></a></li>
+<li class="article-nav-item"><a href="#architecture"><span data-en="Oxidized Architecture" data-fa="معماری Oxidized">Oxidized Architecture</span></a></li>
+<li class="article-nav-item"><a href="#requirements"><span data-en="Oxidized Server Requirements" data-fa="منابع موردنیاز سرور Oxidized">Oxidized Server Requirements</span></a></li>
+<li class="article-nav-item"><a href="#installation"><span data-en="Install Oxidized on Ubuntu 24.04" data-fa="نصب Oxidized روی Ubuntu 24.04">Install Oxidized on Ubuntu 24.04</span></a></li>
+<li class="article-nav-item"><a href="#oxidized-install"><span data-en="Install Oxidized Packages" data-fa="نصب Packageهای Oxidized">Install Oxidized Packages</span></a></li>
+<li class="article-nav-item"><a href="#configuration"><span data-en="Oxidized Configuration" data-fa="تنظیمات اصلی Oxidized">Oxidized Configuration</span></a></li>
+<li class="article-nav-item"><a href="#inventory"><span data-en="Add Network Devices" data-fa="اضافه کردن تجهیزات شبکه">Add Network Devices</span></a></li>
+<li class="article-nav-item"><a href="#mikrotik"><span data-en="MikroTik RouterOS Backup" data-fa="Backup از MikroTik RouterOS">MikroTik RouterOS Backup</span></a></li>
+<li class="article-nav-item"><a href="#supported-platforms"><span data-en="Supported Platforms and Models" data-fa="پلتفرم‌ها و Modelهای پشتیبانی‌شده">Supported Platforms and Models</span></a></li>
+<li class="article-nav-item"><a href="#netbox"><span data-en="NetBox Inventory Integration" data-fa="اتصال Inventory به NetBox">NetBox Inventory Integration</span></a></li>
+<li class="article-nav-item"><a href="#cisco"><span data-en="Cisco Configuration For Oxidized Backup" data-fa="تنظیم Cisco برای Backup">Cisco Configuration For Oxidized Backup</span></a></li>
+<li class="article-nav-item"><a href="#validation"><span data-en="Backup Testing and Validation" data-fa="تست و اعتبارسنجی Backup">Backup Testing and Validation</span></a></li>
+<li class="article-nav-item"><a href="#systemd"><span data-en="Run Oxidized with systemd" data-fa="اجرای Oxidized با systemd">Run Oxidized with systemd</span></a></li>
+<li class="article-nav-item"><a href="#diff"><span data-en="Configuration Change Tracking" data-fa="Tracking تغییرات Configuration">Configuration Change Tracking</span></a></li>
+<li class="article-nav-item"><a href="#security"><span data-en="Security Best Practices" data-fa="بهترین روش‌های امنیتی">Security Best Practices</span></a></li>
+<li class="article-nav-item"><a href="#cisco-issues"><span data-en="Common Cisco Backup Issues" data-fa="مشکلات رایج Backup Cisco">Common Cisco Backup Issues</span></a></li>
+<li class="article-nav-item"><a href="#troubleshooting"><span data-en="Troubleshooting" data-fa="عیب‌یابی">Troubleshooting</span></a></li>
+<li class="article-nav-item"><a href="#faq"><span data-en="Frequently Asked Questions" data-fa="پرسش‌های متداول">Frequently Asked Questions</span></a></li>
+<li class="article-nav-item"><a href="#conclusion"><span data-en="Conclusion" data-fa="نتیجه‌گیری">Conclusion</span></a></li>
+<li class="article-nav-item"><a href="#sources"><span data-en="Official References" data-fa="منابع رسمی">Official References</span></a></li></ul></nav><main id="main-content"><section class="article-hero"><p class="article-category" data-en="Linux" data-fa="لینوکس">Linux</p><h1 class="article-title hero-title" data-en="Oxidized Network Configuration Backup on Ubuntu" data-fa="راهنمای کامل Backup تنظیمات شبکه با Oxidized">Oxidized Network Configuration Backup on Ubuntu</h1><p class="article-excerpt hero-subtitle" data-en="Deploy Oxidized on Ubuntu, back up network devices, track configuration changes with Git and integrate with NetBox." data-fa="آموزش نصب و پیکربندی Oxidized برای Backup خودکار تنظیمات تجهیزات شبکه، Git و اتصال به NetBox">Deploy Oxidized on Ubuntu, back up network devices, track configuration changes with Git and integrate with NetBox.</p><img class="article-hero-thumbnail" src="../assets/img/portfolio/oxidized-banner.png" alt="Oxidized network configuration backup on Ubuntu"></section><article class="article-body"><!-- Introduction -->
+<section id="introduction" class="article-section">
+  <h2 data-en="Introduction" data-fa="مقدمه">مقدمه</h2>
+
+  <div class="intro-content">
+    <p
+      data-en="Oxidized is an open-source network configuration backup solution for routers, switches, firewalls and other supported network platforms. It collects configuration data, stores revisions and makes changes auditable through Git."
+      data-fa="Oxidized یک ابزار متن‌باز برای Backup خودکار Configuration روترها، سوئیچ‌ها، فایروال‌ها و دیگر پلتفرم‌های پشتیبانی‌شده است. این ابزار تنظیمات را دریافت می‌کند، نسخه‌ها را ذخیره می‌کند و تغییرات را با Git قابل بررسی می‌سازد."
+    >
+      Oxidized یک ابزار متن‌باز برای Backup خودکار Configuration تجهیزات شبکه
+      است که برای دریافت، ذخیره و بررسی تغییرات کانفیگ تجهیزات شبکه طراحی شده
+      است.
+    </p>
+
+    <p
+      data-en="This guide explains how to deploy Oxidized on Ubuntu 24.04, integrate it with Git version control, backup Cisco devices and connect it with NetBox API for automated device discovery."
+      data-fa="این راهنما نصب Oxidized روی Ubuntu 24.04، اتصال به Git برای Version Control، Backup تجهیزات Cisco و اتصال به NetBox API برای دریافت خودکار تجهیزات را پوشش می‌دهد."
+    >
+      این راهنما نصب Oxidized روی Ubuntu 24.04، اتصال به Git برای Version
+      Control، Backup تجهیزات Cisco و اتصال به NetBox API برای دریافت خودکار
+      تجهیزات را پوشش می‌دهد.
+    </p>
+  </div>
+</section>
+
+<!-- TOC -->
+<section id="article-toc" class="article-section">
+  <h2 data-en="Table of Contents" data-fa="فهرست مطالب">فهرست مطالب</h2>
+
+  <nav class="article-toc"><ul>
+<li><a href="#introduction" data-en="Introduction" data-fa="مقدمه">1. مقدمه</a></li>
+<li><a href="#backup-problems" data-en="Problems With Traditional Network Backup" data-fa="مشکلات Backup سنتی تجهیزات شبکه">2. مشکلات Backup سنتی تجهیزات شبکه</a></li>
+<li><a href="#oxidized" data-en="What is Oxidized?" data-fa="Oxidized چیست؟">3. Oxidized چیست؟</a></li>
+<li><a href="#architecture" data-en="Oxidized Architecture" data-fa="معماری Oxidized">4. معماری Oxidized</a></li>
+<li><a href="#requirements" data-en="Oxidized Server Requirements" data-fa="منابع موردنیاز سرور Oxidized">5. منابع موردنیاز سرور Oxidized</a></li>
+<li><a href="#installation" data-en="Install Oxidized on Ubuntu 24.04" data-fa="نصب Oxidized روی Ubuntu 24.04">6. نصب Oxidized روی Ubuntu 24.04</a></li>
+<li><a href="#oxidized-install" data-en="Install Oxidized Packages" data-fa="نصب Packageهای Oxidized">7. نصب Packageهای Oxidized</a></li>
+<li><a href="#configuration" data-en="Oxidized Configuration" data-fa="تنظیمات اصلی Oxidized">8. تنظیمات اصلی Oxidized</a></li>
+<li><a href="#inventory" data-en="Add Network Devices" data-fa="اضافه کردن تجهیزات شبکه">9. اضافه کردن تجهیزات شبکه</a></li>
+<li><a href="#mikrotik" data-en="MikroTik RouterOS Backup" data-fa="Backup از MikroTik RouterOS">10. Backup از MikroTik RouterOS</a></li>
+<li><a href="#supported-platforms" data-en="Supported Platforms and Models" data-fa="پلتفرم‌ها و Modelهای پشتیبانی‌شده">11. پلتفرم‌ها و Modelهای پشتیبانی‌شده</a></li>
+<li><a href="#netbox" data-en="NetBox Inventory Integration" data-fa="اتصال Inventory به NetBox">12. اتصال Inventory به NetBox</a></li>
+<li><a href="#cisco" data-en="Cisco Configuration For Oxidized Backup" data-fa="تنظیم Cisco برای Backup">13. تنظیم Cisco برای Backup</a></li>
+<li><a href="#validation" data-en="Backup Testing and Validation" data-fa="تست و اعتبارسنجی Backup">14. تست و اعتبارسنجی Backup</a></li>
+<li><a href="#systemd" data-en="Run Oxidized with systemd" data-fa="اجرای Oxidized با systemd">15. اجرای Oxidized با systemd</a></li>
+<li><a href="#diff" data-en="Configuration Change Tracking" data-fa="Tracking تغییرات Configuration">16. Tracking تغییرات Configuration</a></li>
+<li><a href="#security" data-en="Security Best Practices" data-fa="بهترین روش‌های امنیتی">17. بهترین روش‌های امنیتی</a></li>
+<li><a href="#cisco-issues" data-en="Common Cisco Backup Issues" data-fa="مشکلات رایج Backup Cisco">18. مشکلات رایج Backup Cisco</a></li>
+<li><a href="#troubleshooting" data-en="Troubleshooting" data-fa="عیب‌یابی">19. عیب‌یابی</a></li>
+<li><a href="#faq" data-en="Frequently Asked Questions" data-fa="پرسش‌های متداول">20. پرسش‌های متداول</a></li>
+<li><a href="#conclusion" data-en="Conclusion" data-fa="نتیجه‌گیری">21. نتیجه‌گیری</a></li>
+<li><a href="#sources" data-en="Official References" data-fa="منابع رسمی">22. منابع رسمی</a></li>
+</ul></nav>
+</section>
+
+<!-- Backup Problems -->
+
+<section id="backup-problems" class="article-section">
+  <h2
+    data-en="Problems With Traditional Network Backup"
+    data-fa="مشکلات Backup سنتی تجهیزات شبکه"
+  >
+    مشکلات Backup سنتی تجهیزات شبکه
+  </h2>
+
+  <div class="article-callout article-callout--info">
+    <ul>
+      <li data-en="Manual copy-and-paste backups introduce human error." data-fa="Backup دستی با Copy/Paste باعث خطای انسانی می‌شود.">Backup دستی با Copy/Paste باعث خطای انسانی می‌شود.</li>
+
+      <li data-en="It is difficult to know when the last configuration change was made." data-fa="مشخص نیست آخرین تغییر Configuration چه زمانی انجام شده است.">مشخص نیست آخرین تغییر Configuration چه زمانی انجام شده است.</li>
+
+      <li data-en="When a router or switch fails, the latest known-good configuration may not be available." data-fa="در زمان خرابی Router یا Switch ممکن است آخرین نسخه سالم موجود نباشد.">در زمان خرابی Router یا Switch ممکن است آخرین نسخه سالم موجود نباشد.</li>
+
+      <li data-en="Manual backups do not scale to large device inventories." data-fa="برای تعداد زیاد تجهیزات، Backup دستی قابل مدیریت نیست.">برای تعداد زیاد تجهیزات، Backup دستی قابل مدیریت نیست.</li>
+
+      <li data-en="Sensitive changes to ACLs, VLANs, routing or firewall rules can go unnoticed." data-fa="تغییرات حساس مانند ACL، VLAN، Routing و Firewall Rule بدون اطلاع باقی می‌مانند.">تغییرات حساس مانند ACL، VLAN، Routing و Firewall Rule بدون اطلاع باقی می‌مانند.</li>
+
+      <li data-en="There is no version history for comparing changes." data-fa="هیچ Version History برای مقایسه تغییرات وجود ندارد.">هیچ Version History برای مقایسه تغییرات وجود ندارد.</li>
+    </ul>
+  </div>
+
+  <p
+    data-en="Network infrastructure requires automated configuration backup with version tracking."
+    data-fa="زیرساخت شبکه نیاز به Backup خودکار همراه با Version Tracking دارد."
+  >
+    زیرساخت شبکه نیاز به Backup خودکار همراه با Version Tracking دارد.
+  </p>
+</section>
+
+<!-- What is Oxidized -->
+
+<section id="oxidized" class="article-section">
+  <h2 data-en="What is Oxidized?" data-fa="Oxidized چیست؟">Oxidized چیست؟</h2>
+
+  <p data-en="Oxidized is a network configuration backup system that connects to network devices over protocols such as SSH and Telnet and retrieves their configurations." data-fa="Oxidized یک Network Configuration Backup System است که با استفاده از پروتکل‌هایی مانند SSH و Telnet به تجهیزات شبکه متصل شده و Configuration آن‌ها را دریافت می‌کند.">Oxidized یک Network Configuration Backup System است که با استفاده از پروتکل‌هایی مانند SSH و Telnet به تجهیزات شبکه متصل شده و Configuration آن‌ها را دریافت می‌کند.</p>
+
+  <div class="article-callout article-callout--info">
+    <ul>
+      <li data-en="Cisco IOS and IOS-XE support" data-fa="پشتیبانی از Cisco IOS / IOS-XE">پشتیبانی از Cisco IOS / IOS-XE</li>
+
+      <li data-en="MikroTik RouterOS support" data-fa="پشتیبانی از MikroTik RouterOS">پشتیبانی از MikroTik RouterOS</li>
+
+      <li data-en="Support for HPE, Juniper, Arista and other vendors" data-fa="پشتیبانی از HPE، Juniper، Arista و Vendorهای دیگر">پشتیبانی از HPE، Juniper، Arista و Vendorهای دیگر</li>
+
+      <li data-en="Store configurations in Git" data-fa="ذخیره Configuration با Git">ذخیره Configuration با Git</li>
+
+      <li data-en="View diffs between changes" data-fa="نمایش Diff بین تغییرات">نمایش Diff بین تغییرات</li>
+
+      <li data-en="NetBox integration and automation" data-fa="امکان اتصال به NetBox و Automation">امکان اتصال به NetBox و Automation</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Architecture -->
+
+<section id="architecture" class="article-section">
+  <h2 data-en="Oxidized Architecture" data-fa="معماری Oxidized">
+    معماری Oxidized
+  </h2>
+
+  <div class="article-code">
+    <div class="article-code-header">
+      <span class="article-code-label"> Network Architecture </span>
+    </div>
+
+    <pre>
+<code>
+
+Cisco Router / Switch
+          |
+          | SSH
+          |
+          v
+
+      Oxidized Server
+
+          |
+          |
+          v
+
+   Git Repository
+
+          |
+          |
+          v
+
+ Configuration History
+
+</code>
+</pre>
+  </div>
+</section>
+<!-- Server Requirements -->
+
+<section id="requirements" class="article-section">
+  <h2
+    data-en="Oxidized Server Requirements"
+    data-fa="منابع موردنیاز سرور Oxidized"
+  >
+    منابع موردنیاز سرور Oxidized
+  </h2>
+
+  <p data-en="Oxidized uses very few resources compared with monitoring platforms. Requirements depend mainly on the number of devices, backups per day and configuration size." data-fa="Oxidized نسبت به ابزارهای مانیتورینگ منابع بسیار کمی مصرف می‌کند. منابع موردنیاز بیشتر به تعداد تجهیزات، تعداد Backup در روز و حجم Configurationها بستگی دارد.">Oxidized نسبت به ابزارهای مانیتورینگ منابع بسیار کمی مصرف می‌کند. منابع موردنیاز بیشتر به تعداد تجهیزات، تعداد Backup در روز و حجم Configurationها بستگی دارد.</p>
+
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Environment</th>
+          <th>CPU</th>
+          <th>RAM</th>
+          <th>Storage</th>
+          <th>Usage</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>Lab</td>
+          <td>1 vCPU</td>
+          <td>2 GB</td>
+          <td>20 GB SSD</td>
+          <td>Testing</td>
+        </tr>
+
+        <tr>
+          <td>Small Production</td>
+          <td>2 vCPU</td>
+          <td>4 GB</td>
+          <td>50 GB SSD</td>
+          <td>Up to 100 Devices</td>
+        </tr>
+
+        <tr>
+          <td>Enterprise</td>
+          <td>4 vCPU</td>
+          <td>8 GB</td>
+          <td>100 GB SSD</td>
+          <td>Hundreds of Devices</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="article-callout article-callout--info">
+    <ul>
+      <li data-en="Ubuntu Server 22.04 / 24.04 (recommended)" data-fa="Ubuntu Server 22.04 / 24.04 Recommended">Ubuntu Server 22.04 / 24.04 Recommended</li>
+
+      <li data-en="SSH access to network devices" data-fa="SSH access to network devices">SSH access to network devices</li>
+
+      <li data-en="Git installed for configuration versioning" data-fa="Git installed for configuration versioning">Git installed for configuration versioning</li>
+
+      <li data-en="DNS resolution between Oxidized and devices" data-fa="DNS resolution between Oxidized and devices">DNS resolution between Oxidized and devices</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Installation -->
+
+<section id="installation" class="article-section">
+  <h2
+    data-en="Install Oxidized on Ubuntu 24.04"
+    data-fa="نصب Oxidized روی Ubuntu 24.04"
+  >
+    نصب Oxidized روی Ubuntu 24.04
+  </h2>
+
+  <p data-en="First update the operating system and install the Ruby and Git packages required by Oxidized." data-fa="ابتدا سیستم عامل را Update کرده و Packageهای موردنیاز Ruby و Git را نصب می‌کنیم.">ابتدا سیستم عامل را Update کرده و Packageهای موردنیاز Ruby و Git را نصب می‌کنیم.</p>
+
+  <div class="article-code">
+    <div class="article-code-header">
+      <span class="article-code-label"> Ubuntu Terminal </span>
+
+      <button
+        type="button"
+        class="article-copy-button"
+        data-en="Copy"
+        data-fa="کپی"
+      >
+        <i class="bi bi-clipboard"></i>
+      </button>
+    </div>
+
+    <pre>
+<code class="language-bash">
+
+sudo add-apt-repository universe
+sudo apt update
+
+sudo apt install -y \
+ruby ruby-dev ruby-bundler build-essential \
+  libsqlite3-dev libssl-dev pkg-config cmake libssh2-1-dev \
+  libicu-dev zlib1g-dev g++ libyaml-dev libzstd-dev git
+
+</code>
+</pre>
+  </div>
+
+  <p data-en="Check the installed Ruby version:" data-fa="بررسی نسخه Ruby:">بررسی نسخه Ruby:</p>
+
+  <div class="article-code">
+    <pre>
+<code class="language-bash">
+
+ruby -v
+
+gem -v
+
+git --version
+
+</code>
+</pre>
+  </div>
+</section>
+
+<!-- Install Gem -->
+
+<section id="oxidized-install" class="article-section">
+  <h2 data-en="Install Oxidized Packages" data-fa="نصب Package های Oxidized">
+    نصب Package های Oxidized
+  </h2>
+
+  <div class="article-code">
+    <div class="article-code-header">
+      <span class="article-code-label"> Ubuntu Terminal </span>
+    </div>
+
+    <pre>
+<code class="language-bash">
+
+sudo gem install oxidized
+
+sudo gem install oxidized-web
+
+
+sudo gem install oxidized-script
+
+</code>
+</pre>
+  </div>
+
+  <p data-en="Create a dedicated user to run the Oxidized service." data-fa="برای اجرای سرویس بهتر است یک User اختصاصی ایجاد شود.">برای اجرای سرویس بهتر است یک User اختصاصی ایجاد شود.</p>
+
+  <div class="article-code">
+    <pre>
+<code class="language-bash">
+
+sudo useradd -m -s /bin/bash oxidized
+
+
+sudo passwd oxidized
+
+
+sudo su - oxidized
+
+</code>
+</pre>
+  </div>
+</section>
+
+<!-- Initial Configuration -->
+
+<section id="configuration" class="article-section">
+  <h2 data-en="Oxidized Configuration" data-fa="تنظیمات اصلی Oxidized">
+    تنظیمات اصلی Oxidized
+  </h2>
+
+  <p data-en="After the first run, Oxidized creates its configuration file at:" data-fa="بعد از اولین اجرا، فایل Configuration در مسیر زیر ساخته می‌شود:">بعد از اولین اجرا، فایل Configuration در مسیر زیر ساخته می‌شود:</p>
+
+  <div class="article-code">
+    <pre>
+<code>
+
+~/.config/oxidized/config
+
+</code>
+</pre>
+  </div>
+
+  <p data-en="Example Cisco configuration:" data-fa="نمونه Configuration برای Cisco:">نمونه Configuration برای Cisco:</p>
+
+  <div class="article-code">
+    <div class="article-code-header">
+      <span class="article-code-label"> config.yml </span>
+    </div>
+
+    <pre>
+<code class="language-yaml">---
+username: oxidized
+password: CHANGE_ME
+model: ios
+interval: 3600
+timeout: 20
+timelimit: 300
+retries: 3
+
+input:
+  default: ssh
+  ssh:
+    secure: true
+
+output:
+  default: git
+  git:
+    user: oxidized
+    email: oxidized@example.com
+    repo: /var/lib/oxidized/configs
+
+source:
+  default: csv
+  csv:
+    file: /etc/oxidized/router.db
+    delimiter: !ruby/regexp /:/
+    map:
+      name: 0
+      model: 1
+      group: 2
+
+groups:
+  cisco:
+    username: oxidized
+    password: CHANGE_ME
+  mikrotik:
+    username: oxidized
+    vars:
+      ssh_keys: ~/.ssh/oxidized_routeros
+  swos:
+    username: admin
+    password: CHANGE_ME
+
+vars:
+  remove_secret: true
+  output_store_mode: on_significant
+
+log: true
+debug: false
+threads: 10</code>
+</pre>
+  </div>
+</section>
+
+<!-- Device Inventory -->
+
+<section id="inventory" class="article-section">
+  <h2 data-en="Add Network Devices" data-fa="اضافه کردن تجهیزات شبکه">
+    اضافه کردن تجهیزات شبکه
+  </h2>
+
+  <p data-en="Manage the device inventory with a CSV file." data-fa="لیست تجهیزات را می‌توان با فایل CSV مدیریت کرد.">لیست تجهیزات را می‌توان با فایل CSV مدیریت کرد.</p>
+
+  <div class="article-code">
+    <div class="article-code-header">
+      <span class="article-code-label"> router.db </span>
+    </div>
+
+    <pre>
+<code>
+
+core-sw01:ios:cisco
+dist-sw01:ios:cisco
+mt-core:routeros:mikrotik
+mt-edge:routeros:mikrotik
+swos-access:swos:swos
+
+</code>
+</pre>
+  </div>
+
+  <p data-en="The CSV format used by this configuration is name:model:group. Credentials stay in config.yml or in the secured source adapter; they should not be written into router.db." data-fa="فرمت CSV در این Configuration به شکل name:model:group است. Credentialها باید در config.yml یا Adapter امن Source قرار بگیرند و نباید داخل router.db نوشته شوند.">فرمت CSV در این Configuration به شکل name:model:group است. Credentialها باید در config.yml یا Adapter امن Source قرار بگیرند و نباید داخل router.db نوشته شوند.</p>
+
+  <div class="article-callout article-callout--info">
+    <ul>
+      <li data-en="name: the stable device name used as the backup filename and Git path" data-fa="name: نام ثابت تجهیز که برای نام فایل Backup و مسیر Git استفاده می‌شود">name: نام ثابت تجهیز که برای نام فایل Backup و مسیر Git استفاده می‌شود</li>
+
+      <li data-en="model: an exact Oxidized model such as ios, routeros or junos" data-fa="model: نام دقیق Model در Oxidized مانند ios، routeros یا junos">model: نام دقیق Model در Oxidized مانند ios، routeros یا junos</li>
+
+      <li data-en="group: the group that supplies credentials and per-platform variables" data-fa="group: گروهی که Credential و Variableهای اختصاصی Platform را تأمین می‌کند">group: گروهی که Credential و Variableهای اختصاصی Platform را تأمین می‌کند</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- MikroTik RouterOS -->
+<section id="mikrotik" class="article-section">
+  <h2 data-en="MikroTik RouterOS Backup" data-fa="Backup از MikroTik RouterOS">Backup از MikroTik RouterOS</h2>
+  <p data-en="The official RouterOS model uses SSH or Telnet and collects system metadata, package information, system history and the configuration export. On RouterOS 7 it uses /export show-sensitive by default unless remove_secret is enabled." data-fa="مدل رسمی RouterOS از SSH یا Telnet استفاده می‌کند و اطلاعات سیستم، نسخهٔ Packageها، تاریخچهٔ سیستم و خروجی Configuration را دریافت می‌کند. در RouterOS 7، اگر remove_secret فعال نباشد، به‌صورت پیش‌فرض از /export show-sensitive استفاده می‌شود.">مدل رسمی RouterOS از SSH یا Telnet استفاده می‌کند و اطلاعات سیستم، نسخهٔ Packageها، تاریخچهٔ سیستم و خروجی Configuration را دریافت می‌کند. در RouterOS 7، اگر remove_secret فعال نباشد، به‌صورت پیش‌فرض از /export show-sensitive استفاده می‌شود.</p>
+  <div class="article-callout article-callout--info"><ul>
+    <li data-en="Use the routeros model for MikroTik RouterOS devices and the swos model for MikroTik SwOS/SwOS Lite devices." data-fa="برای تجهیزات MikroTik RouterOS از مدل routeros و برای تجهیزات MikroTik SwOS یا SwOS Lite از مدل swos استفاده کنید.">برای تجهیزات MikroTik RouterOS از مدل routeros و برای تجهیزات MikroTik SwOS یا SwOS Lite از مدل swos استفاده کنید.</li>
+    <li data-en="RouterOS backups are text exports. They are different from the binary /system backup save file." data-fa="Backup مدل RouterOS یک Export متنی است و با فایل Binary حاصل از /system backup save تفاوت دارد.">Backup مدل RouterOS یک Export متنی است و با فایل Binary حاصل از /system backup save تفاوت دارد.</li>
+    <li data-en="With remove_secret: true, secrets are hidden. Keep a separate encrypted recovery backup if you require secret-bearing exports." data-fa="با remove_secret: true، Secretها مخفی می‌شوند. اگر Export حاوی Secret برای بازیابی لازم است، آن را جداگانه و به‌صورت رمزنگاری‌شده نگهداری کنید.">با remove_secret: true، Secretها مخفی می‌شوند. اگر Export حاوی Secret برای بازیابی لازم است، آن را جداگانه و به‌صورت رمزنگاری‌شده نگهداری کنید.</li>
+  </ul></div>
+  <p data-en="For RouterOS 7.12 and later, create a read-only user and use an ED25519 key instead of a shared password:" data-fa="در RouterOS نسخهٔ 7.12 و بالاتر، یک کاربر فقط‌خواندنی بسازید و به‌جای رمز مشترک از کلید ED25519 استفاده کنید:">در RouterOS نسخهٔ 7.12 و بالاتر، یک کاربر فقط‌خواندنی بسازید و به‌جای رمز مشترک از کلید ED25519 استفاده کنید:</p>
+  <div class="article-code"><pre><code class="language-bash">ssh-keygen -t ed25519 -f ~/.ssh/oxidized_routeros
+scp ~/.ssh/oxidized_routeros.pub admin@MIKROTIK_IP:/flash/id_ed25519.pub</code></pre></div>
+  <div class="article-code"><pre><code class="language-routeros">/user add name=oxidized group=read disabled=no
+/user ssh-keys import public-key-file=id_ed25519.pub user=oxidized</code></pre></div>
+  <p data-en="The router.db entries used by this guide are:" data-fa="ورودی‌های router.db این راهنما به‌صورت زیر هستند:">ورودی‌های router.db این راهنما به‌صورت زیر هستند:</p>
+  <div class="article-code"><pre><code class="language-text">mt-core:routeros:mikrotik
+mt-edge:routeros:mikrotik
+swos-access:swos:swos</code></pre></div>
+  <p data-en="The routeros model runs /export; it does not create a binary RouterOS backup file. If you also need a binary recovery image, schedule /system backup save separately, protect it as a secret and test its restore process." data-fa="مدل routeros دستور /export را اجرا می‌کند و فایل Binary Backup میکروتیک نمی‌سازد. اگر فایل Binary برای Recovery لازم دارید، اجرای /system backup save را جداگانه زمان‌بندی کنید، آن را مانند یک Secret محافظت کنید و فرایند Restore را تست کنید.">مدل routeros دستور /export را اجرا می‌کند و فایل Binary Backup میکروتیک نمی‌سازد. اگر فایل Binary برای Recovery لازم دارید، اجرای /system backup save را جداگانه زمان‌بندی کنید، آن را مانند یک Secret محافظت کنید و فرایند Restore را تست کنید.</p>
+  <div class="article-code"><div class="article-code-header"><span class="article-code-label">Optional binary recovery backup</span></div><pre><code class="language-routeros">/system backup save name=oxidized-recovery password="USE_A_UNIQUE_SECRET"</code></pre></div>
+  <p data-en="A binary backup is tied to RouterOS recovery workflows and is not a portable, reviewable configuration history. Store it in a separate encrypted location with strict access controls; keep the normal Oxidized text export in Git for diffs and auditing." data-fa="Backup Binary به فرایند Recovery خود RouterOS وابسته است و جایگزین History متنی و قابل Review نیست. این فایل را جداگانه و در محل رمزنگاری‌شده با دسترسی محدود نگه دارید و Export متنی Oxidized را برای Diff و Audit در Git ذخیره کنید.">Backup Binary به فرایند Recovery خود RouterOS وابسته است و جایگزین History متنی و قابل Review نیست. این فایل را جداگانه و در محل رمزنگاری‌شده با دسترسی محدود نگه دارید و Export متنی Oxidized را برای Diff و Audit در Git ذخیره کنید.</p>
+  <p data-en="SwOS is a different platform from RouterOS: use the swos model, HTTP credentials and the device web port. Oxidized retrieves the switch backup through the SwOS web endpoint, so do not put a SwOS device in the routeros group." data-fa="SwOS با RouterOS متفاوت است؛ برای آن از Model به نام swos، Credentialهای HTTP و Port وب تجهیز استفاده کنید. Oxidized Backup سوئیچ را از Endpoint وب SwOS دریافت می‌کند؛ بنابراین تجهیز SwOS را در گروه routeros قرار ندهید.">SwOS با RouterOS متفاوت است؛ برای آن از Model به نام swos، Credentialهای HTTP و Port وب تجهیز استفاده کنید. Oxidized Backup سوئیچ را از Endpoint وب SwOS دریافت می‌کند؛ بنابراین تجهیز SwOS را در گروه routeros قرار ندهید.</p>
+</section>
+
+<!-- Supported Platforms -->
+<section id="supported-platforms" class="article-section">
+  <h2 data-en="Supported Platforms and Models" data-fa="پلتفرم‌ها و Modelهای پشتیبانی‌شده">پلتفرم‌ها و Modelهای پشتیبانی‌شده</h2>
+  <p data-en="Oxidized is model-driven. The model name in router.db selects the commands and parser used for each device. Availability and behavior can change between releases, so check the upstream Supported OS Types list and model notes before production rollout." data-fa="Oxidized بر پایهٔ Model کار می‌کند. نام Model در router.db تعیین می‌کند چه دستورها و Parserی برای هر تجهیز استفاده شود. پشتیبانی و رفتار Modelها ممکن است بین Releaseها تغییر کند؛ پیش از Production فهرست رسمی Supported OS Types و Model Notes را بررسی کنید.">Oxidized بر پایهٔ Model کار می‌کند. نام Model در router.db تعیین می‌کند چه دستورها و Parserی برای هر تجهیز استفاده شود. پشتیبانی و رفتار Modelها ممکن است بین Releaseها تغییر کند؛ پیش از Production فهرست رسمی Supported OS Types و Model Notes را بررسی کنید.</p>
+  <div class="table-responsive"><table class="table table-bordered"><thead><tr><th>Platform</th><th>Oxidized model</th><th>Transport / collected data</th></tr></thead><tbody>
+    <tr><td>Cisco IOS / IOS-XE</td><td>ios</td><td>SSH/Telnet and running configuration</td></tr>
+    <tr><td>Cisco ASA / NX-OS</td><td>asa / nxos</td><td>Use the model matching the OS</td></tr>
+    <tr><td>Cisco IOS-XR / AireOS / UCS / Viptela</td><td>iosxr / aireos / ucs / viptela</td><td>Use the model matching the product</td></tr>
+    <tr><td>MikroTik RouterOS</td><td>routeros</td><td>SSH/Telnet, metadata, history and /export</td></tr>
+    <tr><td>MikroTik SwOS / SwOS Lite</td><td>swos</td><td>HTTP and /backup.swb</td></tr>
+    <tr><td>Juniper JunOS</td><td>junos</td><td>SSH and JunOS configuration</td></tr>
+    <tr><td>Juniper ScreenOS</td><td>screenos</td><td>SSH and ScreenOS configuration</td></tr>
+    <tr><td>Arista EOS</td><td>eos</td><td>SSH and EOS configuration</td></tr>
+    <tr><td>Aruba AOS-CX / AOS-W</td><td>aoscx / aosw</td><td>SSH and platform CLI</td></tr>
+    <tr><td>HPE ProCurve / Comware</td><td>procurve / comware</td><td>SSH/Telnet and CLI configuration</td></tr>
+    <tr><td>Huawei VRP</td><td>vrp</td><td>SSH/Telnet and VRP configuration</td></tr>
+    <tr><td>Dell PowerConnect / OS6 / OS10</td><td>powerconnect / os6 / os10</td><td>SSH and platform CLI</td></tr>
+    <tr><td>Extreme Networks XOS</td><td>xos</td><td>SSH and XOS configuration</td></tr>
+    <tr><td>Fortinet FortiOS</td><td>fortios / fortigate</td><td>SSH or supported API model</td></tr>
+    <tr><td>Palo Alto PAN-OS</td><td>panos / panos_api</td><td>CLI or API, depending on the model</td></tr>
+    <tr><td>F5 TMOS / F5OS</td><td>tmos / f5os</td><td>SSH and platform commands</td></tr>
+    <tr><td>Ubiquiti EdgeOS / EdgeSwitch / AirOS</td><td>edgeos / edgeswitch / airos</td><td>SSH and model-specific commands</td></tr>
+    <tr><td>VyOS / Cumulus Linux / Linux</td><td>vyos / cumulus / linuxgeneric</td><td>SSH and operating-system CLI</td></tr>
+    <tr><td>pfSense / OPNsense / OpenWrt / OpenBSD</td><td>pfsense / opnsense / openwrt / openbsd</td><td>Model-specific CLI or API</td></tr>
+    <tr><td>TrueNAS / Yamaha / ZTE / Zyxel</td><td>truenas / yamaha / zteolt / zynos</td><td>Use the exact model for the product family</td></tr>
+  </tbody></table></div>
+  <div class="article-callout article-callout--info"><ul><li data-en="A listed model does not guarantee identical support for every firmware or hardware revision." data-fa="وجود یک Model در فهرست به‌معنای پشتیبانی یکسان از همهٔ Firmwareها و Revisionهای سخت‌افزاری نیست.">وجود یک Model در فهرست به‌معنای پشتیبانی یکسان از همهٔ Firmwareها و Revisionهای سخت‌افزاری نیست.</li><li data-en="Test a representative device, inspect the saved output and verify that secrets are not exposed before adding more nodes." data-fa="پیش از افزودن Nodeهای بیشتر، یک تجهیز واقعی را تست کنید، خروجی ذخیره‌شده را بررسی کنید و مطمئن شوید Secretها افشا نشده‌اند.">پیش از افزودن Nodeهای بیشتر، یک تجهیز واقعی را تست کنید، خروجی ذخیره‌شده را بررسی کنید و مطمئن شوید Secretها افشا نشده‌اند.</li></ul></div>
+</section>
+
+<!-- NetBox Integration -->
+<section id="netbox" class="article-section">
+  <h2 data-en="NetBox Inventory Integration" data-fa="اتصال Inventory به NetBox">اتصال Inventory به NetBox</h2>
+  <p data-en="NetBox can be the source of device inventory, but its API response must expose the fields Oxidized needs: name, model, username, password and optionally group or enable. Oxidized's HTTP source supports one object per device and pagination; a small adapter endpoint is usually safer than pointing Oxidized at an unfiltered NetBox endpoint." data-fa="NetBox می‌تواند منبع Inventory تجهیزات باشد، اما پاسخ API باید فیلدهای موردنیاز Oxidized یعنی name، model، username، password و در صورت نیاز group یا enable را ارائه کند. Source نوع HTTP در Oxidized از یک Object برای هر تجهیز و Pagination پشتیبانی می‌کند؛ معمولاً ساختن یک Adapter کوچک از اتصال مستقیم به Endpoint بدون Filter امن‌تر است.">NetBox می‌تواند منبع Inventory تجهیزات باشد، اما پاسخ API باید فیلدهای موردنیاز Oxidized یعنی name، model، username، password و در صورت نیاز group یا enable را ارائه کند. Source نوع HTTP در Oxidized از یک Object برای هر تجهیز و Pagination پشتیبانی می‌کند؛ معمولاً ساختن یک Adapter کوچک از اتصال مستقیم به Endpoint بدون Filter امن‌تر است.</p>
+  <div class="article-code"><div class="article-code-header"><span class="article-code-label">NetBox API check</span></div><pre><code class="language-bash">curl --fail --silent \
+  -H "Authorization: Token $NETBOX_TOKEN" \
+  "https://netbox.example.com/api/dcim/devices/?status=active"</code></pre></div>
+  <p data-en="The adapter should return only active, reachable devices and map their NetBox device type or custom field to an Oxidized model such as ios, routeros or junos. Do not return NetBox credentials to browsers, logs or public endpoints." data-fa="Adapter باید فقط تجهیزات Active و قابل دسترس را برگرداند و Device Type یا Custom Field در NetBox را به Modelهایی مانند ios، routeros یا junos نگاشت کند. Credentialهای NetBox را به Browser، Log یا Endpoint عمومی برنگردانید.">Adapter باید فقط تجهیزات Active و قابل دسترس را برگرداند و Device Type یا Custom Field در NetBox را به Modelهایی مانند ios، routeros یا junos نگاشت کند. Credentialهای NetBox را به Browser، Log یا Endpoint عمومی برنگردانید.</p>
+  <div class="article-code"><div class="article-code-header"><span class="article-code-label">Oxidized HTTP source</span></div><pre><code class="language-yaml">source:
+  default: http
+  http:
+    url: https://inventory.example.com/oxidized/nodes
+    scheme: https
+    user: oxidized-source
+    pass: CHANGE_ME
+    read_timeout: 120
+    map:
+      name: name
+      model: model
+      username: username
+      password: password
+    vars_map:
+      enable: enable
+    pagination: true
+    pagination_key_name: next</code></pre></div>
+</section>
+<!-- Cisco Configuration -->
+
+<section id="cisco" class="article-section">
+  <h2
+    data-en="Cisco Configuration For Oxidized Backup"
+    data-fa="تنظیم Cisco برای Backup"
+  >
+    تنظیم Cisco برای Backup
+  </h2>
+
+  <p data-en="On Cisco devices, enable SSH and create a user with appropriate privileges." data-fa="روی تجهیزات Cisco باید دسترسی SSH و User با سطح دسترسی مناسب ایجاد شود.">روی تجهیزات Cisco باید دسترسی SSH و User با سطح دسترسی مناسب ایجاد شود.</p>
+
+  <div class="article-code">
+    <div class="article-code-header">
+      <span class="article-code-label"> Cisco IOS </span>
+    </div>
+
+    <pre>
+<code class="language-cisco">
+
+conf t
+
+
+username oxidized privilege 15 secret StrongPassword
+
+
+ip domain-name company.local
+
+
+crypto key generate rsa modulus 2048
+
+
+ip ssh version 2
+
+
+
+line vty 0 4
+
+ transport input ssh
+
+ login local
+
+
+end
+
+
+write memory
+
+</code>
+</pre>
+  </div>
+
+  <div class="article-callout article-callout--info">
+    <ul>
+      <li data-en="Privilege 15 is required to retrieve the complete configuration." data-fa="Privilege 15 برای دریافت کامل Configuration لازم است.">Privilege 15 برای دریافت کامل Configuration لازم است.</li>
+
+      <li data-en="Prefer SSH over Telnet." data-fa="SSH به Telnet ترجیح داده شود.">SSH به Telnet ترجیح داده شود.</li>
+
+      <li data-en="Do not use one shared password across all devices." data-fa="Password مشترک بین همه تجهیزات استفاده نشود.">Password مشترک بین همه تجهیزات استفاده نشود.</li>
+    </ul>
+  </div>
+</section>
+<!-- Validation -->
+
+<section id="validation" class="article-section">
+  <h2 data-en="Backup Testing and Validation" data-fa="تست و اعتبارسنجی Backup">
+    تست و اعتبارسنجی Backup
+  </h2>
+
+  <p data-en="After installing and configuring Oxidized, verify SSH connectivity, configuration retrieval and Git storage." data-fa="بعد از نصب و تنظیم Oxidized باید بررسی کنیم که ارتباط SSH، دریافت Configuration و ذخیره در Git به درستی انجام می‌شود.">بعد از نصب و تنظیم Oxidized باید بررسی کنیم که ارتباط SSH، دریافت Configuration و ذخیره در Git به درستی انجام می‌شود.</p>
+
+  <div class="article-code">
+    <div class="article-code-header">
+      <span class="article-code-label"> Ubuntu Terminal </span>
+    </div>
+
+    <pre>
+<code class="language-bash">
+
+
+sudo -u oxidized oxidized
+
+
+</code>
+</pre>
+  </div>
+
+  <p data-en="On success, you should see log output similar to the following:" data-fa="در صورت موفقیت باید Log مشابه زیر مشاهده شود:">در صورت موفقیت باید Log مشابه زیر مشاهده شود:</p>
+
+  <div class="article-code">
+    <pre>
+<code>
+
+
+INFO -- : Configuration completed successfully
+
+INFO -- : Running Oxidized
+
+INFO -- : node core-sw01 completed
+
+
+</code>
+</pre>
+  </div>
+
+  <p data-en="Check the backup file:" data-fa="بررسی فایل Backup:">بررسی فایل Backup:</p>
+
+  <div class="article-code">
+    <pre>
+<code class="language-bash">
+
+
+ls -la /var/lib/oxidized/configs
+
+
+cat /var/lib/oxidized/configs/core-sw01
+
+
+</code>
+</pre>
+  </div>
+</section>
+
+
+<!-- Systemd Service -->
+<section id="systemd" class="article-section">
+  <h2 data-en="Run Oxidized with systemd" data-fa="اجرای Oxidized با systemd">اجرای Oxidized با systemd</h2>
+  <p data-en="Run Oxidized as the dedicated oxidized user and keep its configuration and repository outside the web root. Confirm the executable path with command -v oxidized before creating the unit." data-fa="Oxidized را با کاربر اختصاصی oxidized اجرا کنید و Configuration و Repository آن را خارج از Web Root نگه دارید. پیش از ساخت Unit، مسیر اجرایی را با command -v oxidized بررسی کنید.">Oxidized را با کاربر اختصاصی oxidized اجرا کنید و Configuration و Repository آن را خارج از Web Root نگه دارید. پیش از ساخت Unit، مسیر اجرایی را با command -v oxidized بررسی کنید.</p>
+  <div class="article-code"><pre><code class="language-bash">command -v oxidized
+sudo install -d -o oxidized -g oxidized /var/lib/oxidized/configs
+sudo nano /etc/systemd/system/oxidized.service</code></pre></div>
+  <div class="article-code"><pre><code class="language-ini">[Unit]
+Description=Oxidized network configuration backup
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=oxidized
+Group=oxidized
+ExecStart=/usr/local/bin/oxidized
+Restart=on-failure
+RestartSec=10
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target</code></pre></div>
+  <div class="article-code"><pre><code class="language-bash">sudo systemctl daemon-reload
+sudo systemctl enable --now oxidized
+systemctl status oxidized --no-pager
+journalctl -u oxidized -n 100 --no-pager</code></pre></div>
+</section>
+
+<!-- Git Diff -->
+
+<section id="diff" class="article-section">
+  <h2
+    data-en="Configuration Change Tracking"
+    data-fa="Tracking تغییرات Configuration"
+  >
+    Tracking تغییرات Configuration
+  </h2>
+
+  <p data-en="One of Oxidized’s most useful features is viewing configuration changes through Git." data-fa="یکی از مهم‌ترین قابلیت‌های Oxidized امکان مشاهده تغییرات Configuration با Git است.">یکی از مهم‌ترین قابلیت‌های Oxidized امکان مشاهده تغییرات Configuration با Git است.</p>
+
+  <div class="article-code">
+    <pre>
+<code class="language-bash">
+
+
+cd /var/lib/oxidized/configs
+
+
+git log
+
+
+git diff HEAD~1 HEAD
+
+
+</code>
+</pre>
+  </div>
+
+  <p data-en="Example change:" data-fa="مثال تغییر:">مثال تغییر:</p>
+
+  <div class="article-code">
+    <pre>
+<code>
+
+
+- interface GigabitEthernet1/0/10 shutdown
+
+
++ interface GigabitEthernet1/0/10 no shutdown
+
+
+</code>
+</pre>
+  </div>
+</section>
+
+<!-- Security -->
+
+<section id="security" class="article-section">
+  <h2 data-en="Security Best Practices" data-fa="بهترین روش‌های امنیتی">
+    بهترین روش‌های امنیتی
+  </h2>
+
+  <div class="article-callout article-callout--info">
+    <ul>
+      <li data-en="Use SSH only when connecting to devices." data-fa="برای اتصال به تجهیزات فقط SSH استفاده کنید.">برای اتصال به تجهیزات فقط SSH استفاده کنید.</li>
+
+      <li data-en="Disable Telnet on network devices." data-fa="Telnet را در تجهیزات شبکه غیرفعال کنید.">Telnet را در تجهیزات شبکه غیرفعال کنید.</li>
+
+      <li data-en="Create a dedicated Oxidized user instead of using a personal account." data-fa="User مخصوص Oxidized ایجاد کنید و از Account شخصی استفاده نکنید.">User مخصوص Oxidized ایجاد کنید و از Account شخصی استفاده نکنید.</li>
+
+      <li data-en="Do not store passwords in the repository." data-fa="Passwordها را داخل Repository ذخیره نکنید.">Passwordها را داخل Repository ذخیره نکنید.</li>
+
+      <li data-en="Restrict NetBox API access." data-fa="دسترسی API NetBox را محدود کنید.">دسترسی API NetBox را محدود کنید.</li>
+
+      <li data-en="Keep the backup repository on secure storage." data-fa="Backup Repository را روی Storage امن نگهداری کنید.">Backup Repository را روی Storage امن نگهداری کنید.</li>
+
+      <li data-en="Restrict read/write access to the Git repository." data-fa="برای Git Repository دسترسی Read/Write را محدود کنید.">برای Git Repository دسترسی Read/Write را محدود کنید.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Cisco Problems -->
+
+<section id="cisco-issues" class="article-section">
+  <h2 data-en="Common Cisco Backup Issues" data-fa="مشکلات رایج Backup Cisco">
+    مشکلات رایج Backup Cisco
+  </h2>
+
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Problem</th>
+
+          <th>Cause</th>
+
+          <th>Solution</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>SSH Connection Failed</td>
+
+          <td>SSH disabled or RSA key missing</td>
+
+          <td>Enable SSH and generate RSA key</td>
+        </tr>
+
+        <tr>
+          <td>Permission Denied</td>
+
+          <td>Insufficient privilege level</td>
+
+          <td>Use privilege 15 user</td>
+        </tr>
+
+        <tr>
+          <td>Incomplete Configuration</td>
+
+          <td>Wrong Cisco model definition</td>
+
+          <td>Change Oxidized model</td>
+        </tr>
+
+        <tr>
+          <td>Timeout</td>
+
+          <td>Slow device response</td>
+
+          <td>Increase timeout value</td>
+        </tr>
+
+        <tr>
+          <td>Password Change Required</td>
+
+          <td>Credentials expired</td>
+
+          <td>Update Oxidized credentials</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Troubleshooting -->
+
+<section id="troubleshooting" class="article-section">
+  <h2 data-en="Troubleshooting" data-fa="عیب‌یابی">عیب‌یابی</h2>
+
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Error</th>
+
+          <th>Check</th>
+
+          <th>Solution</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>No configuration backup</td>
+
+          <td>Oxidized logs</td>
+
+          <td>Check SSH connectivity</td>
+        </tr>
+
+        <tr>
+          <td>Git commit failed</td>
+
+          <td>Repository permission</td>
+
+          <td>Fix owner of git directory</td>
+        </tr>
+
+        <tr>
+          <td>NetBox devices not imported</td>
+
+          <td>API Token</td>
+
+          <td>Check Token permission</td>
+        </tr>
+
+        <tr>
+          <td>SSH timeout</td>
+
+          <td>Network ACL / Firewall</td>
+
+          <td>Allow TCP 22</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="article-code">
+    <div class="article-code-header">
+      <span class="article-code-label"> Debug Commands </span>
+    </div>
+
+    <pre>
+<code class="language-bash">
+
+
+journalctl -u oxidized -f
+
+
+systemctl status oxidized
+
+
+ssh oxidized@DEVICE-IP
+
+
+</code>
+</pre>
+  </div>
+</section>
+
+<!-- FAQ -->
+
+<section id="faq" class="article-section">
+  <h2 data-en="Frequently Asked Questions" data-fa="پرسش‌های متداول">
+    پرسش‌های متداول
+  </h2>
+
+  <div class="article-faq-item">
+    <h3 class="article-faq-question" data-en="Does Oxidized replace a backup server?" data-fa="آیا Oxidized جایگزین Backup Server است؟">آیا Oxidized جایگزین Backup Server است؟</h3>
+
+    <div class="article-faq-answer">
+      <p data-en="No. Oxidized backs up network device configurations; it does not replace database, VM or file backups." data-fa="خیر. Oxidized فقط برای Backup Configuration تجهیزات شبکه استفاده می‌شود و جایگزین Backup دیتابیس، VM یا File Backup نیست.">خیر. Oxidized فقط برای Backup Configuration تجهیزات شبکه استفاده می‌شود و جایگزین Backup دیتابیس، VM یا File Backup نیست.</p>
+    </div>
+  </div>
+
+  <div class="article-faq-item">
+    <h3 class="article-faq-question" data-en="Does Oxidized support Cisco IOS-XE?" data-fa="آیا Oxidized از Cisco IOS-XE پشتیبانی می‌کند؟">آیا Oxidized از Cisco IOS-XE پشتیبانی می‌کند؟</h3>
+
+    <div class="article-faq-answer">
+      <p data-en="Yes. The Cisco IOS model is used for most Cisco IOS and IOS-XE devices." data-fa="بله. مدل Cisco IOS برای اکثر تجهیزات Cisco IOS و IOS-XE استفاده می‌شود.">بله. مدل Cisco IOS برای اکثر تجهیزات Cisco IOS و IOS-XE استفاده می‌شود.</p>
+    </div>
+  </div>
+
+  <div class="article-faq-item">
+    <h3 class="article-faq-question" data-en="Why is Git important for Oxidized?" data-fa="چرا Git برای Oxidized مهم است؟">چرا Git برای Oxidized مهم است؟</h3>
+
+    <div class="article-faq-answer">
+      <p data-en="Git stores every configuration change as a version and makes diffs available." data-fa="Git باعث می‌شود تمام تغییرات Configuration به صورت Version ذخیره شود و امکان مشاهده Diff وجود داشته باشد.">Git باعث می‌شود تمام تغییرات Configuration به صورت Version ذخیره شود و امکان مشاهده Diff وجود داشته باشد.</p>
+    </div>
+  </div>
+
+  <div class="article-faq-item">
+    <h3 class="article-faq-question" data-en="Can Oxidized connect to NetBox?" data-fa="آیا می‌توان Oxidized را به NetBox متصل کرد؟">آیا می‌توان Oxidized را به NetBox متصل کرد؟</h3>
+
+    <div class="article-faq-answer">
+      <p data-en="Yes. The device inventory can be fetched automatically through the NetBox API." data-fa="بله. با استفاده از NetBox API می‌توان لیست تجهیزات را به صورت خودکار دریافت کرد.">بله. با استفاده از NetBox API می‌توان لیست تجهیزات را به صورت خودکار دریافت کرد.</p>
+    </div>
+  </div>
+
+  <div class="article-faq-item">
+    <h3 class="article-faq-question" data-en="Does the MikroTik model create a binary backup?" data-fa="آیا Model میکروتیک Backup Binary می‌سازد؟">آیا Model میکروتیک Backup Binary می‌سازد؟</h3>
+
+    <div class="article-faq-answer">
+      <p data-en="No. The routeros model stores a text export and metadata. Schedule /system backup save separately when a binary recovery file is required, and protect that file as a secret." data-fa="خیر. Model به نام routeros یک Export متنی و Metadata ذخیره می‌کند. اگر فایل Binary برای Recovery لازم است، /system backup save را جداگانه زمان‌بندی و فایل را مانند Secret محافظت کنید.">خیر. Model به نام routeros یک Export متنی و Metadata ذخیره می‌کند. اگر فایل Binary برای Recovery لازم است، /system backup save را جداگانه زمان‌بندی و فایل را مانند Secret محافظت کنید.</p>
+    </div>
+  </div>
+
+  <div class="article-faq-item">
+    <h3 class="article-faq-question" data-en="Why is automated Cisco backup important?" data-fa="چرا Backup خودکار Cisco مهم است؟">چرا Backup خودکار Cisco مهم است؟</h3>
+
+    <div class="article-faq-answer">
+      <p data-en="Enterprise networks change frequently. Without version history, it is difficult to identify changes or restore a known-good configuration quickly." data-fa="زیرا در شبکه‌های Enterprise تغییرات زیادی روی Switch و Router انجام می‌شود و بدون Version History امکان تشخیص تغییرات و بازگردانی سریع وجود ندارد.">زیرا در شبکه‌های Enterprise تغییرات زیادی روی Switch و Router انجام می‌شود و بدون Version History امکان تشخیص تغییرات و بازگردانی سریع وجود ندارد.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Conclusion -->
+
+<section id="conclusion" class="article-section">
+  <h2 data-en="Conclusion" data-fa="نتیجه‌گیری">نتیجه‌گیری</h2>
+
+  <p data-en="Oxidized is a lightweight and secure solution for backing up network device configurations. Combining Oxidized with Git and NetBox provides a practical architecture for documentation, automation and change management." data-fa="Oxidized یک راهکار سبک، امن و قدرتمند برای مدیریت Backup Configuration تجهیزات شبکه است. ترکیب Oxidized با Git و NetBox یک معماری استاندارد برای مستندسازی، Automation و مدیریت تغییرات شبکه ایجاد می‌کند.">Oxidized یک راهکار سبک، امن و قدرتمند برای مدیریت Backup Configuration تجهیزات شبکه است. ترکیب Oxidized با Git و NetBox یک معماری استاندارد برای مستندسازی، Automation و مدیریت تغییرات شبکه ایجاد می‌کند.</p>
+</section>
+
+<!-- Sources -->
+
+<section id="sources" class="article-section">
+  <h2 data-en="Official References" data-fa="منابع رسمی">منابع رسمی</h2>
+
+  <ul>
+    <li>
+      <a href="https://github.com/ytti/oxidized">
+        Oxidized GitHub Repository
+      </a>
+    </li>
+
+    <li>
+      <a href="https://github.com/ytti/oxidized-web"> Oxidized Web </a>
+    </li>
+
+    <li>
+      <a href="https://docs.netbox.dev"> NetBox Documentation </a>
+    </li>
+
+    <li>
+      <a href="https://www.cisco.com/c/en/us/support/index.html">
+        Cisco Support Documentation
+      </a>
+    </li>
+
+    <li><a href="https://github.com/ytti/oxidized/blob/master/docs/Supported-OS-Types.md">Oxidized Supported OS Types</a></li>
+    <li><a href="https://github.com/ytti/oxidized/blob/master/docs/Sources.md">Oxidized Sources and NetBox-compatible HTTP source</a></li>
+    <li><a href="https://github.com/ytti/oxidized/blob/master/docs/Model-Notes/RouterOS.md">MikroTik RouterOS model notes</a></li>
+    <li><a href="https://github.com/ytti/oxidized/blob/master/docs/Configuration.md">Oxidized configuration reference</a></li>
+    <li><a href="https://github.com/ytti/oxidized/blob/master/docs/Inputs/SSH.md">Oxidized SSH input reference</a></li>
+  </ul>
+</section>
+</article></main></body></html>

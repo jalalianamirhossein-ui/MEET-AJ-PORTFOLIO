@@ -1,0 +1,1220 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <title>
+      Complete Guide to NetBox Installation and Setup on Ubuntu - Meet AJ
+    </title>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta
+      content="راهنمای جامع راه‌اندازی NetBox روی Ubuntu 24.04 شامل نیازمندی سرور، PostgreSQL، Redis، Python، Gunicorn، Nginx، SSL، API و Import کردن Device Type Library."
+      name="description"
+    />
+    <meta
+      content="NetBox, Ubuntu, IPAM, DCIM, PostgreSQL, Redis, Gunicorn, Nginx, REST API, Device Type Library, Network Automation, DevOps, Infrastructure"
+      name="keywords"
+    />
+    <meta name="author" content="AmirHossein Jalalian" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="fa, en" />
+    <meta name="theme-color" content="#00bf73" />
+    <meta name="msapplication-TileColor" content="#00bf73" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Meet AJ" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Meet AJ" />
+    <meta name="msapplication-tooltip" content="Meet AJ - Technical Articles" />
+    <meta name="msapplication-starturl" content="/" />
+    <meta name="msapplication-navbutton-color" content="#00bf73" />
+    <meta
+      name="msapplication-TileImage"
+      content="../assets/img/apple-touch-icon.png"
+    />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="آموزش جامع راه‌اندازی NetBox در Ubuntu"
+    />
+    <meta
+      property="og:description"
+      content="راهنمای جامع راه‌اندازی NetBox روی Ubuntu 24.04 شامل نیازمندی سرور، PostgreSQL، Redis، Python، Gunicorn، Nginx، SSL، API و Import کردن Device Type Library."
+    />
+    <meta property="og:image" content="../assets/img/portfolio/linux-7.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta
+      property="og:image:alt"
+      content="NetBox Ubuntu Installation Guide - IPAM DCIM Setup"
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/netbox-installation-setup-ubuntu.html"
+    />
+    <meta property="og:site_name" content="Meet AJ - Technical Articles" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta
+      property="twitter:title"
+      content="آموزش جامع راه‌اندازی NetBox در Ubuntu"
+    />
+    <meta
+      property="twitter:description"
+      content="راهنمای جامع راه‌اندازی NetBox روی Ubuntu 24.04 شامل نیازمندی سرور، PostgreSQL، Redis، Python، Gunicorn، Nginx، SSL، API و Import کردن Device Type Library."
+    />
+    <meta
+      property="twitter:image"
+      content="../assets/img/portfolio/linux-7.png"
+    />
+    <meta
+      property="twitter:image:alt"
+      content="NetBox Ubuntu Installation Guide - IPAM DCIM Setup"
+    />
+    <meta property="article:author" content="AmirHossein Jalalian" />
+    <meta
+      property="article:published_time"
+      content="2026-09-19T00:00:00+03:30"
+    />
+    <meta property="article:section" content="Infrastructure & DevOps" />
+    <meta property="article:tag" content="NetBox" />
+    <meta property="article:tag" content="Ubuntu" />
+    <meta property="article:tag" content="IPAM" />
+    <meta property="article:tag" content="SSL" />
+    <meta property="article:tag" content="DCIM" />
+    <meta name="theme-color" content="#00bf73" />
+    <meta name="msapplication-TileColor" content="#00bf73" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Meet AJ" />
+    <link
+      rel="canonical"
+      href="https://meetaj.ir/articles/netbox-installation-setup-ubuntu.html"
+    />
+    <link
+      rel="alternate"
+      hreflang="fa"
+      href="https://meetaj.ir/articles/netbox-installation-setup-ubuntu.html"
+    />
+    <link
+      rel="alternate"
+      hreflang="en"
+      href="https://meetaj.ir/articles/netbox-installation-setup-ubuntu.html"
+    />
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href="https://meetaj.ir/articles/netbox-installation-setup-ubuntu.html"
+    />
+    <link href="../assets/img/favicon.png" rel="icon" />
+    <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "آموزش جامع راه‌اندازی NetBox در Ubuntu",
+        "description": "راهنمای جامع راه‌اندازی NetBox روی Ubuntu 24.04 شامل نیازمندی سرور، PostgreSQL، Redis، Python، Gunicorn، Nginx، SSL، API و Import کردن Device Type Library.",
+        "image": "../assets/img/my-profile-img.jpg",
+        "author": {
+          "@type": "Person",
+          "name": "AmirHossein Jalalian",
+          "url": "https://meetaj.ir"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Meet AJ",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "../assets/img/logo.png"
+          }
+        },
+        "datePublished": "2026-09-19T00:00:00+03:30",
+        "dateModified": "2026-09-19T00:00:00+03:30",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://meetaj.ir/articles/netbox-installation-setup-ubuntu.html"
+        },
+        "articleSection": "Infrastructure & DevOps",
+        "keywords": [
+          "NetBox",
+          "Ubuntu",
+          "IPAM",
+          "SSL",
+          "DCIM",
+          "REST API",
+          "PostgreSQL",
+          "Redis",
+          "آموزش NetBox",
+          "راه‌اندازی IPAM و DCIM",
+          "پیکربندی NetBox",
+          "NetBox API",
+          "Device Type Library",
+          "Network Automation",
+          "DevOps",
+          "Ubuntu Server"
+        ],
+        "inLanguage": ["fa", "en"],
+        "wordCount": "7500",
+        "timeRequired": "PT45M",
+        "educationalLevel": "Intermediate",
+        "learningResourceType": "Tutorial",
+        "about": {
+          "@type": "Thing",
+          "name": "NetBox IPAM/DCIM",
+          "description": "Infrastructure resource modeling, IPAM and DCIM platform"
+        },
+        "mentions": [
+          {
+            "@type": "Thing",
+            "name": "Ubuntu",
+            "description": "Linux operating system"
+          },
+          {
+            "@type": "Thing",
+            "name": "SSL Certificate",
+            "description": "Security certificate for HTTPS"
+          }
+        ]
+      }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Vazirmatn:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="../assets/vendor/bootstrap/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="../assets/vendor/bootstrap-icons/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/vendor/aos/aos.css" rel="stylesheet" />
+    <link
+      href="../assets/vendor/glightbox/css/glightbox.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="../assets/vendor/swiper/swiper-bundle.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/main.css?v=1000" rel="stylesheet" />
+    <link href="../assets/css/articles.css?v=1013" rel="stylesheet" />
+    <link href="../assets/css/lang-toggle.css?v=1000" rel="stylesheet" />
+    <link
+      id="rtl-style"
+      href="../assets/css/rtl.css?v=1000"
+      rel="stylesheet"
+      disabled
+    />
+  </head>
+  <body class="article-page theme-linux">
+    <a href="#main-content" class="skip-link sr-only sr-only-focusable"
+      ><span data-en="Skip to main content" data-fa="رفتن به محتوای اصلی"
+        >Skip to main content</span
+      ></a
+    >
+    <button
+      id="menu-toggle"
+      class="menu-toggle d-xl-none"
+      aria-label="Toggle navigation menu"
+      aria-expanded="false"
+      aria-controls="header"
+      type="button"
+    >
+      <i class="bi bi-list" aria-hidden="true"></i
+      ><span class="sr-only" data-en="Menu" data-fa="منو">Menu</span>
+    </button>
+    <header id="header" class="header dark-background d-flex flex-column">
+      <!-- ===============================================
+      ==================== PROFILE IMAGE =================
+      =============================================== -->
+      <div class="profile-img">
+        <img
+          src="../assets/img/my-profile-img.jpg"
+          loading="lazy"
+          alt="AmirHossein Jalalian Profile Picture"
+          class="img-fluid rounded-circle"
+        />
+      </div>
+
+      <!-- ===============================================
+      ==================== LOGO SECTION ==================
+      =============================================== -->
+      <div
+        class="logo-section d-flex align-items-center justify-content-between"
+      >
+        <!-- Site Logo & Name -->
+        <a href="../index.html#hero" class="logo d-flex align-items-center">
+          <img src="../assets/img/logo.png" alt="Aj-Network" loading="lazy" />
+          <p class="sitename">Meet AJ</p>
+        </a>
+      </div>
+
+      <!-- ===============================================
+      ==================== SOCIAL LINKS ====================
+      =============================================== -->
+      <div class="social-links text-center">
+        <!-- ردیف اول: لینکدین، گیت‌هاب، واتساپ، تلگرام -->
+        <div class="social-row social-row-main">
+          <a
+            href="https://www.linkedin.com/in/amirhussein-jalalian-050702188/"
+            class="linkedin"
+            target="_blank"
+            rel="noopener"
+            aria-label="LinkedIn"
+            ><i class="bi bi-linkedin"></i
+          ></a>
+          <a
+            href="https://github.com/jalalianamirhossein-ui"
+            class="github"
+            target="_blank"
+            rel="noopener"
+            aria-label="GitHub"
+            ><i class="bi bi-github"></i
+          ></a>
+          <a
+            href="https://wa.me/989197276219"
+            class="whatsapp"
+            target="_blank"
+            rel="noopener"
+            aria-label="WhatsApp"
+            ><i class="bi bi-whatsapp"></i
+          ></a>
+          <a
+            href="https://t.me/Aj_mercury"
+            class="telegram"
+            target="_blank"
+            rel="noopener"
+            aria-label="Telegram"
+            ><i class="bi bi-telegram"></i
+          ></a>
+        </div>
+
+        <!-- ردیف دوم: بقیه -->
+        <div class="social-row social-row-secondary">
+          <a
+            href="https://twitter.com/RealAjMercury"
+            class="twitter"
+            target="_blank"
+            rel="noopener"
+            aria-label="X (Twitter)"
+            ><svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+              />
+            </svg>
+          </a>
+          <a
+            href="https://stackoverflow.com/users/24522280/amir-jalalian"
+            class="stackoverflow"
+            target="_blank"
+            rel="noopener"
+            aria-label="Stack Overflow"
+            ><i class="bi bi-stack-overflow"></i
+          ></a>
+          <a
+            href="https://www.facebook.com/amir.jalalian.37"
+            class="facebook"
+            target="_blank"
+            rel="noopener"
+            aria-label="Facebook"
+            ><i class="bi bi-facebook"></i
+          ></a>
+          <a
+            href="https://instagram.com/aj.mercury"
+            class="instagram"
+            target="_blank"
+            rel="noopener"
+            aria-label="Instagram"
+            ><i class="bi bi-instagram"></i
+          ></a>
+          <a href="tel:+989197276219" class="google-plus" aria-label="Phone"
+            ><i class="bi bi-telephone"></i
+          ></a>
+        </div>
+      </div>
+
+      <!-- ===============================================
+      ==================== NAVIGATION MENU ================
+      =============================================== -->
+      <nav id="navmenu" class="navmenu navmenu--article-toc" aria-label="Article navigation">
+<ul>
+<li><a href="../index.html#hero"><i class="bi bi-house navicon" aria-hidden="true"></i><span data-en="Home" data-fa="خانه">Home</span></a></li>
+<li><a href="../index.html#portfolio"><i class="bi bi-journal-text navicon" aria-hidden="true"></i><span data-en="Articles" data-fa="مقالات">Articles</span></a></li><li class="article-nav-item"><a href="#introduction"><i class="bi bi-info-circle navicon" aria-hidden="true"></i><span data-en="Introduction" data-fa="مقدمه">Introduction</span></a></li><li class="article-nav-item"><a href="#architecture"><i class="bi bi-diagram-3 navicon" aria-hidden="true"></i><span data-en="NetBox Architecture" data-fa="معماری NetBox">NetBox Architecture</span></a></li><li class="article-nav-item"><a href="#server-requirements"><i class="bi bi-server navicon" aria-hidden="true"></i><span data-en="Server Requirements" data-fa="منابع موردنیاز سرور">Server Requirements</span></a></li><li class="article-nav-item"><a href="#prerequisites"><i class="bi bi-clipboard-check navicon" aria-hidden="true"></i><span data-en="Prerequisites" data-fa="پیش‌نیازها">Prerequisites</span></a></li><li class="article-nav-item"><a href="#postgresql"><i class="bi bi-database navicon" aria-hidden="true"></i><span data-en="PostgreSQL Setup" data-fa="راه‌اندازی PostgreSQL">PostgreSQL Setup</span></a></li><li class="article-nav-item"><a href="#redis"><i class="bi bi-lightning navicon" aria-hidden="true"></i><span data-en="Redis Setup" data-fa="راه‌اندازی Redis">Redis Setup</span></a></li><li class="article-nav-item"><a href="#installation"><i class="bi bi-download navicon" aria-hidden="true"></i><span data-en="Install NetBox" data-fa="نصب NetBox">Install NetBox</span></a></li><li class="article-nav-item"><a href="#configuration"><i class="bi bi-sliders navicon" aria-hidden="true"></i><span data-en="Core Configuration" data-fa="پیکربندی اصلی">Core Configuration</span></a></li><li class="article-nav-item"><a href="#services"><i class="bi bi-gear navicon" aria-hidden="true"></i><span data-en="Gunicorn &amp; Services" data-fa="Gunicorn و سرویس‌ها">Gunicorn & Services</span></a></li><li class="article-nav-item"><a href="#nginx"><i class="bi bi-hdd-network navicon" aria-hidden="true"></i><span data-en="Nginx &amp; HTTPS" data-fa="Nginx و HTTPS">Nginx & HTTPS</span></a></li><li class="article-nav-item"><a href="#validation"><i class="bi bi-check2-circle navicon" aria-hidden="true"></i><span data-en="Validation &amp; Tests" data-fa="تست و اعتبارسنجی">Validation & Tests</span></a></li><li class="article-nav-item"><a href="#api"><i class="bi bi-braces navicon" aria-hidden="true"></i><span data-en="REST API" data-fa="REST API">REST API</span></a></li><li class="article-nav-item"><a href="#device-library"><i class="bi bi-box-seam navicon" aria-hidden="true"></i><span data-en="Device Type Library Import" data-fa="Import کتابخانه تجهیزات">Device Type Library Import</span></a></li><li class="article-nav-item"><a href="#maintenance"><i class="bi bi-arrow-repeat navicon" aria-hidden="true"></i><span data-en="Backup &amp; Upgrade" data-fa="Backup و Upgrade">Backup & Upgrade</span></a></li><li class="article-nav-item"><a href="#security"><i class="bi bi-shield-check navicon" aria-hidden="true"></i><span data-en="Security Checklist" data-fa="چک‌لیست امنیت">Security Checklist</span></a></li><li class="article-nav-item"><a href="#troubleshooting"><i class="bi bi-tools navicon" aria-hidden="true"></i><span data-en="Troubleshooting" data-fa="عیب‌یابی">Troubleshooting</span></a></li><li class="article-nav-item"><a href="#conclusion"><i class="bi bi-flag navicon" aria-hidden="true"></i><span data-en="Conclusion" data-fa="نتیجه‌گیری">Conclusion</span></a></li><li class="article-nav-item"><a href="#faq"><i class="bi bi-question-circle navicon" aria-hidden="true"></i><span data-en="Frequently Asked Questions" data-fa="پرسش‌های متداول">Frequently Asked Questions</span></a></li></ul></nav>
+      <button
+        id="lang-toggle"
+        class="i18n-link"
+        type="button"
+        aria-pressed="false"
+        aria-label="Switch language"
+      >
+        <span class="i18n-cur">EN</span><span class="i18n-sep"> | </span
+        ><span class="i18n-alt">FA</span>
+      </button>
+    </header>
+    <main id="main-content" class="main" role="main">
+      <section class="article-hero article-header hero" role="banner">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-10 mx-auto">
+              <div class="article-meta">
+                <span class="article-category">Linux</span
+                ><span class="meta-date"
+                  ><span class="article-date" data-en="Article" data-fa="مقاله"
+                    >Article</span
+                  ><time datetime="2026-09-19">NetBox 4.7.1</time></span
+                >
+              </div>
+              <h1
+                class="article-title hero-title"
+                data-en="NetBox Installation &amp; Setup on Ubuntu" data-fa="راه‌اندازی NetBox در Ubuntu">
+                NetBox Installation &amp; Setup on Ubuntu
+              </h1>
+              <p
+                class="article-excerpt hero-subtitle"
+                data-en="Complete guide to NetBox deployment, API and Device Type Library import" data-fa="راهنمای جامع نصب NetBox، API و Import کتابخانه تجهیزات">
+                Complete guide to NetBox deployment, API and Device Type Library import
+              </p>
+              <div class="article-banner">
+                <div class="banner-card">
+                  <img
+                    class="article-hero-thumbnail"
+                    src="../assets/img/portfolio/linux-7.png"
+                    alt="NetBox Installation and Setup on Ubuntu"
+                  />
+                  <div class="banner-content">
+                    <h2 class="banner-title">NetBox</h2>
+                    <p
+                      class="banner-subtitle"
+                      data-en="Meet AJ technical article"
+                      data-fa="مقاله فنی Meet AJ"
+                    >
+                      Meet AJ technical article
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="article-actions">
+                <a
+                  href="#article-content"
+                  class="btn btn-primary btn-lg action-btn"
+                  ><span class="btn-content"
+                    ><i class="bi bi-play-circle" aria-hidden="true"></i
+                    ><span data-en="Start reading" data-fa="شروع مطالعه"
+                      >Start reading</span
+                    ></span
+                  ></a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-background" aria-hidden="true">
+          <div class="bg-shape bg-shape-1"></div>
+          <div class="bg-shape bg-shape-2"></div>
+          <div class="bg-shape bg-shape-3"></div>
+        </div>
+      </section>
+      <section
+        id="article-content"
+        class="article-content article-container"
+        aria-label="Article content"
+      >
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 mx-auto">
+              <article class="article-body">
+<!-- Introduction -->
+<section id="introduction" class="article-section">
+<h2  data-en="Introduction" data-fa="مقدمه">مقدمه</h2>
+<div class="intro-content">
+<p data-en="NetBox is an open-source platform for modeling and documenting network infrastructure and serves as a Source of Truth for IPAM, DCIM, racks, devices, cabling, VLANs, prefixes, virtualization and other infrastructure resources. This guide covers a production-ready NetBox 4.7.x deployment on Ubuntu 24.04 from zero through API use and device library import." data-fa="NetBox یک پلتفرم متن‌باز برای مدل‌سازی و مستندسازی زیرساخت شبکه است که نقش Source of Truth را برای IPAM، DCIM، Rack، Device، Cable، VLAN، Prefix، Virtualization و سایر منابع زیرساختی ایفا می‌کند. این راهنما نصب Production-ready نسخه 4.7.x روی Ubuntu 24.04 را از صفر تا API و Import کتابخانه تجهیزات پوشش می‌دهد.">NetBox یک پلتفرم متن‌باز برای مدل‌سازی و مستندسازی زیرساخت شبکه است که نقش Source of Truth را برای IPAM، DCIM، Rack، Device، Cable، VLAN، Prefix، Virtualization و سایر منابع زیرساختی ایفا می‌کند. این راهنما نصب Production-ready نسخه 4.7.x روی Ubuntu 24.04 را از صفر تا API و Import کتابخانه تجهیزات پوشش می‌دهد.</p>
+<p data-en="At the time of this guide, the latest stable NetBox release is v4.7.1, released September 15, 2026. In production, install the latest patch of the selected stable branch and review release notes before upgrading." data-fa="در زمان تهیه این راهنما آخرین نسخه پایدار NetBox، نسخه 4.7.1 منتشرشده در 15 سپتامبر 2026 است. برای محیط Production بهتر است همیشه آخرین Patch همان شاخه پایدار را نصب کنید و قبل از Upgrade یادداشت‌های Release را بررسی کنید.">در زمان تهیه این راهنما آخرین نسخه پایدار NetBox، نسخه 4.7.1 منتشرشده در 15 سپتامبر 2026 است. برای محیط Production بهتر است همیشه آخرین Patch همان شاخه پایدار را نصب کنید و قبل از Upgrade یادداشت‌های Release را بررسی کنید.</p>
+</div>
+</section>
+<!-- Table of Contents -->
+<section id="article-toc" class="article-section">
+<h2 data-en="Table of Contents" data-fa="فهرست مطالب">فهرست مطالب</h2>
+<nav class="article-toc"><ul><li><a href="#introduction" data-en="Introduction" data-fa="مقدمه">1. مقدمه</a></li><li><a href="#architecture" data-en="NetBox Architecture" data-fa="معماری NetBox">2. معماری NetBox</a></li><li><a href="#server-requirements" data-en="Server Requirements" data-fa="منابع موردنیاز سرور">3. منابع موردنیاز سرور</a></li><li><a href="#prerequisites" data-en="Prerequisites" data-fa="پیش‌نیازها">4. پیش‌نیازها</a></li><li><a href="#postgresql" data-en="PostgreSQL Setup" data-fa="راه‌اندازی PostgreSQL">5. راه‌اندازی PostgreSQL</a></li><li><a href="#redis" data-en="Redis Setup" data-fa="راه‌اندازی Redis">6. راه‌اندازی Redis</a></li><li><a href="#installation" data-en="Install NetBox" data-fa="نصب NetBox">7. نصب NetBox</a></li><li><a href="#configuration" data-en="Core Configuration" data-fa="پیکربندی اصلی">8. پیکربندی اصلی</a></li><li><a href="#services" data-en="Gunicorn &amp; Services" data-fa="Gunicorn و سرویس‌ها">9. Gunicorn و سرویس‌ها</a></li><li><a href="#nginx" data-en="Nginx &amp; HTTPS" data-fa="Nginx و HTTPS">10. Nginx و HTTPS</a></li><li><a href="#validation" data-en="Validation &amp; Tests" data-fa="تست و اعتبارسنجی">11. تست و اعتبارسنجی</a></li><li><a href="#api" data-en="REST API" data-fa="REST API">12. REST API</a></li><li><a href="#device-library" data-en="Device Type Library Import" data-fa="Import کتابخانه تجهیزات">13. Import کتابخانه تجهیزات</a></li><li><a href="#maintenance" data-en="Backup &amp; Upgrade" data-fa="Backup و Upgrade">14. Backup و Upgrade</a></li><li><a href="#security" data-en="Security Checklist" data-fa="چک‌لیست امنیت">15. چک‌لیست امنیت</a></li><li><a href="#troubleshooting" data-en="Troubleshooting" data-fa="عیب‌یابی">16. عیب‌یابی</a></li><li><a href="#faq" data-en="Frequently Asked Questions" data-fa="پرسش‌های متداول">پرسش‌های متداول</a></li></ul></nav>
+</section>
+<!-- Architecture -->
+<section id="architecture" class="article-section">
+<h2  data-en="NetBox Architecture" data-fa="معماری NetBox">معماری NetBox</h2>
+<p data-en="NetBox is a Django/Python application typically deployed behind Gunicorn and Nginx. PostgreSQL is the primary database, Redis is used for caching and background job queues, and the netbox-rq service processes background jobs." data-fa="NetBox یک برنامه Django/Python است که در Production معمولاً پشت Gunicorn و Nginx اجرا می‌شود. PostgreSQL دیتابیس اصلی است و Redis برای Cache و صف Background Jobها استفاده می‌شود. سرویس netbox-rq پردازش Jobهای پس‌زمینه را انجام می‌دهد.">NetBox یک برنامه Django/Python است که در Production معمولاً پشت Gunicorn و Nginx اجرا می‌شود. PostgreSQL دیتابیس اصلی است و Redis برای Cache و صف Background Jobها استفاده می‌شود. سرویس netbox-rq پردازش Jobهای پس‌زمینه را انجام می‌دهد.</p>
+<div class="article-callout article-callout--info"><ul><li data-en="Nginx: reverse proxy, TLS termination and static file delivery" data-fa="Nginx: Reverse Proxy، TLS و ارائه Static Files">Nginx: Reverse Proxy، TLS و ارائه Static Files</li><li data-en="Gunicorn: WSGI application server" data-fa="Gunicorn: اجرای WSGI Application">Gunicorn: اجرای WSGI Application</li><li data-en="NetBox/Django: core application logic" data-fa="NetBox/Django: منطق اصلی برنامه">NetBox/Django: منطق اصلی برنامه</li><li data-en="PostgreSQL 15+: primary database" data-fa="PostgreSQL 15+: پایگاه داده اصلی">PostgreSQL 15+: پایگاه داده اصلی</li><li data-en="Redis 6+: cache and task queue" data-fa="Redis 6+: Cache و Queue">Redis 6+: Cache و Queue</li><li data-en="netbox-rq: background job worker" data-fa="netbox-rq: Worker پردازش Background Jobs">netbox-rq: Worker پردازش Background Jobs</li></ul></div>
+</section>
+<!-- Server sizing -->
+<section id="server-requirements" class="article-section">
+<h2  data-en="What Server Does NetBox Need?" data-fa="چه سروری برای NetBox نیاز داریم؟">چه سروری برای NetBox نیاز داریم؟</h2>
+<p data-en="Official NetBox documentation does not prescribe a fixed minimum CPU/RAM size; capacity depends on users, object count, plugins and automation load. The table below is a practical starting recommendation, not an official requirement." data-fa="مستندات رسمی NetBox حداقل CPU/RAM مشخصی تعیین نمی‌کنند و ظرفیت مناسب به تعداد کاربران، Deviceها، Pluginها و حجم Automation بستگی دارد. جدول زیر یک پیشنهاد عملی برای شروع است، نه الزام رسمی NetBox.">مستندات رسمی NetBox حداقل CPU/RAM مشخصی تعیین نمی‌کنند و ظرفیت مناسب به تعداد کاربران، Deviceها، Pluginها و حجم Automation بستگی دارد. جدول زیر یک پیشنهاد عملی برای شروع است، نه الزام رسمی NetBox.</p>
+<div class="table-responsive"><table class="table table-bordered"><thead><tr><th>Environment</th><th>vCPU</th><th>RAM</th><th>Disk</th><th>Use</th></tr></thead><tbody>
+<tr><td>Lab / Test</td><td>2</td><td>4 GB</td><td>30 GB SSD</td><td>آزمایش و آموزش</td></tr>
+<tr><td>Small Production</td><td>4</td><td>8 GB</td><td>60 GB SSD</td><td>چند هزار Object و کاربران محدود</td></tr>
+<tr><td>Medium Production</td><td>8</td><td>16 GB</td><td>100+ GB SSD</td><td>Automation، Plugin و API پرترافیک</td></tr>
+</tbody></table></div>
+<div class="article-callout article-callout--info"><ul><li data-en="Use SSD storage in production and place PostgreSQL on reliable storage." data-fa="برای Production از SSD استفاده کنید و PostgreSQL را روی Storage پایدار قرار دهید.">برای Production از SSD استفاده کنید و PostgreSQL را روی Storage پایدار قرار دهید.</li><li data-en="For larger deployments, PostgreSQL and Redis can run on separate hosts." data-fa="در محیط‌های بزرگ می‌توانید PostgreSQL و Redis را روی سرورهای جداگانه اجرا کنید.">در محیط‌های بزرگ می‌توانید PostgreSQL و Redis را روی سرورهای جداگانه اجرا کنید.</li><li data-en="Public access generally requires only ports 80/443; do not expose PostgreSQL or Redis publicly." data-fa="پورت‌های عمومی موردنیاز معمولاً 80/443 هستند؛ PostgreSQL و Redis را عمومی نکنید.">پورت‌های عمومی موردنیاز معمولاً 80/443 هستند؛ PostgreSQL و Redis را عمومی نکنید.</li></ul></div>
+</section>
+<!-- Prerequisites -->
+<section id="prerequisites" class="article-section">
+<h2  data-en="Official Prerequisites" data-fa="پیش‌نیازهای رسمی">پیش‌نیازهای رسمی</h2>
+<div class="article-callout article-callout--info"><ul><li data-en="Ubuntu Server 24.04 LTS; official installation instructions are tested on this release." data-fa="Ubuntu Server 24.04 LTS؛ مستندات نصب رسمی NetBox روی این نسخه تست شده‌اند.">Ubuntu Server 24.04 LTS؛ مستندات نصب رسمی NetBox روی این نسخه تست شده‌اند.</li><li data-en="Python 3.12, 3.13 or 3.14" data-fa="Python 3.12، 3.13 یا 3.14">Python 3.12، 3.13 یا 3.14</li><li data-en="PostgreSQL 15 or later; MySQL is not supported." data-fa="PostgreSQL 15 یا بالاتر؛ MySQL پشتیبانی نمی‌شود.">PostgreSQL 15 یا بالاتر؛ MySQL پشتیبانی نمی‌شود.</li><li data-en="Redis 6.0 or later" data-fa="Redis 6.0 یا بالاتر">Redis 6.0 یا بالاتر</li><li data-en="A sudo-capable user, Internet access, DNS/FQDN and preferably a valid SSL certificate" data-fa="کاربر دارای sudo، اینترنت، DNS/FQDN و ترجیحاً SSL معتبر">کاربر دارای sudo، اینترنت، DNS/FQDN و ترجیحاً SSL معتبر</li></ul></div>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">sudo apt update &amp;&amp; sudo apt upgrade -y
+sudo timedatectl set-timezone Asia/Tehran
+hostnamectl
+ip a</code></pre>
+</div>
+<p data-en="If your server uses another timezone, adjust the timezone value to match your environment." data-fa="اگر سرور شما در منطقه زمانی دیگری قرار دارد، مقدار timezone را متناسب با محیط خود تغییر دهید.">اگر سرور شما در منطقه زمانی دیگری قرار دارد، مقدار timezone را متناسب با محیط خود تغییر دهید.</p>
+</section>
+<!-- PostgreSQL -->
+<section id="postgresql" class="article-section">
+<h2  data-en="Install and Configure PostgreSQL" data-fa="نصب و راه‌اندازی PostgreSQL">نصب و راه‌اندازی PostgreSQL</h2>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">sudo apt update
+sudo apt install -y postgresql
+psql -V
+systemctl status postgresql --no-pager</code></pre>
+</div>
+<p data-en="NetBox 4.7 requires PostgreSQL 15 or later. Next, create a dedicated database and user. Always replace the example password." data-fa="NetBox 4.7 به PostgreSQL 15 یا بالاتر نیاز دارد. سپس Database و User اختصاصی بسازید. رمز مثال زیر را حتماً تغییر دهید.">NetBox 4.7 به PostgreSQL 15 یا بالاتر نیاز دارد. سپس Database و User اختصاصی بسازید. رمز مثال زیر را حتماً تغییر دهید.</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">PostgreSQL</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">sudo -u postgres psql
+
+CREATE DATABASE netbox;
+CREATE USER netbox WITH PASSWORD &#x27;CHANGE_THIS_STRONG_PASSWORD&#x27;;
+ALTER DATABASE netbox OWNER TO netbox;
+\connect netbox;
+GRANT CREATE ON SCHEMA public TO netbox;
+\q</code></pre>
+</div>
+<p data-en="Test database authentication before continuing:" data-fa="اتصال دیتابیس را قبل از ادامه تست کنید:">اتصال دیتابیس را قبل از ادامه تست کنید:</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">psql --username netbox --password --host localhost netbox
+# سپس در psql:
+\conninfo
+\q</code></pre>
+</div>
+</section>
+<!-- Redis -->
+<section id="redis" class="article-section">
+<h2  data-en="Install and Configure Redis" data-fa="نصب و راه‌اندازی Redis">نصب و راه‌اندازی Redis</h2>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">sudo apt install -y redis-server
+redis-server -v
+redis-cli ping
+systemctl status redis-server --no-pager</code></pre>
+</div>
+<p data-en="redis-cli ping should return PONG. Keep Redis bound to localhost or a trusted network; NetBox workers consume jobs from Redis, so unauthorized write access is a serious security risk." data-fa="خروجی redis-cli ping باید PONG باشد. Redis را روی localhost یا شبکه Trusted نگه دارید؛ Workerهای NetBox Jobها را از Redis دریافت می‌کنند و دسترسی Write غیرمجاز به Redis یک ریسک امنیتی جدی است.">خروجی redis-cli ping باید PONG باشد. Redis را روی localhost یا شبکه Trusted نگه دارید؛ Workerهای NetBox Jobها را از Redis دریافت می‌کنند و دسترسی Write غیرمجاز به Redis یک ریسک امنیتی جدی است.</p>
+</section>
+<!-- Installation -->
+<section id="installation" class="article-section">
+<h2  data-en="Install NetBox on Ubuntu 24.04" data-fa="نصب NetBox روی Ubuntu 24.04">نصب NetBox روی Ubuntu 24.04</h2>
+<p data-en="For production, use the release archive or Git workflow. The Python package installation remains experimental in NetBox 4.7. This guide uses Git for easier upgrades." data-fa="برای Production از روش Release Archive یا Git استفاده کنید. نصب NetBox از Python package در شاخه 4.7 هنوز Experimental است. در این راهنما روش Git استفاده می‌شود تا Upgradeها ساده‌تر باشند.">برای Production از روش Release Archive یا Git استفاده کنید. نصب NetBox از Python package در شاخه 4.7 هنوز Experimental است. در این راهنما روش Git استفاده می‌شود تا Upgradeها ساده‌تر باشند.</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">sudo apt install -y python3 python3-pip python3-venv python3-dev \
+  build-essential libxml2-dev libxslt1-dev libffi-dev libpq-dev \
+  libssl-dev zlib1g-dev git
+python3 -V</code></pre>
+</div>
+<p data-en="Clone the official repository and check out a stable release. At the time of this guide, the latest patch is v4.7.1." data-fa="Repository رسمی را Clone کرده و نسخه پایدار را Checkout کنید. در تاریخ این راهنما آخرین Patch، نسخه v4.7.1 است.">Repository رسمی را Clone کرده و نسخه پایدار را Checkout کنید. در تاریخ این راهنما آخرین Patch، نسخه v4.7.1 است.</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">sudo mkdir -p /opt/netbox
+cd /opt/netbox
+sudo git clone https://github.com/netbox-community/netbox.git .
+sudo git checkout v4.7.1</code></pre>
+</div>
+<p data-en="Create the dedicated NetBox service account and assign ownership to writable directories." data-fa="سپس Service Account مخصوص NetBox را بسازید و مالکیت مسیرهای قابل نوشتن را تنظیم کنید.">سپس Service Account مخصوص NetBox را بسازید و مالکیت مسیرهای قابل نوشتن را تنظیم کنید.</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">sudo adduser --system --group netbox
+sudo chown --recursive netbox /opt/netbox/netbox/media/
+sudo chown --recursive netbox /opt/netbox/netbox/reports/
+sudo chown --recursive netbox /opt/netbox/netbox/scripts/</code></pre>
+</div>
+</section>
+<!-- Configuration -->
+<section id="configuration" class="article-section">
+<h2  data-en="Core NetBox Configuration" data-fa="پیکربندی اصلی NetBox">پیکربندی اصلی NetBox</h2>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">cd /opt/netbox/netbox/netbox
+sudo cp configuration_example.py configuration.py
+sudo nano configuration.py</code></pre>
+</div>
+<p data-en="For a new NetBox 4.7 installation, the five core required parameters are ALLOWED_HOSTS, API_TOKEN_PEPPERS, DATABASES, REDIS and SECRET_KEY." data-fa="در NetBox 4.7 پنج پارامتر اصلی برای نصب جدید ضروری هستند: ALLOWED_HOSTS، API_TOKEN_PEPPERS، DATABASES، REDIS و SECRET_KEY.">در NetBox 4.7 پنج پارامتر اصلی برای نصب جدید ضروری هستند: ALLOWED_HOSTS، API_TOKEN_PEPPERS، DATABASES، REDIS و SECRET_KEY.</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Generate Secrets</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">cd /opt/netbox/netbox
+python3 generate_secret_key.py
+python3 generate_secret_key.py</code></pre>
+</div>
+<p data-en="Generate two independent values: one for SECRET_KEY and one for API_TOKEN_PEPPERS. Values below are placeholders." data-fa="دو مقدار مستقل بسازید: یکی برای SECRET_KEY و دیگری برای API_TOKEN_PEPPERS. مقادیر زیر Placeholder هستند.">دو مقدار مستقل بسازید: یکی برای SECRET_KEY و دیگری برای API_TOKEN_PEPPERS. مقادیر زیر Placeholder هستند.</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">configuration.py</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-python">ALLOWED_HOSTS = [&#x27;netbox.example.com&#x27;, &#x27;10.10.10.20&#x27;]
+
+API_TOKEN_PEPPERS = {
+    1: &#x27;PUT_A_RANDOM_50_PLUS_CHARACTER_VALUE_HERE&#x27;,
+}
+
+DATABASES = {
+    &#x27;default&#x27;: {
+        &#x27;NAME&#x27;: &#x27;netbox&#x27;,
+        &#x27;USER&#x27;: &#x27;netbox&#x27;,
+        &#x27;PASSWORD&#x27;: &#x27;CHANGE_THIS_STRONG_PASSWORD&#x27;,
+        &#x27;HOST&#x27;: &#x27;localhost&#x27;,
+        &#x27;PORT&#x27;: &#x27;&#x27;,
+        &#x27;CONN_MAX_AGE&#x27;: 300,
+    }
+}
+
+REDIS = {
+    &#x27;tasks&#x27;: {
+        &#x27;HOST&#x27;: &#x27;localhost&#x27;,
+        &#x27;PORT&#x27;: 6379,
+        &#x27;PASSWORD&#x27;: &#x27;&#x27;,
+        &#x27;DATABASE&#x27;: 0,
+        &#x27;SSL&#x27;: False,
+    },
+    &#x27;caching&#x27;: {
+        &#x27;HOST&#x27;: &#x27;localhost&#x27;,
+        &#x27;PORT&#x27;: 6379,
+        &#x27;PASSWORD&#x27;: &#x27;&#x27;,
+        &#x27;DATABASE&#x27;: 1,
+        &#x27;SSL&#x27;: False,
+    }
+}
+
+SECRET_KEY = &#x27;PUT_ANOTHER_RANDOM_50_PLUS_CHARACTER_VALUE_HERE&#x27;</code></pre>
+</div>
+<p data-en="Now run the bundled upgrade script; it creates the virtual environment, installs Python dependencies, applies migrations, builds documentation and collects static files." data-fa="حالا اسکریپت نصب/Upgrade را اجرا کنید؛ این اسکریپت Virtual Environment، Python dependencies، Migrationها، Documentation و Static Files را آماده می‌کند.">حالا اسکریپت نصب/Upgrade را اجرا کنید؛ این اسکریپت Virtual Environment، Python dependencies، Migrationها، Documentation و Static Files را آماده می‌کند.</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">sudo /opt/netbox/upgrade.sh</code></pre>
+</div>
+<p data-en="Create the administrative superuser:" data-fa="در پایان Superuser بسازید:">در پایان Superuser بسازید:</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">source /opt/netbox/venv/bin/activate
+cd /opt/netbox/netbox
+python3 manage.py createsuperuser</code></pre>
+</div>
+</section>
+<!-- Services -->
+<section id="services" class="article-section">
+<h2  data-en="Set Up Gunicorn and systemd Services" data-fa="راه‌اندازی Gunicorn و سرویس‌های systemd">راه‌اندازی Gunicorn و سرویس‌های systemd</h2>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">sudo cp /opt/netbox/contrib/gunicorn.py /opt/netbox/gunicorn.py
+sudo cp -v /opt/netbox/contrib/*.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now netbox netbox-rq</code></pre>
+</div>
+<p data-en="The netbox service runs Gunicorn while netbox-rq runs the background worker. Both should be active." data-fa="سرویس netbox مربوط به Gunicorn و سرویس netbox-rq مربوط به Background Worker است. هر دو باید Active باشند.">سرویس netbox مربوط به Gunicorn و سرویس netbox-rq مربوط به Background Worker است. هر دو باید Active باشند.</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">systemctl status netbox --no-pager
+systemctl status netbox-rq --no-pager
+ss -lntp | grep 8001</code></pre>
+</div>
+</section>
+<!-- Nginx -->
+<section id="nginx" class="article-section">
+<h2  data-en="Set Up Nginx and HTTPS" data-fa="راه‌اندازی Nginx و HTTPS">راه‌اندازی Nginx و HTTPS</h2>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">sudo apt install -y nginx
+sudo cp /opt/netbox/contrib/nginx.conf /etc/nginx/sites-available/netbox
+sudo nano /etc/nginx/sites-available/netbox</code></pre>
+</div>
+<p data-en="Replace netbox.example.com in the Nginx configuration with your FQDN or IP. It should match ALLOWED_HOSTS. The stock configuration proxies requests to Gunicorn on port 8001." data-fa="در فایل Nginx مقدار netbox.example.com را با FQDN یا IP خود جایگزین کنید. مقدار باید با ALLOWED_HOSTS هماهنگ باشد. فایل نمونه NetBox به‌طور پیش‌فرض Gunicorn را روی پورت 8001 Reverse Proxy می‌کند.">در فایل Nginx مقدار netbox.example.com را با FQDN یا IP خود جایگزین کنید. مقدار باید با ALLOWED_HOSTS هماهنگ باشد. فایل نمونه NetBox به‌طور پیش‌فرض Gunicorn را روی پورت 8001 Reverse Proxy می‌کند.</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">sudo rm -f /etc/nginx/sites-enabled/default
+sudo ln -s /etc/nginx/sites-available/netbox /etc/nginx/sites-enabled/netbox
+sudo nginx -t
+sudo systemctl restart nginx
+sudo systemctl enable nginx</code></pre>
+</div>
+<p data-en="Use a trusted certificate in production. With public DNS you can use Let’s Encrypt/Certbot; for internal deployments use your organization&#x27;s PKI certificate." data-fa="برای Production از Certificate معتبر استفاده کنید. اگر DNS عمومی دارید می‌توانید Let’s Encrypt/Certbot را به‌کار ببرید؛ در شبکه داخلی می‌توانید Certificate سازمانی نصب کنید.">برای Production از Certificate معتبر استفاده کنید. اگر DNS عمومی دارید می‌توانید Let’s Encrypt/Certbot را به‌کار ببرید؛ در شبکه داخلی می‌توانید Certificate سازمانی نصب کنید.</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d netbox.example.com
+sudo certbot renew --dry-run</code></pre>
+</div>
+</section>
+<!-- Validation -->
+<section id="validation" class="article-section">
+<h2  data-en="Final Validation and Service Tests" data-fa="تست نهایی و بالا آمدن NetBox">تست نهایی و بالا آمدن NetBox</h2>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">curl -I http://127.0.0.1
+curl -kI https://netbox.example.com
+systemctl is-active postgresql redis-server netbox netbox-rq nginx</code></pre>
+</div>
+<p data-en="For quick troubleshooting, inspect service status and logs:" data-fa="برای عیب‌یابی سریع وضعیت و Logها را بررسی کنید:">برای عیب‌یابی سریع وضعیت و Logها را بررسی کنید:</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">journalctl -eu netbox --no-pager -n 100
+journalctl -eu netbox-rq --no-pager -n 100
+tail -n 100 /var/log/nginx/error.log</code></pre>
+</div>
+<div class="article-callout article-callout--info"><ul><li data-en="HTTP 502 usually means Nginx cannot reach Gunicorn on port 8001 or the netbox service is down." data-fa="HTTP 502 معمولاً یعنی Nginx به Gunicorn روی 8001 دسترسی ندارد یا سرویس netbox Down است.">HTTP 502 معمولاً یعنی Nginx به Gunicorn روی 8001 دسترسی ندارد یا سرویس netbox Down است.</li><li data-en="HTTP 400 Bad Request often indicates an ALLOWED_HOSTS mismatch." data-fa="HTTP 400 Bad Request معمولاً ALLOWED_HOSTS اشتباه است.">HTTP 400 Bad Request معمولاً ALLOWED_HOSTS اشتباه است.</li><li data-en="Validate database connectivity with psql and review journalctl for database-related errors." data-fa="خطاهای DB را با psql و journalctl بررسی کنید.">خطاهای DB را با psql و journalctl بررسی کنید.</li></ul></div>
+</section>
+<!-- API -->
+<section id="api" class="article-section">
+<h2  data-en="Configure and Test the REST API" data-fa="راه‌اندازی و تست REST API">راه‌اندازی و تست REST API</h2>
+<p data-en="All NetBox REST API endpoints live under /api/, with interactive Swagger documentation at /api/schema/swagger-ui/. Use API tokens for automation. v2 tokens are recommended in NetBox 4.5+ and v1 tokens are deprecated as of 4.6." data-fa="تمام REST APIهای NetBox زیر مسیر /api/ قرار دارند و مستندات تعاملی Swagger روی /api/schema/swagger-ui/ در دسترس است. برای Automation از API Token استفاده کنید. در NetBox 4.5 به بعد توکن‌های v2 توصیه می‌شوند و v1 در 4.6 Deprecated شده است.">تمام REST APIهای NetBox زیر مسیر /api/ قرار دارند و مستندات تعاملی Swagger روی /api/schema/swagger-ui/ در دسترس است. برای Automation از API Token استفاده کنید. در NetBox 4.5 به بعد توکن‌های v2 توصیه می‌شوند و v1 در 4.6 Deprecated شده است.</p>
+<div class="article-callout article-callout--info"><ul><li data-en="Open Profile → API Tokens in the UI." data-fa="از UI وارد Profile → API Tokens شوید.">از UI وارد Profile → API Tokens شوید.</li><li data-en="Enable write access only for import/automation that needs changes." data-fa="توکن Write-enabled را فقط برای Import/Automation نیازمند تغییر بسازید.">توکن Write-enabled را فقط برای Import/Automation نیازمند تغییر بسازید.</li><li data-en="Restrict Allowed IPs to your automation host where possible." data-fa="در صورت امکان Allowed IPs را به IP سرور Automation محدود کنید.">در صورت امکان Allowed IPs را به IP سرور Automation محدود کنید.</li><li data-en="Store the token plaintext securely when created; it cannot be retrieved later." data-fa="Token plaintext را همان لحظه امن ذخیره کنید؛ بعداً قابل بازیابی نیست.">Token plaintext را همان لحظه امن ذخیره کنید؛ بعداً قابل بازیابی نیست.</li></ul></div>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">export NETBOX_URL=&#x27;https://netbox.example.com&#x27;
+export NETBOX_TOKEN=&#x27;nbt_xxxxx.xxxxxxxxxxxxxxxxx&#x27;
+
+curl -s \
+  -H &quot;Authorization: Bearer $NETBOX_TOKEN&quot; \
+  -H &quot;Accept: application/json; indent=2&quot; \
+  &quot;$NETBOX_URL/api/dcim/sites/&quot;</code></pre>
+</div>
+<p data-en="To create a test site through the API:" data-fa="برای ساخت یک Site آزمایشی از API:">برای ساخت یک Site آزمایشی از API:</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">curl -s -X POST \
+  -H &quot;Authorization: Bearer $NETBOX_TOKEN&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  &quot;$NETBOX_URL/api/dcim/sites/&quot; \
+  --data &#x27;{&quot;name&quot;:&quot;HQ&quot;,&quot;slug&quot;:&quot;hq&quot;,&quot;status&quot;:&quot;active&quot;}&#x27;</code></pre>
+</div>
+</section>
+<!-- Device library -->
+<section id="device-library" class="article-section">
+<h2  data-en="Import the Device Type Library Using the API" data-fa="Import کردن Device Type Library با API">Import کردن Device Type Library با API</h2>
+<p data-en="The NetBox Community Device Type Library contains YAML definitions for manufacturers, device types, module types, interface templates, power ports and other components. The community Device-Type-Library-Import project can automate API-based import, check duplicates and selectively import vendors." data-fa="NetBox Community Device Type Library مجموعه بزرگی از تعریف‌های YAML برای Manufacturer، Device Type، Module Type، Interface Template، Power Port و سایر Componentهاست. برای Import خودکار می‌توان از پروژه Community به نام Device-Type-Library-Import استفاده کرد که به API NetBox متصل می‌شود، Duplicateها را بررسی می‌کند و امکان Import انتخابی Vendorها را دارد.">NetBox Community Device Type Library مجموعه بزرگی از تعریف‌های YAML برای Manufacturer، Device Type، Module Type، Interface Template، Power Port و سایر Componentهاست. برای Import خودکار می‌توان از پروژه Community به نام Device-Type-Library-Import استفاده کرد که به API NetBox متصل می‌شود، Duplicateها را بررسی می‌کند و امکان Import انتخابی Vendorها را دارد.</p>
+<p data-en="Run the import tool in a separate virtual environment; do not install it into NetBox&#x27;s application venv." data-fa="بهتر است Import Tool را داخل Virtual Environment جداگانه اجرا کنید و آن را داخل venv اصلی NetBox نصب نکنید.">بهتر است Import Tool را داخل Virtual Environment جداگانه اجرا کنید و آن را داخل venv اصلی NetBox نصب نکنید.</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">sudo mkdir -p /opt/netbox-tools
+sudo chown $USER:$USER /opt/netbox-tools
+cd /opt/netbox-tools
+git clone https://github.com/netbox-community/Device-Type-Library-Import.git
+cd Device-Type-Library-Import
+python3 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt</code></pre>
+</div>
+<p data-en="Create the environment file and provide the NetBox URL and a write-enabled token:" data-fa="فایل Environment را بسازید و URL و Token دارای Write Permission را وارد کنید:">فایل Environment را بسازید و URL و Token دارای Write Permission را وارد کنید:</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">.env</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">cp .env.example .env
+nano .env
+
+# نمونه:
+NETBOX_URL=https://netbox.example.com/
+NETBOX_TOKEN=nbt_xxxxx.xxxxxxxxxxxxxxxxx</code></pre>
+</div>
+<p data-en="Start by importing only the vendors you need. This reduces runtime and database growth." data-fa="اول فقط Vendorهای موردنیاز را Import کنید. این کار هم زمان اجرا و هم حجم داده را کاهش می‌دهد.">اول فقط Vendorهای موردنیاز را Import کنید. این کار هم زمان اجرا و هم حجم داده را کاهش می‌دهد.</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">./nb-dt-import.py --vendors cisco,hpe,mikrotik,ubiquiti</code></pre>
+</div>
+<p data-en="To import all vendors, run the tool without --vendors, but validate it in test/staging before production. The device type library repository is cloned or updated during execution." data-fa="برای Import همه Vendorها می‌توانید ابزار را بدون --vendors اجرا کنید، ولی در Production بهتر است ابتدا روی Test/Staging بررسی شود. Repository کتابخانه هنگام اجرا Clone یا Pull می‌شود.">برای Import همه Vendorها می‌توانید ابزار را بدون --vendors اجرا کنید، ولی در Production بهتر است ابتدا روی Test/Staging بررسی شود. Repository کتابخانه هنگام اجرا Clone یا Pull می‌شود.</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">./nb-dt-import.py</code></pre>
+</div>
+<p data-en="To validate API access before importing and list manufacturers:" data-fa="برای تست API قبل از Import و مشاهده Manufacturerها:">برای تست API قبل از Import و مشاهده Manufacturerها:</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">curl -s \
+  -H &quot;Authorization: Bearer $NETBOX_TOKEN&quot; \
+  &quot;$NETBOX_URL/api/dcim/manufacturers/?limit=5&quot;</code></pre>
+</div>
+<div class="article-callout article-callout--info"><ul><li data-en="For 401/403 errors, check the token, permissions and allowed IPs." data-fa="خطای 401/403: Token، Permission و Allowed IPs را بررسی کنید.">خطای 401/403: Token، Permission و Allowed IPs را بررسی کنید.</li><li data-en="For SSL errors, fix the certificate chain; disabling verification is only appropriate for temporary testing." data-fa="خطای SSL: Certificate chain را اصلاح کنید؛ غیرفعال‌کردن Verify فقط برای تست توصیه می‌شود.">خطای SSL: Certificate chain را اصلاح کنید؛ غیرفعال‌کردن Verify فقط برای تست توصیه می‌شود.</li><li data-en="Back up the database before a large import." data-fa="قبل از Import انبوه از دیتابیس Backup بگیرید.">قبل از Import انبوه از دیتابیس Backup بگیرید.</li><li data-en="Verify community device definitions against real hardware before operational use." data-fa="Device Typeهای Community را قبل از استفاده عملی با مدل واقعی سخت‌افزار Verify کنید.">Device Typeهای Community را قبل از استفاده عملی با مدل واقعی سخت‌افزار Verify کنید.</li></ul></div>
+</section>
+<!-- Maintenance -->
+<section id="maintenance" class="article-section">
+<h2  data-en="Backup, Upgrade and Maintenance" data-fa="Backup، Upgrade و نگهداری">Backup، Upgrade و نگهداری</h2>
+<p data-en="The PostgreSQL database is the most important backup target. Also preserve configuration.py, media files and any custom scripts/reports." data-fa="مهم‌ترین بخش Backup، دیتابیس PostgreSQL است. علاوه بر آن configuration.py، media و در صورت استفاده scripts/reports سفارشی را نگه دارید.">مهم‌ترین بخش Backup، دیتابیس PostgreSQL است. علاوه بر آن configuration.py، media و در صورت استفاده scripts/reports سفارشی را نگه دارید.</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">sudo -u postgres pg_dump -Fc netbox &gt; /var/backups/netbox-$(date +%F).dump
+sudo cp /opt/netbox/netbox/netbox/configuration.py /var/backups/configuration.py
+sudo tar -czf /var/backups/netbox-media-$(date +%F).tar.gz /opt/netbox/netbox/media</code></pre>
+</div>
+<p data-en="For Git-based upgrades, review release notes and plugin compatibility, take a backup, then check out the new release tag." data-fa="برای Upgrade در نصب Git، ابتدا Release Notes و سازگاری Pluginها را بررسی کنید، Backup بگیرید و سپس Tag جدید را Checkout کنید.">برای Upgrade در نصب Git، ابتدا Release Notes و سازگاری Pluginها را بررسی کنید، Backup بگیرید و سپس Tag جدید را Checkout کنید.</p>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">cd /opt/netbox
+sudo git fetch --tags
+sudo git checkout v4.7.1
+sudo /opt/netbox/upgrade.sh
+sudo systemctl restart netbox netbox-rq
+systemctl status netbox netbox-rq --no-pager</code></pre>
+</div>
+</section>
+<!-- Security -->
+<section id="security" class="article-section">
+<h2  data-en="Production Security Checklist" data-fa="چک‌لیست امنیت Production">چک‌لیست امنیت Production</h2>
+<div class="article-callout article-callout--info"><ul><li data-en="Keep NetBox, PostgreSQL and Redis on supported security patches." data-fa="NetBox، PostgreSQL و Redis را با آخرین Patchهای امنیتی نگه دارید.">NetBox، PostgreSQL و Redis را با آخرین Patchهای امنیتی نگه دارید.</li><li data-en="Do not expose PostgreSQL 5432 or Redis 6379 publicly." data-fa="PostgreSQL 5432 و Redis 6379 را Public نکنید.">PostgreSQL 5432 و Redis 6379 را Public نکنید.</li><li data-en="Use trusted HTTPS and redirect HTTP to HTTPS." data-fa="از HTTPS معتبر استفاده کنید و HTTP را Redirect کنید.">از HTTPS معتبر استفاده کنید و HTTP را Redirect کنید.</li><li data-en="Use v2 API tokens with least privilege and allowed IP restrictions." data-fa="برای API از Token v2 با حداقل Permission و Allowed IPs استفاده کنید.">برای API از Token v2 با حداقل Permission و Allowed IPs استفاده کنید.</li><li data-en="Never commit SECRET_KEY, API_TOKEN_PEPPERS or database passwords to source control." data-fa="SECRET_KEY، API_TOKEN_PEPPERS و Database Password را در Repository ذخیره نکنید.">SECRET_KEY، API_TOKEN_PEPPERS و Database Password را در Repository ذخیره نکنید.</li><li data-en="Encrypt backups and test restores periodically." data-fa="Backupها را Encrypt و Restore آن‌ها را دوره‌ای تست کنید.">Backupها را Encrypt و Restore آن‌ها را دوره‌ای تست کنید.</li><li data-en="Use least-privilege roles for users and avoid daily use of the superuser account." data-fa="برای کاربران عادی Role/Permission محدود تعریف کنید و Superuser را برای کار روزمره استفاده نکنید.">برای کاربران عادی Role/Permission محدود تعریف کنید و Superuser را برای کار روزمره استفاده نکنید.</li></ul></div>
+</section>
+<!-- Troubleshooting -->
+<section id="troubleshooting" class="article-section">
+<h2  data-en="Common Troubleshooting" data-fa="عیب‌یابی رایج">عیب‌یابی رایج</h2>
+<div class="table-responsive"><table class="table table-bordered"><thead><tr><th>خطا</th><th>بررسی</th><th>راه‌حل معمول</th></tr></thead><tbody>
+<tr><td>502 Bad Gateway</td><td><code>systemctl status netbox</code></td><td>Gunicorn/port 8001 و Nginx proxy_pass را بررسی کنید.</td></tr>
+<tr><td>400 Bad Request</td><td><code>ALLOWED_HOSTS</code></td><td>FQDN/IP صحیح را در configuration.py قرار دهید.</td></tr>
+<tr><td>DB connection failed</td><td><code>psql -h localhost -U netbox netbox</code></td><td>User/Password/HOST و PostgreSQL service را بررسی کنید.</td></tr>
+<tr><td>Redis error</td><td><code>redis-cli ping</code></td><td>Redis service و تنظیم Database IDهای 0 و 1 را بررسی کنید.</td></tr>
+<tr><td>API 403</td><td>Token permission</td><td>Write enabled، User permissions و Allowed IPs را بررسی کنید.</td></tr>
+<tr><td>Static/CSS مشکل دارد</td><td><code>sudo /opt/netbox/upgrade.sh</code></td><td>collectstatic و Nginx static path را بررسی کنید.</td></tr>
+</tbody></table></div>
+<div class="article-code">
+  <div class="article-code-header">
+    <span class="article-code-label">Ubuntu Terminal</span>
+    <button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی"><i class="bi bi-clipboard"></i></button>
+  </div>
+  <pre><code class="language-bash">sudo nginx -t
+sudo systemctl restart netbox netbox-rq nginx
+journalctl -eu netbox -n 150 --no-pager
+journalctl -eu netbox-rq -n 150 --no-pager
+tail -f /var/log/nginx/error.log</code></pre>
+</div>
+</section>
+<!-- Conclusion -->
+<section id="conclusion" class="article-section">
+<h2  data-en="Conclusion" data-fa="نتیجه‌گیری">نتیجه‌گیری</h2>
+<p data-en="With this architecture, NetBox runs on Ubuntu 24.04 using PostgreSQL, Redis, Gunicorn and Nginx in a production-ready layout. Once online, its REST API and Device Type Library provide a strong foundation for network infrastructure documentation and automation." data-fa="با این معماری، NetBox روی Ubuntu 24.04 با PostgreSQL، Redis، Gunicorn و Nginx به‌صورت Production-ready اجرا می‌شود. پس از بالا آمدن سرویس، REST API و Device Type Library پایه مناسبی برای Automation و مستندسازی استاندارد زیرساخت شبکه ایجاد می‌کنند.">با این معماری، NetBox روی Ubuntu 24.04 با PostgreSQL، Redis، Gunicorn و Nginx به‌صورت Production-ready اجرا می‌شود. پس از بالا آمدن سرویس، REST API و Device Type Library پایه مناسبی برای Automation و مستندسازی استاندارد زیرساخت شبکه ایجاد می‌کنند.</p>
+</section>
+<!-- FAQ -->
+<section id="faq" class="article-section"><h2 data-en="Frequently Asked Questions" data-fa="پرسش‌های متداول">پرسش‌های متداول</h2><div class="article-faq-item">
+<h3 class="article-faq-question" data-en="What exactly does NetBox do?" data-fa="NetBox دقیقاً چه کاری انجام می‌دهد؟">NetBox دقیقاً چه کاری انجام می‌دهد؟</h3>
+<div class="article-faq-answer"><p data-en="NetBox is a Source of Truth for IPAM, DCIM, racks, devices, cabling, VLANs, prefixes, circuits, virtualization and other infrastructure resources; it is not a direct monitoring platform." data-fa="NetBox یک Source of Truth برای مدل‌سازی IPAM، DCIM، Rack، Device، Cable، VLAN، Prefix، Circuit، Virtualization و سایر منابع زیرساختی است؛ ابزار Monitoring مستقیم نیست.">NetBox یک Source of Truth برای مدل‌سازی IPAM، DCIM، Rack، Device، Cable، VLAN، Prefix، Circuit، Virtualization و سایر منابع زیرساختی است؛ ابزار Monitoring مستقیم نیست.</p></div>
+</div><div class="article-faq-item">
+<h3 class="article-faq-question" data-en="Does NetBox replace Zabbix or PRTG?" data-fa="آیا NetBox جای Zabbix یا PRTG را می‌گیرد؟">آیا NetBox جای Zabbix یا PRTG را می‌گیرد؟</h3>
+<div class="article-faq-answer"><p data-en="No. NetBox stores intended state and infrastructure documentation, while Zabbix/PRTG monitor operational state and metrics. They can integrate through the API." data-fa="خیر. NetBox وضعیت مطلوب و مستندات زیرساخت را نگه می‌دارد؛ Zabbix/PRTG وضعیت عملیاتی و Metrics را مانیتور می‌کنند. این ابزارها می‌توانند با API به NetBox متصل شوند.">خیر. NetBox وضعیت مطلوب و مستندات زیرساخت را نگه می‌دارد؛ Zabbix/PRTG وضعیت عملیاتی و Metrics را مانیتور می‌کنند. این ابزارها می‌توانند با API به NetBox متصل شوند.</p></div>
+</div><div class="article-faq-item">
+<h3 class="article-faq-question" data-en="Which dependency versions are required for NetBox 4.7?" data-fa="برای NetBox 4.7 چه نسخه‌هایی لازم است؟">برای NetBox 4.7 چه نسخه‌هایی لازم است؟</h3>
+<div class="article-faq-answer"><p data-en="Python 3.12 through 3.14, PostgreSQL 15 or later, and Redis 6.0 or later." data-fa="Python 3.12 تا 3.14، PostgreSQL 15 یا بالاتر و Redis 6.0 یا بالاتر.">Python 3.12 تا 3.14، PostgreSQL 15 یا بالاتر و Redis 6.0 یا بالاتر.</p></div>
+</div><div class="article-faq-item">
+<h3 class="article-faq-question" data-en="Are MySQL or SQL Server supported?" data-fa="آیا MySQL یا SQL Server پشتیبانی می‌شود؟">آیا MySQL یا SQL Server پشتیبانی می‌شود؟</h3>
+<div class="article-faq-answer"><p data-en="No. NetBox requires PostgreSQL." data-fa="خیر. NetBox به PostgreSQL نیاز دارد.">خیر. NetBox به PostgreSQL نیاز دارد.</p></div>
+</div><div class="article-faq-item">
+<h3 class="article-faq-question" data-en="Can PostgreSQL and Redis run on separate servers?" data-fa="آیا می‌توان PostgreSQL و Redis را روی سرور جدا نصب کرد؟">آیا می‌توان PostgreSQL و Redis را روی سرور جدا نصب کرد؟</h3>
+<div class="article-faq-answer"><p data-en="Yes. This is common in larger or HA deployments; configure HOST/credentials accordingly and restrict firewall access to required hosts only." data-fa="بله. در محیط‌های بزرگ یا HA این معماری رایج است؛ HOST و Credentialها را در configuration.py تغییر دهید و Firewall را فقط بین Hostهای موردنیاز باز کنید.">بله. در محیط‌های بزرگ یا HA این معماری رایج است؛ HOST و Credentialها را در configuration.py تغییر دهید و Firewall را فقط بین Hostهای موردنیاز باز کنید.</p></div>
+</div><div class="article-faq-item">
+<h3 class="article-faq-question" data-en="Should ports 8000 or 8001 be Internet-accessible?" data-fa="آیا پورت 8000 یا 8001 باید از اینترنت باز باشد؟">آیا پورت 8000 یا 8001 باید از اینترنت باز باشد؟</h3>
+<div class="article-faq-answer"><p data-en="No. In production only Nginx on 80/443 should be exposed. Gunicorn on 8001 should stay internal, and the development server on 8000 is for testing only." data-fa="خیر. در Production فقط Nginx روی 80/443 در دسترس باشد. Gunicorn روی 8001 باید داخلی باشد و runserver روی 8000 فقط برای تست است.">خیر. در Production فقط Nginx روی 80/443 در دسترس باشد. Gunicorn روی 8001 باید داخلی باشد و runserver روی 8000 فقط برای تست است.</p></div>
+</div><div class="article-faq-item">
+<h3 class="article-faq-question" data-en="What does 502 Bad Gateway mean?" data-fa="خطای 502 Bad Gateway یعنی چه؟">خطای 502 Bad Gateway یعنی چه؟</h3>
+<div class="article-faq-answer"><p data-en="It usually means Nginx cannot reach Gunicorn. Check netbox.service, port 8001 and proxy_pass." data-fa="معمولاً Nginx نمی‌تواند به Gunicorn متصل شود. وضعیت netbox.service، پورت 8001 و proxy_pass را بررسی کنید.">معمولاً Nginx نمی‌تواند به Gunicorn متصل شود. وضعیت netbox.service، پورت 8001 و proxy_pass را بررسی کنید.</p></div>
+</div><div class="article-faq-item">
+<h3 class="article-faq-question" data-en="How do I fix DisallowedHost or HTTP 400?" data-fa="خطای DisallowedHost یا 400 را چطور حل کنم؟">خطای DisallowedHost یا 400 را چطور حل کنم؟</h3>
+<div class="article-faq-answer"><p data-en="Add the FQDN or IP being used to ALLOWED_HOSTS and restart NetBox." data-fa="FQDN یا IP مورد استفاده را به ALLOWED_HOSTS اضافه کرده و سرویس NetBox را Restart کنید.">FQDN یا IP مورد استفاده را به ALLOWED_HOSTS اضافه کرده و سرویس NetBox را Restart کنید.</p></div>
+</div><div class="article-faq-item">
+<h3 class="article-faq-question" data-en="How do I create an API token?" data-fa="چطور API Token بسازم؟">چطور API Token بسازم؟</h3>
+<div class="article-faq-answer"><p data-en="Create a v2 token under Profile → API Tokens. Save the plaintext immediately because it cannot be retrieved later." data-fa="از Profile → API Tokens یک Token v2 بسازید. مقدار plaintext را همان لحظه ذخیره کنید؛ بعداً قابل بازیابی نیست.">از Profile → API Tokens یک Token v2 بسازید. مقدار plaintext را همان لحظه ذخیره کنید؛ بعداً قابل بازیابی نیست.</p></div>
+</div><div class="article-faq-item">
+<h3 class="article-faq-question" data-en="What permissions are needed to import the device library?" data-fa="برای Import کتابخانه تجهیزات چه Permission لازم است؟">برای Import کتابخانه تجهیزات چه Permission لازم است؟</h3>
+<div class="article-faq-answer"><p data-en="The token must be write-enabled and its user must have create/change permissions for manufacturers, device types, module types and related components." data-fa="Token باید Write-enabled باشد و User آن روی Manufacturer، Device Type، Module Type و Componentهای مرتبط Permission ایجاد/تغییر داشته باشد.">Token باید Write-enabled باشد و User آن روی Manufacturer، Device Type، Module Type و Componentهای مرتبط Permission ایجاد/تغییر داشته باشد.</p></div>
+</div><div class="article-faq-item">
+<h3 class="article-faq-question" data-en="Is the Device Type Library part of NetBox core?" data-fa="آیا Device Type Library رسمی خود NetBox است؟">آیا Device Type Library رسمی خود NetBox است؟</h3>
+<div class="article-faq-answer"><p data-en="The library is maintained by the NetBox Community and contains community-sourced definitions. Verify definitions against real hardware before production use." data-fa="این Library در NetBox Community نگهداری می‌شود و تعریف‌ها Community-sourced هستند. قبل از استفاده Production مشخصات را با سخت‌افزار واقعی Verify کنید.">این Library در NetBox Community نگهداری می‌شود و تعریف‌ها Community-sourced هستند. قبل از استفاده Production مشخصات را با سخت‌افزار واقعی Verify کنید.</p></div>
+</div><div class="article-faq-item">
+<h3 class="article-faq-question" data-en="Should I import every vendor?" data-fa="بهتر است همه Vendorها را Import کنم؟">بهتر است همه Vendorها را Import کنم؟</h3>
+<div class="article-faq-answer"><p data-en="Usually not. Selective vendor imports keep the database cleaner and reduce import time." data-fa="معمولاً نه. Import انتخابی Vendorهای موردنیاز Database را تمیزتر نگه می‌دارد و زمان Import را کاهش می‌دهد.">معمولاً نه. Import انتخابی Vendorهای موردنیاز Database را تمیزتر نگه می‌دارد و زمان Import را کاهش می‌دهد.</p></div>
+</div><div class="article-faq-item">
+<h3 class="article-faq-question" data-en="How should NetBox be backed up?" data-fa="چطور از NetBox Backup بگیرم؟">چطور از NetBox Backup بگیرم؟</h3>
+<div class="article-faq-answer"><p data-en="At minimum, back up PostgreSQL, configuration.py and media. Preserve custom scripts/reports and periodically test restores." data-fa="حداقل PostgreSQL dump، configuration.py و media را Backup کنید. اگر Custom Script/Report دارید آن‌ها را هم نگه دارید و Restore را دوره‌ای تست کنید.">حداقل PostgreSQL dump، configuration.py و media را Backup کنید. اگر Custom Script/Report دارید آن‌ها را هم نگه دارید و Restore را دوره‌ای تست کنید.</p></div>
+</div><div class="article-faq-item">
+<h3 class="article-faq-question" data-en="How is NetBox upgraded?" data-fa="Upgrade NetBox چگونه انجام می‌شود؟">Upgrade NetBox چگونه انجام می‌شود؟</h3>
+<div class="article-faq-answer"><p data-en="Review release notes and plugin compatibility, take a backup, check out the new tag, run upgrade.sh and restart netbox/netbox-rq." data-fa="Release Notes و Plugin compatibility را بررسی کنید، Backup بگیرید، Tag جدید را Checkout کنید، upgrade.sh را اجرا کرده و netbox/netbox-rq را Restart کنید.">Release Notes و Plugin compatibility را بررسی کنید، Backup بگیرید، Tag جدید را Checkout کنید، upgrade.sh را اجرا کرده و netbox/netbox-rq را Restart کنید.</p></div>
+</div><div class="article-faq-item">
+<h3 class="article-faq-question" data-en="Can NetBox run without Nginx?" data-fa="آیا می‌توان NetBox را بدون Nginx اجرا کرد؟">آیا می‌توان NetBox را بدون Nginx اجرا کرد؟</h3>
+<div class="article-faq-answer"><p data-en="The development server can be used for testing, but production should place an HTTP server such as Nginx or Apache in front of WSGI." data-fa="برای تست می‌توان از runserver استفاده کرد، اما برای Production توصیه رسمی استفاده از یک HTTP Server مثل Nginx یا Apache در جلوی WSGI است.">برای تست می‌توان از runserver استفاده کرد، اما برای Production توصیه رسمی استفاده از یک HTTP Server مثل Nginx یا Apache در جلوی WSGI است.</p></div>
+</div><div class="article-faq-item">
+<h3 class="article-faq-question" data-en="Where is the Swagger API documentation?" data-fa="Swagger API کجاست؟">Swagger API کجاست؟</h3>
+<div class="article-faq-answer"><p data-en="On a running instance, /api/schema/swagger-ui/ provides interactive OpenAPI documentation." data-fa="روی هر Instance مسیر /api/schema/swagger-ui/ مستندات تعاملی OpenAPI را نمایش می‌دهد.">روی هر Instance مسیر /api/schema/swagger-ui/ مستندات تعاملی OpenAPI را نمایش می‌دهد.</p></div>
+</div><div class="article-faq-item">
+<h3 class="article-faq-question" data-en="How can I quickly check all services?" data-fa="چطور وضعیت همه سرویس‌ها را سریع بررسی کنم؟">چطور وضعیت همه سرویس‌ها را سریع بررسی کنم؟</h3>
+<div class="article-faq-answer"><p data-en="Use systemctl is-active postgresql redis-server netbox netbox-rq nginx and inspect journalctl -eu netbox for errors." data-fa="از systemctl is-active postgresql redis-server netbox netbox-rq nginx استفاده کنید و برای خطا journalctl -eu netbox را ببینید.">از systemctl is-active postgresql redis-server netbox netbox-rq nginx استفاده کنید و برای خطا journalctl -eu netbox را ببینید.</p></div>
+</div></section>
+<!-- Sources -->
+<section id="sources" class="article-section">
+<h2  data-en="Official References" data-fa="منابع رسمی و مرجع">منابع رسمی و مرجع</h2>
+<ul>
+<li><a href="https://netbox.readthedocs.io/en/stable/installation/" target="_blank" rel="noopener">NetBox Installation Documentation</a></li>
+<li><a href="https://netbox.readthedocs.io/en/stable/integrations/rest-api/" target="_blank" rel="noopener">NetBox REST API Documentation</a></li>
+<li><a href="https://github.com/netbox-community/netbox/releases" target="_blank" rel="noopener">NetBox Releases</a></li>
+<li><a href="https://github.com/netbox-community/devicetype-library" target="_blank" rel="noopener">NetBox Device Type Library</a></li>
+<li><a href="https://github.com/netbox-community/Device-Type-Library-Import" target="_blank" rel="noopener">Device Type Library Import Tool</a></li>
+</ul>
+</section>
+
+                <!-- Enhanced Author Bio Section -->
+
+                <footer class="article-footer" aria-label="Article footer">
+                  <section
+                    id="author"
+                    class="article-author"
+                    role="complementary"
+                    aria-labelledby="author-title"
+                  >
+                    <div class="article-author-card">
+                      <img
+                        class="article-author-avatar"
+                        src="../assets/img/my-profile-img.jpg"
+                        alt="AmirHossein Jalalian"
+                        loading="lazy"
+                        width="120"
+                        height="120"
+                        decoding="async"
+                      />
+                      <div class="article-author-content">
+                        <p
+                          class="article-author-kicker"
+                          id="author-title"
+                          data-en="About the author"
+                          data-fa="درباره نویسنده"
+                        >
+                          About the author
+                        </p>
+                        <h2
+                          data-en="AmirHossein Jalalian"
+                          data-fa="امیرحسین جلالیان"
+                        >
+                          AmirHossein Jalalian
+                        </h2>
+                        <p
+                          class="article-author-role"
+                          data-en="Infrastructure & DevOps Engineer"
+                          data-fa="مهندس زیرساخت و DevOps"
+                        >
+                          Infrastructure & DevOps Engineer
+                        </p>
+                        <p
+                          class="article-author-description"
+                          data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
+                          data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
+                        >
+                          Delivering reliable, secure, and scalable IT solutions
+                          for your business success.
+                        </p>
+                        <div
+                          class="article-author-social"
+                          role="group"
+                          aria-label="Author links"
+                        >
+                          <a
+                            href="https://linkedin.com/in/amirhossein-jalalian"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="LinkedIn Profile"
+                            ><i class="bi bi-linkedin" aria-hidden="true"></i
+                          ></a>
+                          <a
+                            href="https://github.com/amirhossein-jalalian"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="GitHub Profile"
+                            ><i class="bi bi-github" aria-hidden="true"></i
+                          ></a>
+                          <a
+                            href="https://twitter.com/amirhossein_j"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Twitter Profile"
+                            ><i class="bi bi-twitter-x" aria-hidden="true"></i
+                          ></a>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                  <nav
+                    class="article-footer-nav"
+                    aria-label="Article footer navigation"
+                  >
+                    <a class="article-back" href="../index.html#portfolio"
+                      ><i class="bi bi-arrow-left" aria-hidden="true"></i
+                      ><span
+                        data-en="Back to portfolio"
+                        data-fa="بازگشت به مقالات"
+                        >Back to portfolio</span
+                      ></a
+                    >
+                  </nav>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer id="footer" class="footer position-relative">
+      <div class="footer-background">
+        <div class="footer-pattern"></div>
+      </div>
+      <div class="container">
+        <div class="footer-content">
+          <!-- Footer Main Content -->
+          <div class="footer-main">
+            <!-- Brand Section -->
+            <div class="footer-brand">
+              <h3 class="brand-name">
+                <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
+                  >AmirHossein Jalalian</span
+                >
+              </h3>
+              <p
+                class="brand-title"
+                data-en="Infrastructure & DevOps Engineer"
+                data-fa="مهندس زیرساخت و DevOps"
+              >
+                Infrastructure & DevOps Engineer
+              </p>
+              <p
+                class="brand-description"
+                data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
+                data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
+              >
+                Delivering reliable, secure, and scalable IT solutions for your
+                business success.
+              </p>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="footer-contact">
+              <h4
+                class="contact-title"
+                data-en="Get In Touch"
+                data-fa="تماس با من"
+              >
+                Get In Touch
+              </h4>
+              <div class="contact-info">
+                <div class="contact-item">
+                  <i class="bi bi-geo-alt"></i>
+                  <span data-en="Tehran, Iran" data-fa="تهران، ایران"
+                    >Tehran, Iran</span
+                  >
+                </div>
+                <div class="contact-item">
+                  <i class="bi bi-telephone"></i>
+                  <a
+                    href="tel:+989197276219"
+                    data-en="+98 9197276219"
+                    data-fa="09197276219"
+                    >+98 9197276219</a
+                  >
+                </div>
+                <div class="contact-item">
+                  <i class="bi bi-envelope"></i>
+                  <a href="mailto:jalalian.amirhossein@gmail.com"
+                    >jalalian.amirhossein@gmail.com</a
+                  >
+                </div>
+              </div>
+
+              <!-- Social Links -->
+              <div class="social-links">
+                <h5
+                  class="social-title"
+                  data-en="Follow Me"
+                  data-fa="دنبال کنید"
+                >
+                  Follow Me
+                </h5>
+                <div class="social-icons">
+                  <a
+                    href="https://wa.me/989197276219"
+                    target="_blank"
+                    rel="noopener"
+                    class="social-link whatsapp"
+                    aria-label="WhatsApp"
+                  >
+                    <i class="bi bi-whatsapp"></i>
+                  </a>
+                  <a
+                    href="https://t.me/Aj_mercury"
+                    target="_blank"
+                    rel="noopener"
+                    class="social-link telegram"
+                    aria-label="Telegram"
+                  >
+                    <i class="bi bi-telegram"></i>
+                  </a>
+                  <a
+                    href="mailto:jalalian.amirhossein@gmail.com"
+                    class="social-link email"
+                    aria-label="Email"
+                  >
+                    <i class="bi bi-envelope"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer Bottom -->
+          <div class="footer-bottom">
+            <div class="footer-bottom-content">
+              <div class="copyright">
+                <p>
+                  © <span>2025</span>
+                  <strong
+                    data-en="AmirHossein Jalalian"
+                    data-fa="امیرحسین جلالیان"
+                    >AmirHossein Jalalian</strong
+                  >
+                  <span
+                    data-en="All Rights Reserved"
+                    data-fa="تمام حقوق محفوظ است"
+                    >All Rights Reserved</span
+                  >
+                </p>
+              </div>
+              <div class="footer-heart">
+                <span data-en="Made with" data-fa="ساخته شده با"
+                  >Made with</span
+                >
+                <i class="bi bi-heart-fill"></i>
+                <span data-en="in Iran" data-fa="در ایران">in Iran</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <div id="preloader"></div>
+
+    <script
+      src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"
+      defer
+    ></script>
+    <script src="../assets/vendor/aos/aos.js" defer></script>
+    <script src="../assets/vendor/typed.js/typed.umd.js" defer></script>
+    <script
+      src="../assets/vendor/purecounter/purecounter_vanilla.js"
+      defer
+    ></script>
+    <script
+      src="../assets/vendor/waypoints/noframework.waypoints.js"
+      defer
+    ></script>
+    <script src="../assets/vendor/glightbox/js/glightbox.min.js" defer></script>
+    <script
+      src="../assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"
+      defer
+    ></script>
+    <script
+      src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"
+      defer
+    ></script>
+    <script src="../assets/vendor/swiper/swiper-bundle.min.js" defer></script>
+    <script src="../assets/js/main.js?v=1000" defer></script>
+    <script src="../assets/js/i18n.js?v=1000" defer></script>
+  </body>
+</html>

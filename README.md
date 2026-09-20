@@ -1,420 +1,230 @@
-# MEET AJ PORTFOLIO
+# Meet AJ
 
-Professional portfolio website for AmirHossein Jalalian
-Network Expert, DevOps Engineer & IT Infrastructure Specialist
+Personal portfolio and technical article site for **AmirHossein Jalalian** (infrastructure, networking, virtualization and DevOps), running as a Laravel application with a Filament admin panel.
 
-**Template Name:** Meet AJ Portfolio  
-**Template URL:** https://meetaj.ir  
-**Author:** AmirHossein Jalalian  
-**License:** https://meetaj.ir  
-**Version:** 1.0.4  
-**Last Updated:** December 2024
+Application overview and directory layout verified on **2026-09-20**. Single source of truth for project state: [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).
 
-===============================================
-MEET AJ PORTFOLIO - README
-===============================================
+## Overview
 
-Professional portfolio website for AmirHossein Jalalian
-Network Expert, DevOps Engineer & IT Infrastructure Specialist
+The site was originally a static English/Persian progressive web app: one homepage, six service quote pages, 24 HTML articles, PHP contact endpoints, a sitemap and a service worker. It now runs as a **Laravel 13 + Blade + Filament 5** application:
 
-Template Name: Meet AJ Portfolio
-Template URL: https://meetaj.ir
-Author: AmirHossein Jalalian
-License: https://meetaj.ir
-Version: 1.0.4
-Last Updated: December 2024
+- the public site renders from Blade views rebuilt from the original HTML, so URLs, CSS hooks and JavaScript contracts are unchanged;
+- homepage sections, articles, services and testimonials live in the database and are editable in the admin panel;
+- contact and quote submissions are stored as requests with a light workflow;
+- English and Persian share the same URLs, switched client-side with RTL support.
 
-## PROJECT OVERVIEW
+The original HTML in `resources/legacy/` remains the import and view-generation source. It is deliberately **outside** the web document root.
 
-This is a modern, responsive portfolio website built as a Progressive Web App (PWA) showcasing the professional work and technical expertise of AmirHossein Jalalian. The website features a clean Apple-inspired design system with comprehensive multilingual support and advanced functionality.
-
-## KEY FEATURES
-
-### 🌐 PROGRESSIVE WEB APP (PWA)
-
-- Offline-first caching strategy
-- Service Worker implementation
-- App-like installation experience
-- Background sync capabilities
-- Push notification support
-
-### 🌍 MULTILINGUAL SUPPORT
-
-- English and Persian/Farsi languages
-- RTL (Right-to-Left) layout support
-- Dynamic language switching
-- Persistent language preferences
-- Typed.js animations with language-specific content
-
-### 📱 RESPONSIVE DESIGN
-
-- Mobile-first approach
-- Cross-device compatibility
-- Touch-friendly interface
-- Optimized for all screen sizes
-- Modern Apple Design System
-
-### 🎨 MODERN UI/UX
-
-- Clean, minimalist design
-- Smooth animations and transitions
-- Dark/Light theme support
-- Accessibility compliant (WCAG 2.1 AA)
-- Performance optimized
-
-### 📧 CONTACT SYSTEM
-
-- Secure contact form with validation
-- Rate limiting protection
-- XSS and injection prevention
-- Email format validation
-- PHP backend processing
-
-### 📚 CONTENT MANAGEMENT
-
-- Portfolio showcase with filtering
-- Technical articles and guides
-- Service details pages
-- Testimonials section
-- Interactive galleries
-
-## TECHNICAL STACK
-
-### FRONTEND TECHNOLOGIES:
-
-- HTML5 (Semantic structure)
-- CSS3 (Custom properties, animations)
-- JavaScript ES6+ (Modern APIs)
-- Bootstrap 5.3.3 (Grid system, components)
-
-### LIBRARIES & FRAMEWORKS:
-
-- AOS (Animate On Scroll) - Scroll animations
-- Swiper.js - Touch sliders and carousels
-- Typed.js - Typing animation effects
-- GLightbox - Image and video galleries
-- PureCounter - Animated counters
-- Waypoints - Scroll-triggered events
-- Isotope - Portfolio filtering
-- ImagesLoaded - Image loading optimization
-
-### PWA FEATURES:
-
-- Service Worker (sw.js)
-- Web App Manifest (manifest.json)
-- Offline caching strategies
-- Background sync
-- Push notifications
-
-### BACKEND & SECURITY:
-
-- PHP contact form handler
-- Input validation and sanitization
-- Rate limiting protection
-- XSS prevention
-- Secure email processing
-
-## PROJECT STRUCTURE
+## Architecture
 
 ```
-📁 ROOT DIRECTORY:
-├── index.html              # Main homepage
-├── portfolio-details.html  # Portfolio item details
-├── service-details.html    # Service details page
-├── starter-page.html       # Template starter page
-├── manifest.json           # PWA manifest
-├── sw.js                   # Service Worker
-└── README.md               # This documentation
-
-📁 ASSETS DIRECTORY:
-├── css/                    # Stylesheets
-│   ├── main.css           # Main stylesheet
-│   ├── rtl.css            # RTL-specific styles
-│   └── articles.css        # Article page styles
-├── js/                     # JavaScript files
-│   ├── main.js            # Main functionality
-│   └── i18n.js            # Internationalization
-├── img/                    # Images and media
-│   ├── portfolio/         # Portfolio images
-│   └── testimonials/      # Testimonial photos
-└── vendor/                 # Third-party libraries
-    ├── bootstrap/         # Bootstrap framework
-    ├── aos/               # Animate On Scroll
-    ├── swiper/            # Touch slider
-    ├── glightbox/         # Gallery lightbox
-    ├── typed.js/          # Typing animation
-    └── [other libraries]  # Additional dependencies
-
-📁 ARTICLES DIRECTORY:
-├── mikrotik-openvpn-setup-v7.html
-├── mikrotik-block-website.html
-├── mikrotik-unequal-dual-wan-load-balancing-ecmp.html
-├── nginx-installation-configuration-ubuntu.html
-├── enable-ssh-linux-complete-guide.html
-└── windows-cmd-common-network-commands.html
-
-📁 FORMS DIRECTORY:
-├── contact.php             # Contact form handler
-└── Readme.txt              # Forms documentation
+Browser → public/index.php → Laravel 13 → Blade → Eloquent → SQLite (local) / MySQL (intended production)
+Admin   → /admin → Filament 5 → Livewire 4 → models + policies → same database
 ```
 
-## INSTALLATION & SETUP
+No SPA, no Node build step, no queue worker, no Redis, no scheduler. Detail: [docs/current/ARCHITECTURE.md](docs/current/ARCHITECTURE.md).
 
-### 1. CLONE OR DOWNLOAD:
+## Technology stack
 
-- Download the project files
-- Extract to your web server directory
+| Component | Version |
+|-----------|---------|
+| Laravel | 13.31.0 |
+| PHP | 8.4.25 |
+| Filament | 5.8.2 |
+| Livewire | 4.4.5 |
+| PHPUnit | 11.5.56 |
+| Database | SQLite locally, MySQL/MariaDB intended in production |
+| Front end | Blade with the original CSS/JS; no Tailwind, no Vite, no npm |
 
-### 2. WEB SERVER REQUIREMENTS:
+## Requirements
 
-- Apache/Nginx web server
-- PHP 7.4+ (for contact form)
-- HTTPS support (required for PWA)
+- PHP **8.4** with `bcmath`, `ctype`, `curl`, `fileinfo`, `gd`, `intl`, `json`, `mbstring`, `openssl`, `pdo`, `pdo_mysql` (or `pdo_sqlite` locally), `session`, `tokenizer`, `xml`, `zip`
+- Composer 2
+- MySQL/MariaDB for production, or SQLite for local work
+- A web server whose document root is the `public/` directory
 
-### 3. CONFIGURATION:
+There is no Node.js requirement.
 
-- Update contact form email in forms/contact.php
-- Configure web server for HTTPS
-- Set proper file permissions
+## Installation
 
-### 4. DEPLOYMENT:
-
-- Upload files to web server
-- Ensure Service Worker is accessible
-- Test PWA functionality
-
-## CUSTOMIZATION GUIDE
-
-### 🎨 DESIGN CUSTOMIZATION:
-
-- Modify CSS variables in main.css
-- Update color scheme in :root selector
-- Customize Apple Design System colors
-- Adjust animations and transitions
-
-### 🌍 LANGUAGE CUSTOMIZATION:
-
-- Edit translations in assets/js/i18n.js
-- Add new languages to DICT object
-- Update RTL support for new languages
-- Modify Typed.js content arrays
-
-### 📱 PWA CUSTOMIZATION:
-
-- Update manifest.json for app details
-- Modify Service Worker caching strategy
-- Add new icons and screenshots
-- Configure push notification settings
-
-### 📧 CONTACT FORM CUSTOMIZATION:
-
-- Update email address in contact.php
-- Configure SMTP settings (optional)
-- Modify validation rules
-- Add new form fields
-
-## PERFORMANCE OPTIMIZATION
-
-### ✅ IMPLEMENTED OPTIMIZATIONS:
-
-- Service Worker caching
-- Image lazy loading
-- CSS/JS minification
-- Gzip compression support
-- Optimized asset loading
-- Mobile performance improvements
-- Accessibility optimizations
-
-### 📊 PERFORMANCE METRICS:
-
-- Lighthouse Score: 95+ (Performance)
-- First Contentful Paint: < 1.5s
-- Largest Contentful Paint: < 2.5s
-- Cumulative Layout Shift: < 0.1
-- Time to Interactive: < 3.0s
-
-## BROWSER SUPPORT
-
-### ✅ FULLY SUPPORTED:
-
-- Chrome 80+
-- Firefox 75+
-- Safari 13+
-- Edge 80+
-
-### ⚠️ PARTIAL SUPPORT:
-
-- Internet Explorer 11 (basic functionality)
-- Older mobile browsers (graceful degradation)
-
-## SECURITY FEATURES
-
-### 🔒 IMPLEMENTED SECURITY:
-
-- Input validation and sanitization
-- XSS prevention
-- CSRF protection
-- Rate limiting
-- Secure email processing
-- HTTPS enforcement
-- Content Security Policy ready
-
-## SUPPORT & MAINTENANCE
-
-### 📞 SUPPORT:
-
-- Website: https://meetaj.ir
-- Email: jalalian.amirhossein@gmail.com
-- Documentation: This README file
-
-### 🔄 MAINTENANCE:
-
-- Regular security updates
-- Performance monitoring
-- Browser compatibility testing
-- Content updates
-- PWA feature enhancements
-
-## LICENSE & CREDITS
-
-### 📄 LICENSE:
-
-- Template: Custom License
-- Author: AmirHossein Jalalian
-- Website: https://meetaj.ir
-
-### 🙏 CREDITS:
-
-- Based on: iPortfolio Template by BootstrapMade
-- Icons: Bootstrap Icons
-- Fonts: System fonts (SF Pro Display, etc.)
-- Design Inspiration: Apple Design System
-
-## CHANGELOG
-
-### v1.0.4 (December 2024):
-
-- Enhanced PWA functionality
-- Improved mobile performance
-- Updated Service Worker caching
-- Added comprehensive documentation
-- Security improvements
-- Accessibility enhancements
-
-### v1.0.3 (November 2024):
-
-- Added multilingual support
-- Implemented RTL layout
-- Enhanced contact form security
-- Performance optimizations
-
-### v1.0.2 (October 2024):
-
-- Initial PWA implementation
-- Service Worker integration
-- Mobile optimization
-
-### v1.0.1 (September 2024):
-
-- Basic portfolio template
-- Contact form implementation
-- Responsive design
-
-### v1.0.0 (August 2024):
-
-- Initial release
-- Core functionality
-- Basic design system
-
-## PRELOADER COMPONENT
-
-Modern bilingual preloader component with RTL/LTR support and CSS animations.
-
-### Features:
-
-- ✅ **Bilingual**: Full Persian (RTL) and English (LTR) support
-- ✅ **CSS Animations**: High performance and smooth
-- ✅ **Responsive**: Compatible with all screen sizes
-- ✅ **Brand Colors**: Uses primary color #2563eb
-- ✅ **Dark Mode**: Dark mode support
-- ✅ **Accessibility**: Reduced motion support
-- ✅ **Typography**: Optimized fonts for Persian and Latin
-
-### Usage:
-
-#### React Component:
-
-```jsx
-import Preloader from "./Preloader";
-
-function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [language, setLanguage] = useState("en"); // 'en' or 'fa'
-
-  return <Preloader isVisible={isLoading} language={language} />;
-}
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan storage:link
 ```
 
-#### HTML:
+On a machine where `php` is not on PATH, prefix commands with the interpreter you have, for example `.\.runtime\php84\php.exe artisan about`.
 
-```html
-<div id="preloader" class="preloader-overlay visible">
-  <div class="preloader-container ltr">
-    <div class="preloader-spinner">
-      <div class="spinner-circle">
-        <div class="spinner-inner"></div>
-      </div>
-    </div>
-    <div class="preloader-text">
-      <span class="loading-text">Loading...</span>
-    </div>
-    <div class="preloader-progress">
-      <div class="progress-line"></div>
-    </div>
-  </div>
-</div>
+## Environment configuration
+
+`.env.example` is for local development; `.env.production.example` is the production template. Keys that matter:
+
+| Key | Local | Production |
+|-----|-------|------------|
+| `APP_ENV` | `local` | `production` |
+| `APP_DEBUG` | `true` | **`false`** |
+| `APP_URL` | `http://127.0.0.1:8000` | `https://meetaj.ir` |
+| `APP_TIMEZONE` | your choice | `Asia/Tehran` |
+| `DB_CONNECTION` | `sqlite` | `mysql` |
+| `SESSION_DRIVER`, `CACHE_STORE` | `file` | `file` |
+| `QUEUE_CONNECTION` | `sync` | `sync` |
+| `SESSION_SECURE_COOKIE` | — | `true` |
+| `CONTACT_NOTIFICATION_EMAIL` | optional | optional; empty disables notification mail |
+
+Never commit `.env`.
+
+## Database setup
+
+### Migration
+
+```bash
+php artisan migrate            # production: php artisan migrate --force
+php artisan migrate:status
 ```
 
-### Props:
+Fifteen application migrations create the CMS schema, including `homepage_contents`, the resume-content repair, `testimonials`, `services`, articles, requests and taxonomy tables. Full schema: [docs/current/DATABASE.md](docs/current/DATABASE.md).
 
-| Prop        | Type    | Default | Description                      |
-| ----------- | ------- | ------- | -------------------------------- |
-| `isVisible` | boolean | `true`  | Show or hide preloader           |
-| `language`  | string  | `'en'`  | Site language (`'en'` or `'fa'`) |
+### Seeding
 
-### CSS Classes:
-
-- `.preloader-overlay` - Background layer
-- `.preloader-container` - Main container
-- `.preloader-spinner` - Spinning animation
-- `.preloader-text` - Loading text
-- `.preloader-progress` - Progress bar
-- `.rtl` - Right-to-left (Persian)
-- `.ltr` - Left-to-right (English)
-- `.visible` - Show preloader
-- `.hidden` - Hide preloader
-
-### Customization:
-
-```css
-:root {
-  --primary-color: #2563eb;
-  --primary-color-light: rgba(37, 99, 235, 0.1);
-}
+```bash
+php artisan db:seed
 ```
 
-### Browser Support:
+`DatabaseSeeder` synchronizes homepage sections, rebuilds the article-library view from the original HTML, then imports articles and services. The homepage view itself is CMS-backed and is never overwritten by the legacy publisher. You can also run the importers directly:
 
-- ✅ Chrome 60+
-- ✅ Firefox 55+
-- ✅ Safari 12+
-- ✅ Edge 79+
-- ✅ iOS Safari 12+
-- ✅ Android Chrome 60+
+```bash
+php artisan articles:import-legacy      # 24 articles + 24 redirects
+php artisan services:import-legacy      # 6 services with their AED prices
+php artisan articles:sync-tags          # tag vocabulary and links
+```
 
-### Performance:
+Both importers accept `--dry-run` and `--refresh`. **`--refresh` deletes existing rows** and discards editorial changes — never run it on a database with edits.
 
-- ⚡ Pure CSS animations (no JavaScript)
-- 🎯 Optimized GPU usage
-- 📱 Mobile optimized
-- ♿ Reduced motion support
+## Local development
+
+```bash
+php artisan site:publish-assets --views   # publish assets and rebuild the generated article listing view
+php artisan filament:assets               # publish admin CSS and Filament assets
+php artisan serve                          # http://127.0.0.1:8000
+```
+
+`php artisan optimize:clear` after changing routes, config or views.
+
+## Admin panel
+
+`/admin`, built with Filament 5. Guests are redirected to `/admin/login`. No default account ships with the repository:
+
+```bash
+php artisan cms:create-user
+```
+
+Roles are `admin` and `editor`; passwords need at least 12 characters.
+
+| Section | Resources |
+|---------|-----------|
+| Content | Homepage sections, Articles, Categories, Tags, Testimonials, Services (admin only) |
+| Communications | Requests (admin only) |
+| Administration | Users (admin only) |
+
+Detail: [docs/current/ADMIN.md](docs/current/ADMIN.md).
+
+## Articles
+
+Published English articles with legacy `.html` → clean-URL redirects, bilingual categories, tags and related content. The library at `/articles` supports `?q=` search and `?tag=` filtering, and each article page has breadcrumbs, tags, share links and related articles. Content integrity against the original HTML is verified by `php artisan site:compare-content` (currently **Failures: 0**). Detail: [docs/current/ARTICLES.md](docs/current/ARTICLES.md).
+
+## Services
+
+The local database has thirteen published services; twelve render in the homepage catalog and details drawer. Six legacy records retain fixed AED prices (2,500–6,900); seven use custom quotes, and Technical Consulting is hidden from the catalog. Standalone `/services/{slug}` pages and their legacy `.html` redirects were removed. Prices are editorial data held in the `services` table and are never hardcoded in Blade. Detail: [docs/current/SERVICES.md](docs/current/SERVICES.md).
+
+## Requests
+
+`GET /forms/get-csrf-token.php` and `POST /forms/contact.php` keep the original contract: CSRF via the legacy `csrf_token` field, a `website` honeypot, validation with plain-text errors, and a limit of 5 submissions per IP per hour. Submissions become `requests` rows with a seven-stage status workflow and admin-only internal notes. Detail: [docs/current/REQUESTS.md](docs/current/REQUESTS.md).
+
+## Languages
+
+English and Persian are public on the **same** URLs, applied client-side through `data-en` / `data-fa` attributes, `assets/js/i18n.js` and `assets/css/rtl.css`. German exists in the CMS language list for drafts only: publishing a German article or service throws a validation error, and `/de` returns 404. `hreflang` is not implemented. Detail: [docs/current/MULTILINGUAL.md](docs/current/MULTILINGUAL.md).
+
+## SEO
+
+Canonical URLs, Open Graph, Twitter cards, JSON-LD on the homepage and articles, a dynamic `/sitemap.xml` listing clean URLs only, `/robots.txt` disallowing `/admin`, `/livewire` and `/forms`, and 301s for `/index.html` and legacy article `.html` paths. Removed service detail paths return 404. Detail: [docs/current/SEO.md](docs/current/SEO.md).
+
+## PWA
+
+`public/manifest.json`, `public/sw.js` (cache `meet-aj-v2.0.0-cms-3`) and `public/offline.html`. The worker serves documents network-first and static assets cache-then-network, and never touches `/admin`, `/livewire`, `/forms`, `/storage/livewire-tmp` or `.php` paths. Install and offline behaviour have **not** been tested in a browser. Detail: [docs/current/PWA.md](docs/current/PWA.md).
+
+## Testing
+
+```bash
+php artisan test                                                    # full feature suite
+vendor/bin/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest     # MySQL schema check
+php artisan site:compare-content                                     # Failures: 0
+```
+
+Latest run (2026-09-20): **67 tests, 1102 assertions, 0 failures, 1 skipped**. The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Homepage CMS details: [docs/current/HOMEPAGE-CMS.md](docs/current/HOMEPAGE-CMS.md). Testing detail: [docs/current/TESTING.md](docs/current/TESTING.md).
+
+## Deployment
+
+### DirectAdmin
+
+The full procedure — PHP 8.4 selector, Composer or a pre-built `vendor/`, MySQL creation, file layout above the web root, document root set to `.../laravel/public`, `.env`, permissions, `storage:link`, migrate, import, caches, SSL, post-deploy checks and rollback — is in [docs/current/DEPLOYMENT.md](docs/current/DEPLOYMENT.md).
+
+**Deployment has not been executed.** Nothing in this repository proves that meetaj.ir is running this application.
+
+### Scheduler
+
+Laravel's scheduler is **not used** and no cron entry is required. If a future feature needs it, add `* * * * * php /path/to/artisan schedule:run >> /dev/null 2>&1` at that point and not before.
+
+## Security
+
+CSRF (including the legacy field contract), a honeypot, two layers of rate limiting, centralised validation in `StoreContactRequest`, hashed passwords with a 12-character minimum, Filament session auth, six policies, and a `SecurityHeaders` middleware (`nosniff`, `Referrer-Policy`, `SAMEORIGIN`, HSTS on HTTPS, `no-store` on admin/Livewire/forms). `APP_DEBUG` must be `false` in production. No penetration test has been performed. Detail: [docs/current/SECURITY.md](docs/current/SECURITY.md).
+
+## Project structure
+
+```
+app/          Laravel application and admin panel code
+bootstrap/    Application bootstrap and generated cache
+config/       Laravel and CMS configuration
+database/     Migrations, seeders, ignored local SQLite database
+docs/         Documentation, design system, QA and historical references
+public/       Web document root and published assets
+resources/    Asset sources, downloads, static files, legacy content and Blade views
+routes/       Web and console routes
+scripts/      Maintenance and diagnostic PHP scripts
+storage/      Uploads, caches, logs and temporary output
+tests/        PHPUnit feature tests
+```
+
+Detail: [docs/current/PROJECT-STRUCTURE.md](docs/current/PROJECT-STRUCTURE.md).
+
+## Documentation index
+
+Full navigation map: [docs/README.md](docs/README.md).
+
+| Area | Start here |
+|------|------------|
+| Current state | [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md) |
+| Architecture | [docs/current/ARCHITECTURE.md](docs/current/ARCHITECTURE.md) |
+| Database | [docs/current/DATABASE.md](docs/current/DATABASE.md) |
+| Admin | [docs/current/ADMIN.md](docs/current/ADMIN.md) |
+| Homepage CMS | [docs/current/HOMEPAGE-CMS.md](docs/current/HOMEPAGE-CMS.md) |
+| Features | [docs/current/FEATURES.md](docs/current/FEATURES.md) |
+| Design system | [docs/current/DESIGN-SYSTEM.md](docs/current/DESIGN-SYSTEM.md) |
+| QA evidence | [docs/qa/FINAL-QA-REPORT.md](docs/qa/FINAL-QA-REPORT.md), [docs/qa/VISUAL-UX-FINAL-REPORT.md](docs/qa/VISUAL-UX-FINAL-REPORT.md) |
+| Decisions | [docs/decisions/ADR/README.md](docs/decisions/ADR/README.md) |
+| History | [docs/phases/phase-01-environment.md](docs/phases/phase-01-environment.md), [docs/historical/README.md](docs/historical/README.md) |
+
+## Known limitations
+
+1. **Not deployed.** DirectAdmin cutover, production database, SMTP and HTTPS verification are all outstanding.
+2. **No CMS user exists locally**, so interactive admin QA is blocked until `php artisan cms:create-user` is run.
+3. **No performance measurement** of any kind has been made — no Lighthouse, no load test.
+4. **PWA install and offline behaviour** have never been exercised in a browser.
+5. **`hreflang` is not implemented**; English and Persian share canonical URLs.
+6. **German is draft-only** and no German content exists.
+7. **Scheduled publishing is query-based**: a future `published_at` simply stays hidden, with nothing to flip it later.
+8. **`/admin/users` and `/admin/cms-users`** resolve to the same Users screen; that is one feature at two paths.
+9. **Standalone service detail pages** were removed; service records remain for the homepage catalog and are synchronized from `HomepageServiceCatalog`.
+10. **Imported article images** still point at `/assets/...` unless an editor uploads a replacement.
+
+Every limitation above is tracked with a status in [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).

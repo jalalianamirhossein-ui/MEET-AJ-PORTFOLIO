@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -14,44 +15,412 @@ use Illuminate\Validation\ValidationException;
 
 class Article extends Model
 {
-    protected $fillable = ['title', 'slug', 'language', 'translation_key', 'excerpt', 'content', 'featured_image', 'category_id', 'meta_title', 'meta_description', 'canonical_url', 'status', 'published_at'];
+    protected $fillable = [
+        'title', 'slug', 'language', 'translation_key', 'excerpt', 'content', 'featured_image',
+        'category_id', 'meta_title', 'meta_description', 'canonical_url', 'seo_data',
+        'presentation', 'sort_order', 'status', 'published_at',
+    ];
+
     protected $attributes = ['language' => 'en', 'status' => 'draft', 'sort_order' => 0];
-    protected function casts(): array { return ['published_at' => 'datetime', 'presentation' => 'array', 'seo_data' => 'array']; }
-    public function category(): BelongsTo { return $this->belongsTo(Category::class); }
-    public function redirects(): HasMany { return $this->hasMany(ArticleRedirect::class); }
-    public function scopePublished(Builder $query): Builder {
-        return $query->whereIn('language', ['en', 'fa'])->where('status', 'published')->whereNotNull('published_at')->where('published_at', '<=', now());
+
+    protected function casts(): array
+    {
+        return [
+            'published_at' => 'datetime',
+            'presentation' => 'array',
+            'seo_data' => 'array',
+        ];
     }
-    public function path(): string { return self::pathFor($this->slug, $this->language); }
-    public static function pathFor(string $slug, string $language): string {
-        return ($language === 'en' ? '' : '/'.$language).'/articles/'.$slug;
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
-    public function publicUrl(): string { return rtrim(config('app.url'), '/').$this->path(); }
-    public function imageUrl(): string {
-        $image = $this->featured_image ?: '/assets/img/hero-bg.jpg';
-        return rtrim(config('app.url'), '/').(str_starts_with($image, '/assets/') ? $image : '/storage/'.ltrim($image, '/'));
+
+    public function redirects(): HasMany
+    {
+        return $this->hasMany(ArticleRedirect::class);
     }
-    public function translatedText(string $field, string $locale): string {
-        // An edited title/excerpt must not revert to obsolete imported data-* text.
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class)->withTimestamps();
+    }
+
+    public function scopeForListing(Builder $query): Builder
+    {
+        return $query->select([
+            'articles.id',
+            'articles.title',
+            'articles.slug',
+            'articles.language',
+            'articles.excerpt',
+            'articles.featured_image',
+            'articles.category_id',
+            'articles.presentation',
+            'articles.sort_order',
+            'articles.status',
+            'articles.published_at',
+        ]);
+    }
+
+    public function scopeSearch(Builder $query, string $term): Builder
+    {
+        $term = trim($term);
+        if ($term === '') {
+            return $query;
+        }
+
+        $like = '%'.addcslashes($term, '%_\\').'%';
+
+        return $query->where(function (Builder $inner) use ($like): void {
+            $inner->where('title', 'like', $like)
+                ->orWhere('excerpt', 'like', $like)
+                ->orWhere('content', 'like', $like)
+                ->orWhereHas('category', fn (Builder $category) => $category->where('name', 'like', $like))
+                ->orWhereHas('tags', fn (Builder $tag) => $tag->where('name', 'like', $like)->orWhere('slug', 'like', $like));
+        });
+    }
+
+    public function scopeWithTag(Builder $query, string $slug): Builder
+    {
+        $slug = trim($slug);
+        if ($slug === '') {
+            return $query;
+        }
+
+        return $query->whereHas('tags', fn (Builder $tag) => $tag->where('slug', $slug));
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection<int, Article>
+     */
+    public function relatedArticles(int $limit = 3)
+    {
+        $limit = 3;
+        $tagIds = $this->relationLoaded('tags')
+            ? $this->tags->pluck('id')->map(fn ($id) => (int) $id)->all()
+            : $this->tags()->pluck('tags.id')->map(fn ($id) => (int) $id)->all();
+        $categoryId = (int) $this->category_id;
+        $sourceWords = collect(preg_split('/[^a-z0-9]+/i', strtolower($this->englishTitle())) ?: [])
+            ->filter(fn (string $word): bool => strlen($word) >= 4)
+            ->values();
+
+        return static::published()
+            ->where('language', $this->language)
+            ->whereKeyNot([$this->id])
+            ->with(['category', 'tags'])
+            ->get()
+            ->map(function (Article $article) use ($tagIds, $categoryId, $sourceWords): Article {
+                $sharedTags = $article->tags->pluck('id')->intersect($tagIds)->count();
+                $categoryMatch = $categoryId !== 0 && (int) $article->category_id === $categoryId;
+                $titleWords = collect(preg_split('/[^a-z0-9]+/i', strtolower($article->englishTitle())) ?: []);
+                $titleMatch = $sourceWords->intersect($titleWords)->count();
+                $article->setAttribute('_related_score', ($categoryMatch ? 100 : 0) + ($sharedTags * 50) + ($titleMatch * 5));
+
+                return $article;
+            })
+            ->sortByDesc(fn (Article $article): array => [(int) $article->getAttribute('_related_score'), -(int) $article->sort_order, -(int) $article->id])
+            ->take($limit)
+            ->values();
+    }
+
+    public function readingMinutes(): int
+    {
+        $text = trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags((string) $this->content), ENT_QUOTES | ENT_HTML5, 'UTF-8')) ?: '');
+        $words = $text === '' ? 0 : count(preg_split('/\s+/', $text) ?: []);
+
+        return max(1, (int) ceil($words / 200));
+    }
+
+    /**
+     * Return article markup in a renderable form.
+     *
+     * Rich editors can store pasted full HTML documents as escaped entities
+     * (`&lt;section&gt;`). Decode only when structural article markup is
+     * clearly present, leaving ordinary escaped text untouched.
+     */
+    public static function normalizeContentMarkup(string $content): string
+    {
+        $content = trim($content);
+        $hasEncodedMarkup = preg_match('~&lt;(?:!--|/?(?:article|section|div|h[1-6]|p|ul|ol|table)\b)~i', $content) === 1;
+
+        if (! $hasEncodedMarkup) {
+            return $content;
+        }
+
+        $decoded = html_entity_decode($content, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        return preg_match('~<(?:article|section|div|h[1-6]|p|ul|ol|table)\b~i', $decoded) === 1
+            ? $decoded
+            : $content;
+    }
+
+    public function displayContent(): string
+    {
+        return app(\App\Services\ArticleContentStandardizer::class)
+            ->standardize($this, (string) $this->content);
+    }
+
+    public function scopePublished(Builder $query): Builder
+    {
+        return $query->whereIn('language', ['en', 'fa'])
+            ->where('status', 'published')
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
+    }
+
+    public function path(): string
+    {
+        return self::pathFor($this->slug, $this->language);
+    }
+
+    public static function pathFor(string $slug, string $language): string
+    {
+        // Production public articles stay on unprefixed English/default URLs.
+        // German never receives a public route.
+        return '/articles/'.$slug;
+    }
+
+    public function publicUrl(): string
+    {
+        return rtrim((string) config('app.url'), '/').$this->path();
+    }
+
+    public function canonicalUrl(): string
+    {
+        return $this->canonical_url ?: $this->publicUrl();
+    }
+
+    public function imageUrl(): string
+    {
+        $image = $this->thumbnailUrl();
+        if (preg_match('~^(?:https?:)?//~i', $image)) {
+            return $image;
+        }
+
+        return rtrim((string) config('app.url'), '/').$image;
+    }
+
+    public function galleryUrl(): string
+    {
+        return $this->publicImagePath($this->selectedImage('gallery'));
+    }
+
+    public function thumbnailUrl(): string
+    {
+        $image = $this->publicImagePath($this->selectedImage('thumbnail'));
+
+        // Older imports store the original PNG in both fields. Resolve the
+        // shipped small image at render time, without overwriting CMS records.
+        if (preg_match('~^/assets/img/portfolio/([a-z0-9-]+)\.png$~', $image, $match)) {
+            $optimized = '/assets/img/portfolio/optimized/'.$match[1].'.jpg';
+            if (is_file(public_path(ltrim($optimized, '/')))) {
+                return $optimized;
+            }
+        }
+
+        return $image;
+    }
+
+    private function selectedImage(string $variant): string
+    {
+        $featured = (string) $this->featured_image;
+        // A new CMS upload replaces the imported thumbnail AND gallery.
+        if ($featured !== '' && ! str_starts_with(ltrim($featured, '/'), 'assets/img/portfolio/')) {
+            return $featured;
+        }
+
+        return (string) (data_get($this->presentation, $variant) ?: $featured ?: '/assets/img/hero-bg.jpg');
+    }
+
+    private function publicImagePath(string $image): string
+    {
+        if (preg_match('~^(?:https?:)?//~i', $image) || str_starts_with($image, '/')) {
+            return $image;
+        }
+        if (str_starts_with($image, 'assets/') || str_starts_with($image, 'storage/')) {
+            return '/'.$image;
+        }
+
+        return '/storage/'.$image;
+    }
+
+    public function filterClass(): string
+    {
+        $slug = trim((string) $this->category?->slug);
+        if ($slug !== '') {
+            return 'filter-'.Str::slug($slug);
+        }
+
+        $stored = trim((string) data_get($this->presentation, 'filter_class'));
+        if ($stored !== '') {
+            return $stored;
+        }
+
+        return 'filter-others';
+    }
+
+    public function brandFilterClasses(): string
+    {
+        return $this->relationLoaded('tags')
+            ? $this->tags->filter(fn (Tag $tag) => $tag->isBrandFilter())->map(fn (Tag $tag) => 'filter-'.$tag->slug)->implode(' ')
+            : '';
+    }
+
+    public function accentColor(): string
+    {
+        if ($this->category) {
+            return $this->category->accentColor();
+        }
+
+        $slug = strtolower(str_replace('filter-', '', $this->filterClass()));
+
+        return Category::accentColorForSlug($slug);
+    }
+
+    public function accentCustomProperties(): string
+    {
+        if ($this->category) {
+            return $this->category->accentCustomProperties();
+        }
+
+        $color = $this->accentColor();
+
+        return '--topic: '.$color.'; --meetaj-topic: '.$color.'; --article-primary: '.$color.'; --article-primary-strong: color-mix(in srgb, '.$color.' 78%, #0f172a); --article-bg-accent: color-mix(in srgb, '.$color.' 14%, transparent);';
+    }
+
+    public function categoryLabelEn(): string
+    {
+        $stored = trim((string) data_get($this->presentation, 'category_label_en'));
+
+        if ($stored !== '' && preg_match('/\p{Arabic}/u', $stored)) {
+            $stored = '';
+        }
+
+        return $stored !== '' ? $this->canonicalTechnicalName($stored) : $this->localizedCategoryLabel('en');
+    }
+
+    public function categoryLabelFa(): string
+    {
+        $stored = trim((string) data_get($this->presentation, 'category_label_fa'));
+
+        return $stored !== '' ? $stored : $this->localizedCategoryLabel('fa');
+    }
+
+    protected function localizedCategoryLabel(string $locale): string
+    {
+        $name = trim((string) ($this->category?->name ?? ''));
+        $slug = strtolower((string) ($this->category?->slug ?? ''));
+        $filter = strtolower(str_replace('filter-', '', $this->filterClass()));
+        $key = $slug !== '' ? $slug : $filter;
+        $map = [
+            'microsoft' => ['en' => 'Microsoft', 'fa' => 'مایکروسافت'],
+            'linux' => ['en' => 'Linux', 'fa' => 'لینوکس'],
+            'mikrotik' => ['en' => 'MikroTik', 'fa' => 'میکروتیک'],
+            'vmware' => ['en' => 'VMware', 'fa' => 'مجازی‌سازی'],
+            'other' => ['en' => 'Other', 'fa' => 'سایر'],
+            'others' => ['en' => 'Other', 'fa' => 'سایر'],
+        ];
+
+        foreach ($map as $needle => $labels) {
+            if ($key === $needle || str_contains($key, $needle) || strcasecmp($name, $labels['en']) === 0) {
+                return $labels[$locale] ?? $labels['en'];
+            }
+        }
+
+        if ($locale === 'en') {
+            return $name !== '' ? $name : 'Article';
+        }
+
+        return $this->categoryLabelEn();
+    }
+
+    public function englishTitle(): string
+    {
+        foreach ([
+            data_get($this->presentation, 'hero_title_en'),
+            data_get($this->presentation, 'card_title_en'),
+            $this->title,
+        ] as $candidate) {
+            if (is_string($candidate) && trim($candidate) !== '' && ! preg_match('/\p{Arabic}/u', $candidate)) {
+                return trim($candidate);
+            }
+        }
+
+        return trim((string) $this->title);
+    }
+
+    public function englishCardTitle(): string
+    {
+        return $this->englishText(data_get($this->presentation, 'card_title_en'), $this->englishTitle());
+    }
+
+    public function englishCardExcerpt(): string
+    {
+        return $this->englishText(data_get($this->presentation, 'card_excerpt_en'), (string) $this->excerpt);
+    }
+
+    public function englishExcerpt(): string
+    {
+        return $this->englishText((string) $this->excerpt, data_get($this->presentation, 'excerpt_en'));
+    }
+
+    protected function englishText(?string $preferred, ?string $fallback): string
+    {
+        foreach ([$preferred, $fallback] as $candidate) {
+            if (is_string($candidate) && trim($candidate) !== '' && ! preg_match('/\p{Arabic}/u', $candidate)) {
+                return trim($candidate);
+            }
+        }
+
+        return '';
+    }
+
+    protected function canonicalTechnicalName(string $value): string
+    {
+        return match (strtolower(trim($value))) {
+            'vmware' => 'VMware',
+            'mikrotik' => 'MikroTik',
+            'devops' => 'DevOps',
+            'linux' => 'Linux',
+            'microsoft' => 'Microsoft',
+            'windows server' => 'Windows Server',
+            default => $value,
+        };
+    }
+
+    public function translatedText(string $field, string $locale): string
+    {
         $original = data_get($this->presentation, 'original_'.$field);
-        return $this->{$field} === $original ? (data_get($this->presentation, $field.'_translations.'.$locale) ?: (string) $this->{$field}) : (string) $this->{$field};
+
+        return $this->{$field} === $original
+            ? (data_get($this->presentation, $field.'_translations.'.$locale) ?: (string) $this->{$field})
+            : (string) $this->{$field};
     }
-    public function save(array $options = []): bool {
-        // A shared-host file lock serializes route claims across the two route tables.
-        return Cache::lock('cms-article-route-write', 30)->block(10, fn () => DB::transaction(fn () => parent::save($options)));
+
+    public function save(array $options = []): bool
+    {
+        return DB::transaction(fn () => parent::save($options));
     }
-    protected static function booted(): void {
+
+    protected static function booted(): void
+    {
         static::saving(function (Article $article) {
             $article->translation_key ??= (string) Str::uuid();
             Validator::make($article->attributesToArray(), [
-                'title' => ['required', 'string', 'max:255'], 'language' => ['required', Rule::in(['en', 'fa', 'de'])],
+                'title' => ['required', 'string', 'max:255'],
+                'language' => ['required', Rule::in(['en', 'fa', 'de'])],
                 'slug' => ['required', 'string', 'max:180', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('articles')->where('language', $article->language)->ignore($article->id)],
                 'translation_key' => ['required', 'uuid', Rule::unique('articles')->where('language', $article->language)->ignore($article->id)],
-                'content' => ['required', 'string'], 'excerpt' => ['nullable', 'string'],
+                'content' => ['required', 'string'],
+                'excerpt' => ['nullable', 'string'],
                 'category_id' => ['nullable', Rule::exists('categories', 'id')->where('language', $article->language)],
-                'meta_title' => ['nullable', 'string', 'max:255'], 'meta_description' => ['nullable', 'string'],
-                'status' => ['required', Rule::in(['draft', 'published'])], 'published_at' => ['nullable', 'date', 'required_if:status,published'],
-                'featured_image' => ['nullable', 'string', 'max:2048', 'regex:~^(?:/assets/img/|articles/)[a-zA-Z0-9/_-]+\.(?:jpg|jpeg|png|webp)$~'],
+                'meta_title' => ['nullable', 'string', 'max:255'],
+                'meta_description' => ['nullable', 'string'],
+                'status' => ['required', Rule::in(['draft', 'published'])],
+                'published_at' => ['nullable', 'date', 'required_if:status,published'],
+                'featured_image' => ['nullable', 'string', 'max:2048', 'not_regex:/\.(php|phtml|phar|exe|js)$/i'],
             ])->validate();
             if ($article->language === 'de' && $article->status !== 'draft') {
                 throw ValidationException::withMessages(['status' => 'German content remains draft until real translations are approved for release.']);
@@ -59,8 +428,11 @@ class Article extends Model
             if ($article->exists && $article->isDirty('language')) {
                 throw ValidationException::withMessages(['language' => 'Create a separate translation; an existing article language cannot change.']);
             }
-            if ($article->canonical_url && $article->canonical_url !== $article->publicUrl()) {
-                throw ValidationException::withMessages(['canonical_url' => 'Use this article’s current public URL or leave blank for automatic canonical handling.']);
+            if ($article->canonical_url) {
+                $allowed = [$article->publicUrl(), 'https://meetaj.ir'.$article->path()];
+                if (! in_array($article->canonical_url, $allowed, true)) {
+                    throw ValidationException::withMessages(['canonical_url' => 'Use this article’s current public URL or leave blank for automatic canonical handling.']);
+                }
             }
             $paths = [$article->path(), $article->path().'.html'];
             if (ArticleRedirect::whereIn('old_path', $paths)->where('article_id', '!=', $article->id ?? 0)->exists()) {

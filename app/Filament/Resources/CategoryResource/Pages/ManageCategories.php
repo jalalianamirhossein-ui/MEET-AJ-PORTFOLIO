@@ -1,6 +1,16 @@
 <?php
+
 namespace App\Filament\Resources\CategoryResource\Pages;
-class ManageCategories extends \Filament\Resources\Pages\ManageRecords {
+
+use Filament\Actions\CreateAction;
+use Filament\Resources\Pages\ManageRecords;
+
+class ManageCategories extends ManageRecords
+{
     protected static string $resource = \App\Filament\Resources\CategoryResource::class;
-    protected function getHeaderActions(): array { return [\Filament\Actions\CreateAction::make()]; }
+
+    protected function getHeaderActions(): array
+    {
+        return [CreateAction::make()];
+    }
 }
