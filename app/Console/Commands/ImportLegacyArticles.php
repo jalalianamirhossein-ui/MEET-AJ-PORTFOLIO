@@ -9,7 +9,7 @@ class ImportLegacyArticles extends Command
 {
     protected $signature = 'articles:import-legacy {--dry-run : Report without writing} {--refresh : Replace previously imported legacy articles}';
 
-    protected $description = 'Import the 23 original HTML articles into the CMS';
+    protected $description = 'Import legacy HTML articles into the CMS';
 
     public function handle(LegacyArticleImporter $importer): int
     {

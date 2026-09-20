@@ -7,8 +7,12 @@
 <li class="article-nav-item"><a href="#oxidized-install"><span data-en="Install Oxidized Packages" data-fa="نصب Packageهای Oxidized">Install Oxidized Packages</span></a></li>
 <li class="article-nav-item"><a href="#configuration"><span data-en="Oxidized Configuration" data-fa="تنظیمات اصلی Oxidized">Oxidized Configuration</span></a></li>
 <li class="article-nav-item"><a href="#inventory"><span data-en="Add Network Devices" data-fa="اضافه کردن تجهیزات شبکه">Add Network Devices</span></a></li>
+<li class="article-nav-item"><a href="#mikrotik"><span data-en="MikroTik RouterOS Backup" data-fa="Backup از MikroTik RouterOS">MikroTik RouterOS Backup</span></a></li>
+<li class="article-nav-item"><a href="#supported-platforms"><span data-en="Supported Platforms and Models" data-fa="پلتفرم‌ها و Modelهای پشتیبانی‌شده">Supported Platforms and Models</span></a></li>
+<li class="article-nav-item"><a href="#netbox"><span data-en="NetBox Inventory Integration" data-fa="اتصال Inventory به NetBox">NetBox Inventory Integration</span></a></li>
 <li class="article-nav-item"><a href="#cisco"><span data-en="Cisco Configuration For Oxidized Backup" data-fa="تنظیم Cisco برای Backup">Cisco Configuration For Oxidized Backup</span></a></li>
 <li class="article-nav-item"><a href="#validation"><span data-en="Backup Testing and Validation" data-fa="تست و اعتبارسنجی Backup">Backup Testing and Validation</span></a></li>
+<li class="article-nav-item"><a href="#systemd"><span data-en="Run Oxidized with systemd" data-fa="اجرای Oxidized با systemd">Run Oxidized with systemd</span></a></li>
 <li class="article-nav-item"><a href="#diff"><span data-en="Configuration Change Tracking" data-fa="Tracking تغییرات Configuration">Configuration Change Tracking</span></a></li>
 <li class="article-nav-item"><a href="#security"><span data-en="Security Best Practices" data-fa="بهترین روش‌های امنیتی">Security Best Practices</span></a></li>
 <li class="article-nav-item"><a href="#cisco-issues"><span data-en="Common Cisco Backup Issues" data-fa="مشکلات رایج Backup Cisco">Common Cisco Backup Issues</span></a></li>
@@ -21,8 +25,8 @@
 
   <div class="intro-content">
     <p
-      data-en="Oxidized is an open-source network configuration backup solution designed to automatically collect, store and track configuration changes from network devices."
-      data-fa="Oxidized یک ابزار متن‌باز برای Backup خودکار Configuration تجهیزات شبکه است که برای دریافت، ذخیره و بررسی تغییرات کانفیگ تجهیزات شبکه طراحی شده است."
+      data-en="Oxidized is an open-source network configuration backup solution for routers, switches, firewalls and other supported network platforms. It collects configuration data, stores revisions and makes changes auditable through Git."
+      data-fa="Oxidized یک ابزار متن‌باز برای Backup خودکار Configuration روترها، سوئیچ‌ها، فایروال‌ها و دیگر پلتفرم‌های پشتیبانی‌شده است. این ابزار تنظیمات را دریافت می‌کند، نسخه‌ها را ذخیره می‌کند و تغییرات را با Git قابل بررسی می‌سازد."
     >
       Oxidized یک ابزار متن‌باز برای Backup خودکار Configuration تجهیزات شبکه
       است که برای دریافت، ذخیره و بررسی تغییرات کانفیگ تجهیزات شبکه طراحی شده
@@ -54,15 +58,19 @@
 <li><a href="#oxidized-install" data-en="Install Oxidized Packages" data-fa="نصب Packageهای Oxidized">7. نصب Packageهای Oxidized</a></li>
 <li><a href="#configuration" data-en="Oxidized Configuration" data-fa="تنظیمات اصلی Oxidized">8. تنظیمات اصلی Oxidized</a></li>
 <li><a href="#inventory" data-en="Add Network Devices" data-fa="اضافه کردن تجهیزات شبکه">9. اضافه کردن تجهیزات شبکه</a></li>
-<li><a href="#cisco" data-en="Cisco Configuration For Oxidized Backup" data-fa="تنظیم Cisco برای Backup">10. تنظیم Cisco برای Backup</a></li>
-<li><a href="#validation" data-en="Backup Testing and Validation" data-fa="تست و اعتبارسنجی Backup">11. تست و اعتبارسنجی Backup</a></li>
-<li><a href="#diff" data-en="Configuration Change Tracking" data-fa="Tracking تغییرات Configuration">12. Tracking تغییرات Configuration</a></li>
-<li><a href="#security" data-en="Security Best Practices" data-fa="بهترین روش‌های امنیتی">13. بهترین روش‌های امنیتی</a></li>
-<li><a href="#cisco-issues" data-en="Common Cisco Backup Issues" data-fa="مشکلات رایج Backup Cisco">14. مشکلات رایج Backup Cisco</a></li>
-<li><a href="#troubleshooting" data-en="Troubleshooting" data-fa="عیب‌یابی">15. عیب‌یابی</a></li>
-<li><a href="#faq" data-en="Frequently Asked Questions" data-fa="پرسش‌های متداول">16. پرسش‌های متداول</a></li>
-<li><a href="#conclusion" data-en="Conclusion" data-fa="نتیجه‌گیری">17. نتیجه‌گیری</a></li>
-<li><a href="#sources" data-en="Official References" data-fa="منابع رسمی">18. منابع رسمی</a></li>
+<li><a href="#mikrotik" data-en="MikroTik RouterOS Backup" data-fa="Backup از MikroTik RouterOS">10. Backup از MikroTik RouterOS</a></li>
+<li><a href="#supported-platforms" data-en="Supported Platforms and Models" data-fa="پلتفرم‌ها و Modelهای پشتیبانی‌شده">11. پلتفرم‌ها و Modelهای پشتیبانی‌شده</a></li>
+<li><a href="#netbox" data-en="NetBox Inventory Integration" data-fa="اتصال Inventory به NetBox">12. اتصال Inventory به NetBox</a></li>
+<li><a href="#cisco" data-en="Cisco Configuration For Oxidized Backup" data-fa="تنظیم Cisco برای Backup">13. تنظیم Cisco برای Backup</a></li>
+<li><a href="#validation" data-en="Backup Testing and Validation" data-fa="تست و اعتبارسنجی Backup">14. تست و اعتبارسنجی Backup</a></li>
+<li><a href="#systemd" data-en="Run Oxidized with systemd" data-fa="اجرای Oxidized با systemd">15. اجرای Oxidized با systemd</a></li>
+<li><a href="#diff" data-en="Configuration Change Tracking" data-fa="Tracking تغییرات Configuration">16. Tracking تغییرات Configuration</a></li>
+<li><a href="#security" data-en="Security Best Practices" data-fa="بهترین روش‌های امنیتی">17. بهترین روش‌های امنیتی</a></li>
+<li><a href="#cisco-issues" data-en="Common Cisco Backup Issues" data-fa="مشکلات رایج Backup Cisco">18. مشکلات رایج Backup Cisco</a></li>
+<li><a href="#troubleshooting" data-en="Troubleshooting" data-fa="عیب‌یابی">19. عیب‌یابی</a></li>
+<li><a href="#faq" data-en="Frequently Asked Questions" data-fa="پرسش‌های متداول">20. پرسش‌های متداول</a></li>
+<li><a href="#conclusion" data-en="Conclusion" data-fa="نتیجه‌گیری">21. نتیجه‌گیری</a></li>
+<li><a href="#sources" data-en="Official References" data-fa="منابع رسمی">22. منابع رسمی</a></li>
 </ul></nav>
 </section>
 
@@ -257,20 +265,13 @@ Cisco Router / Switch
     <pre>
 <code class="language-bash">
 
+sudo add-apt-repository universe
 sudo apt update
 
-sudo apt upgrade -y
-
-
 sudo apt install -y \
-ruby \
-ruby-dev \
-ruby-bundler \
-build-essential \
-libsqlite3-dev \
-libssl-dev \
-pkg-config \
-git
+ruby ruby-dev ruby-bundler build-essential \
+  libsqlite3-dev libssl-dev pkg-config cmake libssh2-1-dev \
+  libicu-dev zlib1g-dev g++ libyaml-dev libzstd-dev git
 
 </code>
 </pre>
@@ -365,71 +366,56 @@ sudo su - oxidized
     </div>
 
     <pre>
-<code class="language-yaml">
-
----
+<code class="language-yaml">---
 username: oxidized
-
-password: StrongPassword
-
-
-model: cisco
-
-
+password: CHANGE_ME
+model: ios
 interval: 3600
-
-
-timeout: 30
-
-
+timeout: 20
+timelimit: 300
 retries: 3
 
-
-
 input:
-
   default: ssh
-
-
+  ssh:
+    secure: true
 
 output:
-
   default: git
-
-
   git:
-
     user: oxidized
-
     email: oxidized@example.com
-
     repo: /var/lib/oxidized/configs
 
-
-
 source:
-
   default: csv
-
-
   csv:
-
     file: /etc/oxidized/router.db
-
     delimiter: !ruby/regexp /:/
+    map:
+      name: 0
+      model: 1
+      group: 2
 
+groups:
+  cisco:
+    username: oxidized
+    password: CHANGE_ME
+  mikrotik:
+    username: oxidized
+    vars:
+      ssh_keys: ~/.ssh/oxidized_routeros
+  swos:
+    username: admin
+    password: CHANGE_ME
 
+vars:
+  remove_secret: true
+  output_store_mode: on_significant
 
 log: true
-
-
 debug: false
-
-
-threads: 30
-
-
-</code>
+threads: 10</code>
 </pre>
   </div>
 </section>
@@ -451,29 +437,109 @@ threads: 30
     <pre>
 <code>
 
-core-sw01:cisco:ios
-
-dist-sw01:cisco:ios
-
-mikrotik-edge:mikrotik:routeros
+core-sw01:ios:cisco
+dist-sw01:ios:cisco
+mt-core:routeros:mikrotik
+mt-edge:routeros:mikrotik
+swos-access:swos:swos
 
 </code>
 </pre>
   </div>
 
-  <p data-en="File format:" data-fa="فرمت فایل:">فرمت فایل:</p>
+  <p data-en="The CSV format used by this configuration is name:model:group. Credentials stay in config.yml or in the secured source adapter; they should not be written into router.db." data-fa="فرمت CSV در این Configuration به شکل name:model:group است. Credentialها باید در config.yml یا Adapter امن Source قرار بگیرند و نباید داخل router.db نوشته شوند.">فرمت CSV در این Configuration به شکل name:model:group است. Credentialها باید در config.yml یا Adapter امن Source قرار بگیرند و نباید داخل router.db نوشته شوند.</p>
 
   <div class="article-callout article-callout--info">
     <ul>
-      <li data-en="Hostname" data-fa="Hostname">Hostname</li>
+      <li data-en="name: the stable device name used as the backup filename and Git path" data-fa="name: نام ثابت تجهیز که برای نام فایل Backup و مسیر Git استفاده می‌شود">name: نام ثابت تجهیز که برای نام فایل Backup و مسیر Git استفاده می‌شود</li>
 
-      <li data-en="Vendor/model" data-fa="Vendor Model">Vendor Model</li>
+      <li data-en="model: an exact Oxidized model such as ios, routeros or junos" data-fa="model: نام دقیق Model در Oxidized مانند ios، routeros یا junos">model: نام دقیق Model در Oxidized مانند ios، routeros یا junos</li>
 
-      <li data-en="OS platform" data-fa="OS Platform">OS Platform</li>
+      <li data-en="group: the group that supplies credentials and per-platform variables" data-fa="group: گروهی که Credential و Variableهای اختصاصی Platform را تأمین می‌کند">group: گروهی که Credential و Variableهای اختصاصی Platform را تأمین می‌کند</li>
     </ul>
   </div>
 </section>
 
+
+<!-- MikroTik RouterOS -->
+<section id="mikrotik" class="article-section">
+  <h2 data-en="MikroTik RouterOS Backup" data-fa="Backup از MikroTik RouterOS">Backup از MikroTik RouterOS</h2>
+  <p data-en="The official RouterOS model uses SSH or Telnet and collects system metadata, package information, system history and the configuration export. On RouterOS 7 it uses /export show-sensitive by default unless remove_secret is enabled." data-fa="مدل رسمی RouterOS از SSH یا Telnet استفاده می‌کند و اطلاعات سیستم، نسخهٔ Packageها، تاریخچهٔ سیستم و خروجی Configuration را دریافت می‌کند. در RouterOS 7، اگر remove_secret فعال نباشد، به‌صورت پیش‌فرض از /export show-sensitive استفاده می‌شود.">مدل رسمی RouterOS از SSH یا Telnet استفاده می‌کند و اطلاعات سیستم، نسخهٔ Packageها، تاریخچهٔ سیستم و خروجی Configuration را دریافت می‌کند. در RouterOS 7، اگر remove_secret فعال نباشد، به‌صورت پیش‌فرض از /export show-sensitive استفاده می‌شود.</p>
+  <div class="article-callout article-callout--info"><ul>
+    <li data-en="Use the routeros model for MikroTik RouterOS devices and the swos model for MikroTik SwOS/SwOS Lite devices." data-fa="برای تجهیزات MikroTik RouterOS از مدل routeros و برای تجهیزات MikroTik SwOS یا SwOS Lite از مدل swos استفاده کنید.">برای تجهیزات MikroTik RouterOS از مدل routeros و برای تجهیزات MikroTik SwOS یا SwOS Lite از مدل swos استفاده کنید.</li>
+    <li data-en="RouterOS backups are text exports. They are different from the binary /system backup save file." data-fa="Backup مدل RouterOS یک Export متنی است و با فایل Binary حاصل از /system backup save تفاوت دارد.">Backup مدل RouterOS یک Export متنی است و با فایل Binary حاصل از /system backup save تفاوت دارد.</li>
+    <li data-en="With remove_secret: true, secrets are hidden. Keep a separate encrypted recovery backup if you require secret-bearing exports." data-fa="با remove_secret: true، Secretها مخفی می‌شوند. اگر Export حاوی Secret برای بازیابی لازم است، آن را جداگانه و به‌صورت رمزنگاری‌شده نگهداری کنید.">با remove_secret: true، Secretها مخفی می‌شوند. اگر Export حاوی Secret برای بازیابی لازم است، آن را جداگانه و به‌صورت رمزنگاری‌شده نگهداری کنید.</li>
+  </ul></div>
+  <p data-en="For RouterOS 7.12 and later, create a read-only user and use an ED25519 key instead of a shared password:" data-fa="در RouterOS نسخهٔ 7.12 و بالاتر، یک کاربر فقط‌خواندنی بسازید و به‌جای رمز مشترک از کلید ED25519 استفاده کنید:">در RouterOS نسخهٔ 7.12 و بالاتر، یک کاربر فقط‌خواندنی بسازید و به‌جای رمز مشترک از کلید ED25519 استفاده کنید:</p>
+  <div class="article-code"><pre><code class="language-bash">ssh-keygen -t ed25519 -f ~/.ssh/oxidized_routeros
+scp ~/.ssh/oxidized_routeros.pub admin@MIKROTIK_IP:/flash/id_ed25519.pub</code></pre></div>
+  <div class="article-code"><pre><code class="language-routeros">/user add name=oxidized group=read disabled=no
+/user ssh-keys import public-key-file=id_ed25519.pub user=oxidized</code></pre></div>
+  <p data-en="The router.db entries used by this guide are:" data-fa="ورودی‌های router.db این راهنما به‌صورت زیر هستند:">ورودی‌های router.db این راهنما به‌صورت زیر هستند:</p>
+  <div class="article-code"><pre><code class="language-text">mt-core:routeros:mikrotik
+mt-edge:routeros:mikrotik
+swos-access:swos:swos</code></pre></div>
+  <p data-en="The routeros model runs /export; it does not create a binary RouterOS backup file. If you also need a binary recovery image, schedule /system backup save separately, protect it as a secret and test its restore process." data-fa="مدل routeros دستور /export را اجرا می‌کند و فایل Binary Backup میکروتیک نمی‌سازد. اگر فایل Binary برای Recovery لازم دارید، اجرای /system backup save را جداگانه زمان‌بندی کنید، آن را مانند یک Secret محافظت کنید و فرایند Restore را تست کنید.">مدل routeros دستور /export را اجرا می‌کند و فایل Binary Backup میکروتیک نمی‌سازد. اگر فایل Binary برای Recovery لازم دارید، اجرای /system backup save را جداگانه زمان‌بندی کنید، آن را مانند یک Secret محافظت کنید و فرایند Restore را تست کنید.</p>
+  <div class="article-code"><div class="article-code-header"><span class="article-code-label">Optional binary recovery backup</span></div><pre><code class="language-routeros">/system backup save name=oxidized-recovery password="USE_A_UNIQUE_SECRET"</code></pre></div>
+  <p data-en="A binary backup is tied to RouterOS recovery workflows and is not a portable, reviewable configuration history. Store it in a separate encrypted location with strict access controls; keep the normal Oxidized text export in Git for diffs and auditing." data-fa="Backup Binary به فرایند Recovery خود RouterOS وابسته است و جایگزین History متنی و قابل Review نیست. این فایل را جداگانه و در محل رمزنگاری‌شده با دسترسی محدود نگه دارید و Export متنی Oxidized را برای Diff و Audit در Git ذخیره کنید.">Backup Binary به فرایند Recovery خود RouterOS وابسته است و جایگزین History متنی و قابل Review نیست. این فایل را جداگانه و در محل رمزنگاری‌شده با دسترسی محدود نگه دارید و Export متنی Oxidized را برای Diff و Audit در Git ذخیره کنید.</p>
+  <p data-en="SwOS is a different platform from RouterOS: use the swos model, HTTP credentials and the device web port. Oxidized retrieves the switch backup through the SwOS web endpoint, so do not put a SwOS device in the routeros group." data-fa="SwOS با RouterOS متفاوت است؛ برای آن از Model به نام swos، Credentialهای HTTP و Port وب تجهیز استفاده کنید. Oxidized Backup سوئیچ را از Endpoint وب SwOS دریافت می‌کند؛ بنابراین تجهیز SwOS را در گروه routeros قرار ندهید.">SwOS با RouterOS متفاوت است؛ برای آن از Model به نام swos، Credentialهای HTTP و Port وب تجهیز استفاده کنید. Oxidized Backup سوئیچ را از Endpoint وب SwOS دریافت می‌کند؛ بنابراین تجهیز SwOS را در گروه routeros قرار ندهید.</p>
+</section>
+
+<!-- Supported Platforms -->
+<section id="supported-platforms" class="article-section">
+  <h2 data-en="Supported Platforms and Models" data-fa="پلتفرم‌ها و Modelهای پشتیبانی‌شده">پلتفرم‌ها و Modelهای پشتیبانی‌شده</h2>
+  <p data-en="Oxidized is model-driven. The model name in router.db selects the commands and parser used for each device. Availability and behavior can change between releases, so check the upstream Supported OS Types list and model notes before production rollout." data-fa="Oxidized بر پایهٔ Model کار می‌کند. نام Model در router.db تعیین می‌کند چه دستورها و Parserی برای هر تجهیز استفاده شود. پشتیبانی و رفتار Modelها ممکن است بین Releaseها تغییر کند؛ پیش از Production فهرست رسمی Supported OS Types و Model Notes را بررسی کنید.">Oxidized بر پایهٔ Model کار می‌کند. نام Model در router.db تعیین می‌کند چه دستورها و Parserی برای هر تجهیز استفاده شود. پشتیبانی و رفتار Modelها ممکن است بین Releaseها تغییر کند؛ پیش از Production فهرست رسمی Supported OS Types و Model Notes را بررسی کنید.</p>
+  <div class="table-responsive"><table class="table table-bordered"><thead><tr><th>Platform</th><th>Oxidized model</th><th>Transport / collected data</th></tr></thead><tbody>
+    <tr><td>Cisco IOS / IOS-XE</td><td>ios</td><td>SSH/Telnet and running configuration</td></tr>
+    <tr><td>Cisco ASA / NX-OS</td><td>asa / nxos</td><td>Use the model matching the OS</td></tr>
+    <tr><td>Cisco IOS-XR / AireOS / UCS / Viptela</td><td>iosxr / aireos / ucs / viptela</td><td>Use the model matching the product</td></tr>
+    <tr><td>MikroTik RouterOS</td><td>routeros</td><td>SSH/Telnet, metadata, history and /export</td></tr>
+    <tr><td>MikroTik SwOS / SwOS Lite</td><td>swos</td><td>HTTP and /backup.swb</td></tr>
+    <tr><td>Juniper JunOS</td><td>junos</td><td>SSH and JunOS configuration</td></tr>
+    <tr><td>Juniper ScreenOS</td><td>screenos</td><td>SSH and ScreenOS configuration</td></tr>
+    <tr><td>Arista EOS</td><td>eos</td><td>SSH and EOS configuration</td></tr>
+    <tr><td>Aruba AOS-CX / AOS-W</td><td>aoscx / aosw</td><td>SSH and platform CLI</td></tr>
+    <tr><td>HPE ProCurve / Comware</td><td>procurve / comware</td><td>SSH/Telnet and CLI configuration</td></tr>
+    <tr><td>Huawei VRP</td><td>vrp</td><td>SSH/Telnet and VRP configuration</td></tr>
+    <tr><td>Dell PowerConnect / OS6 / OS10</td><td>powerconnect / os6 / os10</td><td>SSH and platform CLI</td></tr>
+    <tr><td>Extreme Networks XOS</td><td>xos</td><td>SSH and XOS configuration</td></tr>
+    <tr><td>Fortinet FortiOS</td><td>fortios / fortigate</td><td>SSH or supported API model</td></tr>
+    <tr><td>Palo Alto PAN-OS</td><td>panos / panos_api</td><td>CLI or API, depending on the model</td></tr>
+    <tr><td>F5 TMOS / F5OS</td><td>tmos / f5os</td><td>SSH and platform commands</td></tr>
+    <tr><td>Ubiquiti EdgeOS / EdgeSwitch / AirOS</td><td>edgeos / edgeswitch / airos</td><td>SSH and model-specific commands</td></tr>
+    <tr><td>VyOS / Cumulus Linux / Linux</td><td>vyos / cumulus / linuxgeneric</td><td>SSH and operating-system CLI</td></tr>
+    <tr><td>pfSense / OPNsense / OpenWrt / OpenBSD</td><td>pfsense / opnsense / openwrt / openbsd</td><td>Model-specific CLI or API</td></tr>
+    <tr><td>TrueNAS / Yamaha / ZTE / Zyxel</td><td>truenas / yamaha / zteolt / zynos</td><td>Use the exact model for the product family</td></tr>
+  </tbody></table></div>
+  <div class="article-callout article-callout--info"><ul><li data-en="A listed model does not guarantee identical support for every firmware or hardware revision." data-fa="وجود یک Model در فهرست به‌معنای پشتیبانی یکسان از همهٔ Firmwareها و Revisionهای سخت‌افزاری نیست.">وجود یک Model در فهرست به‌معنای پشتیبانی یکسان از همهٔ Firmwareها و Revisionهای سخت‌افزاری نیست.</li><li data-en="Test a representative device, inspect the saved output and verify that secrets are not exposed before adding more nodes." data-fa="پیش از افزودن Nodeهای بیشتر، یک تجهیز واقعی را تست کنید، خروجی ذخیره‌شده را بررسی کنید و مطمئن شوید Secretها افشا نشده‌اند.">پیش از افزودن Nodeهای بیشتر، یک تجهیز واقعی را تست کنید، خروجی ذخیره‌شده را بررسی کنید و مطمئن شوید Secretها افشا نشده‌اند.</li></ul></div>
+</section>
+
+<!-- NetBox Integration -->
+<section id="netbox" class="article-section">
+  <h2 data-en="NetBox Inventory Integration" data-fa="اتصال Inventory به NetBox">اتصال Inventory به NetBox</h2>
+  <p data-en="NetBox can be the source of device inventory, but its API response must expose the fields Oxidized needs: name, model, username, password and optionally group or enable. Oxidized's HTTP source supports one object per device and pagination; a small adapter endpoint is usually safer than pointing Oxidized at an unfiltered NetBox endpoint." data-fa="NetBox می‌تواند منبع Inventory تجهیزات باشد، اما پاسخ API باید فیلدهای موردنیاز Oxidized یعنی name، model، username، password و در صورت نیاز group یا enable را ارائه کند. Source نوع HTTP در Oxidized از یک Object برای هر تجهیز و Pagination پشتیبانی می‌کند؛ معمولاً ساختن یک Adapter کوچک از اتصال مستقیم به Endpoint بدون Filter امن‌تر است.">NetBox می‌تواند منبع Inventory تجهیزات باشد، اما پاسخ API باید فیلدهای موردنیاز Oxidized یعنی name، model، username، password و در صورت نیاز group یا enable را ارائه کند. Source نوع HTTP در Oxidized از یک Object برای هر تجهیز و Pagination پشتیبانی می‌کند؛ معمولاً ساختن یک Adapter کوچک از اتصال مستقیم به Endpoint بدون Filter امن‌تر است.</p>
+  <div class="article-code"><div class="article-code-header"><span class="article-code-label">NetBox API check</span></div><pre><code class="language-bash">curl --fail --silent \
+  -H "Authorization: Token $NETBOX_TOKEN" \
+  "https://netbox.example.com/api/dcim/devices/?status=active"</code></pre></div>
+  <p data-en="The adapter should return only active, reachable devices and map their NetBox device type or custom field to an Oxidized model such as ios, routeros or junos. Do not return NetBox credentials to browsers, logs or public endpoints." data-fa="Adapter باید فقط تجهیزات Active و قابل دسترس را برگرداند و Device Type یا Custom Field در NetBox را به Modelهایی مانند ios، routeros یا junos نگاشت کند. Credentialهای NetBox را به Browser، Log یا Endpoint عمومی برنگردانید.">Adapter باید فقط تجهیزات Active و قابل دسترس را برگرداند و Device Type یا Custom Field در NetBox را به Modelهایی مانند ios، routeros یا junos نگاشت کند. Credentialهای NetBox را به Browser، Log یا Endpoint عمومی برنگردانید.</p>
+  <div class="article-code"><div class="article-code-header"><span class="article-code-label">Oxidized HTTP source</span></div><pre><code class="language-yaml">source:
+  default: http
+  http:
+    url: https://inventory.example.com/oxidized/nodes
+    scheme: https
+    user: oxidized-source
+    pass: CHANGE_ME
+    read_timeout: 120
+    map:
+      name: name
+      model: model
+      username: username
+      password: password
+    vars_map:
+      enable: enable
+    pagination: true
+    pagination_key_name: next</code></pre></div>
+</section>
 <!-- Cisco Configuration -->
 
 <section id="cisco" class="article-section">
@@ -595,6 +661,36 @@ cat /var/lib/oxidized/configs/core-sw01
 </code>
 </pre>
   </div>
+</section>
+
+
+<!-- Systemd Service -->
+<section id="systemd" class="article-section">
+  <h2 data-en="Run Oxidized with systemd" data-fa="اجرای Oxidized با systemd">اجرای Oxidized با systemd</h2>
+  <p data-en="Run Oxidized as the dedicated oxidized user and keep its configuration and repository outside the web root. Confirm the executable path with command -v oxidized before creating the unit." data-fa="Oxidized را با کاربر اختصاصی oxidized اجرا کنید و Configuration و Repository آن را خارج از Web Root نگه دارید. پیش از ساخت Unit، مسیر اجرایی را با command -v oxidized بررسی کنید.">Oxidized را با کاربر اختصاصی oxidized اجرا کنید و Configuration و Repository آن را خارج از Web Root نگه دارید. پیش از ساخت Unit، مسیر اجرایی را با command -v oxidized بررسی کنید.</p>
+  <div class="article-code"><pre><code class="language-bash">command -v oxidized
+sudo install -d -o oxidized -g oxidized /var/lib/oxidized/configs
+sudo nano /etc/systemd/system/oxidized.service</code></pre></div>
+  <div class="article-code"><pre><code class="language-ini">[Unit]
+Description=Oxidized network configuration backup
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=oxidized
+Group=oxidized
+ExecStart=/usr/local/bin/oxidized
+Restart=on-failure
+RestartSec=10
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target</code></pre></div>
+  <div class="article-code"><pre><code class="language-bash">sudo systemctl daemon-reload
+sudo systemctl enable --now oxidized
+systemctl status oxidized --no-pager
+journalctl -u oxidized -n 100 --no-pager</code></pre></div>
 </section>
 
 <!-- Git Diff -->
@@ -851,6 +947,14 @@ ssh oxidized@DEVICE-IP
   </div>
 
   <div class="article-faq-item">
+    <h3 class="article-faq-question" data-en="Does the MikroTik model create a binary backup?" data-fa="آیا Model میکروتیک Backup Binary می‌سازد؟">آیا Model میکروتیک Backup Binary می‌سازد؟</h3>
+
+    <div class="article-faq-answer">
+      <p data-en="No. The routeros model stores a text export and metadata. Schedule /system backup save separately when a binary recovery file is required, and protect that file as a secret." data-fa="خیر. Model به نام routeros یک Export متنی و Metadata ذخیره می‌کند. اگر فایل Binary برای Recovery لازم است، /system backup save را جداگانه زمان‌بندی و فایل را مانند Secret محافظت کنید.">خیر. Model به نام routeros یک Export متنی و Metadata ذخیره می‌کند. اگر فایل Binary برای Recovery لازم است، /system backup save را جداگانه زمان‌بندی و فایل را مانند Secret محافظت کنید.</p>
+    </div>
+  </div>
+
+  <div class="article-faq-item">
     <h3 class="article-faq-question" data-en="Why is automated Cisco backup important?" data-fa="چرا Backup خودکار Cisco مهم است؟">چرا Backup خودکار Cisco مهم است؟</h3>
 
     <div class="article-faq-answer">
@@ -892,6 +996,12 @@ ssh oxidized@DEVICE-IP
         Cisco Support Documentation
       </a>
     </li>
+
+    <li><a href="https://github.com/ytti/oxidized/blob/master/docs/Supported-OS-Types.md">Oxidized Supported OS Types</a></li>
+    <li><a href="https://github.com/ytti/oxidized/blob/master/docs/Sources.md">Oxidized Sources and NetBox-compatible HTTP source</a></li>
+    <li><a href="https://github.com/ytti/oxidized/blob/master/docs/Model-Notes/RouterOS.md">MikroTik RouterOS model notes</a></li>
+    <li><a href="https://github.com/ytti/oxidized/blob/master/docs/Configuration.md">Oxidized configuration reference</a></li>
+    <li><a href="https://github.com/ytti/oxidized/blob/master/docs/Inputs/SSH.md">Oxidized SSH input reference</a></li>
   </ul>
 </section>
 </article></main></body></html>
