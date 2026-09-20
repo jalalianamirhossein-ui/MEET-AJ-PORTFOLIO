@@ -13,9 +13,9 @@ class LegacyArticleImporter
     public function __construct(private readonly ArticleHtmlSanitizer $sanitizer) {}
 
     /**
-     * @return array{imported:int,skipped:int,redirects:int,report:array<int,array<string,mixed>>}
+     * @return array{imported:int,updated:int,skipped:int,redirects:int,report:array<int,array<string,mixed>>}
      */
-    public function import(bool $dryRun = false): array
+    public function import(bool $dryRun = false, bool $updateExisting = false, array $onlySlugs = []): array
     {
         $cards = $this->homepageCards();
         $files = $this->articleFiles();
@@ -25,24 +25,56 @@ class LegacyArticleImporter
 
         $report = [];
         $imported = 0;
+        $updated = 0;
         $skipped = 0;
         $redirects = 0;
 
-        $run = function () use ($cards, $files, $dryRun, &$report, &$imported, &$skipped, &$redirects): void {
+        $run = function () use ($cards, $files, $dryRun, $updateExisting, $onlySlugs, &$report, &$imported, &$updated, &$skipped, &$redirects): void {
             $categories = $this->ensureCategories();
             foreach ($files as $index => $path) {
                 $relative = 'articles/'.basename($path);
+                $slug = basename($path, '.html');
+                if ($onlySlugs !== [] && ! in_array($slug, $onlySlugs, true)) {
+                    continue;
+                }
                 $html = file_get_contents($path);
                 if ($html === false) {
                     throw new \RuntimeException('Unable to read '.$relative);
                 }
                 $hash = hash('sha256', $html);
-                $slug = basename($path, '.html');
                 $card = $cards[$slug] ?? null;
                 $parsed = $this->parseArticle($html, $slug, $card, $relative, $hash, $index);
 
                 $existing = Article::query()->where('language', 'en')->where('slug', $slug)->first();
                 if ($existing) {
+                    $storedHash = data_get($existing->presentation, 'source_hash');
+                    $sourceChanged = ($storedHash !== null && (string) $storedHash !== $hash)
+                        || ($storedHash === null && trim((string) $existing->content) !== trim((string) $parsed['attributes']['content']));
+                    if ($updateExisting && $sourceChanged) {
+                        if ($dryRun) {
+                            $updated++;
+                            $report[] = [
+                                'slug' => $slug,
+                                'status' => 'would_update',
+                                'reason' => 'source HTML changed',
+                            ];
+                            continue;
+                        }
+
+                        $translationKey = $existing->translation_key;
+                        $existing->forceFill($parsed['attributes']);
+                        $existing->translation_key = $translationKey;
+                        $existing->save();
+                        $updated++;
+                        $report[] = [
+                            'slug' => $slug,
+                            'status' => 'updated',
+                            'id' => $existing->id,
+                            'reason' => 'source HTML changed',
+                        ];
+                        continue;
+                    }
+
                     $repaired = $this->ensureEnglishTitles($existing, $parsed);
                     $skipped++;
                     $report[] = [
@@ -79,7 +111,7 @@ class LegacyArticleImporter
             app(\App\Services\ArticleTagAssigner::class)->syncPublishedLibrary();
         }
 
-        return compact('imported', 'skipped', 'redirects', 'report');
+        return compact('imported', 'updated', 'skipped', 'redirects', 'report');
     }
 
     /**
