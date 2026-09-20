@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Mail\ContactReceivedMail;
 use App\Models\Article;
 use App\Models\Request as ContactRequest;
+use App\Models\Testimonial;
 use App\Models\User;
 use App\Services\LegacyArticleImporter;
 use App\Services\LegacyServiceImporter;
@@ -155,6 +156,37 @@ class CmsOperationsTest extends TestCase
         $this->assertSame('Article body Useful content for readers.', $article->excerpt);
         $this->assertSame('Quick CMS Article', $article->meta_title);
         $this->assertSame($article->excerpt, $article->meta_description);
+    }
+
+    public function test_testimonial_can_be_added_from_the_admin_and_reaches_homepage(): void
+    {
+        $admin = User::create(['name' => 'Testimonial Admin', 'email' => 'testimonial-admin@example.test', 'password' => 'password12chars']);
+        $admin->forceFill(['role' => 'admin'])->save();
+
+        $this->actingAs($admin)
+            ->get('/admin/testimonials')
+            ->assertOk()
+            ->assertSee('/admin/testimonials/create', false);
+
+        \Livewire\Livewire::actingAs($admin)
+            ->test(\App\Filament\Resources\TestimonialResource\Pages\CreateTestimonial::class)
+            ->fillForm([
+                'author_name' => 'CMS Client',
+                'quote_en' => 'The new testimonial is visible immediately from the CMS.',
+                'quote_fa' => 'این نظر جدید مستقیماً از CMS نمایش داده می‌شود.',
+                'role_en' => 'Technical Lead',
+                'role_fa' => 'مدیر فنی',
+                'company_en' => 'CMS Client Co.',
+                'company_fa' => 'شرکت مشتری CMS',
+                'sort_order' => 999,
+                'is_published' => true,
+            ])
+            ->call('create')
+            ->assertHasNoFormErrors();
+
+        $this->assertDatabaseHas('testimonials', ['author_name' => 'CMS Client']);
+        $this->get('/')->assertOk()->assertSee('The new testimonial is visible immediately from the CMS.', false);
+        $this->assertSame(6, Testimonial::query()->count());
     }
 
     public function test_article_pages_have_complete_seo_and_clean_canonicals(): void
