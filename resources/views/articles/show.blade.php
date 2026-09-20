@@ -126,7 +126,9 @@
               </aside>
             @endif
             <div class="article-reading">
-              @php $articleContent = $article->displayContent(); @endphp
+              @php
+                $articleContent = str_replace('my-profile-img.jpg', 'my-profile-img-2.jpg', $article->displayContent());
+              @endphp
               <article class="article-body">
                 {!! $articleContent !!}
                 @if (! str_contains($articleContent, 'id="author"'))
