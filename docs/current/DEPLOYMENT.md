@@ -18,7 +18,7 @@ Do not select PHP 8.2. Do not install Redis, Supervisor, Node, or a queue worker
 | `APP_ENV` / `APP_DEBUG` | `local` / **false** | `testing` | `production` / **false** |
 | Mail | `log` | none | SMTP (**not configured**) |
 | Document root | `php artisan serve` on `public/` | n/a | must be `.../laravel/public` |
-| Status | PASS | PASS (67 tests / 1102 assertions, 1 skipped) | BLOCKED · NOT TESTED |
+| Status | PASS | PASS (67 tests / 1127 assertions, 1 skipped) | BLOCKED · NOT TESTED |
 
 The sections below describe the PRODUCTION procedure only. Nothing in them has been executed.
 

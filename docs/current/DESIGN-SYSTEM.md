@@ -1,6 +1,6 @@
 # Design system — Meet AJ public site
 
-**Authority:** [docs/design-system/meet-aj/MASTER.md](../design-system/meet-aj/MASTER.md). Live cascade last overlay `assets/css/site-modules.css?v=1840` after `visual-upgrade.css?v=1711`.
+**Authority:** [docs/design-system/meet-aj/MASTER.md](../design-system/meet-aj/MASTER.md). Live cascade last overlay `assets/css/site-modules.css?v=1853` after `visual-upgrade.css?v=1713`.
 **Visual DNA:** [ARTICLE-VISUAL-DNA.md](ARTICLE-VISUAL-DNA.md) (Article detail pages are the reference; they are not restyled from this file).  
 **Date:** 2026-09-18  
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md)

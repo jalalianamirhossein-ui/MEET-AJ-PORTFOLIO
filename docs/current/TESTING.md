@@ -1,12 +1,12 @@
 # Testing — Meet AJ
 
 **Authority:** AUTHORITATIVE testing document.
-**Verified:** 2026-09-20 by running the full suite and reading `phpunit.xml`, `phpunit.mysql.xml`, `tests/TestCase.php` and every file in `tests/Feature/`.
+**Verified:** 2026-09-21 by running the full suite and reading `phpunit.xml`, `phpunit.mysql.xml`, `tests/TestCase.php` and every file in `tests/Feature/`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md). Per-URL evidence: [../qa/QA-MATRIX.md](../qa/QA-MATRIX.md).
 
-## Latest run — 2026-09-20
+## Latest run — 2026-09-21
 
-After the homepage CMS, restored resume timeline, simplified article creation, dynamic testimonials, escaped article-markup repair and dynamic site chrome changes: **67 tests, 1102 assertions, 0 failures, 1 skipped**. The skipped test is `MysqlSchemaTest`, which only runs with an explicit MySQL connection. The homepage CMS is covered by `HomepageContentTest`; content comparison remains **Failures: 0**.
+After the homepage CMS, restored resume timeline, simplified article creation, dynamic testimonials, escaped article-markup repair and dynamic site chrome changes: **67 tests, 1127 assertions, 0 failures, 1 skipped**. The skipped test is `MysqlSchemaTest`, which only runs with an explicit MySQL connection. The homepage CMS is covered by `HomepageContentTest`; content comparison remains **Failures: 0**.
 
 ## Previous recorded run — 2026-09-18
 
@@ -33,7 +33,7 @@ Also run on 2026-09-18: `php artisan optimize:clear`, `php artisan route:list` (
 
 | File | Covers |
 |------|--------|
-| `PublicSiteTest.php` | Homepage, `/index.html` 301, all 24 articles and their legacy redirects, 404 on unknown slugs, contact endpoints, honeypot, validation, rate limit, sitemap, robots, German routes returning 404 |
+| `PublicSiteTest.php` | Homepage, `/index.html` 301, all 25 articles and their legacy redirects, 404 on unknown slugs, contact endpoints, honeypot, validation, rate limit, sitemap, robots, German routes returning 404 |
 | `CmsOperationsTest.php` | Filament access control, article create/update, slug-change redirects, importer behaviour |
 | `ServiceCatalogTest.php` | Service catalog rendering, detail pages, `.html` 301, pricing output, editor authorization failure |
 | `ArticleLibraryTest.php` | Search, tag filter, pagination, related articles, share links |
@@ -41,7 +41,7 @@ Also run on 2026-09-18: `php artisan optimize:clear`, `php artisan route:list` (
 | `RequestWorkflowTest.php` | Request statuses, admin-only access, hidden internal notes |
 | `FormCsrfAndAdminRequestsTest.php` | CSRF contracts, homepage service selection persistence, `/admin/requests` inbox |
 | `HomepageContentTest.php` | Homepage section seeding, dynamic rendering and admin resource access |
-| `ProductionAuditTest.php` | Contact → Request → admin inbox; editor 403; first-load Testimonials + Contact; FA encoding; English article titles + importer repair; Expertise `data-expertise` + `initExpertiseReveal`; asset versions `site-modules.css?v=1840` / `main.js?v=1412` |
+| `ProductionAuditTest.php` | Contact → Request → admin inbox; editor 403; first-load Testimonials + Contact; FA encoding; English article titles + importer repair; Expertise `data-expertise` + `initExpertiseReveal`; asset versions `site-modules.css?v=1853` / `main.js?v=1414` |
 | `AdminThemeTest.php` | White/Red admin tokens + contrast lock; published `meet-aj-admin.css`; `categories.accent_color` override/fallback/invalid hex; public `--topic` from `Category::accentColor()`; ColorPicker source asserts; editor denied Requests |
 | `MysqlSchemaTest.php` | Schema creation on MySQL/MariaDB (skipped on SQLite) |
 

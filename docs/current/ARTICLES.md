@@ -1,18 +1,18 @@
 # Articles — Meet AJ
 
 **Authority:** AUTHORITATIVE article subsystem document.
-**Verified:** 2026-09-17 against `app/Models/Article.php`, `app/Http/Controllers/ArticleController.php`, `app/Services/Legacy*`, `app/Filament/Resources/ArticleResource.php`, `resources/views/articles/**`, the live database, and `php artisan site:compare-content`.
+**Verified:** 2026-09-21 against `app/Models/Article.php`, `app/Http/Controllers/ArticleController.php`, `app/Services/Legacy*`, `app/Filament/Resources/ArticleResource.php`, `resources/views/articles/**`, the live database, and `php artisan site:compare-content`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
 ## Counts (live database, 2026-09-17)
 
 | Item | Count |
 |------|-------|
-| Articles | **24** |
-| Published English articles | 24 |
-| Articles with a non-null `published_at` | 24 |
+| Articles | **25** |
+| Published English articles | 25 |
+| Articles with a non-null `published_at` | 25 |
 | Persian or German article rows | 0 |
-| `article_redirects` rows | 24 |
+| `article_redirects` rows | 25 |
 | Categories | 10 (5 concepts × EN/FA) |
 | Tags | 8 |
 | Article ↔ tag links | 38 |
@@ -21,7 +21,7 @@ Every article row is `language = en`, `status = published`. Persian article copy
 
 ## Import
 
-Source of truth for content: the 24 original files in `resources/legacy/articles/*.html`. They are never deleted or rewritten by the CMS.
+Source of truth for content: the 25 original files in `resources/legacy/articles/*.html`. They are never deleted or rewritten by the CMS.
 
 ```bash
 php artisan articles:import-legacy             # import or update
@@ -56,7 +56,7 @@ php artisan articles:sync-tags
 | `/articles/{slug}.html` | **301** to `/articles/{slug}`, query string preserved, no redirect chain |
 | unknown slug | 404 |
 
-The 24 canonical slugs:
+The 25 canonical slugs:
 
 `creating-a-bootable-usb`, `downgrade-mikrotik-routeros-firmware-safely`, `enable-ssh-linux-complete-guide`, `http-vs-https-ssl-certificate-impact`, `imap-vs-pop3-email-protocol-comparison`, `install-dfs-server-windows-server`, `install-mikrotik-chr-vmware-workstation`, `install-vmware-esxi-vmware-workstation-vmcisr`, `linux-cli-common-commands`, `linux-security-account-access-management`, `mikrotik-block-port-scanners`, `mikrotik-block-website`, `mikrotik-openvpn-setup-v7`, `mikrotik-unequal-dual-wan-load-balancing-ecmp`, `netbox-installation-setup-ubuntu`, `nginx-installation-configuration-ubuntu`, `set-static-ip-ubuntu-server-netplan`, `sql-server-automatic-backup-job`, `ubuntu-date-time-settings`, `vmware-esxi-8-installation-basic-configuration`, `vsphere-standard-switch-vs-distributed-switch`, `windows-cmd-common-network-commands`, `windows-hardware-info-cmd-vs-dxdiag`, `windows-password-reset-secure-access-recovery`.
 
@@ -94,7 +94,7 @@ This is SQL `LIKE` matching, not a search engine: there is no Meilisearch, Algol
 
 `php artisan site:compare-content` compares rendered Laravel output against the original HTML for every article: complete body, bilingual attributes, headings, and SEO tokens.
 
-Result on 2026-09-17: **Failures: 0** for all 24 articles. Evidence: [../qa/CONTENT-INTEGRITY.md](../qa/CONTENT-INTEGRITY.md).
+Result on 2026-09-21: **Failures: 0** for all 25 articles. Evidence: [../qa/CONTENT-INTEGRITY.md](../qa/CONTENT-INTEGRITY.md).
 
 ## Languages
 

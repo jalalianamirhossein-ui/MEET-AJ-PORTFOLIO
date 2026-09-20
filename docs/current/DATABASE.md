@@ -37,7 +37,7 @@ Column types below are the SQLite types actually reported by the database. The m
 | `2026_09_20_000013_create_homepage_contents_table` | 3 | Ran |
 | `2026_09_20_000014_restore_resume_content` | 4 | Ran |
 
-The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the migration ledger. Fifteen application migrations exist through `2026_09_20_000014_restore_resume_content`.
+The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the migration ledger. Seventeen application migrations exist through `2026_09_21_000017_repair_missing_article_redirects`.
 
 ## Table overview
 
@@ -47,15 +47,15 @@ The users migration also creates `password_reset_tokens`. Laravel's own `migrati
 | `password_reset_tokens` | Laravel password reset store | 0 |
 | `sessions` | Session rows when the database session driver is selected | 0 |
 | `categories` | Article taxonomy, one row per language | 10 |
-| `articles` | Article content and SEO (24 imported, one additional) | 25 |
-| `article_redirects` | 301 map from old paths to articles | 24 |
+| `articles` | Article content and SEO (25 imported) | 25 |
+| `article_redirects` | 301 map from old paths to articles | 25 |
 | `tags` | Flat public tag vocabulary | 8 |
 | `article_tag` | Article ↔ tag pivot | 39 |
 | `requests` | Inbound contact submissions | 0 |
 | `services` | Service catalog and pricing (12 visible) | 13 |
-| `testimonials` | Bilingual homepage testimonials | 5 |
+| `testimonials` | Bilingual homepage testimonials | 9 |
 | `homepage_contents` | Editable homepage sections | 7 |
-| `migrations` | Laravel migration ledger | 15 |
+| `migrations` | Laravel migration ledger | 17 |
 
 There is **no** `pages` table and **no** `contact_requests` table. Homepage copy is stored in `homepage_contents`; articles, services, testimonials and requests remain dedicated relational resources.
 
@@ -191,7 +191,7 @@ Deleting an article cascades to `article_redirects` and `article_tag`.
 | `article_id` | integer | FK → `articles.id`, **cascade** on delete |
 | `created_at`, `updated_at` | datetime, nullable | |
 
-24 rows, one per imported article. Renaming a slug adds a new row rather than replacing the old one.
+25 rows, one per imported article. Renaming a slug adds a new row rather than replacing the old one.
 
 ## `tags`
 
@@ -212,7 +212,7 @@ Current vocabulary (8): Linux, Microsoft, MikroTik, VMware, Windows Server, Netw
 | `tag_id` | integer | FK → `tags.id`, **cascade** on delete, indexed |
 | `created_at`, `updated_at` | datetime, nullable | |
 
-Composite primary key `(article_id, tag_id)` (unique). 39 links across 24 articles.
+Composite primary key `(article_id, tag_id)` (unique). 39 links across 25 articles.
 
 ## `requests`
 

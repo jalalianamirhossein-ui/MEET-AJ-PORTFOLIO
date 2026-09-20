@@ -3,9 +3,9 @@
 **2026-09-20 CMS update:** Homepage identity, navigation, hero, About, stats, skills, resume, contact and footer content are database-backed through `homepage_contents`. See [the homepage CMS guide](HOMEPAGE-CMS.md) and [the current directory map](PROJECT-STRUCTURE.md).
 
 **Authority:** SINGLE authoritative current-state document. Everything else in `docs/current/` expands one section of this file.
-**Date verified:** 2026-09-20
+**Date verified:** 2026-09-21
 **Local environment recheck:** [2026-09-20 repair and verification](../qa/LOCAL-ENVIRONMENT-REPAIR.md). Counts below describe this checkout, not a production server.
-**Verification method:** `php artisan migrate:status`, `php artisan optimize:clear`, `php artisan route:list`, full `vendor/bin/phpunit` (**67 tests / 1102 assertions / 1 skipped / 0 failures**), targeted `HomepageContentTest`, `php artisan site:compare-content` (Failures: 0), and reading `app/`, `routes/`, `resources/`, `docs/`, and `tests/`.
+**Verification method:** `php artisan migrate:status`, `php artisan optimize:clear`, `php artisan route:list`, full `vendor/bin/phpunit` (**67 tests / 1127 assertions / 1 skipped / 0 failures**), targeted `HomepageContentTest`, `php artisan site:compare-content` (Failures: 0), and reading `app/`, `routes/`, `resources/`, `docs/`, and `tests/`.
 **Runtime used:** `.runtime/php84/php.exe` (PHP is not on PATH on this workstation).
 
 Status vocabulary used in every document: **PASS** | **FAIL** | **BLOCKED** | **NOT TESTED**.
@@ -43,7 +43,7 @@ Local environment reported by `php artisan about`: environment `local`, debug **
 
 Engine in use locally: **SQLite** at `.runtime/cms.sqlite`, selected by the local `DB_DATABASE`. Intended production engine: **MySQL / MariaDB** (not provisioned).
 
-Fifteen application migrations, all **Ran** (batches 1–4), plus Laravel's `migrations` ledger:
+Seventeen application migrations, all **Ran** (batches 1–6), plus Laravel's `migrations` ledger:
 
 | Table | Rows (2026-09-20) |
 |-------|-------------------|
@@ -51,15 +51,15 @@ Fifteen application migrations, all **Ran** (batches 1–4), plus Laravel's `mig
 | `password_reset_tokens` | 0 |
 | `sessions` | (local session files; not counted here) |
 | `categories` | 10 |
-| `articles` | 25 (24 imported legacy articles plus one added during the recheck) |
-| `article_redirects` | 24 |
+| `articles` | 25 imported legacy articles |
+| `article_redirects` | 25 |
 | `tags` | 8 |
 | `article_tag` | 39 |
 | `requests` | 0 |
 | `services` | 13 published; 12 shown in the homepage catalog |
-| `testimonials` | 5 |
+| `testimonials` | 9 |
 | `homepage_contents` | 7 |
-| `migrations` | 15 |
+| `migrations` | 17 |
 
 There is **no** `pages` table and **no** `contact_requests` table. Full column, index, foreign-key and delete-behaviour detail: [DATABASE.md](DATABASE.md).
 
@@ -85,7 +85,7 @@ Routes include the homepage, article library/detail/legacy redirects, two form e
 | Shared public sidebar + icy-blue mobile menu (`<1200px`) | PASS (browser) |
 | Shared Testimonials Swiper (one slider; RTL via `html[dir]`, not a second FA carousel) | PASS (PHPUnit + browser) |
 | Article library `/articles` with search and tag filter | PASS (local) |
-| 24 imported article detail pages | PASS (content comparison); one additional published article exists in the final local database |
+| 25 imported article detail pages | PASS (content comparison) |
 | Standalone service detail pages | Intentionally removed; services remain homepage catalog records |
 | Legacy `.html` URLs 301 to clean URLs | PASS (local) |
 | Contact endpoints `/forms/get-csrf-token.php` and `/forms/contact.php` | PASS (local) |
@@ -113,8 +113,8 @@ Detail: [ADMIN.md](ADMIN.md).
 
 ## 7. Articles
 
-24 imported English articles, all `status = published` with a non-null `published_at`, 24 matching `article_redirects` rows, 10 categories (5 EN + 5 FA sharing `translation_key`), 8 tags, 39 article↔tag links.
-`php artisan site:compare-content` on 2026-09-19: **Failures: 0** across all 24 articles. Detail: [ARTICLES.md](ARTICLES.md).
+25 imported English articles, all `status = published` with a non-null `published_at`, 25 matching `article_redirects` rows, 10 categories (5 EN + 5 FA sharing `translation_key`), 8 tags, 39 article↔tag links.
+`php artisan site:compare-content` on 2026-09-21: **Failures: 0** across all 25 articles. Detail: [ARTICLES.md](ARTICLES.md).
 
 ## 8. Services
 
@@ -144,7 +144,7 @@ CSRF (including the legacy `csrf_token` field contract), honeypot, two-layer rat
 
 | Command | Result (2026-09-20) | Status |
 |---------|---------------------|--------|
-| `vendor/bin/phpunit` | **67 tests, 1102 assertions, 1 skipped, 0 failures** | PASS |
+| `vendor/bin/phpunit` | **67 tests, 1127 assertions, 1 skipped, 0 failures** | PASS |
 | `php artisan site:compare-content` | **Failures: 0** | PASS |
 | Live `POST /forms/contact.php` | HTTP 200 `OK`; SQLite row id 5 | PASS |
 | Cursor browser first-load + FA + Contact hash + 1920/1440/1024/768/390 | Testimonials + Contact visible; no horizontal overflow; English article titles in FA UI | PASS |

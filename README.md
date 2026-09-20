@@ -83,7 +83,7 @@ php artisan migrate            # production: php artisan migrate --force
 php artisan migrate:status
 ```
 
-Fifteen application migrations create the CMS schema, including `homepage_contents`, the resume-content repair, `testimonials`, `services`, articles, requests and taxonomy tables. Full schema: [docs/current/DATABASE.md](docs/current/DATABASE.md).
+Seventeen application migrations create the CMS schema and repair data integrity, including `homepage_contents`, the resume-content repair, `testimonials`, `services`, articles, requests, taxonomy and legacy redirects. Full schema: [docs/current/DATABASE.md](docs/current/DATABASE.md).
 
 ### Seeding
 
@@ -94,7 +94,7 @@ php artisan db:seed
 `DatabaseSeeder` synchronizes homepage sections, rebuilds the article-library view from the original HTML, then imports articles and services. The homepage view itself is CMS-backed and is never overwritten by the legacy publisher. You can also run the importers directly:
 
 ```bash
-php artisan articles:import-legacy      # 24 articles + 24 redirects
+php artisan articles:import-legacy      # 25 legacy articles + redirects
 php artisan services:import-legacy      # 6 services with their AED prices
 php artisan articles:sync-tags          # tag vocabulary and links
 ```
@@ -161,7 +161,7 @@ vendor/bin/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest     # MySQL sch
 php artisan site:compare-content                                     # Failures: 0
 ```
 
-Latest run (2026-09-20): **67 tests, 1102 assertions, 0 failures, 1 skipped**. The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Homepage CMS details: [docs/current/HOMEPAGE-CMS.md](docs/current/HOMEPAGE-CMS.md). Testing detail: [docs/current/TESTING.md](docs/current/TESTING.md).
+Latest run (2026-09-21): **67 tests, 1127 assertions, 0 failures, 1 skipped**. The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Homepage CMS details: [docs/current/HOMEPAGE-CMS.md](docs/current/HOMEPAGE-CMS.md). Testing detail: [docs/current/TESTING.md](docs/current/TESTING.md).
 
 ## Deployment
 
