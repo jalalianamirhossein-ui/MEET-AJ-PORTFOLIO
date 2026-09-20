@@ -55,7 +55,10 @@ DB::transaction(function () use ($slugs): void {
         $timestamps[] = mt_rand($start, $end - 86400);
     }
     rsort($timestamps);
-    array_unshift($timestamps, mt_rand(strtotime('today 09:00:00'), $end));
+    // Keep the featured first article published in the past. A random
+    // timestamp later today would accidentally hide it behind scheduled
+    // publication rules when this script runs before that time.
+    array_unshift($timestamps, strtotime('yesterday 00:00:00'));
 
     foreach ($slugs as $order => $slug) {
         $date = date('Y-m-d', $timestamps[$order]);

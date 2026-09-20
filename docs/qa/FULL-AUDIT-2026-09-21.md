@@ -26,6 +26,7 @@
 - Added the idempotent `repair_missing_article_redirects` migration so every published English article has a legacy URL mapping.
 - Added safe fallback behaviour for missing testimonial avatar assets.
 - Rebuilt published assets/views and re-ran the article content comparison.
+- Corrected `scripts/update-article-order.php` so its featured article cannot receive a future publication timestamp.
 
 ## Remaining external checks
 
