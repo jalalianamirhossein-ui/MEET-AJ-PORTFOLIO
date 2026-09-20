@@ -126,8 +126,12 @@
               </aside>
             @endif
             <div class="article-reading">
+              @php $articleContent = $article->displayContent(); @endphp
               <article class="article-body">
-                {!! $article->displayContent() !!}
+                {!! $articleContent !!}
+                @if (! str_contains($articleContent, 'id="author"'))
+                  @include('articles.partials.author')
+                @endif
               </article>
               @include('articles.partials.share')
               @include('articles.partials.related')
