@@ -51,7 +51,7 @@ class PublicSiteTest extends TestCase
 
     public function test_all_articles_redirect_once_and_render(): void
     {
-        $this->assertSame(24, Article::query()->count());
+        $this->assertSame(25, Article::query()->count());
         foreach (Article::query()->orderBy('slug')->get() as $article) {
             $legacy = $this->get('/articles/'.$article->slug.'.html');
             $legacy->assertRedirect('/articles/'.$article->slug);

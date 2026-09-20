@@ -108,7 +108,7 @@ class ProductionAuditTest extends TestCase
 
     public function test_article_titles_remain_english(): void
     {
-        $this->assertSame(24, Article::query()->count());
+        $this->assertSame(25, Article::query()->count());
         foreach (Article::query()->get() as $article) {
             $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', $article->title, $article->slug);
             $this->get('/articles/'.$article->slug)
@@ -140,7 +140,7 @@ class ProductionAuditTest extends TestCase
         $home = $this->get('/')->assertOk()->getContent();
         $this->assertSame(1, substr_count($home, 'id="testimonials"'));
         $this->assertSame(1, substr_count($home, 'id="testimonials-carousel"'));
-        $this->assertSame(5, substr_count($home, 'class="testimonial-card"'));
+        $this->assertSame(9, substr_count($home, 'class="testimonial-card"'));
         $this->assertStringContainsString('"slidesPerView": 3', $home);
         $this->assertStringContainsString('"768": { "slidesPerView": 2', $home);
         $this->assertStringContainsString('"1200": { "slidesPerView": 3', $home);

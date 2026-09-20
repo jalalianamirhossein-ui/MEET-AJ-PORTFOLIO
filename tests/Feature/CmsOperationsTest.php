@@ -204,7 +204,7 @@ class CmsOperationsTest extends TestCase
 
         $this->assertDatabaseHas('testimonials', ['author_name' => 'CMS Client']);
         $this->get('/')->assertOk()->assertSee('The new testimonial is visible immediately from the CMS.', false);
-        $this->assertSame(6, Testimonial::query()->count());
+        $this->assertSame(10, Testimonial::query()->count());
     }
 
     public function test_article_pages_have_complete_seo_and_clean_canonicals(): void
@@ -232,7 +232,7 @@ class CmsOperationsTest extends TestCase
         $this->assertStringNotContainsString('/services/network-design', $xml);
         $this->assertStringNotContainsString('/admin', $xml);
         $this->assertStringNotContainsString('/de/', $xml);
-        $this->assertSame(24, Article::query()->count());
+        $this->assertSame(25, Article::query()->count());
         foreach (Article::query()->pluck('slug') as $slug) {
             $this->assertStringContainsString('/articles/'.$slug, $xml);
         }
