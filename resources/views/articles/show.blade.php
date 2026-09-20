@@ -114,6 +114,32 @@
       <section id="article-content" class="article-content article-container" aria-label="Article content" data-en-aria-label="Article content" data-fa-aria-label="متن مقاله">
         <div class="container">
           @php $tocHtml = data_get($article->presentation, 'toc_html'); @endphp
+          @php
+            $articleContent = str_replace('my-profile-img.jpg', 'my-profile-img-2.jpg', $article->displayContent());
+            $articleContent = str_replace(
+                ['../index.html#portfolio', 'https://meetaj.ir/#portfolio', 'Back to portfolio', 'بازگشت به نمونه‌کارها'],
+                ['https://meetaj.ir/articles', 'https://meetaj.ir/articles', 'Back to Article', 'بازگشت به مقاله'],
+                $articleContent
+            );
+            $standardToc = [
+                ['introduction', 'Introduction', 'مقدمه'],
+                ['architecture', 'Architecture and Core Concepts', 'معماری و مفاهیم اصلی'],
+                ['prerequisites', 'Prerequisites', 'پیش‌نیازها'],
+                ['configuration', 'Configuration and Validation', 'Configuration و اعتبارسنجی'],
+                ['best-practices', 'Best Practices', 'Best Practiceها'],
+                ['security', 'Security Considerations', 'ملاحظات امنیتی'],
+                ['troubleshooting', 'Troubleshooting', 'عیب‌یابی'],
+                ['conclusion', 'Conclusion', 'جمع‌بندی'],
+                ['faq', 'Frequently Asked Questions', 'پرسش‌های متداول'],
+                ['official-references', 'Official References', 'منابع رسمی و مرجع'],
+            ];
+            foreach ($standardToc as [$id, $en, $fa]) {
+                if (str_contains($articleContent, 'id="'.$id.'"') && ! str_contains((string) $tocHtml, 'href="#'.$id.'"')) {
+                    $tocHtml .= '<li class="article-nav-item"><a href="#'.$id.'"><span data-en="'.$en.'" data-fa="'.$fa.'">'.$en.'</span></a></li>';
+                }
+            }
+                $articleContent = preg_replace('~<footer\b[^>]*class=["\'][^"\']*article-footer[^"\']*["\'][^>]*>.*?</footer>~is', '', $articleContent) ?? $articleContent;
+              @endphp
           <div class="article-shell{{ $tocHtml ? ' article-shell--with-toc' : '' }}">
             @if ($tocHtml)
               <aside class="article-toc" aria-label="Table of contents" data-en-aria-label="Table of contents" data-fa-aria-label="فهرست مطالب">
@@ -126,17 +152,18 @@
               </aside>
             @endif
             <div class="article-reading">
-              @php
-                $articleContent = str_replace('my-profile-img.jpg', 'my-profile-img-2.jpg', $article->displayContent());
-              @endphp
               <article class="article-body">
                 {!! $articleContent !!}
-                @if (! str_contains($articleContent, 'id="author"'))
-                  @include('articles.partials.author')
-                @endif
               </article>
-              @include('articles.partials.share')
               @include('articles.partials.related')
+              @include('articles.partials.author')
+              <nav class="article-nav article-footer-nav" aria-label="Article footer navigation">
+                <a class="article-back" href="https://meetaj.ir/articles">
+                  <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                  <span data-en="Back to Article" data-fa="بازگشت به مقاله">Back to Article</span>
+                </a>
+              </nav>
+              @include('articles.partials.share')
             </div>
           </div>
         </div>

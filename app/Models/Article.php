@@ -97,45 +97,32 @@ class Article extends Model
      */
     public function relatedArticles(int $limit = 3)
     {
-        $exclude = [$this->id];
-        $query = static::published()
+        $limit = 3;
+        $tagIds = $this->relationLoaded('tags')
+            ? $this->tags->pluck('id')->map(fn ($id) => (int) $id)->all()
+            : $this->tags()->pluck('tags.id')->map(fn ($id) => (int) $id)->all();
+        $categoryId = (int) $this->category_id;
+        $sourceWords = collect(preg_split('/[^a-z0-9]+/i', strtolower($this->englishTitle())) ?: [])
+            ->filter(fn (string $word): bool => strlen($word) >= 4)
+            ->values();
+
+        return static::published()
             ->where('language', $this->language)
-            ->whereKeyNot($exclude)
-            ->with(['category', 'tags']);
+            ->whereKeyNot([$this->id])
+            ->with(['category', 'tags'])
+            ->get()
+            ->map(function (Article $article) use ($tagIds, $categoryId, $sourceWords): Article {
+                $sharedTags = $article->tags->pluck('id')->intersect($tagIds)->count();
+                $categoryMatch = $categoryId !== 0 && (int) $article->category_id === $categoryId;
+                $titleWords = collect(preg_split('/[^a-z0-9]+/i', strtolower($article->englishTitle())) ?: []);
+                $titleMatch = $sourceWords->intersect($titleWords)->count();
+                $article->setAttribute('_related_score', ($categoryMatch ? 100 : 0) + ($sharedTags * 50) + ($titleMatch * 5));
 
-        $tagIds = $this->tags()->pluck('tags.id');
-        $found = collect();
-
-        if ($tagIds->isNotEmpty()) {
-            $found = (clone $query)
-                ->whereHas('tags', fn (Builder $tag) => $tag->whereIn('tags.id', $tagIds))
-                ->orderByDesc('published_at')
-                ->limit($limit)
-                ->get();
-        }
-
-        if ($found->count() < $limit && $this->category_id) {
-            $needed = $limit - $found->count();
-            $more = (clone $query)
-                ->where('category_id', $this->category_id)
-                ->whereNotIn('id', $found->pluck('id')->all())
-                ->orderByDesc('published_at')
-                ->limit($needed)
-                ->get();
-            $found = $found->concat($more);
-        }
-
-        if ($found->count() < $limit) {
-            $needed = $limit - $found->count();
-            $more = (clone $query)
-                ->whereNotIn('id', $found->pluck('id')->all())
-                ->orderByDesc('published_at')
-                ->limit($needed)
-                ->get();
-            $found = $found->concat($more);
-        }
-
-        return $found->take($limit)->values();
+                return $article;
+            })
+            ->sortByDesc(fn (Article $article): array => [(int) $article->getAttribute('_related_score'), -(int) $article->sort_order, -(int) $article->id])
+            ->take($limit)
+            ->values();
     }
 
     public function readingMinutes(): int
@@ -171,7 +158,8 @@ class Article extends Model
 
     public function displayContent(): string
     {
-        return self::normalizeContentMarkup((string) $this->content);
+        return app(\App\Services\ArticleContentStandardizer::class)
+            ->standardize($this, (string) $this->content);
     }
 
     public function scopePublished(Builder $query): Builder
