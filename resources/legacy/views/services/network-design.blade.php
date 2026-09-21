@@ -47,7 +47,6 @@
     <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
   </head>
   <body class="service-page">
-    <a class="skip-link" href="#main-content">Skip to main content</a>
     <!-- Language Toggle -->
     <!-- Auto-injected by i18n-switch.js -->
 

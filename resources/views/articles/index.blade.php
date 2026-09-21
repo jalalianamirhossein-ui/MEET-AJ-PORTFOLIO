@@ -21,11 +21,7 @@
     <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">@verbatim
-<a class="skip-link" href="#portfolio" data-en="Skip to main content" data-fa="رفتن به محتوای اصلی">Skip to main content</a>
-    <!-- ===============================================
-    ==================== HEADER SECTION ================
-    =============================================== -->
-    <header id="header" class="header dark-background d-flex flex-column">
+<header id="header" class="header dark-background d-flex flex-column">
       @endverbatim
       @include('partials.site-sidebar-chrome', ['logoHref' => '/#hero'])
 @verbatim

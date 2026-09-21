@@ -46,9 +46,6 @@
     @endif
   </head>
   <body class="{{ data_get($article->presentation, 'body_class', 'article-page theme-other') }}" style="{{ $article->accentCustomProperties() }}">
-    <a href="#main-content" class="skip-link sr-only sr-only-focusable"
-      ><span data-en="Skip to main content" data-fa="رفتن به محتوای اصلی">Skip to main content</span></a
-    >
     <button id="menu-toggle" class="menu-toggle d-xl-none" aria-label="Open menu" data-en-aria-label="Open menu" data-fa-aria-label="باز کردن منو" aria-expanded="false" aria-controls="header" type="button">
       <span class="menu-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
       <span class="sr-only" data-en="Open menu" data-fa="باز کردن منو">Open menu</span>

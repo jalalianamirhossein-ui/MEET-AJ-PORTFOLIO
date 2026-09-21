@@ -145,7 +145,7 @@ BLADE;
 
     private function articleListingChrome(string $html): string
     {
-        $start = strpos($html, '<a class="skip-link"');
+        $start = strpos($html, '<header id="header"');
         $toggle = strpos($html, 'id="menu-toggle"');
         $endBtn = $toggle === false ? false : strpos($html, '</button>', $toggle);
         if ($start === false || $endBtn === false) {
@@ -164,8 +164,6 @@ BLADE;
             'href="/articles" class="active" aria-current="page"',
             $chrome
         );
-        $chrome = str_replace('href="#main-content"', 'href="#portfolio"', $chrome);
-
         return $chrome;
     }
 

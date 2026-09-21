@@ -34,7 +34,7 @@ class ArticleLibraryTest extends TestCase
             ->assertSee('isotope-container', false)
             ->assertSee('articles-load-more', false)
             ->assertSee('Linux', false)
-            ->assertSee('data-fa="رفتن به محتوای اصلی"', false)
+            ->assertDontSee('skip-link', false)
             ->assertSee('data-fa="نمایش مقالات بیشتر"', false)
             ->assertSee('article-chip-label', false);
     }
