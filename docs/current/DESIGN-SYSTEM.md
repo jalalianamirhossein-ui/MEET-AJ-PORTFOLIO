@@ -2,7 +2,7 @@
 
 **Authority:** [docs/design-system/meet-aj/MASTER.md](../design-system/meet-aj/MASTER.md). Live cascade last overlay `assets/css/site-modules.css?v=1853` after `visual-upgrade.css?v=1713`.
 **Visual DNA:** [ARTICLE-VISUAL-DNA.md](ARTICLE-VISUAL-DNA.md) (Article detail pages are the reference; they are not restyled from this file).  
-**Date:** 2026-09-18  
+**Date:** 2026-09-21  
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md)
 
 ui-ux-pro-max catalogs were read directly (Python is not installed, so `search.py` was not executed): Portfolio/Personal + B2B Service; Swiss Modernism 2.0 + Editorial Grid; primary `#2563EB`; Poppins + Vazirmatn; 150–200ms micro-interaction and 400–560ms reveal. frontend-design: Article DNA is the distinctive language — not a SaaS card kit, not cream/terracotta, not glass everywhere.
@@ -33,7 +33,7 @@ Green is success / availability on the hero (“Available for Work”) and form 
 
 Eyebrow → Display/H1 → H2 (bar, weight 700) → H3 → Body → Small → Caption. Same family on Homepage, Services, Articles chrome, Contact, Footer.
 
-Article library teasers are **H3** (after section H2). Homepage skill/value/cert titles still use **H4** in `index.html` (WARN — heading skip).
+Article library teasers are **H3** (after section H2). Homepage skill/value/cert titles use **H4** under their local H3 groups; the current heading hierarchy has no observed level skip.
 
 ## Components
 

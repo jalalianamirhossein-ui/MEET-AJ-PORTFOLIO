@@ -1,7 +1,7 @@
 # Meet AJ — Design System MASTER
 
 **Status:** SOURCE OF TRUTH for public site + Filament branding.  
-**Date:** 2026-09-17  
+**Date:** 2026-09-21  
 **Stack:** Laravel 13 + Blade + Livewire 4 + Filament 5. **Not** React, Vue, Next, Inertia, or Tailwind on the public site.  
 **Visual reference:** live Article detail pages (`assets/css/articles.css`). Do not restyle article HTML bodies.
 
@@ -30,7 +30,7 @@ Dials applied by brief (not by CLI): variance **4** (balanced editorial), motion
 7. Buttons are 12px radius, 700 weight, ≥44px tall. They are not pills.
 8. Pills are kickers, categories, and filters only.
 9. RTL/LTR share tokens. Persian uses Vazirmatn at 700, not 800.
-10. Filament stays native Filament 5. Brand with `#2563eb` and light CSS — do not rebuild the admin as a custom theme.
+10. Filament stays native Filament 5. The public site uses blue; the admin uses a restrained White + Red overlay — do not rebuild the admin as a custom theme.
 
 ## 2. Color tokens
 
@@ -76,7 +76,7 @@ Scale: 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 (`--space-1` … `--space-2
 - Section vertical: `clamp(3.5rem, 6vw, 5.5rem)`
 - Reading column: 56rem
 - Homepage catalog: 70rem
-- Control height: 2.95rem
+- Control height: 2.75–2.95rem (minimum 44px for touch controls)
 
 ## 5. Radius
 
@@ -140,7 +140,7 @@ Safe-area padding on mobile menu. Language control must not cover back links.
 
 - Public UI: Blade + `visual-upgrade.css` overlay after `main.css` / `articles.css` / `services.css` / `rtl.css`.
 - Livewire is **admin only** (Filament). Do not add Livewire to public pages for decoration.
-- Filament: native tables/forms; brand color `#2563eb`; `resources/css/filament-admin.css` for density/radius only.
+- Filament: native tables/forms; White + Red brand overlay (`#be123c`, `#fff1f2`, `#7f1d1d`) in `resources/css/filament-admin.css`; keep the public blue palette separate.
 - Forms keep existing CSRF / honeypot / validation / rate limit.
 
 ## Anti-patterns (do not introduce)

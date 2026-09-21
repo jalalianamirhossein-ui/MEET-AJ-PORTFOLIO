@@ -1,7 +1,7 @@
 # Performance — Meet AJ
 
 **Authority:** AUTHORITATIVE statement of what is known about performance.
-**Verified:** 2026-09-18 by reading query scopes, view code, the service worker, and measuring published asset sizes on disk after `site:publish-assets`.
+**Verified:** 2026-09-21 by reading query scopes, view code, the service worker, and measuring published asset sizes on disk after `site:publish-assets`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
 > **No performance measurement has ever been run on this project.** There is no Lighthouse report, no WebPageTest run, no load test, and no query profiling. Everything below is either a code-level fact or a file measurement. Treat every timing claim elsewhere as **UNKNOWN / NOT VERIFIED**.

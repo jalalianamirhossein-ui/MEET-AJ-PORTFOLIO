@@ -1,7 +1,7 @@
 # Services — Meet AJ
 
 **Authority:** AUTHORITATIVE service catalog document.
-**Verified:** 2026-09-20 against the live `services` table, `app/Models/Service.php`, `app/Filament/Resources/ServiceResource.php`, `app/Policies/ServicePolicy.php`, and `resources/views/components/service-card.blade.php`.
+**Verified:** 2026-09-21 against the live `services` table, `app/Models/Service.php`, `app/Filament/Resources/ServiceResource.php`, `app/Policies/ServicePolicy.php`, and `resources/views/components/service-card.blade.php`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
 ## Current catalog

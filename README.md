@@ -210,7 +210,7 @@ Full navigation map: [docs/README.md](docs/README.md).
 | Homepage CMS | [docs/current/HOMEPAGE-CMS.md](docs/current/HOMEPAGE-CMS.md) |
 | Features | [docs/current/FEATURES.md](docs/current/FEATURES.md) |
 | Design system | [docs/current/DESIGN-SYSTEM.md](docs/current/DESIGN-SYSTEM.md) |
-| QA evidence | [docs/qa/FULL-AUDIT-2026-09-21.md](docs/qa/FULL-AUDIT-2026-09-21.md), [docs/qa/FINAL-QA-REPORT.md](docs/qa/FINAL-QA-REPORT.md), [docs/qa/QA-MATRIX.md](docs/qa/QA-MATRIX.md) |
+| QA evidence | [docs/qa/FULL-AUDIT-2026-09-21.md](docs/qa/FULL-AUDIT-2026-09-21.md), [docs/qa/DESIGN-SYSTEM-AUDIT-2026-09-21.md](docs/qa/DESIGN-SYSTEM-AUDIT-2026-09-21.md), [docs/qa/FINAL-QA-REPORT.md](docs/qa/FINAL-QA-REPORT.md), [docs/qa/QA-MATRIX.md](docs/qa/QA-MATRIX.md) |
 | Decisions | [docs/decisions/ADR/README.md](docs/decisions/ADR/README.md) |
 | History | [docs/phases/phase-01-environment.md](docs/phases/phase-01-environment.md), [docs/historical/README.md](docs/historical/README.md) |
 

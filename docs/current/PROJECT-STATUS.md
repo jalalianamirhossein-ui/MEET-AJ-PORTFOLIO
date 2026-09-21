@@ -43,7 +43,7 @@ Local environment reported by `php artisan about`: environment `local`, debug **
 
 Engine in use locally: **SQLite** at `.runtime/cms.sqlite`, selected by the local `DB_DATABASE`. Intended production engine: **MySQL / MariaDB** (not provisioned).
 
-Seventeen application migrations, all **Ran** (batches 1–7), plus Laravel's `migrations` ledger:
+Seventeen application migrations, all **Ran** (batches 1–8), plus Laravel's `migrations` ledger:
 
 | Table | Rows (2026-09-21) |
 |-------|-------------------|

@@ -29,6 +29,7 @@ This directory contains the maintained operating documentation for the current L
 ## Visual and design references
 
 - [DESIGN-SYSTEM.md](DESIGN-SYSTEM.md) — current public visual rules.
+- [../qa/DESIGN-SYSTEM-AUDIT-2026-09-21.md](../qa/DESIGN-SYSTEM-AUDIT-2026-09-21.md) — latest token, hierarchy, motion, and public/admin brand review.
 - [ARTICLE-VISUAL-DNA.md](ARTICLE-VISUAL-DNA.md) — article presentation rules.
 - Detailed design references: [../design-system/meet-aj/MASTER.md](../design-system/meet-aj/MASTER.md).
 
