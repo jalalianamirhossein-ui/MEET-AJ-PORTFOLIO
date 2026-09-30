@@ -1,0 +1,229 @@
+/** Meet AJ public UI refinement. Loaded last; existing brand and topic tokens win.
+ * Blur is limited to navigation, hero and floating controls. Repeated cards use
+ * translucent fills without blur to keep long libraries inexpensive to render.
+ */
+:root {
+  --radius-panel: 1.25rem;
+  --radius-control: 0.875rem;
+  --glass-fill: rgba(255, 255, 255, 0.88);
+  --glass-fill-hover: rgba(255, 255, 255, 0.96);
+  --glass-edge: rgba(255, 255, 255, 0.75);
+  --glass-blur: blur(12px) saturate(120%);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --glass-shadow: 0 8px 28px rgba(15, 23, 42, 0.07);
+  --glass-shadow-raised: 0 14px 36px rgba(15, 23, 42, 0.11);
+  --glass-hero-fill: rgba(255, 255, 255, 0.82);
+  --section-y: clamp(3rem, 5vw, 5rem);
+}
+
+body.index-page .main {
+  background:
+    radial-gradient(ellipse at 95% 12%, var(--color-primary-soft), transparent 36rem),
+    radial-gradient(ellipse at 5% 45%, rgba(14, 165, 233, 0.08), transparent 32rem),
+    var(--color-background);
+}
+
+/* Preserve the sidebar architecture and its mobile focus/overlay contract. */
+body #header.header.dark-background {
+  background: var(--glass-fill);
+  border-inline-end: 1px solid var(--color-border);
+  box-shadow: var(--glass-highlight), var(--glass-shadow);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+}
+
+body #header.header .navmenu a {
+  border-radius: var(--radius-control);
+  min-height: 2.75rem;
+  transition: background-color var(--duration-fast), color var(--duration-fast);
+}
+
+body #header.header .navmenu a:hover,
+body #header.header .navmenu a.active {
+  background: var(--color-primary-soft);
+  color: var(--primary-hover);
+}
+
+/* Light frosted glass; keep the existing blue identity and dark readable text. */
+body.index-page #hero .hero-content {
+  padding: clamp(1rem, 1.5vw, 1.375rem);
+  gap: var(--space-3);
+  border: 1px solid var(--glass-edge);
+  border-radius: var(--radius-panel);
+  background: var(--glass-hero-fill);
+  color: var(--color-text);
+  box-shadow: var(--glass-highlight), var(--glass-shadow);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+}
+
+body.index-page #hero .hero-title {
+  font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+  line-height: 1.25;
+  overflow-wrap: normal;
+  word-break: normal;
+  color: var(--primary-hover);
+  -webkit-text-fill-color: var(--primary-hover);
+  background: none;
+  text-shadow: none;
+  animation: none;
+  margin-block: var(--space-2);
+}
+body.index-page #hero .hero-title span { overflow-wrap: normal; word-break: normal; }
+body.index-page #hero :is(.hero-role, .hero-subtitle) { color: var(--color-text); font-size: 1rem; margin-block: 0; }
+body.index-page #hero .hero-badge { background: rgba(255, 255, 255, 0.65); color: var(--color-text); border-color: var(--color-border); box-shadow: none; }
+body.index-page #hero .hero-badge .badge-text { color: var(--color-text); }
+body.index-page #hero .hero-actions { gap: var(--space-3); flex-direction: row !important; flex-wrap: wrap; margin-block-start: var(--space-2); }
+body.index-page #hero .hero-actions .btn { padding: 0.65rem 0.85rem; min-height: 2.75rem; }
+body.index-page #hero .btn-outline-light {
+  color: var(--primary-hover);
+  background: rgba(255, 255, 255, 0.65);
+  border-color: var(--color-border);
+}
+body.index-page #hero .btn-outline-light:hover { background: #ffffff; }
+
+/* A single surface recipe shared by existing reusable components. */
+body :is(.article-teaser, .services .service-item.service-catalog-card,
+  .about-domain, .skill-group, .testimonial-card, .contact-card,
+  .contact .form-container) {
+  background: var(--glass-fill);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--glass-highlight), var(--glass-shadow);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  transition: background-color var(--duration-fast), box-shadow var(--duration-fast),
+    border-color var(--duration-fast);
+}
+
+body .article-teaser .portfolio-info { padding: var(--space-6); }
+body .article-teaser-title { line-height: 1.45; }
+body .article-teaser-excerpt { line-height: 1.75; color: var(--color-text); }
+body .services .service-item.service-catalog-card { padding: var(--space-6); }
+body .services #service-catalog { gap: var(--space-6); }
+
+@media (hover: hover) and (pointer: fine) {
+  body :is(.article-teaser, .services .service-item.service-catalog-card,
+    .about-domain, .testimonial-card, .contact-card):hover {
+    background: var(--glass-fill-hover);
+    border-color: var(--primary);
+    box-shadow: var(--glass-highlight), var(--glass-shadow-raised);
+    transform: none;
+  }
+}
+
+body :is(.article-chip, .article-tag) { min-height: 2.75rem; }
+body :is(.btn, .article-share-btn, .article-chip, .article-tag):active {
+  box-shadow: none;
+  transform: translateY(1px);
+}
+body :is(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 4px;
+}
+body #hero :is(a, button):focus-visible { outline-color: var(--primary); }
+body #footer :is(a, button):focus-visible { outline-color: #ffffff; }
+body :is(button, input, select, textarea):disabled,
+body .btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+body :is(input, textarea, select):focus-visible { outline-offset: 2px; }
+
+body :is(.menu-toggle, .scroll-top) {
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--glass-highlight), var(--glass-shadow);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+}
+
+/* Article reading surfaces stay opaque; only the title panel uses glass. */
+.article-page .article-hero-layout {
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  background: var(--glass-fill);
+  border: 1px solid var(--article-border);
+  border-radius: 1.75rem;
+  box-shadow: var(--glass-highlight), var(--glass-shadow);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+}
+.article-page .article-hero .article-title { line-height: 1.25; text-wrap: balance; }
+.article-page .article-hero .article-excerpt { color: var(--article-text); line-height: 1.8; }
+.article-page .article-body {
+  background: var(--article-surface);
+  border-radius: var(--radius-panel);
+  padding: clamp(1.25rem, 4vw, 3rem);
+  box-shadow: var(--glass-shadow);
+}
+.article-page .article-body p { margin-block-end: var(--space-5); }
+.article-page .article-body :is(h2, h3, h4) { scroll-margin-block-start: 5rem; }
+.article-page .article-body pre {
+  max-width: 100%;
+  overflow-x: auto;
+  direction: ltr;
+  text-align: left;
+  background: var(--article-code-bg);
+  color: var(--article-code-text);
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  line-height: 1.75;
+  tab-size: 2;
+}
+.article-page .article-body pre code { color: inherit; background: none; }
+.article-page .article-table-wrap { border-radius: var(--radius-md); }
+.article-page .article-body table { width: 100%; line-height: 1.7; }
+.article-page .article-body :is(th, td) {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--article-border);
+  vertical-align: top;
+}
+.article-page .article-body th { background: var(--article-surface-muted); color: var(--article-text); }
+.article-page .article-body tbody tr:nth-child(even) { background: var(--article-background); }
+.article-page .article-related { margin-block-start: var(--space-12); }
+
+body #footer.footer { padding-block: var(--space-12) var(--space-6); }
+body #footer .footer-main { gap: var(--space-8); }
+body #footer .footer-bottom { margin-block-start: var(--space-8); padding-block-start: var(--space-6); }
+body #footer p { line-height: 1.8; }
+body #footer a { text-underline-offset: 0.25em; }
+body #footer a:hover { text-decoration: underline; }
+
+@media (max-width: 1199px) {
+  body #header.header.dark-background { background: var(--glass-fill-hover); }
+  body #header.header.header-show .navmenu li { animation: none; opacity: 1; transform: none; }
+}
+@media (max-width: 767px) {
+  body.index-page #hero .hero-content { border-radius: var(--radius-panel); padding: var(--space-4); }
+  body.index-page #hero .hero-actions { flex-wrap: wrap; }
+  body.index-page #hero .hero-actions .btn { flex: 1 1 9rem; white-space: normal; }
+  body .article-teaser .portfolio-info,
+  body .services .service-item.service-catalog-card { padding: var(--space-5); }
+  .article-page .article-hero-layout { padding: var(--space-5); }
+}
+
+/* Opaque defaults remain readable when blur is unavailable or unwanted. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root { --glass-fill: #ffffff; --glass-fill-hover: #ffffff; --glass-hero-fill: #ffffff; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root { --glass-fill: #ffffff; --glass-fill-hover: #ffffff; --glass-hero-fill: #ffffff; --glass-blur: none; }
+  body.index-page #hero .hero-content { -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+/* Content must remain visible even if AOS fails or has not observed it yet. */
+body [data-aos] {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  transition: none !important;
+  pointer-events: auto !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  body *, body *::before, body *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  body [data-aos] { opacity: 1 !important; transform: none !important; }
+}

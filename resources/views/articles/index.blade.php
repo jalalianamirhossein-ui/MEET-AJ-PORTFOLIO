@@ -19,6 +19,7 @@
     <link id="rtl-style" href="/assets/css/rtl.css?v=1405" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
     <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
+    <link href="/assets/css/glass-system.css?v=2" rel="stylesheet" />
   </head>
   <body class="index-page articles-index-page">@verbatim
 <header id="header" class="header dark-background d-flex flex-column">

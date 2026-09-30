@@ -252,6 +252,7 @@
     />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
     <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
+    <link href="/assets/css/glass-system.css?v=2" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -385,7 +386,15 @@
       =============================================== -->
       <nav id="navmenu" class="navmenu" role="navigation" aria-label="Primary" data-en-aria-label="Primary" data-fa-aria-label="ناوبری اصلی">
         <ul>
-          @foreach (data_get($siteContent, 'navigation', []) as $item)
+          @php
+            // Older CMS records may predate the navigation field.
+            $navigation = data_get($siteContent, 'navigation');
+            if (!is_array($navigation) || $navigation === []) {
+                $siteDefaults = collect(app(\App\Services\HomepageContentCatalog::class)->definitions())->firstWhere('key', 'site');
+                $navigation = data_get($siteDefaults, 'content.navigation', []);
+            }
+          @endphp
+          @foreach ($navigation as $item)
             <li>
               <a href="{{ $item['href'] ?? '#' }}" @class(['active' => $loop->first]) @if ($loop->first) aria-current="page" @endif>
                 <i class="{{ $item['icon'] ?? 'bi bi-link-45deg' }} navicon"></i>
