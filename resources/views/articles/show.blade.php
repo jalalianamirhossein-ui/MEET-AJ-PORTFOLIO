@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ data_get($article->presentation, 'content_language', 'en') }}" dir="ltr">
+<html lang="{{ data_get($article->presentation, 'content_language', 'en') }}" dir="{{ data_get($article->presentation, 'content_language') === 'fa' ? 'rtl' : 'ltr' }}" @if(data_get($article->presentation, 'localizations')) data-article-language="{{ data_get($article->presentation, 'content_language') }}" @endif>
   <head>
     <title>{{ $seo['title'] }}</title>
     <meta charset="UTF-8" />
@@ -8,6 +8,12 @@
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="{{ $seo['robots'] }}" />
     <link rel="canonical" href="{{ $seo['canonical'] }}" />
+    @if (!empty($seo['keywords']))
+      <meta name="keywords" content="{{ $seo['keywords'] }}" />
+    @endif
+    @foreach ($seo['alternates'] ?? [] as $language => $target)
+      <link rel="alternate" hreflang="{{ $language }}" href="{{ $target }}" />
+    @endforeach
     <meta property="og:type" content="{{ $seo['og_type'] }}" />
     <meta property="og:title" content="{{ $seo['og_title'] }}" />
     <meta property="og:description" content="{{ $seo['og_description'] }}" />
@@ -87,6 +93,12 @@
           <div class="article-hero-layout">
             <div class="article-hero-copy">
               @include('articles.partials.breadcrumbs')
+              @if (!empty($seo['alternates']))
+                <nav class="article-translations" aria-label="Article language">
+                  <a lang="fa" hreflang="fa" href="{{ $seo['alternates']['fa'] }}">فارسی</a> ·
+                  <a lang="en" hreflang="en" href="{{ $seo['alternates']['en'] }}">English</a>
+                </nav>
+              @endif
               <div class="article-meta">
                 @if ($article->published_at)
                   <time class="meta-date article-date" datetime="{{ $article->published_at->toAtomString() }}">{{ $article->published_at->timezone(config('cms.display_timezone', config('app.timezone')))->format('M j, Y') }}</time>
@@ -158,7 +170,7 @@
               </aside>
             @endif
             <div class="article-reading">
-              <article class="article-body" @if(data_get($article->presentation, 'content_language') === 'fa') lang="fa" dir="rtl" @endif>
+              <article class="article-body" lang="{{ data_get($article->presentation, 'content_language', 'en') }}" dir="{{ data_get($article->presentation, 'content_language') === 'fa' ? 'rtl' : 'ltr' }}">
                 {!! $articleContent !!}
               </article>
               @include('articles.partials.related')
@@ -322,7 +334,7 @@
     <script src="/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
     <script src="/assets/js/main.js?v=1415" defer></script>
     <script src="/assets/js/scroll-reveal.js?v=1" defer></script>
-    <script src="/assets/js/i18n.js?v=1403" defer></script>
+    <script src="/assets/js/i18n.js?v=1404" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {

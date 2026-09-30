@@ -15,6 +15,9 @@ class ArticleContentStandardizer
     {
         $content = Article::normalizeContentMarkup($content);
         $content = $this->removeArticleBackButton($content);
+        if (is_array(data_get($article->presentation, 'localizations'))) {
+            return $content;
+        }
         $content = preg_replace('/id=["\']references["\']/i', 'id="official-references"', $content) ?? $content;
         $content = str_ireplace('Official references', 'Official References', $content);
 

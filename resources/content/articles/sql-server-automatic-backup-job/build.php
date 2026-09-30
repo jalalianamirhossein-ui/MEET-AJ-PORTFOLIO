@@ -5,6 +5,8 @@ $directory = __DIR__;
 $metadata = json_decode(file_get_contents($directory.'/metadata.json'), true, 512, JSON_THROW_ON_ERROR);
 $escape = fn (string $value): string => htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 $source = file_get_contents($directory.'/../../../legacy/articles/sql-server-automatic-backup-job.html');
+preg_match('~<script\b[^>]*id="article-localizations"[^>]*>(.*?)</script>~is', $source, $localized);
+$localizations = isset($localized[1]) ? json_decode($localized[1], true, 512, JSON_THROW_ON_ERROR) : null;
 if (! preg_match('~<article\b[^>]*class="article-body"[^>]*>(.*?)</article>~is', $source, $body)) {
     throw new RuntimeException('Original article body is missing.');
 }
@@ -20,7 +22,10 @@ $dom = new DOMDocument;
 $toc = '';
 foreach ((new DOMXPath($dom))->query('//section[@id]/h2') as $heading) {
     $id = $heading->parentNode->getAttribute('id');
-    $toc .= '<li class="article-nav-item"><a href="#'.$escape($id).'"><span>'
+    $translations = $heading->hasAttribute('data-en')
+        ? ' data-en="'.$escape($heading->getAttribute('data-en')).'" data-fa="'.$escape($heading->getAttribute('data-fa')).'"'
+        : '';
+    $toc .= '<li class="article-nav-item"><a href="#'.$escape($id).'"><span'.$translations.'>'
         .$escape(trim($heading->textContent)).'</span></a></li>';
 }
 
@@ -31,6 +36,7 @@ return [
     'meta_title' => $metadata['meta_title'],
     'meta_description' => $metadata['meta_description'],
     'presentation' => [
+        'localizations' => $localizations,
         'content_language' => 'fa',
         'hero_title_en' => $metadata['title_en'], 'hero_title_fa' => $metadata['title_fa'],
         'card_title_en' => $metadata['title_en'], 'card_title_fa' => $metadata['title_fa'],

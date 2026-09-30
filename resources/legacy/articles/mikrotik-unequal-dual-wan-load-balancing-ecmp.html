@@ -1,20 +1,11 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="fa" dir="rtl" data-article-language="fa">
   <head>
-    <title>
-      Professional Asymmetric Load Balancing with Failover in MikroTik using
-      ECMP Method | Complete Guide
-    </title>
+    <title>Dual-WAN وزنی در RouterOS v7: PCC، مسیر برگشت و Failover | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta
-      content="آموزش کامل پیکربندی Load Balancing نامتقارن با Failover خودکار در میکروتیک به روش ECMP. شامل دستورات MikroTik، تست عملی، مانیتورینگ و بهترین روش‌های امنیتی برای سازمان‌ها."
-      name="description"
-    />
-    <meta
-      content="MikroTik ECMP, Load Balancing نامتقارن, Dual WAN, Failover خودکار, Policy Based Routing, مانیتورینگ شبکه, آموزش میکروتیک, پیکربندی روتر, شبکه سازمانی, ECMP Configuration, MikroTik RouterOS, Network Load Balancing"
-      name="keywords"
-    />
+    <meta name="description" content="طراحی Dual-WAN وزنی با PCC در RouterOS v7؛ routing table، مسیر پاسخ، FastTrack، پایش هر لینک و آزمون failover اتصال‌های تازه." />
+    <meta name="keywords" content="Dual-WAN وزنی در RouterOS v7: PCC، مسیر برگشت و Failover, مدیریت زیرساخت, عیب‌یابی, امنیت سرویس, بازیابی, mikrotik unequal dual wan load balancing ecmp" />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <meta name="language" content="fa, en" />
@@ -34,14 +25,8 @@
       content="../assets/img/apple-touch-icon.png"
     />
     <meta property="og:type" content="article" />
-    <meta
-      property="og:title"
-      content="پیکربندی حرفه‌ای Load Balancing نامتقارن با Failover در میکروتیک به روش ECMP | راهنمای کامل"
-    />
-    <meta
-      property="og:description"
-      content="آموزش کامل پیکربندی Load Balancing نامتقارن با Failover خودکار در میکروتیک به روش ECMP. شامل دستورات MikroTik، تست عملی، مانیتورینگ و بهترین روش‌های امنیتی برای سازمان‌ها."
-    />
+    <meta property="og:title" content="Dual-WAN وزنی در RouterOS v7: PCC، مسیر برگشت و Failover" />
+    <meta property="og:description" content="طراحی Dual-WAN وزنی با PCC در RouterOS v7؛ routing table، مسیر پاسخ، FastTrack، پایش هر لینک و آزمون failover اتصال‌های تازه." />
     <meta property="og:image" content="../assets/img/my-profile-img.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -49,10 +34,7 @@
       property="og:image:alt"
       content="آموزش پیکربندی ECMP در میکروتیک - AmirHossein Jalalian"
     />
-    <meta
-      property="og:url"
-      content="https://meetaj.ir/articles/mikrotik-unequal-dual-wan-load-balancing-ecmp.html"
-    />
+    <meta property="og:url" content="https://meetaj.ir/articles/mikrotik-unequal-dual-wan-load-balancing-ecmp" />
     <meta property="og:site_name" content="Meet AJ - Technical Articles" />
     <meta property="og:locale" content="fa_IR" />
     <meta property="twitter:card" content="summary_large_image" />
@@ -98,118 +80,11 @@
     <meta name="apple-mobile-web-app-title" content="Meet AJ" />
     <link
       rel="canonical"
-      href="https://meetaj.ir/articles/mikrotik-unequal-dual-wan-load-balancing-ecmp.html"
-    />
-    <link
-      rel="alternate"
-      hreflang="fa"
-      href="https://meetaj.ir/articles/mikrotik-unequal-dual-wan-load-balancing-ecmp.html"
-    />
-    <link
-      rel="alternate"
-      hreflang="en"
-      href="https://meetaj.ir/articles/mikrotik-unequal-dual-wan-load-balancing-ecmp.html"
-    />
-    <link
-      rel="alternate"
-      hreflang="x-default"
-      href="https://meetaj.ir/articles/mikrotik-unequal-dual-wan-load-balancing-ecmp.html"
+      href="https://meetaj.ir/articles/mikrotik-unequal-dual-wan-load-balancing-ecmp"
     />
     <link href="../assets/img/favicon.png" rel="icon" />
     <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "پیکربندی حرفه‌ای Load Balancing نامتقارن با Failover در میکروتیک به روش ECMP | راهنمای کامل",
-        "description": "آموزش کامل پیکربندی Load Balancing نامتقارن با Failover خودکار در میکروتیک به روش ECMP. شامل دستورات MikroTik، تست عملی، مانیتورینگ و بهترین روش‌های امنیتی برای سازمان‌ها.",
-        "image": {
-          "@type": "ImageObject",
-          "url": "../assets/img/my-profile-img.jpg",
-          "width": 1200,
-          "height": 630,
-          "caption": "آموزش پیکربندی ECMP در میکروتیک - AmirHossein Jalalian"
-        },
-        "author": {
-          "@type": "Person",
-          "name": "AmirHossein Jalalian",
-          "url": "https://meetaj.ir",
-          "jobTitle": "Infrastructure & DevOps Engineer",
-          "worksFor": {
-            "@type": "Organization",
-            "name": "Meet AJ"
-          },
-          "sameAs": [
-            "https://www.linkedin.com/in/amirhussein-jalalian-050702188/",
-            "https://github.com/jalalianamirhossein-ui",
-            "https://twitter.com/RealAjMercury"
-          ]
-        },
-        "publisher": {
-          "@type": "Organization",
-          "name": "Meet AJ",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "../assets/img/logo.png",
-            "width": 200,
-            "height": 200
-          },
-          "url": "https://meetaj.ir"
-        },
-        "datePublished": "2024-01-15T00:00:00+03:30",
-        "dateModified": "2024-01-15T00:00:00+03:30",
-        "mainEntityOfPage": {
-          "@type": "WebPage",
-          "@id": "https://meetaj.ir/articles/mikrotik-unequal-dual-wan-load-balancing-ecmp.html"
-        },
-        "articleSection": "MikroTik Network Configuration",
-        "keywords": [
-          "MikroTik ECMP",
-          "Load Balancing نامتقارن",
-          "Dual WAN",
-          "Failover خودکار",
-          "Policy Based Routing",
-          "مانیتورینگ شبکه",
-          "آموزش میکروتیک",
-          "پیکربندی روتر",
-          "شبکه سازمانی",
-          "ECMP Configuration",
-          "MikroTik RouterOS",
-          "Network Load Balancing",
-          "Enterprise Network",
-          "Network Monitoring"
-        ],
-        "inLanguage": ["fa", "en"],
-        "wordCount": "3500",
-        "timeRequired": "PT15M",
-        "educationalLevel": "Intermediate",
-        "learningResourceType": "Tutorial",
-        "about": {
-          "@type": "Thing",
-          "name": "MikroTik ECMP Load Balancing Configuration",
-          "description": "Professional configuration of asymmetric load balancing with automatic failover in MikroTik using ECMP method",
-          "category": "Network Configuration"
-        },
-        "mentions": [
-          {
-            "@type": "Thing",
-            "name": "MikroTik RouterOS"
-          },
-          {
-            "@type": "Thing",
-            "name": "ECMP Protocol"
-          },
-          {
-            "@type": "Thing",
-            "name": "Load Balancing"
-          },
-          {
-            "@type": "Thing",
-            "name": "Network Failover"
-          }
-        ]
-      }
-    </script>
+
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -243,7 +118,14 @@
       rel="stylesheet"
       disabled
     />
-  </head>
+  <meta name="article:content-language" content="fa" />
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Dual-WAN وزنی در RouterOS v7: PCC، مسیر برگشت و Failover", "description": "طراحی Dual-WAN وزنی با PCC در RouterOS v7؛ routing table، مسیر پاسخ، FastTrack، پایش هر لینک و آزمون failover اتصال‌های تازه.", "inLanguage": "fa", "url": "https://meetaj.ir/articles/mikrotik-unequal-dual-wan-load-balancing-ecmp", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "آیا وزن ۲ به ۱ یعنی پهنای‌باند دقیق ۲ به ۱؟", "acceptedAnswer": {"@type": "Answer", "text": "خیر؛ وزن بر اتصال‌ها اعمال می‌شود و اندازه flowها متفاوت است."}}, {"@type": "Question", "name": "آیا failover نشست TCP را حفظ می‌کند؟", "acceptedAnswer": {"@type": "Answer", "text": "با تغییر public IP ممکن است نشست قطع شود و اتصال دوباره لازم باشد."}}]}</script>
+<link rel="alternate" hreflang="fa" href="https://meetaj.ir/articles/mikrotik-unequal-dual-wan-load-balancing-ecmp" />
+<link rel="alternate" hreflang="en" href="https://meetaj.ir/articles/mikrotik-unequal-dual-wan-load-balancing-ecmp?lang=en" />
+<link rel="alternate" hreflang="x-default" href="https://meetaj.ir/articles/mikrotik-unequal-dual-wan-load-balancing-ecmp" />
+<script id="article-localizations" type="application/json">{"fa": {"title": "Dual-WAN وزنی در RouterOS v7: PCC، مسیر برگشت و Failover", "meta_title": "Dual-WAN وزنی در RouterOS v7: PCC، مسیر برگشت و Failover | Meet AJ", "description": "طراحی Dual-WAN وزنی با PCC در RouterOS v7؛ routing table، مسیر پاسخ، FastTrack، پایش هر لینک و آزمون failover اتصال‌های تازه.", "keywords": ["Dual-WAN وزنی در RouterOS v7: PCC، مسیر برگشت و Failover", "مدیریت زیرساخت", "عیب‌یابی", "امنیت سرویس", "بازیابی", "mikrotik unequal dual wan load balancing ecmp"], "faq": [["آیا وزن ۲ به ۱ یعنی پهنای‌باند دقیق ۲ به ۱؟", "خیر؛ وزن بر اتصال‌ها اعمال می‌شود و اندازه flowها متفاوت است."], ["آیا failover نشست TCP را حفظ می‌کند؟", "با تغییر public IP ممکن است نشست قطع شود و اتصال دوباره لازم باشد."]]}, "en": {"title": "Weighted Dual-WAN on RouterOS v7: PCC, Return Paths and Failover", "meta_title": "Weighted Dual-WAN on RouterOS v7: PCC, Return Paths and Failover | Meet AJ", "description": "Build weighted connection distribution with PCC and per-table failover, then verify symmetry, FastTrack exclusions and session limitations.", "keywords": ["Weighted Dual-WAN on RouterOS v7", "mikrotik unequal dual wan load balancing ecmp", "enterprise infrastructure", "production operations", "troubleshooting"], "faq": [["Does 2:1 weighting guarantee a 2:1 bandwidth ratio?", "No. Weighting applies to connections whose flow sizes differ."], ["Does failover preserve TCP sessions?", "A changed public IP can terminate a session and require reconnection."]]}}</script>
+</head>
   <body class="article-page theme-mikrotik">
     <button
       id="menu-toggle"
@@ -392,126 +274,19 @@
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
-          <li class="article-nav-item">
-            <a href="#introduction"
-              ><i class="bi bi-info-circle navicon" aria-hidden="true"></i
-              ><span data-en="Introduction" data-fa="مقدمه"
-                >Introduction</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#why-asymmetric"
-              ><i class="bi bi-diagram-3 navicon" aria-hidden="true"></i
-              ><span
-                data-en="Why Asymmetric Load Balancing?"
-                data-fa="چرا Load Balancing نامتقارن؟"
-                >Why Asymmetric Load Balancing?</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#ecmp-comparison"
-              ><i class="bi bi-bar-chart-line navicon" aria-hidden="true"></i
-              ><span
-                data-en="ECMP Comparison with PCC and Other Methods"
-                data-fa="مقایسه ECMP با PCC و سایر روش‌ها"
-                >ECMP Comparison with PCC and Other Methods</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#ecmp-intro"
-              ><i class="bi bi-signpost-split navicon" aria-hidden="true"></i
-              ><span data-en="Introduction to ECMP" data-fa="آشنایی با ECMP"
-                >Introduction to ECMP</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#lab-scenario"
-              ><i class="bi bi-pc-display navicon" aria-hidden="true"></i
-              ><span
-                data-en="Laboratory Scenario (Lab Scenario)"
-                data-fa="توپولوژی آزمایشگاهی (Lab Scenario)"
-                >Laboratory Scenario (Lab Scenario)</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#configuration"
-              ><i class="bi bi-list-check navicon" aria-hidden="true"></i
-              ><span data-en="Configuration Steps" data-fa="مراحل پیکربندی"
-                >Configuration Steps</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#testing"
-              ><i class="bi bi-wrench-adjustable navicon" aria-hidden="true"></i
-              ><span
-                data-en="Testing and Troubleshooting with Real Examples"
-                data-fa="تست و خطایابی با مثال واقعی"
-                >Testing and Troubleshooting with Real Examples</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#monitoring"
-              ><i class="bi bi-activity navicon" aria-hidden="true"></i
-              ><span
-                data-en="Monitoring and Alerting"
-                data-fa="مانیتورینگ و هشداردهی"
-                >Monitoring and Alerting</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#security"
-              ><i class="bi bi-shield-check navicon" aria-hidden="true"></i
-              ><span
-                data-en="Security Tips and Optimization"
-                data-fa="نکات امنیتی و بهینه‌سازی"
-                >Security Tips and Optimization</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#best-practices"
-              ><i class="bi bi-check2-square navicon" aria-hidden="true"></i
-              ><span
-                data-en="Best Practices for Organizations"
-                data-fa="بهترین روش‌ها برای سازمان‌ها"
-                >Best Practices for Organizations</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#cheat-sheet"
-              ><i class="bi bi-table navicon" aria-hidden="true"></i
-              ><span data-en="Summary Table (Cheat Sheet)" data-fa="جدول خلاصه"
-                >Summary Table (Cheat Sheet)</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#conclusion"
-              ><i class="bi bi-flag navicon" aria-hidden="true"></i
-              ><span data-en="Conclusion" data-fa="نتیجه‌گیری"
-                >Conclusion</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#faq"
-              ><i class="bi bi-question-circle navicon" aria-hidden="true"></i
-              ><span
-                data-en="Frequently Asked Questions"
-                data-fa="پرسش‌های متداول"
-                >Frequently Asked Questions</span
-              ></a
-            >
-          </li>
+          <li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="مقدمه" data-en="Introduction">مقدمه</span></a></li><li class="article-nav-item"><a href="#enterprise-scenario"><span data-fa="سناریوی واقعی Enterprise" data-en="Enterprise Scenario">سناریوی واقعی Enterprise</span></a></li><li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="پیش‌نیازها" data-en="Prerequisites">پیش‌نیازها</span></a></li><li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="Architecture / Design" data-en="Architecture / Design">Architecture / Design</span></a></li><li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="Installation / Configuration" data-en="Installation / Configuration">Installation / Configuration</span></a></li><li class="article-nav-item"><a href="#enterprise-security"><span data-fa="Security Hardening" data-en="Security Hardening">Security Hardening</span></a></li><li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="Monitoring" data-en="Monitoring">Monitoring</span></a></li><li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="Troubleshooting" data-en="Troubleshooting">Troubleshooting</span></a></li><li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="Backup / Recovery" data-en="Backup / Recovery">Backup / Recovery</span></a></li><li class="article-nav-item"><a href="#enterprise-practices"><span data-fa="Best Practices" data-en="Best Practices">Best Practices</span></a></li><li class="article-nav-item"><a href="#enterprise-compatibility"><span data-fa="نسخه‌های قدیمی و Compatibility" data-en="Legacy Versions and Compatibility">نسخه‌های قدیمی و Compatibility</span></a></li><li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">پرسش‌های متداول</span></a></li><li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">منابع رسمی</span></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
         </ul>
       </nav>
       <button
@@ -540,20 +315,14 @@
               </div>
               <h1
                 class="article-title hero-title"
-                data-en="Professional Configuration of Asymmetric Load Balancing with Failover in MikroTik"
-                data-fa="پیکربندی حرفه‌ای Load Balancing نامتقارن با Failover در MikroTik"
-              >
-                Professional Configuration of Asymmetric Load Balancing with
-                Failover in MikroTik
-              </h1>
+
+
+               data-fa="Dual-WAN وزنی در RouterOS v7: PCC، مسیر برگشت و Failover" data-en="Weighted Dual-WAN on RouterOS v7: PCC, Return Paths and Failover">Dual-WAN وزنی در RouterOS v7: PCC، مسیر برگشت و Failover</h1>
               <p
                 class="article-excerpt hero-subtitle"
-                data-en="Complete guide to configuring asymmetric Load Balancing with automatic Failover in MikroTik using ECMP method"
-                data-fa="راهنمای کامل پیکربندی Load Balancing نامتقارن با Failover خودکار در MikroTik با روش ECMP"
-              >
-                Complete guide to configuring asymmetric Load Balancing with
-                automatic Failover in MikroTik using ECMP method
-              </p>
+
+
+               data-fa="طراحی Dual-WAN وزنی با PCC در RouterOS v7؛ routing table، مسیر پاسخ، FastTrack، پایش هر لینک و آزمون failover اتصال‌های تازه." data-en="Build weighted connection distribution with PCC and per-table failover, then verify symmetry, FastTrack exclusions and session limitations.">طراحی Dual-WAN وزنی با PCC در RouterOS v7؛ routing table، مسیر پاسخ، FastTrack، پایش هر لینک و آزمون failover اتصال‌های تازه.</p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -602,9 +371,40 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body">
+              <nav class="article-translations" aria-label="Article language"><a lang="fa" hreflang="fa" href="https://meetaj.ir/articles/mikrotik-unequal-dual-wan-load-balancing-ecmp">فارسی</a> · <a lang="en" hreflang="en" href="https://meetaj.ir/articles/mikrotik-unequal-dual-wan-load-balancing-ecmp?lang=en">English</a></nav>
+<article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="fa" dir="rtl"><section id="enterprise-intro" class="article-section"><h2 data-fa="مقدمه" data-en="Introduction">مقدمه</h2><p data-fa="دو لینک ۱۰۰ و ۵۰ مگابیتی با یک default route تکرارشده، توزیع ظرفیت قابل تضمین ندارند. PCC اتصال‌ها را وزن‌دهی می‌کند؛ failover باید در هر routing table و مسیر پاسخ آزموده شود." data-en="Repeated default routes do not guarantee capacity distribution across 100 and 50 Mbps links. PCC weights connections; each routing table and return path needs a failover test.">دو لینک ۱۰۰ و ۵۰ مگابیتی با یک default route تکرارشده، توزیع ظرفیت قابل تضمین ندارند. PCC اتصال‌ها را وزن‌دهی می‌کند؛ failover باید در هر routing table و مسیر پاسخ آزموده شود.</p></section><section id="enterprise-scenario" class="article-section"><h2 data-fa="سناریوی واقعی Enterprise" data-en="Enterprise Scenario">سناریوی واقعی Enterprise</h2><p data-fa="سناریوی آموزشی با سازمان فرضی «آریا»: LAN برابر 10.10.10.0/24 است. WAN1:192.168.30.2/30 با GW .1 و WAN2:172.30.30.2/30 با GW .1. این آدرس‌ها فقط lab هستند؛ روی Production با نقشه IPAM جایگزین شوند." data-en="Illustrative scenario at fictional Arya: LAN is 10.10.10.0/24. WAN1 uses 192.168.30.2/30 with gateway .1, and WAN2 uses 172.30.30.2/30 with gateway .1. Replace these lab addresses with the production IPAM plan.">سناریوی آموزشی با سازمان فرضی «آریا»: LAN برابر 10.10.10.0/24 است. WAN1:192.168.30.2/30 با GW .1 و WAN2:172.30.30.2/30 با GW .1. این آدرس‌ها فقط lab هستند؛ روی Production با نقشه IPAM جایگزین شوند.</p></section><section id="enterprise-prerequisites" class="article-section"><h2 data-fa="پیش‌نیازها" data-en="Prerequisites">پیش‌نیازها</h2><p data-fa="RouterOS v7؛ patch دقیق و architecture را با /system resource print ثبت کنید. دستورات v6 را بدون بازبینی وارد v7 نکنید." data-en="MikroTik RouterOS v7. Record the exact patch and architecture with /system resource print. Review v6 commands before using them on v7.">RouterOS v7؛ patch دقیق و architecture را با /system resource print ثبت کنید. دستورات v6 را بدون بازبینی وارد v7 نکنید.</p>
+<p data-fa="سخت‌افزار و ظرفیت: روتر یا CHR آزمایشگاهی با پورت‌های مجزا؛ ظرفیت CPU، RAM و connection tracking باید زیر بار واقعی اندازه‌گیری شود." data-en="Use a router or isolated CHR lab with separate interfaces. Measure CPU, RAM and connection tracking under representative load.">سخت‌افزار و ظرفیت: روتر یا CHR آزمایشگاهی با پورت‌های مجزا؛ ظرفیت CPU، RAM و connection tracking باید زیر بار واقعی اندازه‌گیری شود.</p>
+<p data-fa="نرم‌افزار و دسترسی: Terminal از شبکه مدیریت، حساب دارای policy لازم برای write؛ Safe Mode با Ctrl+X، export خارج دستگاه و console مستقل پیش از تغییر. نمونه روی lab بدون routing policy و DNAT موجود؛ ether1=WAN1، ether2=WAN2، ether3=LAN با IP و gatewayهای زیر از قبل تنظیم شوند." data-en="Connect from the management network with the required write policies. Before changing configuration, enable Safe Mode with Ctrl+X, save an off-device export and arrange independent console access. Use a lab without existing policy routing or DNAT. Preconfigure ether1=WAN1, ether2=WAN2 and ether3=LAN with the documented addresses and gateways.">نرم‌افزار و دسترسی: Terminal از شبکه مدیریت، حساب دارای policy لازم برای write؛ Safe Mode با Ctrl+X، export خارج دستگاه و console مستقل پیش از تغییر. نمونه روی lab بدون routing policy و DNAT موجود؛ ether1=WAN1، ether2=WAN2، ether3=LAN با IP و gatewayهای زیر از قبل تنظیم شوند.</p></section><section id="enterprise-architecture" class="article-section"><h2 data-fa="Architecture / Design" data-en="Architecture / Design">Architecture / Design</h2><p data-fa="LAN new connection → PCC buckets 0/1→WAN1 و 2→WAN2 → connection mark → routing table → srcnat. پاسخ ورودی از هر WAN باید همان WAN را انتخاب کند. وزن تعداد اتصال است، نه تضمین نسبت بایت یا جمع سرعت یک دانلود." data-en="New LAN connection → PCC buckets 0/1 to WAN1 and 2 to WAN2 → connection mark → routing table → srcnat. Inbound replies must use their ingress WAN. This weights connection count, not bytes, and does not combine link speeds for one download.">LAN new connection → PCC buckets 0/1→WAN1 و 2→WAN2 → connection mark → routing table → srcnat. پاسخ ورودی از هر WAN باید همان WAN را انتخاب کند. وزن تعداد اتصال است، نه تضمین نسبت بایت یا جمع سرعت یک دانلود.</p></section><section id="enterprise-installation" class="article-section"><h2 data-fa="Installation / Configuration" data-en="Installation / Configuration">Installation / Configuration</h2><p data-fa="پیش از تغییر export، route و ruleهای FastTrack را بررسی کنید. در canary FastTrack را برای اتصال‌های marked مستثنا کنید؛ در lab می‌توان rule fasttrack موجود را موقت disable کرد." data-en="Review the export, routes and FastTrack rules. Exclude marked connections during a canary deployment; an existing FastTrack rule can be temporarily disabled in the lab.">پیش از تغییر export، route و ruleهای FastTrack را بررسی کنید. در canary FastTrack را برای اتصال‌های marked مستثنا کنید؛ در lab می‌توان rule fasttrack موجود را موقت disable کرد.</p>
+<pre dir="ltr"><code class="language-routeros">/ip address print
+/ip route print detail
+/ip firewall mangle print detail
+/ip firewall filter print where action=fasttrack-connection
+/routing table add name=ent-wan1 fib
+/routing table add name=ent-wan2 fib
+/ip firewall address-list add list=ent-local address=10.10.10.0/24
+/ip firewall address-list add list=ent-local address=192.168.30.0/30
+/ip firewall address-list add list=ent-local address=172.30.30.0/30
+/ip firewall mangle add chain=prerouting in-interface=ether3 dst-address-list=ent-local action=accept comment=&quot;ENT-PCC local bypass&quot;
+/ip firewall mangle add chain=prerouting in-interface=ether1 connection-state=new connection-mark=no-mark action=mark-connection new-connection-mark=ent-c1 comment=&quot;ENT-PCC incoming WAN1&quot;
+/ip firewall mangle add chain=prerouting in-interface=ether2 connection-state=new connection-mark=no-mark action=mark-connection new-connection-mark=ent-c2 comment=&quot;ENT-PCC incoming WAN2&quot;
+/ip firewall mangle add chain=prerouting in-interface=ether3 dst-address-type=!local connection-state=new connection-mark=no-mark per-connection-classifier=both-addresses-and-ports:3/0 action=mark-connection new-connection-mark=ent-c1 comment=&quot;ENT-PCC bucket0&quot;
+/ip firewall mangle add chain=prerouting in-interface=ether3 dst-address-type=!local connection-state=new connection-mark=no-mark per-connection-classifier=both-addresses-and-ports:3/1 action=mark-connection new-connection-mark=ent-c1 comment=&quot;ENT-PCC bucket1&quot;
+/ip firewall mangle add chain=prerouting in-interface=ether3 dst-address-type=!local connection-state=new connection-mark=no-mark per-connection-classifier=both-addresses-and-ports:3/2 action=mark-connection new-connection-mark=ent-c2 comment=&quot;ENT-PCC bucket2&quot;
+/ip firewall mangle add chain=prerouting in-interface=ether3 dst-address-type=!local connection-mark=ent-c1 action=mark-routing new-routing-mark=ent-wan1 passthrough=no comment=&quot;ENT-PCC route1&quot;
+/ip firewall mangle add chain=prerouting in-interface=ether3 dst-address-type=!local connection-mark=ent-c2 action=mark-routing new-routing-mark=ent-wan2 passthrough=no comment=&quot;ENT-PCC route2&quot;
+/ip firewall mangle add chain=output connection-mark=ent-c1 action=mark-routing new-routing-mark=ent-wan1 passthrough=no comment=&quot;ENT-PCC reply1&quot;
+/ip firewall mangle add chain=output connection-mark=ent-c2 action=mark-routing new-routing-mark=ent-wan2 passthrough=no comment=&quot;ENT-PCC reply2&quot;
+/ip route add dst-address=0.0.0.0/0 gateway=192.168.30.1 routing-table=main distance=1 check-gateway=ping comment=&quot;ENT-PCC main1&quot;
+/ip route add dst-address=0.0.0.0/0 gateway=172.30.30.1 routing-table=main distance=2 check-gateway=ping comment=&quot;ENT-PCC main2&quot;
+/ip route add dst-address=0.0.0.0/0 gateway=192.168.30.1@main routing-table=ent-wan1 distance=1 check-gateway=ping comment=&quot;ENT-PCC table1 primary&quot;
+/ip route add dst-address=0.0.0.0/0 gateway=172.30.30.1@main routing-table=ent-wan1 distance=2 check-gateway=ping comment=&quot;ENT-PCC table1 backup&quot;
+/ip route add dst-address=0.0.0.0/0 gateway=172.30.30.1@main routing-table=ent-wan2 distance=1 check-gateway=ping comment=&quot;ENT-PCC table2 primary&quot;
+/ip route add dst-address=0.0.0.0/0 gateway=192.168.30.1@main routing-table=ent-wan2 distance=2 check-gateway=ping comment=&quot;ENT-PCC table2 backup&quot;
+/ip firewall nat add chain=srcnat src-address=10.10.10.0/24 out-interface=ether1 action=masquerade comment=&quot;ENT-PCC nat1&quot;
+/ip firewall nat add chain=srcnat src-address=10.10.10.0/24 out-interface=ether2 action=masquerade comment=&quot;ENT-PCC nat2&quot;</code></pre>
+<p data-fa="rules بالا روی lab پاک با firewall از قبل امن اجرا شوند؛ در سایت موجود با ruleهای قبلی merge و duplicate route/NAT حذف شود. subnetهای VPN/DC به ent-local افزوده شوند. ابتدا چند صد اتصال تازه بسازید؛ counters bucket0+1 باید تقریباً دو برابر bucket2 باشد، نه الزاماً bytes. WAN1 را در lab قطع و route فعال هر table و برقراری اتصال تازه را بررسی کنید." data-en="Run this on a clean lab with a secured Firewall. Merge with existing production rules and remove duplicate routes/NAT. Add VPN/datacenter subnets to ent-local. Generate hundreds of fresh connections: buckets 0+1 should approach twice bucket 2 in connection count, not necessarily bytes. Disconnect WAN1 in the lab and verify active routes in every table and new-connection success.">rules بالا روی lab پاک با firewall از قبل امن اجرا شوند؛ در سایت موجود با ruleهای قبلی merge و duplicate route/NAT حذف شود. subnetهای VPN/DC به ent-local افزوده شوند. ابتدا چند صد اتصال تازه بسازید؛ counters bucket0+1 باید تقریباً دو برابر bucket2 باشد، نه الزاماً bytes. WAN1 را در lab قطع و route فعال هر table و برقراری اتصال تازه را بررسی کنید.</p></section><section id="enterprise-security" class="article-section"><h2 data-fa="Security Hardening" data-en="Security Hardening">Security Hardening</h2><p data-fa="NAT جای firewall نیست. input WAN default deny و forward فقط LAN مجاز باشد. مسیر داخلی نباید به policy WAN فرستاده شود. مدیریت روتر از LAN/console برقرار بماند؛ DNAT موجود نیازمند آزمون symmetry مستقل است." data-en="NAT is not a Firewall. Deny unsolicited WAN input and permit only approved LAN forwarding. Keep internal traffic out of WAN policy routing. Preserve LAN/console management and test existing DNAT symmetry separately.">NAT جای firewall نیست. input WAN default deny و forward فقط LAN مجاز باشد. مسیر داخلی نباید به policy WAN فرستاده شود. مدیریت روتر از LAN/console برقرار بماند؛ DNAT موجود نیازمند آزمون symmetry مستقل است.</p></section><section id="enterprise-monitoring" class="article-section"><h2 data-fa="Monitoring" data-en="Monitoring">Monitoring</h2><p data-fa="برای هر WAN availability، packet loss، latency و utilization مستقل ثبت شود. check-gateway=ping فقط gateway را می‌سنجد؛ قطع بالادست ISP با gateway زنده را کشف نمی‌کند. recursive probe یا کنترل چند مقصد مستقل نیاز طراحی و آزمون جدا دارد." data-en="Measure availability, loss, latency and utilization for each WAN. check-gateway=ping tests only the gateway; it misses upstream failure while the gateway remains alive. Recursive probes or multiple independent targets need separate design and validation.">برای هر WAN availability، packet loss، latency و utilization مستقل ثبت شود. check-gateway=ping فقط gateway را می‌سنجد؛ قطع بالادست ISP با gateway زنده را کشف نمی‌کند. recursive probe یا کنترل چند مقصد مستقل نیاز طراحی و آزمون جدا دارد.</p></section><section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="Troubleshooting" data-en="Troubleshooting">Troubleshooting</h2><p data-fa="توزیع دیده نمی‌شود: اتصال‌های قدیمی و FastTrack را بررسی کنید. پاسخ از WAN غلط: connection-mark و output/prerouting counters. route inactive: next-hop در main و gateway scope. banking session حساس به public IP: مقصد را pin یا classifier both-addresses انتخاب کنید و وزن را دوباره بسنجید." data-en="For absent distribution, inspect old connections and FastTrack. For replies leaving the wrong WAN, inspect connection marks and output/prerouting counters. Inactive routes require checking next-hop resolution in main and gateway scope. Pin public-IP-sensitive destinations or evaluate both-addresses classification, then remeasure the weighting.">توزیع دیده نمی‌شود: اتصال‌های قدیمی و FastTrack را بررسی کنید. پاسخ از WAN غلط: connection-mark و output/prerouting counters. route inactive: next-hop در main و gateway scope. banking session حساس به public IP: مقصد را pin یا classifier both-addresses انتخاب کنید و وزن را دوباره بسنجید.</p></section><section id="enterprise-recovery" class="article-section"><h2 data-fa="Backup / Recovery" data-en="Backup / Recovery">Backup / Recovery</h2><p data-fa="export قبل تغییر حفظ شود. rollback به ترتیب disable mangleهای ENT-PCC، restore route/NAT قبلی و disable route/NAT جدید است؛ tableها فقط پس از نبود reference حذف شوند. connection state را کورکورانه flush نکنید. با تغییر public IP، نشست TCP ممکن است قطع شود و reconnect لازم است؛ failover حفظ همه sessionها را تضمین نمی‌کند." data-en="Keep the pre-change export. Rollback disables ENT-PCC mangle rules, restores previous routes/NAT and disables new routes/NAT. Remove tables only after all references are gone. Do not blindly flush connection state. Public-IP changes can break TCP sessions and require reconnects; failover does not preserve every session.">export قبل تغییر حفظ شود. rollback به ترتیب disable mangleهای ENT-PCC، restore route/NAT قبلی و disable route/NAT جدید است؛ tableها فقط پس از نبود reference حذف شوند. connection state را کورکورانه flush نکنید. با تغییر public IP، نشست TCP ممکن است قطع شود و reconnect لازم است؛ failover حفظ همه sessionها را تضمین نمی‌کند.</p></section><section id="enterprise-practices" class="article-section"><h2 data-fa="Best Practices" data-en="Best Practices">Best Practices</h2><p data-fa="ECMP equal-cost و PCC weighted را تفکیک کنید؛ یک flow سرعت دو لینک را جمع نمی‌کند. gateway failure و upstream failure دو آزمون جدا باشند." data-en="Distinguish equal-cost ECMP from weighted PCC. One flow does not aggregate two links. Test gateway failure and upstream failure independently.">ECMP equal-cost و PCC weighted را تفکیک کنید؛ یک flow سرعت دو لینک را جمع نمی‌کند. gateway failure و upstream failure دو آزمون جدا باشند.</p></section><section id="enterprise-compatibility" class="article-section"><h2 data-fa="نسخه‌های قدیمی و Compatibility" data-en="Legacy Versions and Compatibility">نسخه‌های قدیمی و Compatibility</h2><p data-fa="routing-mark در دستور /ip route نسخه v6 با routing-table v7 یکسان نیست. تکرار gateway برای وزن‌دهی در نسخه جدید مبنای قابل اتکای طراحی نیست؛ مقاله با URL تاریخی حفظ و طراحی به PCC ارتقا یافته است." data-en="RouterOS v6 route routing-mark syntax differs from v7 routing-table. Repeating gateways is not a dependable weighting design for this baseline. The historical URL is retained while the implementation uses PCC.">routing-mark در دستور /ip route نسخه v6 با routing-table v7 یکسان نیست. تکرار gateway برای وزن‌دهی در نسخه جدید مبنای قابل اتکای طراحی نیست؛ مقاله با URL تاریخی حفظ و طراحی به PCC ارتقا یافته است.</p></section><section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">پرسش‌های متداول</h2><h3 data-fa="آیا وزن ۲ به ۱ یعنی پهنای‌باند دقیق ۲ به ۱؟" data-en="Does 2:1 weighting guarantee a 2:1 bandwidth ratio?">آیا وزن ۲ به ۱ یعنی پهنای‌باند دقیق ۲ به ۱؟</h3><p data-fa="خیر؛ وزن بر اتصال‌ها اعمال می‌شود و اندازه flowها متفاوت است." data-en="No. Weighting applies to connections whose flow sizes differ.">خیر؛ وزن بر اتصال‌ها اعمال می‌شود و اندازه flowها متفاوت است.</p><h3 data-fa="آیا failover نشست TCP را حفظ می‌کند؟" data-en="Does failover preserve TCP sessions?">آیا failover نشست TCP را حفظ می‌کند؟</h3><p data-fa="با تغییر public IP ممکن است نشست قطع شود و اتصال دوباره لازم باشد." data-en="A changed public IP can terminate a session and require reconnection.">با تغییر public IP ممکن است نشست قطع شود و اتصال دوباره لازم باشد.</p></section><section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">منابع رسمی</h2><ul><li><a href="https://help.mikrotik.com/docs/spaces/ROS/pages/152600617/Per+connection+classifier" rel="noopener">MikroTik: PCC</a></li><li><a href="https://help.mikrotik.com/docs/spaces/ROS/pages/59965508/Policy+Routing" rel="noopener">MikroTik: Policy routing</a></li></ul><p data-fa="تاریخ بررسی منابع: 2026-09-30. اعتبارسنجی عملی روی محیط هدف باید پیش از انتشار تغییر زیرساخت انجام شود." data-en="Sources reviewed: 2026-09-30. Validate procedures on the target environment before deploying infrastructure changes.">تاریخ بررسی منابع: 2026-09-30. اعتبارسنجی عملی روی محیط هدف باید پیش از انتشار تغییر زیرساخت انجام شود.</p></section><details id="legacy-history"><summary data-fa="محتوای نسخه قدیمی — فقط مرجع تاریخی" data-en="Historical edition — retained as originally written">محتوای نسخه قدیمی — فقط مرجع تاریخی</summary><p data-fa="نمونه‌های زیر برای حفظ سابقه هستند؛ دستورالعمل اجرایی، امنیتی و سازگاری نسخه جدید در بخش‌های بالا آمده است." data-en="The following material is retained in its original languages for historical reference. Use the bilingual runbook above for current operations, security and compatibility.">نمونه‌های زیر برای حفظ سابقه هستند؛ دستورالعمل اجرایی، امنیتی و سازگاری نسخه جدید در بخش‌های بالا آمده است.</p>
                 <!-- Introduction -->
-                <section id="introduction" class="article-section">
+                <section id="legacy-introduction" class="article-section">
                   <h2 data-en="Introduction" data-fa="مقدمه">مقدمه</h2>
                   <div class="intro-content">
                     <p
@@ -622,7 +422,7 @@
                 </section>
 
                 <!-- Why Asymmetric Load Balancing -->
-                <section id="why-asymmetric" class="article-section">
+                <section id="legacy-why-asymmetric" class="article-section">
                   <h2
                     data-en="Why Asymmetric Load Balancing?"
                     data-fa="چرا Load Balancing نامتقارن؟"
@@ -655,7 +455,7 @@
                 </section>
 
                 <!-- ECMP Comparison -->
-                <section id="ecmp-comparison" class="article-section">
+                <section id="legacy-ecmp-comparison" class="article-section">
                   <h2
                     data-en="ECMP Comparison with PCC and Other Methods"
                     data-fa="مقایسه ECMP با PCC و سایر روش‌ها"
@@ -753,7 +553,7 @@
                 </section>
 
                 <!-- ECMP Introduction -->
-                <section id="ecmp-intro" class="article-section">
+                <section id="legacy-ecmp-intro" class="article-section">
                   <h2 data-en="Introduction to ECMP" data-fa="آشنایی با ECMP">
                     آشنایی با ECMP
                   </h2>
@@ -783,7 +583,7 @@
                 </section>
 
                 <!-- Lab Scenario -->
-                <section id="lab-scenario" class="article-section">
+                <section id="legacy-lab-scenario" class="article-section">
                   <h2
                     data-en="Laboratory Scenario (Lab Scenario)"
                     data-fa="توپولوژی آزمایشگاهی (Lab Scenario)"
@@ -827,7 +627,7 @@
                 </section>
 
                 <!-- Configuration Steps -->
-                <section id="configuration" class="article-section">
+                <section id="legacy-configuration" class="article-section">
                   <h2 data-en="Configuration Steps" data-fa="مراحل پیکربندی">
                     مراحل پیکربندی
                   </h2>
@@ -866,18 +666,11 @@
                             data-en="MikroTik"
                             >MikroTik</span
                           >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
+
                         </div>
-                        <pre><code class="language-bash">/interface set [find default-name=ether1] name=WAN1
+                        <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">/interface set [find default-name=ether1] name=WAN1
 /interface set [find default-name=ether2] name=WAN2
-/interface set [find default-name=ether3] name=LAN</code></pre>
+/interface set [find default-name=ether3] name=LAN</code></div>
                       </div>
                     </div>
                   </div>
@@ -916,19 +709,12 @@
                             data-en="MikroTik"
                             >MikroTik</span
                           >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
+
                         </div>
-                        <pre><code class="language-bash">/ip address
+                        <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">/ip address
 add address=192.168.30.2/30 interface=WAN1
 add address=172.30.30.2/30 interface=WAN2
-add address=10.10.10.1/24 interface=LAN</code></pre>
+add address=10.10.10.1/24 interface=LAN</code></div>
                       </div>
                     </div>
                   </div>
@@ -967,16 +753,9 @@ add address=10.10.10.1/24 interface=LAN</code></pre>
                             data-en="MikroTik"
                             >MikroTik</span
                           >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
+
                         </div>
-                        <pre><code class="language-bash">/ip dns set servers=8.8.8.8,1.1.1.1 allow-remote-requests=yes</code></pre>
+                        <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">/ip dns set servers=8.8.8.8,1.1.1.1 allow-remote-requests=yes</code></div>
                       </div>
                     </div>
                   </div>
@@ -1015,18 +794,11 @@ add address=10.10.10.1/24 interface=LAN</code></pre>
                             data-en="MikroTik"
                             >MikroTik</span
                           >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
+
                         </div>
-                        <pre><code class="language-bash">/ip firewall nat
+                        <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">/ip firewall nat
 add chain=srcnat out-interface=WAN1 action=masquerade
-add chain=srcnat out-interface=WAN2 action=masquerade</code></pre>
+add chain=srcnat out-interface=WAN2 action=masquerade</code></div>
                       </div>
                     </div>
                   </div>
@@ -1065,17 +837,10 @@ add chain=srcnat out-interface=WAN2 action=masquerade</code></pre>
                             data-en="MikroTik"
                             >MikroTik</span
                           >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
+
                         </div>
-                        <pre><code>/ip route
-add dst-address=0.0.0.0/0 gateway=192.168.30.1,192.168.30.1,172.30.30.1 check-gateway=ping</code></pre>
+                        <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code>/ip route
+add dst-address=0.0.0.0/0 gateway=192.168.30.1,192.168.30.1,172.30.30.1 check-gateway=ping</code></div>
                       </div>
 
                       <div class="article-card-note">
@@ -1090,22 +855,14 @@ add dst-address=0.0.0.0/0 gateway=192.168.30.1,192.168.30.1,172.30.30.1 check-ga
                               data-en="Output"
                               >خروجی</span
                             >
-                            <button
-                              class="article-copy-button"
-                              type="button"
-                              data-en="Copy code"
-                              data-fa="کپی کد"
-                              aria-label="Copy code"
-                            >
-                              <i class="bi bi-clipboard" aria-hidden="true"></i>
-                            </button>
+
                           </div>
-                          <pre><code class="language-bash">[admin@MikroTik] > /ip route print
+                          <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">[admin@MikroTik] > /ip route print
 Flags: D - dynamic; A - active; C - connect; S - static; r - rip; o - ospf; b - bgp
  #      DST-ADDRESS        GATEWAY          DISTANCE
  0  AS  0.0.0.0/0          192.168.30.1     1
  1  AS  0.0.0.0/0          192.168.30.1     1
- 2  AS  0.0.0.0/0          172.30.30.1      1</code></pre>
+ 2  AS  0.0.0.0/0          172.30.30.1      1</code></div>
                         </div>
                       </div>
                     </div>
@@ -1145,16 +902,9 @@ Flags: D - dynamic; A - active; C - connect; S - static; r - rip; o - ospf; b - 
                             data-en="MikroTik"
                             >MikroTik</span
                           >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
+
                         </div>
-                        <pre><code class="language-bash">/ip firewall mangle
+                        <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">/ip firewall mangle
 add chain=input in-interface=WAN1 action=mark-connection new-connection-mark=WAN1_CONN passthrough=no
 add chain=input in-interface=WAN2 action=mark-connection new-connection-mark=WAN2_CONN passthrough=no
 add chain=output connection-mark=WAN1_CONN action=mark-routing new-routing-mark=to_WAN1 passthrough=no
@@ -1162,14 +912,14 @@ add chain=output connection-mark=WAN2_CONN action=mark-routing new-routing-mark=
 
 /ip route
 add dst-address=0.0.0.0/0 gateway=192.168.30.1 routing-mark=to_WAN1 check-gateway=ping
-add dst-address=0.0.0.0/0 gateway=172.30.30.1 routing-mark=to_WAN2 check-gateway=ping</code></pre>
+add dst-address=0.0.0.0/0 gateway=172.30.30.1 routing-mark=to_WAN2 check-gateway=ping</code></div>
                       </div>
                     </div>
                   </div>
                 </section>
 
                 <!-- Testing and Troubleshooting -->
-                <section id="testing" class="article-section">
+                <section id="legacy-testing" class="article-section">
                   <h2
                     data-en="Testing and Troubleshooting with Real Examples"
                     data-fa="تست و خطایابی با مثال واقعی"
@@ -1234,17 +984,10 @@ add dst-address=0.0.0.0/0 gateway=172.30.30.1 routing-mark=to_WAN2 check-gateway
                               data-en="MikroTik"
                               >MikroTik</span
                             >
-                            <button
-                              type="button"
-                              class="article-copy-button"
-                              data-fa="کپی"
-                              data-en="Copy"
-                            >
-                              کپی
-                            </button>
+
                           </div>
-                          <pre><code class="language-bash">/tool torch interface=WAN1
-/tool torch interface=WAN2</code></pre>
+                          <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">/tool torch interface=WAN1
+/tool torch interface=WAN2</code></div>
                         </div>
                       </div>
                     </div>
@@ -1281,17 +1024,10 @@ add dst-address=0.0.0.0/0 gateway=172.30.30.1 routing-mark=to_WAN2 check-gateway
                               data-en="MikroTik"
                               >MikroTik</span
                             >
-                            <button
-                              type="button"
-                              class="article-copy-button"
-                              data-fa="کپی"
-                              data-en="Copy"
-                            >
-                              کپی
-                            </button>
+
                           </div>
-                          <pre><code class="language-bash">/ip route print
-/tool traceroute 8.8.8.8</code></pre>
+                          <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">/ip route print
+/tool traceroute 8.8.8.8</code></div>
                         </div>
 
                         <div class="article-card-note">
@@ -1309,22 +1045,11 @@ add dst-address=0.0.0.0/0 gateway=172.30.30.1 routing-mark=to_WAN2 check-gateway
                                 data-en="Output"
                                 >خروجی</span
                               >
-                              <button
-                                class="article-copy-button"
-                                type="button"
-                                data-en="Copy code"
-                                data-fa="کپی کد"
-                                aria-label="Copy code"
-                              >
-                                <i
-                                  class="bi bi-clipboard"
-                                  aria-hidden="true"
-                                ></i>
-                              </button>
+
                             </div>
-                            <pre><code> 1  10.10.10.1
+                            <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code> 1  10.10.10.1
  2  192.168.30.1  (ISP1)
- 3  8.8.8.8</code></pre>
+ 3  8.8.8.8</code></div>
                           </div>
                         </div>
                       </div>
@@ -1333,7 +1058,7 @@ add dst-address=0.0.0.0/0 gateway=172.30.30.1 routing-mark=to_WAN2 check-gateway
                 </section>
 
                 <!-- Monitoring -->
-                <section id="monitoring" class="article-section">
+                <section id="legacy-monitoring" class="article-section">
                   <h2
                     data-en="Monitoring and Alerting"
                     data-fa="مانیتورینگ و هشداردهی"
@@ -1365,7 +1090,7 @@ add dst-address=0.0.0.0/0 gateway=172.30.30.1 routing-mark=to_WAN2 check-gateway
                 </section>
 
                 <!-- Security and Optimization -->
-                <section id="security" class="article-section">
+                <section id="legacy-security" class="article-section">
                   <h2
                     data-en="Security Tips and Optimization"
                     data-fa="نکات امنیتی و بهینه‌سازی"
@@ -1404,7 +1129,7 @@ add dst-address=0.0.0.0/0 gateway=172.30.30.1 routing-mark=to_WAN2 check-gateway
                 </section>
 
                 <!-- Best Practices -->
-                <section id="best-practices" class="article-section">
+                <section id="legacy-best-practices" class="article-section">
                   <h2
                     data-en="Best Practices for Organizations"
                     data-fa="بهترین روش‌ها برای سازمان‌ها"
@@ -1443,7 +1168,7 @@ add dst-address=0.0.0.0/0 gateway=172.30.30.1 routing-mark=to_WAN2 check-gateway
                 </section>
 
                 <!-- Cheat Sheet -->
-                <section id="cheat-sheet" class="article-section">
+                <section id="legacy-cheat-sheet" class="article-section">
                   <h2
                     data-en="Summary Table (Cheat Sheet)"
                     data-fa="جدول خلاصه"
@@ -1515,7 +1240,7 @@ add dst-address=0.0.0.0/0 gateway=172.30.30.1 routing-mark=to_WAN2 check-gateway
                 </section>
 
                 <!-- Conclusion -->
-                <section id="conclusion" class="article-section">
+                <section id="legacy-conclusion" class="article-section">
                   <h2 data-en="Conclusion" data-fa="نتیجه‌گیری">نتیجه‌گیری</h2>
                   <div class="content">
                     <p
@@ -1534,7 +1259,7 @@ add dst-address=0.0.0.0/0 gateway=172.30.30.1 routing-mark=to_WAN2 check-gateway
                 </section>
 
                 <!-- FAQ -->
-                <section id="faq" class="article-section">
+                <section id="legacy-faq" class="article-section">
                   <h2
                     data-en="Frequently Asked Questions"
                     data-fa="پرسش‌های متداول"
@@ -1622,7 +1347,7 @@ add dst-address=0.0.0.0/0 gateway=172.30.30.1 routing-mark=to_WAN2 check-gateway
 
                 <footer class="article-footer" aria-label="Article footer">
                   <section
-                    id="author"
+                    id="legacy-author"
                     class="article-author"
                     role="complementary"
                     aria-labelledby="author-title"
@@ -1640,7 +1365,7 @@ add dst-address=0.0.0.0/0 gateway=172.30.30.1 routing-mark=to_WAN2 check-gateway
                       <div class="article-author-content">
                         <p
                           class="article-author-kicker"
-                          id="author-title"
+                          id="legacy-author-title"
                           data-en="About the author"
                           data-fa="درباره نویسنده"
                         >
@@ -1711,7 +1436,7 @@ add dst-address=0.0.0.0/0 gateway=172.30.30.1 routing-mark=to_WAN2 check-gateway
                     >
                   </nav>
                 </footer>
-              </article>
+              </details></div></article>
             </div>
           </div>
         </div>

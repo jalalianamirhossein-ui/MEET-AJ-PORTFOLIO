@@ -37,6 +37,8 @@ class ArticleSeo
             'title' => $title,
             'description' => $description,
             'canonical' => $canonical,
+            'keywords' => $seo['keywords'] ?? null,
+            'alternates' => $seo['alternates'] ?? [],
             'og_title' => $this->englishHeadline($article, $seo['og_title'] ?? $title),
             'og_description' => $seo['og_description'] ?? $description,
             'og_url' => $canonical,
@@ -113,16 +115,17 @@ class ArticleSeo
     private function breadcrumb(Article $article, string $canonical): array
     {
         $origin = rtrim((string) config('app.url'), '/');
+        $locale = data_get($article->presentation, 'content_language', 'en');
         $items = [
-            ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $origin.'/'],
-            ['@type' => 'ListItem', 'position' => 2, 'name' => 'Articles', 'item' => $origin.'/articles'],
+            ['@type' => 'ListItem', 'position' => 1, 'name' => $locale === 'fa' ? 'صفحه اصلی' : 'Home', 'item' => $origin.'/'],
+            ['@type' => 'ListItem', 'position' => 2, 'name' => $locale === 'fa' ? 'مقالات' : 'Articles', 'item' => $origin.'/articles'],
         ];
         $position = 3;
         if ($article->category) {
             $items[] = [
                 '@type' => 'ListItem',
                 'position' => $position,
-                'name' => $article->category->name,
+                'name' => $locale === 'fa' ? $article->categoryLabelFa() : $article->categoryLabelEn(),
                 'item' => $origin.'/articles',
             ];
             $position++;
@@ -130,7 +133,7 @@ class ArticleSeo
         $items[] = [
             '@type' => 'ListItem',
             'position' => $position,
-            'name' => $this->englishHeadline($article, $article->title),
+            'name' => data_get($article->presentation, 'localizations.'.$locale.'.title') ?: $this->englishHeadline($article, $article->title),
             'item' => $canonical,
         ];
 

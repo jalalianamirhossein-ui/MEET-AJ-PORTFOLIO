@@ -1,7 +1,7 @@
 # Articles — Meet AJ
 
 **Authority:** AUTHORITATIVE article subsystem document.
-**Verified:** 2026-09-21 against `app/Models/Article.php`, `app/Http/Controllers/ArticleController.php`, `app/Services/Legacy*`, `app/Filament/Resources/ArticleResource.php`, `resources/views/articles/**`, the live database, and `php artisan site:compare-content`.
+**Verified:** Bilingual source and route behavior checked on 2026-09-30 using an isolated test database. The live counts below remain the historical 2026-09-17 snapshot.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
 ## Counts (live database, 2026-09-17)
@@ -17,15 +17,16 @@
 | Tags | 8 |
 | Article ↔ tag links | 38 |
 
-Every article row is `language = en`, `status = published`. Persian article copy lives inside the stored HTML as `data-fa` attributes, not as separate rows.
+The imported library uses one shared `language = en` row per article. Both editorial versions live in `data-fa` / `data-en` HTML and `presentation.localizations`; language selection does not create or update database rows.
 
 ## Import
 
 Source of truth for content: the 25 original files in `resources/legacy/articles/*.html`. They are never deleted or rewritten by the CMS.
 
 ```bash
-php artisan articles:import-legacy             # import or update
-php artisan articles:import-legacy --dry-run   # report only
+php artisan articles:import-legacy             # import missing rows
+php artisan articles:import-legacy --update-existing --dry-run # preview source updates
+php artisan articles:import-legacy --update-existing          # update changed sources
 php artisan articles:import-legacy --refresh   # delete existing rows, then re-import
 ```
 
@@ -53,8 +54,17 @@ php artisan articles:sync-tags
 | `/articles?q=…` | Search results, 9 per page, query string preserved |
 | `/articles?tag=…` | Tag filter, same pagination |
 | `/articles/{slug}` | Canonical article detail |
+| `/articles/{slug}?lang=en` | English version of a curated bilingual article; its own canonical |
 | `/articles/{slug}.html` | **301** to `/articles/{slug}`, query string preserved, no redirect chain |
 | unknown slug | 404 |
+
+## Bilingual enterprise editions
+
+All 25 source files contain complete current FA/EN runbooks. The base URL serves Persian; `?lang=en` serves English. Other language values fall back to Persian with the base canonical. Cookies/local storage do not override the language selected by the URL. Both pages return reciprocal `fa`/`en` hreflang and an `x-default` pointing to the Persian base URL. Sitemap entries cover both versions.
+
+`ArticleLocalization` selects prose, headings, TOC, metadata, Article/FAQ schemas and sharing titles before Blade renders. Code blocks are shared and protected from translation. The language button navigates to the alternate URL, which makes localized metadata available without JavaScript. Related links retain the selected language. Historical editions remain labeled and preserved in their original languages; `docs/enterprise-articles/originals.zip` retains exact original files.
+
+`LegacyArticleImporter` reads the `article-localizations` JSON block from each source into `presentation.localizations`. Existing database rows need `--update-existing` to receive the replacement sources. This work changed source/application files and tested an isolated database; it did not import into the operational database or deploy the site. Review `docs/enterprise-articles/bilingual-report.md` and the dry-run before deployment, and publish updated assets through the existing deployment workflow.
 
 The 25 canonical slugs:
 

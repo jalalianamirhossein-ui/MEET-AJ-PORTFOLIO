@@ -1,7 +1,7 @@
 /**
  * Language switch — one clickable EN/FA control. No dropdown.
  * DE is included only when the page actually has data-de copy.
- * Switching language rewrites on-page strings and does not navigate away.
+ * Editorial bilingual articles navigate to their server-rendered language URL.
  */
 
 (() => {
@@ -22,6 +22,8 @@
   };
 
   const init = (langs) => {
+    const articleLanguage = document.documentElement.dataset.articleLanguage;
+    if (langs.includes(articleLanguage)) return articleLanguage;
     const stored = localStorage.getItem(KEY);
     if (langs.includes(stored)) return stored;
 
@@ -113,6 +115,16 @@
   const apply = (lang) => {
     const langs = availableLanguages();
     const next = langs.includes(lang) ? lang : "en";
+    const articleLanguage = document.documentElement.dataset.articleLanguage;
+    if (articleLanguage && next !== articleLanguage) {
+      const alternate = document.querySelector(`link[rel="alternate"][hreflang="${next}"]`);
+      if (alternate) {
+        localStorage.setItem(KEY, next);
+        setCookie(next);
+        window.location.assign(alternate.href);
+        return;
+      }
+    }
     const isPersian = next === "fa";
     const html = document.documentElement;
 
@@ -131,6 +143,7 @@
     }
 
     document.querySelectorAll("[data-en]").forEach((el) => {
+      if (articleLanguage && el.closest(".article-body, .article-toc-list")) return;
       if (isLockedEnglish(el)) {
         const english = el.getAttribute("data-en");
         if (english != null) setElementText(el, english);

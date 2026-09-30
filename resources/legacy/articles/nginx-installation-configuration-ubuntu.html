@@ -1,19 +1,11 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="fa" dir="rtl" data-article-language="fa">
   <head>
-    <title>
-      Complete Guide to Nginx Installation and Configuration on Ubuntu - Meet AJ
-    </title>
+    <title>Nginx در Production: Reverse Proxy، TLS و تشخیص خطای Upstream | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta
-      content="راهنمای کامل نصب و پیکربندی وب‌سرور Nginx در اوبونتو شامل Virtual Host، SSL، HTTP/2، فایروال و بهینه‌سازی عملکرد. آموزش گام به گام نصب Nginx، تنظیم SSL رایگان، پیکربندی HTTP/2 و بهینه‌سازی سرعت."
-      name="description"
-    />
-    <meta
-      content="Nginx, Ubuntu, Web Server, SSL, HTTP/2, Virtual Host, Let's Encrypt, Performance, آموزش Nginx, نصب وب‌سرور, پیکربندی Nginx, SSL رایگان, HTTP/2, فایروال UFW, بهینه‌سازی سرعت, DevOps, Linux Server"
-      name="keywords"
-    />
+    <meta name="description" content="استقرار Nginx به‌عنوان Reverse Proxy با TLS، بررسی syntax پیش از reload، پایش upstream و عیب‌یابی خطاهای اتصال در Production." />
+    <meta name="keywords" content="Nginx در Production: Reverse Proxy، TLS و تشخیص خطای Upstream, مدیریت زیرساخت, عیب‌یابی, امنیت سرویس, بازیابی, nginx installation configuration ubuntu" />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <meta name="language" content="fa, en" />
@@ -33,14 +25,8 @@
       content="../assets/img/apple-touch-icon.png"
     />
     <meta property="og:type" content="article" />
-    <meta
-      property="og:title"
-      content="آموزش جامع نصب و پیکربندی Nginx در اوبونتو Ubuntu"
-    />
-    <meta
-      property="og:description"
-      content="راهنمای کامل نصب و پیکربندی وب‌سرور Nginx در اوبونتو شامل Virtual Host، SSL، HTTP/2، فایروال و بهینه‌سازی عملکرد. آموزش گام به گام نصب Nginx، تنظیم SSL رایگان، پیکربندی HTTP/2 و بهینه‌سازی سرعت."
-    />
+    <meta property="og:title" content="Nginx در Production: Reverse Proxy، TLS و تشخیص خطای Upstream" />
+    <meta property="og:description" content="استقرار Nginx به‌عنوان Reverse Proxy با TLS، بررسی syntax پیش از reload، پایش upstream و عیب‌یابی خطاهای اتصال در Production." />
     <meta property="og:image" content="../assets/img/portfolio/linux-1.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -49,10 +35,7 @@
       property="og:image:alt"
       content="Nginx Ubuntu Installation Guide - Web Server Configuration"
     />
-    <meta
-      property="og:url"
-      content="https://meetaj.ir/articles/nginx-installation-configuration-ubuntu.html"
-    />
+    <meta property="og:url" content="https://meetaj.ir/articles/nginx-installation-configuration-ubuntu" />
     <meta property="og:site_name" content="Meet AJ - Technical Articles" />
     <meta property="twitter:card" content="summary_large_image" />
     <meta
@@ -89,94 +72,11 @@
     <meta name="apple-mobile-web-app-title" content="Meet AJ" />
     <link
       rel="canonical"
-      href="https://meetaj.ir/articles/nginx-installation-configuration-ubuntu.html"
-    />
-    <link
-      rel="alternate"
-      hreflang="fa"
-      href="https://meetaj.ir/articles/nginx-installation-configuration-ubuntu.html"
-    />
-    <link
-      rel="alternate"
-      hreflang="en"
-      href="https://meetaj.ir/articles/nginx-installation-configuration-ubuntu.html"
-    />
-    <link
-      rel="alternate"
-      hreflang="x-default"
-      href="https://meetaj.ir/articles/nginx-installation-configuration-ubuntu.html"
+      href="https://meetaj.ir/articles/nginx-installation-configuration-ubuntu"
     />
     <link href="../assets/img/favicon.png" rel="icon" />
     <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "آموزش جامع نصب و پیکربندی Nginx در اوبونتو Ubuntu",
-        "description": "راهنمای کامل نصب و پیکربندی وب‌سرور Nginx در اوبونتو شامل Virtual Host، SSL، HTTP/2، فایروال و بهینه‌سازی عملکرد. آموزش گام به گام نصب Nginx، تنظیم SSL رایگان، پیکربندی HTTP/2 و بهینه‌سازی سرعت.",
-        "image": "../assets/img/my-profile-img.jpg",
-        "author": {
-          "@type": "Person",
-          "name": "AmirHossein Jalalian",
-          "url": "https://meetaj.ir"
-        },
-        "publisher": {
-          "@type": "Organization",
-          "name": "Meet AJ",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "../assets/img/logo.png"
-          }
-        },
-        "datePublished": "2024-01-15T00:00:00+03:30",
-        "dateModified": "2024-01-15T00:00:00+03:30",
-        "mainEntityOfPage": {
-          "@type": "WebPage",
-          "@id": "https://meetaj.ir/articles/nginx-installation-configuration-ubuntu.html"
-        },
-        "articleSection": "Web Development",
-        "keywords": [
-          "Nginx",
-          "Ubuntu",
-          "Web Server",
-          "SSL",
-          "HTTP/2",
-          "Virtual Host",
-          "Let's Encrypt",
-          "Performance",
-          "آموزش Nginx",
-          "نصب وب‌سرور",
-          "پیکربندی Nginx",
-          "SSL رایگان",
-          "فایروال UFW",
-          "بهینه‌سازی سرعت",
-          "DevOps",
-          "Linux Server"
-        ],
-        "inLanguage": ["fa", "en"],
-        "wordCount": "3500",
-        "timeRequired": "PT25M",
-        "educationalLevel": "Intermediate",
-        "learningResourceType": "Tutorial",
-        "about": {
-          "@type": "Thing",
-          "name": "Nginx Web Server",
-          "description": "High-performance web server and reverse proxy"
-        },
-        "mentions": [
-          {
-            "@type": "Thing",
-            "name": "Ubuntu",
-            "description": "Linux operating system"
-          },
-          {
-            "@type": "Thing",
-            "name": "SSL Certificate",
-            "description": "Security certificate for HTTPS"
-          }
-        ]
-      }
-    </script>
+
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -210,7 +110,14 @@
       rel="stylesheet"
       disabled
     />
-  </head>
+  <meta name="article:content-language" content="fa" />
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Nginx در Production: Reverse Proxy، TLS و تشخیص خطای Upstream", "description": "استقرار Nginx به‌عنوان Reverse Proxy با TLS، بررسی syntax پیش از reload، پایش upstream و عیب‌یابی خطاهای اتصال در Production.", "inLanguage": "fa", "url": "https://meetaj.ir/articles/nginx-installation-configuration-ubuntu", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "آیا nginx -t سلامت برنامه را تأیید می‌کند؟", "acceptedAnswer": {"@type": "Answer", "text": "خیر؛ فقط config را بررسی می‌کند و health check برنامه جدا لازم است."}}, {"@type": "Question", "name": "برای 504 باید timeout را زیاد کرد؟", "acceptedAnswer": {"@type": "Answer", "text": "ابتدا latency و وابستگی‌های upstream را بررسی کنید؛ افزایش timeout می‌تواند صف را بزرگ‌تر کند."}}]}</script>
+<link rel="alternate" hreflang="fa" href="https://meetaj.ir/articles/nginx-installation-configuration-ubuntu" />
+<link rel="alternate" hreflang="en" href="https://meetaj.ir/articles/nginx-installation-configuration-ubuntu?lang=en" />
+<link rel="alternate" hreflang="x-default" href="https://meetaj.ir/articles/nginx-installation-configuration-ubuntu" />
+<script id="article-localizations" type="application/json">{"fa": {"title": "Nginx در Production: Reverse Proxy، TLS و تشخیص خطای Upstream", "meta_title": "Nginx در Production: Reverse Proxy، TLS و تشخیص خطای Upstream | Meet AJ", "description": "استقرار Nginx به‌عنوان Reverse Proxy با TLS، بررسی syntax پیش از reload، پایش upstream و عیب‌یابی خطاهای اتصال در Production.", "keywords": ["Nginx در Production: Reverse Proxy، TLS و تشخیص خطای Upstream", "مدیریت زیرساخت", "عیب‌یابی", "امنیت سرویس", "بازیابی", "nginx installation configuration ubuntu"], "faq": [["آیا nginx -t سلامت برنامه را تأیید می‌کند؟", "خیر؛ فقط config را بررسی می‌کند و health check برنامه جدا لازم است."], ["برای 504 باید timeout را زیاد کرد؟", "ابتدا latency و وابستگی‌های upstream را بررسی کنید؛ افزایش timeout می‌تواند صف را بزرگ‌تر کند."]]}, "en": {"title": "Production Nginx: Reverse Proxy, TLS and Upstream Troubleshooting", "meta_title": "Production Nginx: Reverse Proxy, TLS and Upstream Troubleshooting | Meet AJ", "description": "Deploy Nginx with a complete TLS reverse proxy, bounded timeouts, independent upstream checks, monitoring and validated reloads.", "keywords": ["Production Nginx", "nginx installation configuration ubuntu", "enterprise infrastructure", "production operations", "troubleshooting"], "faq": [["Does nginx -t verify application health?", "No. It validates configuration; application health needs a separate check."], ["Should a 504 be fixed by increasing the timeout?", "Inspect upstream latency and dependencies first; a longer timeout can increase queueing."]]}}</script>
+</head>
   <body class="article-page theme-linux">
     <button
       id="menu-toggle"
@@ -359,124 +266,20 @@
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
-          <li class="article-nav-item">
-            <a href="#introduction"
-              ><i class="bi bi-info-circle navicon" aria-hidden="true"></i
-              ><span data-en="Introduction" data-fa="مقدمه">Introduction</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#advantages"
-              ><i class="bi bi-award navicon" aria-hidden="true"></i
-              ><span
-                data-en="Advantages of Nginx over Apache"
-                data-fa="مزایای Nginx نسبت به Apache"
-                >Advantages of Nginx over Apache</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#prerequisites"
-              ><i class="bi bi-clipboard-check navicon" aria-hidden="true"></i
-              ><span data-en="Prerequisites" data-fa="پیش‌نیازها"
-                >Prerequisites</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#installation"
-              ><i class="bi bi-download navicon" aria-hidden="true"></i
-              ><span data-en="Installing Nginx" data-fa="نصب Nginx"
-                >Installing Nginx</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#configuration"
-              ><i class="bi bi-sliders navicon" aria-hidden="true"></i
-              ><span data-en="Basic Configuration" data-fa="پیکربندی پایه">Basic Configuration</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#service-management"
-              ><i class="bi bi-gear navicon" aria-hidden="true"></i
-              ><span data-en="Service Management" data-fa="مدیریت سرویس Nginx"
-                >Service Management</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#virtual-host"
-              ><i class="bi bi-hdd-network navicon" aria-hidden="true"></i
-              ><span
-                data-en="Virtual Host Configuration"
-                data-fa="ساخت و پیکربندی Virtual Host"
-                >Virtual Host Configuration</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#ssl-setup"
-              ><i class="bi bi-lock navicon" aria-hidden="true"></i
-              ><span data-en="SSL Setup with Let" data-fa="فعال‌سازی SSL با Let"
-                >SSL Setup with Let</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#http2-config"
-              ><i class="bi bi-lightning-charge navicon" aria-hidden="true"></i
-              ><span
-                data-en="HTTP/2 Configuration"
-                data-fa="پیکربندی HTTP/2 در Nginx"
-                >HTTP/2 Configuration</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#firewall"
-              ><i class="bi bi-shield-check navicon" aria-hidden="true"></i
-              ><span
-                data-en="Firewall Management (UFW)"
-                data-fa="مدیریت فایروال (UFW)"
-                >Firewall Management (UFW)</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#monitoring"
-              ><i class="bi bi-activity navicon" aria-hidden="true"></i
-              ><span data-en="Logs and Monitoring" data-fa="لاگ‌ها و مانیتورینگ"
-                >Logs and Monitoring</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#optimization"
-              ><i class="bi bi-speedometer2 navicon" aria-hidden="true"></i
-              ><span
-                data-en="Performance Optimization"
-                data-fa="بهینه‌سازی Performance در Nginx"
-                >Performance Optimization</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#conclusion"
-              ><i class="bi bi-flag navicon" aria-hidden="true"></i
-              ><span data-en="Conclusion" data-fa="نتیجه‌گیری">Conclusion</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#faq"
-              ><i class="bi bi-question-circle navicon" aria-hidden="true"></i
-              ><span
-                data-en="Frequently Asked Questions"
-                data-fa="پرسش‌های متداول"
-                >Frequently Asked Questions</span
-              ></a
-            >
-          </li>
+          <li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="مقدمه" data-en="Introduction">مقدمه</span></a></li><li class="article-nav-item"><a href="#enterprise-scenario"><span data-fa="سناریوی واقعی Enterprise" data-en="Enterprise Scenario">سناریوی واقعی Enterprise</span></a></li><li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="پیش‌نیازها" data-en="Prerequisites">پیش‌نیازها</span></a></li><li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="Architecture / Design" data-en="Architecture / Design">Architecture / Design</span></a></li><li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="Installation / Configuration" data-en="Installation / Configuration">Installation / Configuration</span></a></li><li class="article-nav-item"><a href="#enterprise-security"><span data-fa="Security Hardening" data-en="Security Hardening">Security Hardening</span></a></li><li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="Monitoring" data-en="Monitoring">Monitoring</span></a></li><li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="Troubleshooting" data-en="Troubleshooting">Troubleshooting</span></a></li><li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="Backup / Recovery" data-en="Backup / Recovery">Backup / Recovery</span></a></li><li class="article-nav-item"><a href="#enterprise-practices"><span data-fa="Best Practices" data-en="Best Practices">Best Practices</span></a></li><li class="article-nav-item"><a href="#enterprise-compatibility"><span data-fa="نسخه‌های قدیمی و Compatibility" data-en="Legacy Versions and Compatibility">نسخه‌های قدیمی و Compatibility</span></a></li><li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">پرسش‌های متداول</span></a></li><li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">منابع رسمی</span></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
         </ul>
       </nav>
       <button
@@ -505,18 +308,14 @@
               </div>
               <h1
                 class="article-title hero-title"
-                data-en="Nginx Installation &amp; Configuration Ubuntu"
-                data-fa="نصب و پیکربندی Nginx در Ubuntu"
-              >
-                Nginx Installation &amp; Configuration Ubuntu
-              </h1>
+
+
+               data-fa="Nginx در Production: Reverse Proxy، TLS و تشخیص خطای Upstream" data-en="Production Nginx: Reverse Proxy, TLS and Upstream Troubleshooting">Nginx در Production: Reverse Proxy، TLS و تشخیص خطای Upstream</h1>
               <p
                 class="article-excerpt hero-subtitle"
-                data-en="Complete guide to Nginx web server setup"
-                data-fa="راهنمای کامل راه‌اندازی وب‌سرور Nginx"
-              >
-                Complete guide to Nginx web server setup
-              </p>
+
+
+               data-fa="استقرار Nginx به‌عنوان Reverse Proxy با TLS، بررسی syntax پیش از reload، پایش upstream و عیب‌یابی خطاهای اتصال در Production." data-en="Deploy Nginx with a complete TLS reverse proxy, bounded timeouts, independent upstream checks, monitoring and validated reloads.">استقرار Nginx به‌عنوان Reverse Proxy با TLS، بررسی syntax پیش از reload، پایش upstream و عیب‌یابی خطاهای اتصال در Production.</p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -565,9 +364,53 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body">
+              <nav class="article-translations" aria-label="Article language"><a lang="fa" hreflang="fa" href="https://meetaj.ir/articles/nginx-installation-configuration-ubuntu">فارسی</a> · <a lang="en" hreflang="en" href="https://meetaj.ir/articles/nginx-installation-configuration-ubuntu?lang=en">English</a></nav>
+<article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="fa" dir="rtl"><section id="enterprise-intro" class="article-section"><h2 data-fa="مقدمه" data-en="Introduction">مقدمه</h2><p data-fa="Healthy بودن Nginx به معنی سالم‌بودن برنامه نیست. Reverse Proxy باید timeout، شناسه درخواست، TLS معتبر و آزمون مستقل upstream داشته باشد تا خطای 502 قابل پیگیری شود." data-en="A healthy Nginx process does not prove the application is healthy. A reverse proxy needs bounded timeouts, request IDs, valid TLS and independent upstream checks so 502 failures can be traced.">Healthy بودن Nginx به معنی سالم‌بودن برنامه نیست. Reverse Proxy باید timeout، شناسه درخواست، TLS معتبر و آزمون مستقل upstream داشته باشد تا خطای 502 قابل پیگیری شود.</p></section><section id="enterprise-scenario" class="article-section"><h2 data-fa="سناریوی واقعی Enterprise" data-en="Enterprise Scenario">سناریوی واقعی Enterprise</h2><p data-fa="سناریوی آموزشی با سازمان فرضی «آریا»: برنامه داخلی روی loopback اجرا می‌شود و کاربران فقط به TLS proxy دسترسی دارند. ابتدا یک VM canary و سپس load balancer تغییر می‌کند." data-en="Illustrative scenario at fictional Arya: an internal application listens on loopback and clients reach only the TLS proxy. Changes reach one canary VM before the Load Balancer.">سناریوی آموزشی با سازمان فرضی «آریا»: برنامه داخلی روی loopback اجرا می‌شود و کاربران فقط به TLS proxy دسترسی دارند. ابتدا یک VM canary و سپس load balancer تغییر می‌کند.</p></section><section id="enterprise-prerequisites" class="article-section"><h2 data-fa="پیش‌نیازها" data-en="Prerequisites">پیش‌نیازها</h2><p data-fa="Ubuntu Server 24.04 LTS، Bash 5، systemd؛ package patch را پیش از تغییر با dpkg-query ثبت کنید." data-en="Ubuntu Server 24.04 LTS, Bash 5 and systemd. Record installed package patches with dpkg-query before making changes.">Ubuntu Server 24.04 LTS، Bash 5، systemd؛ package patch را پیش از تغییر با dpkg-query ثبت کنید.</p>
+<p data-fa="سخت‌افزار و ظرفیت: نمونه ۲ vCPU و ۲ GiB RAM؛ worker و file descriptor با load test تعیین شوند. backend آماده روی 127.0.0.1:8080 لازم است." data-en="Example capacity: 2 vCPUs and 2 GiB RAM. Determine worker and file-descriptor settings through load testing. A working backend at 127.0.0.1:8080 is required.">سخت‌افزار و ظرفیت: نمونه ۲ vCPU و ۲ GiB RAM؛ worker و file descriptor با load test تعیین شوند. backend آماده روی 127.0.0.1:8080 لازم است.</p>
+<p data-fa="نرم‌افزار و دسترسی: sudo، nginx، curl و DNS برای app.example.com؛ این نام placeholder است. گواهی و کلید معتبر باید از PKI سازمان در مسیرهای زیر فراهم شوند." data-en="Use sudo, nginx, curl and DNS for the placeholder app.example.com. Provision a valid certificate chain and private key from organizational PKI at the paths below.">نرم‌افزار و دسترسی: sudo، nginx، curl و DNS برای app.example.com؛ این نام placeholder است. گواهی و کلید معتبر باید از PKI سازمان در مسیرهای زیر فراهم شوند.</p></section><section id="enterprise-architecture" class="article-section"><h2 data-fa="Architecture / Design" data-en="Architecture / Design">Architecture / Design</h2><p data-fa="Client → TCP/443 Nginx → HTTP loopback:8080 → Application. در چند میزبان upstream به subnet خصوصی و firewall محدود منتقل شود؛ forwarding header از proxyهای ناشناس پذیرفته نشود." data-en="Client → TCP/443 Nginx → loopback HTTP:8080 → application. For multi-host deployments, move the upstream to a private subnet with restricted Firewall access. Do not trust forwarding headers from arbitrary proxies.">Client → TCP/443 Nginx → HTTP loopback:8080 → Application. در چند میزبان upstream به subnet خصوصی و firewall محدود منتقل شود؛ forwarding header از proxyهای ناشناس پذیرفته نشود.</p></section><section id="enterprise-installation" class="article-section"><h2 data-fa="Installation / Configuration" data-en="Installation / Configuration">Installation / Configuration</h2><p data-fa="ابتدا backend را تست و تنظیم موجود را حفظ کنید. نصب package از repository سیستم انجام می‌شود." data-en="Check the backend first and preserve existing configuration. Install the package from the operating system repository.">ابتدا backend را تست و تنظیم موجود را حفظ کنید. نصب package از repository سیستم انجام می‌شود.</p>
+<pre dir="ltr"><code class="language-bash">sudo apt-get update
+sudo apt-get install -y nginx curl
+nginx -v
+curl --fail --max-time 5 http://127.0.0.1:8080/health
+sudo cp -a /etc/nginx /root/nginx-before-change</code></pre>
+<p data-fa="در موفقیت health باید کد 200 و payload مورد انتظار برنامه بدهد. پیش از نوشتن config گواهی chain و private key را در مسیرهای زیر نصب و مالکیت root/600 برای key اعمال کنید." data-en="The health endpoint must return HTTP 200 and its expected application payload. Before writing configuration, install the certificate chain and private key below; the key must have root ownership and mode 600.">در موفقیت health باید کد 200 و payload مورد انتظار برنامه بدهد. پیش از نوشتن config گواهی chain و private key را در مسیرهای زیر نصب و مالکیت root/600 برای key اعمال کنید.</p>
+<pre dir="ltr"><code class="language-bash">sudo tee /etc/nginx/sites-available/enterprise-app &gt;/dev/null &lt;&lt;&#x27;EOF&#x27;
+server {
+    listen 80;
+    server_name app.example.com;
+    return 301 https://app.example.com$request_uri;
+}
+server {
+    listen 443 ssl;
+    server_name app.example.com;
+    ssl_certificate /etc/nginx/tls/fullchain.pem;
+    ssl_certificate_key /etc/nginx/tls/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Request-ID $request_id;
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 60s;
+    }
+}
+EOF
+sudo ln -s /etc/nginx/sites-available/enterprise-app /etc/nginx/sites-enabled/enterprise-app
+sudo nginx -t
+sudo systemctl reload nginx
+curl --fail --max-time 10 https://app.example.com/health</code></pre>
+<p data-fa="symlink فقط در نخستین نصب ساخته شود؛ اگر موجود است محتوا و مقصدش را بررسی کنید. انتظار nginx -t: syntax is ok و test is successful. در canary، DNS یا --resolve به IP همان VM اشاره کند. اگر default virtual host یا همان server_name از قبل وجود دارد تعارض را پیش از reload رفع کنید." data-en="Create the symlink only on first installation; inspect its existing destination otherwise. nginx -t must report syntax is ok and test is successful. Point canary DNS or --resolve at the canary VM. Resolve existing default-host or server_name conflicts before reloading.">symlink فقط در نخستین نصب ساخته شود؛ اگر موجود است محتوا و مقصدش را بررسی کنید. انتظار nginx -t: syntax is ok و test is successful. در canary، DNS یا --resolve به IP همان VM اشاره کند. اگر default virtual host یا همان server_name از قبل وجود دارد تعارض را پیش از reload رفع کنید.</p></section><section id="enterprise-security" class="article-section"><h2 data-fa="Security Hardening" data-en="Security Hardening">Security Hardening</h2><p data-fa="backend روی public IP bind نشود. key گواهی خواندنی برای کاربر عمومی نباشد. firewall به مسیر مدیریت و 443 محدود شود؛ 80 فقط برای redirect یا ACME لازم است. HSTS ابتدا با max-age کوتاه و بدون includeSubDomains آزمایش شود. rate limit بر اساس مسیر و ترافیک واقعی تنظیم شود، نه عدد کپی‌شده." data-en="Do not bind the backend to a public IP. Protect the private key from ordinary users. Permit management traffic and 443 through the Firewall; port 80 is only needed for redirects or ACME. Trial HSTS with a short max-age and no includeSubDomains. Tune rate limits to paths and measured traffic rather than copied values.">backend روی public IP bind نشود. key گواهی خواندنی برای کاربر عمومی نباشد. firewall به مسیر مدیریت و 443 محدود شود؛ 80 فقط برای redirect یا ACME لازم است. HSTS ابتدا با max-age کوتاه و بدون includeSubDomains آزمایش شود. rate limit بر اساس مسیر و ترافیک واقعی تنظیم شود، نه عدد کپی‌شده.</p></section><section id="enterprise-monitoring" class="article-section"><h2 data-fa="Monitoring" data-en="Monitoring">Monitoring</h2><p data-fa="Prometheus exporter فقط از شبکه monitoring خوانده شود. نرخ 5xx، latency upstream، handshake failure و عمر گواهی پایش شوند. آستانه نمونه 5xx بالاتر از ۱٪ برای ۵ دقیقه به baseline وابسته است. Grafana درخواست کل و درخواست موفق را کنار هم نشان دهد؛ log شامل request ID باشد." data-en="Expose the Prometheus exporter only to monitoring. Track 5xx rate, upstream latency, handshake failures and certificate age. A 5xx rate above 1% for five minutes is an example threshold, subject to baseline. Grafana should show total and successful requests together, with request IDs in logs.">Prometheus exporter فقط از شبکه monitoring خوانده شود. نرخ 5xx، latency upstream، handshake failure و عمر گواهی پایش شوند. آستانه نمونه 5xx بالاتر از ۱٪ برای ۵ دقیقه به baseline وابسته است. Grafana درخواست کل و درخواست موفق را کنار هم نشان دهد؛ log شامل request ID باشد.</p></section><section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="Troubleshooting" data-en="Troubleshooting">Troubleshooting</h2><p data-fa="502: اتصال یا پاسخ نامعتبر upstream؛ 504: timeout؛ 403: permission یا policy. ابتدا upstream مستقیم را امتحان کنید." data-en="502 indicates failed connectivity or an invalid upstream response; 504 indicates a timeout; 403 points to permissions or policy. Test the upstream directly first.">502: اتصال یا پاسخ نامعتبر upstream؛ 504: timeout؛ 403: permission یا policy. ابتدا upstream مستقیم را امتحان کنید.</p>
+<pre dir="ltr"><code class="language-bash">curl --verbose --max-time 5 http://127.0.0.1:8080/health
+sudo ss -lntp
+sudo tail -n 80 /var/log/nginx/error.log
+sudo journalctl -u nginx -n 50 --no-pager
+sudo nginx -T</code></pre>
+<p data-fa="connect() failed با Connection refused نشان‌دهنده listener backend است. permission denied ممکن است از socket یا AppArmor باشد؛ chmod 777 راه‌حل نیست. -T ممکن است اطلاعات حساس config را نمایش دهد؛ فقط در محل امن ثبت کنید." data-en="connect() failed with Connection refused identifies a missing backend listener. permission denied may involve a socket or AppArmor; chmod 777 is not a fix. nginx -T can expose sensitive configuration, so record it only in a protected location.">connect() failed با Connection refused نشان‌دهنده listener backend است. permission denied ممکن است از socket یا AppArmor باشد؛ chmod 777 راه‌حل نیست. -T ممکن است اطلاعات حساس config را نمایش دهد؛ فقط در محل امن ثبت کنید.</p></section><section id="enterprise-recovery" class="article-section"><h2 data-fa="Backup / Recovery" data-en="Backup / Recovery">Backup / Recovery</h2><p data-fa="از /etc/nginx، certificate chain و secret با کنترل دسترسی backup بگیرید؛ محتوای برنامه و database خارج از scope Nginx است. در rollback فایل enterprise-app را با نسخه قبلی جایگزین کنید، nginx -t بگیرید و reload کنید. اگر اولین استقرار است symlink جدید را خارج کنید و تنظیم قبلی را validate کنید. قطع سرویس با stop/start روش عادی rollback نیست." data-en="Back up /etc/nginx and certificate secrets with restricted access. Application data and databases need separate backups. For rollback, restore the previous enterprise-app file, run nginx -t and reload. On first deployment, remove only the new symlink and validate the prior configuration. Stop/start is not the normal rollback mechanism.">از /etc/nginx، certificate chain و secret با کنترل دسترسی backup بگیرید؛ محتوای برنامه و database خارج از scope Nginx است. در rollback فایل enterprise-app را با نسخه قبلی جایگزین کنید، nginx -t بگیرید و reload کنید. اگر اولین استقرار است symlink جدید را خارج کنید و تنظیم قبلی را validate کنید. قطع سرویس با stop/start روش عادی rollback نیست.</p></section><section id="enterprise-practices" class="article-section"><h2 data-fa="Best Practices" data-en="Best Practices">Best Practices</h2><p data-fa="Reload فقط پس از syntax test، آزمون health و معیار مشخص پذیرش انجام شود. تغییر global worker را با limit سرویس و benchmark هماهنگ کنید." data-en="Reload only after syntax checks, health tests and explicit acceptance criteria. Coordinate global worker changes with service limits and benchmark results.">Reload فقط پس از syntax test، آزمون health و معیار مشخص پذیرش انجام شود. تغییر global worker را با limit سرویس و benchmark هماهنگ کنید.</p></section><section id="enterprise-compatibility" class="article-section"><h2 data-fa="نسخه‌های قدیمی و Compatibility" data-en="Legacy Versions and Compatibility">نسخه‌های قدیمی و Compatibility</h2><p data-fa="این نمونه از listen 443 ssl برای سازگاری package Ubuntu استفاده می‌کند؛ syntax HTTP/2 در شاخه‌های Nginx متفاوت است. نمونه قبلی دارای سه‌نقطه، config اجرایی نیست و فقط در بخش تاریخی حفظ شده است." data-en="This example uses listen 443 ssl for Ubuntu-package compatibility. HTTP/2 syntax differs between Nginx branches. The previous ellipsis-based example is not executable configuration and remains only in historical material.">این نمونه از listen 443 ssl برای سازگاری package Ubuntu استفاده می‌کند؛ syntax HTTP/2 در شاخه‌های Nginx متفاوت است. نمونه قبلی دارای سه‌نقطه، config اجرایی نیست و فقط در بخش تاریخی حفظ شده است.</p></section><section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">پرسش‌های متداول</h2><h3 data-fa="آیا nginx -t سلامت برنامه را تأیید می‌کند؟" data-en="Does nginx -t verify application health?">آیا nginx -t سلامت برنامه را تأیید می‌کند؟</h3><p data-fa="خیر؛ فقط config را بررسی می‌کند و health check برنامه جدا لازم است." data-en="No. It validates configuration; application health needs a separate check.">خیر؛ فقط config را بررسی می‌کند و health check برنامه جدا لازم است.</p><h3 data-fa="برای 504 باید timeout را زیاد کرد؟" data-en="Should a 504 be fixed by increasing the timeout?">برای 504 باید timeout را زیاد کرد؟</h3><p data-fa="ابتدا latency و وابستگی‌های upstream را بررسی کنید؛ افزایش timeout می‌تواند صف را بزرگ‌تر کند." data-en="Inspect upstream latency and dependencies first; a longer timeout can increase queueing.">ابتدا latency و وابستگی‌های upstream را بررسی کنید؛ افزایش timeout می‌تواند صف را بزرگ‌تر کند.</p></section><section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">منابع رسمی</h2><ul><li><a href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html" rel="noopener">Nginx: proxy module</a></li><li><a href="https://nginx.org/en/docs/http/configuring_https_servers.html" rel="noopener">Nginx: HTTPS</a></li></ul><p data-fa="تاریخ بررسی منابع: 2026-09-30. اعتبارسنجی عملی روی محیط هدف باید پیش از انتشار تغییر زیرساخت انجام شود." data-en="Sources reviewed: 2026-09-30. Validate procedures on the target environment before deploying infrastructure changes.">تاریخ بررسی منابع: 2026-09-30. اعتبارسنجی عملی روی محیط هدف باید پیش از انتشار تغییر زیرساخت انجام شود.</p></section><details id="legacy-history"><summary data-fa="محتوای نسخه قدیمی — فقط مرجع تاریخی" data-en="Historical edition — retained as originally written">محتوای نسخه قدیمی — فقط مرجع تاریخی</summary><p data-fa="نمونه‌های زیر برای حفظ سابقه هستند؛ دستورالعمل اجرایی، امنیتی و سازگاری نسخه جدید در بخش‌های بالا آمده است." data-en="The following material is retained in its original languages for historical reference. Use the bilingual runbook above for current operations, security and compatibility.">نمونه‌های زیر برای حفظ سابقه هستند؛ دستورالعمل اجرایی، امنیتی و سازگاری نسخه جدید در بخش‌های بالا آمده است.</p>
                 <!-- Introduction -->
-                <section id="introduction" class="article-section">
+                <section id="legacy-introduction" class="article-section">
                   <h2 data-en="Introduction" data-fa="مقدمه">مقدمه</h2>
                   <div class="intro-content">
                     <p
@@ -594,7 +437,7 @@
                 </section>
 
                 <!-- Table of Contents -->
-                <section id="article-toc" class="article-section">
+                <section id="legacy-article-toc" class="article-section">
                   <h2 data-en="Table of Contents" data-fa="فهرست مطالب">
                     فهرست مطالب
                   </h2>
@@ -602,7 +445,7 @@
                     <ul>
                       <li>
                         <a
-                          href="#advantages"
+                          href="#legacy-advantages"
                           data-en="1. Advantages of Nginx over Apache"
                           data-fa="1. مزایای Nginx نسبت به Apache"
                           >1. مزایای Nginx نسبت به Apache</a
@@ -610,7 +453,7 @@
                       </li>
                       <li>
                         <a
-                          href="#prerequisites"
+                          href="#legacy-prerequisites"
                           data-en="2. Prerequisites"
                           data-fa="2. پیش‌نیازها"
                           >2. پیش‌نیازها</a
@@ -618,7 +461,7 @@
                       </li>
                       <li>
                         <a
-                          href="#installation"
+                          href="#legacy-installation"
                           data-en="3. Installing Nginx"
                           data-fa="3. نصب Nginx"
                           >3. نصب Nginx</a
@@ -626,7 +469,7 @@
                       </li>
                       <li>
                         <a
-                          href="#service-management"
+                          href="#legacy-service-management"
                           data-en="4. Service Management"
                           data-fa="4. مدیریت سرویس"
                           >4. مدیریت سرویس</a
@@ -634,7 +477,7 @@
                       </li>
                       <li>
                         <a
-                          href="#virtual-host"
+                          href="#legacy-virtual-host"
                           data-en="5. Virtual Host Configuration"
                           data-fa="5. پیکربندی Virtual Host"
                           >5. پیکربندی Virtual Host</a
@@ -642,7 +485,7 @@
                       </li>
                       <li>
                         <a
-                          href="#ssl-setup"
+                          href="#legacy-ssl-setup"
                           data-en="6. SSL Setup with Let's Encrypt"
                           data-fa="6. راه‌اندازی SSL با Let's Encrypt"
                           >6. راه‌اندازی SSL با Let's Encrypt</a
@@ -650,7 +493,7 @@
                       </li>
                       <li>
                         <a
-                          href="#http2-config"
+                          href="#legacy-http2-config"
                           data-en="7. HTTP/2 Configuration"
                           data-fa="7. پیکربندی HTTP/2"
                           >7. پیکربندی HTTP/2</a
@@ -658,7 +501,7 @@
                       </li>
                       <li>
                         <a
-                          href="#firewall"
+                          href="#legacy-firewall"
                           data-en="8. Firewall Management"
                           data-fa="8. مدیریت فایروال"
                           >8. مدیریت فایروال</a
@@ -666,7 +509,7 @@
                       </li>
                       <li>
                         <a
-                          href="#monitoring"
+                          href="#legacy-monitoring"
                           data-en="9. Logs and Monitoring"
                           data-fa="9. لاگ‌ها و مانیتورینگ"
                           >9. لاگ‌ها و مانیتورینگ</a
@@ -674,7 +517,7 @@
                       </li>
                       <li>
                         <a
-                          href="#optimization"
+                          href="#legacy-optimization"
                           data-en="10. Performance Optimization"
                           data-fa="10. بهینه‌سازی عملکرد"
                           >10. بهینه‌سازی عملکرد</a
@@ -682,7 +525,7 @@
                       </li>
                       <li>
                         <a
-                          href="#faq"
+                          href="#legacy-faq"
                           data-en="11. FAQ"
                           data-fa="11. پرسش‌های متداول"
                           >11. پرسش‌های متداول</a
@@ -693,7 +536,7 @@
                 </section>
 
                 <!-- Advantages -->
-                <section id="advantages" class="article-section">
+                <section id="legacy-advantages" class="article-section">
                   <h2
                     data-en="Advantages of Nginx over Apache"
                     data-fa="مزایای Nginx نسبت به Apache"
@@ -731,7 +574,7 @@
                 </section>
 
                 <!-- Prerequisites -->
-                <section id="prerequisites" class="article-section">
+                <section id="legacy-prerequisites" class="article-section">
                   <h2 data-en="Prerequisites" data-fa="پیش‌نیازها">
                     پیش‌نیازها
                   </h2>
@@ -763,7 +606,7 @@
                 </section>
 
                 <!-- Installation -->
-                <section id="installation" class="article-section">
+                <section id="legacy-installation" class="article-section">
                   <h2 data-en="Installing Nginx" data-fa="نصب Nginx">
                     نصب Nginx
                   </h2>
@@ -777,17 +620,10 @@
                   <div class="article-code">
                     <div class="article-code-header">
                       <span class="article-code-label">Ubuntu Terminal</span>
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        <i class="bi bi-clipboard"></i>
-                      </button>
+
                     </div>
-                    <pre><code class="language-bash">sudo apt update
-sudo apt upgrade -y</code></pre>
+                    <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">sudo apt update
+sudo apt upgrade -y</code></div>
                   </div>
 
                   <p
@@ -800,21 +636,14 @@ sudo apt upgrade -y</code></pre>
                   <div class="article-code">
                     <div class="article-code-header">
                       <span class="article-code-label">Ubuntu Terminal</span>
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        <i class="bi bi-clipboard"></i>
-                      </button>
+
                     </div>
-                    <pre><code class="language-bash">sudo apt install nginx -y</code></pre>
+                    <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">sudo apt install nginx -y</code></div>
                   </div>
                 </section>
 
                 <!-- Configuration -->
-                <section id="configuration" class="article-section">
+                <section id="legacy-configuration" class="article-section">
                   <h2 data-en="Basic Configuration" data-fa="پیکربندی پایه">
                     پیکربندی پایه
                   </h2>
@@ -828,7 +657,7 @@ sudo apt upgrade -y</code></pre>
                 </section>
 
                 <!-- Service Management -->
-                <section id="service-management" class="article-section">
+                <section id="legacy-service-management" class="article-section">
                   <h2 data-en="Service Management" data-fa="مدیریت سرویس Nginx">
                     مدیریت سرویس Nginx
                   </h2>
@@ -842,16 +671,9 @@ sudo apt upgrade -y</code></pre>
                   <div class="article-code">
                     <div class="article-code-header">
                       <span class="article-code-label">Ubuntu Terminal</span>
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        <i class="bi bi-clipboard"></i>
-                      </button>
+
                     </div>
-                    <pre><code class="language-bash">systemctl status nginx</code></pre>
+                    <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">systemctl status nginx</code></div>
                   </div>
 
                   <p
@@ -863,16 +685,9 @@ sudo apt upgrade -y</code></pre>
                   <div class="article-code">
                     <div class="article-code-header">
                       <span class="article-code-label">Ubuntu Terminal</span>
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        <i class="bi bi-clipboard"></i>
-                      </button>
+
                     </div>
-                    <pre><code class="language-bash">sudo systemctl enable nginx</code></pre>
+                    <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">sudo systemctl enable nginx</code></div>
                   </div>
 
                   <p
@@ -884,22 +699,15 @@ sudo apt upgrade -y</code></pre>
                   <div class="article-code">
                     <div class="article-code-header">
                       <span class="article-code-label">Ubuntu Terminal</span>
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        <i class="bi bi-clipboard"></i>
-                      </button>
+
                     </div>
-                    <pre><code class="language-bash">sudo systemctl restart nginx
-sudo systemctl stop nginx</code></pre>
+                    <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">sudo systemctl restart nginx
+sudo systemctl stop nginx</code></div>
                   </div>
                 </section>
 
                 <!-- Virtual Host -->
-                <section id="virtual-host" class="article-section">
+                <section id="legacy-virtual-host" class="article-section">
                   <h2
                     data-en="Virtual Host Configuration"
                     data-fa="ساخت و پیکربندی Virtual Host"
@@ -916,17 +724,10 @@ sudo systemctl stop nginx</code></pre>
                   <div class="article-code">
                     <div class="article-code-header">
                       <span class="article-code-label">Ubuntu Terminal</span>
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        <i class="bi bi-clipboard"></i>
-                      </button>
+
                     </div>
-                    <pre><code class="language-bash">sudo mkdir -p /var/www/example.com/html
-sudo chown -R $USER:$USER /var/www/example.com/html</code></pre>
+                    <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">sudo mkdir -p /var/www/example.com/html
+sudo chown -R $USER:$USER /var/www/example.com/html</code></div>
                   </div>
 
                   <p data-en="Create test file:" data-fa="ایجاد فایل تست:">
@@ -935,16 +736,9 @@ sudo chown -R $USER:$USER /var/www/example.com/html</code></pre>
                   <div class="article-code">
                     <div class="article-code-header">
                       <span class="article-code-label">Ubuntu Terminal</span>
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        <i class="bi bi-clipboard"></i>
-                      </button>
+
                     </div>
-                    <pre><code class="language-bash">echo "&lt;h1&gt;Hello from Nginx on Ubuntu!&lt;/h1&gt;" &gt; /var/www/example.com/html/index.html</code></pre>
+                    <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">echo "&lt;h1&gt;Hello from Nginx on Ubuntu!&lt;/h1&gt;" &gt; /var/www/example.com/html/index.html</code></div>
                   </div>
 
                   <p
@@ -956,16 +750,9 @@ sudo chown -R $USER:$USER /var/www/example.com/html</code></pre>
                   <div class="article-code">
                     <div class="article-code-header">
                       <span class="article-code-label">Ubuntu Terminal</span>
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        <i class="bi bi-clipboard"></i>
-                      </button>
+
                     </div>
-                    <pre><code class="language-bash">sudo nano /etc/nginx/sites-available/example.com</code></pre>
+                    <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">sudo nano /etc/nginx/sites-available/example.com</code></div>
                   </div>
 
                   <p data-en="Content:" data-fa="محتوا:">محتوا:</p>
@@ -974,16 +761,9 @@ sudo chown -R $USER:$USER /var/www/example.com/html</code></pre>
                       <span class="article-code-label"
                         >Nginx Configuration</span
                       >
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        <i class="bi bi-clipboard"></i>
-                      </button>
+
                     </div>
-                    <pre><code>server {
+                    <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code>server {
     listen 80;
     server_name example.com www.example.com;
 
@@ -993,7 +773,7 @@ sudo chown -R $USER:$USER /var/www/example.com/html</code></pre>
     location / {
         try_files $uri $uri/ =404;
     }
-}</code></pre>
+}</code></div>
                   </div>
 
                   <p
@@ -1005,23 +785,16 @@ sudo chown -R $USER:$USER /var/www/example.com/html</code></pre>
                   <div class="article-code">
                     <div class="article-code-header">
                       <span class="article-code-label">Ubuntu Terminal</span>
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        <i class="bi bi-clipboard"></i>
-                      </button>
+
                     </div>
-                    <pre><code>sudo ln -s /etc/nginx/sites-available/example.com /etc/nginx/sites-enabled/
+                    <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code>sudo ln -s /etc/nginx/sites-available/example.com /etc/nginx/sites-enabled/
 sudo nginx -t
-sudo systemctl reload nginx</code></pre>
+sudo systemctl reload nginx</code></div>
                   </div>
                 </section>
 
                 <!-- SSL Setup -->
-                <section id="ssl-setup" class="article-section">
+                <section id="legacy-ssl-setup" class="article-section">
                   <h2
                     data-en="SSL Setup with Let's Encrypt"
                     data-fa="فعال‌سازی SSL با Let's Encrypt"
@@ -1035,17 +808,10 @@ sudo systemctl reload nginx</code></pre>
                   <div class="article-code">
                     <div class="article-code-header">
                       <span class="article-code-label">Ubuntu Terminal</span>
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        <i class="bi bi-clipboard"></i>
-                      </button>
+
                     </div>
-                    <pre><code>sudo apt install certbot python3-certbot-nginx -y
-sudo certbot --nginx -d example.com -d www.example.com</code></pre>
+                    <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code>sudo apt install certbot python3-certbot-nginx -y
+sudo certbot --nginx -d example.com -d www.example.com</code></div>
                   </div>
 
                   <p
@@ -1057,7 +823,7 @@ sudo certbot --nginx -d example.com -d www.example.com</code></pre>
                 </section>
 
                 <!-- HTTP/2 -->
-                <section id="http2-config" class="article-section">
+                <section id="legacy-http2-config" class="article-section">
                   <h2
                     data-en="HTTP/2 Configuration"
                     data-fa="پیکربندی HTTP/2 در Nginx"
@@ -1073,25 +839,18 @@ sudo certbot --nginx -d example.com -d www.example.com</code></pre>
                       <span class="article-code-label"
                         >Nginx Configuration</span
                       >
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        <i class="bi bi-clipboard"></i>
-                      </button>
+
                     </div>
-                    <pre><code>server {
+                    <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code>server {
     listen 443 ssl http2;
     server_name example.com;
     ...
-}</code></pre>
+}</code></div>
                   </div>
                 </section>
 
                 <!-- Firewall -->
-                <section id="firewall" class="article-section">
+                <section id="legacy-firewall" class="article-section">
                   <h2
                     data-en="Firewall Management (UFW)"
                     data-fa="مدیریت فایروال (UFW)"
@@ -1102,22 +861,15 @@ sudo certbot --nginx -d example.com -d www.example.com</code></pre>
                   <div class="article-code">
                     <div class="article-code-header">
                       <span class="article-code-label">Ubuntu Terminal</span>
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        <i class="bi bi-clipboard"></i>
-                      </button>
+
                     </div>
-                    <pre><code>sudo ufw allow 'Nginx Full'
-sudo ufw enable</code></pre>
+                    <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code>sudo ufw allow 'Nginx Full'
+sudo ufw enable</code></div>
                   </div>
                 </section>
 
                 <!-- Monitoring -->
-                <section id="monitoring" class="article-section">
+                <section id="legacy-monitoring" class="article-section">
                   <h2
                     data-en="Logs and Monitoring"
                     data-fa="لاگ‌ها و مانیتورینگ"
@@ -1144,21 +896,14 @@ sudo ufw enable</code></pre>
                   <div class="article-code">
                     <div class="article-code-header">
                       <span class="article-code-label">Ubuntu Terminal</span>
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        <i class="bi bi-clipboard"></i>
-                      </button>
+
                     </div>
-                    <pre><code>tail -f /var/log/nginx/access.log</code></pre>
+                    <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code>tail -f /var/log/nginx/access.log</code></div>
                   </div>
                 </section>
 
                 <!-- Performance Optimization -->
-                <section id="optimization" class="article-section">
+                <section id="legacy-optimization" class="article-section">
                   <h2
                     data-en="Performance Optimization"
                     data-fa="بهینه‌سازی Performance در Nginx"
@@ -1177,19 +922,12 @@ sudo ufw enable</code></pre>
                       <span class="article-code-label"
                         >Nginx Configuration</span
                       >
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        <i class="bi bi-clipboard"></i>
-                      </button>
+
                     </div>
-                    <pre><code>worker_processes auto;
+                    <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code>worker_processes auto;
 events {
     worker_connections 1024;
-}</code></pre>
+}</code></div>
                   </div>
 
                   <p data-en="Enable Gzip:" data-fa="فعال‌سازی Gzip:">
@@ -1200,22 +938,15 @@ events {
                       <span class="article-code-label"
                         >Nginx Configuration</span
                       >
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        <i class="bi bi-clipboard"></i>
-                      </button>
+
                     </div>
-                    <pre><code>gzip on;
-gzip_types text/plain text/css application/json application/javascript application/xml+rss;</code></pre>
+                    <div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code>gzip on;
+gzip_types text/plain text/css application/json application/javascript application/xml+rss;</code></div>
                   </div>
                 </section>
 
                 <!-- Conclusion -->
-                <section id="conclusion" class="article-section">
+                <section id="legacy-conclusion" class="article-section">
                   <h2 data-en="Conclusion" data-fa="نتیجه‌گیری">نتیجه‌گیری</h2>
                   <p
                     data-en="Nginx is not only a fast web server but also a comprehensive tool for managing web traffic and increasing security. By installing SSL, enabling HTTP/2 and optimizing parameters, you can provide a professional experience for your users."
@@ -1229,7 +960,7 @@ gzip_types text/plain text/css application/json application/javascript applicati
                 </section>
 
                 <!-- FAQ -->
-                <section id="faq" class="article-section">
+                <section id="legacy-faq" class="article-section">
                   <h2
                     data-en="Frequently Asked Questions"
                     data-fa="پرسش‌های متداول"
@@ -1321,7 +1052,7 @@ gzip_types text/plain text/css application/json application/javascript applicati
 
                 <footer class="article-footer" aria-label="Article footer">
                   <section
-                    id="author"
+                    id="legacy-author"
                     class="article-author"
                     role="complementary"
                     aria-labelledby="author-title"
@@ -1339,7 +1070,7 @@ gzip_types text/plain text/css application/json application/javascript applicati
                       <div class="article-author-content">
                         <p
                           class="article-author-kicker"
-                          id="author-title"
+                          id="legacy-author-title"
                           data-en="About the author"
                           data-fa="درباره نویسنده"
                         >
@@ -1410,7 +1141,7 @@ gzip_types text/plain text/css application/json application/javascript applicati
                     >
                   </nav>
                 </footer>
-              </article>
+              </details></div></article>
             </div>
           </div>
         </div>

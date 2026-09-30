@@ -1,0 +1,167 @@
+Automated SQL Server Backups: From Agent Jobs to Service Recovery
+When Jira’s database is unavailable, ticket history, workflows and project records are at risk. A healthy Confluence web service is also insufficient if database and attachments are inconsistent. Treat backups as part of service recovery design, with ownership, schedules, storage and practical tests.
+Manual backups suit individual changes but depend on an operator. Automation reduces that dependency only when job failures and each database’s backup freshness are monitored. A .bak extension or green job does not prove recoverability.
+RPO defines acceptable data loss: a fifteen-minute target permits at most fifteen minutes of changes. RTO covers the entire service restoration, including provisioning, retrieval, restore, validation and application startup. Agree these targets with the service owner before setting schedules.
+Deletion, storage failure, ransomware and failed schema changes can cause irrecoverable loss without a backup strategy. VM snapshots and replicas do not replace recovery history: destructive changes can reach replicas too.
+Backup Strategy for Jira and Confluence
+Assume DB-Jira and DB-Confluence run on a standalone SQL Server. Target roughly fifteen-minute RPO and an initial sixty-minute RTO. Actual restore measurements must validate RTO; database size, network throughput and log count influence it.
+Type
+Schedule
+Purpose
+Full Backup
+Daily at 01:00
+Recovery base and differential baseline
+Differential Backup
+07:00, 13:00 and 19:00
+Changes since the last ordinary full; less restore work
+Transaction Log Backup
+Every fifteen minutes, around the clock
+Changes between data backups and point-in-time recovery
+Retention and Cleanup
+Thirty-day window; daily cleanup at 05:00
+Remove expired files while preserving the chain required throughout the window
+A differential is cumulative from its base full, not from the previous differential. Restore the compatible full, latest appropriate differential and required logs in LSN order. For a 14:10 incident, review the 01:00 full, 13:00 differential and subsequent logs. The recoverable endpoint depends on the last healthy log and, where possible, a tail-log backup rather than the incident clock time alone.
+A fifteen-minute schedule does not guarantee RPO: runtime, failure, delayed secondary copies and missing logs affect actual loss. SQL Server permits full and log backups concurrently. This procedure coordinates full/differential per database without making log backups wait behind a long full.
+Schedules use the SQL server’s local clock; filenames and audit use UTC. Record NTP/timezone in the runbook. Jira/Confluence also require coordinated Application Home, Shared Home, attachments and configuration according to their installed-version guidance.
+Prerequisites and Implementation Scope
+This scenario uses standalone SQL Server 2019/2022 on Windows with Standard, Enterprise or Developer. Developer is nonproduction only. Express lacks SQL Server Agent and requires a separately designed scheduler such as Windows Task Scheduler.
+Agent must be running with an appropriate startup setting. This implementation does not target Azure SQL Database, Availability Groups or UNC storage. AG deployments require separate replica-policy and SQL-version assessment.
+The Database Engine service identity writes backups. A CmdExec proxy creates folders and performs cleanup. Permissions for one identity do not substitute for the other.
+Grant the engine required reads/writes on dedicated backup paths and the proxy folder-creation/file-deletion rights. Avoid Everyone and broad grants. Restrict the script directory to proxy Read/Execute and DBA/system-administrator modifications.
+PowerShell uses Windows PowerShell 5.1 and built-in SqlClient; the SqlServer module is unnecessary. Integrated Security, TLS encryption and certificate validation are enabled. Replace localhost with an instance/FQDN matching a trusted certificate; do not toggle TrustServerCertificate to conceal trust errors.
+The eight whitelist names are examples. Disable absent databases before testing; the procedure does not silently skip them. System databases are rejected: protect master, model and msdb separately. tempdb cannot be backed up.
+COMPRESSION reduces backup size and IO at a CPU cost. Measure duration and CPU before enabling it during busy periods and check edition/version support.
+SQL Server Recovery Models: SIMPLE, FULL and BULK_LOGGED
+Model
+Log Backup
+Recovery Scope
+SIMPLE
+Not supported
+Existing full/differential only; no arbitrary point-in-time recovery
+FULL
+Required for this policy
+Point-in-time recovery with an intact log chain
+BULK_LOGGED
+Supported
+Cannot stop within a log containing minimally logged operations
+SIMPLE still logs transactions. Its inactive log can be reused after checkpoint when no blocker remains, and it does not preserve a transaction-log backup chain. BACKUP LOG is therefore unavailable. FULL is selected for these Jira/Confluence databases because changes between data backups must be recoverable.
+After SIMPLE changes to FULL or BULK_LOGGED, a valid full or differential data backup must establish the log chain. This runbook takes a fresh ordinary full for an explicit differential/recovery baseline. This is not a requirement to take full after every model change: FULL-to-BULK_LOGGED transitions do not break the chain like SIMPLE. Take a log backup before leaving FULL/BULK_LOGGED; returning from SIMPLE requires a new chain.
+These commands deliberately change only the two scenario databases. Decide the other whitelist members’ models separately. BULK_LOGGED is not a permanent log-size fix; accept its recovery limitations before bulk operations.
+Backup Folder Layout and Database Separation
+Per-database paths simplify restore selection, capacity checks and cleanup audit. Full/differential use .bak; logs use .trn. Names include database, type, UTC milliseconds and GUID, preventing manual runs/retries from overwriting earlier files.
+D: is only an example path. Different drive letters do not establish independent storage. Shared disks/LUNs still create a common failure point. Give multiple instances separate roots and management databases to avoid mixed audit/files.
+Multi-Database Backup Procedure with Whitelist and Audit
+This file creates DBAOperations, the whitelist, audit table and stored procedure. It selects explicit requested names rather than all server databases. COMPRESSION/CHECKSUM are always enabled. TRY/CATCH records each database failure, attempts remaining members and fails the step if any attempt fails.
+The procedure validates paths and rejects system databases, snapshots, offline databases and AG members. LOG on SIMPLE is an error. A PowerShell step creates folders without xp_cmdshell/xp_create_subdir. The T-SQL job runs as a trusted DBA identity with backup/VERIFYONLY rights; a more restricted design requires module signing and permission tests.
+Review the Database List Before Execution
+Compare names with sys.databases first. Disable STLA if it is absent rather than hiding a typo by selecting every database. Disabling a member does not automatically terminate retention; remaining archive/deletion needs a separate decision.
+Create Backup Folders with PowerShell
+Save this as C:/DBA/Prepare-SqlBackupFolders.ps1. It reads active whitelist members and creates FULL, DIFF and LOG directories. Invalid Windows names and reparse-point paths such as junctions are rejected.
+Create a Windows credential and SQLBackupFiles proxy under Agent → Proxies → Operating System (CmdExec). The proxy needs DBAOperations connectivity, SELECT on BackupWhitelist/BackupAudit and appropriate filesystem permissions. Enter the credential password in the secure credential interface, never the article script or job. Authorize the job owner to use this proxy.
+Provision folders before the first full. PowerShell does not grant the engine’s NTFS rights; provision them separately. Calling the procedure without prepared folders can cause path errors.
+Create SQL Server Agent Jobs, Steps and Schedules
+In SSMS, open SQL Server Agent → Jobs → New Job. Use a clear name such as MeetAJ - SQL FULL and a trusted owner.
+Create the first step as Operating system (CmdExec), Run as SQLBackupFiles, running Prepare-SqlBackupFolders.ps1. Success advances to the next step; failure quits with failure.
+Create the second step as Transact-SQL in DBAOperations. Use EXEC dbo.usp_BackupWhitelist @BackupType='FULL'; the other jobs use DIFF and LOG. Success quits successfully; failure quits with failure.
+Schedule FULL daily at 01:00. Schedule DIFF every six hours from 07:00 through 19:00: exactly 07:00, 13:00 and 19:00. Schedule LOG every fifteen minutes from 00:00 through 23:59:59.
+Keep jobs disabled initially. Run preparation/FULL manually, then test DIFF/LOG. Use Start Job at Step. A disabled schedule does not prevent manual starts.
+Inspect each step in View History and compare BackupAudit, files and msdb.backupset. Overall job status is insufficient.
+The equivalent script creates three disabled jobs/schedules without overwriting existing jobs. Adjust ServerInstance in the preparation step for named instances/certificate names. Configure Database Mail before replacing @Operator with an actual operator.
+Job starts are asynchronous. Starting them consecutively does not ensure FULL finishes before DIFF. Run each separately and observe completion in History. Interrupted sessions/Agent outages can leave RUNNING audit records; do not read these as success.
+Thirty-Day Cleanup Without Breaking the Backup Chain
+Deleting every file older than thirty days cannot guarantee the entire thirty-day recovery window. The base full and early required logs may precede the boundary. Deleting them invalidates part of the promised window.
+Cleanup protects each database’s latest verified full before the retention boundary and all full/differential/log files since its start. It deletes only older files with valid extensions, whitelist-conforming paths and successful audit history. Extra hours or days may remain after failed full backups; this preserves recovery. Without a trustworthy base, nothing is deleted for that database.
+Save as C:/DBA/Cleanup-SqlBackups.ps1. Preview is the default. Unknown, incomplete or FAILED files are not automatically removed; investigate/manage them separately. This job does not purge audit or msdb history.
+Run cleanup only against this instance’s dedicated root. Other identities must not swap paths into junctions or remove the protected base concurrently. Filesystem presence is checked, but base integrity/LSN continuity still requires chain checks and restore tests.
+After reviewing preview and policy, enable cleanup in SSMS. 05:00 is an example: change it if FULL/off-site transfer is incomplete and add transfer acceptance to the runbook. Maintenance Cleanup Task deletes by age/extension without preserving dependencies automatically; this scenario uses audit-based cleanup.
+Validation: History, VERIFYONLY and Backup Freshness
+Check Agent step history, per-database BackupAudit and SQL Server msdb.backupset. This query reports missing backups as NULL rather than omitting unprotected databases.
+CHECKSUM improves error detection during page reads/backup writes. VERIFYONLY WITH CHECKSUM checks readability and existing checksums, but does not restore the database or establish logical integrity, application compatibility or RTO.
+Restore Testing on an Isolated Instance
+Prepare an isolated instance with adequate storage; use destination names/paths distinct from production.
+Inspect backup type, DatabaseBackupLSN and FirstLSN/LastLSN with HEADERONLY. Read logical names using FILELISTONLY.
+Restore FULL using MOVE to test paths and NORECOVERY. Apply the latest compatible DIFF and required logs in order with NORECOVERY.
+For point-in-time recovery, apply STOPAT in the appropriate log step, finish with RECOVERY and run DBCC CHECKDB.
+Start test Jira/Confluence with matching Home/attachments. Record total recovery time and last-data difference against RPO/RTO.
+Do not copy REPLACE or production paths as a generic restore command. Select actual generated backups and their logical filenames. Last month’s successful test does not prove today’s chain is recoverable.
+SQL Server Backup Job Troubleshooting
+Symptom
+Diagnosis
+Correction
+No log backup
+Recovery model, initial data backup after SIMPLE, LOG job and audit ErrorMessage
+Select FULL for the intended database, take the initial data backup and manually test LOG; inspect Agent History.
+Error 4214
+The backup chain has not been established
+Prepare folders and take an ordinary full; ALTER DATABASE alone is insufficient.
+Error 3201 / OS error 5
+Engine service access to the root/database directory
+Correct NTFS/share rights for the actual identity; the SSMS user does not write backup files.
+OS error 3
+Root/FULL/DIFF/LOG existence and preparation-step result
+Run Prepare as the same proxy; inspect the SQL server’s paths, not the DBA workstation.
+Job never ran
+Agent state, job/schedule enabled flags, server time and starting step
+Correct service/schedule configuration and detect missing executions with freshness monitoring.
+Low disk / error 112
+Full size, differential/log growth, off-site transfer and cleanup
+Increase capacity or revise policy. Do not delete required logs to free space.
+FULL succeeds but DIFF fails
+Ordinary full base, model changes and full backups outside this pipeline
+Take a new ordinary full and review the chain. COPY_ONLY does not create a differential base.
+CHECKSUM or VERIFYONLY failure
+Exact error, IO/storage and incomplete/modified files
+Quarantine the file, locate an alternative healthy chain and investigate database/storage health. Do not enable CONTINUE_AFTER_ERROR just to make the job green.
+Growing transaction log
+log_reuse_wait_desc, log backups, long transactions, replicas or replication
+Resolve the retention cause; daily shrink/SIMPLE switching is not a substitute.
+PowerShell cannot connect to SQL
+Proxy login, table rights, FQDN and TLS certificate/trust chain
+Correct identity/certificates; do not embed SQL passwords in jobs.
+Job failed but some files exist
+Per-database audit
+The procedure attempts every member before reporting failure. Investigate the failed database/step. Failed-verification files may remain on disk.
+Backup Encryption and Certificate Custody
+Backups contain readable organizational data and need protection at rest/in transit. @EncryptionCertificate adds AES_256 using a master certificate. Provision the database master key/certificate under organizational key policy, then export the certificate/private key to protected storage separate from backup files. Without required keys, replacement-server restore fails.
+Encryption defaults off to simplify testing. Before production, provision a certificate and add the parameter to all three jobs. TDE, backup encryption and storage encryption serve different purposes. Periodically test key access/import and do not leave keys only beside disposable backups.
+Enterprise SQL Server Backup Practices
+Independent/off-site storage: retain local copies for speed and a second independent location. Keep at least one offline/immutable copy with separate identity so a compromised account cannot erase every version.
+Restore drills: regularly test restore and point-in-time recovery for critical services; record results, duration and corrective-action ownership.
+Monitoring: check failures, missing/late backups per whitelist member, stale RUNNING records, free space, duration and off-site transfer. The validation example uses a twenty-minute log threshold; align it to your RPO.
+Alert delivery: configure approved Database Mail, select it in Agent Properties → Alert System and create an operator. Enable failure email and test a controlled failure. Cleanup needs separate notification; independent monitoring must detect Agent itself stopping.
+One chain owner: an ordinary full outside this pipeline can change the differential base. Use COPY_ONLY for ad hoc copies and coordinate other backup tools’ deletion/restore policies.
+System databases and keys: this job excludes master/model/msdb/tempdb. Protect master/model/msdb, logins, jobs, certificates and runbooks separately. Management audit also needs its own retention/backup.
+Capacity/performance: measure full size, differential growth and log generation. VERIFYONLY reads the entire file and adds IO. It may run in a separate validation job for large databases, provided Verified state and cleanup remain coordinated.
+Change control: record whitelist additions, model/root changes and shorter retention. New databases have no coverage until explicitly added.
+Acceptance Depends on Reliable Restore
+Daily FULL, three DIFFs and fifteen-minute LOGs provide this scenario’s starting schedule. Explicit whitelisting, per-database failure records, chain-aware cleanup, independent copies and restore tests make it operationally useful. Validate names, permissions, certificates, capacity and test recovery before enabling schedules; report measured RPO/RTO to the service owner.
+SQL Server Automated Backup FAQ
+Why is log backup unavailable in SIMPLE?
+SIMPLE reuses inactive transaction log after checkpoint when no blocker exists and does not maintain a backup log chain. LOG needs FULL/BULK_LOGGED and an initial data backup.
+What follows a SIMPLE-to-FULL change?
+Take a valid full/differential to establish the log chain. This scenario selects a fresh ordinary full, then schedules LOG. The same requirement does not apply identically to every model transition.
+Does a differential store changes since the previous differential?
+No. It covers changes since its ordinary full base. Restore the compatible full, latest appropriate differential and required logs in sequence.
+Does VERIFYONLY replace a restore test?
+No. It checks readability and existing checksums without restoring the database. CHECKDB, application validation and measured RTO remain necessary.
+Why are some files older than thirty days retained?
+The full before the retention boundary and its subsequent backups may be required for the entire window. Cleanup preserves these dependencies rather than deleting the base/required logs solely by age.
+Which identities need backup-folder access?
+The engine service writes/reads backups. A CmdExec proxy creates folders and performs cleanup here. Both require appropriate rights on the dedicated paths.
+Does this job back up master, model, msdb or tempdb?
+No. System databases are rejected even if whitelisted. Use separate jobs for master/model/msdb; tempdb cannot be backed up.
+Does Agent alone provide complete Jira/Confluence backups?
+No. Back up Home, Shared Home, attachments and configuration with installed-version-compatible procedures. Independent off-site copies and application startup after restore are also required.
+Official Sources and Publication Metadata
+Microsoft: Backup overview
+Microsoft: BACKUP Transact-SQL
+Microsoft: Backup CHECKSUM and service permissions
+Microsoft: Restore and Recovery
+Meta Title: Automated SQL Server Backup: Enterprise Agent Runbook | Meet AJ
+Meta Description: SQL Server backups for Jira and Confluence: FULL, DIFF, LOG, explicit whitelists, thirty-day chain-aware retention, encryption, monitoring and restore tests.
+Retained base URL: https://meetaj.ir/articles/sql-server-automatic-backup-job; English uses the same path with ?lang=en.
+FAQ Schema uses these visible questions. Structured data does not guarantee a search rich result.
+About the author
+AmirHossein Jalalian
+Infrastructure & DevOps Engineer
+Delivering reliable, secure, and scalable IT solutions for your business success.

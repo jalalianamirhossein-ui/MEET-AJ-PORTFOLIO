@@ -1,23 +1,20 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="fa" dir="rtl" data-article-language="fa">
   <head>
-    <title>Windows Hardware info: CMD vs DxDiag | Meet AJ</title>
+    <title>Inventory سازمانی Windows: CIM، ظرفیت و محدودیت DxDiag | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Comprehensive guide to checking system specs using CMD and DxDiag"
-    />
+    <meta name="description" content="جمع‌آوری Inventory سخت‌افزار Windows با CIM و Storage، خروجی JSON زمان‌دار، تطبیق CMDB و تشخیص محدودیت DxDiag و RAID." />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <link
       rel="canonical"
-      href="https://meetaj.ir/articles/windows-hardware-info-cmd-vs-dxdiag.html"
+      href="https://meetaj.ir/articles/windows-hardware-info-cmd-vs-dxdiag"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Windows Hardware info: CMD vs DxDiag | Meet AJ" />
-    <meta property="og:description" content="Comprehensive guide to checking system specs using CMD and DxDiag" />
-    <meta property="og:url" content="https://meetaj.ir/articles/windows-hardware-info-cmd-vs-dxdiag.html" />
+    <meta property="og:title" content="Inventory سازمانی Windows: CIM، ظرفیت و محدودیت DxDiag" />
+    <meta property="og:description" content="جمع‌آوری Inventory سخت‌افزار Windows با CIM و Storage، خروجی JSON زمان‌دار، تطبیق CMDB و تشخیص محدودیت DxDiag و RAID." />
+    <meta property="og:url" content="https://meetaj.ir/articles/windows-hardware-info-cmd-vs-dxdiag" />
     <meta property="og:site_name" content="Meet AJ" />
     <meta name="twitter:card" content="summary" />
     <link href="../assets/img/favicon.png" rel="icon" />
@@ -54,7 +51,15 @@
       rel="stylesheet"
       disabled
     />
-  </head>
+  <meta name="keywords" content="Inventory سازمانی Windows: CIM، ظرفیت و محدودیت DxDiag, مدیریت زیرساخت, عیب‌یابی, امنیت سرویس, بازیابی, windows hardware info cmd vs dxdiag" />
+<meta name="article:content-language" content="fa" />
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Inventory سازمانی Windows: CIM، ظرفیت و محدودیت DxDiag", "description": "جمع‌آوری Inventory سخت‌افزار Windows با CIM و Storage، خروجی JSON زمان‌دار، تطبیق CMDB و تشخیص محدودیت DxDiag و RAID.", "inLanguage": "fa", "url": "https://meetaj.ir/articles/windows-hardware-info-cmd-vs-dxdiag", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "آیا DxDiag ابزار مناسب همه سرورهاست؟", "acceptedAnswer": {"@type": "Answer", "text": "خیر؛ برای گرافیک و DirectX است و روی Server Core ممکن است موجود نباشد."}}, {"@type": "Question", "name": "آیا HealthStatus سالم سلامت RAID را تضمین می‌کند؟", "acceptedAnswer": {"@type": "Answer", "text": "خیر؛ telemetry کنترلر و ابزار vendor نیز باید بررسی شوند."}}]}</script>
+<link rel="alternate" hreflang="fa" href="https://meetaj.ir/articles/windows-hardware-info-cmd-vs-dxdiag" />
+<link rel="alternate" hreflang="en" href="https://meetaj.ir/articles/windows-hardware-info-cmd-vs-dxdiag?lang=en" />
+<link rel="alternate" hreflang="x-default" href="https://meetaj.ir/articles/windows-hardware-info-cmd-vs-dxdiag" />
+<script id="article-localizations" type="application/json">{"fa": {"title": "Inventory سازمانی Windows: CIM، ظرفیت و محدودیت DxDiag", "meta_title": "Inventory سازمانی Windows: CIM، ظرفیت و محدودیت DxDiag | Meet AJ", "description": "جمع‌آوری Inventory سخت‌افزار Windows با CIM و Storage، خروجی JSON زمان‌دار، تطبیق CMDB و تشخیص محدودیت DxDiag و RAID.", "keywords": ["Inventory سازمانی Windows: CIM، ظرفیت و محدودیت DxDiag", "مدیریت زیرساخت", "عیب‌یابی", "امنیت سرویس", "بازیابی", "windows hardware info cmd vs dxdiag"], "faq": [["آیا DxDiag ابزار مناسب همه سرورهاست؟", "خیر؛ برای گرافیک و DirectX است و روی Server Core ممکن است موجود نباشد."], ["آیا HealthStatus سالم سلامت RAID را تضمین می‌کند؟", "خیر؛ telemetry کنترلر و ابزار vendor نیز باید بررسی شوند."]]}, "en": {"title": "Windows Hardware Inventory: CIM, Storage Providers and DxDiag Scope", "meta_title": "Windows Hardware Inventory: CIM, Storage Providers and DxDiag Scope | Meet AJ", "description": "Collect timestamped Windows inventory, distinguish VM abstractions from physical hardware and validate capacity against CMDB and vendor telemetry.", "keywords": ["Windows Hardware Inventory", "windows hardware info cmd vs dxdiag", "enterprise infrastructure", "production operations", "troubleshooting"], "faq": [["Is DxDiag appropriate for every server?", "No. It targets graphics/DirectX and may be absent on Server Core."], ["Does Healthy HealthStatus guarantee RAID health?", "No. Inspect controller telemetry and vendor tools as well."]]}}</script>
+</head>
   <body class="article-page theme-microsoft">
     <button
       id="menu-toggle"
@@ -203,90 +208,20 @@
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
-          <li class="article-nav-item">
-            <a href="#overview"
-              ><i class="bi bi-info-circle navicon" aria-hidden="true"></i
-              ><span data-en="Introduction" data-fa="مقدمه">Introduction</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#article-status"
-              ><i class="bi bi-clipboard-check navicon" aria-hidden="true"></i
-              ><span data-en="Prerequisites" data-fa="پیش‌نیازها">Prerequisites</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#planned-sections"
-              ><i class="bi bi-pc-display navicon" aria-hidden="true"></i
-              ><span data-en="System information" data-fa="۰۱ — اطلاعات کلی سیستم">System information</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#ram"
-              ><i class="bi bi-memory navicon" aria-hidden="true"></i
-              ><span data-en="RAM" data-fa="۰۳ — مشاهده RAM">RAM</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#motherboard-bios"
-              ><i class="bi bi-cpu navicon" aria-hidden="true"></i
-              ><span data-en="Motherboard and BIOS" data-fa="۰۴ — مادربرد و BIOS">Motherboard and BIOS</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#disk"
-              ><i class="bi bi-device-hdd navicon" aria-hidden="true"></i
-              ><span data-en="Disk information" data-fa="۰۵ — اطلاعات Disk">Disk information</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#graphics"
-              ><i class="bi bi-pc-display navicon" aria-hidden="true"></i
-              ><span data-en="Graphics" data-fa="۰۶ — کارت گرافیک">Graphics</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#dxdiag"
-              ><i class="bi bi-tools navicon" aria-hidden="true"></i
-              ><span data-en="DxDiag" data-fa="۰۷ — استفاده از DxDiag">DxDiag</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#system-information"
-              ><i class="bi bi-file-earmark-code navicon" aria-hidden="true"></i
-              ><span data-en="System Information" data-fa="۰۸ — System Information">System Information</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#best-practices"
-              ><i class="bi bi-check2-square navicon" aria-hidden="true"></i
-              ><span data-en="Best Practices" data-fa="بهترین روش‌ها">Best Practices</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#troubleshooting"
-              ><i class="bi bi-wrench-adjustable navicon" aria-hidden="true"></i
-              ><span data-en="Troubleshooting" data-fa="رفع اشکال">Troubleshooting</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#faq"
-              ><i class="bi bi-question-circle navicon" aria-hidden="true"></i
-              ><span data-en="Frequently Asked Questions" data-fa="سوالات متداول">Frequently Asked Questions</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#conclusion"
-              ><i class="bi bi-flag navicon" aria-hidden="true"></i
-              ><span data-en="Conclusion" data-fa="جمع‌بندی">Conclusion</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#official-resources"
-              ><i class="bi bi-book navicon" aria-hidden="true"></i
-              ><span data-en="Official resources" data-fa="منابع رسمی">Official resources</span></a
-            >
-          </li>
+          <li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="مقدمه" data-en="Introduction">مقدمه</span></a></li><li class="article-nav-item"><a href="#enterprise-scenario"><span data-fa="سناریوی واقعی Enterprise" data-en="Enterprise Scenario">سناریوی واقعی Enterprise</span></a></li><li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="پیش‌نیازها" data-en="Prerequisites">پیش‌نیازها</span></a></li><li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="Architecture / Design" data-en="Architecture / Design">Architecture / Design</span></a></li><li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="Installation / Configuration" data-en="Installation / Configuration">Installation / Configuration</span></a></li><li class="article-nav-item"><a href="#enterprise-security"><span data-fa="Security Hardening" data-en="Security Hardening">Security Hardening</span></a></li><li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="Monitoring" data-en="Monitoring">Monitoring</span></a></li><li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="Troubleshooting" data-en="Troubleshooting">Troubleshooting</span></a></li><li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="Backup / Recovery" data-en="Backup / Recovery">Backup / Recovery</span></a></li><li class="article-nav-item"><a href="#enterprise-practices"><span data-fa="Best Practices" data-en="Best Practices">Best Practices</span></a></li><li class="article-nav-item"><a href="#enterprise-compatibility"><span data-fa="نسخه‌های قدیمی و Compatibility" data-en="Legacy Versions and Compatibility">نسخه‌های قدیمی و Compatibility</span></a></li><li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">پرسش‌های متداول</span></a></li><li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">منابع رسمی</span></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
         </ul>
       </nav>
       <button
@@ -315,18 +250,14 @@
               </div>
               <h1
                 class="article-title hero-title"
-                data-en="View Windows Hardware Specifications with CMD and DxDiag"
-                data-fa="مشاهده مشخصات سخت‌افزاری ویندوز با CMD و DxDiag"
-              >
-                View Windows Hardware Specifications with CMD and DxDiag
-              </h1>
+
+
+               data-fa="Inventory سازمانی Windows: CIM، ظرفیت و محدودیت DxDiag" data-en="Windows Hardware Inventory: CIM, Storage Providers and DxDiag Scope">Inventory سازمانی Windows: CIM، ظرفیت و محدودیت DxDiag</h1>
               <p
                 class="article-excerpt hero-subtitle"
-                data-en="Check the CPU, RAM, BIOS, motherboard, graphics adapter, and system information in Windows"
-                data-fa="بررسی CPU، RAM، BIOS، مادربرد، کارت گرافیک و اطلاعات سیستم در Windows"
-              >
-                Check the CPU, RAM, BIOS, motherboard, graphics adapter, and system information in Windows
-              </p>
+
+
+               data-fa="جمع‌آوری Inventory سخت‌افزار Windows با CIM و Storage، خروجی JSON زمان‌دار، تطبیق CMDB و تشخیص محدودیت DxDiag و RAID." data-en="Collect timestamped Windows inventory, distinguish VM abstractions from physical hardware and validate capacity against CMDB and vendor telemetry.">جمع‌آوری Inventory سخت‌افزار Windows با CIM و Storage، خروجی JSON زمان‌دار، تطبیق CMDB و تشخیص محدودیت DxDiag و RAID.</p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -375,72 +306,91 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body">
-                <section id="overview" class="article-section">
+              <nav class="article-translations" aria-label="Article language"><a lang="fa" hreflang="fa" href="https://meetaj.ir/articles/windows-hardware-info-cmd-vs-dxdiag">فارسی</a> · <a lang="en" hreflang="en" href="https://meetaj.ir/articles/windows-hardware-info-cmd-vs-dxdiag?lang=en">English</a></nav>
+<article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="fa" dir="rtl"><section id="enterprise-intro" class="article-section"><h2 data-fa="مقدمه" data-en="Introduction">مقدمه</h2><p data-fa="خروجی screenshot برای تصمیم ظرفیت کافی نیست. Inventory باید قابل مقایسه، timestampدار و با تمایز سخت‌افزار فیزیکی و VM جمع‌آوری شود." data-en="A screenshot is insufficient for capacity decisions. Collect comparable, timestamped inventory and distinguish physical hardware from virtual-machine representations.">خروجی screenshot برای تصمیم ظرفیت کافی نیست. Inventory باید قابل مقایسه، timestampدار و با تمایز سخت‌افزار فیزیکی و VM جمع‌آوری شود.</p></section><section id="enterprise-scenario" class="article-section"><h2 data-fa="سناریوی واقعی Enterprise" data-en="Enterprise Scenario">سناریوی واقعی Enterprise</h2><p data-fa="سناریوی آموزشی با سازمان فرضی «آریا»: قبل از ارتقای fleet، مدل BIOS، core و RAM سرورها با inventory سازمان مقایسه می‌شود. serial موجود در VM الزاماً serial chassis نیست." data-en="Illustrative scenario at fictional Arya: before a fleet upgrade, operations compares BIOS, cores and RAM with organizational inventory. A VM serial number need not identify the physical chassis.">سناریوی آموزشی با سازمان فرضی «آریا»: قبل از ارتقای fleet، مدل BIOS، core و RAM سرورها با inventory سازمان مقایسه می‌شود. serial موجود در VM الزاماً serial chassis نیست.</p></section><section id="enterprise-prerequisites" class="article-section"><h2 data-fa="پیش‌نیازها" data-en="Prerequisites">پیش‌نیازها</h2><p data-fa="Windows Server 2022/2025 یا Windows 11، Windows PowerShell 5.1 x64؛ برای cmdletهای Server نقش و ماژول مربوط لازم است." data-en="Windows Server 2022/2025 or Windows 11 with 64-bit Windows PowerShell 5.1. Server cmdlets require their corresponding roles and modules.">Windows Server 2022/2025 یا Windows 11، Windows PowerShell 5.1 x64؛ برای cmdletهای Server نقش و ماژول مربوط لازم است.</p>
+<p data-fa="سخت‌افزار و ظرفیت: میزبان مجاز موجود؛ ابزارهای تشخیصی به سخت‌افزار اضافه نیاز ندارند. برای VM آزمایشگاهی ۲ vCPU، ۴ GiB RAM و ۶۰ GiB دیسک در نظر بگیرید." data-en="Use an authorized existing host; diagnostic tools need no additional hardware. A sample lab VM can use 2 vCPUs, 4 GiB RAM and 60 GiB storage.">سخت‌افزار و ظرفیت: میزبان مجاز موجود؛ ابزارهای تشخیصی به سخت‌افزار اضافه نیاز ندارند. برای VM آزمایشگاهی ۲ vCPU، ۴ GiB RAM و ۶۰ GiB دیسک در نظر بگیرید.</p>
+<p data-fa="نرم‌افزار و دسترسی: PowerShell x64، CimCmdlets و Storage؛ خواندن local با دسترسی عادی، remote با حساب delegated و WinRM امن. DxDiag برای Desktop Experience است." data-en="Use x64 PowerShell, CimCmdlets and Storage. Local reads usually need standard access; remote collection needs delegated permissions and protected WinRM. DxDiag applies to Desktop Experience.">نرم‌افزار و دسترسی: PowerShell x64، CimCmdlets و Storage؛ خواندن local با دسترسی عادی، remote با حساب delegated و WinRM امن. DxDiag برای Desktop Experience است.</p></section><section id="enterprise-architecture" class="article-section"><h2 data-fa="Architecture / Design" data-en="Architecture / Design">Architecture / Design</h2><p data-fa="CIM/Storage providers → snapshot JSON → CMDB → مقایسه baseline. DxDiag فقط برای مشکل گرافیک و DirectX client مناسب است؛ ظرفیت GPU حرفه‌ای از ابزار vendor تأیید می‌شود." data-en="CIM/Storage providers → JSON snapshot → CMDB → baseline comparison. DxDiag targets client graphics/DirectX issues; verify professional GPU capacity using vendor tools.">CIM/Storage providers → snapshot JSON → CMDB → مقایسه baseline. DxDiag فقط برای مشکل گرافیک و DirectX client مناسب است؛ ظرفیت GPU حرفه‌ای از ابزار vendor تأیید می‌شود.</p></section><section id="enterprise-installation" class="article-section"><h2 data-fa="Installation / Configuration" data-en="Installation / Configuration">Installation / Configuration</h2><p data-fa="اسکریپت کامل read-only را در Windows PowerShell 5.1 x64 اجرا کنید. محل خروجی در TEMP کاربر است؛ اگر policy سازمان اجازه ندهد با مسیر مجاز جایگزین کنید." data-en="Run the complete read-only script in x64 Windows PowerShell 5.1. It writes to the user TEMP directory; substitute an approved location if policy requires it.">اسکریپت کامل read-only را در Windows PowerShell 5.1 x64 اجرا کنید. محل خروجی در TEMP کاربر است؛ اگر policy سازمان اجازه ندهد با مسیر مجاز جایگزین کنید.</p>
+<pre dir="ltr"><code class="language-powershell">$ErrorActionPreference = &#x27;Stop&#x27;
+$InventoryPath = Join-Path $env:TEMP (&#x27;Inventory-&#x27; + (Get-Date -Format &#x27;yyyyMMdd-HHmmss&#x27;) + &#x27;.json&#x27;)
+$Inventory = [ordered]@{
+    CollectedUtc = [DateTime]::UtcNow.ToString(&#x27;o&#x27;)
+    Computer = Get-CimInstance Win32_ComputerSystem | Select-Object Name,Manufacturer,Model,TotalPhysicalMemory
+    OS = Get-CimInstance Win32_OperatingSystem | Select-Object Caption,Version,BuildNumber,LastBootUpTime
+    CPU = @(Get-CimInstance Win32_Processor | Select-Object Name,NumberOfCores,NumberOfLogicalProcessors)
+    Memory = @(Get-CimInstance Win32_PhysicalMemory | Select-Object Manufacturer,PartNumber,Capacity,Speed)
+    BIOS = Get-CimInstance Win32_BIOS | Select-Object Manufacturer,SMBIOSBIOSVersion,SerialNumber
+    Disks = @(Get-PhysicalDisk | Select-Object FriendlyName,MediaType,Size,HealthStatus)
+    Video = @(Get-CimInstance Win32_VideoController | Select-Object Name,DriverVersion)
+}
+$Inventory | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $InventoryPath -Encoding UTF8
+Get-Content -LiteralPath $InventoryPath -Raw | ConvertFrom-Json | Select-Object CollectedUtc,Computer
+Get-FileHash -LiteralPath $InventoryPath -Algorithm SHA256</code></pre>
+<p data-fa="خروجی JSON شامل timestamp UTC و objectهای مشخص است؛ Capacity و Size برحسب byte هستند. برای GiB بر 1GB در PowerShell تقسیم کنید. serial و model را با CMDB و کنسول vendor تأیید کنید. DxDiag فقط در سیستم دارای GUI و binary مربوط اجرا شود؛ مسیر گزارش باید موجود و نوشتنی باشد." data-en="JSON includes a UTC timestamp and named objects. Capacity and Size are bytes; divide by PowerShell 1GB for GiB. Verify model and serial against CMDB/vendor consoles. Run DxDiag only where the GUI/binary exists and the report directory is writable.">خروجی JSON شامل timestamp UTC و objectهای مشخص است؛ Capacity و Size برحسب byte هستند. برای GiB بر 1GB در PowerShell تقسیم کنید. serial و model را با CMDB و کنسول vendor تأیید کنید. DxDiag فقط در سیستم دارای GUI و binary مربوط اجرا شود؛ مسیر گزارش باید موجود و نوشتنی باشد.</p></section><section id="enterprise-security" class="article-section"><h2 data-fa="Security Hardening" data-en="Security Hardening">Security Hardening</h2><p data-fa="Serial، hostname و inventory توپولوژی سازمان را افشا می‌کنند؛ فایل به share عمومی نرود. remote CIM از session مجاز با least privilege و WinRM TLS/Kerberos استفاده کند؛ Basic بدون TLS فعال نشود." data-en="Serial numbers, hostnames and inventory reveal organizational topology. Restrict report access. Remote CIM requires an approved least-privilege session and WinRM TLS/Kerberos; do not enable Basic without TLS.">Serial، hostname و inventory توپولوژی سازمان را افشا می‌کنند؛ فایل به share عمومی نرود. remote CIM از session مجاز با least privilege و WinRM TLS/Kerberos استفاده کند؛ Basic بدون TLS فعال نشود.</p></section><section id="enterprise-monitoring" class="article-section"><h2 data-fa="Monitoring" data-en="Monitoring">Monitoring</h2><p data-fa="به‌جای alert روی هر inventory، تغییر غیرمجاز RAM/BIOS و health دیسک بررسی شود. Zabbix برای سلامت و CMDB برای مالکیت دارایی استفاده شوند. HealthStatus سالم به معنی SMART کامل یا سلامت RAID controller نیست." data-en="Alert on unauthorized RAM/BIOS changes and disk health rather than every inventory snapshot. Use Zabbix for health and CMDB for ownership. Healthy HealthStatus is not complete SMART or RAID-controller evidence.">به‌جای alert روی هر inventory، تغییر غیرمجاز RAM/BIOS و health دیسک بررسی شود. Zabbix برای سلامت و CMDB برای مالکیت دارایی استفاده شوند. HealthStatus سالم به معنی SMART کامل یا سلامت RAID controller نیست.</p></section><section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="Troubleshooting" data-en="Troubleshooting">Troubleshooting</h2><p data-fa="CIM null در VM می‌تواند محدودیت provider باشد؛ مقدار Unknown را با صفر واقعی یکی نکنید. Get-PhysicalDisk ممکن است دیسک پشت RAID را abstract ببیند؛ خروجی vendor controller معیار مکمل است. DxDiag روی Server Core ممکن است موجود نباشد؛ این خطای اجرای inventory سرور نیست. access denied در remote یعنی session/permission بررسی شود، نه غیرفعال‌کردن firewall." data-en="Null CIM values in a VM may reflect provider limitations; distinguish Unknown from actual zero. Get-PhysicalDisk can abstract disks behind RAID, so consult controller telemetry. Missing DxDiag on Server Core is not an inventory failure. Remote access denied calls for session/permission checks, not Firewall removal.">CIM null در VM می‌تواند محدودیت provider باشد؛ مقدار Unknown را با صفر واقعی یکی نکنید. Get-PhysicalDisk ممکن است دیسک پشت RAID را abstract ببیند؛ خروجی vendor controller معیار مکمل است. DxDiag روی Server Core ممکن است موجود نباشد؛ این خطای اجرای inventory سرور نیست. access denied در remote یعنی session/permission بررسی شود، نه غیرفعال‌کردن firewall.</p></section><section id="enterprise-recovery" class="article-section"><h2 data-fa="Backup / Recovery" data-en="Backup / Recovery">Backup / Recovery</h2><p data-fa="Inventory state سرویس را تغییر نمی‌دهد؛ JSON و hash با retention نگهداری شوند. برای recovery سخت‌افزار علاوه بر inventory، firmware، driver، config RAID و backup کاربردی لازم است. serial به‌تنهایی restore procedure نیست." data-en="Inventory does not change service state. Retain JSON and hashes according to policy. Hardware recovery also needs firmware, drivers, RAID configuration and application backups; a serial number is not a restore procedure.">Inventory state سرویس را تغییر نمی‌دهد؛ JSON و hash با retention نگهداری شوند. برای recovery سخت‌افزار علاوه بر inventory، firmware، driver، config RAID و backup کاربردی لازم است. serial به‌تنهایی restore procedure نیست.</p></section><section id="enterprise-practices" class="article-section"><h2 data-fa="Best Practices" data-en="Best Practices">Best Practices</h2><p data-fa="از CIM برای automation و tool vendor برای telemetry اختصاصی استفاده کنید. API کم‌دقت AdapterRAM را برای GPU جدید معیار ظرفیت نگذارید." data-en="Use CIM for automation and vendor tools for specialized telemetry. Do not size modern GPUs from the low-precision AdapterRAM property.">از CIM برای automation و tool vendor برای telemetry اختصاصی استفاده کنید. API کم‌دقت AdapterRAM را برای GPU جدید معیار ظرفیت نگذارید.</p></section><section id="enterprise-compatibility" class="article-section"><h2 data-fa="نسخه‌های قدیمی و Compatibility" data-en="Legacy Versions and Compatibility">نسخه‌های قدیمی و Compatibility</h2><p data-fa="WMIC deprecated است و موجودبودن آن در یک میزبان تضمین fleet نیست. این script از CIM استفاده می‌کند. Server Core و workstation گرافیکی scopeهای متفاوت دارند." data-en="WMIC is deprecated; its presence on one host does not establish fleet availability. This script uses CIM. Server Core and graphical workstations have different scopes.">WMIC deprecated است و موجودبودن آن در یک میزبان تضمین fleet نیست. این script از CIM استفاده می‌کند. Server Core و workstation گرافیکی scopeهای متفاوت دارند.</p></section><section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">پرسش‌های متداول</h2><h3 data-fa="آیا DxDiag ابزار مناسب همه سرورهاست؟" data-en="Is DxDiag appropriate for every server?">آیا DxDiag ابزار مناسب همه سرورهاست؟</h3><p data-fa="خیر؛ برای گرافیک و DirectX است و روی Server Core ممکن است موجود نباشد." data-en="No. It targets graphics/DirectX and may be absent on Server Core.">خیر؛ برای گرافیک و DirectX است و روی Server Core ممکن است موجود نباشد.</p><h3 data-fa="آیا HealthStatus سالم سلامت RAID را تضمین می‌کند؟" data-en="Does Healthy HealthStatus guarantee RAID health?">آیا HealthStatus سالم سلامت RAID را تضمین می‌کند؟</h3><p data-fa="خیر؛ telemetry کنترلر و ابزار vendor نیز باید بررسی شوند." data-en="No. Inspect controller telemetry and vendor tools as well.">خیر؛ telemetry کنترلر و ابزار vendor نیز باید بررسی شوند.</p></section><section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">منابع رسمی</h2><ul><li><a href="https://learn.microsoft.com/en-us/powershell/module/cimcmdlets/get-ciminstance" rel="noopener">Microsoft: Get-CimInstance</a></li><li><a href="https://learn.microsoft.com/en-us/windows/whats-new/removed-features" rel="noopener">Microsoft: removed features</a></li></ul><p data-fa="تاریخ بررسی منابع: 2026-09-30. اعتبارسنجی عملی روی محیط هدف باید پیش از انتشار تغییر زیرساخت انجام شود." data-en="Sources reviewed: 2026-09-30. Validate procedures on the target environment before deploying infrastructure changes.">تاریخ بررسی منابع: 2026-09-30. اعتبارسنجی عملی روی محیط هدف باید پیش از انتشار تغییر زیرساخت انجام شود.</p></section><details id="legacy-history"><summary data-fa="محتوای نسخه قدیمی — فقط مرجع تاریخی" data-en="Historical edition — retained as originally written">محتوای نسخه قدیمی — فقط مرجع تاریخی</summary><p data-fa="نمونه‌های زیر برای حفظ سابقه هستند؛ دستورالعمل اجرایی، امنیتی و سازگاری نسخه جدید در بخش‌های بالا آمده است." data-en="The following material is retained in its original languages for historical reference. Use the bilingual runbook above for current operations, security and compatibility.">نمونه‌های زیر برای حفظ سابقه هستند؛ دستورالعمل اجرایی، امنیتی و سازگاری نسخه جدید در بخش‌های بالا آمده است.</p>
+                <section id="legacy-overview" class="article-section">
                   <h2 data-en="Introduction" data-fa="مقدمه">Introduction</h2>
                   <p data-en="Windows includes several built-in tools for viewing hardware specifications and system information. This article covers CMD, PowerShell, System Information, and DxDiag for checking the CPU, RAM, BIOS, motherboard, disks, graphics adapter, and overall system details." data-fa="Windows ابزارهای داخلی مختلفی برای مشاهده مشخصات سخت‌افزاری و اطلاعات سیستم دارد. در این مقاله استفاده از CMD، PowerShell، System Information و DxDiag را برای بررسی CPU، RAM، BIOS، مادربرد، Disk، کارت گرافیک و اطلاعات کلی سیستم بررسی می‌کنیم.">Windows includes several built-in tools for viewing hardware specifications and system information. This article covers CMD, PowerShell, System Information, and DxDiag for checking the CPU, RAM, BIOS, motherboard, disks, graphics adapter, and overall system details.</p>
                 </section>
 
-                <section id="article-status" class="article-section">
+                <section id="legacy-article-status" class="article-section">
                   <h2 data-en="01 — General System Information" data-fa="۰۱ — اطلاعات کلی سیستم">01 — General System Information</h2>
                   <p data-en="Run systeminfo in Command Prompt to view detailed Windows and hardware configuration information." data-fa="برای مشاهده اطلاعات کامل پیکربندی Windows و سخت‌افزار، دستور systeminfo را در Command Prompt اجرا کنید.">Run systeminfo in Command Prompt to view detailed Windows and hardware configuration information.</p>
-                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="Command Prompt" data-fa="Command Prompt">Command Prompt</span><button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی">Copy</button></div><pre><code class="language-bash">systeminfo</code></pre></div>
+                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="Command Prompt" data-fa="Command Prompt">Command Prompt</span></div><div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">systeminfo</code></div></div>
                   <p data-en="The output includes information such as the Windows version, system model, BIOS details, installed RAM, and network adapter configuration." data-fa="خروجی شامل اطلاعاتی مانند Windows Version، System Model، مشخصات BIOS، RAM نصب‌شده و پیکربندی Network Adapterها است.">The output includes information such as the Windows version, system model, BIOS details, installed RAM, and network adapter configuration.</p>
                 </section>
 
-                <section id="planned-sections" class="article-section">
+                <section id="legacy-planned-sections" class="article-section">
                   <h2 data-en="02 — View CPU Information" data-fa="۰۲ — مشاهده اطلاعات CPU">02 — View CPU Information</h2>
                   <p data-en="Run the following PowerShell command to view the processor name, manufacturer, core count, logical processor count, and reported maximum clock speed." data-fa="برای مشاهده نام CPU، سازنده، تعداد Core، تعداد Logical Processor و حداکثر Clock Speed گزارش‌شده، دستور PowerShell زیر را اجرا کنید.">Run the following PowerShell command to view the processor name, manufacturer, core count, logical processor count, and reported maximum clock speed.</p>
-                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="PowerShell" data-fa="PowerShell">PowerShell</span><button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی">Copy</button></div><pre><code class="language-powershell">Get-CimInstance Win32_Processor |
-Select-Object Name, Manufacturer, NumberOfCores, NumberOfLogicalProcessors, MaxClockSpeed</code></pre></div>
+                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="PowerShell" data-fa="PowerShell">PowerShell</span></div><div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-powershell">Get-CimInstance Win32_Processor |
+Select-Object Name, Manufacturer, NumberOfCores, NumberOfLogicalProcessors, MaxClockSpeed</code></div></div>
                 </section>
 
-                <section id="ram" class="article-section">
+                <section id="legacy-ram" class="article-section">
                   <h2 data-en="03 — View RAM Information" data-fa="۰۳ — مشاهده اطلاعات RAM">03 — View RAM Information</h2>
                   <p data-en="The following command lists the physical memory modules and their manufacturer, part number, capacity, and speed." data-fa="دستور زیر ماژول‌های حافظه فیزیکی و Manufacturer، Part Number، Capacity و Speed آن‌ها را نمایش می‌دهد.">The following command lists the physical memory modules and their manufacturer, part number, capacity, and speed.</p>
-                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="PowerShell" data-fa="PowerShell">PowerShell</span><button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی">Copy</button></div><pre><code class="language-powershell">Get-CimInstance Win32_PhysicalMemory |
-Select-Object Manufacturer, PartNumber, Capacity, Speed</code></pre></div>
+                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="PowerShell" data-fa="PowerShell">PowerShell</span></div><div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-powershell">Get-CimInstance Win32_PhysicalMemory |
+Select-Object Manufacturer, PartNumber, Capacity, Speed</code></div></div>
                 </section>
 
-                <section id="motherboard-bios" class="article-section">
+                <section id="legacy-motherboard-bios" class="article-section">
                   <h2 data-en="04 — Motherboard and BIOS" data-fa="۰۴ — مادربرد و BIOS">04 — Motherboard and BIOS</h2>
                   <p data-en="Use CIM classes to view motherboard and BIOS information without relying on the deprecated WMIC command-line utility." data-fa="برای مشاهده اطلاعات مادربرد و BIOS، از CIM Classها استفاده کنید و به ابزار Command-Line قدیمی WMIC تکیه نکنید.">Use CIM classes to view motherboard and BIOS information without relying on the deprecated WMIC command-line utility.</p>
-                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="PowerShell" data-fa="PowerShell">PowerShell</span><button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی">Copy</button></div><pre><code class="language-powershell">Get-CimInstance Win32_BaseBoard
-Get-CimInstance Win32_BIOS</code></pre></div>
+                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="PowerShell" data-fa="PowerShell">PowerShell</span></div><div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-powershell">Get-CimInstance Win32_BaseBoard
+Get-CimInstance Win32_BIOS</code></div></div>
                   <div class="article-callout article-callout--warning"><p data-en="WMIC is deprecated and has been removed from newer Windows releases. Use CIM/PowerShell for new scripts and commands." data-fa="WMIC منسوخ شده و از نسخه‌های جدیدتر Windows حذف شده است. برای Scriptها و دستورهای جدید از CIM/PowerShell استفاده کنید.">WMIC is deprecated and has been removed from newer Windows releases. Use CIM/PowerShell for new scripts and commands.</p></div>
                 </section>
 
-                <section id="disk" class="article-section">
+                <section id="legacy-disk" class="article-section">
                   <h2 data-en="05 — Disk Information" data-fa="۰۵ — اطلاعات Disk">05 — Disk Information</h2>
                   <p data-en="Check the available physical disks, their media type, size, and health status." data-fa="Diskهای فیزیکی موجود، Media Type، Size و Health Status آن‌ها را بررسی کنید.">Check the available physical disks, their media type, size, and health status.</p>
-                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="PowerShell" data-fa="PowerShell">PowerShell</span><button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی">Copy</button></div><pre><code class="language-powershell">Get-PhysicalDisk |
-Select-Object FriendlyName, MediaType, Size, HealthStatus</code></pre></div>
+                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="PowerShell" data-fa="PowerShell">PowerShell</span></div><div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-powershell">Get-PhysicalDisk |
+Select-Object FriendlyName, MediaType, Size, HealthStatus</code></div></div>
                 </section>
 
-                <section id="graphics" class="article-section">
+                <section id="legacy-graphics" class="article-section">
                   <h2 data-en="06 — Graphics Adapter" data-fa="۰۶ — کارت گرافیک">06 — Graphics Adapter</h2>
                   <p data-en="Use the video-controller CIM class to view the graphics-adapter name, driver version, and reported adapter memory." data-fa="برای مشاهده نام کارت گرافیک، Driver Version و حافظه گزارش‌شده Adapter از CIM Class مربوط به Video Controller استفاده کنید.">Use the video-controller CIM class to view the graphics-adapter name, driver version, and reported adapter memory.</p>
-                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="PowerShell" data-fa="PowerShell">PowerShell</span><button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی">Copy</button></div><pre><code class="language-powershell">Get-CimInstance Win32_VideoController |
-Select-Object Name, DriverVersion, AdapterRAM</code></pre></div>
+                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="PowerShell" data-fa="PowerShell">PowerShell</span></div><div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-powershell">Get-CimInstance Win32_VideoController |
+Select-Object Name, DriverVersion, AdapterRAM</code></div></div>
                 </section>
 
-                <section id="dxdiag" class="article-section">
+                <section id="legacy-dxdiag" class="article-section">
                   <h2 data-en="07 — Use DxDiag" data-fa="۰۷ — استفاده از DxDiag">07 — Use DxDiag</h2>
                   <p data-en="Run DxDiag to open the DirectX Diagnostic Tool." data-fa="برای باز کردن DirectX Diagnostic Tool، DxDiag را اجرا کنید.">Run DxDiag to open the DirectX Diagnostic Tool.</p>
-                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="Run" data-fa="Run">Run</span><button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی">Copy</button></div><pre><code class="language-bash">dxdiag</code></pre></div>
+                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="Run" data-fa="Run">Run</span></div><div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">dxdiag</code></div></div>
                   <div class="article-grid">
                     <div class="article-card article-card--method"><div class="article-card-content"><h3 class="article-card-title" data-en="System" data-fa="System">System</h3><p data-en="Shows Windows, system, processor, memory, BIOS, and DirectX information." data-fa="اطلاعات Windows، سیستم، Processor، Memory، BIOS و DirectX را نشان می‌دهد.">Shows Windows, system, processor, memory, BIOS, and DirectX information.</p></div></div>
                     <div class="article-card article-card--method"><div class="article-card-content"><h3 class="article-card-title" data-en="Display" data-fa="Display">Display</h3><p data-en="Shows graphics-adapter and display-driver details." data-fa="جزئیات کارت گرافیک و Display Driver را نشان می‌دهد.">Shows graphics-adapter and display-driver details.</p></div></div>
                     <div class="article-card article-card--method"><div class="article-card-content"><h3 class="article-card-title" data-en="Sound and Input" data-fa="Sound و Input">Sound and Input</h3><p data-en="Shows detected audio devices and input devices such as keyboard and mouse." data-fa="دستگاه‌های صوتی شناسایی‌شده و Input Deviceهایی مانند Keyboard و Mouse را نشان می‌دهد.">Shows detected audio devices and input devices such as keyboard and mouse.</p></div></div>
                   </div>
                   <p data-en="To save a text report, run the following command. Ensure that the destination folder exists and is writable." data-fa="برای ذخیره گزارش متنی، دستور زیر را اجرا کنید. مطمئن شوید پوشه مقصد وجود دارد و قابل نوشتن است.">To save a text report, run the following command. Ensure that the destination folder exists and is writable.</p>
-                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="Command Prompt" data-fa="Command Prompt">Command Prompt</span><button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی">Copy</button></div><pre><code class="language-bash">dxdiag /t C:\Temp\dxdiag.txt</code></pre></div>
+                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="Command Prompt" data-fa="Command Prompt">Command Prompt</span></div><div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">dxdiag /t C:\Temp\dxdiag.txt</code></div></div>
                 </section>
 
-                <section id="system-information" class="article-section">
+                <section id="legacy-system-information" class="article-section">
                   <h2 data-en="08 — System Information" data-fa="۰۸ — System Information">08 — System Information</h2>
                   <p data-en="Open the graphical System Information utility for a detailed, categorized view of hardware resources, components, and the software environment." data-fa="برای مشاهده دسته‌بندی‌شده و گرافیکی منابع سخت‌افزاری، Componentها و محیط نرم‌افزاری، ابزار System Information را باز کنید.">Open the graphical System Information utility for a detailed, categorized view of hardware resources, components, and the software environment.</p>
-                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="Run" data-fa="Run">Run</span><button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی">Copy</button></div><pre><code class="language-bash">msinfo32</code></pre></div>
+                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="Run" data-fa="Run">Run</span></div><div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">msinfo32</code></div></div>
                   <div class="article-table-wrap"><table class="article-table"><thead><tr><th data-en="Tool" data-fa="ابزار">Tool</th><th data-en="Best use" data-fa="بهترین کاربرد">Best use</th><th data-en="Interface" data-fa="رابط">Interface</th></tr></thead><tbody>
                     <tr><td>systeminfo</td><td data-en="General Windows and system configuration" data-fa="پیکربندی کلی Windows و سیستم">General Windows and system configuration</td><td data-en="Command Prompt" data-fa="Command Prompt">Command Prompt</td></tr>
                     <tr><td>DxDiag</td><td data-en="DirectX, graphics, audio, and input diagnostics" data-fa="عیب‌یابی DirectX، گرافیک، صدا و Input">DirectX, graphics, audio, and input diagnostics</td><td data-en="Graphical utility and text export" data-fa="ابزار گرافیکی و خروجی متنی">Graphical utility and text export</td></tr>
@@ -448,7 +398,7 @@ Select-Object Name, DriverVersion, AdapterRAM</code></pre></div>
                   </tbody></table></div>
                 </section>
 
-                <section id="best-practices" class="article-section">
+                <section id="legacy-best-practices" class="article-section">
                   <h2 data-en="Best Practices" data-fa="بهترین روش‌ها">Best Practices</h2>
                   <div class="article-callout article-callout--tip"><ul>
                     <li data-en="Use CIM/PowerShell instead of WMIC for new automation and scripts." data-fa="برای Automation و Scriptهای جدید به‌جای WMIC از CIM/PowerShell استفاده کنید.">Use CIM/PowerShell instead of WMIC for new automation and scripts.</li>
@@ -458,7 +408,7 @@ Select-Object Name, DriverVersion, AdapterRAM</code></pre></div>
                   </ul></div>
                 </section>
 
-                <section id="troubleshooting" class="article-section">
+                <section id="legacy-troubleshooting" class="article-section">
                   <h2 data-en="Troubleshooting" data-fa="رفع اشکال">Troubleshooting</h2>
                   <div class="article-grid">
                     <div class="article-card article-card--method"><div class="article-card-content"><h3 class="article-card-title" data-en="A command is not recognized" data-fa="یک دستور شناسایی نمی‌شود">A command is not recognized</h3><p data-en="Run CMD or PowerShell as appropriate, verify the command spelling, and confirm that the required Windows component is available." data-fa="CMD یا PowerShell را متناسب با دستور اجرا کنید، املای دستور را بررسی کنید و از وجود Component موردنیاز در Windows مطمئن شوید.">Run CMD or PowerShell as appropriate, verify the command spelling, and confirm that the required Windows component is available.</p></div></div>
@@ -467,7 +417,7 @@ Select-Object Name, DriverVersion, AdapterRAM</code></pre></div>
                   </div>
                 </section>
 
-                <section id="faq" class="article-section">
+                <section id="legacy-faq" class="article-section">
                   <h2 data-en="Frequently Asked Questions" data-fa="سوالات متداول">Frequently Asked Questions</h2>
                   <div class="article-faq">
                     <div class="article-faq-item"><h3 class="article-faq-question"><span data-en="Should I use WMIC for new hardware inventory scripts?" data-fa="آیا برای Scriptهای جدید Inventory سخت‌افزار باید از WMIC استفاده کنم؟">Should I use WMIC for new hardware inventory scripts?</span><i class="bi bi-chevron-down" aria-hidden="true"></i></h3><div class="article-faq-answer"><p data-en="No. WMIC is deprecated; use CIM cmdlets in PowerShell for new work." data-fa="خیر. WMIC منسوخ شده است؛ برای کارهای جدید از CIM Cmdletها در PowerShell استفاده کنید.">No. WMIC is deprecated; use CIM cmdlets in PowerShell for new work.</p></div></div>
@@ -476,12 +426,12 @@ Select-Object Name, DriverVersion, AdapterRAM</code></pre></div>
                   </div>
                 </section>
 
-                <section id="conclusion" class="article-section">
+                <section id="legacy-conclusion" class="article-section">
                   <h2 data-en="Conclusion" data-fa="جمع‌بندی">Conclusion</h2>
                   <p data-en="Use systeminfo for a quick general view, CIM cmdlets in PowerShell for structured hardware queries, DxDiag for DirectX and multimedia diagnostics, and msinfo32 for a detailed graphical inventory. Prefer CIM/PowerShell over WMIC in current Windows environments." data-fa="برای نمای کلی سریع از systeminfo، برای Queryهای ساختاریافته سخت‌افزار از CIM Cmdletهای PowerShell، برای عیب‌یابی DirectX و Multimedia از DxDiag و برای Inventory گرافیکی تفصیلی از msinfo32 استفاده کنید. در محیط‌های فعلی Windows، CIM/PowerShell را به WMIC ترجیح دهید.">Use systeminfo for a quick general view, CIM cmdlets in PowerShell for structured hardware queries, DxDiag for DirectX and multimedia diagnostics, and msinfo32 for a detailed graphical inventory. Prefer CIM/PowerShell over WMIC in current Windows environments.</p>
                 </section>
 
-                <section id="official-resources" class="article-section">
+                <section id="legacy-official-resources" class="article-section">
                   <h2 data-en="Official References" data-fa="منابع رسمی">Official References</h2>
                   <ul>
                     <li><a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/systeminfo" target="_blank" rel="noopener noreferrer" data-en="Microsoft Learn: systeminfo" data-fa="Microsoft Learn: systeminfo">Microsoft Learn: systeminfo</a></li>
@@ -492,7 +442,7 @@ Select-Object Name, DriverVersion, AdapterRAM</code></pre></div>
                 </section>
                 <footer class="article-footer" aria-label="Article footer">
                   <section
-                    id="author"
+                    id="legacy-author"
                     class="article-author"
                     role="complementary"
                     aria-labelledby="author-title"
@@ -510,7 +460,7 @@ Select-Object Name, DriverVersion, AdapterRAM</code></pre></div>
                       <div class="article-author-content">
                         <p
                           class="article-author-kicker"
-                          id="author-title"
+                          id="legacy-author-title"
                           data-en="About the author"
                           data-fa="درباره نویسنده"
                         >
@@ -581,7 +531,7 @@ Select-Object Name, DriverVersion, AdapterRAM</code></pre></div>
                     >
                   </nav>
                 </footer>
-              </article>
+              </details></div></article>
             </div>
           </div>
         </div>

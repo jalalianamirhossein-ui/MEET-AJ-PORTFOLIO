@@ -7,6 +7,7 @@ use App\Models\ArticleRedirect;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Services\ArticleSeo;
+use App\Services\ArticleLocalization;
 use App\Services\ArticleShareLinks;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -63,7 +64,7 @@ class ArticleController extends Controller
         ]);
     }
 
-    public function show(string $slug): View
+    public function show(Request $request, string $slug): View
     {
         $article = Article::published()
             ->with(['category', 'tags'])
@@ -71,6 +72,7 @@ class ArticleController extends Controller
             ->where('language', 'en')
             ->first();
         abort_if($article === null, 404);
+        $article = app(ArticleLocalization::class)->apply($article, $request->query('lang') === 'en' ? 'en' : 'fa');
 
         return view('articles.show', [
             'article' => $article,

@@ -1,23 +1,20 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="fa" dir="rtl" data-article-language="fa">
   <head>
-    <title>HTTP vs HTTPS: SSL Certificate Impact | Meet AJ</title>
+    <title>HTTPS در Production: TLS، Certificate Chain و Rollout امن HSTS | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Why HTTPS matters for security, SEO, and user trust with SSL/TLS"
-    />
+    <meta name="description" content="مدیریت HTTPS در Production؛ بررسی SAN و chain گواهی، renewal و پایش expiry، rollout تدریجی HSTS و تحلیل خطا از مسیر واقعی کلاینت." />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <link
       rel="canonical"
-      href="https://meetaj.ir/articles/http-vs-https-ssl-certificate-impact.html"
+      href="https://meetaj.ir/articles/http-vs-https-ssl-certificate-impact"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="HTTP vs HTTPS: SSL Certificate Impact | Meet AJ" />
-    <meta property="og:description" content="Why HTTPS matters for security, SEO, and user trust with SSL/TLS" />
-    <meta property="og:url" content="https://meetaj.ir/articles/http-vs-https-ssl-certificate-impact.html" />
+    <meta property="og:title" content="HTTPS در Production: TLS، Certificate Chain و Rollout امن HSTS" />
+    <meta property="og:description" content="مدیریت HTTPS در Production؛ بررسی SAN و chain گواهی، renewal و پایش expiry، rollout تدریجی HSTS و تحلیل خطا از مسیر واقعی کلاینت." />
+    <meta property="og:url" content="https://meetaj.ir/articles/http-vs-https-ssl-certificate-impact" />
     <meta property="og:site_name" content="Meet AJ" />
     <meta name="twitter:card" content="summary" />
     <link href="../assets/img/favicon.png" rel="icon" />
@@ -54,7 +51,15 @@
       rel="stylesheet"
       disabled
     />
-  </head>
+  <meta name="keywords" content="HTTPS در Production: TLS، Certificate Chain و Rollout امن HSTS, مدیریت زیرساخت, عیب‌یابی, امنیت سرویس, بازیابی, http vs https ssl certificate impact" />
+<meta name="article:content-language" content="fa" />
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "HTTPS در Production: TLS، Certificate Chain و Rollout امن HSTS", "description": "مدیریت HTTPS در Production؛ بررسی SAN و chain گواهی، renewal و پایش expiry، rollout تدریجی HSTS و تحلیل خطا از مسیر واقعی کلاینت.", "inLanguage": "fa", "url": "https://meetaj.ir/articles/http-vs-https-ssl-certificate-impact", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "آیا redirect جای HSTS است؟", "acceptedAnswer": {"@type": "Answer", "text": "خیر؛ HSTS policy مرورگر را پس از دریافت از HTTPS معتبر تعیین می‌کند."}}, {"@type": "Question", "name": "چرا گواهی معتبر روی disk کافی نیست؟", "acceptedAnswer": {"@type": "Answer", "text": "سرویس ممکن است certificate قبلی را serve کند؛ probe از مسیر واقعی client لازم است."}}]}</script>
+<link rel="alternate" hreflang="fa" href="https://meetaj.ir/articles/http-vs-https-ssl-certificate-impact" />
+<link rel="alternate" hreflang="en" href="https://meetaj.ir/articles/http-vs-https-ssl-certificate-impact?lang=en" />
+<link rel="alternate" hreflang="x-default" href="https://meetaj.ir/articles/http-vs-https-ssl-certificate-impact" />
+<script id="article-localizations" type="application/json">{"fa": {"title": "HTTPS در Production: TLS، Certificate Chain و Rollout امن HSTS", "meta_title": "HTTPS در Production: TLS، Certificate Chain و Rollout امن HSTS | Meet AJ", "description": "مدیریت HTTPS در Production؛ بررسی SAN و chain گواهی، renewal و پایش expiry، rollout تدریجی HSTS و تحلیل خطا از مسیر واقعی کلاینت.", "keywords": ["HTTPS در Production: TLS، Certificate Chain و Rollout امن HSTS", "مدیریت زیرساخت", "عیب‌یابی", "امنیت سرویس", "بازیابی", "http vs https ssl certificate impact"], "faq": [["آیا redirect جای HSTS است؟", "خیر؛ HSTS policy مرورگر را پس از دریافت از HTTPS معتبر تعیین می‌کند."], ["چرا گواهی معتبر روی disk کافی نیست؟", "سرویس ممکن است certificate قبلی را serve کند؛ probe از مسیر واقعی client لازم است."]]}, "en": {"title": "Production HTTPS: Certificate Lifecycle, Trust Chains and HSTS Recovery", "meta_title": "Production HTTPS: Certificate Lifecycle, Trust Chains and HSTS Recovery | Meet AJ", "description": "Validate HTTPS through real client paths, manage certificate renewal and stage HSTS with explicit compatibility and recovery requirements.", "keywords": ["Production HTTPS", "http vs https ssl certificate impact", "enterprise infrastructure", "production operations", "troubleshooting"], "faq": [["Does redirect replace HSTS?", "No. Browsers acquire HSTS policy through trusted HTTPS."], ["Why is a valid certificate on disk insufficient?", "The service may still serve an older certificate; probe from the real client path."]]}}</script>
+</head>
   <body class="article-page theme-security">
     <button
       id="menu-toggle"
@@ -203,96 +208,21 @@
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
-          <li class="article-nav-item">
-            <a href="#overview"
-              ><i class="bi bi-globe navicon" aria-hidden="true"></i
-              ><span data-en="What is HTTP?" data-fa="۰۱ — HTTP چیست؟">What is HTTP?</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#article-status"
-              ><i class="bi bi-shield-lock navicon" aria-hidden="true"></i
-              ><span data-en="What is HTTPS?" data-fa="۰۲ — HTTPS چیست؟">What is HTTPS?</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#planned-sections"
-              ><i class="bi bi-award navicon" aria-hidden="true"></i
-              ><span data-en="TLS certificate" data-fa="۰۳ — TLS Certificate چیست؟">TLS certificate</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#tls-certificate"
-              ><i class="bi bi-shield-check navicon" aria-hidden="true"></i
-              ><span data-en="Certificate role" data-fa="نقش TLS Certificate">Certificate role</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#tls-handshake"
-              ><i class="bi bi-arrow-left-right navicon" aria-hidden="true"></i
-              ><span data-en="TLS Handshake" data-fa="۰۴ — TLS Handshake">TLS Handshake</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#check-certificate"
-              ><i class="bi bi-search navicon" aria-hidden="true"></i
-              ><span data-en="Check Certificate" data-fa="۰۵ — بررسی Certificate">Check Certificate</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#http-redirect"
-              ><i class="bi bi-arrow-repeat navicon" aria-hidden="true"></i
-              ><span data-en="HTTP to HTTPS redirect" data-fa="۰۶ — Redirect از HTTP به HTTPS">HTTP to HTTPS redirect</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#hsts"
-              ><i class="bi bi-shield-lock navicon" aria-hidden="true"></i
-              ><span data-en="HSTS" data-fa="۰۷ — HSTS">HSTS</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#common-errors"
-              ><i class="bi bi-exclamation-triangle navicon" aria-hidden="true"></i
-              ><span data-en="Common errors" data-fa="۰۸ — خطاهای رایج">Common errors</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#comparison"
-              ><i class="bi bi-table navicon" aria-hidden="true"></i
-              ><span data-en="HTTP and HTTPS comparison" data-fa="جدول مقایسه">HTTP and HTTPS comparison</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#best-practices"
-              ><i class="bi bi-check2-square navicon" aria-hidden="true"></i
-              ><span data-en="Best Practices" data-fa="بهترین روش‌ها">Best Practices</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#troubleshooting"
-              ><i class="bi bi-wrench-adjustable navicon" aria-hidden="true"></i
-              ><span data-en="Troubleshooting" data-fa="رفع اشکال">Troubleshooting</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#faq"
-              ><i class="bi bi-question-circle navicon" aria-hidden="true"></i
-              ><span data-en="Frequently Asked Questions" data-fa="سوالات متداول">Frequently Asked Questions</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#conclusion"
-              ><i class="bi bi-flag navicon" aria-hidden="true"></i
-              ><span data-en="Conclusion" data-fa="جمع‌بندی">Conclusion</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#official-resources"
-              ><i class="bi bi-book navicon" aria-hidden="true"></i
-              ><span data-en="Official resources" data-fa="منابع رسمی">Official resources</span></a
-            >
-          </li>
+          <li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="مقدمه" data-en="Introduction">مقدمه</span></a></li><li class="article-nav-item"><a href="#enterprise-scenario"><span data-fa="سناریوی واقعی Enterprise" data-en="Enterprise Scenario">سناریوی واقعی Enterprise</span></a></li><li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="پیش‌نیازها" data-en="Prerequisites">پیش‌نیازها</span></a></li><li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="Architecture / Design" data-en="Architecture / Design">Architecture / Design</span></a></li><li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="Installation / Configuration" data-en="Installation / Configuration">Installation / Configuration</span></a></li><li class="article-nav-item"><a href="#enterprise-security"><span data-fa="Security Hardening" data-en="Security Hardening">Security Hardening</span></a></li><li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="Monitoring" data-en="Monitoring">Monitoring</span></a></li><li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="Troubleshooting" data-en="Troubleshooting">Troubleshooting</span></a></li><li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="Backup / Recovery" data-en="Backup / Recovery">Backup / Recovery</span></a></li><li class="article-nav-item"><a href="#enterprise-practices"><span data-fa="Best Practices" data-en="Best Practices">Best Practices</span></a></li><li class="article-nav-item"><a href="#enterprise-compatibility"><span data-fa="نسخه‌های قدیمی و Compatibility" data-en="Legacy Versions and Compatibility">نسخه‌های قدیمی و Compatibility</span></a></li><li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">پرسش‌های متداول</span></a></li><li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">منابع رسمی</span></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </ul>
       </nav>
       <button
@@ -324,18 +254,14 @@
               </div>
               <h1
                 class="article-title hero-title"
-                data-en="HTTP vs HTTPS and the Impact of TLS Certificates"
-                data-fa="تفاوت HTTP و HTTPS و تأثیر SSL/TLS Certificate"
-              >
-                HTTP vs HTTPS and the Impact of TLS Certificates
-              </h1>
+
+
+               data-fa="HTTPS در Production: TLS، Certificate Chain و Rollout امن HSTS" data-en="Production HTTPS: Certificate Lifecycle, Trust Chains and HSTS Recovery">HTTPS در Production: TLS، Certificate Chain و Rollout امن HSTS</h1>
               <p
                 class="article-excerpt hero-subtitle"
-                data-en="Security, encryption, certificates, and the difference between HTTP and HTTPS"
-                data-fa="بررسی امنیت، رمزنگاری، Certificate و تفاوت ارتباط HTTP و HTTPS"
-              >
-                Security, encryption, certificates, and the difference between HTTP and HTTPS
-              </p>
+
+
+               data-fa="مدیریت HTTPS در Production؛ بررسی SAN و chain گواهی، renewal و پایش expiry، rollout تدریجی HSTS و تحلیل خطا از مسیر واقعی کلاینت." data-en="Validate HTTPS through real client paths, manage certificate renewal and stage HSTS with explicit compatibility and recovery requirements.">مدیریت HTTPS در Production؛ بررسی SAN و chain گواهی، renewal و پایش expiry، rollout تدریجی HSTS و تحلیل خطا از مسیر واقعی کلاینت.</p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -386,23 +312,36 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body">
-                <section id="overview" class="article-section">
+              <nav class="article-translations" aria-label="Article language"><a lang="fa" hreflang="fa" href="https://meetaj.ir/articles/http-vs-https-ssl-certificate-impact">فارسی</a> · <a lang="en" hreflang="en" href="https://meetaj.ir/articles/http-vs-https-ssl-certificate-impact?lang=en">English</a></nav>
+<article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="fa" dir="rtl"><section id="enterprise-intro" class="article-section"><h2 data-fa="مقدمه" data-en="Introduction">مقدمه</h2><p data-fa="گواهی منقضی یا chain ناقص می‌تواند API و automation را هم‌زمان قطع کند. HTTPS علاوه بر رمزنگاری، تأیید هویت مقصد و سلامت chain را به lifecycle گواهی وابسته می‌کند." data-en="Expired certificates or incomplete chains can interrupt APIs and automation together. HTTPS identity verification depends on the certificate lifecycle as well as encryption.">گواهی منقضی یا chain ناقص می‌تواند API و automation را هم‌زمان قطع کند. HTTPS علاوه بر رمزنگاری، تأیید هویت مقصد و سلامت chain را به lifecycle گواهی وابسته می‌کند.</p></section><section id="enterprise-scenario" class="article-section"><h2 data-fa="سناریوی واقعی Enterprise" data-en="Enterprise Scenario">سناریوی واقعی Enterprise</h2><p data-fa="سناریوی آموزشی با سازمان فرضی «آریا»: API سازمان پشت TLS proxy است؛ browser و jobهای Linux از trust store متفاوت استفاده می‌کنند. rollout با کلاینت canary و سپس HSTS کوتاه آغاز می‌شود." data-en="Illustrative scenario at fictional Arya: an API sits behind a TLS proxy. Browsers and Linux jobs use different trust stores. Rollout starts with canary clients and a short HSTS policy.">سناریوی آموزشی با سازمان فرضی «آریا»: API سازمان پشت TLS proxy است؛ browser و jobهای Linux از trust store متفاوت استفاده می‌کنند. rollout با کلاینت canary و سپس HSTS کوتاه آغاز می‌شود.</p></section><section id="enterprise-prerequisites" class="article-section"><h2 data-fa="پیش‌نیازها" data-en="Prerequisites">پیش‌نیازها</h2><p data-fa="Ubuntu Server 24.04 LTS، Bash 5، systemd؛ package patch را پیش از تغییر با dpkg-query ثبت کنید. OpenSSL 3.x، curl و Nginx از repository؛ حداقل TLS 1.2 و پشتیبانی TLS 1.3 مطابق client policy." data-en="Ubuntu Server 24.04 LTS, Bash 5 and systemd. Record installed package patches with dpkg-query before making changes. Use repository OpenSSL 3.x, curl and Nginx. Require at least TLS 1.2 and enable TLS 1.3 according to client policy.">Ubuntu Server 24.04 LTS، Bash 5، systemd؛ package patch را پیش از تغییر با dpkg-query ثبت کنید. OpenSSL 3.x، curl و Nginx از repository؛ حداقل TLS 1.2 و پشتیبانی TLS 1.3 مطابق client policy.</p>
+<p data-fa="سخت‌افزار و ظرفیت: برای مثال یک VM با ۲ vCPU، ۲ GiB RAM و ۲۰ GiB دیسک؛ این ظرفیت پیشنهادی آزمایشگاه است و sizing سرویس به بار واقعی وابسته است." data-en="Example lab capacity: 2 vCPUs, 2 GiB RAM and 20 GiB storage. These are planning assumptions, not vendor minimums; size the service for measured load.">سخت‌افزار و ظرفیت: برای مثال یک VM با ۲ vCPU، ۲ GiB RAM و ۲۰ GiB دیسک؛ این ظرفیت پیشنهادی آزمایشگاه است و sizing سرویس به بار واقعی وابسته است.</p>
+<p data-fa="نرم‌افزار و دسترسی: DNS app.example.com، CA داخلی یا عمومی معتبر، certificate شامل SAN، fullchain و key با permission محدود. sudo فقط برای config proxy." data-en="Actual DNS replacing app.example.com, a trusted internal/public CA, SAN certificate, full chain and restricted private key. sudo is required only for proxy configuration.">نرم‌افزار و دسترسی: DNS app.example.com، CA داخلی یا عمومی معتبر، certificate شامل SAN، fullchain و key با permission محدود. sudo فقط برای config proxy.</p></section><section id="enterprise-architecture" class="article-section"><h2 data-fa="Architecture / Design" data-en="Architecture / Design">Architecture / Design</h2><p data-fa="DNS/SNI → TLS handshake → chain/hostname verification → HTTP request → backend. TLS termination باید مرز اعتماد proxy تا backend را نیز مشخص کند." data-en="DNS/SNI → TLS handshake → chain/hostname verification → HTTP request → backend. Define the trust boundary from TLS termination to the backend too.">DNS/SNI → TLS handshake → chain/hostname verification → HTTP request → backend. TLS termination باید مرز اعتماد proxy تا backend را نیز مشخص کند.</p></section><section id="enterprise-installation" class="article-section"><h2 data-fa="Installation / Configuration" data-en="Installation / Configuration">Installation / Configuration</h2><p data-fa="app.example.com placeholder مقصد واقعی است. ابتدا certificate و chain بدون bypass تست شوند." data-en="Replace app.example.com with the actual endpoint. Test the certificate/chain without verification bypasses.">app.example.com placeholder مقصد واقعی است. ابتدا certificate و chain بدون bypass تست شوند.</p>
+<pre dir="ltr"><code class="language-bash">HOST=&#x27;app.example.com&#x27;
+openssl s_client -connect &quot;$HOST:443&quot; -servername &quot;$HOST&quot; -verify_hostname &quot;$HOST&quot; -verify_return_error &lt;/dev/null
+curl --fail --show-error --head &quot;https://$HOST/&quot;</code></pre>
+<p data-fa="انتظار Verify return code: 0 (ok)، hostname صحیح و status مورد انتظار endpoint. برای CA داخلی به‌جای -k، CA مصوب را به trust store یا --cacert فایل معتبر بدهید." data-en="Expect Verify return code: 0 (ok), correct hostname and the required endpoint status. For internal CA, use an approved trust store or --cacert rather than -k.">انتظار Verify return code: 0 (ok)، hostname صحیح و status مورد انتظار endpoint. برای CA داخلی به‌جای -k، CA مصوب را به trust store یا --cacert فایل معتبر بدهید.</p>
+<p data-fa="config کامل TLS و redirect در مقاله Nginx این مجموعه آمده است. پس از استقرار آن، فقط در server block HTTPS این directive کامل افزوده شود؛ این snippet مستقل config کامل Nginx نیست." data-en="The Nginx article supplies the complete TLS/redirect configuration. After deploying it, add this directive only inside the HTTPS server block. This directive is not a standalone Nginx configuration.">config کامل TLS و redirect در مقاله Nginx این مجموعه آمده است. پس از استقرار آن، فقط در server block HTTPS این directive کامل افزوده شود؛ این snippet مستقل config کامل Nginx نیست.</p>
+<pre dir="ltr"><code class="language-nginx">add_header Strict-Transport-Security &quot;max-age=300&quot; always;</code></pre>
+<pre dir="ltr"><code class="language-bash">sudo nginx -t
+sudo systemctl reload nginx
+curl --fail --head https://app.example.com</code></pre>
+<p data-fa="header باید فقط روی HTTPS و max-age کوتاه دیده شود. پس از اطمینان از تمام hostnameها و renewal، مدت افزایش یابد. includeSubDomains و preload فقط پس از inventory کامل و برنامه recovery انتخاب شوند." data-en="Expect the header only on HTTPS with a short max-age. Increase it after validating every hostname and renewal. includeSubDomains/preload require a complete inventory and recovery plan.">header باید فقط روی HTTPS و max-age کوتاه دیده شود. پس از اطمینان از تمام hostnameها و renewal، مدت افزایش یابد. includeSubDomains و preload فقط پس از inventory کامل و برنامه recovery انتخاب شوند.</p></section><section id="enterprise-security" class="article-section"><h2 data-fa="Security Hardening" data-en="Security Hardening">Security Hardening</h2><p data-fa="SSL نام رایج قدیمی است؛ SSLv2/v3 نباید baseline باشد. private key root-only و chain معتبر. از 0-RTT برای درخواست state-changing بدون تحلیل replay استفاده نشود. redirect با hostname ثابت مانع اعتماد بی‌جا به Host ورودی می‌شود." data-en="SSL is historical terminology; SSLv2/v3 are not acceptable baselines. Restrict keys to root and serve a valid chain. Assess replay before 0-RTT on state-changing requests. A fixed-hostname redirect avoids trusting arbitrary incoming Host values.">SSL نام رایج قدیمی است؛ SSLv2/v3 نباید baseline باشد. private key root-only و chain معتبر. از 0-RTT برای درخواست state-changing بدون تحلیل replay استفاده نشود. redirect با hostname ثابت مانع اعتماد بی‌جا به Host ورودی می‌شود.</p></section><section id="enterprise-monitoring" class="article-section"><h2 data-fa="Monitoring" data-en="Monitoring">Monitoring</h2><p data-fa="پایش certificate از مسیر واقعی کاربر شامل SAN، chain و expiry باشد؛ فایل روی disk شاید با certificate سرو شده متفاوت باشد. probe TLS و آزمون API هر دو؛ هشدار expiry در ۳۰/۱۴/۷ روز نمونه است." data-en="Probe SAN, chain and expiry through the actual client path; the disk file may differ from the served certificate. Test both TLS and API behavior. Example expiry alerts are 30/14/7 days.">پایش certificate از مسیر واقعی کاربر شامل SAN، chain و expiry باشد؛ فایل روی disk شاید با certificate سرو شده متفاوت باشد. probe TLS و آزمون API هر دو؛ هشدار expiry در ۳۰/۱۴/۷ روز نمونه است.</p></section><section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="Troubleshooting" data-en="Troubleshooting">Troubleshooting</h2><p data-fa="Expired: زمان واقعی client/server و notAfter. hostname mismatch: DNS/SAN/SNI. issuer unknown: intermediate و CA trust. curl موفق ولی browser خطا: mixed content، cache/HSTS یا trust store متفاوت. Error در upstream HTTP الزاماً TLS client نیست. openssl بدون -verify_return_error ممکن است handshake را با هشدار ادامه دهد؛ نتیجه را درست تفسیر کنید." data-en="For expiry, check actual client/server time and notAfter. For name mismatch, inspect DNS/SAN/SNI; for unknown issuer, inspect intermediates and CA trust. Browser-only failures may involve mixed content, HSTS/cache or trust stores. Upstream HTTP errors need not be client TLS failures. OpenSSL without -verify_return_error may continue with warnings; interpret the result correctly.">Expired: زمان واقعی client/server و notAfter. hostname mismatch: DNS/SAN/SNI. issuer unknown: intermediate و CA trust. curl موفق ولی browser خطا: mixed content، cache/HSTS یا trust store متفاوت. Error در upstream HTTP الزاماً TLS client نیست. openssl بدون -verify_return_error ممکن است handshake را با هشدار ادامه دهد؛ نتیجه را درست تفسیر کنید.</p></section><section id="enterprise-recovery" class="article-section"><h2 data-fa="Backup / Recovery" data-en="Backup / Recovery">Backup / Recovery</h2><p data-fa="key/cert و config به vault امن backup شوند؛ chain قدیمی معتبر برای rollback deploy قابل نگهداری است. بعد renewal reload و remote probe لازم است. HSTS در client cache می‌شود؛ max-age=0 فقط روی HTTPS معتبر policy را حذف می‌کند و recovery فوری همه کلاینت‌ها را تضمین نمی‌کند. preload حذف فرآیند و زمان مستقل دارد." data-en="Back up keys/certificates/configuration in a vault. Retain an older still-valid chain for deployment rollback where appropriate. Reload after renewal and probe remotely. HSTS is client-cached: max-age=0 requires valid HTTPS and does not guarantee instant recovery for every client. Preload removal has a separate process and delay.">key/cert و config به vault امن backup شوند؛ chain قدیمی معتبر برای rollback deploy قابل نگهداری است. بعد renewal reload و remote probe لازم است. HSTS در client cache می‌شود؛ max-age=0 فقط روی HTTPS معتبر policy را حذف می‌کند و recovery فوری همه کلاینت‌ها را تضمین نمی‌کند. preload حذف فرآیند و زمان مستقل دارد.</p></section><section id="enterprise-practices" class="article-section"><h2 data-fa="Best Practices" data-en="Best Practices">Best Practices</h2><p data-fa="Automation renewal، canary trust test و مالک گواهی تعریف شود. -k برای acceptance test استفاده نشود. HTTPS به‌تنهایی امنیت application یا endpoint آلوده را حل نمی‌کند." data-en="Assign certificate ownership, automate renewal and canary-test trust. Do not use -k for acceptance. HTTPS alone does not secure application logic or compromised endpoints.">Automation renewal، canary trust test و مالک گواهی تعریف شود. -k برای acceptance test استفاده نشود. HTTPS به‌تنهایی امنیت application یا endpoint آلوده را حل نمی‌کند.</p></section><section id="enterprise-compatibility" class="article-section"><h2 data-fa="نسخه‌های قدیمی و Compatibility" data-en="Legacy Versions and Compatibility">نسخه‌های قدیمی و Compatibility</h2><p data-fa="TLS 1.3 با TLS 1.2 رفتار cipher و handshake متفاوت دارد؛ policy clientهای قدیمی با منبع رسمی تطبیق شود. HSTS نیاز HTTPS فعال معتبر دارد؛ redirect جای HSTS نیست." data-en="TLS 1.3 differs from TLS 1.2 in cipher/handshake behavior. Validate older-client policy using official guidance. HSTS requires working trusted HTTPS; a redirect is not HSTS.">TLS 1.3 با TLS 1.2 رفتار cipher و handshake متفاوت دارد؛ policy clientهای قدیمی با منبع رسمی تطبیق شود. HSTS نیاز HTTPS فعال معتبر دارد؛ redirect جای HSTS نیست.</p></section><section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">پرسش‌های متداول</h2><h3 data-fa="آیا redirect جای HSTS است؟" data-en="Does redirect replace HSTS?">آیا redirect جای HSTS است؟</h3><p data-fa="خیر؛ HSTS policy مرورگر را پس از دریافت از HTTPS معتبر تعیین می‌کند." data-en="No. Browsers acquire HSTS policy through trusted HTTPS.">خیر؛ HSTS policy مرورگر را پس از دریافت از HTTPS معتبر تعیین می‌کند.</p><h3 data-fa="چرا گواهی معتبر روی disk کافی نیست؟" data-en="Why is a valid certificate on disk insufficient?">چرا گواهی معتبر روی disk کافی نیست؟</h3><p data-fa="سرویس ممکن است certificate قبلی را serve کند؛ probe از مسیر واقعی client لازم است." data-en="The service may still serve an older certificate; probe from the real client path.">سرویس ممکن است certificate قبلی را serve کند؛ probe از مسیر واقعی client لازم است.</p></section><section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">منابع رسمی</h2><ul><li><a href="https://www.rfc-editor.org/rfc/rfc8446.html" rel="noopener">IETF: TLS 1.3</a></li><li><a href="https://www.rfc-editor.org/rfc/rfc6797.html" rel="noopener">IETF: HSTS</a></li><li><a href="https://nginx.org/en/docs/http/configuring_https_servers.html" rel="noopener">Nginx: HTTPS</a></li></ul><p data-fa="تاریخ بررسی منابع: 2026-09-30. اعتبارسنجی عملی روی محیط هدف باید پیش از انتشار تغییر زیرساخت انجام شود." data-en="Sources reviewed: 2026-09-30. Validate procedures on the target environment before deploying infrastructure changes.">تاریخ بررسی منابع: 2026-09-30. اعتبارسنجی عملی روی محیط هدف باید پیش از انتشار تغییر زیرساخت انجام شود.</p></section><details id="legacy-history"><summary data-fa="محتوای نسخه قدیمی — فقط مرجع تاریخی" data-en="Historical edition — retained as originally written">محتوای نسخه قدیمی — فقط مرجع تاریخی</summary><p data-fa="نمونه‌های زیر برای حفظ سابقه هستند؛ دستورالعمل اجرایی، امنیتی و سازگاری نسخه جدید در بخش‌های بالا آمده است." data-en="The following material is retained in its original languages for historical reference. Use the bilingual runbook above for current operations, security and compatibility.">نمونه‌های زیر برای حفظ سابقه هستند؛ دستورالعمل اجرایی، امنیتی و سازگاری نسخه جدید در بخش‌های بالا آمده است.</p>
+                <section id="legacy-overview" class="article-section">
                   <h2 data-en="Introduction" data-fa="مقدمه">Introduction</h2>
                   <p data-en="HTTP and HTTPS are web communication protocols. HTTP transfers data without transport encryption, while HTTPS uses HTTP over TLS to protect the connection. The term SSL Certificate is common, but modern HTTPS deployments use TLS." data-fa="HTTP و HTTPS پروتکل‌های ارتباط وب هستند. HTTP داده‌ها را بدون رمزنگاری در لایه انتقال جابه‌جا می‌کند، در حالی که HTTPS از HTTP روی TLS برای محافظت از اتصال استفاده می‌کند. اصطلاح SSL Certificate رایج است، اما در پیاده‌سازی‌های مدرن HTTPS از TLS استفاده می‌شود.">HTTP and HTTPS are web communication protocols. HTTP transfers data without transport encryption, while HTTPS uses HTTP over TLS to protect the connection. The term SSL Certificate is common, but modern HTTPS deployments use TLS.</p>
                 </section>
 
-                <section id="article-status" class="article-section">
+                <section id="legacy-article-status" class="article-section">
                   <h2 data-en="01 — What Is HTTP?" data-fa="۰۱ — HTTP چیست؟">01 — What Is HTTP?</h2>
                   <p data-en="HTTP transfers requests and responses without TLS encryption. It conventionally uses port 80/TCP, so information sent through a plain HTTP connection can be read or modified by an attacker on the network path." data-fa="HTTP درخواست‌ها و پاسخ‌ها را بدون رمزنگاری TLS منتقل می‌کند. این پروتکل معمولاً از پورت 80/TCP استفاده می‌کند؛ بنابراین اطلاعات ارسال‌شده در یک اتصال HTTP ساده ممکن است توسط مهاجم در مسیر شبکه خوانده یا تغییر داده شود.">HTTP transfers requests and responses without TLS encryption. It conventionally uses port 80/TCP, so information sent through a plain HTTP connection can be read or modified by an attacker on the network path.</p>
                 </section>
 
-                <section id="planned-sections" class="article-section">
+                <section id="legacy-planned-sections" class="article-section">
                   <h2 data-en="02 — What Is HTTPS?" data-fa="۰۲ — HTTPS چیست؟">02 — What Is HTTPS?</h2>
                   <p data-en="HTTPS is HTTP carried over TLS. It conventionally uses port 443/TCP and protects the connection with encryption, integrity checks, and server authentication." data-fa="HTTPS همان HTTP روی TLS است. این پروتکل معمولاً از پورت 443/TCP استفاده می‌کند و اتصال را با Encryption، بررسی Integrity و Server Authentication محافظت می‌کند.">HTTPS is HTTP carried over TLS. It conventionally uses port 443/TCP and protects the connection with encryption, integrity checks, and server authentication.</p>
                 </section>
 
-                <section id="tls-certificate" class="article-section">
+                <section id="legacy-tls-certificate" class="article-section">
                   <h2 data-en="03 — What Is a TLS Certificate?" data-fa="۰۳ — TLS Certificate چیست؟">03 — What Is a TLS Certificate?</h2>
                   <p data-en="A TLS Certificate binds the server public key to its domain identity so the browser can authenticate the server. The certificate itself does not encrypt the page content; it supports the authenticated TLS handshake that establishes the session keys used for encryption and integrity protection." data-fa="TLS Certificate، Public Key سرور را به Identity دامنه متصل می‌کند تا Browser بتواند Server را احراز هویت کند. Certificate به‌تنهایی محتوای صفحه را رمزنگاری نمی‌کند؛ بلکه از TLS Handshake احراز هویت‌شده پشتیبانی می‌کند تا Session Keyهای مورد استفاده برای Encryption و Integrity ایجاد شوند.">A TLS Certificate binds the server public key to its domain identity so the browser can authenticate the server. The certificate itself does not encrypt the page content; it supports the authenticated TLS handshake that establishes the session keys used for encryption and integrity protection.</p>
                   <div class="article-grid">
@@ -412,35 +351,35 @@
                   </div>
                 </section>
 
-                <section id="tls-handshake" class="article-section">
+                <section id="legacy-tls-handshake" class="article-section">
                   <h2 data-en="04 — TLS Handshake" data-fa="۰۴ — TLS Handshake">04 — TLS Handshake</h2>
                   <p data-en="During a simplified TLS handshake, the client sends ClientHello with supported protocol versions and cryptographic options. The server responds with ServerHello, presents its certificate, and the peers perform key exchange. After the server identity is validated and the handshake completes, both sides use shared session keys to protect HTTP requests and responses." data-fa="در یک TLS Handshake ساده‌شده، Client پیام ClientHello را همراه با Versionهای پشتیبانی‌شده و گزینه‌های رمزنگاری می‌فرستد. Server با ServerHello پاسخ می‌دهد، Certificate خود را ارائه می‌کند و دو طرف Key Exchange را انجام می‌دهند. پس از اعتبارسنجی Identity سرور و تکمیل Handshake، هر دو سمت از Session Keyهای مشترک برای محافظت از درخواست‌ها و پاسخ‌های HTTP استفاده می‌کنند.">During a simplified TLS handshake, the client sends ClientHello with supported protocol versions and cryptographic options. The server responds with ServerHello, presents its certificate, and the peers perform key exchange. After the server identity is validated and the handshake completes, both sides use shared session keys to protect HTTP requests and responses.</p>
                 </section>
 
-                <section id="check-certificate" class="article-section">
+                <section id="legacy-check-certificate" class="article-section">
                   <h2 data-en="05 — Check a Certificate" data-fa="۰۵ — بررسی Certificate">05 — Check a Certificate</h2>
                   <p data-en="Use these commands to inspect the TLS connection and make an HTTPS header request. Replace the example domain with the target host you are authorized to test." data-fa="برای بررسی اتصال TLS و ارسال درخواست Header روی HTTPS از دستورهای زیر استفاده کنید. example.com را با Host مجازی که مجاز به بررسی آن هستید جایگزین کنید.">Use these commands to inspect the TLS connection and make an HTTPS header request. Replace the example domain with the target host you are authorized to test.</p>
-                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="Terminal" data-fa="ترمینال">Terminal</span><button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی">Copy</button></div><pre><code class="language-bash">openssl s_client -connect example.com:443 -servername example.com</code></pre></div>
-                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="Terminal" data-fa="ترمینال">Terminal</span><button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی">Copy</button></div><pre><code class="language-bash">curl -I https://example.com</code></pre></div>
+                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="Terminal" data-fa="ترمینال">Terminal</span></div><div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">openssl s_client -connect example.com:443 -servername example.com</code></div></div>
+                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="Terminal" data-fa="ترمینال">Terminal</span></div><div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-bash">curl -I https://example.com</code></div></div>
                 </section>
 
-                <section id="http-redirect" class="article-section">
+                <section id="legacy-http-redirect" class="article-section">
                   <h2 data-en="06 — Redirect HTTP to HTTPS" data-fa="۰۶ — Redirect از HTTP به HTTPS">06 — Redirect HTTP to HTTPS</h2>
                   <p data-en="Keep an HTTP listener only to redirect visitors to the HTTPS URL. The following Nginx server block returns a permanent redirect." data-fa="یک Listener برای HTTP را فقط برای Redirect کردن بازدیدکنندگان به URL مبتنی بر HTTPS نگه دارید. Server Block زیر در Nginx یک Redirect دائمی برمی‌گرداند.">Keep an HTTP listener only to redirect visitors to the HTTPS URL. The following Nginx server block returns a permanent redirect.</p>
-                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="Nginx" data-fa="Nginx">Nginx</span><button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی">Copy</button></div><pre><code class="language-nginx">server {
+                  <div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="Nginx" data-fa="Nginx">Nginx</span></div><div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left"><code class="language-nginx">server {
     listen 80;
     server_name example.com www.example.com;
     return 301 https://$host$request_uri;
-}</code></pre></div>
+}</code></div></div>
                 </section>
 
-                <section id="hsts" class="article-section">
+                <section id="legacy-hsts" class="article-section">
                   <h2 data-en="07 — HSTS" data-fa="۰۷ — HSTS">07 — HSTS</h2>
                   <p data-en="The Strict-Transport-Security response header tells browsers to use HTTPS for future connections to a host. It strengthens protection against downgrade attempts after the browser has received the policy over HTTPS." data-fa="Response Header با نام Strict-Transport-Security به Browser اعلام می‌کند که برای اتصال‌های بعدی به یک Host از HTTPS استفاده کند. این Header پس از دریافت Policy از طریق HTTPS، محافظت در برابر تلاش‌های Downgrade را تقویت می‌کند.">The Strict-Transport-Security response header tells browsers to use HTTPS for future connections to a host. It strengthens protection against downgrade attempts after the browser has received the policy over HTTPS.</p>
                   <div class="article-callout article-callout--warning"><p class="article-callout-title" data-en="Test before enabling broadly" data-fa="پیش از فعال‌سازی گسترده تست کنید">Test before enabling broadly</p><p data-en="HSTS must be sent over HTTPS. Enabling includeSubDomains or a long max-age before every affected host supports valid HTTPS can make those hosts unavailable to users, and browsers do not allow users to bypass certificate errors for HSTS hosts." data-fa="HSTS باید از طریق HTTPS ارسال شود. فعال‌کردن includeSubDomains یا max-age طولانی پیش از آن‌که همه Hostهای تحت تأثیر از HTTPS معتبر پشتیبانی کنند، ممکن است آن Hostها را برای کاربران غیرقابل‌دسترسی کند؛ همچنین Browserها برای Hostهای HSTS اجازه عبور از خطای Certificate را نمی‌دهند.">HSTS must be sent over HTTPS. Enabling includeSubDomains or a long max-age before every affected host supports valid HTTPS can make those hosts unavailable to users, and browsers do not allow users to bypass certificate errors for HSTS hosts.</p></div>
                 </section>
 
-                <section id="common-errors" class="article-section">
+                <section id="legacy-common-errors" class="article-section">
                   <h2 data-en="08 — Common Errors" data-fa="۰۸ — خطاهای رایج">08 — Common Errors</h2>
                   <div class="article-grid">
                     <div class="article-card article-card--method"><div class="article-card-content"><h3 class="article-card-title" data-en="Certificate Expired" data-fa="Certificate Expired">Certificate Expired</h3><p data-en="Renew and deploy the certificate before its expiry date, then verify that the server is presenting the renewed certificate." data-fa="Certificate را پیش از تاریخ انقضا Renew و Deploy کنید، سپس بررسی کنید Server، Certificate تمدیدشده را ارائه می‌کند.">Renew and deploy the certificate before its expiry date, then verify that the server is presenting the renewed certificate.</p></div></div>
@@ -450,7 +389,7 @@
                   </div>
                 </section>
 
-                <section id="comparison" class="article-section">
+                <section id="legacy-comparison" class="article-section">
                   <h2 data-en="HTTP and HTTPS Comparison" data-fa="جدول مقایسه HTTP و HTTPS">HTTP and HTTPS Comparison</h2>
                   <div class="article-table-wrap"><table class="article-table"><thead><tr><th data-en="Feature" data-fa="ویژگی">Feature</th><th data-en="HTTP" data-fa="HTTP">HTTP</th><th data-en="HTTPS" data-fa="HTTPS">HTTPS</th></tr></thead><tbody>
                     <tr><td data-en="Transport protection" data-fa="محافظت از انتقال">Transport protection</td><td data-en="No TLS encryption" data-fa="بدون Encryption مبتنی بر TLS">No TLS encryption</td><td data-en="HTTP over TLS" data-fa="HTTP روی TLS">HTTP over TLS</td></tr>
@@ -461,7 +400,7 @@
                   </tbody></table></div>
                 </section>
 
-                <section id="best-practices" class="article-section">
+                <section id="legacy-best-practices" class="article-section">
                   <h2 data-en="Best Practices" data-fa="بهترین روش‌ها">Best Practices</h2>
                   <div class="article-callout article-callout--tip"><ul>
                     <li data-en="Serve all pages and subresources over HTTPS and redirect HTTP to HTTPS." data-fa="همه صفحه‌ها و Subresourceها را با HTTPS ارائه کنید و HTTP را به HTTPS Redirect کنید.">Serve all pages and subresources over HTTPS and redirect HTTP to HTTPS.</li>
@@ -471,12 +410,12 @@
                   </ul></div>
                 </section>
 
-                <section id="troubleshooting" class="article-section">
+                <section id="legacy-troubleshooting" class="article-section">
                   <h2 data-en="Troubleshooting" data-fa="رفع اشکال">Troubleshooting</h2>
                   <p data-en="When HTTPS does not work as expected, verify the domain name, certificate validity period, certificate chain, server TLS configuration, and the web-server redirect. Review browser developer tools for mixed-content warnings." data-fa="وقتی HTTPS مطابق انتظار کار نمی‌کند، Domain Name، دوره اعتبار Certificate، Certificate Chain، پیکربندی TLS در Server و Redirect وب‌سرور را بررسی کنید. برای هشدارهای Mixed Content، ابزار توسعه‌دهنده Browser را بازبینی کنید.">When HTTPS does not work as expected, verify the domain name, certificate validity period, certificate chain, server TLS configuration, and the web-server redirect. Review browser developer tools for mixed-content warnings.</p>
                 </section>
 
-                <section id="faq" class="article-section">
+                <section id="legacy-faq" class="article-section">
                   <h2 data-en="Frequently Asked Questions" data-fa="سوالات متداول">Frequently Asked Questions</h2>
                   <div class="article-faq">
                     <div class="article-faq-item"><h3 class="article-faq-question"><span data-en="Is SSL the same as TLS?" data-fa="آیا SSL همان TLS است؟">Is SSL the same as TLS?</span><i class="bi bi-chevron-down" aria-hidden="true"></i></h3><div class="article-faq-answer"><p data-en="SSL is the older name that remains common in product names such as SSL Certificate. Modern secure web connections use TLS." data-fa="SSL نام قدیمی‌تری است که هنوز در نام‌هایی مانند SSL Certificate رایج است. اتصال‌های امن وب مدرن از TLS استفاده می‌کنند.">SSL is the older name that remains common in product names such as SSL Certificate. Modern secure web connections use TLS.</p></div></div>
@@ -485,12 +424,12 @@
                   </div>
                 </section>
 
-                <section id="conclusion" class="article-section">
+                <section id="legacy-conclusion" class="article-section">
                   <h2 data-en="Conclusion" data-fa="جمع‌بندی">Conclusion</h2>
                   <p data-en="HTTPS protects HTTP with TLS by providing encryption, integrity, and server authentication. Use a valid TLS certificate, redirect HTTP to HTTPS, test all resources for secure loading, and enable HSTS only after confirming that the relevant hosts can reliably serve HTTPS." data-fa="HTTPS با ارائه Encryption، Integrity و Server Authentication از HTTP با TLS محافظت می‌کند. از TLS Certificate معتبر استفاده کنید، HTTP را به HTTPS Redirect کنید، بارگذاری امن همه Resourceها را تست کنید و HSTS را فقط پس از اطمینان از ارائه پایدار HTTPS توسط Hostهای مرتبط فعال کنید.">HTTPS protects HTTP with TLS by providing encryption, integrity, and server authentication. Use a valid TLS certificate, redirect HTTP to HTTPS, test all resources for secure loading, and enable HSTS only after confirming that the relevant hosts can reliably serve HTTPS.</p>
                 </section>
 
-                <section id="official-resources" class="article-section">
+                <section id="legacy-official-resources" class="article-section">
                   <h2 data-en="Official References" data-fa="منابع رسمی">Official References</h2>
                   <ul>
                     <li><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Transport_Layer_Security" target="_blank" rel="noopener noreferrer" data-en="MDN: Transport Layer Security" data-fa="MDN: Transport Layer Security">MDN: Transport Layer Security</a></li>
@@ -501,7 +440,7 @@
                 </section>
                 <footer class="article-footer" aria-label="Article footer">
                   <section
-                    id="author"
+                    id="legacy-author"
                     class="article-author"
                     role="complementary"
                     aria-labelledby="author-title"
@@ -519,7 +458,7 @@
                       <div class="article-author-content">
                         <p
                           class="article-author-kicker"
-                          id="author-title"
+                          id="legacy-author-title"
                           data-en="About the author"
                           data-fa="درباره نویسنده"
                         >
@@ -590,7 +529,7 @@
                     >
                   </nav>
                 </footer>
-              </article>
+              </details></div></article>
             </div>
           </div>
         </div>

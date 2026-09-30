@@ -21,7 +21,7 @@
 @endphp
               @if ($isRelated)
                 <article class="article-teaser article-teaser--related" data-topic="{{ $topic }}" style="{{ $accentStyle }}">
-                  <a class="article-teaser-link" href="{{ $article->path() }}">
+                  <a class="article-teaser-link" href="{{ $article->path().(($pageLocale ?? null) === 'en' && data_get($article->presentation, 'localizations') ? '?lang=en' : '') }}">
                     <div class="article-teaser-media">
                       <img
                         src="{{ $article->thumbnailUrl() }}"
@@ -40,7 +40,7 @@
                           data-fa="{{ $categoryFa }}"
                         >{{ $categoryEn }}</p>
                       @endif
-                      <h3 class="article-teaser-title" data-i18n-lock data-en="{{ $titleEn }}">{{ $titleEn }}</h3>
+                      <h3 class="article-teaser-title" @if(empty($pageLocale)) data-i18n-lock @else data-fa="{{ $titleFa }}" @endif data-en="{{ $titleEn }}">{{ ($pageLocale ?? null) === 'fa' ? $titleFa : $titleEn }}</h3>
                       <p class="article-teaser-meta">
                         @if ($article->published_at)
                           <span>

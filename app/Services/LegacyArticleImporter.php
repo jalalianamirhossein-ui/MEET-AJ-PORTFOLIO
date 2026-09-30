@@ -205,6 +205,17 @@ class LegacyArticleImporter
 
         $schema = $this->jsonLd($html);
         $contentLanguage = $this->namedMeta($html, 'article:content-language') === 'fa' ? 'fa' : 'en';
+        $localizations = null;
+        if (preg_match('~<script\b[^>]*id="article-localizations"[^>]*>(.*?)</script>~is', $html, $localized)) {
+            $candidate = json_decode($localized[1], true);
+            if (is_array($candidate) && isset($candidate['fa'], $candidate['en'])) {
+                $localizations = $candidate;
+                $heroTitle = $candidate['en']['title'];
+                $heroTitleFa = $candidate['fa']['title'];
+                $excerpt = $candidate['en']['description'];
+                $excerptFa = $candidate['fa']['description'];
+            }
+        }
         $publishedAt = $this->publishedAt($schema, $relative);
         $seo = [
             'og_title' => $contentLanguage === 'fa' ? $this->meta($html, 'og:title') : $this->englishOrFallback($this->meta($html, 'og:title'), $heroTitle),
@@ -224,6 +235,7 @@ class LegacyArticleImporter
         ];
 
         $presentation = array_filter([
+            'localizations' => $localizations,
             'content_language' => $contentLanguage === 'fa' ? 'fa' : null,
             'source_file' => $relative,
             'source_hash' => $hash,
@@ -241,10 +253,10 @@ class LegacyArticleImporter
             'filter_class' => $card['filter_class'] ?? $this->filterFromCategory($categorySlug),
             'thumbnail' => $card['thumbnail'] ?? $heroImage,
             'gallery' => $card['gallery'] ?? $heroImage,
-            'card_title_en' => $card['card_title_en'] ?? $heroTitle,
-            'card_title_fa' => $card['card_title_fa'] ?? $heroTitleFa,
-            'card_excerpt_en' => $card['card_excerpt_en'] ?? $excerpt,
-            'card_excerpt_fa' => $card['card_excerpt_fa'] ?? $excerptFa,
+            'card_title_en' => $localizations ? $heroTitle : ($card['card_title_en'] ?? $heroTitle),
+            'card_title_fa' => $localizations ? $heroTitleFa : ($card['card_title_fa'] ?? $heroTitleFa),
+            'card_excerpt_en' => $localizations ? $excerpt : ($card['card_excerpt_en'] ?? $excerpt),
+            'card_excerpt_fa' => $localizations ? $excerptFa : ($card['card_excerpt_fa'] ?? $excerptFa),
             'image_alt' => $card['alt'] ?? $heroTitle,
         ], fn ($value) => $value !== null && $value !== '');
 
@@ -497,6 +509,13 @@ class LegacyArticleImporter
     {
         // A reviewed Persian editorial package intentionally has Persian SEO.
         if (data_get($article->presentation, 'content_language') === 'fa') {
+            // The shared row keeps its English identity, while Persian SEO is intentional.
+            if ($this->hasArabic((string) $article->title) && ! $this->hasArabic((string) $parsed['title'])) {
+                $article->title = $parsed['title'];
+                $article->save();
+
+                return true;
+            }
             return false;
         }
         $english = $this->englishOrFallback($parsed['title'] ?? null, $article->title);

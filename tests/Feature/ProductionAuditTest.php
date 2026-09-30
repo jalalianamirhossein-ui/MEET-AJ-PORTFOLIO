@@ -106,16 +106,18 @@ class ProductionAuditTest extends TestCase
             ->assertSee('href="/#contact"', false);
     }
 
-    public function test_article_titles_remain_english(): void
+    public function test_shared_article_identity_remains_english_and_titles_follow_the_requested_locale(): void
     {
         $this->assertSame(25, Article::query()->count());
         foreach (Article::query()->get() as $article) {
             $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', $article->title, $article->slug);
-            $this->get('/articles/'.$article->slug)
+            $this->get('/articles/'.$article->slug.'?lang=en')
                 ->assertOk()
                 ->assertSee('data-i18n-lock', false)
                 ->assertSee($article->title)
                 ->assertSee('href="/#contact"', false);
+            $this->get('/articles/'.$article->slug)->assertOk()
+                ->assertSee($article->presentation['localizations']['fa']['title']);
         }
         $listing = $this->get('/articles')->assertOk()->getContent();
         $this->assertStringContainsString('data-i18n-lock', $listing);
@@ -124,15 +126,15 @@ class ProductionAuditTest extends TestCase
 
         $article = Article::query()->orderBy('slug')->first();
         $english = $article->title;
+        $persianMetaTitle = $article->meta_title;
         $article->forceFill([
             'title' => 'آموزش تست',
-            'meta_title' => 'آموزش تست',
         ])->save();
         app(LegacyArticleImporter::class)->import(false);
         $article->refresh();
         $this->assertSame($english, $article->title);
         $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', $article->title);
-        $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', (string) $article->meta_title);
+        $this->assertSame($persianMetaTitle, $article->meta_title);
     }
 
     public function test_persian_testimonials_use_shared_rtl_safe_slider(): void
