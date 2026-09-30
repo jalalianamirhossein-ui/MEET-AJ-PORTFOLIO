@@ -35,7 +35,7 @@ class AdminWorkspaceTest extends TestCase
         $response = $this->actingAs($admin)->get('/admin')->assertOk()
             ->assertSee('Your next great update starts here.')
             ->assertSee('Workspace shortcuts')
-            ->assertSee('glass-2', false);
+            ->assertSee('glass-3', false);
 
         // Optional static visual fixture uses isolated test data, never live users.
         if (getenv('MEETAJ_ADMIN_PREVIEW') === '1') {

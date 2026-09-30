@@ -70,7 +70,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->renderHook(
                 PanelsRenderHook::STYLES_AFTER,
-                fn (): string => '<link rel="stylesheet" href="'.e(asset('css/app/meet-aj-admin.css')).'?v=glass-2" data-meetaj="admin-contrast-late">',
+                fn (): string => '<link rel="stylesheet" href="'.e(asset('css/app/meet-aj-admin.css')).'?v=glass-3" data-meetaj="admin-contrast-late">',
             )
             ->renderHook(PanelsRenderHook::SIMPLE_PAGE_START, fn () => view('filament.partials.login-intro'))
             ->renderHook(PanelsRenderHook::SCRIPTS_AFTER, fn (): string => '<script src="'.e(asset('assets/js/scroll-reveal.js')).'?v=1" defer></script>')

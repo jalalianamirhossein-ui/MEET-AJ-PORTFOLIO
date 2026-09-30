@@ -899,7 +899,9 @@ html.fi .fi-ta-header-toolbar { padding: 1.1rem 1.25rem; background: transparent
 html.fi .fi-ta-header-cell { background: #f8fafc; font-size: 0.75rem; padding-block: 0.875rem; }
 html.fi .fi-ta-cell { padding-block: 1rem; }
 html.fi .fi-ta-row:not(.meetaj-request-new):nth-child(even) { background: rgba(248, 250, 252, 0.65); }
-html.fi .fi-ta-row:hover { background: var(--color-primary-soft); }
+html.fi .fi-ta-row:hover,
+html.fi .fi-ta-row:not(.meetaj-request-new):nth-child(even):hover,
+html.fi .fi-ta-row:focus-within { background: var(--color-primary-soft); }
 html.fi .fi-pagination { padding: 1rem 1.25rem; }
 html.fi .fi-ta-empty-state { padding: 3rem 1.5rem; }
 
@@ -939,6 +941,37 @@ html.fi .fi-no-notification {
 }
 html.fi .fi-dropdown-list { background: transparent; border: 0; box-shadow: none; padding: 0.5rem; }
 html.fi .fi-dropdown-list-item { border-radius: 0.65rem; min-height: 2.75rem; }
+html.fi .fi-dropdown-list-item:hover,
+html.fi .fi-dropdown-list-item:focus-visible,
+html.fi .fi-global-search-result:hover,
+html.fi .fi-global-search-result:focus-within { background: var(--color-primary-soft); }
+
+/* Keep the entire search field inside one surface, including its icon/affixes. */
+html.fi .fi-global-search-ctn { min-width: 0; }
+html.fi .fi-global-search-field { width: clamp(12rem, 22vw, 20rem); max-width: 100%; }
+html.fi .fi-global-search-field .fi-input-wrp {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.8);
+}
+html.fi .fi-global-search-field .fi-input-wrp-content-ctn { min-width: 0; flex: 1; }
+html.fi .fi-global-search-field input.fi-input {
+  width: 100%;
+  min-width: 0;
+  background: transparent !important;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  outline-offset: -3px;
+}
+html.fi .fi-global-search-results-ctn { max-width: calc(100vw - 2rem); }
+html.fi .fi-global-search-result-link { overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  html.fi .fi-global-search-field { width: min(14rem, 55vw); }
+}
 
 /* Dashboard welcome area and permission-aware shortcuts. */
 .meetaj-workspace {

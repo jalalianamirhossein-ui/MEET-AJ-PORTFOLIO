@@ -12,7 +12,7 @@
   --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9);
   --glass-shadow: 0 8px 28px rgba(15, 23, 42, 0.07);
   --glass-shadow-raised: 0 14px 36px rgba(15, 23, 42, 0.11);
-  --glass-hero-fill: rgba(255, 255, 255, 0.82);
+  --glass-hero-fill: rgba(255, 255, 255, 0.58);
   --section-y: clamp(3rem, 5vw, 5rem);
 }
 
@@ -53,8 +53,8 @@ body.index-page #hero .hero-content {
   background: var(--glass-hero-fill);
   color: var(--color-text);
   box-shadow: var(--glass-highlight), var(--glass-shadow);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  backdrop-filter: blur(8px) saturate(120%);
 }
 
 body.index-page #hero .hero-title {
@@ -83,7 +83,7 @@ body.index-page #hero .btn-outline-light {
 body.index-page #hero .btn-outline-light:hover { background: #ffffff; }
 
 /* A single surface recipe shared by existing reusable components. */
-body :is(.article-teaser, .services .service-item.service-catalog-card,
+body :is(.article-teaser, .service-catalog-card,
   .skill-group, .testimonial-card, .contact-card,
   .contact .form-container) {
   background: var(--glass-fill);
@@ -103,13 +103,81 @@ body .services .service-item.service-catalog-card { padding: var(--space-6); }
 body .services #service-catalog { gap: var(--space-6); }
 
 @media (hover: hover) and (pointer: fine) {
-  body :is(.article-teaser, .services .service-item.service-catalog-card,
+  body :is(.services .service-item.service-catalog-card,
     .testimonial-card, .contact-card):hover {
     background: var(--glass-fill-hover);
     border-color: var(--primary);
     box-shadow: var(--glass-highlight), var(--glass-shadow-raised);
     transform: none;
   }
+}
+
+/* Each article keeps its category colour on the edge and hover elevation. */
+body .article-teaser {
+  --card-accent: var(--topic, var(--article-primary, var(--primary)));
+  transition: border-color 220ms ease, box-shadow 220ms ease, background-color 220ms ease;
+}
+body .article-teaser:focus-within {
+  border-color: var(--card-accent);
+  box-shadow: var(--glass-highlight), 0 10px 30px color-mix(in srgb, var(--card-accent) 20%, transparent);
+}
+@media (hover: hover) and (pointer: fine) {
+  body .article-teaser:hover {
+    border-color: var(--card-accent);
+    box-shadow: var(--glass-highlight), 0 10px 30px color-mix(in srgb, var(--card-accent) 20%, transparent);
+    transform: none;
+  }
+}
+
+/* Crisp portrait, quiet glass ring: no glow, shimmer, or oversized zoom. */
+body #header.header .profile-img { isolation: isolate; }
+body #header.header .profile-img::before,
+body #header.header .profile-img::after { content: none; }
+body #header.header .profile-img img {
+  opacity: 1;
+  filter: none;
+  animation: none;
+  border: 3px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.1);
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+body #header.header .profile-img:hover img,
+body #header.header .profile-img:focus-within img {
+  transform: scale(1.035);
+  filter: none;
+  border-color: var(--primary);
+  box-shadow: 0 5px 16px rgba(15, 23, 42, 0.16);
+}
+
+/* Grid/flex children must be allowed to shrink around long addresses/titles. */
+body .contact-main-grid > *,
+body .contact :is(.contact-info-section, .contact-form-section, .form-container,
+  .contact-cards-grid, .contact-card, .card-content, .form-row, .form-group) {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+body .contact .contact-card { width: 100%; transform: none; }
+body .contact .contact-card:hover { transform: none; }
+body .contact .card-content { flex: 1 1 0; gap: 0.35rem; }
+body .contact .card-icon { flex-shrink: 0; }
+body .contact :is(.contact-link, .contact-item a) { overflow-wrap: anywhere; word-break: normal; }
+body .contact :is(input, textarea, select, iframe) { min-width: 0; max-width: 100%; box-sizing: border-box; }
+.article-page aside.article-toc :is(nav, ul, li, a, a > span) {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.article-page aside.article-toc .article-nav-item a {
+  width: 100%;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  min-height: 2.75rem;
+}
+.article-page aside.article-toc .article-nav-item a > span { flex: 1 1 0; }
+.article-page aside.article-toc .article-toc-list { padding: 0.25rem; }
+@media (max-width: 767px) {
+  body .contact-main-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
 body :is(.article-chip, .article-tag) { min-height: 2.75rem; }

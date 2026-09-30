@@ -505,9 +505,9 @@
         });
       };
 
-      const animateFilter = () => {
+      const animateFilter = ({ loadMore = false } = {}) => {
         const reduce = prefersReducedMotion() || !state.booted;
-        const duration = 420;
+        const duration = loadMore ? 620 : 420;
         const first = reduce ? new Map() : capture();
         const visible = nextVisible();
 
@@ -550,16 +550,22 @@
             };
           });
 
+          let entryIndex = 0;
           last.forEach((box, el) => {
             const prev = first.get(el);
             if (!prev) {
               el.classList.add("is-flip-enter");
               el.animate(
                 [
-                  { transform: "translate3d(0,14px,0)", opacity: 0 },
+                  { transform: "translate3d(0,18px,0)", opacity: 0 },
                   { transform: "translate3d(0,0,0)", opacity: 1 },
                 ],
-                { duration, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+                {
+                  duration,
+                  delay: loadMore ? Math.min(entryIndex++, 5) * 45 : 0,
+                  easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+                  fill: "backwards",
+                },
               ).onfinish = () => el.classList.remove("is-flip-enter");
               return;
             }
@@ -618,7 +624,7 @@
       if (loadMore && inPortfolio) {
         loadMore.addEventListener("click", () => {
           state.visibleCount += state.batchSize;
-          animateFilter();
+          animateFilter({ loadMore: true });
         });
       }
 
