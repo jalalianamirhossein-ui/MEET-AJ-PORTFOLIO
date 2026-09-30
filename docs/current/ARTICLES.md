@@ -53,16 +53,17 @@ php artisan articles:sync-tags
 | `/articles` | Library: full card grid, or paginated results when filtered |
 | `/articles?q=…` | Search results, 9 per page, query string preserved |
 | `/articles?tag=…` | Tag filter, same pagination |
-| `/articles/{slug}` | Canonical article detail |
-| `/articles/{slug}?lang=en` | English version of a curated bilingual article; its own canonical |
+| `/articles/{slug}` | Default English edition and English SEO; clean canonical |
+| `/articles/{slug}?lang=fa` | Persian edition with its own canonical |
+| `/articles/{slug}?lang=en` | Compatible English alias; canonical points to the clean URL |
 | `/articles/{slug}.html` | **301** to `/articles/{slug}`, query string preserved, no redirect chain |
 | unknown slug | 404 |
 
 ## Bilingual enterprise editions
 
-All 25 source files contain complete current FA/EN runbooks. The base URL serves Persian; `?lang=en` serves English. Other language values fall back to Persian with the base canonical. Cookies/local storage do not override the language selected by the URL. Both pages return reciprocal `fa`/`en` hreflang and an `x-default` pointing to the Persian base URL. Sitemap entries cover both versions.
+All 25 source files contain complete current FA/EN editions. The base URL serves English content and SEO; `?lang=fa` serves Persian. An old `?lang=en` link or an unsupported language value renders English with the clean canonical. Cookies/local storage do not override article URLs. Both pages return reciprocal `fa`/`en` hreflang and an `x-default` pointing to the English base URL. Sitemap entries cover both versions.
 
-`ArticleLocalization` selects prose, headings, TOC, metadata, Article/FAQ schemas and sharing titles before Blade renders. Code blocks are shared and protected from translation. The language button navigates to the alternate URL, which makes localized metadata available without JavaScript. Related links retain the selected language. Historical editions remain labeled and preserved in their original languages; `docs/enterprise-articles/originals.zip` retains exact original files.
+`ArticleLocalization` selects prose, headings, TOC, metadata, Article/FAQ schemas and sharing titles before Blade renders. Code blocks are shared and protected from translation. With JavaScript, the language control and inline translation links update the existing text, direction, metadata, schemas, share links and URL using `history.replaceState`; they do not fetch or reload the document. Without JavaScript, alternate links still return a complete localized response. The switch payload contains metadata only, without duplicate article bodies. Related links retain the selected language. Historical editions remain labeled and preserved in their original languages; `docs/enterprise-articles/originals.zip` retains exact original files.
 
 `LegacyArticleImporter` reads the `article-localizations` JSON block from each source into `presentation.localizations`. Existing database rows need `--update-existing` to receive the replacement sources. This work changed source/application files and tested an isolated database; it did not import into the operational database or deploy the site. Review `docs/enterprise-articles/bilingual-report.md` and the dry-run before deployment, and publish updated assets through the existing deployment workflow.
 
@@ -108,7 +109,7 @@ Result on 2026-09-21: **Failures: 0** for all 25 articles. Evidence: [../qa/CONT
 
 ## Languages
 
-Articles are stored in English. The Persian visitor experience comes from `data-fa` attributes inside the stored HTML plus `assets/js/i18n.js` and `rtl.css`. There are no `/fa/...` article URLs and no German articles. Publishing `language = de` throws `ValidationException`.
+Articles share an English database identity. The clean URL renders the complete English edition and SEO. `?lang=fa` renders the complete Persian edition and SEO. Both use the same stored bilingual HTML and code; `i18n.js` changes language in place after loading. There are no `/fa/...` article URLs and no German articles. Publishing `language = de` throws `ValidationException`.
 
 ## Publication rules
 

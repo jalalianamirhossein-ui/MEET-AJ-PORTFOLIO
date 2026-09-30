@@ -33,7 +33,7 @@ class BilingualEnterpriseArticleTest extends TestCase
             $localeIds = [];
             $original = $article->content;
             foreach (['fa', 'en'] as $lang) {
-                $url = $article->path().($lang === 'en' ? '?lang=en' : '');
+                $url = $article->path().($lang === 'fa' ? '?lang=fa' : '');
                 $html = $this->get($url)->assertOk()->getContent();
                 if (getenv('ARTICLE_PREVIEW_EXPORT')) {
                     file_put_contents(storage_path('app/bilingual-preview/'.$article->slug.'.'.$lang.'.html'), $html);
@@ -46,16 +46,22 @@ class BilingualEnterpriseArticleTest extends TestCase
                 $this->assertSame($meta['description'], $xp->evaluate('string(//meta[@name="description"]/@content)'));
                 $this->assertSame(implode(', ', $meta['keywords']), $xp->evaluate('string(//meta[@name="keywords"]/@content)'));
                 $this->assertSame($meta['title'], $xp->evaluate('string(//h1[@class="article-title hero-title"])'));
-                $this->assertSame($article->publicUrl().($lang === 'en' ? '?lang=en' : ''), $xp->evaluate('string(//link[@rel="canonical"]/@href)'));
+                $switchSeo = json_decode($xp->evaluate('string(//script[@id="article-language-seo"])'), true, 512, JSON_THROW_ON_ERROR);
+                foreach (['fa', 'en'] as $switchLocale) {
+                    $this->assertSame($article->presentation['localizations'][$switchLocale]['meta_title'], $switchSeo[$switchLocale]['title']);
+                    $this->assertSame($switchLocale, $switchSeo[$switchLocale]['faq_schema']['inLanguage']);
+                    $this->assertArrayNotHasKey('content', $switchSeo[$switchLocale], 'Switch payload must not duplicate article bodies');
+                }
+                $this->assertSame($article->publicUrl().($lang === 'fa' ? '?lang=fa' : ''), $xp->evaluate('string(//link[@rel="canonical"]/@href)'));
                 foreach (['fa', 'en'] as $alternate) {
-                    $target = $article->publicUrl().($alternate === 'en' ? '?lang=en' : '');
+                    $target = $article->publicUrl().($alternate === 'fa' ? '?lang=fa' : '');
                     $this->assertSame($target, $xp->evaluate('string(//link[@hreflang="'.$alternate.'"]/@href)'));
                     $this->assertSame($target, $xp->evaluate('string(//nav[@class="article-translations"]/a[@hreflang="'.$alternate.'"]/@href)'));
                 }
                 $this->assertSame($lang, $xp->evaluate('string(//article[@class="article-body"]/@lang)'));
                 $this->assertSame($lang === 'fa' ? 'rtl' : 'ltr', $xp->evaluate('string(//article[@class="article-body"]/@dir)'));
                 foreach ($xp->query('//a[@class="article-teaser-link"]') as $peer) {
-                    $this->assertSame($lang === 'en', str_ends_with($peer->getAttribute('href'), '?lang=en'));
+                    $this->assertSame($lang === 'fa', str_ends_with($peer->getAttribute('href'), '?lang=fa'));
                 }
                 $localeCodes[$lang] = [];
                 foreach ($xp->query('//article[@class="article-body"]//pre/code') as $code) {
@@ -104,9 +110,11 @@ class BilingualEnterpriseArticleTest extends TestCase
         app(LegacyArticleImporter::class)->import(false);
         $path = '/articles/enable-ssh-linux-complete-guide';
         $this->get($path.'.html?lang=en')->assertRedirect($path.'?lang=en');
-        $this->withCookie('lang', 'en')->get($path)->assertOk()->assertSee('data-article-language="fa"', false);
-        $this->withCookie('lang', 'fa')->get($path.'?lang=en')->assertOk()->assertSee('data-article-language="en"', false);
-        $this->get($path.'?lang=invalid')->assertOk()->assertSee('data-article-language="fa"', false);
+        $this->withCookie('lang', 'en')->get($path.'?lang=fa')->assertOk()->assertSee('data-article-language="fa"', false);
+        $this->withCookie('lang', 'fa')->get($path)->assertOk()->assertSee('data-article-language="en"', false);
+        $this->get($path.'?lang=invalid')->assertOk()->assertSee('data-article-language="en"', false);
+        $alias = $this->get($path.'?lang=en')->assertOk()->getContent();
+        $this->assertSame(url($path), $this->dom($alias)->evaluate('string(//link[@rel="canonical"]/@href)'));
         $xml = $this->get('/sitemap.xml')->assertOk()->getContent();
         $dom = new \DOMDocument;
         $this->assertTrue($dom->loadXML($xml));
@@ -125,5 +133,61 @@ class BilingualEnterpriseArticleTest extends TestCase
             ->assertSee($package['presentation']['localizations']['en']['title'])
             ->assertSee('"inLanguage":"en"', false)
             ->assertSee('Why is log backup unavailable in SIMPLE?');
+    }
+
+    public function test_updating_existing_imported_articles_enables_english_after_deployment(): void
+    {
+        app(LegacyArticleImporter::class)->import(false);
+        $article = Article::where('slug', 'enable-ssh-linux-complete-guide')->firstOrFail();
+        $id = $article->id;
+        $translationKey = $article->translation_key;
+        $presentation = $article->presentation;
+        unset($presentation['localizations']);
+        $presentation['source_hash'] = 'pre-bilingual-source';
+        $article->update([
+            'presentation' => $presentation,
+            'content' => '<section id="enterprise-intro"><h2>مقدمه</h2><p>متن نسخه قدیمی فارسی</p></section>',
+        ]);
+
+        // A routine import skips existing rows even after source files change.
+        $this->artisan('articles:import-legacy')->assertSuccessful();
+        $this->assertNull(data_get($article->fresh()->presentation, 'localizations'));
+        $this->get($article->path().'?lang=en')->assertOk()->assertSee('متن نسخه قدیمی فارسی');
+
+        // Preview is read-only; the explicit update preserves the shared identity.
+        $this->artisan('articles:import-legacy', ['--update-existing' => true, '--dry-run' => true])->assertSuccessful();
+        $this->assertNull(data_get($article->fresh()->presentation, 'localizations'));
+        $this->artisan('articles:import-legacy', ['--update-existing' => true])->assertSuccessful();
+        $article->refresh();
+        $this->assertSame($id, $article->id);
+        $this->assertSame($translationKey, $article->translation_key);
+        $this->assertCount(25, Article::all());
+        $this->get($article->path().'?lang=en')->assertOk()
+            ->assertSee('data-article-language="en"', false)
+            ->assertSee($article->presentation['localizations']['en']['title'])
+            ->assertDontSee('متن نسخه قدیمی فارسی');
+        $this->get($article->path().'?lang=fa')->assertOk()
+            ->assertSee('data-article-language="fa"', false)
+            ->assertSee($article->presentation['localizations']['fa']['title']);
+    }
+
+    public function test_comparison_articles_keep_their_original_decision_topic(): void
+    {
+        app(LegacyArticleImporter::class)->import(false);
+        foreach ([
+            'vsphere-standard-switch-vs-distributed-switch' => 'switch-comparison',
+            'http-vs-https-ssl-certificate-impact' => 'http-https-comparison',
+            'imap-vs-pop3-email-protocol-comparison' => 'mail-protocol-comparison',
+            'windows-hardware-info-cmd-vs-dxdiag' => 'inventory-tool-comparison',
+            'mikrotik-unequal-dual-wan-load-balancing-ecmp' => 'ecmp-pcc-comparison',
+        ] as $slug => $section) {
+            foreach (['en', 'fa'] as $locale) {
+                $html = $this->get('/articles/'.$slug.($locale === 'fa' ? '?lang=fa' : ''))->assertOk()->getContent();
+                $xp = $this->dom($html);
+                $this->assertGreaterThanOrEqual(3, $xp->query('//section[@id="'.$section.'"]//tbody/tr')->length, $slug);
+                $this->assertSame(1, $xp->query('//ul[@class="article-toc-list"]//a[@href="#'.$section.'"]')->length);
+                $this->assertLessThan(strpos($html, '<section id="enterprise-installation"'), strpos($html, '<section id="'.$section.'"'));
+            }
+        }
     }
 }

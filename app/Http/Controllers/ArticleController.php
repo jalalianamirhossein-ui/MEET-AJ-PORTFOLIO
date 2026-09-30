@@ -72,10 +72,23 @@ class ArticleController extends Controller
             ->where('language', 'en')
             ->first();
         abort_if($article === null, 404);
-        $article = app(ArticleLocalization::class)->apply($article, $request->query('lang') === 'en' ? 'en' : 'fa');
+        $localizer = app(ArticleLocalization::class);
+        $languageSeo = [];
+        if (data_get($article->presentation, 'localizations')) {
+            foreach (['en', 'fa'] as $locale) {
+                $localized = $localizer->apply(clone $article, $locale, false);
+                $languageSeo[$locale] = array_intersect_key(
+                    app(ArticleSeo::class)->forArticle($localized),
+                    array_flip(['title', 'description', 'keywords', 'canonical', 'og_title', 'og_description', 'og_url', 'twitter_title', 'twitter_description', 'schema', 'faq_schema', 'breadcrumb'])
+                );
+                $languageSeo[$locale]['share'] = app(ArticleShareLinks::class)->for($localized);
+            }
+        }
+        $article = $localizer->apply($article, $request->query('lang') === 'fa' ? 'fa' : 'en');
 
         return view('articles.show', [
             'article' => $article,
+            'languageSeo' => $languageSeo,
             'seo' => app(ArticleSeo::class)->forArticle($article),
             'share' => app(ArticleShareLinks::class)->for($article),
             'related' => $article->relatedArticles(3),

@@ -21,7 +21,7 @@
 @endphp
               @if ($isRelated)
                 <article class="article-teaser article-teaser--related" data-topic="{{ $topic }}" style="{{ $accentStyle }}">
-                  <a class="article-teaser-link" href="{{ $article->path().(($pageLocale ?? null) === 'en' && data_get($article->presentation, 'localizations') ? '?lang=en' : '') }}">
+                  <a class="article-teaser-link" @if(data_get($article->presentation, 'localizations')) data-article-path="{{ $article->path() }}" @endif href="{{ $article->path().(($pageLocale ?? null) === 'fa' && data_get($article->presentation, 'localizations') ? '?lang=fa' : '') }}">
                     <div class="article-teaser-media">
                       <img
                         src="{{ $article->thumbnailUrl() }}"

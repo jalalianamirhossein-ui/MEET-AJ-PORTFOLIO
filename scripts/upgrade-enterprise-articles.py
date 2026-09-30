@@ -5,6 +5,7 @@ import html
 import json
 import re
 import zipfile
+from article_comparisons import render_sections
 
 ROOT = Path(__file__).resolve().parents[1]
 DOC = ROOT / 'docs/enterprise-articles'
@@ -54,8 +55,10 @@ def build():
             legacy = re.sub(r'\bid="([^"]+)"',lambda m:'id="legacy-'+m[1]+'"',legacy)
             legacy = re.sub(r'href="#([^"]+)"',lambda m:'href="#legacy-'+m[1]+'"',legacy)
             sections = []
-            for key, title in [('intro','مقدمه'),('scenario','سناریوی واقعی Enterprise'),('prerequisites','پیش‌نیازها'),('architecture','Architecture / Design'),('installation','Installation / Configuration'),('security','Security Hardening'),('monitoring','Monitoring'),('troubleshooting','Troubleshooting'),('recovery','Backup / Recovery'),('practices','Best Practices'),('compatibility','نسخه‌های قدیمی و Compatibility')]:
+            for key, title in [('intro','مقدمه'),('scenario','مثال عملی'),('prerequisites','پیش‌نیازها'),('architecture','Architecture / Design'),('installation','Installation / Configuration'),('security','Security Hardening'),('monitoring','Monitoring'),('troubleshooting','Troubleshooting'),('recovery','Backup / Recovery'),('practices','Best Practices'),('compatibility','نسخه‌های قدیمی و Compatibility')]:
                 sections.append(f'<section id="enterprise-{key}" class="article-section"><h2>{title}</h2>{render(item[key])}</section>')
+                if key == 'intro':
+                    sections.extend(render_sections(file.stem))
             faq = item['faq']
             if file.stem != 'sql-server-automatic-backup-job':
                 sections.append('<section id="faq" class="article-section"><h2>پرسش‌های متداول</h2>'+''.join('<h3>'+html.escape(q)+'</h3><p>'+html.escape(a)+'</p>' for q,a in faq)+'</section>')
@@ -85,7 +88,7 @@ def build():
                 faq_schema = {'@context':'https://schema.org','@type':'FAQPage','mainEntity':[{'@type':'Question','name':q,'acceptedAnswer':{'@type':'Answer','text':a}} for q,a in faq]}
                 updated = updated.replace('</head>', ''.join('<script type="application/ld+json">'+json.dumps(s,ensure_ascii=False).replace('<','\\u003c')+'</script>\n' for s in [schema,faq_schema])+'</head>',1)
             # Replace navigation with current section anchors, retain legacy IDs in history.
-            navkeys = re.findall(r'<section id="((?:enterprise-[^"]+)|faq)"[^>]*><h2>([^<]+)</h2>', ''.join(sections))
+            navkeys = [(m[1], html.unescape(m[2])) for m in re.finditer(r'<section id="([^"]+)"[^>]*><h2[^>]*>([^<]+)</h2>', ''.join(sections))]
             navs = re.findall(r'<li class="article-nav-item">.*?</li>', updated, flags=re.S)
             if navs:
                 newnav = ''.join('<li class="article-nav-item"><a href="#'+k+'"><span>'+label+'</span></a></li>' for k,label in navkeys)

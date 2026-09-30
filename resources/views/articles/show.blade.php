@@ -47,12 +47,15 @@
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
     <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
     <link href="/assets/css/glass-system.css?v=10" rel="stylesheet" />
-    <script type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+    @if (!empty($languageSeo))
+      <script id="article-language-seo" type="application/json">{!! json_encode($languageSeo, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+    @endif
+    <script id="article-schema" type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @if (!empty($seo['breadcrumb']))
-      <script type="application/ld+json">{!! json_encode($seo['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+      <script id="article-breadcrumb-schema" type="application/ld+json">{!! json_encode($seo['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @endif
     @if (!empty($seo['faq_schema']))
-      <script type="application/ld+json">{!! json_encode($seo['faq_schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+      <script id="article-faq-schema" type="application/ld+json">{!! json_encode($seo['faq_schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @endif
   </head>
   <body class="{{ data_get($article->presentation, 'body_class', 'article-page theme-other') }}" style="{{ $article->accentCustomProperties() }}">
@@ -115,7 +118,11 @@
                   </ul>
                 @endif
               </div>
-              @if (data_get($article->presentation, 'content_language') === 'fa')
+              @if (data_get($article->presentation, 'localizations'))
+                @php $locale = data_get($article->presentation, 'content_language', 'en'); @endphp
+                <h1 class="article-title hero-title" data-fa="{{ data_get($article->presentation, 'localizations.fa.title') }}" data-en="{{ data_get($article->presentation, 'localizations.en.title') }}">{{ data_get($article->presentation, 'localizations.'.$locale.'.title') }}</h1>
+                <p class="article-excerpt hero-subtitle" data-fa="{{ data_get($article->presentation, 'localizations.fa.description') }}" data-en="{{ data_get($article->presentation, 'localizations.en.description') }}">{{ data_get($article->presentation, 'localizations.'.$locale.'.description') }}</p>
+              @elseif (data_get($article->presentation, 'content_language') === 'fa')
                 <h1 class="article-title hero-title" lang="fa" dir="rtl">{{ data_get($article->presentation, 'hero_title_fa', $article->title) }}</h1>
                 <p class="article-excerpt hero-subtitle" lang="fa" dir="rtl">{{ data_get($article->presentation, 'excerpt_translations.fa', $article->excerpt) }}</p>
               @else
@@ -334,7 +341,7 @@
     <script src="/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
     <script src="/assets/js/main.js?v=1415" defer></script>
     <script src="/assets/js/scroll-reveal.js?v=1" defer></script>
-    <script src="/assets/js/i18n.js?v=1404" defer></script>
+    <script src="/assets/js/i18n.js?v=1406" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {

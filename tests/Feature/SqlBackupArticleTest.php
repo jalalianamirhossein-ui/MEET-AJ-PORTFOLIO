@@ -48,8 +48,8 @@ class SqlBackupArticleTest extends TestCase
             'slug' => 'sql-server-automatic-backup-job',
             'status' => 'published', 'published_at' => now()->subDay(),
         ]));
-        $response = $this->get('/articles/sql-server-automatic-backup-job')->assertOk();
-        $response->assertSee('<title>'.$package['meta_title'].'</title>', false)
+        $response = $this->get('/articles/sql-server-automatic-backup-job?lang=fa')->assertOk();
+        $response->assertSee('<title>'.$package['presentation']['localizations']['fa']['meta_title'].'</title>', false)
             ->assertSee('"@type":"FAQPage"', false)
             ->assertSee('"inLanguage":"fa"', false)
             ->assertSee($package['presentation']['hero_title_fa'])
@@ -82,7 +82,7 @@ class SqlBackupArticleTest extends TestCase
         $article = Article::where('slug', 'sql-server-automatic-backup-job')->firstOrFail();
         $package = require resource_path('content/articles/sql-server-automatic-backup-job/build.php');
         $this->assertSame($package['meta_title'], $article->meta_title);
-        $this->assertSame('fa', $article->presentation['content_language']);
+        $this->assertSame('en', $article->presentation['content_language']);
         $this->assertSame(8, count($article->seo_data['faq_schema']['mainEntity']));
         $this->assertStringContainsString('usp_BackupWhitelist', $article->content);
         $this->assertStringContainsString('Cleanup-SqlBackups.ps1', $article->content);

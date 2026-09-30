@@ -3,7 +3,7 @@ import json
 
 DATA = {}
 def add(slug,title,priority,analysis,version,hardware,permissions,intro,scenario,flow,installation,security,monitoring,troubleshooting,recovery,practices,compatibility,sources,faq):
-    DATA[slug] = dict(title=title,priority=priority,analysis=analysis,description=intro[:155],keywords=[slug.replace('-',' '),'زیرساخت سازمانی','Production','Troubleshooting'],intro=intro,scenario='سناریوی آموزشی با سازمان فرضی «آریا»: '+scenario,prerequisites=version+'\n\nسخت‌افزار و ظرفیت: '+hardware+'\n\nنرم‌افزار و دسترسی: '+permissions,architecture=flow,installation=installation,security=security,monitoring=monitoring,troubleshooting=troubleshooting,recovery=recovery,practices=practices,compatibility=compatibility,sources=sources,faq=faq)
+    DATA[slug] = dict(title=title,priority=priority,analysis=analysis,description=intro[:155],keywords=[slug.replace('-',' '),'مدیریت زیرساخت','Production','Troubleshooting'],intro=intro,scenario=scenario,prerequisites=version+'\n\nسخت‌افزار و ظرفیت: '+hardware+'\n\nنرم‌افزار و دسترسی: '+permissions,architecture=flow,installation=installation,security=security,monitoring=monitoring,troubleshooting=troubleshooting,recovery=recovery,practices=practices,compatibility=compatibility,sources=sources,faq=faq)
 
 UBUNTU='Ubuntu Server 24.04 LTS، Bash 5، systemd؛ package patch را پیش از تغییر با dpkg-query ثبت کنید.'
 LINUXHW='برای مثال یک VM با ۲ vCPU، ۲ GiB RAM و ۲۰ GiB دیسک؛ این ظرفیت پیشنهادی آزمایشگاه است و sizing سرویس به بار واقعی وابسته است.'
@@ -1372,6 +1372,8 @@ if __name__ == '__main__':
     for slug, description in descriptions.items():
         DATA[slug]['description'] = description
         DATA[slug]['keywords'] = [DATA[slug]['title'], 'مدیریت زیرساخت', 'عیب‌یابی', 'امنیت سرویس', 'بازیابی', slug.replace('-', ' ')]
+    from article_comparisons import apply_editorial
+    apply_editorial(DATA, 'fa')
     assert len(DATA) == 25, len(DATA)
     target = Path(__file__).resolve().parents[1] / 'docs/enterprise-articles/runbooks.json'
     target.write_text(json.dumps(DATA,ensure_ascii=False,indent=2),encoding='utf-8')

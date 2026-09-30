@@ -156,6 +156,24 @@ php artisan view:cache
 
 Do not run `articles:import-legacy --refresh` or `services:import-legacy --refresh` on a database that already has editorial changes.
 
+### Updating an existing deployment with bilingual article sources
+
+Pulling new HTML files does not replace article content already stored in the database. A plain `articles:import-legacy` imports missing rows and skips existing content. The default English edition and the Persian `?lang=fa` edition require the new body translations and `presentation.localizations` together. Deploy the updated controllers, localization service, Blade views and assets as well as the HTML sources.
+
+From the Laravel application root, preview the affected rows, then apply the reviewed source replacements and publish the language-switch asset:
+
+```bash
+php artisan articles:import-legacy --update-existing --dry-run
+php artisan articles:import-legacy --update-existing
+php artisan site:publish-assets --views
+php artisan optimize:clear
+php artisan optimize
+```
+
+`--update-existing` replaces changed source articles, including CMS edits to those rows; back up the database before replacing them. It preserves existing IDs and translation keys. `--refresh` deletes article rows and is unnecessary for this update. If using `scripts/refresh-project.sh`, its ordinary seeding step also skips existing article bodies, so run the explicit update above.
+
+Check an article at `/articles/{slug}` and `/articles/{slug}?lang=fa`: page source should have `data-article-language="en"` and `data-article-language="fa"` respectively, with the matching heading and canonical. English titles must appear at the clean URL. Confirm the rendered page loads `i18n.js?v=1406`; language switching should update the page without another document request or preloader. Old `?lang=en` links remain readable, with a clean English canonical. These URLs must reach Laravel rather than a static HTML copy. If responses are stale after import, ensure the CDN/proxy forwards `lang` and includes it in cache keys, then purge stale article responses. If the source remains unchanged after replacing PHP files, reload PHP OPcache through the host's PHP service control.
+
 Confirm `php artisan about` shows production, debug OFF, mysql, Laravel 13, PHP 8.4, the configured timezone, and linked public storage. Publish both site and Filament assets on every fresh deployment; generated public assets are excluded from Git.
 
 ## 9. Cron

@@ -4,6 +4,7 @@ from html import escape, unescape
 import hashlib
 import json
 import re
+import time
 
 ROOT=Path(__file__).resolve().parents[1]
 DOC=ROOT/'docs/enterprise-articles'
@@ -11,15 +12,36 @@ SRC=ROOT/'resources/legacy/articles'
 FA=json.loads((DOC/'runbooks.json').read_text(encoding='utf-8'))
 EN=json.loads((DOC/'english-runbooks.json').read_text(encoding='utf-8'))
 SQL_EN=(ROOT/'scripts/sql-backup-english.txt').read_text(encoding='utf-8').splitlines()
-HEADINGS=dict(intro='Introduction',scenario='Enterprise Scenario',prerequisites='Prerequisites',architecture='Architecture / Design',installation='Installation / Configuration',security='Security Hardening',monitoring='Monitoring',troubleshooting='Troubleshooting',recovery='Backup / Recovery',practices='Best Practices',compatibility='Legacy Versions and Compatibility',sources='Official Sources')
+HEADINGS=dict(intro='Introduction',scenario='Practical Example',prerequisites='Prerequisites',architecture='Architecture / Design',installation='Installation / Configuration',security='Security Hardening',monitoring='Monitoring',troubleshooting='Troubleshooting',recovery='Backup / Recovery',practices='Best Practices',compatibility='Legacy Versions and Compatibility',sources='Official Sources')
 
 def plain(s):
     return unescape(re.sub('<[^>]*>','',s)).strip()
 
 def dual(match, english):
     tag,attrs,inner=match[1],match[2],match[3]
+    existing_fa = re.search(r'\bdata-fa="([^"]*)"', attrs)
+    persian = unescape(existing_fa[1]) if existing_fa else plain(inner)
     attrs=re.sub(r'\sdata-(?:en|fa)="[^"]*"','',attrs)
-    return '<'+tag+attrs+' data-fa="'+escape(plain(inner),quote=True)+'" data-en="'+escape(english,quote=True)+'">'+inner+'</'+tag+'>'
+    return '<'+tag+attrs+' data-fa="'+escape(persian,quote=True)+'" data-en="'+escape(english,quote=True)+'">'+inner+'</'+tag+'>'
+
+def localize_html(s, locale):
+    protected = {}
+    def protect(m):
+        key = '__PROTECTED_'+str(len(protected))+'__'
+        protected[key] = m[0]
+        return key
+    s = re.sub(r'<pre\b.*?</pre>|<details\b[^>]*id="legacy-history"[^>]*>.*?</details>', protect, s, flags=re.S)
+    def replace(m):
+        value = escape(unescape(m[3]), quote=False)
+        links = re.findall(r'<a\b[^>]*href="https://[^"]*"[^>]*>.*?</a>', m[4], re.S)
+        if locale == 'en':
+            links = [re.sub(r'>.*?</a>', '>Official documentation</a>', v, flags=re.S) if re.search('[\u0600-\u06ff]', plain(v)) else v for v in links]
+        icons = re.findall(r'<i\b[^>]*aria-hidden="true"[^>]*>.*?</i>', m[4], re.S)
+        return '<'+m[1]+m[2]+'>'+value+(' '+ ' '.join(links) if links else '')+''.join(icons)+'</'+m[1]+'>'
+    s = re.sub(r'<(h[1-6]|p|span|li|th|td|summary)\b([^>]*\bdata-'+locale+r'="([^"]*)"[^>]*)>(.*?)</\1\s*>', replace, s, flags=re.S)
+    s = re.sub(r'lang="(?:fa|en)" dir="(?:rtl|ltr)"', 'lang="'+locale+'" dir="'+('rtl' if locale == 'fa' else 'ltr')+'"', s)
+    for key, value in protected.items(): s = s.replace(key, value)
+    return s
 
 def prose(s):
     s=re.sub(r'```[^\n]*\n.*?\n```','',s,flags=re.S)
@@ -50,6 +72,12 @@ if not (DOC/'bilingual-before.json').exists():
 report=[]
 for f in files:
     s=f.read_text(encoding='utf-8'); item=FA[f.stem]; en=EN[f.stem]
+    previous_metadata = re.search(r'<script\b[^>]*id="article-localizations"[^>]*>(.*?)</script>', s, re.S)
+    previous_metadata = json.loads(previous_metadata[1]) if previous_metadata else None
+    if previous_metadata:
+        s = localize_html(s, 'fa')
+        s = re.sub(r'<title>.*?</title>', '<title>'+escape(previous_metadata['fa']['meta_title'])+'</title>', s, count=1, flags=re.S)
+        s = re.sub(r'(<meta\b[^>]*name="description"[^>]*content=")[^"]*', lambda m:m[1]+escape(previous_metadata['fa']['description'],quote=True), s)
     s=re.sub(r'<script\b[^>]*id="article-localizations"[^>]*>.*?</script>\s*','',s,flags=re.S)
     s=re.sub(r'<link\b[^>]*rel="alternate"[^>]*hreflang="(?:fa|en|x-default)"[^>]*>\s*','',s)
     s=re.sub(r'<nav class="article-translations".*?</nav>\s*','',s,flags=re.S)
@@ -104,18 +132,21 @@ for f in files:
     s=re.sub(r'(<link\s+rel="canonical"\s+href=")[^"]+',lambda m:m[1]+url,s,count=1)
     fa_title=unescape(re.search(r'<title>(.*?)</title>',s,re.S)[1])
     fa_desc=unescape(re.search(r'<meta\b[^>]*name="description"[^>]*content="([^"]*)"',s)[1])
+    fa_title=fa_title.replace('راهنمای Enterprise با Agent', 'زمان‌بندی Agent و آزمون Restore')
     fa_hero=plain(re.search(r'<h1\b[^>]*class="article-title hero-title"[^>]*>(.*?)</h1>',s,re.S)[1])
+    fa_hero=fa_hero.replace('طراحی Enterprise با SQL Server Agent', 'زمان‌بندی SQL Server Agent و آزمون Restore')
+    s=s.replace('طراحی Enterprise با SQL Server Agent', 'زمان‌بندی SQL Server Agent و آزمون Restore').replace('Best Practiceهای Enterprise برای Backup SQL Server', 'Best Practiceها برای Backup SQL Server')
     faq_fa=item['faq'];faq_en=en['faq']
     if f.stem=='sql-server-automatic-backup-job':
         schemas=[json.loads(v) for v in re.findall(r'<script[^>]*type="application/ld\+json"[^>]*>(.*?)</script>',s,re.S)]
         existing=next(v for v in schemas if v.get('@type')=='FAQPage')
-        faq_fa=[[v['name'],v['acceptedAnswer']['text']] for v in existing['mainEntity']]
+        faq_fa=previous_metadata['fa']['faq'] if previous_metadata else [[v['name'],v['acceptedAnswer']['text']] for v in existing['mainEntity']]
         faq_en=[[SQL_EN[i],SQL_EN[i+1]] for i in range(138,154,2)]
     localizations={'fa':dict(title=fa_hero,meta_title=fa_title,description=fa_desc,keywords=item['keywords'],faq=faq_fa),'en':dict(title=en['title'],meta_title=en['title']+' | Meet AJ',description=en['description'],keywords=en['keywords'],faq=faq_en)}
-    links=''.join('<link rel="alternate" hreflang="'+lang+'" href="'+escape(target,quote=True)+'" />\n' for lang,target in [('fa',url),('en',url+'?lang=en'),('x-default',url)])
+    links=''.join('<link rel="alternate" hreflang="'+lang+'" href="'+escape(target,quote=True)+'" />\n' for lang,target in [('fa',url+'?lang=fa'),('en',url),('x-default',url)])
     links+='<script id="article-localizations" type="application/json">'+json.dumps(localizations,ensure_ascii=False).replace('<','\\u003c')+'</script>\n'
     s=s.replace('</head>',links+'</head>',1)
-    navigation='<nav class="article-translations" aria-label="Article language"><a lang="fa" hreflang="fa" href="'+url+'">فارسی</a> · <a lang="en" hreflang="en" href="'+url+'?lang=en">English</a></nav>'
+    navigation='<nav class="article-translations" aria-label="Article language"><a lang="fa" hreflang="fa" href="'+url+'?lang=fa">فارسی</a> · <a lang="en" hreflang="en" href="'+url+'">English</a></nav>'
     s=s.replace('<article class="article-body"',navigation+'\n<article class="article-body"',1)
     # Generated TOC labels use the same bilingual headings as current sections.
     headings={m[1]:(unescape(m[2]),unescape(m[3])) for m in re.finditer(r'<section id="([^"]+)"[^>]*><h2[^>]*data-fa="([^"]*)" data-en="([^"]*)"',s)}
@@ -124,11 +155,33 @@ for f in files:
         fa,enlabel=headings[m[1]]
         return '<a href="#'+m[1]+'"><span data-fa="'+escape(fa,quote=True)+'" data-en="'+escape(enlabel,quote=True)+'">'+escape(fa)+'</span></a>'
     s=re.sub(r'<a href="#([^"]+)"><span>[^<]*</span></a>',toc,s)
+    # The clean article URL and source metadata now default to English.
+    s = localize_html(s, 'en')
+    s = s.replace('data-article-language="fa"', 'data-article-language="en"')
+    s = re.sub(r'<title>.*?</title>', '<title>'+escape(localizations['en']['meta_title'])+'</title>', s, count=1, flags=re.S)
+    for attr, name, value in [('name','description',en['description']),('name','keywords',', '.join(en['keywords'])),('name','article:content-language','en'),('property','og:title',en['title']),('property','og:description',en['description']),('name','twitter:title',en['title']),('name','twitter:description',en['description'])]:
+        s = re.sub(r'(<meta\b[^>]*'+attr+'="'+re.escape(name)+r'"[^>]*content=")[^"]*',lambda m:m[1]+escape(value,quote=True),s)
+    def english_schema(m):
+        obj=json.loads(m[1])
+        if obj.get('@type')=='Article':
+            obj.update(headline=en['title'],description=en['description'],inLanguage='en',url=url,mainEntityOfPage=url)
+        elif obj.get('@type')=='FAQPage':
+            obj.update(inLanguage='en',mainEntity=[{'@type':'Question','name':q,'acceptedAnswer':{'@type':'Answer','text':a}} for q,a in faq_en])
+        return '<script type="application/ld+json">'+json.dumps(obj,ensure_ascii=False).replace('<','\\u003c')+'</script>'
+    s = re.sub(r'<script[^>]*type="application/ld\+json"[^>]*>(.*?)</script>',english_schema,s,flags=re.S)
     # Trim shell indentation outside executable blocks without changing scripts.
     s=''.join(block if block.startswith('<pre') else re.sub(r'[ \t]+(?=\n)', '', block) for block in re.split(r'(<pre\b.*?</pre>)',s,flags=re.S))
     assert re.findall(r'<pre\b.*?</pre>',s,re.S)==codes_before,f.name+' code drift'
-    f.write_text(s,encoding='utf-8',newline='')
-    report.append(dict(file=f.name,title_fa=fa_hero,title_en=localizations['en']['title'],fa_status='Complete',en_status='Complete',missing_sections=[],translation_quality='Editorial English; aligned operational meaning, headings and shared code',seo_status='Localized title, description, keywords and FAQ; reciprocal hreflang; self canonical per language',seo_metadata=localizations,urls={'fa':url,'en':url+'?lang=en'},historical_content='Preserved in original languages, clearly marked',code_blocks=len(codes_before),updated_sha256=hashlib.sha256(f.read_bytes()).hexdigest()))
+    # Windows file watchers can briefly hold a just-rewritten source file.
+    for attempt in range(5):
+        try:
+            f.write_text(s,encoding='utf-8',newline='')
+            break
+        except OSError as error:
+            if error.errno not in (13, 22) or attempt == 4:
+                raise
+            time.sleep(0.25 * (attempt + 1))
+    report.append(dict(file=f.name,title_fa=fa_hero,title_en=localizations['en']['title'],fa_status='Complete',en_status='Complete',missing_sections=[],translation_quality='Editorial English; aligned operational meaning, headings and shared code',seo_status='Localized title, description, keywords and FAQ; reciprocal hreflang; self canonical per language',seo_metadata=localizations,urls={'fa':url+'?lang=fa','en':url},historical_content='Preserved in original languages, clearly marked',code_blocks=len(codes_before),updated_sha256=hashlib.sha256(f.read_bytes()).hexdigest()))
 (DOC/'bilingual-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
 previous=json.loads((DOC/'report.json').read_text(encoding='utf-8'))
 for row in previous:

@@ -1,7 +1,7 @@
 /**
  * Language switch — one clickable EN/FA control. No dropdown.
  * DE is included only when the page actually has data-de copy.
- * Editorial bilingual articles navigate to their server-rendered language URL.
+ * Bilingual articles switch existing prose and SEO without reloading the page.
  */
 
 (() => {
@@ -112,24 +112,67 @@
     return langs[(index + 1) % langs.length];
   };
 
+  const updateArticleSeo = (lang) => {
+    const payload = document.getElementById("article-language-seo");
+    if (!payload) return;
+    const seo = JSON.parse(payload.textContent)[lang];
+    if (!seo) return;
+    document.title = seo.title;
+    const attributes = {
+      'meta[name="description"]': seo.description,
+      'meta[name="keywords"]': seo.keywords,
+      'meta[property="og:title"]': seo.og_title,
+      'meta[property="og:description"]': seo.og_description,
+      'meta[property="og:url"]': seo.og_url,
+      'meta[name="twitter:title"]': seo.twitter_title,
+      'meta[name="twitter:description"]': seo.twitter_description,
+    };
+    Object.entries(attributes).forEach(([selector, value]) => {
+      const element = document.querySelector(selector);
+      if (element && value != null) element.setAttribute("content", value);
+    });
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href", seo.canonical);
+    Object.entries({
+      "article-schema": seo.schema,
+      "article-faq-schema": seo.faq_schema,
+      "article-breadcrumb-schema": seo.breadcrumb,
+    }).forEach(([id, value]) => {
+      const element = document.getElementById(id);
+      if (element && value) element.textContent = JSON.stringify(value);
+    });
+    document.querySelectorAll("[data-share-channel]").forEach((el) => {
+      const href = seo.share?.[el.dataset.shareChannel];
+      if (href) el.href = href;
+    });
+    document.querySelector("[data-copy-link]")?.setAttribute("data-copy-link", seo.canonical);
+  };
+
   const apply = (lang) => {
     const langs = availableLanguages();
     const next = langs.includes(lang) ? lang : "en";
     const articleLanguage = document.documentElement.dataset.articleLanguage;
-    if (articleLanguage && next !== articleLanguage) {
-      const alternate = document.querySelector(`link[rel="alternate"][hreflang="${next}"]`);
-      if (alternate) {
-        localStorage.setItem(KEY, next);
-        setCookie(next);
-        window.location.assign(alternate.href);
-        return;
-      }
-    }
     const isPersian = next === "fa";
     const html = document.documentElement;
 
     html.lang = next;
     html.dir = isPersian ? "rtl" : "ltr";
+    if (articleLanguage) {
+      html.dataset.articleLanguage = next;
+      document.querySelectorAll(".article-body, .article-toc-nav, .enterprise-runbook, .article-body [lang][dir]").forEach((el) => {
+        if (el.closest("#legacy-history, pre")) return;
+        el.lang = next;
+        el.dir = isPersian ? "rtl" : "ltr";
+      });
+      updateArticleSeo(next);
+      // Preserve query filters and anchor position. English uses the clean URL.
+      const url = new URL(window.location.href);
+      if (next === "fa") url.searchParams.set("lang", "fa");
+      else url.searchParams.delete("lang");
+      if (url.href !== window.location.href) window.history.replaceState(null, "", url);
+      document.querySelectorAll("[data-article-path]").forEach((el) => {
+        el.href = el.dataset.articlePath + (isPersian ? "?lang=fa" : "");
+      });
+    }
 
     const rtlStyle = getRtlStyle();
     if (rtlStyle) {
@@ -143,7 +186,7 @@
     }
 
     document.querySelectorAll("[data-en]").forEach((el) => {
-      if (articleLanguage && el.closest(".article-body, .article-toc-list")) return;
+      if (articleLanguage && el.closest("#legacy-history") && el.tagName !== "SUMMARY") return;
       if (isLockedEnglish(el)) {
         const english = el.getAttribute("data-en");
         if (english != null) setElementText(el, english);
@@ -283,6 +326,18 @@
     const langs = availableLanguages();
     injectLanguageToggle(langs);
     apply(init(langs));
+    if (document.documentElement.dataset.articleLanguage) {
+      document.querySelectorAll(".article-translations a[hreflang]").forEach((link) => {
+        link.addEventListener("click", (event) => {
+          if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0) return;
+          event.preventDefault();
+          apply(link.hreflang);
+        });
+      });
+      window.addEventListener("popstate", () => {
+        apply(new URL(window.location.href).searchParams.get("lang") === "fa" ? "fa" : "en");
+      });
+    }
   };
 
   if (document.readyState === "loading") {

@@ -7,14 +7,19 @@ $escape = fn (string $value): string => htmlspecialchars($value, ENT_QUOTES | EN
 $source = file_get_contents($directory.'/../../../legacy/articles/sql-server-automatic-backup-job.html');
 preg_match('~<script\b[^>]*id="article-localizations"[^>]*>(.*?)</script>~is', $source, $localized);
 $localizations = isset($localized[1]) ? json_decode($localized[1], true, 512, JSON_THROW_ON_ERROR) : null;
+$default = $localizations['en'] ?? [
+    'title' => $metadata['title_en'], 'meta_title' => $metadata['meta_title'],
+    'description' => $metadata['meta_description'],
+    'faq' => array_map(fn ($item) => [$item['question'], $item['answer']], $metadata['faq']),
+];
 if (! preg_match('~<article\b[^>]*class="article-body"[^>]*>(.*?)</article>~is', $source, $body)) {
     throw new RuntimeException('Original article body is missing.');
 }
 $content = preg_replace('~<footer\b[^>]*class="article-footer"[^>]*>.*?</footer>~is', '', $body[1]);
 $questions = [];
-foreach ($metadata['faq'] as $item) {
-    $questions[] = ['@type' => 'Question', 'name' => $item['question'], 'acceptedAnswer' => [
-        '@type' => 'Answer', 'text' => $item['answer'],
+foreach ($default['faq'] as [$question, $answer]) {
+    $questions[] = ['@type' => 'Question', 'name' => $question, 'acceptedAnswer' => [
+        '@type' => 'Answer', 'text' => $answer,
     ]];
 }
 $dom = new DOMDocument;
@@ -30,16 +35,16 @@ foreach ((new DOMXPath($dom))->query('//section[@id]/h2') as $heading) {
 }
 
 return [
-    'title' => $metadata['title_en'],
-    'excerpt' => $metadata['excerpt_en'],
+    'title' => $default['title'],
+    'excerpt' => $default['description'],
     'content' => $content,
-    'meta_title' => $metadata['meta_title'],
-    'meta_description' => $metadata['meta_description'],
+    'meta_title' => $default['meta_title'],
+    'meta_description' => $default['description'],
     'presentation' => [
         'localizations' => $localizations,
-        'content_language' => 'fa',
-        'hero_title_en' => $metadata['title_en'], 'hero_title_fa' => $metadata['title_fa'],
-        'card_title_en' => $metadata['title_en'], 'card_title_fa' => $metadata['title_fa'],
+        'content_language' => 'en',
+        'hero_title_en' => $default['title'], 'hero_title_fa' => $localizations['fa']['title'] ?? $metadata['title_fa'],
+        'card_title_en' => $default['title'], 'card_title_fa' => $localizations['fa']['title'] ?? $metadata['title_fa'],
         'card_excerpt_en' => $metadata['excerpt_en'], 'card_excerpt_fa' => $metadata['excerpt_fa'],
         'original_excerpt' => $metadata['excerpt_en'],
         'excerpt_translations' => ['fa' => $metadata['excerpt_fa']],
@@ -47,14 +52,14 @@ return [
         'editorial_package' => 'sql-server-automatic-backup-job',
     ],
     'seo_data' => [
-        'og_title' => $metadata['meta_title'], 'og_description' => $metadata['meta_description'],
-        'twitter_title' => $metadata['meta_title'], 'twitter_description' => $metadata['meta_description'],
+        'og_title' => $default['meta_title'], 'og_description' => $default['description'],
+        'twitter_title' => $default['meta_title'], 'twitter_description' => $default['description'],
         'schema' => [
-            '@context' => 'https://schema.org', '@type' => 'Article', 'inLanguage' => 'fa',
-            'headline' => $metadata['title_fa'], 'description' => $metadata['meta_description'],
+            '@context' => 'https://schema.org', '@type' => 'Article', 'inLanguage' => 'en',
+            'headline' => $default['title'], 'description' => $default['description'],
         ],
         'faq_schema' => [
-            '@context' => 'https://schema.org', '@type' => 'FAQPage', 'inLanguage' => 'fa',
+            '@context' => 'https://schema.org', '@type' => 'FAQPage', 'inLanguage' => 'en',
             'mainEntity' => $questions,
         ],
     ],

@@ -6,19 +6,21 @@ use App\Models\Article;
 
 class ArticleLocalization
 {
-    public function apply(Article $article, string $locale): Article
+    public function apply(Article $article, string $locale, bool $renderContent = true): Article
     {
         $localizations = data_get($article->presentation, 'localizations');
         if (! is_array($localizations) || ! isset($localizations['fa'], $localizations['en'])) {
             return $article;
         }
 
-        $locale = $locale === 'en' ? 'en' : 'fa';
+        $locale = $locale === 'fa' ? 'fa' : 'en';
         $text = $localizations[$locale];
         $base = $article->publicUrl();
-        $canonical = $base.($locale === 'en' ? '?lang=en' : '');
+        $canonical = $base.($locale === 'fa' ? '?lang=fa' : '');
         // Only this request's model is changed; the database identity stays shared.
-        $article->content = $this->html((string) $article->content, $locale);
+        if ($renderContent) {
+            $article->content = $this->html((string) $article->content, $locale);
+        }
         $article->meta_title = $text['meta_title'];
         $article->meta_description = $text['description'];
         $article->canonical_url = $canonical;
@@ -34,7 +36,7 @@ class ArticleLocalization
             'og_title' => $text['title'], 'og_description' => $text['description'],
             'twitter_title' => $text['title'], 'twitter_description' => $text['description'],
             'keywords' => implode(', ', $text['keywords']),
-            'alternates' => ['fa' => $base, 'en' => $base.'?lang=en', 'x-default' => $base],
+            'alternates' => ['fa' => $base.'?lang=fa', 'en' => $base, 'x-default' => $base],
             'schema' => array_replace(data_get($article->seo_data, 'schema', []) ?? [], [
                 '@context' => 'https://schema.org', '@type' => 'Article',
                 'headline' => $text['title'], 'description' => $text['description'],
@@ -73,7 +75,7 @@ class ArticleLocalization
 
             return $match[1].$parts[0].'</summary>'.$key.$match[3];
         }, $html) ?? $html;
-        $html = preg_replace_callback('~<(h[1-6]|p|span|li|th|td|summary)\b([^>]*\bdata-'.$locale.'="([^"]*)"[^>]*)>(.*?)</\1>~is', function ($match) use ($locale) {
+        $html = preg_replace_callback('~<(h[1-6]|p|span|li|th|td|summary)\b([^>]*\bdata-'.$locale.'="([^"]*)"[^>]*)>(.*?)</\1\s*>~is', function ($match) use ($locale) {
             $value = html_entity_decode($match[3], ENT_QUOTES | ENT_HTML5, 'UTF-8');
             // Keep source citation links when replacing the surrounding prose.
             preg_match_all('~<a\b[^>]*href="https://[^"]*"[^>]*>.*?</a>~is', $match[4], $links);
@@ -86,7 +88,7 @@ class ArticleLocalization
             return '<'.$match[1].$match[2].'>'.htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
                 .($links[0] ? ' '.implode(' ', $links[0]) : '').implode('', $icons[0]).'</'.$match[1].'>';
         }, $html) ?? $html;
-        $html = str_replace('lang="fa" dir="rtl"', 'lang="'.$locale.'" dir="'.($locale === 'fa' ? 'rtl' : 'ltr').'"', $html);
+        $html = preg_replace('~lang="(?:fa|en)" dir="(?:rtl|ltr)"~', 'lang="'.$locale.'" dir="'.($locale === 'fa' ? 'rtl' : 'ltr').'"', $html) ?? $html;
 
         return strtr($html, $protected);
     }

@@ -111,12 +111,12 @@ class ProductionAuditTest extends TestCase
         $this->assertSame(25, Article::query()->count());
         foreach (Article::query()->get() as $article) {
             $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', $article->title, $article->slug);
-            $this->get('/articles/'.$article->slug.'?lang=en')
+            $this->get('/articles/'.$article->slug)
                 ->assertOk()
-                ->assertSee('data-i18n-lock', false)
+                ->assertSee('data-en="'.$article->title.'"', false)
                 ->assertSee($article->title)
                 ->assertSee('href="/#contact"', false);
-            $this->get('/articles/'.$article->slug)->assertOk()
+            $this->get('/articles/'.$article->slug.'?lang=fa')->assertOk()
                 ->assertSee($article->presentation['localizations']['fa']['title']);
         }
         $listing = $this->get('/articles')->assertOk()->getContent();

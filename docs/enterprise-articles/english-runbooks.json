@@ -5,12 +5,12 @@
     "keywords": [
       "Production SSH",
       "enable ssh linux complete guide",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "An authentication change can leave a healthy server unreachable by the operations team. This runbook pairs access controls with an independent login test and a recovery path.",
-    "scenario": "Illustrative scenario at fictional Arya: operations manages 40 VMs through a bastion on 10.20.30.0/24. Public Internet login is blocked, and changes reach a canary first.",
+    "scenario": "Operations manages 40 VMs through a bastion on 10.20.30.0/24. Public Internet login is blocked, and changes reach a canary first.",
     "prerequisites": [
       "Ubuntu Server 24.04 LTS, Bash 5 and systemd. Record installed package patches with dpkg-query before making changes.",
       "Example lab capacity: 2 vCPUs, 2 GiB RAM and 20 GiB storage. These are planning assumptions, not vendor minimums; size the service for measured load.",
@@ -52,12 +52,12 @@
     "keywords": [
       "Ubuntu Server Netplan",
       "set static ip ubuntu server netplan",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "An IP change over SSH can interrupt management, DNS and backup traffic together. Apply Netplan changes with explicit file ownership, preflight checks and confirmation from a separate client.",
-    "scenario": "Illustrative scenario at fictional Arya: an application VM in VLAN 30 moves from DHCP to 10.20.30.10/24. NetBox holds the reservation, and networking has validated the trunk and ACLs.",
+    "scenario": "An application VM in VLAN 30 moves from DHCP to 10.20.30.10/24. NetBox holds the reservation, and networking has validated the trunk and ACLs.",
     "prerequisites": [
       "Ubuntu Server 24.04 LTS, Bash 5 and systemd. Record installed package patches with dpkg-query before making changes.",
       "Example lab capacity: 2 vCPUs, 2 GiB RAM and 20 GiB storage. These are planning assumptions, not vendor minimums; size the service for measured load.",
@@ -98,12 +98,12 @@
     "keywords": [
       "Linux Access Management",
       "linux security account access management",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "Locking a password does not necessarily revoke access for a departing employee. SSH keys, tokens and existing sessions may remain valid. Access control must follow identity and account lifecycle.",
-    "scenario": "Illustrative scenario at fictional Arya: shift support can inspect Nginx status but cannot restart it or edit service files. Offboarding revokes bastion and VM access.",
+    "scenario": "Shift support can inspect Nginx status but cannot restart it or edit service files. Offboarding revokes bastion and VM access.",
     "prerequisites": [
       "Ubuntu Server 24.04 LTS, Bash 5 and systemd. Record installed package patches with dpkg-query before making changes.",
       "Example lab capacity: 2 vCPUs, 2 GiB RAM and 20 GiB storage. These are planning assumptions, not vendor minimums; size the service for measured load.",
@@ -141,12 +141,12 @@
     "keywords": [
       "Production Nginx",
       "nginx installation configuration ubuntu",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "A healthy Nginx process does not prove the application is healthy. A reverse proxy needs bounded timeouts, request IDs, valid TLS and independent upstream checks so 502 failures can be traced.",
-    "scenario": "Illustrative scenario at fictional Arya: an internal application listens on loopback and clients reach only the TLS proxy. Changes reach one canary VM before the Load Balancer.",
+    "scenario": "An internal application listens on loopback and clients reach only the TLS proxy. Changes reach one canary VM before the Load Balancer.",
     "prerequisites": [
       "Ubuntu Server 24.04 LTS, Bash 5 and systemd. Record installed package patches with dpkg-query before making changes.",
       "Example capacity: 2 vCPUs and 2 GiB RAM. Determine worker and file-descriptor settings through load testing. A working backend at 127.0.0.1:8080 is required.",
@@ -184,12 +184,12 @@
     "keywords": [
       "Ubuntu Production Time",
       "ubuntu date time settings",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "Clock skew can disrupt Kerberos, TLS, log ordering and replication. A timezone change does not correct the underlying clock; inspect sources, offsets and synchronization separately.",
-    "scenario": "Illustrative scenario at fictional Arya: two internal NTP servers use different upstream sources. Application and database servers use them; central logs use UTC timestamps.",
+    "scenario": "Two internal NTP servers use different upstream sources. Application and database servers use them; central logs use UTC timestamps.",
     "prerequisites": [
       "Ubuntu Server 24.04 LTS, Bash 5 and systemd. Record installed package patches with dpkg-query before making changes.",
       "Example lab capacity: 2 vCPUs, 2 GiB RAM and 20 GiB storage. These are planning assumptions, not vendor minimums; size the service for measured load.",
@@ -227,12 +227,12 @@
     "keywords": [
       "Linux Incident Runbook",
       "linux cli common commands",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "Random restarts or log deletion during an incident can destroy evidence. This runbook moves from symptoms to resources and then service dependencies.",
-    "scenario": "Illustrative scenario at fictional Arya: Nginx is slow despite low CPU use. Operations checks memory, disks, inodes and upstream services, recording a hypothesis before making changes.",
+    "scenario": "Nginx is slow despite low CPU use. Operations checks memory, disks, inodes and upstream services, recording a hypothesis before making changes.",
     "prerequisites": [
       "Ubuntu Server 24.04 LTS, Bash 5 and systemd. Record installed package patches with dpkg-query before making changes.",
       "Example lab capacity: 2 vCPUs, 2 GiB RAM and 20 GiB storage. These are planning assumptions, not vendor minimums; size the service for measured load.",
@@ -270,12 +270,12 @@
     "keywords": [
       "Safe RouterOS Downgrade",
       "downgrade mikrotik routeros firmware safely",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "A router downgrade can change routing, VPN behavior and configuration syntax. Tie the decision to a specific regression, an allowed target version and service acceptance tests.",
-    "scenario": "Illustrative scenario at fictional Arya: a branch tunnel fails after a patch. The team tests the path on CHR, then changes the router in a maintenance window with a local console available.",
+    "scenario": "A branch tunnel fails after a patch. The team tests the path on CHR, then changes the router in a maintenance window with a local console available.",
     "prerequisites": [
       "MikroTik RouterOS v7. Record the exact patch and architecture with /system resource print. Review v6 commands before using them on v7.",
       "Use a router or isolated CHR lab with separate interfaces. Measure CPU, RAM and connection tracking under representative load.",
@@ -315,12 +315,12 @@
     "keywords": [
       "MikroTik Firewall",
       "mikrotik block port scanners",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "Scan detection is useful only if it preserves legitimate management access. The psd matcher is a TCP heuristic; default-deny rules and source restrictions remain the primary protection.",
-    "scenario": "Illustrative scenario at fictional Arya: security runs authorized scans from 10.20.30.0/24. ether1 belongs to WAN. The input chain protects the router; LAN services need a separate forward policy.",
+    "scenario": "Security runs authorized scans from 10.20.30.0/24. ether1 belongs to WAN. The input chain protects the router; LAN services need a separate forward policy.",
     "prerequisites": [
       "MikroTik RouterOS v7. Record the exact patch and architecture with /system resource print. Review v6 commands before using them on v7.",
       "Use a router or isolated CHR lab with separate interfaces. Measure CPU, RAM and connection tracking under representative load.",
@@ -360,12 +360,12 @@
     "keywords": [
       "MikroTik Web Access Policy",
       "mikrotik block website",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "IP blocking and string matching are unreliable for CDN-backed sites and modern TLS. A web policy must state its visibility limits and the expected behavior of managed clients.",
-    "scenario": "Illustrative scenario at fictional Arya: user-VLAN clients use an internal resolver. example.com is the test target. The router supplies part of the policy; endpoint management governs DoH and VPN bypass.",
+    "scenario": "User-VLAN clients use an internal resolver. example.com is the test target. The router supplies part of the policy; endpoint management governs DoH and VPN bypass.",
     "prerequisites": [
       "MikroTik RouterOS v7. Record the exact patch and architecture with /system resource print. Review v6 commands before using them on v7. Verify type=NXDOMAIN and match-subdomain support using CLI help on the selected patch.",
       "Use a router or isolated CHR lab with separate interfaces. Measure CPU, RAM and connection tracking under representative load.",
@@ -406,12 +406,12 @@
     "keywords": [
       "RouterOS v7 OpenVPN",
       "mikrotik openvpn setup v7",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "A working tunnel without forward controls can expose more of a datacenter than the client needs. Validate authentication, return routing and service authorization together.",
-    "scenario": "Illustrative scenario at fictional Arya: support can reach only SSH on 10.20.30.10. Clients use dedicated certificates, a separate 10.250.0.0/24 pool and split tunneling.",
+    "scenario": "Support can reach only SSH on 10.20.30.10. Clients use dedicated certificates, a separate 10.250.0.0/24 pool and split tunneling.",
     "prerequisites": [
       "RouterOS 7.17 or later with named servers; OpenVPN Community 2.6 on Linux/Windows. Pin the selected patch after staging validation.",
       "Use a router or isolated CHR lab with separate interfaces. Measure CPU, RAM and connection tracking under representative load.",
@@ -447,17 +447,17 @@
     ]
   },
   "mikrotik-unequal-dual-wan-load-balancing-ecmp": {
-    "title": "Weighted Dual-WAN on RouterOS v7: PCC, Return Paths and Failover",
+    "title": "MikroTik Unequal Dual-WAN: ECMP vs PCC and Failover Design",
     "description": "Build weighted connection distribution with PCC and per-table failover, then verify symmetry, FastTrack exclusions and session limitations.",
     "keywords": [
-      "Weighted Dual-WAN on RouterOS v7",
+      "MikroTik Unequal Dual-WAN: ECMP vs PCC and Failover Design",
       "mikrotik unequal dual wan load balancing ecmp",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "Repeated default routes do not guarantee capacity distribution across 100 and 50 Mbps links. PCC weights connections; each routing table and return path needs a failover test.",
-    "scenario": "Illustrative scenario at fictional Arya: LAN is 10.10.10.0/24. WAN1 uses 192.168.30.2/30 with gateway .1, and WAN2 uses 172.30.30.2/30 with gateway .1. Replace these lab addresses with the production IPAM plan.",
+    "scenario": "LAN is 10.10.10.0/24. WAN1 uses 192.168.30.2/30 with gateway .1, and WAN2 uses 172.30.30.2/30 with gateway .1. Replace these lab addresses with the production IPAM plan.",
     "prerequisites": [
       "MikroTik RouterOS v7. Record the exact patch and architecture with /system resource print. Review v6 commands before using them on v7.",
       "Use a router or isolated CHR lab with separate interfaces. Measure CPU, RAM and connection tracking under representative load.",
@@ -495,12 +495,12 @@
     "keywords": [
       "Windows Network Incident Runbook",
       "windows cmd common network commands",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "Successful ping, correct DNS and a reachable TCP service establish different facts. Identify the failing layer before using release/renew or resetting a server network stack.",
-    "scenario": "Illustrative scenario at fictional Arya: an application server cannot access files01.corp.example.com over SMB. Test private DNS and TCP/445 from the application subnet to the file server.",
+    "scenario": "An application server cannot access files01.corp.example.com over SMB. Test private DNS and TCP/445 from the application subnet to the file server.",
     "prerequisites": [
       "Windows Server 2022/2025 or Windows 11 with 64-bit Windows PowerShell 5.1. Server cmdlets require their corresponding roles and modules.",
       "Use an authorized existing host; diagnostic tools need no additional hardware. A sample lab VM can use 2 vCPUs, 4 GiB RAM and 60 GiB storage.",
@@ -536,17 +536,17 @@
     ]
   },
   "windows-hardware-info-cmd-vs-dxdiag": {
-    "title": "Windows Hardware Inventory: CIM, Storage Providers and DxDiag Scope",
+    "title": "Windows Hardware Information: CMD vs PowerShell vs DxDiag",
     "description": "Collect timestamped Windows inventory, distinguish VM abstractions from physical hardware and validate capacity against CMDB and vendor telemetry.",
     "keywords": [
-      "Windows Hardware Inventory",
+      "Windows Hardware Information: CMD vs PowerShell vs DxDiag",
       "windows hardware info cmd vs dxdiag",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "A screenshot is insufficient for capacity decisions. Collect comparable, timestamped inventory and distinguish physical hardware from virtual-machine representations.",
-    "scenario": "Illustrative scenario at fictional Arya: before a fleet upgrade, operations compares BIOS, cores and RAM with organizational inventory. A VM serial number need not identify the physical chassis.",
+    "scenario": "Before a fleet upgrade, operations compares BIOS, cores and RAM with organizational inventory. A VM serial number need not identify the physical chassis.",
     "prerequisites": [
       "Windows Server 2022/2025 or Windows 11 with 64-bit Windows PowerShell 5.1. Server cmdlets require their corresponding roles and modules.",
       "Use an authorized existing host; diagnostic tools need no additional hardware. A sample lab VM can use 2 vCPUs, 4 GiB RAM and 60 GiB storage.",
@@ -584,12 +584,12 @@
     "keywords": [
       "Secure Windows Account Recovery",
       "windows password reset secure access recovery",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "Resetting the wrong account can disrupt services, scheduled tasks or EFS access. Establish identity type, dependencies and auditing before changing a password.",
-    "scenario": "Illustrative scenario at fictional Arya: a human user has forgotten their password. Helpdesk has delegation only on the staff OU; service accounts and Domain Admins are outside this procedure.",
+    "scenario": "A human user has forgotten their password. Helpdesk has delegation only on the staff OU; service accounts and Domain Admins are outside this procedure.",
     "prerequisites": [
       "Windows Server 2022/2025 or Windows 11 with 64-bit Windows PowerShell 5.1. Server cmdlets require their corresponding roles and modules.",
       "Use an authorized existing host; diagnostic tools need no additional hardware. A sample lab VM can use 2 vCPUs, 4 GiB RAM and 60 GiB storage.",
@@ -629,12 +629,12 @@
     "keywords": [
       "MikroTik CHR Lab on VMware Workstation",
       "install mikrotik chr vmware workstation",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "An incorrectly bridged lab can inject test DHCP or routing into the company network. Deploy CHR with explicit VMnet mapping and restricted management access.",
-    "scenario": "Illustrative scenario at fictional Arya: a NAT VMnet supplies WAN and a separate Host-only network supplies LAN. The team validates branch exports and Firewall behavior before an upgrade.",
+    "scenario": "A NAT VMnet supplies WAN and a separate Host-only network supplies LAN. The team validates branch exports and Firewall behavior before an upgrade.",
     "prerequisites": [
       "RouterOS CHR v7 and a licensed Workstation build supported on the host. Record exact router patch and Workstation build.",
       "Lab recommendation: 2 vCPU, 1 GiB RAM, at least 1 GiB disk and two vNICs for CHR. Throughput depends on the host and license.",
@@ -673,12 +673,12 @@
     "keywords": [
       "Nested ESXi on VMware Workstation",
       "install vmware esxi vmware workstation vmcisr",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "Nested ESXi is useful for migration/API rehearsal, but does not establish bare-metal performance or support. Diagnose VMCI failures from logs and build compatibility.",
-    "scenario": "Illustrative scenario at fictional Arya: before changing a vSwitch, the team builds a nested ESXi host and two test VMs. Management is isolated from the company LAN.",
+    "scenario": "Before changing a vSwitch, the team builds a nested ESXi host and two test VMs. Management is isolated from the company LAN.",
     "prerequisites": [
       "ESXi 8.x with an authorized ISO and a Workstation build compatible with the host OS. Record exact versions and the applicable error KB before changes.",
       "Suggested lab host: 32 GiB RAM, VT-x/EPT or AMD-V/RVI CPU and SSD. Allocate 4 vCPU, 8 GiB RAM, a suitable boot disk and separate datastore to nested ESXi. These are not performance guarantees.",
@@ -719,12 +719,12 @@
     "keywords": [
       "ESXi 8 Deployment",
       "vmware esxi 8 installation basic configuration",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "An installed hypervisor is not service-ready until hardware compatibility and management networking are verified. Validate firmware, DNS, NTP, uplinks and recovery before workloads arrive.",
-    "scenario": "Illustrative scenario at fictional Arya: a new host joins a cluster with no workloads yet. Management VLAN30 has two uplinks and an independent console.",
+    "scenario": "A new host joins a cluster with no workloads yet. Management VLAN30 has two uplinks and an independent console.",
     "prerequisites": [
       "Supported ESXi 8.x patch with an approved OEM image and compatible vCenter. Check firmware/drivers in the Compatibility Guide.",
       "CPU, NIC, controller and boot device must match the HCL for the build. The example uses two management uplinks and independent storage; size workloads through capacity planning.",
@@ -762,17 +762,17 @@
     ]
   },
   "vsphere-standard-switch-vs-distributed-switch": {
-    "title": "vSS to vDS Migration: Uplink Staging and Management Recovery",
-    "description": "Choose vSphere switching architecture and migrate a canary host incrementally while retaining an independently tested management rollback path.",
+    "title": "vSphere Standard Switch vs Distributed Switch: Features and Design Choices",
+    "description": "Compare vSS and vDS management, VLANs, traffic shaping, LLDP and port groups, then choose a design and validate migration without losing management access.",
     "keywords": [
-      "vSS to vDS Migration",
+      "vSphere Standard Switch vs Distributed Switch: Features and Design Choices",
       "vsphere standard switch vs distributed switch",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
-    "intro": "Moving vmk0 and every uplink at once can disconnect both the host and vCenter. Choose vDS together with staged migration and a tested recovery path.",
-    "scenario": "Illustrative scenario at fictional Arya: port-group policy has drifted across a six-host cluster. The team migrates to vDS while preserving a vSS uplink on the canary host.",
+    "intro": "Both switch types connect VMs and VMkernel adapters to the network. Their management model and feature set differ. In a cluster, inconsistent VLANs or policies can break connectivity after a VM moves. This comparison explains those differences, selection criteria and configuration checks before covering migration.",
+    "scenario": "Consider six ESXi hosts sharing application VLANs but carrying inconsistent port-group policies. Central management through vDS is a candidate for this cluster. A standalone host with ordinary VLAN and NIC teaming requirements may remain on vSS. Host count alone does not determine the choice.",
     "prerequisites": [
       "vSphere/ESXi 8.x. Confirm compatible vCenter builds and entitlement for vDS/features before design.",
       "Two independent uplinks for this migration example, with consistent physical trunks and MTU. Retain one management uplink on vSS until validation.",
@@ -798,12 +798,16 @@
     "compatibility": "vSS supports VLANs and NIC teaming; vDS adds centralized features. Verify LACP/NIOC availability against edition and current contract.",
     "faq": [
       [
-        "Does a vCenter outage stop all vDS traffic?",
-        "Existing host dataplanes generally continue; management and recovery are constrained."
+        "Does vSS support VLANs and NIC teaming?",
+        "Yes. Both switch types support these capabilities. Key vDS differences include centralized management, LLDP, private VLANs and inbound traffic shaping."
       ],
       [
-        "Why not move all uplinks together?",
-        "The retained vSS uplink preserves management and rollback while the new path is validated."
+        "Does every cluster require vDS?",
+        "No. Feature requirements, configuration consistency, entitlement and recovery access determine the choice. A cluster can also use consistently configured standard switches."
+      ],
+      [
+        "Does a vCenter outage stop existing vDS traffic?",
+        "Existing host forwarding generally continues, while configuration changes and some recovery operations are restricted. Prepare OOB access and an independent recovery path."
       ]
     ]
   },
@@ -813,12 +817,12 @@
     "keywords": [
       "NetBox 4.7.2 on Ubuntu",
       "netbox installation setup ubuntu",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "NetBox is a network source of truth. Database loss or excessive API permissions can disrupt inventory and automation. Installation must include identity policy and a testable restore.",
-    "scenario": "Illustrative scenario at fictional Arya: networking records three datacenters, VLANs and prefixes. Automation receives read access; inventory-owner groups control writes.",
+    "scenario": "Networking records three datacenters, VLANs and prefixes. Automation receives read access; inventory-owner groups control writes.",
     "prerequisites": [
       "Baseline: Ubuntu Server 24.04 LTS, NetBox 4.7.2, Python 3.12, PostgreSQL 16 and Redis 7. Pin patches/plugins after staging tests.",
       "Example capacity: 4 vCPU, 8 GiB RAM, 60 GiB SSD. Measure database/media growth, object count and job load. This single node is not a complete HA implementation.",
@@ -861,12 +865,12 @@
     "keywords": [
       "Oxidized Network Backups",
       "oxidized network device configuration backup",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "A configuration file does not prove network recoverability. Record changes, alert on collection failures and test selective restore against actual device models.",
-    "scenario": "Illustrative scenario at fictional Arya: 120 switches/routers are polled hourly. Monitor each node’s last successful backup independently of process health.",
+    "scenario": "120 switches/routers are polled hourly. Monitor each node’s last successful backup independently of process health.",
     "prerequisites": [
       "Ubuntu Server 24.04 LTS, Bash 5 and systemd. Record installed package patches with dpkg-query before making changes. Use Oxidized 0.37.0 with Ruby 3.2 on Ubuntu 24.04 from RubyGems, with the gem version locked in Gemfile.lock. Validate device models against their firmware.",
       "Suggested 2 vCPU, 4 GiB RAM and disk sized for history. Choose thread count from device latency and AAA load.",
@@ -907,12 +911,12 @@
     "keywords": [
       "Windows Server DFS",
       "install dfs server windows server",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "Namespace provides a stable path; Replication copies files. Neither is a backup. Deletions and overwrites can propagate to other members.",
-    "scenario": "Illustrative scenario at fictional Arya: two branches use Company/Data. FS01 supplies initial content to FS02. Users must not write to FS02 before initial synchronization finishes.",
+    "scenario": "Two branches use Company/Data. FS01 supplies initial content to FS02. Users must not write to FS02 before initial synchronization finishes.",
     "prerequisites": [
       "Windows Server 2022/2025 joined to AD DS with DFSN/DFSR PowerShell modules. Replicated content uses NTFS; DFS-R does not support ReFS.",
       "Two file servers with separate storage. Size staging from the largest files and allow space for conflict/deleted content; inventory determines capacity.",
@@ -952,12 +956,12 @@
     "keywords": [
       "SQL Server Backup Operations",
       "sql server automatic backup job",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "A green Agent Job does not prove every database has a usable backup. RPO/RTO depend on database coverage and restoring the full chain within the required time.",
-    "scenario": "Illustrative scenario at fictional Arya: Jira and Confluence use whitelisted databases. SQL backups must be coordinated with application files and home directories; the database alone is not a full application backup.",
+    "scenario": "Jira and Confluence use whitelisted databases. SQL backups must be coordinated with application files and home directories; the database alone is not a full application backup.",
     "prerequisites": [
       "SQL Server 2019/2022 with SQL Server Agent on Windows Server and PowerShell 5.1. Check compression/encryption against edition/build.",
       "Separate backup storage from data/log, size for FULL/DIFF/LOG and off-host copies, and measure actual restore throughput.",
@@ -993,17 +997,17 @@
     ]
   },
   "creating-a-bootable-usb": {
-    "title": "Enterprise Boot Media: Trusted Images, Firmware Compatibility and Recovery Tests",
+    "title": "Bootable USB Media: Trusted Images, Firmware Compatibility and Recovery Tests",
     "description": "Prepare verified boot media with recorded image hashes, correct firmware settings, controlled device selection and spare-server boot acceptance.",
     "keywords": [
-      "Enterprise Boot Media",
+      "Bootable USB Media",
       "creating a bootable usb",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "Bad media or an untrusted ISO can consume the recovery window. Record image provenance, hash, firmware mode and a successful boot test.",
-    "scenario": "Illustrative scenario at fictional Arya: datacenter staff prepare spare-server media before failure. Labels record OS, build, hash and the boot-test date.",
+    "scenario": "Datacenter staff prepare spare-server media before failure. Labels record OS, build, hash and the boot-test date.",
     "prerequisites": [
       "Official Ubuntu 24.04 LTS or Windows Server 2022/2025 ISO; approved stable Rufus on Windows 11. A Windows client Media Creation Tool is not a Server ISO substitute.",
       "USB capacity compatible with the image/firmware; 16 GiB is an example. Use a prepared workstation and spare server, verifying target controller/NIC models first.",
@@ -1039,17 +1043,17 @@
     ]
   },
   "http-vs-https-ssl-certificate-impact": {
-    "title": "Production HTTPS: Certificate Lifecycle, Trust Chains and HSTS Recovery",
-    "description": "Validate HTTPS through real client paths, manage certificate renewal and stage HSTS with explicit compatibility and recovery requirements.",
+    "title": "HTTP vs HTTPS: TLS Certificates, Security and Operational Impact",
+    "description": "Compare HTTP and HTTPS confidentiality, integrity and server authentication; understand certificate limits, trust-chain validation and safe HSTS rollout.",
     "keywords": [
-      "Production HTTPS",
+      "HTTP vs HTTPS: TLS Certificates, Security and Operational Impact",
       "http vs https ssl certificate impact",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "Expired certificates or incomplete chains can interrupt APIs and automation together. HTTPS identity verification depends on the certificate lifecycle as well as encryption.",
-    "scenario": "Illustrative scenario at fictional Arya: an API sits behind a TLS proxy. Browsers and Linux jobs use different trust stores. Rollout starts with canary clients and a short HSTS policy.",
+    "scenario": "An API sits behind a TLS proxy. Browsers and Linux jobs use different trust stores. Rollout starts with canary clients and a short HSTS policy.",
     "prerequisites": [
       "Ubuntu Server 24.04 LTS, Bash 5 and systemd. Record installed package patches with dpkg-query before making changes. Use repository OpenSSL 3.x, curl and Nginx. Require at least TLS 1.2 and enable TLS 1.3 according to client policy.",
       "Example lab capacity: 2 vCPUs, 2 GiB RAM and 20 GiB storage. These are planning assumptions, not vendor minimums; size the service for measured load.",
@@ -1084,17 +1088,17 @@
     ]
   },
   "imap-vs-pop3-email-protocol-comparison": {
-    "title": "Enterprise IMAP and POP3: Authentication, Synchronization and Retention",
+    "title": "IMAP vs POP3: Synchronization, Retention and Protocol Selection",
     "description": "Choose mail retrieval around multi-device state, provider authentication policies and independent retention, then validate TLS and client behavior.",
     "keywords": [
-      "Enterprise IMAP and POP3",
+      "IMAP vs POP3: Synchronization, Retention and Protocol Selection",
       "imap vs pop3 email protocol comparison",
-      "enterprise infrastructure",
+      "infrastructure operations",
       "production operations",
       "troubleshooting"
     ],
     "intro": "POP3 deletion settings can hide mail from other devices, while IMAP synchronization is not a backup. Choose protocols alongside organizational retention and authentication policy.",
-    "scenario": "Illustrative scenario at fictional Arya: mobile/desktop users need shared folders/read state, so IMAP is selected. A legacy POP3 workflow is tested with a dedicated mailbox and retention review before migration.",
+    "scenario": "Mobile/desktop users need shared folders/read state, so IMAP is selected. A legacy POP3 workflow is tested with a dedicated mailbox and retention review before migration.",
     "prerequisites": [
       "Provider-compatible IMAP4/POP3 client and OAuth; OpenSSL 3.x for diagnostics. Apply the current Exchange Online policy; assess on-premises Exchange separately.",
       "Existing workstation with mailbox quota, cache and archive capacity determined by retention. This is not a mail-server installation.",

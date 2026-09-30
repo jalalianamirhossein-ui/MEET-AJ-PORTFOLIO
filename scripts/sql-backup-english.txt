@@ -124,7 +124,7 @@ The procedure attempts every member before reporting failure. Investigate the fa
 Backup Encryption and Certificate Custody
 Backups contain readable organizational data and need protection at rest/in transit. @EncryptionCertificate adds AES_256 using a master certificate. Provision the database master key/certificate under organizational key policy, then export the certificate/private key to protected storage separate from backup files. Without required keys, replacement-server restore fails.
 Encryption defaults off to simplify testing. Before production, provision a certificate and add the parameter to all three jobs. TDE, backup encryption and storage encryption serve different purposes. Periodically test key access/import and do not leave keys only beside disposable backups.
-Enterprise SQL Server Backup Practices
+SQL Server Backup Practices
 Independent/off-site storage: retain local copies for speed and a second independent location. Keep at least one offline/immutable copy with separate identity so a compromised account cannot erase every version.
 Restore drills: regularly test restore and point-in-time recovery for critical services; record results, duration and corrective-action ownership.
 Monitoring: check failures, missing/late backups per whitelist member, stale RUNNING records, free space, duration and off-site transfer. The validation example uses a twenty-minute log threshold; align it to your RPO.
@@ -157,7 +157,7 @@ Microsoft: Backup overview
 Microsoft: BACKUP Transact-SQL
 Microsoft: Backup CHECKSUM and service permissions
 Microsoft: Restore and Recovery
-Meta Title: Automated SQL Server Backup: Enterprise Agent Runbook | Meet AJ
+Meta Title: Automated SQL Server Backup: Agent Jobs and Restore | Meet AJ
 Meta Description: SQL Server backups for Jira and Confluence: FULL, DIFF, LOG, explicit whitelists, thirty-day chain-aware retention, encryption, monitoring and restore tests.
 Retained base URL: https://meetaj.ir/articles/sql-server-automatic-backup-job; English uses the same path with ?lang=en.
 FAQ Schema uses these visible questions. Structured data does not guarantee a search rich result.

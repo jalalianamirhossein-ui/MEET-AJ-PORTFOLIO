@@ -236,7 +236,7 @@ class LegacyArticleImporter
 
         $presentation = array_filter([
             'localizations' => $localizations,
-            'content_language' => $contentLanguage === 'fa' ? 'fa' : null,
+            'content_language' => $contentLanguage,
             'source_file' => $relative,
             'source_hash' => $hash,
             'source_identity' => $relative,
@@ -274,7 +274,7 @@ class LegacyArticleImporter
                 'content' => $body,
                 'featured_image' => $card['thumbnail'] ?? $heroImage,
                 'category_id' => $category?->id,
-                'meta_title' => $contentLanguage === 'fa' ? $this->tagContent($html, 'title') : $heroTitle,
+                'meta_title' => $contentLanguage === 'fa' ? $this->tagContent($html, 'title') : $this->englishOrFallback($this->tagContent($html, 'title'), $heroTitle),
                 'meta_description' => $description,
                 'canonical_url' => null,
                 'seo_data' => $seo,

@@ -65,11 +65,11 @@
 موضوع: WAN نابرابر؛ هدف: تقسیم بار ۲ به ۱. سطح قبلی: متوسط با syntax v6. کمبود: table v7، تضمین نادرست وزن ECMP، FastTrack و failover session.
 
 - اولویت: 1
-- عنوان: Dual-WAN وزنی در RouterOS v7: PCC، مسیر برگشت و Failover
-- Meta Title: Dual-WAN وزنی در RouterOS v7: PCC، مسیر برگشت و Failover | Meet AJ
+- عنوان: Dual-WAN نامتقارن در MikroTik؛ تفاوت ECMP و PCC و طراحی Failover
+- Meta Title: Dual-WAN نامتقارن در MikroTik؛ تفاوت ECMP و PCC و طراحی Failover | Meet AJ
 - Meta Description: طراحی Dual-WAN وزنی با PCC در RouterOS v7؛ routing table، مسیر پاسخ، FastTrack، پایش هر لینک و آزمون failover اتصال‌های تازه.
 - URL: /articles/mikrotik-unequal-dual-wan-load-balancing-ecmp
-- Keywords: Dual-WAN وزنی در RouterOS v7: PCC، مسیر برگشت و Failover, مدیریت زیرساخت, عیب‌یابی, امنیت سرویس, بازیابی, mikrotik unequal dual wan load balancing ecmp
+- Keywords: Dual-WAN نامتقارن در MikroTik؛ تفاوت ECMP و PCC و طراحی Failover, مدیریت زیرساخت, عیب‌یابی, امنیت سرویس, بازیابی, mikrotik unequal dual wan load balancing ecmp
 
 ## set-static-ip-ubuntu-server-netplan.html
 موضوع: IP ثابت؛ هدف: پیکربندی شبکه. سطح قبلی: متوسط. کمبود: merge فایل‌ها، cloud-init، مالکیت DNS و rollback قابل اثبات.
@@ -86,7 +86,7 @@
 
 - اولویت: 1
 - عنوان: Backup سازمانی SQL Server: Agent، زنجیره Log و Restore آزمایشی
-- Meta Title: بکاپ خودکار SQL Server؛ راهنمای Enterprise با Agent | Meet AJ
+- Meta Title: بکاپ خودکار SQL Server؛ زمان‌بندی Agent و آزمون Restore | Meet AJ
 - Meta Description: طراحی بکاپ SQL Server برای Jira و Confluence؛ Full، Differential و Log، اسکریپت Whitelist، Retention سی‌روزه، Encryption، مانیتورینگ و تست Restore.
 - URL: /articles/sql-server-automatic-backup-job
 - Keywords: Backup سازمانی SQL Server: Agent، زنجیره Log و Restore آزمایشی, مدیریت زیرساخت, عیب‌یابی, امنیت سرویس, بازیابی, sql server automatic backup job
@@ -105,11 +105,11 @@
 موضوع: HTTP/TLS؛ هدف: امنیت انتقال. سطح قبلی: مقدماتی. کمبود: chain validation، renewal probe و rollback HSTS.
 
 - اولویت: 2
-- عنوان: HTTPS در Production: TLS، Certificate Chain و Rollout امن HSTS
-- Meta Title: HTTPS در Production: TLS، Certificate Chain و Rollout امن HSTS | Meet AJ
-- Meta Description: مدیریت HTTPS در Production؛ بررسی SAN و chain گواهی، renewal و پایش expiry، rollout تدریجی HSTS و تحلیل خطا از مسیر واقعی کلاینت.
+- عنوان: مقایسه HTTP و HTTPS؛ نقش TLS، گواهی و اثر عملی بر امنیت
+- Meta Title: مقایسه HTTP و HTTPS؛ نقش TLS، گواهی و اثر عملی بر امنیت | Meet AJ
+- Meta Description: تفاوت HTTP و HTTPS در محرمانگی، اصالت سرور و یکپارچگی ارتباط؛ نقش گواهی TLS، محدودیت‌های HTTPS و روش اعتبارسنجی Chain و HSTS.
 - URL: /articles/http-vs-https-ssl-certificate-impact
-- Keywords: HTTPS در Production: TLS، Certificate Chain و Rollout امن HSTS, مدیریت زیرساخت, عیب‌یابی, امنیت سرویس, بازیابی, http vs https ssl certificate impact
+- Keywords: مقایسه HTTP و HTTPS؛ نقش TLS، گواهی و اثر عملی بر امنیت, مدیریت زیرساخت, عیب‌یابی, امنیت سرویس, بازیابی, http vs https ssl certificate impact
 
 ## install-dfs-server-windows-server.html
 موضوع: DFS-N/DFS-R؛ هدف: share توزیع‌شده. سطح قبلی: مقدماتی. کمبود: setup کامل، staging، initial sync و backup مستقل.
@@ -175,11 +175,11 @@
 موضوع: switch انتخابی؛ هدف: طراحی شبکه vSphere. سطح قبلی: متوسط. کمبود: rollback دقیق migration، licensing و failure vCenter.
 
 - اولویت: 2
-- عنوان: طراحی vSS و vDS: مهاجرت VMkernel، VLAN و بازیابی Management
-- Meta Title: طراحی vSS و vDS: مهاجرت VMkernel، VLAN و بازیابی Management | Meet AJ
-- Meta Description: مقایسه vSS و vDS و مهاجرت مرحله‌ای شبکه vSphere؛ حفظ uplink مدیریت، آزمون VLAN و MTU و بازیابی از console مستقل.
+- عنوان: مقایسه vSphere Standard Switch و Distributed Switch؛ قابلیت‌ها و معیار انتخاب
+- Meta Title: مقایسه vSphere Standard Switch و Distributed Switch؛ قابلیت‌ها و معیار انتخاب | Meet AJ
+- Meta Description: مقایسه vSS و vDS در مدیریت، VLAN، Traffic Shaping، LLDP و Port Group؛ معیار انتخاب برای ESXi مستقل و Cluster، همراه با ملاحظات مهاجرت.
 - URL: /articles/vsphere-standard-switch-vs-distributed-switch
-- Keywords: طراحی vSS و vDS: مهاجرت VMkernel، VLAN و بازیابی Management, مدیریت زیرساخت, عیب‌یابی, امنیت سرویس, بازیابی, vsphere standard switch vs distributed switch
+- Keywords: مقایسه vSphere Standard Switch و Distributed Switch؛ قابلیت‌ها و معیار انتخاب, مدیریت زیرساخت, عیب‌یابی, امنیت سرویس, بازیابی, vsphere standard switch vs distributed switch
 
 ## creating-a-bootable-usb.html
 موضوع: USB boot؛ هدف: نصب/recovery. سطح قبلی: مقدماتی. کمبود: زنجیره اعتماد ISO، کنترل انتخاب device و معیار restore.
@@ -195,11 +195,11 @@
 موضوع: email protocol؛ هدف: انتخاب client. سطح قبلی: مقدماتی. کمبود: OAuth، mailbox retention، اثر delete و تست امن TLS.
 
 - اولویت: 3
-- عنوان: انتخاب IMAP و POP3 سازمانی: TLS، OAuth و جلوگیری از فقدان ایمیل
-- Meta Title: انتخاب IMAP و POP3 سازمانی: TLS، OAuth و جلوگیری از فقدان ایمیل | Meet AJ
+- عنوان: مقایسه IMAP و POP3؛ همگام‌سازی، نگهداری پیام و انتخاب پروتکل
+- Meta Title: مقایسه IMAP و POP3؛ همگام‌سازی، نگهداری پیام و انتخاب پروتکل | Meet AJ
 - Meta Description: انتخاب IMAP و POP3 بر اساس sync، OAuth و retention؛ اعتبارسنجی TLS، آزمون چند دستگاه و بازیابی ایمیل مستقل از رفتار کلاینت.
 - URL: /articles/imap-vs-pop3-email-protocol-comparison
-- Keywords: انتخاب IMAP و POP3 سازمانی: TLS، OAuth و جلوگیری از فقدان ایمیل, مدیریت زیرساخت, عیب‌یابی, امنیت سرویس, بازیابی, imap vs pop3 email protocol comparison
+- Keywords: مقایسه IMAP و POP3؛ همگام‌سازی، نگهداری پیام و انتخاب پروتکل, مدیریت زیرساخت, عیب‌یابی, امنیت سرویس, بازیابی, imap vs pop3 email protocol comparison
 
 ## install-mikrotik-chr-vmware-workstation.html
 موضوع: CHR VM؛ هدف: lab RouterOS. سطح قبلی: مقدماتی. کمبود: جداسازی WAN/LAN، اثر license و عدم تعمیم Workstation به Production.
@@ -245,8 +245,8 @@
 موضوع: hardware inventory؛ هدف: اطلاعات سیستم. سطح قبلی: متوسط. کمبود: خروجی ساختاریافته، null در VM، driver و محدودیت GPU RAM.
 
 - اولویت: 3
-- عنوان: Inventory سازمانی Windows: CIM، ظرفیت و محدودیت DxDiag
-- Meta Title: Inventory سازمانی Windows: CIM، ظرفیت و محدودیت DxDiag | Meet AJ
+- عنوان: مقایسه CMD، PowerShell و DxDiag برای شناسایی سخت‌افزار Windows
+- Meta Title: مقایسه CMD، PowerShell و DxDiag برای شناسایی سخت‌افزار Windows | Meet AJ
 - Meta Description: جمع‌آوری Inventory سخت‌افزار Windows با CIM و Storage، خروجی JSON زمان‌دار، تطبیق CMDB و تشخیص محدودیت DxDiag و RAID.
 - URL: /articles/windows-hardware-info-cmd-vs-dxdiag
-- Keywords: Inventory سازمانی Windows: CIM، ظرفیت و محدودیت DxDiag, مدیریت زیرساخت, عیب‌یابی, امنیت سرویس, بازیابی, windows hardware info cmd vs dxdiag
+- Keywords: مقایسه CMD، PowerShell و DxDiag برای شناسایی سخت‌افزار Windows, مدیریت زیرساخت, عیب‌یابی, امنیت سرویس, بازیابی, windows hardware info cmd vs dxdiag

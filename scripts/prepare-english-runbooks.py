@@ -4,7 +4,10 @@ import json
 
 EN = {}
 def add(slug, title, description, intro, scenario, prerequisites, architecture, installation, security, monitoring, troubleshooting, recovery, practices, compatibility, faq):
-    EN[slug] = dict(title=title,description=description,keywords=[title.split(':')[0],slug.replace('-',' '),'enterprise infrastructure','production operations','troubleshooting'],intro=intro,scenario=scenario,prerequisites=prerequisites,architecture=architecture,installation=installation,security=security,monitoring=monitoring,troubleshooting=troubleshooting,recovery=recovery,practices=practices,compatibility=compatibility,faq=faq)
+    title = title.replace('Enterprise Boot Media', 'Bootable USB Media').replace('Enterprise IMAP and POP3', 'IMAP vs POP3')
+    scenario = scenario.removeprefix('Illustrative scenario at fictional Arya: ')
+    scenario = scenario[:1].upper() + scenario[1:]
+    EN[slug] = dict(title=title,description=description,keywords=[title.split(':')[0],slug.replace('-',' '),'infrastructure operations','production operations','troubleshooting'],intro=intro,scenario=scenario,prerequisites=prerequisites,architecture=architecture,installation=installation,security=security,monitoring=monitoring,troubleshooting=troubleshooting,recovery=recovery,practices=practices,compatibility=compatibility,faq=faq)
 
 UBUNTU='Ubuntu Server 24.04 LTS, Bash 5 and systemd. Record installed package patches with dpkg-query before making changes.'
 HW='Example lab capacity: 2 vCPUs, 2 GiB RAM and 20 GiB storage. These are planning assumptions, not vendor minimums; size the service for measured load.'
@@ -475,6 +478,8 @@ add('imap-vs-pop3-email-protocol-comparison','Enterprise IMAP and POP3: Authenti
 
 if __name__ == '__main__':
     assert len(EN) == 25, len(EN)
+    from article_comparisons import apply_editorial
+    apply_editorial(EN, 'en')
     target = Path(__file__).resolve().parents[1] / 'docs/enterprise-articles/english-runbooks.json'
     target.write_text(json.dumps(EN,ensure_ascii=False,indent=2),encoding='utf-8')
     print('Prepared',len(EN),'English counterparts.')

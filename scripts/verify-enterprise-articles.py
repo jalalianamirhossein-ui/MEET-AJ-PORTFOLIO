@@ -53,7 +53,7 @@ with zipfile.ZipFile(DOC/'originals.zip') as archive:
         for section in ['intro','scenario','prerequisites','architecture','installation','security','monitoring','troubleshooting','recovery','practices','compatibility','sources']:
             if parsed.ids.count('enterprise-'+section) != 1:
                 errors.append(file.name+': section '+section)
-        if parsed.meta.get('article:content-language') != 'fa':
+        if parsed.meta.get('article:content-language') != 'en':
             errors.append(file.name+': content language')
         for key in ['description','keywords']:
             if not parsed.meta.get(key):
