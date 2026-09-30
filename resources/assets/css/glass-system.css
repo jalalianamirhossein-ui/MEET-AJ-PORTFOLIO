@@ -323,6 +323,28 @@ body .contact :is(input, textarea, select, iframe) { min-width: 0; max-width: 10
 }
 .article-page aside.article-toc .article-nav-item a > span { flex: 1 1 0; }
 .article-page aside.article-toc .article-toc-list { padding: 0.25rem; }
+@media (min-width: 1024px) {
+  /* The nav, rather than its nested list, must shrink inside the sticky panel. */
+  .article-page aside.article-toc .article-toc-title { flex: 0 0 auto; }
+  .article-page aside.article-toc .article-toc-nav {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--article-primary) transparent;
+    scrollbar-gutter: stable;
+  }
+  .article-page aside.article-toc .article-toc-list {
+    max-height: none;
+    overflow: visible;
+  }
+}
+.article-page aside.article-toc .article-toc-nav:focus-visible {
+  outline: 2px solid var(--article-primary);
+  outline-offset: 2px;
+}
 @media (max-width: 767px) {
   body .contact-main-grid { grid-template-columns: minmax(0, 1fr); }
 }

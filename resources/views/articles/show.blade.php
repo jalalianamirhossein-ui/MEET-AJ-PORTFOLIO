@@ -40,7 +40,7 @@
     <link id="rtl-style" href="/assets/css/rtl.css?v=1405" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
     <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
-    <link href="/assets/css/glass-system.css?v=7" rel="stylesheet" />
+    <link href="/assets/css/glass-system.css?v=8" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @if (!empty($seo['breadcrumb']))
       <script type="application/ld+json">{!! json_encode($seo['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
@@ -141,8 +141,8 @@
           <div class="article-shell{{ $tocHtml ? ' article-shell--with-toc' : '' }}">
             @if ($tocHtml)
               <aside class="article-toc" aria-label="Table of contents" data-en-aria-label="Table of contents" data-fa-aria-label="فهرست مطالب">
-                <p class="article-toc-title" data-en="On this page" data-fa="در این مقاله">On this page</p>
-                <nav class="article-toc-nav">
+                <p id="article-toc-heading" class="article-toc-title" data-en="On this page" data-fa="در این مقاله">On this page</p>
+                <nav class="article-toc-nav" tabindex="0" aria-labelledby="article-toc-heading">
                   <ul class="article-toc-list">
                     {!! $tocHtml !!}
                   </ul>
