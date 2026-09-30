@@ -21,6 +21,17 @@ html {
   --color-canvas: #ffffff;
   --color-muted: #64748b;
   --color-border: #e2e8f0;
+  --admin-canvas: #f8f6f7;
+  --admin-glass: rgba(255, 255, 255, 0.8);
+  --admin-glass-strong: rgba(255, 255, 255, 0.96);
+  --admin-glass-border: rgba(255, 255, 255, 0.85);
+  --admin-blur: blur(18px) saturate(140%);
+  --admin-specular: inset 0 2px 0 rgba(255, 255, 255, 0.85);
+  --admin-shadow: 0 8px 30px rgba(15, 23, 42, 0.055);
+  --admin-shadow-floating: 0 20px 60px rgba(15, 23, 42, 0.14);
+  --admin-radius: 1.25rem;
+  --admin-control-radius: 0.8rem;
+  --admin-gap: clamp(1rem, 2vw, 1.5rem);
   --topic-microsoft: #2563eb;
   --topic-linux: #15803d;
   --topic-mikrotik: #c2410c;
@@ -808,4 +819,191 @@ html.fi input:disabled {
   color: #64748b !important;
   -webkit-text-fill-color: #64748b !important;
   opacity: 0.72;
+}
+
+/* Light glass workspace. No reveal effects: administrative data stays visible.
+   Structural Filament classes, roles, validation and Livewire remain intact. */
+html.fi .fi-body,
+html.fi .fi-simple-layout,
+html.fi .fi-layout {
+  background:
+    radial-gradient(ellipse at 8% 0%, rgba(190, 18, 60, 0.075), transparent 36rem),
+    radial-gradient(ellipse at 95% 65%, rgba(100, 116, 139, 0.06), transparent 40rem),
+    var(--admin-canvas);
+}
+
+html.fi .fi-sidebar,
+html.fi .fi-topbar {
+  background: var(--admin-glass);
+  border-color: var(--color-border);
+  box-shadow: var(--admin-specular);
+  -webkit-backdrop-filter: var(--admin-blur);
+  backdrop-filter: var(--admin-blur);
+}
+html.fi .fi-sidebar { border-inline-end: 1px solid var(--color-border); }
+html.fi .fi-sidebar-header { min-height: 5rem; }
+html.fi .fi-sidebar-nav { padding: 1rem 0.875rem; gap: 1.5rem; }
+html.fi .fi-sidebar-group-label { font-size: 0.7rem; letter-spacing: 0.08em; }
+html.fi .fi-sidebar-item-btn { min-height: 2.85rem; border-radius: var(--admin-control-radius); }
+html.fi .fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
+  background: var(--color-primary-soft);
+  box-shadow: inset 0 0 0 1px rgba(190, 18, 60, 0.15);
+}
+html.fi .fi-sidebar-item-btn:hover { background: var(--color-primary-soft); }
+html.fi .fi-header {
+  background: transparent;
+  border: 0;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  padding-block: 0.5rem;
+}
+html.fi .fi-header-heading { font-size: clamp(1.6rem, 2.5vw, 2.1rem); line-height: 1.25; }
+html.fi .fi-header-subheading { max-width: 48rem; line-height: 1.7; }
+html.fi .fi-main { padding-block: 1.75rem; }
+html.fi .fi-page { gap: var(--admin-gap); }
+
+/* Apply glass to outer containers only, avoiding stacked blur in forms/tables. */
+html.fi .fi-wi-widget,
+html.fi .fi-fo-component-ctn {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+html.fi .fi-section,
+html.fi .fi-ta-ctn,
+html.fi .fi-simple-main,
+html.fi .fi-wi-stats-overview-stat {
+  background: var(--admin-glass);
+  border: 1px solid var(--color-border);
+  border-radius: var(--admin-radius);
+  box-shadow: var(--admin-specular), var(--admin-shadow);
+}
+html.fi .fi-section .fi-section,
+html.fi .fi-section .fi-ta-ctn {
+  background: transparent;
+  box-shadow: none;
+}
+html.fi .fi-section-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--color-border); }
+html.fi .fi-section-content { padding: 1.5rem; }
+html.fi .fi-section-header-heading { font-weight: 700; font-size: 1.05rem; }
+html.fi .fi-wi-stats-overview-stats { gap: var(--admin-gap); }
+html.fi .fi-wi-stats-overview-stat { min-height: 9rem; padding: 1.4rem; border-inline-start-width: 1px; }
+html.fi .fi-wi-stats-overview-stat-value { font-size: clamp(1.8rem, 3vw, 2.4rem); line-height: 1.3; }
+html.fi .fi-wi-stats-overview-stat-label { font-size: 0.85rem; }
+html.fi .fi-wi-stats-overview-stat-description { font-size: 0.8rem; line-height: 1.6; }
+html.fi a.fi-wi-stats-overview-stat:hover { border-color: var(--color-primary); box-shadow: var(--admin-specular), var(--admin-shadow); }
+
+html.fi .fi-ta-header,
+html.fi .fi-ta-header-toolbar { padding: 1.1rem 1.25rem; background: transparent; }
+html.fi .fi-ta-header-cell { background: #f8fafc; font-size: 0.75rem; padding-block: 0.875rem; }
+html.fi .fi-ta-cell { padding-block: 1rem; }
+html.fi .fi-ta-row:not(.meetaj-request-new):nth-child(even) { background: rgba(248, 250, 252, 0.65); }
+html.fi .fi-ta-row:hover { background: var(--color-primary-soft); }
+html.fi .fi-pagination { padding: 1rem 1.25rem; }
+html.fi .fi-ta-empty-state { padding: 3rem 1.5rem; }
+
+html.fi .fi-input-wrp {
+  background: #ffffff;
+  border-radius: var(--admin-control-radius);
+  box-shadow: inset 0 0 0 1px var(--color-border);
+  min-height: 2.75rem;
+}
+html.fi .fi-input-wrp:focus-within {
+  box-shadow: inset 0 0 0 1px var(--color-primary), 0 0 0 3px rgba(190, 18, 60, 0.12);
+}
+html.fi .fi-input-wrp:has([aria-invalid="true"]) {
+  box-shadow: inset 0 0 0 1px var(--color-danger);
+}
+html.fi .fi-input,
+html.fi .fi-select-input { min-height: 2.75rem; }
+html.fi .fi-fo-field-label-content { font-size: 0.875rem; }
+html.fi .fi-fo-rich-editor,
+html.fi .fi-fo-markdown-editor { background: #ffffff; border-radius: var(--admin-control-radius); }
+html.fi .fi-btn { min-height: 2.75rem; border-radius: 999px; padding-inline: 1.1rem; }
+html.fi .fi-btn:active:not(:disabled) { transform: translateY(1px); }
+html.fi :is(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+html.fi .fi-btn:disabled { transform: none; cursor: not-allowed; }
+
+html.fi .fi-modal-window,
+html.fi .fi-dropdown-panel,
+html.fi .fi-global-search-results-ctn,
+html.fi .fi-no-notification {
+  background: var(--admin-glass-strong);
+  border: 1px solid var(--color-border);
+  border-radius: var(--admin-radius);
+  box-shadow: var(--admin-shadow-floating);
+}
+html.fi .fi-dropdown-list { background: transparent; border: 0; box-shadow: none; padding: 0.5rem; }
+html.fi .fi-dropdown-list-item { border-radius: 0.65rem; min-height: 2.75rem; }
+
+/* Dashboard welcome area and permission-aware shortcuts. */
+.meetaj-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 2rem;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  border: 1px solid var(--admin-glass-border);
+  border-radius: 1.5rem;
+  background: var(--admin-glass);
+  box-shadow: var(--admin-specular), var(--admin-shadow);
+  -webkit-backdrop-filter: var(--admin-blur);
+  backdrop-filter: var(--admin-blur);
+}
+.meetaj-admin-eyebrow { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.13em; color: var(--color-primary); }
+.meetaj-workspace h2 { font-size: clamp(1.35rem, 2.2vw, 1.85rem); line-height: 1.35; font-weight: 700; color: var(--color-secondary); margin-block: 0.75rem; }
+.meetaj-workspace-copy > p:not(.meetaj-admin-eyebrow) { color: #475569; line-height: 1.75; max-width: 38rem; }
+.meetaj-site-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-primary); font-weight: 600; font-size: 0.85rem; margin-block-start: 1.25rem; min-height: 2.75rem; }
+.meetaj-site-link svg { width: 1rem; height: 1rem; }
+.meetaj-workspace-actions { display: grid; gap: 0.65rem; }
+.meetaj-workspace-action {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.95rem 1rem;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  color: var(--color-secondary);
+}
+.meetaj-workspace-action:hover { background: #ffffff; border-color: var(--color-primary); }
+.meetaj-workspace-action > svg { width: 1.3rem; height: 1.3rem; flex-shrink: 0; color: var(--color-primary); }
+.meetaj-workspace-action strong { display: block; font-weight: 600; font-size: 0.875rem; }
+.meetaj-workspace-action small { display: block; color: #475569; font-size: 0.75rem; margin-block-start: 0.2rem; line-height: 1.5; }
+.meetaj-workspace-action .meetaj-action-arrow { width: 1rem; margin-inline-start: auto; color: var(--color-muted); }
+[dir="rtl"] .meetaj-action-arrow { transform: rotate(180deg); }
+
+/* Login uses the same bright glass recipe, with no extra image downloads. */
+html.fi .fi-simple-main {
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  -webkit-backdrop-filter: var(--admin-blur);
+  backdrop-filter: var(--admin-blur);
+}
+.meetaj-login-intro { text-align: center; margin-block-end: 0.25rem; }
+.meetaj-login-intro p { margin-block-start: 0.5rem; color: #475569; font-size: 0.85rem; line-height: 1.6; }
+html.fi .fi-simple-header-heading { font-size: 1.7rem; letter-spacing: -0.025em; }
+
+@media (max-width: 1023px) {
+  html.fi .fi-sidebar { background: var(--admin-glass-strong); }
+  .meetaj-workspace { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+}
+@media (max-width: 640px) {
+  html.fi .fi-main { padding-block: 1rem; }
+  html.fi .fi-section-content { padding: 1rem; }
+  html.fi .fi-section-header { padding: 1rem; }
+  html.fi .fi-wi-stats-overview-stat { min-height: 8rem; padding: 1rem; }
+  .meetaj-workspace { padding: 1.25rem; border-radius: var(--admin-radius); }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root { --admin-glass: #ffffff; --admin-glass-strong: #ffffff; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root { --admin-glass: #ffffff; --admin-glass-strong: #ffffff; --admin-blur: none; }
+}
+@media (forced-colors: active) {
+  .meetaj-workspace, .meetaj-workspace-action { border: 1px solid CanvasText; }
 }
