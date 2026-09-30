@@ -13,7 +13,7 @@ class WorkspaceActions extends Widget
 
     protected static bool $isLazy = false;
 
-    protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = ['default' => 'full'];
 
     protected string $view = 'filament.widgets.workspace-actions';
 

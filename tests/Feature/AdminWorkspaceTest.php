@@ -42,7 +42,9 @@ class AdminWorkspaceTest extends TestCase
             $html = preg_replace('/<script\b[^>]*>.*?<\/script>/si', '', $response->getContent());
             $html = str_replace('<head>', '<head><base href="http://127.0.0.1:8088/">', $html);
             $html = str_replace('http://localhost', 'http://127.0.0.1:8088', $html);
+            $html = str_replace('class="fi-sidebar fi-main-sidebar"', 'class="fi-sidebar fi-main-sidebar fi-sidebar-open"', $html);
             $html = preg_replace_callback('/<aside\b[^>]*>/i', fn ($match) => preg_replace('/\s+x-cloak="[^"]*"/', '', $match[0]), $html);
+            $html = str_replace('</head>', '<style>.fi-main-ctn{opacity:1!important}.fi-sidebar{display:flex!important;transform:none!important}@media(max-width:1023px){.fi-sidebar{display:none!important}}</style></head>', $html);
             file_put_contents(base_path('.runtime/admin-preview.html'), $html);
         }
     }
