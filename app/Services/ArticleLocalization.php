@@ -56,6 +56,20 @@ class ArticleLocalization
 
     public function html(string $html, string $locale): string
     {
+        // Also remove the retired section from previously imported database rows.
+        if (preg_match('~<details\b[^>]*\bid="legacy-history"[^>]*>~i', $html, $start, PREG_OFFSET_CAPTURE)) {
+            $offset = $start[0][1];
+            $cursor = $offset + strlen($start[0][0]);
+            $depth = 1;
+            preg_match_all('~</?details\b[^>]*>~i', substr($html, $cursor), $tags, PREG_OFFSET_CAPTURE);
+            foreach ($tags[0] as [$tag, $position]) {
+                $depth += str_starts_with($tag, '</') ? -1 : 1;
+                if ($depth === 0) {
+                    $html = substr($html, 0, $offset).substr($html, $cursor + $position + strlen($tag));
+                    break;
+                }
+            }
+        }
         // Executable blocks remain byte-for-byte identical across locales.
         $protected = [];
         $html = preg_replace_callback('~<pre\b.*?</pre>~is', function ($match) use (&$protected) {
@@ -63,17 +77,6 @@ class ArticleLocalization
             $protected[$key] = $match[0];
 
             return $key;
-        }, $html) ?? $html;
-        // Historical content remains in its original languages, visibly labeled.
-        $html = preg_replace_callback('~(<details\b[^>]*id="legacy-history"[^>]*>)(.*?)(</details>)~is', function ($match) use (&$protected) {
-            $parts = explode('</summary>', $match[2], 2);
-            if (count($parts) !== 2) {
-                return $match[0];
-            }
-            $key = '__ARTICLE_HISTORY__';
-            $protected[$key] = $parts[1];
-
-            return $match[1].$parts[0].'</summary>'.$key.$match[3];
         }, $html) ?? $html;
         $html = preg_replace_callback('~<(h[1-6]|p|span|li|th|td|summary)\b([^>]*\bdata-'.$locale.'="([^"]*)"[^>]*)>(.*?)</\1\s*>~is', function ($match) use ($locale) {
             $value = html_entity_decode($match[3], ENT_QUOTES | ENT_HTML5, 'UTF-8');

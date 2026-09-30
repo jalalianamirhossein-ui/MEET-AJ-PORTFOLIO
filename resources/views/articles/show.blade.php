@@ -46,7 +46,7 @@
     <link id="rtl-style" href="/assets/css/rtl.css?v=1405" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
     <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
-    <link href="/assets/css/glass-system.css?v=10" rel="stylesheet" />
+    <link href="/assets/css/glass-system.css?v=11" rel="stylesheet" />
     @if (!empty($languageSeo))
       <script id="article-language-seo" type="application/json">{!! json_encode($languageSeo, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @endif
@@ -96,12 +96,6 @@
           <div class="article-hero-layout">
             <div class="article-hero-copy">
               @include('articles.partials.breadcrumbs')
-              @if (!empty($seo['alternates']))
-                <nav class="article-translations" aria-label="Article language">
-                  <a lang="fa" hreflang="fa" href="{{ $seo['alternates']['fa'] }}">فارسی</a> ·
-                  <a lang="en" hreflang="en" href="{{ $seo['alternates']['en'] }}">English</a>
-                </nav>
-              @endif
               <div class="article-meta">
                 @if ($article->published_at)
                   <time class="meta-date article-date" datetime="{{ $article->published_at->toAtomString() }}">{{ $article->published_at->timezone(config('cms.display_timezone', config('app.timezone')))->format('M j, Y') }}</time>
@@ -143,7 +137,7 @@
             $articleContent = str_replace('my-profile-img.jpg', 'my-profile-img-2.jpg', $article->displayContent());
             $articleContent = str_replace(
                 ['../index.html#portfolio', 'https://meetaj.ir/#portfolio', 'Back to portfolio', 'بازگشت به نمونه‌کارها'],
-                ['https://meetaj.ir/articles', 'https://meetaj.ir/articles', 'Back to Article', 'بازگشت به مقاله'],
+                [route('articles.index', [], false), route('articles.index', [], false), 'Back to articles', 'بازگشت به فهرست مقاله‌ها'],
                 $articleContent
             );
             $standardToc = [
@@ -183,9 +177,9 @@
               @include('articles.partials.related')
               @include('articles.partials.author')
               <nav class="article-nav article-footer-nav" aria-label="Article footer navigation">
-                <a class="article-back" href="https://meetaj.ir/articles">
+                <a class="article-back" href="{{ route('articles.index', [], false) }}">
                   <i class="bi bi-arrow-left" aria-hidden="true"></i>
-                  <span data-en="Back to Article" data-fa="بازگشت به مقاله">Back to Article</span>
+                  <span data-en="Back to articles" data-fa="بازگشت به فهرست مقاله‌ها">{{ data_get($article->presentation, 'content_language') === 'fa' ? 'بازگشت به فهرست مقاله‌ها' : 'Back to articles' }}</span>
                 </a>
               </nav>
               @include('articles.partials.share')

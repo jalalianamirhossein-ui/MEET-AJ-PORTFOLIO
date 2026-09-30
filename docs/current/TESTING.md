@@ -1,93 +1,37 @@
 # Testing — Meet AJ
 
-**Authority:** AUTHORITATIVE testing document.
-**Verified:** 2026-09-21 by running the full suite and reading `phpunit.xml`, `phpunit.mysql.xml`, `tests/TestCase.php` and every file in `tests/Feature/`.
-**Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md). Per-URL evidence: [../qa/QA-MATRIX.md](../qa/QA-MATRIX.md).
-
-## Latest run — 2026-09-21
-
-After the homepage CMS, restored resume timeline, simplified article creation, dynamic testimonials, escaped article-markup repair and dynamic site chrome changes: **67 tests, 1127 assertions, 0 failures, 1 skipped**. The skipped test is `MysqlSchemaTest`, which only runs with an explicit MySQL connection. The homepage CMS is covered by `HomepageContentTest`; content comparison remains **Failures: 0**.
-
-## Previous recorded run — 2026-09-18
-
-```
-PHPUnit 11.5.56 by Sebastian Bergmann and contributors.
-Runtime:       PHP 8.4.25
-Configuration: phpunit.xml
-```
-
-**Status: PASS — 58 tests, 1124 assertions, 1 skipped, 0 failures** (includes `AdminThemeTest` for White/Red + category accents, and `ProductionAuditTest` for contact inbox / FA / Expertise markup). The single skip is `MysqlSchemaTest`, which only runs when a MySQL/MariaDB connection is bound.
-
-Also run on 2026-09-18: `php artisan optimize:clear`, `php artisan route:list` (42 routes), `php artisan site:compare-content` (**Failures: 0**), `php artisan site:publish-assets`, `php artisan filament:assets`.
-
-## Suites and configuration
-
-| Configuration | Database | Purpose |
-|---------------|----------|---------|
-| `phpunit.xml` (default) | SQLite `:memory:` | Full feature suite |
-| `phpunit.mysql.xml` | MySQL / MariaDB `127.0.0.1:3307`, database `meetaj_test` | Schema compatibility only |
-
-`tests/TestCase.php` synchronizes PHPUnit's configured `$_ENV` values into `$_SERVER` before bootstrapping Laravel, then explicitly sets SQLite `:memory:` for the default suite. This keeps an Artisan parent's `APP_ENV=local` and local database/cache/mail settings out of the test app, even without `.env.testing`. PHPUnit's XML `force="true"` updates `getenv()` and `$_ENV`, but leaves inherited `$_SERVER` entries untouched. MySQL is used only when selected in the test configuration. See [the repair verification](../qa/LOCAL-ENVIRONMENT-REPAIR.md).
-
-## Test files
-
-| File | Covers |
-|------|--------|
-| `PublicSiteTest.php` | Homepage, `/index.html` 301, all 25 articles and their legacy redirects, 404 on unknown slugs, contact endpoints, honeypot, validation, rate limit, sitemap, robots, German routes returning 404 |
-| `CmsOperationsTest.php` | Filament access control, article create/update, slug-change redirects, importer behaviour |
-| `ServiceCatalogTest.php` | Service catalog rendering, detail pages, `.html` 301, pricing output, editor authorization failure |
-| `ArticleLibraryTest.php` | Search, tag filter, pagination, related articles, share links |
-| `ContentRulesTest.php` | Language rules, German publishing rejection, publication gates |
-| `RequestWorkflowTest.php` | Request statuses, admin-only access, hidden internal notes |
-| `FormCsrfAndAdminRequestsTest.php` | CSRF contracts, homepage service selection persistence, `/admin/requests` inbox |
-| `HomepageContentTest.php` | Homepage section seeding, dynamic rendering and admin resource access |
-| `ProductionAuditTest.php` | Contact → Request → admin inbox; editor 403; first-load Testimonials + Contact; FA encoding; English article titles + importer repair; Expertise `data-expertise` + `initExpertiseReveal`; asset versions `site-modules.css?v=1853` / `main.js?v=1414` |
-| `AdminThemeTest.php` | White/Red admin tokens + contrast lock; published `meet-aj-admin.css`; `categories.accent_color` override/fallback/invalid hex; public `--topic` from `Category::accentColor()`; ColorPicker source asserts; editor denied Requests |
-| `MysqlSchemaTest.php` | Schema creation on MySQL/MariaDB (skipped on SQLite) |
+Verified **2026-10-01**. Latest full suite: **84 tests, 0 failures, 1 skipped**. Exact assertion count and browser findings are in [FULL-AUDIT-2026-10-01.md](../qa/FULL-AUDIT-2026-10-01.md).
 
 ## Commands
 
 ```bash
-php artisan test                                              # default SQLite suite
-vendor/bin/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest   # MySQL schema check
-php artisan site:compare-content                              # content integrity vs original HTML
-php artisan migrate:status                                    # migration ledger
-php artisan route:list                                        # route inventory
+php vendor/phpunit/phpunit/phpunit
+php vendor/phpunit/phpunit/phpunit --filter BilingualEnterpriseArticleTest
+php vendor/phpunit/phpunit/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest
+php artisan site:compare-content
+php artisan migrate:status
+php artisan route:list
+python scripts/verify-enterprise-articles.py
 ```
 
-`php artisan test` is a project command (`App\Console\Commands\RunTests`) that forwards arguments to PHPUnit. On this workstation every command runs through `.runtime/php84/php.exe` because `php` is not on PATH. That wrapper does **not** accept `--filter`; use `php vendor/phpunit/phpunit/phpunit --filter …` for a subset.
+On this Windows workstation PHP is `.runtime/php84/php.exe`. `composer test` also invokes PHPUnit. The custom `php artisan test` wrapper exists, but does not accept PHPUnit options such as `--filter`; invoke PHPUnit directly for filtering or reports.
 
-## Content integrity
+## Isolation and coverage
 
-`php artisan site:compare-content` compares the homepage, articles index, and article pages. Standalone service pages are no longer public.
+`phpunit.xml` uses SQLite `:memory:`. `tests/TestCase.php` synchronizes configured environment values before Laravel bootstraps, preventing inherited local database/mail settings from leaking into tests. MySQL is opt-in through `phpunit.mysql.xml`; its schema test is the one skip in the default suite. Do not run destructive schema tests against an operational database.
 
-## Live HTTP (not PHPUnit)
+The feature suite covers public pages and redirects; CMS roles/policies; contact validation, CSRF, honeypot and throttling; request workflow; homepage content; service catalog; article search/tags/related content; publication rules; image fallbacks; SQL backup package; FA/EN content and SEO; admin layout; and production-template handling.
 
-| Check | Result |
-|-------|--------|
-| `GET /forms/get-csrf-token.php` then `POST /forms/contact.php` | 200 `OK`; SQLite `requests.id = 5` |
-| Direct Homepage first load | `#testimonials` and `#contact` opacity 1, `aos-animate`, non-zero height |
-| FA switch | `dir=rtl`, Persian nav, typed roles in Arabic script, 0 visible `????` nodes |
-| Contact from Homepage and from `/articles` | `#contact` in viewport |
-| Viewports 1920 / 1440 / 1024 / 768 / 390 | no horizontal overflow |
-| Homepage Expertise EN + FA | 5 pastel columns; LTR left / RTL right 3px markers |
-| `/admin/categories` Accent color | ColorPicker, helper, Preview, Reset; empty Linux `#15803d` |
+New regression coverage checks that content comparison detects stale source hashes/missing localization even when markup counts match, skips custom CMS articles without crashing, and excludes drafts. Environment setup round-trips passwords with spaces, quotes, backslashes, dollar signs and comment characters, and refuses to overwrite an existing `.env`. Sitemap checks require both languages to reflect the article update date.
 
-## MySQL integration
+## Local operational checks
 
-`MysqlSchemaTest` last ran green on 2026-09-16 against MariaDB on `127.0.0.1:3307`. It was **not** re-run on 2026-09-18.
+All 25 local article rows were synchronized after a consistent SQLite backup. `site:compare-content` reports **Failures: 0**. The command checks maintained source hashes, stored localization, body markers and rendered SEO. It skips public CMS articles with no corresponding legacy source. It is not a substitute for editorial review or browser testing.
 
-## What is not tested
+The article validator checks 25 maintained HTML files, section IDs, FAQ/schema consistency, archive hashes and embedded Python syntax. Bash and PowerShell examples receive syntax-only checks; infrastructure commands are not executed.
 
-| Area | Status | Reason |
-|------|--------|--------|
-| Interactive Filament CRUD in a browser | PASS (login, lists, edit form viewed, Requests inbox) | Users CRUD and article **save** were not exercised this pass |
-| Admin responsive layout (authenticated) | PASS | 1024 / 768 / 390; see [../qa/ADMIN-QA.md](../qa/ADMIN-QA.md) |
-| PWA install, offline browsing | NOT TESTED | never exercised as an install |
-| Lighthouse or any performance budget | NOT TESTED | no run exists |
-| Production smoke tests on meetaj.ir | BLOCKED | no deployment |
-| SMTP delivery | BLOCKED | no production mail account |
-| Penetration testing, dependency CVE gate | NOT TESTED | out of scope so far |
-| Unit tests (`tests/Unit`) | none exist | the suite is feature-level only |
+Live browser checks cover the English menu name, local homepage/library navigation, English defaults, Persian article rendering and instant toggling. Evidence is in the dated audit. No real contact messages are sent by the browser checks.
 
-Do not upgrade any of these to PASS without new evidence.
+## Limits
+
+This pass does not validate remote deployment, SMTP delivery, real MySQL/MariaDB, authenticated admin interactions in a browser, PWA installation/offline behavior, Core Web Vitals, load capacity or infrastructure runbooks on their target equipment. Admin authorization and workflows are covered by isolated feature tests. Earlier dated QA files remain historical evidence.

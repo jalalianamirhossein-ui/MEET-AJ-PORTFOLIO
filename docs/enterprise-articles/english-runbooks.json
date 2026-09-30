@@ -872,7 +872,7 @@
     "intro": "A configuration file does not prove network recoverability. Record changes, alert on collection failures and test selective restore against actual device models.",
     "scenario": "120 switches/routers are polled hourly. Monitor each node’s last successful backup independently of process health.",
     "prerequisites": [
-      "Ubuntu Server 24.04 LTS, Bash 5 and systemd. Record installed package patches with dpkg-query before making changes. Use Oxidized 0.37.0 with Ruby 3.2 on Ubuntu 24.04 from RubyGems, with the gem version locked in Gemfile.lock. Validate device models against their firmware.",
+      "Ubuntu Server 24.04 LTS, Bash 5 and systemd. Record installed package patches with dpkg-query before making changes. Use Oxidized 0.37.0 with Ruby 3.2 on Ubuntu 24.04 from RubyGems, with the application version pinned by --version. Record resolved dependencies in an organizational artifact before production rollout. Validate device models against their firmware.",
       "Suggested 2 vCPU, 4 GiB RAM and disk sized for history. Choose thread count from device latency and AAA load.",
       "Ruby/Bundler and build dependencies; a non-login service identity, vault-provided read credentials and TCP/22 to device management only."
     ],
@@ -926,7 +926,7 @@
     "installation": [
       "Prepare roles and paths on both file servers. D: must be suitable NTFS storage. CORP FileUsers represents the actual organizational group.",
       "Design/apply NTFS ACLs with the data owner; share permissions do not grant NTFS access. Continue from a management host with modules and delegation.",
-      "Add-DfsrConnection creates the reverse connection by default; inspect Get-DfsrConnection. Do not repeat creation on existing deployments. AD propagation/initial sync takes time. PrimaryMember selects the initial source only. Accept only after a closed canary file reaches FS02 with the same hash and backlog reaches zero."
+      "Add-DfsrConnection creates the reverse connection by default; inspect Get-DfsrConnection. Do not repeat creation on existing deployments. AD propagation/initial sync takes time. PrimaryMember selects the initial source only. FS02 starts Offline so clients receive no referrals before acceptance; also restrict direct user access to its share during initial sync. Accept only after a closed canary file reaches FS02 with the same hash and both backlogs reach zero. Run the following commands to bring that target Online only after these checks pass."
     ],
     "security": "Scope SMB and RPC/DFSR to members and consumer subnets using official Windows Firewall guidance. Coordinate dynamic RPC ranges with policy. Review share/NTFS ACLs, SMB signing and access audit. End users should not write to the namespace root.",
     "monitoring": "Monitor both backlog directions, DFS Replication logs, staging pressure, disk space and conflict/deleted content. Short backlogs can be normal; sustained growth matters. Specify the monitoring account context for Zabbix checks.",

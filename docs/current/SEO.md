@@ -1,74 +1,29 @@
 # SEO — Meet AJ
 
-**Authority:** AUTHORITATIVE SEO document.  
-**Verified:** 2026-09-16 against Blade heads, `App\Services\ArticleSeo`, `SitemapController`, `RobotsController`, `PublicSiteTest`, `CmsOperationsTest`.
+Verified locally on **2026-10-01** against routes, `ArticleLocalization`, `ArticleSeo`, Blade output and the feature suite. This does not establish search indexing or remote deployment state.
 
-## Canonical URLs
+## Article identity and languages
 
-| Page | Canonical |
-|------|-----------|
-| Home | `https://meetaj.ir/` (hardcoded in `home.blade.php`) |
-| Articles index | `{APP_URL}/articles` |
-| Article detail | `Article::canonicalUrl()` (override `canonical_url` if set; otherwise `{APP_URL}/articles/{slug}` **without** `.html`) |
+English uses `/articles/{slug}`; Persian uses `/articles/{slug}?lang=fa`. Each response has a localized title, description, keywords, Open Graph/Twitter copy and a self-canonical. The old `?lang=en` alias has a clean English canonical. The default article edition is English regardless of a saved Persian UI preference.
 
-`/index.html` is **not** canonical; it 301s to `/`.  
-Standalone `/services/{slug}` and `/services/{slug}.html` pages are removed and return 404. Services remain represented in the homepage section only.
+Both editions expose reciprocal EN/FA alternate links and an English `x-default`. No German alternate is emitted. The floating language control updates metadata and URL in place. Direct requests also work without JavaScript, so crawler correctness does not depend on clicking the control.
 
-## Open Graph and Twitter
+## Structured data
 
-Article detail (`articles/show.blade.php` + `ArticleSeo`): `og:title`, `og:description`, `og:url`, `og:type` (default `article`), `og:image`; Twitter `twitter_card` (default `summary`), title, description, optional image.
+Article pages include Article, BreadcrumbList and FAQPage JSON-LD. Article language/headline and FAQ questions/answers match the selected edition and visible content. The SQL backup article retains eight FAQ entries. Other current articles have their reviewed FAQs. Schema validity does not guarantee a search-engine rich result.
 
-The homepage includes the original Open Graph tags from the static HTML (absolute `meetaj.ir` URLs). Articles index sets `og:title` “Articles | Meet AJ”.
+The homepage retains its existing person/site structured data. Imported images use their configured public asset URLs or CMS uploads.
 
-## JSON-LD
+## Sitemap and redirects
 
-- Home: original Person / WebSite / etc. scripts from `index.html`
-- Articles: `Article` schema from import `seo_data.schema` or a generated `Article` object (`headline`, `description`, `image`, `author` Person AmirHossein Jalalian, `mainEntityOfPage`)
+`GET /sitemap.xml` is generated from published English article identities. With the current library it contains the homepage plus 50 article edition URLs and 100 EN/FA alternate links. Article `lastmod` uses the stored modification date, including English content updates. Draft/future/German articles and removed service detail pages are excluded. The article library itself is not currently a separate sitemap entry.
 
-## sitemap.xml (`GET /sitemap.xml`)
+Legacy `/articles/{slug}.html` URLs redirect once to the clean path while preserving language. `/index.html` redirects to `/`. Slug-history redirects work through `article_redirects`; unknown or unpublished destinations return 404. Removed `/services/...` routes return 404.
 
-Includes:
+`robots.txt` excludes `/admin`, `/livewire` and `/forms` and points to the configured sitemap. Robots rules do not replace authorization.
 
-1. `{APP_URL}/`
-2. Each **published English** article canonical URL
+## Deployment checks
 
-Excludes:
+Set `APP_URL` to the real canonical HTTPS origin. Deploy PHP/views/assets and update existing imported rows together. Check both language URLs in page source, then the sitemap and redirects. A CDN must forward `lang` and vary article cache entries by it. Publish the versioned assets and purge stale application/CDN responses after a release.
 
-- `/admin`, `/livewire`, `/forms`
-- `/articles/{slug}.html` legacy URLs
-- `/index.html`
-- `/articles` listing (not added by the controller)
-- Service detail URLs (removed)
-- German URLs
-- Draft / future / non-`en` articles
-
-Content-Type: `application/xml; charset=UTF-8`. PHPUnit asserts well-formed XML and canonical-only article URLs.
-
-## robots.txt (`GET /robots.txt`)
-
-```
-User-agent: *
-Allow: /
-Disallow: /admin
-Disallow: /admin/
-Disallow: /livewire
-Disallow: /livewire/
-Disallow: /forms/
-Sitemap: {APP_URL}/sitemap.xml
-```
-
-## Article redirects
-
-`article_redirects.old_path` → current article. Importer writes `/articles/{slug}.html` for each of the 23 files. Further slug changes append new unique `old_path` rows. Delete article → redirects **cascade**.
-
-## index.html redirect
-
-`GET /index.html` → **301** `/`.
-
-## hreflang
-
-**Not implemented.** EN and FA share URLs (client-side language). No `link rel="alternate" hreflang`. Do not add invented DE alternates.
-
-## Production crawlers
-
-Indexing on meetaj.ir after CMS cutover: **NOT TESTED**.
+See [DEPLOYMENT.md](DEPLOYMENT.md), [MULTILINGUAL.md](MULTILINGUAL.md) and [the current audit](../qa/FULL-AUDIT-2026-10-01.md). Production crawler/indexing checks were not performed in this local review.

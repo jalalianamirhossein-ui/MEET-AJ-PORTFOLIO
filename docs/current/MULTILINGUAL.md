@@ -1,48 +1,36 @@
 # Multilingual — Meet AJ
 
-**Authority:** AUTHORITATIVE language document.  
-**Verified:** 2026-09-18 against `config/cms.php`, `Article` model, views, `assets/js/i18n.js`, `assets/css/lang-toggle.css`, `assets/css/site-modules.css`, PHPUnit `ProductionAuditTest`, and a Cursor browser FA pass (RTL nav, typed roles, English article titles, 0 visible `????` nodes).
+Verified locally on **2026-10-01**. Current state: [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
-## Languages
+## Article editions
 
-| Code | Public site | CMS | Content |
-|------|-------------|-----|---------|
-| **EN** | Production. Default HTML is English (`<html lang="en" dir="ltr">` until the switcher runs). | `language = en` articles are what `/articles` and `/articles/{slug}` query. | 23 imported English articles. |
-| **FA** | Production. Same URLs. Client applies `data-fa` / `data-en` and `dir="rtl"` / `lang="fa"`. Font: Vazirmatn via overlay + `rtl.css`. | FA article **rows** are not required for the public FA UI; Persian copy lives in attributes inside the English HTML (and homepage/service markup). | No separate `/fa/...` routes. |
-| **DE** | **Not public.** `GET /de` and `GET /de/articles` return **404**. No German hreflang. | `config('cms.languages')` includes `de`. Publishing `language=de` throws `ValidationException`. Draft DE rows are allowed. | **No German article HTML source.** Do not invent DE copy. |
+All 25 imported articles have complete FA and EN prose, matching headings, shared executable examples, and language-specific metadata/FAQs. Each article has one English database identity. `presentation.localizations` stores the two SEO editions, and `data-fa` / `data-en` carry paired prose in the stored HTML. Code blocks are protected from translation.
 
-`config/cms.php`:
+| Request | Server-rendered edition | Canonical |
+|---------|-------------------------|-----------|
+| `/articles/{slug}` | English, LTR | clean URL |
+| `/articles/{slug}?lang=fa` | Persian, RTL | same URL with `?lang=fa` |
+| `/articles/{slug}?lang=en` | English alias | clean URL |
+| unsupported `lang` | English fallback | clean URL |
 
-- `languages` → `en`, `fa`, `de`
-- `public_languages` → `en`, `fa`
+The article URL takes precedence over cookies and local storage. Direct FA/EN requests return complete content and SEO without JavaScript. There are no separate `/fa/...` or `/en/...` routes. Legacy `.html` redirects preserve the requested language.
 
-## Database fields
+## Switching in the browser
 
-- `articles.language` / `categories.language`: two-letter code
-- `translation_key`: UUID shared by translations of the same work
-- Unique: `(language, slug)` and `(translation_key, language)` on articles, categories, and services
+The shared floating language button updates existing prose, headings, TOC, direction, title, description, keywords, canonical, Open Graph, Article/FAQ schema, share links and related-article links. `history.replaceState` changes the URL without navigating or fetching a second article. The switch payload contains metadata only, not two copies of the article body. The first Persian switch may load the RTL stylesheet.
 
-Public listing does **not** show FA or DE rows as separate URLs.
+The inline FA/EN row above the article date is removed. Historical article editions are also removed from public pages; exact originals remain in `docs/enterprise-articles/originals.zip`.
 
-## RTL / LTR
+Homepage and article-library UI translation still uses the saved preference and `data-fa` / `data-en`. Article card titles remain English. The English sidebar name uses `white-space: nowrap` in `glass-system.css`.
 
-- Switcher: `#lang-toggle` (homepage, listing, and article pages)
-- Persistence: `localStorage` and cookie `lang` (`en` \| `fa`) — `assets/js/i18n.js`
-- Styles: `assets/css/rtl.css` then `assets/css/visual-upgrade.css`
-- `html[dir=rtl]` uses Vazirmatn; LTR uses Poppins (overlay)
+## SEO and CMS
 
-## Language switcher
+Article heads contain reciprocal `fa`, `en` and English `x-default` links. Each language has a self-canonical. The sitemap includes both article editions. See [SEO.md](SEO.md).
 
-One shared control (`#lang-switcher` / `#lang-toggle`) injected by `assets/js/i18n.js` on the homepage, article listing, and article detail pages. Palette is Meet AJ white / blue `#2563eb` / cyan — **not** burgundy. `assets/css/lang-toggle.css` is the component stylesheet; `site-modules.css` last-layer rules match it (the previous `!important` burgundy override was removed on 2026-09-18). FA active state is filled blue with white type. EN is LTR; FA sets `html[dir=rtl][lang=fa]` and enables `rtl.css`.
+`config/cms.php` allows EN/FA publicly and DE in drafts. German publication is rejected and `/de` returns 404. Do not add German alternates without published translations.
 
-Client-side only. No Laravel locale middleware for FA. No URL prefix.
+The importer reads each source's `article-localizations` JSON. Existing rows require the explicitly reviewed `articles:import-legacy --update-existing` operation; copying HTML files alone is insufficient. See [DEPLOYMENT.md](DEPLOYMENT.md).
 
-Article **titles stay English** in FA UI (`data-i18n-lock` on H1 and cards). Persian titles that had been stored in `meta_title` / `seo_data` were repaired to the canonical English hero title by `LegacyArticleImporter::ensureEnglishTitles()` (6 live rows on 2026-09-18).
+## Validation
 
-## hreflang
-
-**Not implemented.** EN and FA share the same canonical URLs, so alternate `hreflang` tags are not emitted. Do not document them as present.
-
-## German routes
-
-PHPUnit asserts `/de` is 404. There is no `routes/web.php` entry for `/de`. Older plans that described a public `/de` architecture are **SUPERSEDED**.
+`BilingualEnterpriseArticleTest` renders every article in both languages and checks titles, schemas, canonical/alternate URLs, FAQ text, section IDs and exact code-block parity. Browser checks cover the floating toggle and URL changes. Full local results: [2026-10-01 audit](../qa/FULL-AUDIT-2026-10-01.md).

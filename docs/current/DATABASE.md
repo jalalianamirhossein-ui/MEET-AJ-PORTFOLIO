@@ -13,7 +13,7 @@ Column types below are the SQLite types actually reported by the database. The m
 | Local `php artisan serve` / artisan commands | SQLite `.runtime/cms.sqlite` (local `DB_DATABASE`) | PASS |
 | Default PHPUnit suite (`phpunit.xml`) | SQLite `:memory:` | PASS |
 | `phpunit.mysql.xml` | MySQL / MariaDB `127.0.0.1:3307`, database `meetaj_test` | PASS (`MysqlSchemaTest`, last run 2026-09-16) |
-| DirectAdmin production | intended MySQL / MariaDB | BLOCKED · NOT TESTED |
+| DirectAdmin production | MySQL / MariaDB expected; remote state unverified | NOT TESTED in the 2026-10-01 local review |
 
 `tests/TestCase.php` explicitly forces the default suite onto SQLite `:memory:` before boot; it does not require `.env.testing`. Bind MySQL explicitly with `phpunit.mysql.xml`.
 
@@ -40,7 +40,7 @@ Column types below are the SQLite types actually reported by the database. The m
 | `2026_09_21_000016_refresh_testimonials_full_set` | 6 | Ran |
 | `2026_09_21_000017_repair_missing_article_redirects` | 7 | Ran |
 
-The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the migration ledger. Seventeen application migrations exist through `2026_09_21_000017_repair_missing_article_redirects`.
+The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the migration ledger. Eighteen application migration files exist through `2026_09_21_000017_repair_missing_article_redirects`.
 
 ## Table overview
 

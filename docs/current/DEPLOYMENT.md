@@ -1,8 +1,8 @@
 # Deployment — Meet AJ
 
 **Authority:** AUTHORITATIVE deployment procedure.
-**Verified:** 2026-09-17 against `.env.example`, `.env.production.example`, `composer.json`, `config/`, and the console commands that exist.
-**Cutover status:** documented, **NOT executed** from this environment. Every production claim below is BLOCKED / NOT TESTED.
+**Verified:** 2026-10-01 against `.env.example`, `.env.production.example`, `composer.json`, `config/`, and the console commands that exist.
+**Deployment status:** the owner reports a deployed server. This local audit did not inspect or modify that server; remote configuration remains unverified.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md)
 
 Stack: **Laravel 13.31.0**, **PHP 8.4**, **Filament 5.8.2**, **Blade**, **MySQL/MariaDB in production**.
@@ -14,13 +14,13 @@ Do not select PHP 8.2. Do not install Redis, Supervisor, Node, or a queue worker
 |---|-------|------|------------|
 | Where | This workstation | PHPUnit suites | DirectAdmin on meetaj.ir |
 | PHP | `.runtime/php84/php.exe` 8.4.25 | same runtime | PHP 8.4 selector (**unverified**) |
-| Database | SQLite `.runtime/cms.sqlite` (local `DB_DATABASE`) | SQLite `:memory:` (default) or MariaDB `127.0.0.1:3307` via `phpunit.mysql.xml` | MySQL / MariaDB (**not created**) |
+| Database | SQLite `.runtime/cms.sqlite` (local `DB_DATABASE`) | SQLite `:memory:` (default) or MariaDB `127.0.0.1:3307` via `phpunit.mysql.xml` | MySQL / MariaDB (**remote state unverified**) |
 | `APP_ENV` / `APP_DEBUG` | `local` / **false** | `testing` | `production` / **false** |
-| Mail | `log` | none | SMTP (**not configured**) |
+| Mail | `log` | none | SMTP (**remote state unverified**) |
 | Document root | `php artisan serve` on `public/` | n/a | must be `.../laravel/public` |
-| Status | PASS | PASS (67 tests / 1127 assertions, 1 skipped) | BLOCKED · NOT TESTED |
+| Status | PASS | PASS (84 tests, 0 failures, 1 skipped) | NOT TESTED remotely |
 
-The sections below describe the PRODUCTION procedure only. Nothing in them has been executed.
+The sections below describe the production procedure. They are not a record of actions performed on the remote server.
 
 This file does not assume DirectAdmin features that a given shared plan may lack (SSH, Composer CLI, `cron`, `nodejs`). Use the path that the account actually provides.
 
@@ -47,7 +47,7 @@ If SSH + Composer exist:
 
 ```bash
 cd /home/ACCOUNT/domains/meetaj.ir/laravel   # adjust to the real path
-php -d memory_limit=512M composer install --no-dev --optimize-autoloader
+COMPOSER_MEMORY_LIMIT=512M composer install --no-dev --optimize-autoloader
 ```
 
 If Composer is not installed, upload the already-built `vendor/` from a trusted build machine that used PHP 8.4 and the project `composer.lock`. Do not copy `.env` from a workstation.
@@ -87,10 +87,21 @@ DirectAdmin → Domain Setup → document root:
 
 ## 6. Environment
 
+For a **new installation only**, copy the template if no environment exists and generate the initial key:
+
 ```bash
-cp .env.production.example .env
-php artisan key:generate
+if [ ! -e .env ] && [ ! -L .env ]; then
+    cp .env.production.example .env
+    php artisan config:clear
+    php artisan key:generate --force
+fi
 ```
+
+For an existing installation, preserve its `.env` and original `APP_KEY`. If only `.env.production.example` was deleted, restore the tracked template from the release; Laravel normally reads `.env`, not the example. If the real `.env` was lost, recover it from a protected backup or the hosting secret store before clearing cached configuration. A cached configuration may be the remaining source of the original key; do not print it into logs or chat. Generating a new key is not recovery for encrypted data.
+
+If initial key generation fails, run from the directory containing `artisan`, verify PHP 8.4 and installed `vendor/`, confirm `.env` contains exactly one `APP_KEY=` entry and is writable by the deployment account, and inspect the actual error. Quote passwords containing spaces or comment characters. Never fix permissions with `chmod 777`.
+
+The Ubuntu VPS `deploy/setup_env.sh` is a fresh-install helper, expects `www-data`, and refuses an existing `.env`. Its PHP writer quotes and validates values before exclusive creation. DirectAdmin users should follow the hosting account permissions below rather than assuming that service user exists.
 
 Edit `.env`:
 
@@ -168,11 +179,12 @@ php artisan articles:import-legacy --update-existing
 php artisan site:publish-assets --views
 php artisan optimize:clear
 php artisan optimize
+php artisan site:compare-content
 ```
 
-`--update-existing` replaces changed source articles, including CMS edits to those rows; back up the database before replacing them. It preserves existing IDs and translation keys. `--refresh` deletes article rows and is unnecessary for this update. If using `scripts/refresh-project.sh`, its ordinary seeding step also skips existing article bodies, so run the explicit update above.
+`--update-existing` replaces changed source articles, including CMS edits to those rows; back up the database before replacing them. It preserves existing IDs and translation keys. `--refresh` deletes article rows and is unnecessary for this update. If using `scripts/refresh-project.sh`, its ordinary seeding step also skips existing article bodies. `deploy/update_project.sh` also leaves editorial replacements explicit; run the reviewed article update above when deploying changed sources.
 
-Check an article at `/articles/{slug}` and `/articles/{slug}?lang=fa`: page source should have `data-article-language="en"` and `data-article-language="fa"` respectively, with the matching heading and canonical. English titles must appear at the clean URL. Confirm the rendered page loads `i18n.js?v=1406`; language switching should update the page without another document request or preloader. Old `?lang=en` links remain readable, with a clean English canonical. These URLs must reach Laravel rather than a static HTML copy. If responses are stale after import, ensure the CDN/proxy forwards `lang` and includes it in cache keys, then purge stale article responses. If the source remains unchanged after replacing PHP files, reload PHP OPcache through the host's PHP service control.
+Check an article at `/articles/{slug}` and `/articles/{slug}?lang=fa`: page source should have `data-article-language="en"` and `data-article-language="fa"` respectively, with the matching heading and canonical. English titles must appear at the clean URL. Confirm the rendered page loads `i18n.js?v=1406` and `glass-system.css?v=11`; language switching should update the page without another document request or preloader. Old `?lang=en` links remain readable, with a clean English canonical. These URLs must reach Laravel rather than a static HTML copy. If responses are stale after import, ensure the CDN/proxy forwards `lang` and includes it in cache keys, then purge stale article responses. If the source remains unchanged after replacing PHP files, reload PHP OPcache through the host's PHP service control.
 
 Confirm `php artisan about` shows production, debug OFF, mysql, Laravel 13, PHP 8.4, the configured timezone, and linked public storage. Publish both site and Filament assets on every fresh deployment; generated public assets are excluded from Git.
 
@@ -202,11 +214,12 @@ Use DirectAdmin Let’s Encrypt / SSL for `meetaj.ir` (and `www` if used). Set `
 
 ## 12. Rollback
 
-1. Point the DirectAdmin document root back to a separately preserved, complete previous static release. The reorganized `resources/legacy/` directory is an import source, not a standalone web root; assets now live separately under `resources/assets/`.
-2. Or restore a filesystem + MySQL backup taken before cutover.
-3. Leave the Laravel tree in place until the static site is confirmed.
+1. Retain the previous complete application release, public assets, original `.env` and database backup before updating.
+2. If rollback is needed, return the document root/release pointer to that application release and rebuild its caches with the same application key.
+3. Restore database state only when required for schema/content compatibility, with an explicit plan for data received since the backup. Do not run `migrate:fresh` or blindly roll back migrations on production.
+4. Test the homepage, both article languages, authentication, contact storage and asset delivery before reopening traffic.
 
-Original article HTML is never deleted by the CMS importer.
+`resources/legacy/` is an import source, not a deployable static web root. Original article snapshots remain in `docs/enterprise-articles/originals.zip`.
 
 ## 13. Secrets
 

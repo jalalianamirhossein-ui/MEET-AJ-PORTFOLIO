@@ -56,8 +56,10 @@ class BilingualEnterpriseArticleTest extends TestCase
                 foreach (['fa', 'en'] as $alternate) {
                     $target = $article->publicUrl().($alternate === 'fa' ? '?lang=fa' : '');
                     $this->assertSame($target, $xp->evaluate('string(//link[@hreflang="'.$alternate.'"]/@href)'));
-                    $this->assertSame($target, $xp->evaluate('string(//nav[@class="article-translations"]/a[@hreflang="'.$alternate.'"]/@href)'));
                 }
+                $this->assertSame(0, $xp->query('//nav[@class="article-translations"]')->length);
+                $this->assertSame('/articles', $xp->evaluate('string(//a[@class="article-back"]/@href)'));
+                $this->assertSame(0, $xp->query('//*[@id="legacy-history"]')->length);
                 $this->assertSame($lang, $xp->evaluate('string(//article[@class="article-body"]/@lang)'));
                 $this->assertSame($lang === 'fa' ? 'rtl' : 'ltr', $xp->evaluate('string(//article[@class="article-body"]/@dir)'));
                 foreach ($xp->query('//a[@class="article-teaser-link"]') as $peer) {
@@ -115,6 +117,8 @@ class BilingualEnterpriseArticleTest extends TestCase
         $this->get($path.'?lang=invalid')->assertOk()->assertSee('data-article-language="en"', false);
         $alias = $this->get($path.'?lang=en')->assertOk()->getContent();
         $this->assertSame(url($path), $this->dom($alias)->evaluate('string(//link[@rel="canonical"]/@href)'));
+        $updated = Article::where('slug', 'enable-ssh-linux-complete-guide')->firstOrFail();
+        $updated->forceFill(['published_at' => now()->subYear(), 'updated_at' => now()->subDay()])->save();
         $xml = $this->get('/sitemap.xml')->assertOk()->getContent();
         $dom = new \DOMDocument;
         $this->assertTrue($dom->loadXML($xml));
@@ -123,6 +127,9 @@ class BilingualEnterpriseArticleTest extends TestCase
         $xp->registerNamespace('x', 'http://www.w3.org/1999/xhtml');
         $this->assertSame(50, $xp->query('//s:url[contains(s:loc,"/articles/")]')->length);
         $this->assertSame(100, $xp->query('//s:url/x:link')->length);
+        foreach (['', '?lang=fa'] as $suffix) {
+            $this->assertSame(now()->subDay()->toDateString(), $xp->evaluate('string(//s:url[s:loc="'.url($path).$suffix.'"]/s:lastmod)'));
+        }
     }
 
     public function test_sql_editorial_package_supports_the_same_english_route(): void

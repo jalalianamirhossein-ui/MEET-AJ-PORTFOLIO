@@ -21,7 +21,7 @@ class SitemapController extends Controller
             $urls[] = [
                 'loc' => $article->canonicalUrl(),
                 'alternates' => $alternates,
-                'lastmod' => $article->published_at?->toDateString(),
+                'lastmod' => ($article->updated_at ?? $article->published_at)?->toDateString(),
             ];
             if ($alternates) {
                 $urls[] = ['loc' => $alternates['fa'], 'alternates' => $alternates, 'lastmod' => $article->updated_at?->toDateString()];

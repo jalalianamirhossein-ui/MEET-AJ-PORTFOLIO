@@ -47,13 +47,6 @@ def build():
                     end = start.end() + token.start()
                     break
             assert end is not None, file.name
-            legacy = old[start.end():end]
-            # Historical material is retained as readable text, not runnable code.
-            legacy = re.sub(r'<script\b.*?</script>', '', legacy, flags=re.S|re.I)
-            legacy = re.sub(r'<pre\b[^>]*>(.*?)</pre>', lambda m: '<div class="legacy-example" dir="ltr" style="white-space:pre-wrap;text-align:left">'+m[1]+'</div>', legacy, flags=re.S)
-            legacy = re.sub(r'<button\b.*?</button>', '', legacy, flags=re.S)
-            legacy = re.sub(r'\bid="([^"]+)"',lambda m:'id="legacy-'+m[1]+'"',legacy)
-            legacy = re.sub(r'href="#([^"]+)"',lambda m:'href="#legacy-'+m[1]+'"',legacy)
             sections = []
             for key, title in [('intro','مقدمه'),('scenario','مثال عملی'),('prerequisites','پیش‌نیازها'),('architecture','Architecture / Design'),('installation','Installation / Configuration'),('security','Security Hardening'),('monitoring','Monitoring'),('troubleshooting','Troubleshooting'),('recovery','Backup / Recovery'),('practices','Best Practices'),('compatibility','نسخه‌های قدیمی و Compatibility')]:
                 sections.append(f'<section id="enterprise-{key}" class="article-section"><h2>{title}</h2>{render(item[key])}</section>')
@@ -67,7 +60,7 @@ def build():
                 # Existing editorial package is the executable implementation.
                 body = old[start.end():end]+'\n<div lang="fa" dir="rtl">'+''.join(sections)+'</div>'
             else:
-                body = '<div class="enterprise-runbook" lang="fa" dir="rtl">'+''.join(sections)+'<details id="legacy-history"><summary>محتوای نسخه قدیمی — فقط مرجع تاریخی</summary><p>نمونه‌های زیر برای حفظ سابقه هستند؛ دستورالعمل اجرایی، امنیتی و سازگاری نسخه جدید در بخش‌های بالا آمده است.</p>'+legacy+'</details></div>'
+                body = '<div class="enterprise-runbook" lang="fa" dir="rtl">'+''.join(sections)+'</div>'
             updated = old[:start.end()]+body+old[end:]
             if file.stem == 'sql-server-automatic-backup-job' and not re.search(r'<meta\b[^>]*name="keywords"',updated):
                 updated = updated.replace('</head>','<meta name="keywords" content="'+html.escape(', '.join(item['keywords']),quote=True)+'" />\n</head>',1)

@@ -1030,7 +1030,7 @@ config سرور restore به netbox_restore اشاره کند؛ SECRET_KEY/peppe
 
 add('oxidized-network-device-configuration-backup','Oxidized سازمانی: Backup پیکربندی شبکه، Git و Restore کنترل‌شده',2,
 'موضوع: backup شبکه؛ هدف: version history. سطح قبلی: متوسط. کمبود: pin dependency، bare Git، host key و تفاوت export/restore.',
-UBUNTU+' Oxidized 0.37.0 با Ruby 3.2 روی Ubuntu 24.04 از RubyGems نصب و gem version در Gemfile.lock تثبیت شود؛ مدل هر device با firmware خودش تست شود.',
+UBUNTU+' Oxidized 0.37.0 با Ruby 3.2 روی Ubuntu 24.04 از RubyGems نصب و نسخه اصلی با --version تثبیت می‌شود؛ dependencyها برای Production در artifact سازمانی ثبت شوند؛ مدل هر device با firmware خودش تست شود.',
 'پیشنهاد ۲ vCPU، ۴ GiB RAM و دیسک متناسب history؛ تعداد thread با latency تجهیزات و load AAA تعیین شود.',
 'Ruby/Bundler و build dependency؛ حساب سرویس بدون login، credential read-only از vault، TCP/22 فقط به management دستگاه‌ها.',
 'وجود فایل config به‌تنهایی قابلیت بازیابی شبکه را اثبات نمی‌کند. Oxidized باید تغییر را ثبت، عدم موفقیت جمع‌آوری را هشدار و restore انتخابی را روی مدل واقعی آزمون کند.',
@@ -1150,7 +1150,7 @@ Import-Module DFSR
 New-DfsnRoot -Path '\\\\corp.example.com\\Company' -TargetPath '\\\\FS01\\Company' -Type DomainV2
 New-DfsnRootTarget -Path '\\\\corp.example.com\\Company' -TargetPath '\\\\FS02\\Company'
 New-DfsnFolder -Path '\\\\corp.example.com\\Company\\Data' -TargetPath '\\\\FS01\\Data'
-New-DfsnFolderTarget -Path '\\\\corp.example.com\\Company\\Data' -TargetPath '\\\\FS02\\Data'
+New-DfsnFolderTarget -Path '\\\\corp.example.com\\Company\\Data' -TargetPath '\\\\FS02\\Data' -State Offline
 New-DfsReplicationGroup -GroupName 'Company-Data'
 New-DfsReplicatedFolder -GroupName 'Company-Data' -FolderName 'Data'
 Add-DfsrMember -GroupName 'Company-Data' -ComputerName 'FS01','FS02'
@@ -1159,7 +1159,12 @@ Set-DfsrMembership -GroupName 'Company-Data' -FolderName 'Data' -ComputerName 'F
 Set-DfsrMembership -GroupName 'Company-Data' -FolderName 'Data' -ComputerName 'FS02' -ContentPath 'D:\\Data' -Force
 ```
 
-Add-DfsrConnection به‌صورت پیش‌فرض reverse connection نیز می‌سازد؛ topology را با Get-DfsrConnection بررسی کنید. روی نصب موجود createها را تکرار نکنید. propagation AD و initial sync زمان می‌برد. PrimaryMember فقط انتخاب منبع initial sync است. قبل پذیرش، فایل canary بسته‌شده از FS01 به FS02 با hash یکسان برسد و backlog صفر شود.''',
+Add-DfsrConnection به‌صورت پیش‌فرض reverse connection نیز می‌سازد؛ topology را با Get-DfsrConnection بررسی کنید. روی نصب موجود createها را تکرار نکنید. propagation AD و initial sync زمان می‌برد. PrimaryMember فقط انتخاب منبع initial sync است. مقصد FS02 با State Offline ساخته می‌شود تا پیش از پذیرش referral دریافت نکند؛ دسترسی مستقیم کاربران به share مقصد را نیز در زمان initial sync محدود کنید. قبل پذیرش، فایل canary بسته‌شده از FS01 به FS02 با hash یکسان برسد و backlog هر دو جهت صفر شود. پس از تأیید این شروط، فقط دستور زیر مقصد را Online می‌کند.
+
+```powershell
+Set-DfsnFolderTarget -Path '\\\\corp.example.com\\Company\\Data' -TargetPath '\\\\FS02\\Data' -State Online
+Get-DfsnFolderTarget -Path '\\\\corp.example.com\\Company\\Data'
+```''',
 'SMB و RPC/DFSR فقط بین اعضا و subnetهای مصرف‌کننده مطابق firewall رسمی Windows مجاز باشد؛ range پورت dynamic RPC را با policy سازمان هماهنگ کنید. ACL share و NTFS، SMB signing و audit access لازم‌اند؛ کاربران end-user روی namespace root write نداشته باشند.',
 'backlog هر جهت، DFS Replication event log، staging pressure، disk space و conflict/deleted پایش شود. backlog لحظه‌ای طبیعی است؛ backlog رو به رشد چند interval مهم است. Zabbix checkها context حساب مانیتورینگ مشخص داشته باشند.',
 '''namespace سالم ولی فایل قدیمی: DFS-R و backlog جدا بررسی شوند. دستورهای تشخیص روی میزبان دارای module:
@@ -1176,7 +1181,7 @@ backlog cmdlet فهرست محدود نشان می‌دهد؛ count کامل د�
 'VSS-aware backup مستقل از share و AD/namespace تهیه و نسخه off-site/immutable نگهداری شود. در restore فایل، propagation overwrite را مدیریت کنید؛ restore اولیه در مسیر ایزوله و مقایسه ACL/hash انجام شود، سپس فایل منتخب با Change Record برگردد. خرابی عضو: rebuild و non-authoritative sync طبق مستندات Microsoft؛ روی دو عضو primary هم‌زمان ندهید. RPO تابع backup واقعی است، نه فقط سرعت DFS-R.',
 'DFS-R برای فایل‌های بسته و workflow سازگار است؛ database live، VM disk فعال و فایل مشترک دارای locking بین شعبه‌ها workload مناسب این طرح نیستند. initial sync پیش از referral کاربران تأیید شود.',
 'DFS-N و DFS-R نقش‌های جدا دارند. این نمونه domain-based است؛ standalone namespace رفتار HA متفاوت دارد. volume replicated در baseline NTFS باشد.',
-[('Microsoft: DFS-R overview','https://learn.microsoft.com/en-us/windows-server/storage/dfs-replication/dfs-replication-overview'),('Microsoft: DFS namespace deployment','https://learn.microsoft.com/en-us/windows-server/storage/dfs-namespaces/checklist-deploy-dfs-namespaces'),('Microsoft: DFSR PowerShell','https://learn.microsoft.com/en-us/powershell/module/dfsr/')],
+[('Microsoft: DFS target state','https://learn.microsoft.com/en-us/powershell/module/dfsn/new-dfsnfoldertarget?view=windowsserver2025-ps'),('Microsoft: DFS-R overview','https://learn.microsoft.com/en-us/windows-server/storage/dfs-replication/dfs-replication-overview'),('Microsoft: DFS namespace deployment','https://learn.microsoft.com/en-us/windows-server/storage/dfs-namespaces/checklist-deploy-dfs-namespaces'),('Microsoft: DFSR PowerShell','https://learn.microsoft.com/en-us/powershell/module/dfsr/')],
 [['آیا DFS-R جای backup است؟','خیر؛ حذف و overwrite می‌توانند replicate شوند و backup مستقل لازم است.'],['آیا PrimaryMember رهبر دائمی است؟','خیر؛ برای initial sync استفاده می‌شود و replication معمول multi-master است.']])
 
 add('sql-server-automatic-backup-job','Backup سازمانی SQL Server: Agent، زنجیره Log و Restore آزمایشی',1,

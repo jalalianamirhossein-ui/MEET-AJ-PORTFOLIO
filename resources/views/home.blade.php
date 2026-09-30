@@ -252,7 +252,7 @@
     />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
     <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
-    <link href="/assets/css/glass-system.css?v=10" rel="stylesheet" />
+    <link href="/assets/css/glass-system.css?v=11" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -746,7 +746,7 @@
           </div>
           <blockquote class="about-quote">
             <p data-en="{{ data_get($aboutContent, 'motto_en', '') }}" data-fa="{{ data_get($aboutContent, 'motto_fa', '') }}">{{ data_get($aboutContent, 'motto_en', '') }}</p>
-            <footer data-en="? My Personal Motto" data-fa="شعار شخصی من">? My Personal Motto</footer>
+            <footer data-en="My Personal Motto" data-fa="شعار شخصی من">My Personal Motto</footer>
           </blockquote>
           <div class="about-philosophy">
             <h3 data-en="{{ data_get($aboutContent, 'philosophy_title_en', 'My Philosophy') }}" data-fa="{{ data_get($aboutContent, 'philosophy_title_fa', 'فلسفه من') }}">{{ data_get($aboutContent, 'philosophy_title_en', 'My Philosophy') }}</h3>

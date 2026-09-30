@@ -2,7 +2,7 @@
 
 Personal portfolio and technical article site for **AmirHossein Jalalian** (infrastructure, networking, virtualization and DevOps), running as a Laravel application with a Filament admin panel.
 
-Application overview and directory layout verified on **2026-09-21**. Single source of truth for project state: [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).
+Application overview and directory layout verified on **2026-10-01**. Single source of truth for project state: [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).
 
 ## Overview
 
@@ -11,9 +11,9 @@ The site was originally a static English/Persian progressive web app: one homepa
 - the public site renders from Blade views rebuilt from the original HTML, so URLs, CSS hooks and JavaScript contracts are unchanged;
 - homepage sections, articles, services and testimonials live in the database and are editable in the admin panel;
 - contact and quote submissions are stored as requests with a light workflow;
-- English and Persian share the same URLs, switched client-side with RTL support.
+- all 25 articles have complete English and Persian editions: English at the clean URL, Persian at `?lang=fa`, with instant language switching and RTL support.
 
-The original HTML in `resources/legacy/` remains the import and view-generation source. It is deliberately **outside** the web document root.
+The maintained HTML in `resources/legacy/` remains the import and view-generation source. Exact pre-upgrade articles are archived in `docs/enterprise-articles/originals.zip`. It is deliberately **outside** the web document root.
 
 ## Architecture
 
@@ -47,6 +47,8 @@ There is no Node.js requirement.
 
 ## Installation
 
+For a new checkout only; preserve `.env` and its key when updating an existing installation.
+
 ```bash
 composer install
 cp .env.example .env
@@ -63,7 +65,7 @@ On a machine where `php` is not on PATH, prefix commands with the interpreter yo
 | Key | Local | Production |
 |-----|-------|------------|
 | `APP_ENV` | `local` | `production` |
-| `APP_DEBUG` | `true` | **`false`** |
+| `APP_DEBUG` | `false` | **`false`** |
 | `APP_URL` | `http://127.0.0.1:8000` | `https://meetaj.ir` |
 | `APP_TIMEZONE` | your choice | `Asia/Tehran` |
 | `DB_CONNECTION` | `sqlite` | `mysql` |
@@ -72,7 +74,7 @@ On a machine where `php` is not on PATH, prefix commands with the interpreter yo
 | `SESSION_SECURE_COOKIE` | — | `true` |
 | `CONTACT_NOTIFICATION_EMAIL` | optional | optional; empty disables notification mail |
 
-Never commit `.env`.
+Never commit `.env`. Deleting `.env.production.example` does not remove a configured application environment; restore that template from Git if needed. For an existing installation, recover `.env` and its original `APP_KEY` from a protected backup. Generate a key only for a new installation; see [environment recovery](docs/current/DEPLOYMENT.md#6-environment).
 
 ## Database setup
 
@@ -83,7 +85,7 @@ php artisan migrate            # production: php artisan migrate --force
 php artisan migrate:status
 ```
 
-Seventeen application migrations create the CMS schema and repair data integrity, including `homepage_contents`, the resume-content repair, `testimonials`, `services`, articles, requests, taxonomy and legacy redirects. Full schema: [docs/current/DATABASE.md](docs/current/DATABASE.md).
+Eighteen application migration files create the CMS schema and repair data integrity, including `homepage_contents`, the resume-content repair, `testimonials`, `services`, articles, requests, taxonomy and legacy redirects. Full schema: [docs/current/DATABASE.md](docs/current/DATABASE.md).
 
 ### Seeding
 
@@ -94,12 +96,14 @@ php artisan db:seed
 `DatabaseSeeder` synchronizes homepage sections, rebuilds the article-library view from the original HTML, then imports articles and services. The homepage view itself is CMS-backed and is never overwritten by the legacy publisher. You can also run the importers directly:
 
 ```bash
-php artisan articles:import-legacy      # 25 legacy articles + redirects
+php artisan articles:import-legacy      # import missing articles + redirects
+php artisan articles:import-legacy --update-existing --dry-run # preview source replacements
+php artisan articles:import-legacy --update-existing          # apply reviewed replacements
 php artisan services:import-legacy      # 6 services with their AED prices
 php artisan articles:sync-tags          # tag vocabulary and links
 ```
 
-Both importers accept `--dry-run` and `--refresh`. **`--refresh` deletes existing rows** and discards editorial changes — never run it on a database with edits.
+`--update-existing` preserves article IDs and translation keys, but replaces content/metadata for changed sources; back up the database and review CMS edits first. A plain import skips existing article bodies. Both importers accept `--dry-run` and `--refresh`. **`--refresh` deletes existing rows** and discards editorial changes — never run it on a database with edits.
 
 ## Local development
 
@@ -131,7 +135,7 @@ Detail: [docs/current/ADMIN.md](docs/current/ADMIN.md).
 
 ## Articles
 
-Published English articles with legacy `.html` → clean-URL redirects, bilingual categories, tags and related content. The library at `/articles` supports `?q=` search and `?tag=` filtering, and each article page has breadcrumbs, tags, share links and related articles. Content integrity against the original HTML is verified by `php artisan site:compare-content` (currently **Failures: 0**). Detail: [docs/current/ARTICLES.md](docs/current/ARTICLES.md).
+Published English articles with legacy `.html` → clean-URL redirects, bilingual categories, tags and related content. The library at `/articles` supports `?q=` search and `?tag=` filtering, and each article page has breadcrumbs, tags, share links and related articles. Content integrity against maintained HTML sources is verified by `php artisan site:compare-content` (currently **Failures: 0**). Detail: [docs/current/ARTICLES.md](docs/current/ARTICLES.md).
 
 ## Services
 
@@ -143,11 +147,11 @@ The local database has thirteen published services; twelve render in the homepag
 
 ## Languages
 
-English and Persian are public on the **same** URLs, applied client-side through `data-en` / `data-fa` attributes, `assets/js/i18n.js` and `assets/css/rtl.css`. German exists in the CMS language list for drafts only: publishing a German article or service throws a validation error, and `/de` returns 404. `hreflang` is not implemented. Detail: [docs/current/MULTILINGUAL.md](docs/current/MULTILINGUAL.md).
+Article URLs select complete server-rendered editions: `/articles/{slug}` is English and `/articles/{slug}?lang=fa` is Persian. Each has localized SEO, a self-canonical, reciprocal `hreflang`, and English `x-default`. The floating toggle changes text, direction, metadata and URL in place without a document reload; code blocks are shared. Homepage/library UI preferences still use client-side translation. German remains draft-only and `/de` returns 404. Detail: [docs/current/MULTILINGUAL.md](docs/current/MULTILINGUAL.md).
 
 ## SEO
 
-Canonical URLs, Open Graph, Twitter cards, JSON-LD on the homepage and articles, a dynamic `/sitemap.xml` listing clean URLs only, `/robots.txt` disallowing `/admin`, `/livewire` and `/forms`, and 301s for `/index.html` and legacy article `.html` paths. Removed service detail paths return 404. Detail: [docs/current/SEO.md](docs/current/SEO.md).
+Canonical URLs, Open Graph, Twitter cards, JSON-LD on the homepage and articles, a dynamic `/sitemap.xml` listing the homepage plus 50 localized article URLs with alternates and modification dates, `/robots.txt` disallowing `/admin`, `/livewire` and `/forms`, and 301s for `/index.html` and legacy article `.html` paths. Removed service detail paths return 404. Detail: [docs/current/SEO.md](docs/current/SEO.md).
 
 ## PWA
 
@@ -156,12 +160,12 @@ Canonical URLs, Open Graph, Twitter cards, JSON-LD on the homepage and articles,
 ## Testing
 
 ```bash
-php artisan test                                                    # full feature suite
-vendor/bin/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest     # MySQL schema check
+php vendor/phpunit/phpunit/phpunit                                  # full feature suite
+php vendor/phpunit/phpunit/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest     # MySQL schema check
 php artisan site:compare-content                                     # Failures: 0
 ```
 
-Latest run (2026-09-21): **67 tests, 1127 assertions, 0 failures, 1 skipped**. The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Homepage CMS details: [docs/current/HOMEPAGE-CMS.md](docs/current/HOMEPAGE-CMS.md). Testing detail: [docs/current/TESTING.md](docs/current/TESTING.md).
+Latest review (2026-10-01): **84 tests, 0 failures, 1 skipped**. Assertion counts and live-browser evidence are recorded in [the audit](docs/qa/FULL-AUDIT-2026-10-01.md). The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Homepage CMS details: [docs/current/HOMEPAGE-CMS.md](docs/current/HOMEPAGE-CMS.md). Testing detail: [docs/current/TESTING.md](docs/current/TESTING.md).
 
 ## Deployment
 
@@ -169,7 +173,7 @@ Latest run (2026-09-21): **67 tests, 1127 assertions, 0 failures, 1 skipped**. T
 
 The full procedure — PHP 8.4 selector, Composer or a pre-built `vendor/`, MySQL creation, file layout above the web root, document root set to `.../laravel/public`, `.env`, permissions, `storage:link`, migrate, import, caches, SSL, post-deploy checks and rollback — is in [docs/current/DEPLOYMENT.md](docs/current/DEPLOYMENT.md).
 
-**Deployment has not been executed.** Nothing in this repository proves that meetaj.ir is running this application.
+**Production was reported as deployed by the owner.** This audit ran locally; the remote release, database, SMTP and TLS configuration were not inspected.
 
 ### Scheduler
 
@@ -190,7 +194,7 @@ docs/         Documentation, design system, QA and historical references
 public/       Web document root and published assets
 resources/    Asset sources, downloads, static files, legacy content and Blade views
 routes/       Web and console routes
-scripts/      Maintenance and diagnostic PHP scripts
+scripts/      PHP maintenance tools and Python article generators
 storage/      Uploads, caches, logs and temporary output
 tests/        PHPUnit feature tests
 ```
@@ -210,17 +214,17 @@ Full navigation map: [docs/README.md](docs/README.md).
 | Homepage CMS | [docs/current/HOMEPAGE-CMS.md](docs/current/HOMEPAGE-CMS.md) |
 | Features | [docs/current/FEATURES.md](docs/current/FEATURES.md) |
 | Design system | [docs/current/DESIGN-SYSTEM.md](docs/current/DESIGN-SYSTEM.md) |
-| QA evidence | [docs/qa/FULL-AUDIT-2026-09-21.md](docs/qa/FULL-AUDIT-2026-09-21.md), [docs/qa/DESIGN-SYSTEM-AUDIT-2026-09-21.md](docs/qa/DESIGN-SYSTEM-AUDIT-2026-09-21.md), [docs/qa/FINAL-QA-REPORT.md](docs/qa/FINAL-QA-REPORT.md), [docs/qa/QA-MATRIX.md](docs/qa/QA-MATRIX.md) |
+| QA evidence | [docs/qa/FULL-AUDIT-2026-10-01.md](docs/qa/FULL-AUDIT-2026-10-01.md), [docs/qa/DESIGN-SYSTEM-AUDIT-2026-09-21.md](docs/qa/DESIGN-SYSTEM-AUDIT-2026-09-21.md), [docs/qa/FINAL-QA-REPORT.md](docs/qa/FINAL-QA-REPORT.md), [docs/qa/QA-MATRIX.md](docs/qa/QA-MATRIX.md) |
 | Decisions | [docs/decisions/ADR/README.md](docs/decisions/ADR/README.md) |
 | History | [docs/phases/phase-01-environment.md](docs/phases/phase-01-environment.md), [docs/historical/README.md](docs/historical/README.md) |
 
 ## Known limitations
 
-1. **Not deployed.** DirectAdmin cutover, production database, SMTP and HTTPS verification are all outstanding.
+1. **Remote deployment unverified in this audit.** The owner reports deployment; production database, SMTP and HTTPS checks need the server environment.
 2. **No CMS user exists locally**, so interactive admin QA is blocked until `php artisan cms:create-user` is run.
 3. **No performance measurement** of any kind has been made — no Lighthouse, no load test.
 4. **PWA install and offline behaviour** have never been exercised in a browser.
-5. **`hreflang` is not implemented**; English and Persian share canonical URLs.
+5. **Article upgrades require an explicit database update.** Pulling source files alone does not replace already-imported content.
 6. **German is draft-only** and no German content exists.
 7. **Scheduled publishing is query-based**: a future `published_at` simply stays hidden, with nothing to flip it later.
 8. **`/admin/users` and `/admin/cms-users`** resolve to the same Users screen; that is one feature at two paths.

@@ -1,10 +1,10 @@
 # Articles — Meet AJ
 
 **Authority:** AUTHORITATIVE article subsystem document.
-**Verified:** Bilingual source and route behavior checked on 2026-09-30 using an isolated test database. The live counts below remain the historical 2026-09-17 snapshot.
+**Verified:** 2026-10-01: source validation, isolated feature tests and local operational import after a consistent SQLite backup. Remote production was not changed.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
-## Counts (live database, 2026-09-17)
+## Counts (local database, 2026-10-01)
 
 | Item | Count |
 |------|-------|
@@ -13,9 +13,9 @@
 | Articles with a non-null `published_at` | 25 |
 | Persian or German article rows | 0 |
 | `article_redirects` rows | 25 |
-| Categories | 10 (5 concepts × EN/FA) |
-| Tags | 8 |
-| Article ↔ tag links | 38 |
+| Categories | 19 |
+| Tags | 24 |
+| Article ↔ tag links | 44 |
 
 The imported library uses one shared `language = en` row per article. Both editorial versions live in `data-fa` / `data-en` HTML and `presentation.localizations`; language selection does not create or update database rows.
 
@@ -63,9 +63,9 @@ php artisan articles:sync-tags
 
 All 25 source files contain complete current FA/EN editions. The base URL serves English content and SEO; `?lang=fa` serves Persian. An old `?lang=en` link or an unsupported language value renders English with the clean canonical. Cookies/local storage do not override article URLs. Both pages return reciprocal `fa`/`en` hreflang and an `x-default` pointing to the English base URL. Sitemap entries cover both versions.
 
-`ArticleLocalization` selects prose, headings, TOC, metadata, Article/FAQ schemas and sharing titles before Blade renders. Code blocks are shared and protected from translation. With JavaScript, the language control and inline translation links update the existing text, direction, metadata, schemas, share links and URL using `history.replaceState`; they do not fetch or reload the document. Without JavaScript, alternate links still return a complete localized response. The switch payload contains metadata only, without duplicate article bodies. Related links retain the selected language. Historical editions remain labeled and preserved in their original languages; `docs/enterprise-articles/originals.zip` retains exact original files.
+`ArticleLocalization` selects prose, headings, TOC, metadata, Article/FAQ schemas and sharing titles before Blade renders. Code blocks are shared and protected from translation. With JavaScript, the floating language control update the existing text, direction, metadata, schemas, share links and URL using `history.replaceState`; they do not fetch or reload the document. Direct requests to either language URL return a complete localized response without JavaScript. The inline FA/EN row above the date has been removed; alternate links remain in the document head for SEO. The switch payload contains metadata only, without duplicate article bodies. Related links retain the selected language. Historical editions are removed from public pages, including previously imported content; `docs/enterprise-articles/originals.zip` retains exact original files.
 
-`LegacyArticleImporter` reads the `article-localizations` JSON block from each source into `presentation.localizations`. Existing database rows need `--update-existing` to receive the replacement sources. This work changed source/application files and tested an isolated database; it did not import into the operational database or deploy the site. Review `docs/enterprise-articles/bilingual-report.md` and the dry-run before deployment, and publish updated assets through the existing deployment workflow.
+`LegacyArticleImporter` reads the `article-localizations` JSON block from each source into `presentation.localizations`. Existing database rows need `--update-existing` to receive the replacement sources. On 2026-10-01, all 25 local operational rows were updated after a consistent SQLite backup. The remote server was not updated from this environment. Review `docs/enterprise-articles/bilingual-report.md` and the dry-run before deployment, and publish updated assets through the existing deployment workflow.
 
 The 25 canonical slugs:
 
@@ -95,7 +95,7 @@ This is SQL `LIKE` matching, not a search engine: there is no Meilisearch, Algol
 
 ## Related articles
 
-`Article::relatedArticles(3)` returns at most three other published articles in the same language, preferring shared tags, then the same category, then recency. It is rendered by `resources/views/articles/partials/related.blade.php`.
+`Article::relatedArticles(3)` returns at most three other published articles in the same language, ranking category matches, shared tags and title-word overlap, then sort order and ID. It is rendered by `resources/views/articles/partials/related.blade.php`.
 
 ## SEO
 

@@ -1,6 +1,6 @@
 # Meet AJ — documentation
 
-Navigation map for every document in this repository. Last updated **2026-09-21** after the full structural, documentation and test audit.
+Navigation map for every document in this repository. Last updated **2026-10-01** after the full structural, documentation and test audit.
 
 **Start here:** [current/README.md](current/README.md), then [current/PROJECT-STATUS.md](current/PROJECT-STATUS.md) — the single authoritative statement of what exists today.
 
@@ -20,7 +20,7 @@ Describes the application as it is now. When one of these disagrees with `PROJEC
 | [current/ADMIN.md](current/ADMIN.md) | Filament panel, resources, authorization |
 | [current/FEATURES.md](current/FEATURES.md) | Public and CMS feature inventory |
 | [current/ARTICLES.md](current/ARTICLES.md) | 25 articles, import, slugs, redirects, search, tags |
-| [current/SERVICES.md](current/SERVICES.md) | Six services, pricing, publication, requests |
+| [current/SERVICES.md](current/SERVICES.md) | 13 services, 12 catalog entries, pricing, publication, requests |
 | [current/REQUESTS.md](current/REQUESTS.md) | Contact and quote pipeline, statuses, internal notes |
 | [current/MULTILINGUAL.md](current/MULTILINGUAL.md) | EN / FA / draft-only DE, RTL, hreflang status |
 | [current/SEO.md](current/SEO.md) | Canonicals, OG, JSON-LD, sitemap, robots, redirects |
@@ -40,6 +40,7 @@ Evidence, not intentions. Each file names its method and marks BLOCKED work hone
 
 | Document | Covers |
 |----------|--------|
+| [qa/FULL-AUDIT-2026-10-01.md](qa/FULL-AUDIT-2026-10-01.md) | Current full suite, bilingual articles, local database sync, browser and documentation review |
 | [qa/FINAL-QA-REPORT.md](qa/FINAL-QA-REPORT.md) | Master audit acceptance matrix, fixes, open items |
 | [qa/QA-MATRIX.md](qa/QA-MATRIX.md) | Per-URL expected vs actual, test method, status |
 | [qa/VISUAL-QA.md](qa/VISUAL-QA.md) | Browser and CDP visual verification |

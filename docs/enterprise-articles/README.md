@@ -1,31 +1,44 @@
-# گزارش ارتقای مقالات زیرساخت
+# مقاله‌های فنی فارسی و انگلیسی
 
-نسخه نهایی اکنون دوزبانه است: [گزارش مقاله‌به‌مقاله](bilingual-report.md)، [SEO و وضعیت قابل پردازش](bilingual-report.json)، [ارزیابی قبل تغییر زبان](bilingual-before.json). هر دو زبان متن اجرایی کامل دارند؛ نسخه تاریخی به زبان اصلی نگهداری می‌شود. headingها و code blockها در ۵۰ پاسخ سرور با یکدیگر تطبیق داده شده‌اند.
+آخرین بازبینی: **2026-10-01**؛ تعداد: **۲۵ مقاله** در `resources/legacy/articles`.
 
-انگلیسی و SEO پیش‌فرض: `/articles/{slug}`؛ فارسی: `/articles/{slug}?lang=fa`. لینک قدیمی `?lang=en` همچنان انگلیسی است و Canonical آن URL اصلی است. هر نسخه Hreflang متقابل و FAQ Schema همان زبان دارد. دکمه زبان و لینک ترجمه، متن و metadata موجود را بدون Reload عوض می‌کنند؛ با JavaScript غیرفعال، هر دو نسخه از سرور کامل برمی‌گردند. [مستند رسمی Google](https://developers.google.com/search/docs/specialty/international/localized-versions) مبنای رابطه نسخه‌هاست.
+فهرست فایل‌ها، عنوان فارسی و انگلیسی، وضعیت ترجمه، بخش‌های لازم و SEO هر مقاله در [bilingual-report.md](bilingual-report.md) و [bilingual-report.json](bilingual-report.json) ثبت شده است. تحلیل اولیه و اولویت‌ها در [report.md](report.md)، [report.json](report.json) و [inventory.json](inventory.json) موجود است.
 
-اصلاح موضوع مقاله‌ها: vSS/vDS دوباره مقایسه قابلیت‌ها و معیار انتخاب است؛ مهاجرت بخش عملی بعد از تصمیم معماری است. جدول مقایسه برای HTTP/HTTPS، IMAP/POP3 و CMD/PowerShell/DxDiag بازگردانده شد. مقاله Dual-WAN هدف اصلی توزیع نامتقارن را حفظ می‌کند و تفاوت ECMP با مثال PCC را صریح توضیح می‌دهد. عنوان تکراری Enterprise و سازمان فرضی یکسان از مثال‌های جدید حذف شدند؛ اشاره به Edition واقعی SQL Server حفظ شده است. متن این اصلاحات در `scripts/article_comparisons.py` نگهداری می‌شود.
+نسخهٔ اصلی هر فایل بدون تغییر در `originals.zip` محفوظ است. بخش نسخهٔ تاریخی و ردیف اضافهٔ فارسی/انگلیسی از صفحات عمومی حذف شده‌اند. نام فایل و موضوع اصلی حفظ شده‌اند؛ مقاله‌های مقایسه‌ای جدول مقایسه و معیار انتخاب دارند. سناریوها آموزشی‌اند و ادعای تجربهٔ واقعی در شرکت نام‌برده نیستند.
 
-آزمون‌های مرتبط اصلاحات 2026-10-01: ۲۲ تست، ۴۳۶۶ assertion موفق. اعتبارسنجی HTML/FAQ/TOC/hash هر ۲۵ فایل بدون خطا و بررسی syntax JavaScript موفق است. تغییر زبان در مقاله vSS/vDS و مقاله بلند SQL Server بدون درخواست جدید برای document بررسی شد؛ متن، عنوان، RTL/LTR، Canonical، FAQ Schema، کدها، لینک کپی و Related هماهنگ‌اند. تنها بارگذاری موردنیاز در اولین تغییر به فارسی CSS زبان است. تصاویر corrected-vsphere-fa.jpg و corrected-vsphere-en.jpg ثبت شده‌اند. اجرای عملی زیرساخت جزو این آزمون‌ها نیست.
+آدرس بدون پارامتر، نسخهٔ کامل انگلیسی و SEO انگلیسی را نمایش می‌دهد. `?lang=fa` نسخهٔ کامل فارسی را برمی‌گرداند. دکمهٔ شناور زبان، متن و metadata و URL را بدون بارگذاری دوباره عوض می‌کند؛ Code Blockها مشترک‌اند. جزئیات: [MULTILINGUAL.md](../current/MULTILINGUAL.md).
 
-نتیجه کل مجموعه تست پروژه: ۸۱ تست، ۵۲۷۹ assertion، یک failure و یک skip. تنها failure در ProductionAuditTest::test_persian_testimonials_use_shared_rtl_safe_slider است: تست انتظار main.js?v=1414 دارد اما صفحه اصلی main.js?v=1415 را استفاده می‌کند. این اختلاف در نسخه HEAD پیش از تغییرات این کار نیز وجود دارد؛ صفحه اصلی و این بررسی نامرتبط تغییر نکرده‌اند. کنترل عنوان مقاله در ProductionAuditTest با رفتار FA/EN جدید هماهنگ شده و موفق است.
+## منبع و بازتولید
 
-بازسازی از مبنای اصلی: ابتدا `prepare-enterprise-runbooks.py` و `upgrade-enterprise-articles.py`، سپس `prepare-english-runbooks.py` و `build-bilingual-articles.py` اجرا شوند. مرحله آخر متن تألیفی انگلیسی را با کد مشترک ترکیب می‌کند؛ اجرای مکرر آن تغییری ایجاد نمی‌کند. این اسکریپت‌ها HTML را می‌نویسند؛ قبل اجرا ویرایش دستی را با source تألیفی هماهنگ کنید.
+متن‌های تألیفی در `scripts/prepare-enterprise-runbooks.py` و `scripts/prepare-english-runbooks.py` قرار دارند. جدول‌های مقایسه در `scripts/article_comparisons.py` و بستهٔ کامل SQL Server در `resources/content/articles/sql-server-automatic-backup-job` نگهداری می‌شوند. ابتدا تغییر متن را در منبع تألیفی اعمال کنید؛ تولید دوباره می‌تواند ویرایش دستی HTML را جایگزین کند.
 
-فایل‌های منبع جایگزین و پشتیبانی زبان در برنامه تکمیل شده است؛ دیتابیس عملیاتی و سایت منتشرشده تغییر نکرده‌اند. برای استقرار، ابتدا `php artisan articles:import-legacy --update-existing --dry-run` و پس از بازبینی، `php artisan articles:import-legacy --update-existing` در workflow استقرار اجرا شوند. انتشار asset جدید i18n.js نیز لازم است. این فرمان‌ها در این کار روی دیتابیس عملیاتی اجرا نشده‌اند.
+```bash
+python scripts/prepare-enterprise-runbooks.py
+python scripts/upgrade-enterprise-articles.py
+python scripts/prepare-english-runbooks.py
+python scripts/build-bilingual-articles.py
+python scripts/verify-enterprise-articles.py
+```
 
-تاریخ بررسی: 2026-09-30. تعداد: ۲۵ فایل HTML در `resources/legacy/articles`.
+هر مرحله باید موفق باشد، سپس مرحلهٔ بعد اجرا شود. `runbooks.json` و `english-runbooks.json` خروجی قابل بررسی متن‌ها هستند؛ HTML و گزارش hash از آن‌ها ساخته می‌شوند.
 
-فهرست کامل، ساختار قبلی، دستورات و منابع استخراج‌شده در `inventory.json` ثبت شده است. اولویت ۱: SSH، Netplan، مدیریت حساب، OpenVPN، Dual-WAN، فیلتر وب و اسکن، Downgrade، SQL Backup و بازیابی Windows. اولویت ۲: NetBox، Nginx، Oxidized، DFS، ESXi، vSwitch، TLS و زمان. سایر موضوعات اولویت ۳ هستند.
+## دیتابیس و استقرار
 
-روش حفظ محتوا: فایل اصلی پیش از تغییر به‌صورت کامل در `originals.zip` نگهداری می‌شود. متن مقاله قدیمی در بخش تاریخی همان مقاله باقی می‌ماند؛ نمونه‌های تاریخی دستورالعمل اجرایی نسخه جدید نیستند. URL و نام فایل حفظ می‌شوند و URL بدون پسوند با مسیر Laravel هم‌راستا است.
+در این بازبینی، دیتابیس محلی پس از پشتیبان‌گیری کامل با ۲۵ منبع فعلی هماهنگ شد؛ سرور اصلی از این محیط تغییر نکرد. برای سرور، ابتدا Backup و بررسی ویرایش‌های CMS لازم است، سپس:
 
-تحقیق: مستندات رسمی Canonical/OpenSSH/Netplan، MikroTik، Microsoft Learn، NetBox، Nginx، Oxidized و Broadcom. سناریوهای سازمانی آموزشی و فرضی هستند. اندازه سخت‌افزار پیشنهادی مقاله، حداقل رسمی سازنده محسوب نمی‌شود. نسخه‌ها baseline هستند؛ انتخاب patch در Change Record ثبت می‌شود.
+```bash
+php artisan articles:import-legacy --update-existing --dry-run
+php artisan articles:import-legacy --update-existing
+php artisan site:publish-assets --views
+php artisan optimize:clear
+php artisan optimize
+php artisan site:compare-content
+```
 
-محدودیت اعتبارسنجی: این workspace تجهیزات RouterOS، ESXi، Windows Server، SQL Server و VM لینوکس هدف را در اختیار ندارد. اعتبارسنجی ساختار HTML، JSON-LD، حفظ متن و سازگاری importer انجام می‌شود؛ اجرای عملی دستورات روی این پلتفرم‌ها باید در staging انجام شود. موفقیت تست ساختاری به معنی تأیید عملکرد در Production نیست.
+Import معمولی مقالهٔ موجود را جایگزین نمی‌کند. `--refresh` برای این به‌روزرسانی لازم نیست. راهنمای کامل در [DEPLOYMENT.md](../current/DEPLOYMENT.md) است.
 
-نتیجه بررسی نهایی: هر ۲۵ فایل جایگزین شد. بررسی بخش‌ها، metadata فارسی، FAQ/متن، لینک‌های فهرست، hash نسخه جدید و archive اصلی بدون خطا است (validation.json). مجموعه تست‌های ArticleLibrary، ArticleFaqTranslation، SqlBackupArticle و ArticleImage: ۱۶ تست، ۳۲۰ assertion، همگی موفق. syntax چهل block Bash و یازده block PowerShell بررسی شد؛ Python تولید تنظیمات NetBox نیز parse می‌شود. این بررسی‌ها دستورات زیرساخت را اجرا نمی‌کنند.
+## نتیجه و حدود بررسی
 
-گزارش قابل مطالعه نام فایل‌ها، تحلیل و SEO: report.md. داده قابل پردازش: report.json. متن تألیفی runbookها: runbooks.json. اسکریپت scripts/upgrade-enterprise-articles.py از archive اولیه بازتولید می‌کند؛ پس از ویرایش دستی HTML آن را بدون بررسی دوباره اجرا نکنید، چون مبنا نسخه archive است. این کار فایل‌های منبع را تغییر داده است؛ دیتابیس عملیاتی یا سایت منتشرشده در این مرحله تغییر داده نشده‌اند.
+بررسی ساختار ۲۵ مقاله بدون خطاست؛ تطابق دیتابیس محلی نیز `Failures: 0` دارد. تست‌های پروژه، دو زبان، Headingها، FAQ، Canonical، Hreflang و یکسان‌بودن کدها را کنترل می‌کنند. [گزارش 2026-10-01](../qa/FULL-AUDIT-2026-10-01.md) نتیجهٔ تست‌ها و مرورگر را ثبت می‌کند.
 
-مقاله SQL Server بسته مستقل و اسکریپت‌های کامل موجود دارد؛ آن بسته حفظ می‌شود. هش baseline تاریخی در `docs/qa/baseline-files.json` تغییر نمی‌کند؛ ابزار verify-originals پس از بازنویسی، تغییر مجاز این ۲۵ فایل را گزارش خواهد کرد.
+در بازبینی متن، فعال‌شدن زودهنگام مقصد DFS اصلاح و توضیح تثبیت نسخهٔ Oxidized با دستور واقعی هماهنگ شد. منابع رسمی داخل هر مقاله آمده‌اند. نسخه‌ها baseline مقاله‌اند و حداقل سخت‌افزار رسمی برای همهٔ محیط‌ها محسوب نمی‌شوند. آزمون syntax یا رندر مقاله، جای اجرای Runbook روی تجهیزات هدف و آزمون Restore در staging را نمی‌گیرد.
