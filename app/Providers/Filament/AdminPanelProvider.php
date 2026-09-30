@@ -6,6 +6,7 @@ use App\Filament\Pages\Dashboard;
 use App\Filament\Widgets\CmsStatsOverview;
 use App\Filament\Widgets\RecentArticles;
 use App\Filament\Widgets\RecentRequests;
+use App\Filament\Widgets\WorkspaceActions;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -59,6 +60,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->pages([Dashboard::class])
             ->widgets([
+                WorkspaceActions::class,
                 CmsStatsOverview::class,
                 RecentArticles::class,
                 RecentRequests::class,
@@ -68,8 +70,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->renderHook(
                 PanelsRenderHook::STYLES_AFTER,
-                fn (): string => '<link rel="stylesheet" href="'.e(asset('css/app/meet-aj-admin.css')).'" data-meetaj="admin-contrast-late">',
+                fn (): string => '<link rel="stylesheet" href="'.e(asset('css/app/meet-aj-admin.css')).'?v=glass-1" data-meetaj="admin-contrast-late">',
             )
+            ->renderHook(PanelsRenderHook::SIMPLE_PAGE_START, fn () => view('filament.partials.login-intro'))
             ->authGuard('web')
             ->middleware([
                 EncryptCookies::class,
