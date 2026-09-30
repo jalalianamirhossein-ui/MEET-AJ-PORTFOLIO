@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="en" dir="ltr">
   <head>
-    <title>SQL Server Automatic Backup Job | Meet AJ</title>
+    <title>بکاپ خودکار SQL Server؛ راهنمای Enterprise با Agent | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Schedule secure SQL Server backups with Agent jobs, retention, and alerts"
+      content="طراحی بکاپ SQL Server برای Jira و Confluence؛ Full، Differential و Log، اسکریپت Whitelist، Retention سی‌روزه، Encryption، مانیتورینگ و تست Restore."
     />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
@@ -15,8 +15,8 @@
       href="https://meetaj.ir/articles/sql-server-automatic-backup-job.html"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="SQL Server Automatic Backup Job | Meet AJ" />
-    <meta property="og:description" content="Schedule secure SQL Server backups with Agent jobs, retention, and alerts" />
+    <meta property="og:title" content="بکاپ خودکار SQL Server؛ راهنمای Enterprise با Agent | Meet AJ" />
+    <meta property="og:description" content="طراحی بکاپ SQL Server برای Jira و Confluence؛ Full، Differential و Log، اسکریپت Whitelist، Retention سی‌روزه، Encryption، مانیتورینگ و تست Restore." />
     <meta property="og:url" content="https://meetaj.ir/articles/sql-server-automatic-backup-job.html" />
     <meta property="og:site_name" content="Meet AJ" />
     <meta name="twitter:card" content="summary" />
@@ -54,7 +54,11 @@
       rel="stylesheet"
       disabled
     />
-  </head>
+  <meta name="article:content-language" content="fa" />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","inLanguage":"fa","headline":"بکاپ خودکار SQL Server؛ طراحی Enterprise با SQL Server Agent","description":"طراحی بکاپ SQL Server برای Jira و Confluence؛ Full، Differential و Log، اسکریپت Whitelist، Retention سی‌روزه، Encryption، مانیتورینگ و تست Restore.","datePublished":"2025-11-23T21:44:43+03:30","dateModified":"2026-09-30T19:27:43+03:30","author":{"@type":"Person","name":"AmirHossein Jalalian"},"mainEntityOfPage":"https://meetaj.ir/articles/sql-server-automatic-backup-job"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","inLanguage":"fa","mainEntity":[{"@type":"Question","name":"چرا در Recovery Model ساده نمی‌توان Log Backup گرفت؟","acceptedAnswer":{"@type":"Answer","text":"در SIMPLE، بخش غیرفعال Transaction Log در صورت نبود مانع پس از Checkpoint قابل استفادهٔ مجدد می‌شود و زنجیرهٔ Log Backup نگهداری نمی‌شود. برای Log Backup باید FULL یا BULK_LOGGED داشته باشید و زنجیره را با Backup داده آغاز کنید."}},{"@type":"Question","name":"بعد از تغییر SIMPLE به FULL چه کاری لازم است؟","acceptedAnswer":{"@type":"Answer","text":"باید یک Full یا Differential معتبر برای شروع زنجیرهٔ Log گرفته شود. در این سناریو Full معمولی جدید انتخاب می‌شود تا پایهٔ بازیابی روشن باشد؛ سپس Log Backup زمان‌بندی می‌شود. این الزام برای تمام تغییرات Recovery Model یکسان نیست."}},{"@type":"Question","name":"آیا Differential تغییرات از Differential قبلی را ذخیره می‌کند؟","acceptedAnswer":{"@type":"Answer","text":"خیر. Differential تغییرات از Full پایهٔ معمولی را نگه می‌دارد. برای Restore از Full سازگار، آخرین Differential مناسب و Logهای موردنیاز به ترتیب استفاده می‌شود."}},{"@type":"Question","name":"آیا VERIFYONLY جایگزین تست Restore است؟","acceptedAnswer":{"@type":"Answer","text":"خیر. VERIFYONLY خوانایی Backup و Checksumهای موجود را بررسی می‌کند، ولی دیتابیس را Restore نمی‌کند. تست Restore، کنترل DBCC CHECKDB، سازگاری برنامه و اندازه‌گیری RTO همچنان لازم‌اند."}},{"@type":"Question","name":"چرا بعضی فایل‌های قدیمی‌تر از ۳۰ روز حذف نمی‌شوند؟","acceptedAnswer":{"@type":"Answer","text":"برای بازیابی تمام پنجرهٔ سی‌روزه، Full پایهٔ قبل از مرز Retention و Backupهای بعد از آن لازم‌اند. Cleanup این وابستگی را حفظ می‌کند و فایل پایه یا Logهای موردنیاز را صرفاً به خاطر سن حذف نمی‌کند."}},{"@type":"Question","name":"چه حسابی باید به فولدر Backup دسترسی داشته باشد؟","acceptedAnswer":{"@type":"Answer","text":"سرویس Database Engine فایل Backup را می‌نویسد و می‌خواند. ساخت فولدر و Cleanup در این راهکار با CmdExec Proxy انجام می‌شوند. هر دو هویت به مجوزهای متناسب روی مسیر اختصاصی نیاز دارند."}},{"@type":"Question","name":"آیا این Job از master، model، msdb و tempdb بکاپ می‌گیرد؟","acceptedAnswer":{"@type":"Answer","text":"خیر. دیتابیس‌های سیستمی حتی اگر به Whitelist اضافه شوند رد می‌شوند. master، model و msdb باید Job جداگانه داشته باشند؛ tempdb بکاپ‌پذیر نیست."}},{"@type":"Question","name":"آیا SQL Server Agent به‌تنهایی بکاپ Jira و Confluence را کامل می‌کند؟","acceptedAnswer":{"@type":"Answer","text":"خیر. علاوه بر دیتابیس، Home، Shared Home، Attachmentها و تنظیمات برنامه باید با روش سازگار با نسخهٔ نصب‌شده Backup شوند. نسخهٔ مستقل Off-site و تست راه‌اندازی برنامه پس از Restore نیز لازم است."}}]}</script>
+<link href="../assets/css/glass-system.css?v=10" rel="stylesheet" />
+</head>
   <body class="article-page theme-microsoft">
     <button
       id="menu-toggle"
@@ -203,91 +207,7 @@
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
-          <li class="article-nav-item">
-            <a href="#overview"
-              ><i class="bi bi-info-circle navicon" aria-hidden="true"></i
-              ><span data-en="Introduction" data-fa="مقدمه">Introduction</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#article-status"
-              ><i class="bi bi-clipboard-check navicon" aria-hidden="true"></i
-              ><span data-en="Prerequisites" data-fa="پیش‌نیازها">Prerequisites</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#planned-sections"
-              ><i class="bi bi-gear navicon" aria-hidden="true"></i
-              ><span data-en="Check SQL Server Agent" data-fa="۰۱ — بررسی SQL Server Agent">Check SQL Server Agent</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#test-full-backup"
-              ><i class="bi bi-device-hdd navicon" aria-hidden="true"></i
-              ><span data-en="Test Full Backup" data-fa="۰۲ — تست Full Backup">Test Full Backup</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#create-job"
-              ><i class="bi bi-clipboard-check navicon" aria-hidden="true"></i
-              ><span data-en="Create Agent Job" data-fa="۰۳ — ساخت SQL Server Agent Job">Create Agent Job</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#dated-backup-file"
-              ><i class="bi bi-file-earmark-code navicon" aria-hidden="true"></i
-              ><span data-en="Dated backup file" data-fa="۰۴ — ایجاد فایل Backup با تاریخ">Dated backup file</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#schedule"
-              ><i class="bi bi-clock-history navicon" aria-hidden="true"></i
-              ><span data-en="Schedule" data-fa="۰۵ — Schedule">Schedule</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#verify-backup"
-              ><i class="bi bi-check2-circle navicon" aria-hidden="true"></i
-              ><span data-en="Verify Backup" data-fa="۰۶ — بررسی صحت Backup">Verify Backup</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#job-history"
-              ><i class="bi bi-journal-text navicon" aria-hidden="true"></i
-              ><span data-en="Job History" data-fa="۰۷ — بررسی Job History">Job History</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#troubleshooting"
-              ><i class="bi bi-wrench-adjustable navicon" aria-hidden="true"></i
-              ><span data-en="Troubleshooting" data-fa="رفع اشکال">Troubleshooting</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#best-practices"
-              ><i class="bi bi-check2-square navicon" aria-hidden="true"></i
-              ><span data-en="Best Practices" data-fa="بهترین روش‌ها">Best Practices</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#faq"
-              ><i class="bi bi-question-circle navicon" aria-hidden="true"></i
-              ><span data-en="Frequently Asked Questions" data-fa="سوالات متداول">Frequently Asked Questions</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#conclusion"
-              ><i class="bi bi-flag navicon" aria-hidden="true"></i
-              ><span data-en="Conclusion" data-fa="جمع‌بندی">Conclusion</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#official-resources"
-              ><i class="bi bi-book navicon" aria-hidden="true"></i
-              ><span data-en="Official resources" data-fa="منابع رسمی">Official resources</span></a
-            >
-          </li>
-        </ul>
+          <li class="article-nav-item"><a href="#introduction"><span>Backup خودکار SQL Server؛ از ساخت Job تا تضمین بازیابی سرویس</span></a></li><li class="article-nav-item"><a href="#architecture"><span>طراحی Backup Strategy برای Jira و Confluence</span></a></li><li class="article-nav-item"><a href="#prerequisites"><span>پیش‌نیازها و حدود اجرای راهکار</span></a></li><li class="article-nav-item"><a href="#recovery-model"><span>Recovery Model در SQL Server: SIMPLE، FULL و BULK_LOGGED</span></a></li><li class="article-nav-item"><a href="#backup-folders"><span>ساختار فولدر Backup و تفکیک دیتابیس‌ها</span></a></li><li class="article-nav-item"><a href="#configuration"><span>اسکریپت Backup چند دیتابیس با Whitelist و Audit</span></a></li><li class="article-nav-item"><a href="#agent-jobs"><span>ساخت SQL Server Agent Job، Step و Schedule</span></a></li><li class="article-nav-item"><a href="#cleanup"><span>Cleanup Job و Retention سی‌روزه بدون شکستن زنجیره</span></a></li><li class="article-nav-item"><a href="#validation"><span>Validation: Backup History، VERIFYONLY و آخرین Backup هر دیتابیس</span></a></li><li class="article-nav-item"><a href="#troubleshooting"><span>عیب‌یابی Backup Job در SQL Server</span></a></li><li class="article-nav-item"><a href="#security"><span>Backup Encryption و نگهداری Certificate</span></a></li><li class="article-nav-item"><a href="#best-practices"><span>Best Practiceهای Enterprise برای Backup SQL Server</span></a></li><li class="article-nav-item"><a href="#conclusion"><span>جمع‌بندی: معیار موفقیت، Restore قابل‌اعتماد است</span></a></li><li class="article-nav-item"><a href="#faq"><span>سوالات متداول دربارهٔ Backup خودکار SQL Server</span></a></li><li class="article-nav-item"><a href="#official-references"><span>منابع رسمی و اطلاعات انتشار</span></a></li></ul>
       </nav>
       <button
         id="lang-toggle"
@@ -313,20 +233,8 @@
                   ><time datetime="">Microsoft</time></span
                 >
               </div>
-              <h1
-                class="article-title hero-title"
-                data-en="Configure Automatic SQL Server Backups with SQL Server Agent"
-                data-fa="تنظیم بکاپ خودکار SQL Server با SQL Server Agent"
-              >
-                Configure Automatic SQL Server Backups with SQL Server Agent
-              </h1>
-              <p
-                class="article-excerpt hero-subtitle"
-                data-en="Create a scheduled job for full database backups in SQL Server"
-                data-fa="ساخت Job زمان‌بندی‌شده برای Full Backup دیتابیس در SQL Server"
-              >
-                Create a scheduled job for full database backups in SQL Server
-              </p>
+              <h1 class="article-title hero-title" data-en="SQL Server Automatic Backup Job: Enterprise Backup Strategy" data-fa="بکاپ خودکار SQL Server؛ طراحی Enterprise با SQL Server Agent" lang="fa" dir="rtl">بکاپ خودکار SQL Server؛ طراحی Enterprise با SQL Server Agent</h1>
+              <p class="article-excerpt hero-subtitle" data-en="Design SQL Server backups for Jira and Confluence with full, differential and log jobs, whitelist automation, retention, encryption and restore validation." data-fa="طراحی بکاپ SQL Server برای Jira و Confluence با Full، Differential و Log، اجرای Whitelist، Retention سی‌روزه، Encryption و تست Restore." lang="fa" dir="rtl">طراحی بکاپ SQL Server برای Jira و Confluence با Full، Differential و Log، اجرای Whitelist، Retention سی‌روزه، Encryption و تست Restore.</p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -375,576 +283,667 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body">
-                <section id="overview" class="article-section">
-                  <h2 data-en="Introduction" data-fa="مقدمه">Introduction</h2>
-                  <p
-                    data-en="Regular backups of SQL Server databases are essential to prevent data loss. SQL Server Agent can run backup operations automatically on a schedule."
-                    data-fa="برای جلوگیری از ازدست‌رفتن اطلاعات، تهیه Backup منظم از دیتابیس‌های SQL Server ضروری است. با SQL Server Agent می‌توان عملیات Backup را به‌صورت خودکار و زمان‌بندی‌شده اجرا کرد."
-                  >
-                    Regular backups of SQL Server databases are essential to
-                    prevent data loss. SQL Server Agent can run backup
-                    operations automatically on a schedule.
-                  </p>
-                </section>
+              <article class="article-body" lang="fa" dir="rtl"><section id="introduction" class="article-section">
+<h2>Backup خودکار SQL Server؛ از ساخت Job تا تضمین بازیابی سرویس</h2>
+<p>وقتی دیتابیس Jira از دسترس خارج می‌شود، مشکل فقط توقف ثبت تیکت نیست؛ تاریخچهٔ تغییرات، گردش کار تیم‌ها و مستندات مرتبط با پروژه نیز در معرض خطر قرار می‌گیرند. برای Confluence هم سالم بودن سرویس وب کافی نیست: اگر دیتابیس و فایل‌های پیوست با یکدیگر سازگار نباشند، بازگرداندن سرویس کامل نخواهد بود. بنابراین Backup را باید بخشی از طراحی بازیابی سرویس دید، با مسئول مشخص، زمان‌بندی، محل نگهداری و تست عملی.</p>
+<p>Backup دستی برای کنترل یک تغییر یا گرفتن نسخهٔ موردی مناسب است؛ اما به حضور اپراتور وابسته است و اجرای فراموش‌شده معمولاً تا روز حادثه دیده نمی‌شود. Automated Backup این وابستگی را کم می‌کند، به شرط آنکه شکست Job و عقب‌افتادن آخرین Backup هر دیتابیس مانیتور شود. فایل با پسوند <code>.bak</code> یا Job سبزرنگ، به‌تنهایی مدرک قابل‌بازیابی‌بودن اطلاعات نیست.</p>
+<p><strong>RPO</strong> مقدار داده‌ای است که کسب‌وکار حاضر است از دست بدهد؛ برای مثال RPO پانزده دقیقه یعنی در بدترین وضعیت، پذیرش ازدست‌رفتن پانزده دقیقه تغییرات. <strong>RTO</strong> مدت زمان مجاز برای بازگرداندن سرویس است؛ از آماده‌کردن سرور و دریافت Backup تا Restore، کنترل صحت و راه‌اندازی برنامه. این دو عدد را با مالک سرویس توافق کنید؛ زمان‌بندی فنی باید از آن‌ها پیروی کند.</p>
+<p>بدون Backup Strategy، یک حذف اشتباه، خرابی Storage، باج‌افزار یا شکست تغییر Schema می‌تواند به ازدست‌رفتن غیرقابل‌جبران داده منجر شود. Snapshot ماشین مجازی و Replica نیز جایگزین تاریخچهٔ قابل‌بازیابی نیستند؛ تغییر خراب یا حذف داده می‌تواند به Replica منتقل شود.</p>
+</section>
+<section id="architecture" class="article-section">
+<h2>طراحی Backup Strategy برای Jira و Confluence</h2>
+<p>فرض کنید دیتابیس‌های <code>DB-Jira</code> و <code>DB-Confluence</code> روی یک SQL Server مستقل اجرا می‌شوند. هدف طراحی، RPO حدود پانزده دقیقه و RTO اولیهٔ شصت دقیقه است. RTO یک هدف قراردادی است و فقط با اندازه‌گیری Restore واقعی تأیید می‌شود؛ اندازهٔ دیتابیس، سرعت شبکه و تعداد Logها ممکن است این زمان را تغییر دهند.</p>
+<div class="article-table-wrap"><table class="article-table"><thead><tr><th>نوع</th><th>زمان اجرا</th><th>کاربرد</th></tr></thead><tbody>
+<tr><td>Full Backup</td><td>هر روز 01:00</td><td>نسخهٔ پایهٔ بازیابی و مبنای Differential</td></tr>
+<tr><td>Differential Backup</td><td>07:00، 13:00، 19:00</td><td>تغییرات از آخرین Full معمولی؛ کاهش حجم کار هنگام Restore</td></tr>
+<tr><td>Transaction Log Backup</td><td>هر ۱۵ دقیقه، تمام شبانه‌روز</td><td>پوشش تغییرات بین Backupهای داده و بازیابی به زمان مشخص</td></tr>
+<tr><td>Retention و Cleanup</td><td>پنجرهٔ ۳۰ روزه؛ Cleanup روزانه 05:00</td><td>حذف نسخه‌های منقضی با حفظ زنجیرهٔ لازم برای کل پنجره</td></tr>
+</tbody></table></div>
+<p>Differential افزایشی نسبت به Differential قبلی نیست؛ هر بار تغییرات از Full پایه را پوشش می‌دهد. برای بازیابی، Full مناسب، آخرین Differential سازگار و سپس Logهای لازم به ترتیب LSN استفاده می‌شوند. برای نمونه در حادثهٔ ساعت 14:10، Full ساعت 01:00، Differential ساعت 13:00 و Logهای بعد از آن را بررسی می‌کنیم؛ آخرین نقطهٔ قابل‌بازیابی به آخرین Log سالم و در صورت امکان Tail-log بستگی دارد، نه صرفاً ساعت حادثه. <a href="https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/plan-and-perform-restore-sequences-full-recovery-model?view&#61;sql-server-ver17" target="_blank" rel="noopener">مستندات توالی Restore در Microsoft</a></p>
+<p>زمان‌بندی پانزده‌دقیقه‌ای به‌تنهایی RPO را تضمین نمی‌کند. مدت Job، شکست Backup، انتقال دیرهنگام به محل دوم و Log گم‌شده روی RPO واقعی اثر دارند. Full و Log در SQL Server می‌توانند هم‌زمان اجرا شوند؛ اسکریپت این مقاله Full و Differential را برای هر دیتابیس هماهنگ می‌کند، ولی Log را پشت Full طولانی متوقف نمی‌کند.</p>
+<p>همهٔ زمان‌های Schedule بر اساس ساعت محلی سرور SQL هستند؛ نام فایل‌ها و Audit بر اساس UTC تولید می‌شوند. NTP و منطقهٔ زمانی سرور را در Runbook ثبت کنید. برای Jira و Confluence، نسخهٔ هماهنگ از Application Home، Shared Home، Attachmentها و تنظیمات نیز لازم است؛ روش دقیق هماهنگی را با مستندات نسخهٔ نصب‌شدهٔ برنامه تعیین کنید.</p>
+</section>
+<section id="prerequisites" class="article-section">
+<h2>پیش‌نیازها و حدود اجرای راهکار</h2>
+<ul>
+<li>سناریو برای SQL Server 2019 یا 2022 روی Windows، نسخهٔ Standard، Enterprise یا Developer و Instance مستقل است. Developer فقط برای محیط غیرتولیدی است. SQL Server Express فاقد SQL Server Agent است؛ برای آن باید زمان‌بند دیگری مانند Windows Task Scheduler طراحی شود.</li>
+<li>SQL Server Agent باید Running باشد و Startup Type مناسب داشته باشد. این کد برای Azure SQL Database، Availability Group یا مسیر UNC نوشته نشده است؛ در AG باید سیاست Replica و محدودیت نسخهٔ SQL Server جداگانه بررسی شود.</li>
+<li>بکاپ با هویت سرویس <strong>Database Engine</strong> روی دیسک نوشته می‌شود. ساخت فولدر و Cleanup با هویت <strong>CmdExec Proxy</strong> اجرا می‌شوند. مجوز یکی، جایگزین مجوز دیگری نیست.</li>
+<li>روی مسیر اختصاصی Backup، به سرویس Database Engine مجوز لازم برای خواندن و نوشتن و به حساب Proxy مجوز ساخت فولدر و حذف فایل بدهید؛ از Everyone و مجوزهای گسترده پرهیز کنید. پوشهٔ اسکریپت‌ها برای Proxy فقط Read/Execute باشد و تغییر آن در اختیار DBA یا مدیر سیستم بماند.</li>
+<li>اسکریپت‌های PowerShell از Windows PowerShell 5.1 و کتابخانهٔ داخلی SqlClient استفاده می‌کنند و به نصب ماژول SqlServer نیاز ندارند. اتصال Integrated Security، رمزگذاری TLS و اعتبارسنجی Certificate فعال است. مقدار localhost را در محیط واقعی با نام Instance/FQDN مطابق Certificate معتبر جایگزین کنید؛ TrustServerCertificate را برای رفع خطا خاموش و روشن نکنید.</li>
+<li>هشت نام Whitelist مثال هستند. دیتابیس‌های ناموجود را پیش از تست غیرفعال کنید؛ اسکریپت آن‌ها را بی‌صدا رد نمی‌کند. System Databaseها در این Job ممنوع‌اند؛ برای master، model و msdb برنامهٔ جداگانه لازم است. tempdb بکاپ‌پذیر نیست.</li>
+</ul>
+<p>COMPRESSION حجم و I/O Backup را کم می‌کند، ولی هزینهٔ CPU دارد. پیش از فعال‌سازی روی ساعات پرترافیک، مدت اجرا و بار CPU را اندازه بگیرید. <a href="https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/backup-compression-sql-server?view&#61;sql-server-ver17" target="_blank" rel="noopener">محدودیت‌ها و پشتیبانی Compression</a></p>
+</section>
+<section id="recovery-model" class="article-section">
+<h2>Recovery Model در SQL Server: SIMPLE، FULL و BULK_LOGGED</h2>
+<div class="article-table-wrap"><table class="article-table"><thead><tr><th>مدل</th><th>Log Backup</th><th>محدودهٔ بازیابی</th></tr></thead><tbody>
+<tr><td>SIMPLE</td><td>پشتیبانی نمی‌شود</td><td>تا Full یا Differential موجود؛ بازیابی به زمان دلخواه ندارد</td></tr>
+<tr><td>FULL</td><td>ضروری برای سیاست این مقاله</td><td>با زنجیرهٔ سالم Log، بازیابی به نقطهٔ زمانی مشخص</td></tr>
+<tr><td>BULK_LOGGED</td><td>پشتیبانی می‌شود</td><td>اگر Log شامل عملیات minimally logged باشد، توقف در نقطه‌ای داخل همان Log ممکن نیست</td></tr>
+</tbody></table></div>
+<p>در SIMPLE هم تراکنش‌ها در Log ثبت می‌شوند؛ تفاوت این است که بخش غیرفعال Log، در صورت نبود مانع، پس از Checkpoint قابل استفادهٔ مجدد می‌شود و زنجیرهٔ Transaction Log Backup نگهداری نمی‌شود. بنابراین SQL Server دستور BACKUP LOG را در این مدل نمی‌پذیرد. FULL برای Jira و Confluence این سناریو انتخاب شده، چون بازیابی تغییرات بین Backupهای داده لازم است. <a href="https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/recovery-models-sql-server?view&#61;sql-server-ver17" target="_blank" rel="noopener">مقایسهٔ Recovery Modelها</a></p>
+<p>بعد از تغییر SIMPLE به FULL یا BULK_LOGGED، یک Backup داده، یعنی Full یا Differential معتبر، برای شروع زنجیرهٔ Log لازم است. در این Runbook یک <strong>Full معمولی و جدید</strong> می‌گیریم تا پایهٔ Differential و مسیر بازیابی روشن باشد. این الزام به معنی «Full بعد از هر تغییر مدل» نیست: جابه‌جایی FULL و BULK_LOGGED زنجیره را مانند رفتن به SIMPLE قطع نمی‌کند. پیش از خروج از FULL یا BULK_LOGGED، Log Backup بگیرید؛ بازگشت از SIMPLE نیازمند شروع زنجیرهٔ جدید است. <a href="https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/view-or-change-the-recovery-model-of-a-database-sql-server?view&#61;sql-server-ver17" target="_blank" rel="noopener">تغییر Recovery Model و شروع زنجیره</a></p>
+<pre><code class="language-sql">SELECT name,recovery_model_desc,log_reuse_wait_desc
+FROM sys.databases WHERE name IN (N&#039;DB-Jira&#039;,N&#039;DB-Confluence&#039;);
+GO
+ALTER DATABASE [DB-Jira] SET RECOVERY FULL;
+ALTER DATABASE [DB-Confluence] SET RECOVERY FULL;
+GO
+-- After installing the procedure and preparing folders:
+EXEC DBAOperations.dbo.usp_BackupWhitelist &#64;BackupType&#61;&#039;FULL&#039;;
+EXEC DBAOperations.dbo.usp_BackupWhitelist &#64;BackupType&#61;&#039;LOG&#039;;
+GO</code></pre>
+<p>این دستورات عمداً فقط دو دیتابیس سناریو را تغییر می‌دهند؛ مدل سایر دیتابیس‌های Whitelist را جداگانه تصمیم‌گیری کنید. BULK_LOGGED راه‌حل دائمی برای کوچک‌کردن Log نیست. برای عملیات Bulk باید محدودیت بازیابی همان بازه را از قبل پذیرفته باشید.</p>
+</section>
+<section id="backup-folders" class="article-section">
+<h2>ساختار فولدر Backup و تفکیک دیتابیس‌ها</h2>
+<pre><code>D:\SQLBackup
+├── DB-Jira
+│   ├── FULL
+│   ├── DIFF
+│   └── LOG
+└── DB-Confluence
+    ├── FULL
+    ├── DIFF
+    └── LOG</code></pre>
+<p>تفکیک مسیر هر دیتابیس، پیدا کردن فایل‌های Restore، کنترل حجم و ممیزی Cleanup را ساده می‌کند. Full و Differential با پسوند bak و Log با پسوند trn ذخیره می‌شوند. نام فایل شامل نام دیتابیس، نوع Backup، تاریخ و زمان UTC با میلی‌ثانیه و GUID است؛ تکرار دستی یا Retry فایل قبلی را بازنویسی نمی‌کند.</p>
+<p>حرف D در این مثال فقط یک مسیر است؛ جدا بودن Drive Letter به معنی مستقل بودن Storage نیست. اگر دیتابیس و Backup روی همان دیسک، LUN یا Storage خرابی‌پذیر قرار دارند، همچنان یک نقطهٔ شکست دارید. برای چند Instance روی یک سرور، Root و دیتابیس مدیریتی مستقل تعریف کنید تا Audit و فایل‌ها مخلوط نشوند.</p>
+</section>
+<section id="configuration" class="article-section">
+<h2>اسکریپت Backup چند دیتابیس با Whitelist و Audit</h2>
+<p>فایل زیر دیتابیس مدیریتی DBAOperations، جدول Whitelist، جدول ثبت نتیجه و Stored Procedure را ایجاد می‌کند. Whitelist دقیقاً نام‌های درخواست‌شده را دارد و به‌صورت خودکار تمام دیتابیس‌های سرور را انتخاب نمی‌کند. Compression و CHECKSUM همیشه فعال‌اند؛ TRY/CATCH خطای هر دیتابیس را ثبت می‌کند و پس از تلاش برای بقیه، در صورت هر شکست، Step را Failed می‌کند.</p>
+<p>Stored Procedure مسیر را کنترل می‌کند، دیتابیس‌های سیستمی، Snapshot، دیتابیس Offline و AG را رد می‌کند و Log Backup در SIMPLE را خطا می‌داند. این راهکار فولدر را با یک Step PowerShell ایجاد می‌کند؛ نیازی به xp_cmdshell یا xp_create_subdir ندارد. حساب T-SQL Job در این نمونه یک حساب مورد اعتماد DBA با دسترسی لازم برای Backup و VERIFYONLY است؛ مجوزدهی محدودتر باید با Module Signing و آزمون دسترسی طراحی شود.</p>
+<div class="article-code"><div class="article-code-header"><span class="article-code-label">01-backup-procedure.sql</span><button type="button" class="article-copy-button">کپی</button></div><pre><code class="language-sql">-- SQL Server 2019/2022 on Windows, Standard/Enterprise/Developer.
+-- DBA installation. No xp_cmdshell or undocumented folder procedures.
+USE master;
+GO
+IF DB_ID(N&#039;DBAOperations&#039;) IS NULL CREATE DATABASE [DBAOperations];
+GO
+USE [DBAOperations];
+GO
+IF OBJECT_ID(N&#039;dbo.BackupWhitelist&#039;, N&#039;U&#039;) IS NULL
+CREATE TABLE dbo.BackupWhitelist
+(
+    DatabaseName sysname NOT NULL PRIMARY KEY,
+    Enabled bit NOT NULL CONSTRAINT DF_BackupWhitelist_Enabled DEFAULT (1)
+);
+IF OBJECT_ID(N&#039;dbo.BackupAudit&#039;, N&#039;U&#039;) IS NULL
+BEGIN
+    CREATE TABLE dbo.BackupAudit
+    (
+        AuditId bigint IDENTITY PRIMARY KEY,
+        RunId uniqueidentifier NOT NULL,
+        DatabaseName sysname NOT NULL,
+        BackupType varchar(4) NOT NULL,
+        StartedUtc datetime2(3) NOT NULL,
+        FinishedUtc datetime2(3) NULL,
+        BackupRoot nvarchar(200) NOT NULL,
+        BackupFile nvarchar(260) NULL,
+        Status varchar(12) NOT NULL,
+        Verified bit NOT NULL CONSTRAINT DF_BackupAudit_Verified DEFAULT (0),
+        ErrorNumber int NULL,
+        ErrorMessage nvarchar(4000) NULL
+    );
+    CREATE INDEX IX_BackupAudit_Retention
+        ON dbo.BackupAudit(DatabaseName, BackupType, Status, FinishedUtc);
+END;
+INSERT dbo.BackupWhitelist(DatabaseName)
+SELECT v.DatabaseName FROM (VALUES
+    (N&#039;DB-Confluence&#039;), (N&#039;DB-Jira&#039;), (N&#039;DWConfiguration&#039;), (N&#039;DWDiagnostics&#039;),
+    (N&#039;DWQueue&#039;), (N&#039;ORACLE_VIEW&#039;), (N&#039;RAYDANA_DB&#039;), (N&#039;STLA&#039;)
+) v(DatabaseName)
+WHERE NOT EXISTS
+    (SELECT 1 FROM dbo.BackupWhitelist w WHERE w.DatabaseName &#61; v.DatabaseName);
+GO
+CREATE OR ALTER PROCEDURE dbo.usp_BackupWhitelist
+    &#64;BackupType varchar(4),
+    &#64;BackupRoot nvarchar(200) &#61; N&#039;D:\SQLBackup&#039;,
+    &#64;Verify bit &#61; 1,
+    &#64;EncryptionCertificate sysname &#61; NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF &#64;&#64;TRANCOUNT &gt; 0 THROW 51000, &#039;Run backups outside a user transaction.&#039;, 1;
+    SET &#64;BackupType &#61; UPPER(&#64;BackupType);
+    IF &#64;BackupType IS NULL OR &#64;BackupType NOT IN (&#039;FULL&#039;,&#039;DIFF&#039;,&#039;LOG&#039;)
+        THROW 51001, &#039;BackupType must be FULL, DIFF or LOG.&#039;, 1;
+    IF &#64;Verify IS NULL THROW 51002, &#039;Verify must be 0 or 1.&#039;, 1;
+    IF &#64;BackupRoot IS NULL OR LEN(&#64;BackupRoot) &gt; 100
+       OR &#64;BackupRoot NOT LIKE N&#039;[A-Za-z]:\%&#039;
+       OR CHARINDEX(N&#039;..&#039;, &#64;BackupRoot) &gt; 0 OR CHARINDEX(N&#039;/&#039;, &#64;BackupRoot) &gt; 0
+        THROW 51003, &#039;Use a local absolute backup root, up to 100 characters.&#039;, 1;
+    WHILE RIGHT(&#64;BackupRoot, 1) &#61; N&#039;\&#039;
+        SET &#64;BackupRoot &#61; LEFT(&#64;BackupRoot, LEN(&#64;BackupRoot)-1);
+    IF LEN(&#64;BackupRoot) &lt; 4 THROW 51004, &#039;Do not use a drive root.&#039;, 1;
+    IF NOT EXISTS (SELECT 1 FROM dbo.BackupWhitelist WHERE Enabled &#61; 1)
+        THROW 51005, &#039;Whitelist is empty; no backups were taken.&#039;, 1;
+    IF &#64;EncryptionCertificate IS NOT NULL AND NOT EXISTS
+       (SELECT 1 FROM master.sys.certificates WHERE name &#61; &#64;EncryptionCertificate)
+        THROW 51006, &#039;Encryption certificate is missing in master.&#039;, 1;
 
-                <section id="article-status" class="article-section">
-                  <h2 data-en="Prerequisites" data-fa="پیش‌نیازها">
-                    Prerequisites
-                  </h2>
-                  <ul>
-                    <li
-                      data-en="SQL Server Agent is enabled."
-                      data-fa="SQL Server Agent فعال باشد."
-                    >
-                      SQL Server Agent is enabled.
-                    </li>
-                    <li
-                      data-en="Appropriate access to SQL Server is available."
-                      data-fa="دسترسی مناسب به SQL Server در دسترس باشد."
-                    >
-                      Appropriate access to SQL Server is available.
-                    </li>
-                    <li
-                      data-en="There is sufficient storage space for the backup."
-                      data-fa="فضای کافی برای Backup وجود داشته باشد."
-                    >
-                      There is sufficient storage space for the backup.
-                    </li>
-                    <li
-                      data-en="The SQL Server Service Account can access the destination path."
-                      data-fa="SQL Server Service Account به مسیر مقصد دسترسی داشته باشد."
-                    >
-                      The SQL Server Service Account can access the destination
-                      path.
-                    </li>
-                  </ul>
-                </section>
-
-                <section id="planned-sections" class="article-section">
-                  <h2
-                    data-en="01 — Check SQL Server Agent"
-                    data-fa="۰۱ — بررسی SQL Server Agent"
-                  >
-                    01 — Check SQL Server Agent
-                  </h2>
-                  <p
-                    data-en="In SQL Server Management Studio, confirm that the SQL Server Agent service is in the Running state before creating the job."
-                    data-fa="در SQL Server Management Studio بررسی کنید سرویس SQL Server Agent در وضعیت Running باشد؛ سپس Job را ایجاد کنید."
-                  >
-                    In SQL Server Management Studio, confirm that the SQL Server
-                    Agent service is in the Running state before creating the
-                    job.
-                  </p>
-                </section>
-
-                <section id="test-full-backup" class="article-section">
-                  <h2
-                    data-en="02 — Test a full backup"
-                    data-fa="۰۲ — تست Full Backup"
-                  >
-                    02 — Test a full backup
-                  </h2>
-                  <p
-                    data-en="Run a full backup once before scheduling it to confirm that the database and destination path are ready."
-                    data-fa="پیش از زمان‌بندی، یک Full Backup را یک‌بار اجرا کنید تا آماده‌بودن دیتابیس و مسیر مقصد تأیید شود."
-                  >
-                    Run a full backup once before scheduling it to confirm that
-                    the database and destination path are ready.
-                  </p>
-                  <div class="article-code">
-                    <div class="article-code-header">
-                      <span
-                        class="article-code-label"
-                        data-en="T-SQL"
-                        data-fa="T-SQL"
-                        >T-SQL</span
-                      >
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        Copy
-                      </button>
-                    </div>
-                    <pre><code class="language-sql">BACKUP DATABASE [NewShop]
-TO DISK = N'D:\SQLBackup\NewShop_FULL.bak'
-WITH
-    COMPRESSION,
-    CHECKSUM,
-    STATS = 10;</code></pre>
-                  </div>
-                  <div class="article-callout article-callout--tip">
-                    <p
-                      class="article-callout-title"
-                      data-en="Backup options"
-                      data-fa="گزینه‌های Backup"
-                    >
-                      Backup options
-                    </p>
-                    <p
-                      data-en="COMPRESSION reduces backup size. CHECKSUM helps detect possible corruption during the backup operation, and STATS = 10 reports progress at 10-percent intervals."
-                      data-fa="COMPRESSION حجم Backup را کاهش می‌دهد. CHECKSUM برای تشخیص خرابی احتمالی در فرایند Backup استفاده می‌شود و STATS = 10 میزان پیشرفت را در بازه‌های ۱۰ درصدی گزارش می‌کند."
-                    >
-                      COMPRESSION reduces backup size. CHECKSUM helps detect
-                      possible corruption during the backup operation, and STATS
-                      = 10 reports progress at 10-percent intervals.
-                    </p>
-                  </div>
-                </section>
-
-                <section id="create-job" class="article-section">
-                  <h2
-                    data-en="03 — Create a SQL Server Agent job"
-                    data-fa="۰۳ — ساخت SQL Server Agent Job"
-                  >
-                    03 — Create a SQL Server Agent job
-                  </h2>
-                  <p
-                    data-en="In SQL Server Management Studio, open SQL Server Agent, then Jobs, and select New Job."
-                    data-fa="در SQL Server Management Studio به مسیر SQL Server Agent > Jobs > New Job بروید."
-                  >
-                    In SQL Server Management Studio, open SQL Server Agent, then
-                    Jobs, and select New Job.
-                  </p>
-                  <div class="article-card-note">
-                    <p
-                      data-en="On the Steps page, create a step with the Transact-SQL script (T-SQL) type and add the backup command to that step."
-                      data-fa="در بخش Steps، یک Step از نوع Transact-SQL script (T-SQL) ایجاد کرده و دستور Backup را در آن قرار دهید."
-                    >
-                      On the Steps page, create a step with the Transact-SQL
-                      script (T-SQL) type and add the backup command to that
-                      step.
-                    </p>
-                  </div>
-                </section>
-
-                <section id="dated-backup-file" class="article-section">
-                  <h2
-                    data-en="04 — Create a dated backup file"
-                    data-fa="۰۴ — ایجاد فایل Backup با تاریخ"
-                  >
-                    04 — Create a dated backup file
-                  </h2>
-                  <p
-                    data-en="Use the following script in the job step to add the execution date to the backup file name."
-                    data-fa="برای افزودن تاریخ اجرا به نام فایل Backup، اسکریپت زیر را در Job Step قرار دهید."
-                  >
-                    Use the following script in the job step to add the
-                    execution date to the backup file name.
-                  </p>
-                  <div class="article-code">
-                    <div class="article-code-header">
-                      <span
-                        class="article-code-label"
-                        data-en="T-SQL"
-                        data-fa="T-SQL"
-                        >T-SQL</span
-                      >
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        Copy
-                      </button>
-                    </div>
-                    <pre><code class="language-sql">DECLARE @FileName nvarchar(500);
-
-SET @FileName =
-    N'D:\SQLBackup\NewShop_FULL_' +
-    CONVERT(char(8), GETDATE(), 112) +
-    N'.bak';
-
-BACKUP DATABASE [NewShop]
-TO DISK = @FileName
-WITH COMPRESSION, CHECKSUM, STATS = 10;</code></pre>
-                  </div>
-                </section>
-
-                <section id="schedule" class="article-section">
-                  <h2
-                    data-en="05 — Configure the schedule"
-                    data-fa="۰۵ — تنظیم Schedule"
-                  >
-                    05 — Configure the schedule
-                  </h2>
-                  <p
-                    data-en="On the Schedules page of the job, add a recurring schedule. For example, configure the Full Backup to run every night at 02:00."
-                    data-fa="در بخش Schedules مربوط به Job، یک Schedule تکرارشونده ایجاد کنید؛ برای مثال Full Backup را هر شب ساعت ۰۲:۰۰ اجرا کنید."
-                  >
-                    On the Schedules page of the job, add a recurring schedule.
-                    For example, configure the Full Backup to run every night at
-                    02:00.
-                  </p>
-                  <div class="article-callout article-callout--warning">
-                    <p
-                      class="article-callout-title"
-                      data-en="Plan the schedule"
-                      data-fa="Schedule را با برنامه‌ریزی انتخاب کنید"
-                    >
-                      Plan the schedule
-                    </p>
-                    <p
-                      data-en="Choose a time that fits the workload and available storage capacity of the server."
-                      data-fa="زمان اجرا را متناسب با بار کاری و ظرفیت ذخیره‌سازی در دسترس سرور انتخاب کنید."
-                    >
-                      Choose a time that fits the workload and available storage
-                      capacity of the server.
-                    </p>
-                  </div>
-                </section>
-
-                <section id="verify-backup" class="article-section">
-                  <h2
-                    data-en="06 — Verify the backup"
-                    data-fa="۰۶ — بررسی صحت Backup"
-                  >
-                    06 — Verify the backup
-                  </h2>
-                  <p
-                    data-en="Use RESTORE VERIFYONLY to check that the backup set is complete and readable."
-                    data-fa="از RESTORE VERIFYONLY برای بررسی کامل‌بودن و خوانا بودن Backup Set استفاده کنید."
-                  >
-                    Use RESTORE VERIFYONLY to check that the backup set is
-                    complete and readable.
-                  </p>
-                  <div class="article-code">
-                    <div class="article-code-header">
-                      <span
-                        class="article-code-label"
-                        data-en="T-SQL"
-                        data-fa="T-SQL"
-                        >T-SQL</span
-                      >
-                      <button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        Copy
-                      </button>
-                    </div>
-                    <pre><code class="language-sql">RESTORE VERIFYONLY
-FROM DISK = N'D:\SQLBackup\NewShop_FULL_20260902.bak';</code></pre>
-                  </div>
-                  <div class="article-callout article-callout--warning">
-                    <p
-                      class="article-callout-title"
-                      data-en="Important limitation"
-                      data-fa="محدودیت مهم"
-                    >
-                      Important limitation
-                    </p>
-                    <p
-                      data-en="RESTORE VERIFYONLY is not a replacement for a real restore test. Backups must be restored periodically to a test environment and verified there."
-                      data-fa="RESTORE VERIFYONLY جایگزین تست واقعی Restore نیست. Backup باید به‌صورت دوره‌ای واقعاً روی محیط Test Restore و در همان محیط بررسی شود."
-                    >
-                      RESTORE VERIFYONLY is not a replacement for a real restore
-                      test. Backups must be restored periodically to a test
-                      environment and verified there.
-                    </p>
-                  </div>
-                </section>
-
-                <section id="job-history" class="article-section">
-                  <h2
-                    data-en="07 — Review job history"
-                    data-fa="۰۷ — بررسی تاریخچه Job"
-                  >
-                    07 — Review job history
-                  </h2>
-                  <p
-                    data-en="In SQL Server Management Studio, expand SQL Server Agent and Jobs, right-click the job, and select View History. Review failed runs and the messages recorded for the job step; use the SQL Server Agent error information to investigate failures."
-                    data-fa="در SQL Server Management Studio، SQL Server Agent و سپس Jobs را باز کنید، روی Job راست‌کلیک کرده و View History را انتخاب کنید. اجراهای ناموفق و پیام‌های ثبت‌شده برای Job Step را بررسی کنید و برای بررسی خطاها از اطلاعات خطای SQL Server Agent استفاده کنید."
-                  >
-                    In SQL Server Management Studio, expand SQL Server Agent and
-                    Jobs, right-click the job, and select View History. Review
-                    failed runs and the messages recorded for the job step; use
-                    the SQL Server Agent error information to investigate
-                    failures.
-                  </p>
-                </section>
-
-                <section id="troubleshooting" class="article-section">
-                  <h2 data-en="Troubleshooting" data-fa="رفع اشکال">
-                    Troubleshooting
-                  </h2>
-                  <div class="article-grid">
-                    <div class="article-card article-card--method">
-                      <span class="article-card-icon"
-                        ><i class="bi bi-play-circle" aria-hidden="true"></i
-                      ></span>
-                      <div class="article-card-content">
-                        <h3
-                          class="article-card-title"
-                          data-en="SQL Server Agent is not running"
-                          data-fa="SQL Server Agent در حال اجرا نیست"
-                        >
-                          SQL Server Agent is not running
-                        </h3>
-                        <p
-                          data-en="Start SQL Server Agent and confirm that its status is Running before expecting the schedule to execute."
-                          data-fa="SQL Server Agent را اجرا کرده و پیش از انتظار برای اجرای Schedule، وضعیت آن را روی Running تأیید کنید."
-                        >
-                          Start SQL Server Agent and confirm that its status is
-                          Running before expecting the schedule to execute.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="article-card article-card--method">
-                      <span class="article-card-icon"
-                        ><i class="bi bi-folder-x" aria-hidden="true"></i
-                      ></span>
-                      <div class="article-card-content">
-                        <h3
-                          class="article-card-title"
-                          data-en="The destination path cannot be accessed"
-                          data-fa="مسیر مقصد در دسترس نیست"
-                        >
-                          The destination path cannot be accessed
-                        </h3>
-                        <p
-                          data-en="Verify that the backup folder exists and that the SQL Server Service Account has the required access to it."
-                          data-fa="بررسی کنید پوشه Backup وجود دارد و SQL Server Service Account دسترسی لازم به آن را دارد."
-                        >
-                          Verify that the backup folder exists and that the SQL
-                          Server Service Account has the required access to it.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="article-card article-card--method">
-                      <span class="article-card-icon"
-                        ><i class="bi bi-device-hdd" aria-hidden="true"></i
-                      ></span>
-                      <div class="article-card-content">
-                        <h3
-                          class="article-card-title"
-                          data-en="There is not enough disk space"
-                          data-fa="فضای دیسک کافی نیست"
-                        >
-                          There is not enough disk space
-                        </h3>
-                        <p
-                          data-en="Check the available space in the backup destination and review the retention plan before the next scheduled run."
-                          data-fa="پیش از اجرای زمان‌بندی‌شده بعدی، فضای موجود در مسیر Backup و برنامه نگهداری فایل‌ها را بررسی کنید."
-                        >
-                          Check the available space in the backup destination
-                          and review the retention plan before the next
-                          scheduled run.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="article-card article-card--method">
-                      <span class="article-card-icon"
-                        ><i class="bi bi-clock-history" aria-hidden="true"></i
-                      ></span>
-                      <div class="article-card-content">
-                        <h3
-                          class="article-card-title"
-                          data-en="The job fails or does not run"
-                          data-fa="Job اجرا نمی‌شود یا ناموفق است"
-                        >
-                          The job fails or does not run
-                        </h3>
-                        <p
-                          data-en="Review Job History, the job step message, the schedule configuration, and SQL Server Agent error information to identify the failed stage."
-                          data-fa="برای شناسایی مرحله ناموفق، Job History، پیام Job Step، تنظیمات Schedule و اطلاعات خطای SQL Server Agent را بررسی کنید."
-                        >
-                          Review Job History, the job step message, the schedule
-                          configuration, and SQL Server Agent error information
-                          to identify the failed stage.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <section id="best-practices" class="article-section">
-                  <h2 data-en="Best practices" data-fa="بهترین روش‌ها">
-                    Best practices
-                  </h2>
-                  <div class="article-callout article-callout--tip">
-                    <ul>
-                      <li
-                        data-en="Keep the backup destination available and ensure the SQL Server Service Account has the required access."
-                        data-fa="مسیر Backup را در دسترس نگه دارید و دسترسی لازم SQL Server Service Account را تأیید کنید."
-                      >
-                        Keep the backup destination available and ensure the SQL
-                        Server Service Account has the required access.
-                      </li>
-                      <li
-                        data-en="Use COMPRESSION and CHECKSUM as appropriate for the backup policy."
-                        data-fa="متناسب با سیاست Backup، از COMPRESSION و CHECKSUM استفاده کنید."
-                      >
-                        Use COMPRESSION and CHECKSUM as appropriate for the
-                        backup policy.
-                      </li>
-                      <li
-                        data-en="Review Job History after scheduled runs and investigate failed executions promptly."
-                        data-fa="پس از اجراهای زمان‌بندی‌شده Job History را بررسی کرده و اجراهای ناموفق را سریع بررسی کنید."
-                      >
-                        Review Job History after scheduled runs and investigate
-                        failed executions promptly.
-                      </li>
-                      <li
-                        data-en="Periodically restore backups to a test environment; verification alone is not a restore test."
-                        data-fa="Backupها را به‌صورت دوره‌ای روی محیط Test Restore کنید؛ بررسی صحت به‌تنهایی تست Restore نیست."
-                      >
-                        Periodically restore backups to a test environment;
-                        verification alone is not a restore test.
-                      </li>
-                    </ul>
-                  </div>
-                </section>
-
-                <section id="faq" class="article-section">
-                  <h2
-                    data-en="Frequently asked questions"
-                    data-fa="سوالات متداول"
-                  >
-                    Frequently asked questions
-                  </h2>
-                  <div class="article-faq">
-                    <div class="article-faq-item">
-                      <h3 class="article-faq-question">
-                        <span
-                          data-en="What type of job step should be created for the backup command?"
-                          data-fa="برای دستور Backup چه نوع Job Step باید ایجاد شود؟"
-                          >What type of job step should be created for the
-                          backup command?</span
-                        ><i class="bi bi-chevron-down" aria-hidden="true"></i>
-                      </h3>
-                      <div class="article-faq-answer">
-                        <p
-                          data-en="Create a step with the Transact-SQL script (T-SQL) type and place the backup script in that step."
-                          data-fa="یک Step از نوع Transact-SQL script (T-SQL) ایجاد کرده و اسکریپت Backup را در آن قرار دهید."
-                        >
-                          Create a step with the Transact-SQL script (T-SQL)
-                          type and place the backup script in that step.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="article-faq-item">
-                      <h3 class="article-faq-question">
-                        <span
-                          data-en="Can RESTORE VERIFYONLY replace a test restore?"
-                          data-fa="آیا RESTORE VERIFYONLY می‌تواند جایگزین تست Restore شود؟"
-                          >Can RESTORE VERIFYONLY replace a test restore?</span
-                        ><i class="bi bi-chevron-down" aria-hidden="true"></i>
-                      </h3>
-                      <div class="article-faq-answer">
-                        <p
-                          data-en="No. It verifies that the backup is complete and readable but does not perform a real restore. Periodically restore the backup to a test environment."
-                          data-fa="خیر. این دستور کامل‌بودن و خوانا بودن Backup را بررسی می‌کند، اما Restore واقعی انجام نمی‌دهد. Backup را به‌صورت دوره‌ای روی محیط Test Restore کنید."
-                        >
-                          No. It verifies that the backup is complete and
-                          readable but does not perform a real restore.
-                          Periodically restore the backup to a test environment.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="article-faq-item">
-                      <h3 class="article-faq-question">
-                        <span
-                          data-en="Where can I review failures of a scheduled backup job?"
-                          data-fa="خطاهای Job زمان‌بندی‌شده Backup را از کجا بررسی کنم؟"
-                          >Where can I review failures of a scheduled backup
-                          job?</span
-                        ><i class="bi bi-chevron-down" aria-hidden="true"></i>
-                      </h3>
-                      <div class="article-faq-answer">
-                        <p
-                          data-en="Use View History for the job in SQL Server Agent and inspect the job-step messages and SQL Server Agent error information."
-                          data-fa="از View History مربوط به Job در SQL Server Agent استفاده کرده و پیام‌های Job Step و اطلاعات خطای SQL Server Agent را بررسی کنید."
-                        >
-                          Use View History for the job in SQL Server Agent and
-                          inspect the job-step messages and SQL Server Agent
-                          error information.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <section id="conclusion" class="article-section">
-                  <h2 data-en="Conclusion" data-fa="جمع‌بندی">Conclusion</h2>
-                  <p
-                    data-en="A scheduled SQL Server Agent job automates full backups after the database, destination path, permissions, and schedule are configured. Verify every backup and regularly perform a real restore in a test environment."
-                    data-fa="با آماده‌سازی دیتابیس، مسیر مقصد، دسترسی‌ها و Schedule، یک SQL Server Agent Job می‌تواند Full Backup را خودکار اجرا کند. هر Backup را بررسی کرده و Restore واقعی را نیز به‌صورت منظم در محیط Test انجام دهید."
-                  >
-                    A scheduled SQL Server Agent job automates full backups
-                    after the database, destination path, permissions, and
-                    schedule are configured. Verify every backup and regularly
-                    perform a real restore in a test environment.
-                  </p>
-                </section>
-
-                <section id="official-resources" class="article-section">
-                  <h2
-                    data-en="Official Microsoft Learn resources"
-                    data-fa="منابع رسمی Microsoft Learn"
-                  >
-                    Official Microsoft Learn resources
-                  </h2>
-                  <ul>
-                    <li>
-                      <a
-                        href="https://learn.microsoft.com/en-us/ssms/agent/create-a-job"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        data-en="Create a SQL Server Agent job"
-                        data-fa="ایجاد SQL Server Agent Job"
-                        >Create a SQL Server Agent job</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="https://learn.microsoft.com/en-us/ssms/agent/schedule-a-job"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        data-en="Configure a SQL Server Agent job schedule"
-                        data-fa="تنظیم Schedule برای SQL Server Agent Job"
-                        >Configure a SQL Server Agent job schedule</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="https://learn.microsoft.com/en-us/sql/t-sql/statements/backup-transact-sql?view=sql-server-ver17"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        data-en="BACKUP (Transact-SQL)"
-                        data-fa="دستور BACKUP در Transact-SQL"
-                        >BACKUP (Transact-SQL)</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="https://learn.microsoft.com/en-us/sql/t-sql/statements/restore-statements-verifyonly-transact-sql?view=sql-server-ver17"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        data-en="RESTORE VERIFYONLY (Transact-SQL)"
-                        data-fa="دستور RESTORE VERIFYONLY در Transact-SQL"
-                        >RESTORE VERIFYONLY (Transact-SQL)</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/back-up-and-restore-of-sql-server-databases?view=sql-server-ver17"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        data-en="Back up and restore SQL Server databases"
-                        data-fa="پشتیبان‌گیری و Restore دیتابیس‌های SQL Server"
-                        >Back up and restore SQL Server databases</a
-                      >
-                    </li>
-                  </ul>
-                </section>
-                <footer class="article-footer" aria-label="Article footer">
+    DECLARE &#64;RunId uniqueidentifier &#61; NEWID(), &#64;Database sysname,
+            &#64;AuditId bigint, &#64;File nvarchar(260), &#64;Sql nvarchar(max),
+            &#64;Stamp varchar(20), &#64;Recovery nvarchar(60), &#64;DatabaseId int,
+            &#64;State nvarchar(60), &#64;SourceId int, &#64;Failures int &#61; 0,
+            &#64;LockResult int, &#64;LockResource nvarchar(255), &#64;Locked bit;
+    DECLARE databases CURSOR LOCAL FAST_FORWARD FOR
+        SELECT DatabaseName FROM dbo.BackupWhitelist WHERE Enabled &#61; 1
+        ORDER BY DatabaseName;
+    OPEN databases;
+    FETCH NEXT FROM databases INTO &#64;Database;
+    WHILE &#64;&#64;FETCH_STATUS &#61; 0
+    BEGIN
+        SET &#64;File &#61; NULL;
+        SET &#64;Locked &#61; 0;
+        INSERT dbo.BackupAudit(RunId,DatabaseName,BackupType,StartedUtc,BackupRoot,Status)
+        VALUES(&#64;RunId,&#64;Database,&#64;BackupType,SYSUTCDATETIME(),&#64;BackupRoot,&#039;RUNNING&#039;);
+        SET &#64;AuditId &#61; SCOPE_IDENTITY();
+        BEGIN TRY
+            IF &#64;Database COLLATE Latin1_General_100_BIN2 LIKE N&#039;%[^A-Za-z0-9_-]%&#039;
+               OR UPPER(&#64;Database) IN
+                  (N&#039;CON&#039;,N&#039;PRN&#039;,N&#039;AUX&#039;,N&#039;NUL&#039;,N&#039;COM1&#039;,N&#039;COM2&#039;,N&#039;COM3&#039;,N&#039;COM4&#039;,
+                   N&#039;COM5&#039;,N&#039;COM6&#039;,N&#039;COM7&#039;,N&#039;COM8&#039;,N&#039;COM9&#039;,N&#039;LPT1&#039;,N&#039;LPT2&#039;,N&#039;LPT3&#039;,
+                   N&#039;LPT4&#039;,N&#039;LPT5&#039;,N&#039;LPT6&#039;,N&#039;LPT7&#039;,N&#039;LPT8&#039;,N&#039;LPT9&#039;)
+                THROW 51007, &#039;Whitelist name is not safe for this folder layout.&#039;, 1;
+            SELECT &#64;DatabaseId &#61; NULL, &#64;Recovery &#61; NULL, &#64;State &#61; NULL, &#64;SourceId &#61; NULL;
+            SELECT &#64;DatabaseId&#61;database_id, &#64;Recovery&#61;recovery_model_desc,
+                   &#64;State&#61;state_desc, &#64;SourceId&#61;source_database_id
+            FROM sys.databases WHERE name &#61; &#64;Database;
+            IF &#64;DatabaseId IS NULL THROW 51008, &#039;Whitelist database does not exist.&#039;, 1;
+            IF &#64;DatabaseId &lt;&#61; 4 THROW 51009, &#039;System databases are excluded.&#039;, 1;
+            IF &#64;State &lt;&gt; N&#039;ONLINE&#039; OR &#64;SourceId IS NOT NULL
+                THROW 51010, &#039;Database must be online and not a snapshot.&#039;, 1;
+            IF &#64;BackupType &#61; &#039;LOG&#039; AND &#64;Recovery &#61; N&#039;SIMPLE&#039;
+                THROW 51011, &#039;SIMPLE recovery does not support log backups.&#039;, 1;
+            IF EXISTS (SELECT 1 FROM sys.databases
+                       WHERE database_id&#61;&#64;DatabaseId AND group_database_id IS NOT NULL)
+                THROW 51012, &#039;Availability Group needs a replica-aware backup policy.&#039;, 1;
+            -- FULL/DIFF serialize; LOG may run concurrently with a data backup.
+            SET &#64;LockResource &#61; N&#039;MeetAJ.Backup.&#039; &#43; &#64;Database &#43;
+                CASE WHEN &#64;BackupType&#61;&#039;LOG&#039; THEN N&#039;.LOG&#039; ELSE N&#039;.DATA&#039; END;
+            EXEC &#64;LockResult &#61; sys.sp_getapplock
+                &#64;Resource&#61;&#64;LockResource, &#64;LockMode&#61;&#039;Exclusive&#039;,
+                &#64;LockOwner&#61;&#039;Session&#039;, &#64;LockTimeout&#61;60000;
+            IF &#64;LockResult &lt; 0 THROW 51013, &#039;Could not acquire the database backup lock.&#039;, 1;
+            SET &#64;Locked &#61; 1;
+            SET &#64;Stamp &#61; CONVERT(char(8),GETUTCDATE(),112) &#43; &#039;_&#039; &#43;
+                         REPLACE(CONVERT(char(12),GETUTCDATE(),114),&#039;:&#039;,&#039;&#039;);
+            IF LEN(&#64;BackupRoot)&#43;LEN(&#64;Database)*2&#43;LEN(&#64;BackupType)&#43;65 &gt; 259
+                THROW 51014, &#039;Backup path would exceed 259 characters.&#039;, 1;
+            SET &#64;File &#61; &#64;BackupRoot &#43; N&#039;\&#039; &#43; &#64;Database &#43; N&#039;\&#039; &#43; &#64;BackupType &#43;
+                        N&#039;\&#039; &#43; &#64;Database &#43; N&#039;_&#039; &#43; &#64;BackupType &#43; N&#039;_&#039; &#43; &#64;Stamp &#43; N&#039;_&#039; &#43;
+                        CONVERT(nvarchar(36),NEWID()) &#43;
+                        CASE WHEN &#64;BackupType&#61;&#039;LOG&#039; THEN N&#039;.trn&#039; ELSE N&#039;.bak&#039; END;
+            UPDATE dbo.BackupAudit SET BackupFile&#61;&#64;File WHERE AuditId&#61;&#64;AuditId;
+            SET &#64;Sql &#61; CASE WHEN &#64;BackupType&#61;&#039;LOG&#039; THEN N&#039;BACKUP LOG &#039; ELSE N&#039;BACKUP DATABASE &#039; END
+                &#43; QUOTENAME(&#64;Database) &#43; N&#039; TO DISK&#61;&#64;Path WITH &#039;
+                &#43; CASE WHEN &#64;BackupType&#61;&#039;DIFF&#039; THEN N&#039;DIFFERENTIAL, &#039; ELSE N&#039;&#039; END
+                &#43; N&#039;COMPRESSION, CHECKSUM, STOP_ON_ERROR, STATS&#61;10&#039;
+                &#43; CASE WHEN &#64;EncryptionCertificate IS NULL THEN N&#039;&#039; ELSE
+                    N&#039;, ENCRYPTION (ALGORITHM&#61;AES_256, SERVER CERTIFICATE&#61;&#039;
+                    &#43; QUOTENAME(&#64;EncryptionCertificate) &#43; N&#039;)&#039; END &#43; N&#039;;&#039;;
+            EXEC sys.sp_executesql &#64;Sql, N&#039;&#64;Path nvarchar(260)&#039;, &#64;Path&#61;&#64;File;
+            IF &#64;Verify&#61;1
+            BEGIN
+                SET &#64;Sql &#61; N&#039;RESTORE VERIFYONLY FROM DISK&#61;&#64;Path WITH CHECKSUM, STOP_ON_ERROR;&#039;;
+                EXEC sys.sp_executesql &#64;Sql, N&#039;&#64;Path nvarchar(260)&#039;, &#64;Path&#61;&#64;File;
+            END;
+            UPDATE dbo.BackupAudit
+                SET Status&#61;&#039;SUCCEEDED&#039;,FinishedUtc&#61;SYSUTCDATETIME(),Verified&#61;&#64;Verify
+                WHERE AuditId&#61;&#64;AuditId;
+        END TRY
+        BEGIN CATCH
+            SET &#64;Failures &#43;&#61; 1;
+            UPDATE dbo.BackupAudit SET Status&#61;&#039;FAILED&#039;,FinishedUtc&#61;SYSUTCDATETIME(),
+                ErrorNumber&#61;ERROR_NUMBER(),ErrorMessage&#61;ERROR_MESSAGE()
+                WHERE AuditId&#61;&#64;AuditId;
+        END CATCH;
+        IF &#64;Locked&#61;1
+            EXEC sys.sp_releaseapplock &#64;Resource&#61;&#64;LockResource, &#64;LockOwner&#61;&#039;Session&#039;;
+        FETCH NEXT FROM databases INTO &#64;Database;
+    END;
+    CLOSE databases;
+    DEALLOCATE databases;
+    IF &#64;Failures &gt; 0
+        THROW 51015, &#039;One or more backups failed. Check DBAOperations.dbo.BackupAudit.&#039;, 1;
+END;
+GO
+</code></pre></div>
+<h3>مدیریت فهرست دیتابیس‌ها پیش از اجرا</h3>
+<p>ابتدا فهرست را با sys.databases مقایسه کنید. اگر مثلاً STLA در این Instance نیست، آن را غیرفعال کنید؛ خطای نام اشتباه را با انتخاب همهٔ دیتابیس‌ها پنهان نکنید. غیرفعال‌کردن یک دیتابیس به معنای پایان خودکار سیاست Retention آن نیست؛ آرشیو و حذف باقی‌ماندهٔ آن نیاز به تصمیم مستقل دارد.</p>
+<pre><code class="language-sql">SELECT w.DatabaseName,w.Enabled,d.state_desc,d.recovery_model_desc
+FROM DBAOperations.dbo.BackupWhitelist w
+LEFT JOIN sys.databases d ON d.name&#61;w.DatabaseName;
+-- Example only: disable a database that is intentionally absent.
+UPDATE DBAOperations.dbo.BackupWhitelist SET Enabled&#61;0 WHERE DatabaseName&#61;N&#039;STLA&#039;;
+-- Add an approved database explicitly:
+-- INSERT DBAOperations.dbo.BackupWhitelist(DatabaseName) VALUES(N&#039;NewShop&#039;);</code></pre>
+<h3>ساخت خودکار فولدرها با PowerShell</h3>
+<p>فایل زیر را با نام C:\DBA\Prepare-SqlBackupFolders.ps1 ذخیره کنید. این فایل Whitelist را می‌خواند و برای هر عضو فعال، FULL، DIFF و LOG را ایجاد می‌کند. نام‌های نامناسب برای Windows و مسیرهای Reparse Point مانند Junction پذیرفته نمی‌شوند.</p>
+<div class="article-code"><div class="article-code-header"><span class="article-code-label">02-prepare-folders.ps1</span><button type="button" class="article-copy-button">کپی</button></div><pre><code class="language-powershell"># Windows PowerShell 5.1. Provision folders without enabling xp_cmdshell.
+param([string]$ServerInstance &#61; &#039;localhost&#039;, [string]$BackupRoot &#61; &#039;D:\SQLBackup&#039;)
+$ErrorActionPreference &#61; &#039;Stop&#039;
+$rootPath &#61; [IO.Path]::GetFullPath($BackupRoot).TrimEnd(&#039;\&#039;)
+if ($rootPath -notmatch &#039;^[A-Za-z]:\\.&#43;&#039; -or $rootPath.Length -gt 100) {
+    throw &#039;Use a local absolute backup folder, not a drive root.&#039;
+}
+function Assert-NoReparsePath([string]$Path) {
+    $currentPath &#61; [IO.Path]::GetFullPath($Path)
+    while ($currentPath) {
+        if (Test-Path -LiteralPath $currentPath) {
+            $item &#61; Get-Item -LiteralPath $currentPath -Force
+            if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) {
+                throw &#34;Reparse points are not permitted: $currentPath&#34;
+            }
+        }
+        $parent &#61; [IO.Directory]::GetParent($currentPath)
+        if ($null -eq $parent) { break }
+        $currentPath &#61; $parent.FullName
+    }
+}
+Assert-NoReparsePath $rootPath
+$builder &#61; New-Object System.Data.SqlClient.SqlConnectionStringBuilder
+$builder.DataSource &#61; $ServerInstance
+$builder.InitialCatalog &#61; &#039;DBAOperations&#039;
+$builder.IntegratedSecurity &#61; $true
+$builder.Encrypt &#61; $true
+$builder.TrustServerCertificate &#61; $false
+$connection &#61; New-Object System.Data.SqlClient.SqlConnection $builder.ConnectionString
+try {
+    $connection.Open()
+    $command &#61; $connection.CreateCommand()
+    $command.CommandText &#61; &#039;SELECT DatabaseName FROM dbo.BackupWhitelist WHERE Enabled&#61;1;&#039;
+    $reader &#61; $command.ExecuteReader()
+    $databases &#61; &#64;()
+    while ($reader.Read()) { $databases &#43;&#61; $reader.GetString(0) }
+    $reader.Close()
+    if ($databases.Count -eq 0) { throw &#039;Whitelist is empty.&#039; }
+    foreach ($database in $databases) {
+        if ($database -notmatch &#039;^[A-Za-z0-9_-]&#43;$&#039; -or
+            $database -match &#039;^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])$&#039; -or
+            $database -in &#64;(&#039;master&#039;,&#039;model&#039;,&#039;msdb&#039;,&#039;tempdb&#039;)) {
+            throw &#34;Unsupported database folder name: $database&#34;
+        }
+        foreach ($kind in &#64;(&#039;FULL&#039;,&#039;DIFF&#039;,&#039;LOG&#039;)) {
+            $directory &#61; Join-Path (Join-Path $rootPath $database) $kind
+            Assert-NoReparsePath $directory
+            [IO.Directory]::CreateDirectory($directory) | Out-Null
+        }
+    }
+} finally { $connection.Dispose() }
+</code></pre></div>
+<p>یک Windows Credential و Proxy به نام <code>SQLBackupFiles</code> از بخش SQL Server Agent → Proxies → Operating System (CmdExec) ایجاد کنید. حساب Proxy باید به DBAOperations متصل شود، SELECT روی BackupWhitelist و BackupAudit داشته باشد و مجوز مناسب روی مسیر فایل‌ها داشته باشد. Credential Password را در اسکریپت مقاله یا Job ذخیره نکنید؛ آن را در رابط امن مدیریت Credential وارد کنید. Job Owner باید اجازهٔ استفاده از Proxy داشته باشد.</p>
+<pre><code class="language-powershell">powershell.exe -NoProfile -NonInteractive -File &#34;C:\DBA\Prepare-SqlBackupFolders.ps1&#34; -ServerInstance &#34;localhost&#34; -BackupRoot &#34;D:\SQLBackup&#34;</code></pre>
+<p>فولدرها را قبل از اولین Full ایجاد کنید. PowerShell مجوز NTFS سرویس Database Engine را تغییر نمی‌دهد؛ آن مجوز را هنگام Provisioning تنظیم کنید. اجرای مستقیم Stored Procedure بدون آماده‌سازی فولدرها ممکن است با خطای مسیر مواجه شود.</p>
+</section>
+<section id="agent-jobs" class="article-section">
+<h2>ساخت SQL Server Agent Job، Step و Schedule</h2>
+<ol>
+<li>در SSMS، SQL Server Agent → Jobs → New Job را باز کنید. نام روشنی مثل MeetAJ - SQL FULL و Owner مورد اعتماد مشخص کنید.</li>
+<li>در Steps، Step اول از نوع Operating system (CmdExec) بسازید؛ Run as را SQLBackupFiles قرار دهید و دستور Prepare-SqlBackupFolders.ps1 را وارد کنید. On success به Step بعدی و On failure به Quit with failure برود.</li>
+<li>Step دوم از نوع Transact-SQL، با Database برابر DBAOperations باشد. برای Full، دستور EXEC dbo.usp_BackupWhitelist &#64;BackupType&#61;&#039;FULL&#039; را قرار دهید؛ برای دو Job دیگر DIFF و LOG. On success برابر Quit with success و On failure برابر Quit with failure باشد.</li>
+<li>Schedule Full را Daily ساعت 01:00 تنظیم کنید. Differential هر شش ساعت از 07:00 تا 19:00 اجرا می‌شود؛ دقیقاً 07:00، 13:00 و 19:00. Log هر پانزده دقیقه از 00:00 تا 23:59:59 اجرا شود.</li>
+<li>Jobها را ابتدا Disabled نگه دارید. Prepare و Full را دستی اجرا کنید؛ سپس Differential و Log را تست کنید. روی Job راست‌کلیک و Start Job at Step انتخاب کنید. Disabled بودن Schedule مانع شروع دستی Job نیست.</li>
+<li>View History را باز کنید و نتیجهٔ <strong>هر Step</strong> را بررسی کنید. هم‌زمان BackupAudit، وجود فایل و msdb.backupset را کنترل کنید؛ نتیجهٔ کلی Job کافی نیست.</li>
+</ol>
+<p>اسکریپت معادل زیر سه Job و Schedule را می‌سازد و Jobهای موجود را بازنویسی نمی‌کند. تمام Jobها Disabled ساخته می‌شوند. در Named Instance یا اتصال دارای Certificate، مقدار ServerInstance داخل دستور Step اول را پیش از اجرا اصلاح کنید. برای ایمیل، پس از تنظیم Database Mail، مقدار &#64;Operator را نام Operator واقعی قرار دهید. <a href="https://learn.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-add-schedule-transact-sql?view&#61;sql-server-ver17" target="_blank" rel="noopener">مرجع پارامترهای Schedule</a></p>
+<div class="article-code"><div class="article-code-header"><span class="article-code-label">03-agent-jobs.sql</span><button type="button" class="article-copy-button">کپی</button></div><pre><code class="language-sql">-- Provision SQLBackupFiles CmdExec proxy first; see article prerequisites.
+-- Save 02-prepare-folders.ps1 as C:\DBA\Prepare-SqlBackupFolders.ps1.
+USE msdb;
+GO
+DECLARE &#64;Proxy sysname&#61;N&#039;SQLBackupFiles&#039;, &#64;Operator sysname&#61;NULL,
+        &#64;Owner sysname&#61;SUSER_SNAME(), &#64;Notify int,
+        &#64;Type varchar(4), &#64;Job sysname, &#64;Schedule sysname, &#64;Command nvarchar(max),
+        &#64;Start int, &#64;End int, &#64;SubType int, &#64;SubInterval int;
+IF NOT EXISTS (SELECT 1 FROM dbo.sysproxies WHERE name&#61;&#64;Proxy AND enabled&#61;1)
+    THROW 51100, &#039;Create the enabled SQLBackupFiles CmdExec proxy first.&#039;, 1;
+IF &#64;Operator IS NOT NULL AND NOT EXISTS
+   (SELECT 1 FROM dbo.sysoperators WHERE name&#61;&#64;Operator AND enabled&#61;1)
+    THROW 51101, &#039;Configured notification operator does not exist.&#039;, 1;
+IF EXISTS (SELECT 1 FROM dbo.sysjobs
+           WHERE name IN (N&#039;MeetAJ - SQL FULL&#039;,N&#039;MeetAJ - SQL DIFF&#039;,N&#039;MeetAJ - SQL LOG&#039;))
+    THROW 51102, &#039;Jobs already exist. Review/update them; do not overwrite.&#039;, 1;
+SET &#64;Notify&#61;CASE WHEN &#64;Operator IS NULL THEN 0 ELSE 2 END;
+BEGIN TRY
+    BEGIN TRANSACTION;
+    DECLARE types CURSOR LOCAL FAST_FORWARD FOR
+        SELECT Kind FROM (VALUES (&#039;FULL&#039;),(&#039;DIFF&#039;),(&#039;LOG&#039;)) t(Kind);
+    OPEN types;
+    FETCH NEXT FROM types INTO &#64;Type;
+    WHILE &#64;&#64;FETCH_STATUS&#61;0
+    BEGIN
+        SET &#64;Job&#61;N&#039;MeetAJ - SQL &#039;&#43;&#64;Type;
+        SET &#64;Schedule&#61;&#64;Job&#43;N&#039; schedule&#039;;
+        -- Jobs stay disabled until a manual FULL/DIFF/LOG test succeeds.
+        EXEC dbo.sp_add_job &#64;job_name&#61;&#64;Job, &#64;enabled&#61;0,
+            &#64;owner_login_name&#61;&#64;Owner, &#64;notify_level_email&#61;&#64;Notify,
+            &#64;notify_email_operator_name&#61;&#64;Operator;
+        EXEC dbo.sp_add_jobstep &#64;job_name&#61;&#64;Job, &#64;step_id&#61;1,
+            &#64;step_name&#61;N&#039;Prepare whitelist folders&#039;, &#64;subsystem&#61;N&#039;CmdExec&#039;,
+            &#64;proxy_name&#61;&#64;Proxy,
+            &#64;command&#61;N&#039;powershell.exe -NoProfile -NonInteractive -File &#34;C:\DBA\Prepare-SqlBackupFolders.ps1&#34; -ServerInstance &#34;localhost&#34; -BackupRoot &#34;D:\SQLBackup&#34;&#039;,
+            &#64;on_success_action&#61;3, &#64;on_fail_action&#61;2, &#64;retry_attempts&#61;0;
+        SET &#64;Command&#61;N&#039;EXEC dbo.usp_BackupWhitelist &#64;BackupType&#61;&#039;&#039;&#039;&#43;&#64;Type&#43;
+            N&#039;&#039;&#039;, &#64;BackupRoot&#61;N&#039;&#039;D:\SQLBackup&#039;&#039;, &#64;Verify&#61;1;&#039;;
+        EXEC dbo.sp_add_jobstep &#64;job_name&#61;&#64;Job, &#64;step_id&#61;2,
+            &#64;step_name&#61;N&#039;Backup and verify&#039;, &#64;subsystem&#61;N&#039;TSQL&#039;,
+            &#64;database_name&#61;N&#039;DBAOperations&#039;, &#64;command&#61;&#64;Command,
+            &#64;on_success_action&#61;1, &#64;on_fail_action&#61;2, &#64;retry_attempts&#61;0;
+        SET &#64;Start&#61;CASE &#64;Type WHEN &#039;FULL&#039; THEN 010000 WHEN &#039;DIFF&#039; THEN 070000 ELSE 000000 END;
+        SET &#64;End&#61;CASE WHEN &#64;Type&#61;&#039;DIFF&#039; THEN 190000 ELSE 235959 END;
+        SET &#64;SubType&#61;CASE &#64;Type WHEN &#039;FULL&#039; THEN 1 WHEN &#039;DIFF&#039; THEN 8 ELSE 4 END;
+        SET &#64;SubInterval&#61;CASE &#64;Type WHEN &#039;FULL&#039; THEN 1 WHEN &#039;DIFF&#039; THEN 6 ELSE 15 END;
+        EXEC dbo.sp_add_jobschedule &#64;job_name&#61;&#64;Job, &#64;name&#61;&#64;Schedule,
+            &#64;enabled&#61;1, &#64;freq_type&#61;4, &#64;freq_interval&#61;1,
+            &#64;freq_subday_type&#61;&#64;SubType, &#64;freq_subday_interval&#61;&#64;SubInterval,
+            &#64;active_start_time&#61;&#64;Start, &#64;active_end_time&#61;&#64;End;
+        EXEC dbo.sp_add_jobserver &#64;job_name&#61;&#64;Job, &#64;server_name&#61;N&#039;(LOCAL)&#039;;
+        FETCH NEXT FROM types INTO &#64;Type;
+    END;
+    CLOSE types;
+    DEALLOCATE types;
+    COMMIT;
+END TRY
+BEGIN CATCH
+    IF &#64;&#64;TRANCOUNT&gt;0 ROLLBACK;
+    THROW;
+END CATCH;
+GO
+</code></pre></div>
+<pre><code class="language-sql">-- Execute individually and wait for each job to finish before starting the next.
+EXEC msdb.dbo.sp_start_job &#64;job_name&#61;N&#039;MeetAJ - SQL FULL&#039;;
+-- After successful FULL:
+EXEC msdb.dbo.sp_start_job &#64;job_name&#61;N&#039;MeetAJ - SQL DIFF&#039;;
+-- After recovery models and log chain have been checked:
+EXEC msdb.dbo.sp_start_job &#64;job_name&#61;N&#039;MeetAJ - SQL LOG&#039;;
+GO
+-- Enable only after validating history, files and restore tests.
+EXEC msdb.dbo.sp_update_job &#64;job_name&#61;N&#039;MeetAJ - SQL FULL&#039;,&#64;enabled&#61;1;
+EXEC msdb.dbo.sp_update_job &#64;job_name&#61;N&#039;MeetAJ - SQL DIFF&#039;,&#64;enabled&#61;1;
+EXEC msdb.dbo.sp_update_job &#64;job_name&#61;N&#039;MeetAJ - SQL LOG&#039;,&#64;enabled&#61;1;
+GO</code></pre>
+<p>دستورات شروع Job غیرهم‌زمان‌اند؛ اجرای پشت‌سرهم آن‌ها به معنی پایان Full قبل از Differential نیست. هر دستور را جداگانه اجرا و پایان آن را در History مشاهده کنید. اگر Session قطع شود یا Agent متوقف شود، Audit ممکن است روی RUNNING بماند؛ آن را نشانهٔ موفقیت فرض نکنید.</p>
+</section>
+<section id="cleanup" class="article-section">
+<h2>Cleanup Job و Retention سی‌روزه بدون شکستن زنجیره</h2>
+<p>دستور سادهٔ حذف «تمام فایل‌های قدیمی‌تر از ۳۰ روز» برای تضمین بازیابی کل پنجرهٔ سی‌روزه کافی نیست. Full پایهٔ نزدیک مرز و Logهای بین آن و اولین نقطهٔ داخل پنجره ممکن است کمی قدیمی‌تر از ۳۰ روز باشند. حذف آن‌ها، بخشی از پنجرهٔ وعده‌داده‌شده را غیرقابل‌بازیابی می‌کند.</p>
+<p>Cleanup این مقاله آخرین Full تأییدشده <strong>قبل از مرز Retention</strong> را برای هر دیتابیس محافظت می‌کند و تمام Full، Differential و Logهای بعد از شروع آن را نگه می‌دارد. فقط فایل‌های قدیمی‌تر از آن پایه، با پسوند معتبر، مسیر مطابق Whitelist و سابقهٔ موفق در Audit، حذف می‌شوند. در نتیجه ممکن است چند ساعت یا در صورت شکست Full، چند روز بیشتر از ۳۰ روز نگهداری شود؛ این حاشیه برای حفظ قابلیت Restore است. اگر هیچ پایهٔ قابل اتکایی پیدا نشود، برای آن دیتابیس حذف انجام نمی‌شود.</p>
+<p>اسکریپت زیر را در C:\DBA\Cleanup-SqlBackups.ps1 ذخیره کنید. پیش‌فرض Preview است. فایل‌های ناشناخته، ناقص یا FAILED را خودکار حذف نمی‌کند؛ آن‌ها باید بعد از بررسی علت، به‌صورت مستقل مدیریت شوند. Audit و msdb History نیز با این Job پاک نمی‌شوند.</p>
+<div class="article-code"><div class="article-code-header"><span class="article-code-label">04-cleanup.ps1</span><button type="button" class="article-copy-button">کپی</button></div><pre><code class="language-powershell"># Windows PowerShell 5.1. Default is preview; -Delete authorizes actual cleanup.
+# Retain the verified FULL before the 30-day boundary, plus ALL backups since it.
+[CmdletBinding(SupportsShouldProcess&#61;$true)]
+param(
+    [string]$ServerInstance &#61; &#039;localhost&#039;,
+    [string]$BackupRoot &#61; &#039;D:\SQLBackup&#039;,
+    [ValidateRange(30,3650)][int]$RetentionDays &#61; 30,
+    [switch]$Delete
+)
+$ErrorActionPreference &#61; &#039;Stop&#039;
+$rootPath &#61; [IO.Path]::GetFullPath($BackupRoot).TrimEnd(&#039;\&#039;)
+if ($rootPath -notmatch &#039;^[A-Za-z]:\\.&#43;&#039; -or $rootPath.Length -gt 100) {
+    throw &#039;Use a dedicated local backup root, not a drive root.&#039;
+}
+function Assert-NoReparsePath([string]$Path) {
+    $currentPath &#61; [IO.Path]::GetFullPath($Path)
+    while ($currentPath) {
+        if (Test-Path -LiteralPath $currentPath) {
+            $item &#61; Get-Item -LiteralPath $currentPath -Force
+            if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) {
+                throw &#34;Reparse point blocked: $currentPath&#34;
+            }
+        }
+        $parent &#61; [IO.Directory]::GetParent($currentPath)
+        if ($null -eq $parent) { break }
+        $currentPath &#61; $parent.FullName
+    }
+}
+Assert-NoReparsePath $rootPath
+$builder &#61; New-Object System.Data.SqlClient.SqlConnectionStringBuilder
+$builder.DataSource &#61; $ServerInstance
+$builder.InitialCatalog &#61; &#039;DBAOperations&#039;
+$builder.IntegratedSecurity &#61; $true
+$builder.Encrypt &#61; $true
+$builder.TrustServerCertificate &#61; $false
+$connection &#61; New-Object System.Data.SqlClient.SqlConnection $builder.ConnectionString
+$candidates &#61; New-Object System.Data.DataTable
+try {
+    $connection.Open()
+    $command &#61; $connection.CreateCommand()
+    $command.CommandText &#61; &#64;&#039;
+DECLARE &#64;Cutoff datetime2(3)&#61;DATEADD(day,-&#64;Days,SYSUTCDATETIME());
+SELECT a.DatabaseName,a.BackupType,a.BackupFile,f.BackupFile AS AnchorFile
+FROM dbo.BackupWhitelist w
+CROSS APPLY (
+    SELECT TOP (1) b.BackupFile,b.StartedUtc
+    FROM dbo.BackupAudit b
+    WHERE b.DatabaseName&#61;w.DatabaseName AND b.BackupRoot&#61;&#64;Root
+      AND b.BackupType&#61;&#039;FULL&#039; AND b.Status&#61;&#039;SUCCEEDED&#039; AND b.Verified&#61;1
+      AND b.FinishedUtc&lt;&#61;&#64;Cutoff
+    ORDER BY b.FinishedUtc DESC,b.AuditId DESC
+) f
+JOIN dbo.BackupAudit a ON a.DatabaseName&#61;w.DatabaseName
+WHERE w.Enabled&#61;1 AND a.BackupRoot&#61;&#64;Root AND a.Status&#61;&#039;SUCCEEDED&#039;
+  AND a.BackupType IN (&#039;FULL&#039;,&#039;DIFF&#039;,&#039;LOG&#039;)
+  AND a.FinishedUtc&lt;f.StartedUtc AND a.FinishedUtc&lt;&#64;Cutoff
+  AND a.BackupFile IS NOT NULL
+ORDER BY a.DatabaseName,a.FinishedUtc;
+&#039;&#64;
+    $command.Parameters.Add(&#039;&#64;Days&#039;,[Data.SqlDbType]::Int).Value&#61;$RetentionDays
+    $command.Parameters.Add(&#039;&#64;Root&#039;,[Data.SqlDbType]::NVarChar,200).Value&#61;$rootPath
+    $reader&#61;$command.ExecuteReader()
+    $candidates.Load($reader)
+    $reader.Close()
+} finally { $connection.Dispose() }
+$cutoffUtc&#61;[DateTime]::UtcNow.AddDays(-$RetentionDays)
+foreach ($row in $candidates.Rows) {
+    $database&#61;[string]$row.DatabaseName
+    $kind&#61;[string]$row.BackupType
+    if ($database -notmatch &#039;^[A-Za-z0-9_-]&#43;$&#039; -or
+        $database -in &#64;(&#039;master&#039;,&#039;model&#039;,&#039;msdb&#039;,&#039;tempdb&#039;)) {
+        throw &#039;Invalid database name in cleanup manifest.&#039;
+    }
+    $expectedDir&#61;Join-Path (Join-Path $rootPath $database) $kind
+    $filePath&#61;[IO.Path]::GetFullPath([string]$row.BackupFile)
+    $anchorPath&#61;[IO.Path]::GetFullPath([string]$row.AnchorFile)
+    $anchorDir&#61;Join-Path (Join-Path $rootPath $database) &#039;FULL&#039;
+    if (-not [IO.Path]::GetDirectoryName($filePath).Equals($expectedDir,[StringComparison]::OrdinalIgnoreCase) -or
+        -not [IO.Path]::GetDirectoryName($anchorPath).Equals($anchorDir,[StringComparison]::OrdinalIgnoreCase)) {
+        throw &#34;Manifest path is outside the expected backup directory: $filePath&#34;
+    }
+    Assert-NoReparsePath $filePath
+    Assert-NoReparsePath $anchorPath
+    if (-not (Test-Path -LiteralPath $anchorPath -PathType Leaf)) {
+        throw &#34;Protected FULL backup is missing; cleanup stopped: $anchorPath&#34;
+    }
+    $extension&#61;if ($kind -eq &#039;LOG&#039;) { &#039;.trn&#039; } else { &#039;.bak&#039; }
+    if ([IO.Path]::GetExtension($filePath) -ne $extension -or
+        -not [IO.Path]::GetFileName($filePath).StartsWith($database&#43;&#039;_&#039;&#43;$kind&#43;&#039;_&#039;,[StringComparison]::OrdinalIgnoreCase)) {
+        throw &#34;Unexpected backup filename: $filePath&#34;
+    }
+    if (-not (Test-Path -LiteralPath $filePath -PathType Leaf)) { continue }
+    $file&#61;Get-Item -LiteralPath $filePath -Force
+    if ($file.LastWriteTimeUtc -ge $cutoffUtc) { continue }
+    if (-not $Delete) { Write-Output &#34;PREVIEW: $filePath&#34;; continue }
+    if ($PSCmdlet.ShouldProcess($filePath,&#039;Delete expired SQL backup&#039;)) {
+        Remove-Item -LiteralPath $filePath -ErrorAction Stop
+        Write-Output &#34;DELETED: $filePath&#34;
+    }
+}
+</code></pre></div>
+<pre><code class="language-powershell"># Preview candidates; no deletion.
+powershell.exe -NoProfile -NonInteractive -File &#34;C:\DBA\Cleanup-SqlBackups.ps1&#34; -RetentionDays 30
+# After reviewing candidates and the protected FULL:
+powershell.exe -NoProfile -NonInteractive -File &#34;C:\DBA\Cleanup-SqlBackups.ps1&#34; -RetentionDays 30 -Delete -WhatIf
+# Actual deletion is performed by the reviewed Cleanup Job.</code></pre>
+<p>Cleanup فقط روی Root اختصاصی همین Instance اجرا شود. حساب‌های دیگر نباید بتوانند هم‌زمان مسیرها را به Junction تبدیل کنند یا فایل پایه را حذف کنند. وجود Full محافظت‌شده روی فایل‌سیستم بررسی می‌شود، اما سالم‌ماندن آن و پیوستگی LSNها همچنان به تست Restore و کنترل زنجیره نیاز دارد.</p>
+<div class="article-code"><div class="article-code-header"><span class="article-code-label">05-cleanup-job.sql</span><button type="button" class="article-copy-button">کپی</button></div><pre><code class="language-sql">-- Save 04-cleanup.ps1 as C:\DBA\Cleanup-SqlBackups.ps1; preview before enabling.
+USE msdb;
+GO
+IF EXISTS (SELECT 1 FROM dbo.sysjobs WHERE name&#61;N&#039;MeetAJ - SQL Cleanup&#039;)
+    THROW 51200, &#039;Cleanup job exists; review it instead of overwriting.&#039;, 1;
+IF NOT EXISTS (SELECT 1 FROM dbo.sysproxies WHERE name&#61;N&#039;SQLBackupFiles&#039; AND enabled&#61;1)
+    THROW 51201, &#039;SQLBackupFiles proxy is missing.&#039;, 1;
+BEGIN TRY
+    BEGIN TRANSACTION;
+    DECLARE &#64;Owner sysname&#61;SUSER_SNAME();
+    EXEC dbo.sp_add_job &#64;job_name&#61;N&#039;MeetAJ - SQL Cleanup&#039;,&#64;enabled&#61;0,&#64;owner_login_name&#61;&#64;Owner;
+    EXEC dbo.sp_add_jobstep &#64;job_name&#61;N&#039;MeetAJ - SQL Cleanup&#039;,
+        &#64;step_name&#61;N&#039;Clean expired backups&#039;,&#64;subsystem&#61;N&#039;CmdExec&#039;,&#64;proxy_name&#61;N&#039;SQLBackupFiles&#039;,
+        &#64;command&#61;N&#039;powershell.exe -NoProfile -NonInteractive -File &#34;C:\DBA\Cleanup-SqlBackups.ps1&#34; -ServerInstance &#34;localhost&#34; -BackupRoot &#34;D:\SQLBackup&#34; -RetentionDays 30 -Delete&#039;,
+        &#64;on_success_action&#61;1,&#64;on_fail_action&#61;2,&#64;retry_attempts&#61;0;
+    EXEC dbo.sp_add_jobschedule &#64;job_name&#61;N&#039;MeetAJ - SQL Cleanup&#039;,
+        &#64;name&#61;N&#039;MeetAJ - cleanup daily 05:00&#039;,&#64;freq_type&#61;4,&#64;freq_interval&#61;1,
+        &#64;active_start_time&#61;050000;
+    EXEC dbo.sp_add_jobserver &#64;job_name&#61;N&#039;MeetAJ - SQL Cleanup&#039;,&#64;server_name&#61;N&#039;(LOCAL)&#039;;
+    COMMIT;
+END TRY
+BEGIN CATCH
+    IF &#64;&#64;TRANCOUNT&gt;0 ROLLBACK;
+    THROW;
+END CATCH;
+GO
+</code></pre></div>
+<p>پس از مشاهدهٔ Preview و تأیید سیاست، Job Cleanup را از SSMS فعال کنید. ساعت 05:00 زمانی پیشنهادی است؛ اگر Full شما تا آن زمان ادامه دارد یا انتقال Off-site تمام نشده، زمان را تغییر دهید و شرط تأیید انتقال را به Runbook اضافه کنید. Maintenance Cleanup Task هم امکان حذف بر اساس سن و پسوند را دارد، اما زنجیرهٔ وابستگی را خودکار حفظ نمی‌کند؛ در این سناریو Cleanup مبتنی بر Audit انتخاب شده است.</p>
+</section>
+<section id="validation" class="article-section">
+<h2>Validation: Backup History، VERIFYONLY و آخرین Backup هر دیتابیس</h2>
+<p>سه لایه را کنترل کنید: Agent History برای اجرای Step، BackupAudit برای نتیجهٔ تک‌تک دیتابیس‌ها و msdb.backupset برای سابقهٔ Backup در SQL Server. اسکریپت زیر نبودن Backup را با NULL نشان می‌دهد؛ دیتابیس بدون Backup از گزارش حذف نمی‌شود.</p>
+<div class="article-code"><div class="article-code-header"><span class="article-code-label">06-validation.sql</span><button type="button" class="article-copy-button">کپی</button></div><pre><code class="language-sql">-- Run on the source instance. msdb timestamps use server local time;
+-- BackupAudit timestamps use UTC.
+USE msdb;
+GO
+SELECT TOP (100) b.database_name,
+    CASE b.type WHEN &#039;D&#039; THEN &#039;FULL&#039; WHEN &#039;I&#039; THEN &#039;DIFF&#039; WHEN &#039;L&#039; THEN &#039;LOG&#039; END AS BackupType,
+    b.backup_start_date,b.backup_finish_date,b.is_copy_only,b.has_backup_checksums,
+    CAST(b.backup_size/1048576.0 AS decimal(18,2)) AS OriginalMB,
+    CAST(b.compressed_backup_size/1048576.0 AS decimal(18,2)) AS CompressedMB,
+    m.physical_device_name,b.first_lsn,b.last_lsn,b.database_backup_lsn
+FROM dbo.backupset b
+JOIN dbo.backupmediafamily m ON m.media_set_id&#61;b.media_set_id
+JOIN DBAOperations.dbo.BackupWhitelist w ON w.DatabaseName&#61;b.database_name AND w.Enabled&#61;1
+WHERE b.type IN (&#039;D&#039;,&#039;I&#039;,&#039;L&#039;)
+ORDER BY b.backup_finish_date DESC;
+GO
+-- OUTER APPLY keeps missing backups visible (NULL), instead of hiding the DB.
+SELECT w.DatabaseName,d.recovery_model_desc,
+       f.backup_finish_date AS LastFull,
+       i.backup_finish_date AS LastDifferential,
+       l.backup_finish_date AS LastLog,
+       d.log_reuse_wait_desc
+FROM DBAOperations.dbo.BackupWhitelist w
+LEFT JOIN sys.databases d ON d.name&#61;w.DatabaseName
+OUTER APPLY (SELECT TOP (1) backup_finish_date FROM dbo.backupset
+    WHERE database_name&#61;w.DatabaseName AND type&#61;&#039;D&#039; AND is_copy_only&#61;0
+    ORDER BY backup_finish_date DESC) f
+OUTER APPLY (SELECT TOP (1) backup_finish_date FROM dbo.backupset
+    WHERE database_name&#61;w.DatabaseName AND type&#61;&#039;I&#039;
+    ORDER BY backup_finish_date DESC) i
+OUTER APPLY (SELECT TOP (1) backup_finish_date FROM dbo.backupset
+    WHERE database_name&#61;w.DatabaseName AND type&#61;&#039;L&#039; AND is_copy_only&#61;0
+    ORDER BY backup_finish_date DESC) l
+WHERE w.Enabled&#61;1;
+GO
+SELECT TOP (100) * FROM DBAOperations.dbo.BackupAudit ORDER BY AuditId DESC;
+GO
+-- Verify the latest successful Jira FULL using its real generated file name.
+DECLARE &#64;File nvarchar(260);
+SELECT TOP (1) &#64;File&#61;BackupFile FROM DBAOperations.dbo.BackupAudit
+WHERE DatabaseName&#61;N&#039;DB-Jira&#039; AND BackupType&#61;&#039;FULL&#039; AND Status&#61;&#039;SUCCEEDED&#039;
+ORDER BY FinishedUtc DESC;
+IF &#64;File IS NULL THROW 51300, &#039;No successful Jira FULL backup found.&#039;, 1;
+RESTORE VERIFYONLY FROM DISK&#61;&#64;File WITH CHECKSUM,STOP_ON_ERROR;
+GO
+-- Example freshness thresholds; integrate these rows with your monitoring.
+-- A successful Agent execution is not a substitute for per-database checks.
+SELECT w.DatabaseName,t.Kind,latest.FinishedUtc,
+    CASE WHEN latest.FinishedUtc IS NULL THEN &#039;MISSING&#039; ELSE &#039;STALE&#039; END AS AlertReason
+FROM DBAOperations.dbo.BackupWhitelist w
+-- DIFF has a 12-hour overnight gap (19:00 to 07:00), so 7h would false-alert.
+-- Use 13h here, or a schedule-aware check for stricter daytime detection.
+CROSS JOIN (VALUES (&#039;FULL&#039;,1560),(&#039;DIFF&#039;,780),(&#039;LOG&#039;,20)) t(Kind,MaxMinutes)
+OUTER APPLY (
+    SELECT TOP (1) a.FinishedUtc FROM DBAOperations.dbo.BackupAudit a
+    WHERE a.DatabaseName&#61;w.DatabaseName AND a.BackupType&#61;t.Kind AND a.Status&#61;&#039;SUCCEEDED&#039;
+    ORDER BY a.FinishedUtc DESC
+) latest
+WHERE w.Enabled&#61;1 AND (latest.FinishedUtc IS NULL OR
+    latest.FinishedUtc&lt;DATEADD(minute,-t.MaxMinutes,SYSUTCDATETIME()));
+GO
+</code></pre></div>
+<p>CHECKSUM احتمال کشف خطا هنگام خواندن صفحات و نوشتن Backup را افزایش می‌دهد. RESTORE VERIFYONLY با CHECKSUM خوانایی Backup و Checksumهای موجود را بررسی می‌کند، اما دیتابیس را Restore نمی‌کند و صحت منطقی داده، سازگاری برنامه یا دستیابی به RTO را ثابت نمی‌کند. <a href="https://learn.microsoft.com/en-us/sql/t-sql/statements/restore-statements-verifyonly-transact-sql?view&#61;sql-server-ver17" target="_blank" rel="noopener">محدودهٔ واقعی VERIFYONLY</a></p>
+<h3>تست Restore روی محیط جدا</h3>
+<ol>
+<li>یک Instance آزمایشی جدا با فضای کافی آماده کنید؛ نام و مسیر مقصد را از Production جدا نگه دارید.</li>
+<li>با RESTORE HEADERONLY، نوع Backup، DatabaseBackupLSN و بازهٔ FirstLSN/LastLSN را کنترل کنید. با RESTORE FILELISTONLY نام Logical Fileها را بخوانید.</li>
+<li>Full را با MOVE به مسیرهای آزمایشی و NORECOVERY برگردانید. آخرین Differential سازگار و Logهای لازم را به ترتیب و با NORECOVERY اعمال کنید.</li>
+<li>برای نقطهٔ زمانی، STOPAT را روی مرحلهٔ Log مناسب اعمال کنید؛ در پایان RECOVERY انجام دهید. در محیط آزمایشی DBCC CHECKDB اجرا کنید.</li>
+<li>Jira یا Confluence آزمایشی را با Home و Attachment هماهنگ راه‌اندازی کنید. زمان کل بازیابی و اختلاف آخرین داده را ثبت و با RPO/RTO مقایسه کنید.</li>
+</ol>
+<p>گزینهٔ REPLACE یا مسیر فایل‌های Production را به‌عنوان دستور عمومی Restore کپی نکنید. فایل‌های Restore واقعی باید از روی همین Backupهای تولیدشده و Logical Fileهای همان دیتابیس انتخاب شوند. یک Restore موفق ماه قبل، قابل‌بازیابی‌بودن زنجیرهٔ امروز را تضمین نمی‌کند.</p>
+</section>
+<section id="troubleshooting" class="article-section">
+<h2>عیب‌یابی Backup Job در SQL Server</h2>
+<div class="article-table-wrap"><table class="article-table"><thead><tr><th>نشانه</th><th>بررسی</th><th>اقدام</th></tr></thead><tbody>
+<tr><td>Log Backup تولید نمی‌شود</td><td>Recovery Model، اولین Full پس از SIMPLE، وضعیت Job LOG و ErrorMessage در Audit</td><td>FULL را برای دیتابیس موردنظر تنظیم کنید، Backup دادهٔ آغازین بگیرید و Log را دستی تست کنید؛ Agent History را بخوانید.</td></tr>
+<tr><td>خطای 4214</td><td>زنجیرهٔ Backup هنوز شروع نشده است</td><td>پس از آماده‌شدن فولدر، Full معمولی بگیرید؛ صرف ALTER DATABASE کافی نیست.</td></tr>
+<tr><td>خطای 3201 / Operating system error 5</td><td>دسترسی سرویس Database Engine به Root و فولدر دیتابیس</td><td>مجوز NTFS یا Share را برای هویت درست اصلاح کنید. دسترسی حسابی که SSMS را اجرا کرده، معیار نوشتن Backup نیست.</td></tr>
+<tr><td>Operating system error 3</td><td>وجود Root و FULL/DIFF/LOG؛ نتیجهٔ Step ساخت فولدر</td><td>Prepare را با همان Proxy اجرا کنید؛ مسیر را روی سرور SQL بررسی کنید، نه سیستم شخصی DBA.</td></tr>
+<tr><td>Job اصلاً اجرا نشده</td><td>Running بودن Agent، Enabled بودن Job و Schedule، ساعت سرور، Step شروع</td><td>سرویس و Schedule را اصلاح کنید؛ نبودن اجرا را با مانیتور Freshness تشخیص دهید.</td></tr>
+<tr><td>فضای دیسک کم است / خطای 112</td><td>حجم Fullها، نرخ رشد Differential و Log، انتقال Off-site و Cleanup</td><td>Capacity را افزایش دهید یا سیاست را بازبینی کنید. Log موردنیاز را برای آزادکردن فضا حذف نکنید.</td></tr>
+<tr><td>Full موفق است ولی Differential خطا می‌دهد</td><td>Full پایهٔ معمولی، تغییر Recovery Model، Fullهای خارج از این Pipeline</td><td>یک Full معمولی جدید بگیرید و زنجیره را بازبینی کنید. COPY_ONLY پایهٔ Differential جدید ایجاد نمی‌کند.</td></tr>
+<tr><td>CHECKSUM یا VERIFYONLY خطا دارد</td><td>خطای دقیق، I/O، Storage، فایل ناقص یا تغییرکرده</td><td>فایل را قرنطینه کنید، زنجیرهٔ جایگزین سالم را بررسی کنید و سلامت دیتابیس/Storage را ارزیابی کنید؛ CONTINUE_AFTER_ERROR را برای سبزکردن Job فعال نکنید.</td></tr>
+<tr><td>فایل Log رشد می‌کند</td><td>log_reuse_wait_desc، Log Backup، تراکنش طولانی، Replica یا Replication</td><td>علت نگهداری Log را برطرف کنید؛ Shrink روزانه و تغییر به SIMPLE جایگزین حل علت نیست.</td></tr>
+<tr><td>PowerShell به SQL وصل نمی‌شود</td><td>Login حساب Proxy، دسترسی جدول‌ها، FQDN، زنجیرهٔ اعتماد TLS و Certificate</td><td>هویت و Certificate را اصلاح کنید؛ SQL Password را داخل Job ننویسید.</td></tr>
+<tr><td>Job Failed است ولی بعضی فایل‌ها ساخته شده‌اند</td><td>Audit هر دیتابیس</td><td>Procedure بعد از تلاش برای همهٔ اعضا خطا می‌دهد؛ فقط دیتابیس یا مرحلهٔ شکست‌خورده را بررسی کنید. فایل حاصل از Verify ناموفق هنوز ممکن است روی دیسک بماند.</td></tr>
+</tbody></table></div>
+</section>
+<section id="security" class="article-section">
+<h2>Backup Encryption و نگهداری Certificate</h2>
+<p>Backup شامل دادهٔ قابل‌خواندن سازمان است و باید در زمان نگهداری و انتقال محافظت شود. Procedure پارامتر &#64;EncryptionCertificate دارد و با Certificate از master، AES_256 را به BACKUP اضافه می‌کند. ابتدا Database Master Key و Certificate را با سیاست مدیریت کلید سازمان ایجاد کنید؛ سپس Certificate و Private Key را در مقصد امن، جدا از فایل‌های Backup، Export کنید. بدون کلید لازم، Restore روی سرور جایگزین امکان‌پذیر نیست. <a href="https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/backup-encryption?view&#61;sql-server-ver17" target="_blank" rel="noopener">پیش‌نیازهای Encryption و بازیابی کلید</a></p>
+<pre><code class="language-sql">-- After provisioning and securely exporting the certificate/private key:
+EXEC DBAOperations.dbo.usp_BackupWhitelist
+    &#64;BackupType&#61;&#039;FULL&#039;,
+    &#64;EncryptionCertificate&#61;N&#039;SqlBackupEncryptionCert&#039;,
+    &#64;Verify&#61;1;
+-- Add the SAME encryption parameter to the DIFF and LOG job commands too.</code></pre>
+<p>پیش‌فرض نمونه برای سهولت تست، Encryption ندارد؛ قبل از Production، Certificate معتبر را آماده و پارامتر را در هر سه Job اضافه کنید. TDE، Backup Encryption و رمزگذاری Storage کاربردهای متفاوت دارند. دسترسی به کلید و امکان Import آن روی Instance بازیابی را دوره‌ای تست کنید و کلید را همراه با همان Backup قابل‌حذف رها نکنید.</p>
+</section>
+<section id="best-practices" class="article-section">
+<h2>Best Practiceهای Enterprise برای Backup SQL Server</h2>
+<ul>
+<li><strong>Storage مستقل و نسخهٔ Off-site:</strong> Backup محلی برای بازیابی سریع است؛ نسخهٔ دوم روی محل مستقل نگهداری شود. حداقل یک نسخهٔ Offline یا Immutable با هویت جدا داشته باشید تا حساب آسیب‌دیده نتواند تمام نسخه‌ها را پاک کند.</li>
+<li><strong>تست Restore:</strong> برای سرویس‌های حیاتی، آزمون منظم Restore و آزمون Point-in-time تعریف کنید؛ نتیجه، مدت و مالک اقدام اصلاحی را ثبت کنید.</li>
+<li><strong>مانیتورینگ:</strong> شکست Job، Backup مفقود یا دیرهنگام برای هر عضو Whitelist، فایل RUNNING مانده، فضای آزاد، مدت اجرا و نتیجهٔ انتقال Off-site را کنترل کنید. نمونهٔ Validation با آستانهٔ Log بیست دقیقه هشدار می‌دهد؛ این آستانه باید متناسب با RPO شما تنظیم شود.</li>
+<li><strong>Alert:</strong> Database Mail را با پروفایل مورد تأیید سازمان تنظیم کنید، آن را در Agent Properties → Alert System انتخاب و Operator بسازید. روی Job Notification، Email When job fails را فعال کنید و یک شکست کنترل‌شده را آزمایش کنید. برای Cleanup هم Notification مستقل لازم است. قطع خود Agent باید از مانیتورینگ خارج از سرور تشخیص داده شود.</li>
+<li><strong>یک مالک برای زنجیره:</strong> Full معمولی خارج از Pipeline می‌تواند مبنای Differential را تغییر دهد. برای Backup موردی از COPY_ONLY استفاده کنید؛ حذف و Restore را با ابزار Backup دیگری بدون هماهنگی این سیاست مخلوط نکنید.</li>
+<li><strong>System Database و کلیدها:</strong> این Job عمداً master، model، msdb و tempdb را کنار می‌گذارد. master، model و msdb، Loginها، Jobها، Certificateها و Runbook باید در برنامهٔ بازیابی جداگانه پوشش داده شوند. Audit مدیریتی نیز به نگهداری و Backup مستقل نیاز دارد.</li>
+<li><strong>Capacity و Performance:</strong> حجم واقعی Full، رشد Differential و تولید Log را اندازه بگیرید. VERIFYONLY تمام فایل را می‌خواند و I/O اضافه دارد؛ برای دیتابیس حجیم می‌توان آن را به Job اعتبارسنجی جدا برد، اما وضعیت Verified و قواعد Cleanup باید با همان فرایند به‌روز شوند.</li>
+<li><strong>Change Control:</strong> افزودن دیتابیس به Whitelist، تغییر Recovery Model، تغییر Root و کاهش Retention باید در تغییرات ثبت شود. یک دیتابیس تازه‌ساخته‌شده تا زمانی که به Whitelist اضافه نشود، پوشش ندارد.</li>
+</ul>
+</section>
+<section id="conclusion" class="article-section">
+<h2>جمع‌بندی: معیار موفقیت، Restore قابل‌اعتماد است</h2>
+<p>برای Jira و Confluence این سناریو، Full روزانه، سه Differential و Log پانزده‌دقیقه‌ای یک نقطهٔ شروع مشخص می‌دهند. ارزش عملی این طراحی در Whitelist صریح، ثبت شکست هر دیتابیس، کنترل زنجیره، Cleanup محافظه‌کارانه، نسخهٔ مستقل و تست Restore است. پیش از فعال‌کردن Scheduleها، نام دیتابیس‌ها، دسترسی‌ها، Certificate، فضای آزاد و بازیابی آزمایشی را تأیید کنید؛ سپس RPO و RTO واقعی را به مالک سرویس گزارش دهید.</p>
+</section>
+<section id="faq" class="article-section article-faq">
+<h2>سوالات متداول دربارهٔ Backup خودکار SQL Server</h2>
+<div class="article-faq-list"><div class="article-faq-item"><h3 class="article-faq-question">چرا در Recovery Model ساده نمی‌توان Log Backup گرفت؟<i class="bi bi-chevron-down" aria-hidden="true"></i></h3><div class="article-faq-answer"><p>در SIMPLE، بخش غیرفعال Transaction Log در صورت نبود مانع پس از Checkpoint قابل استفادهٔ مجدد می‌شود و زنجیرهٔ Log Backup نگهداری نمی‌شود. برای Log Backup باید FULL یا BULK_LOGGED داشته باشید و زنجیره را با Backup داده آغاز کنید.</p></div></div><div class="article-faq-item"><h3 class="article-faq-question">بعد از تغییر SIMPLE به FULL چه کاری لازم است؟<i class="bi bi-chevron-down" aria-hidden="true"></i></h3><div class="article-faq-answer"><p>باید یک Full یا Differential معتبر برای شروع زنجیرهٔ Log گرفته شود. در این سناریو Full معمولی جدید انتخاب می‌شود تا پایهٔ بازیابی روشن باشد؛ سپس Log Backup زمان‌بندی می‌شود. این الزام برای تمام تغییرات Recovery Model یکسان نیست.</p></div></div><div class="article-faq-item"><h3 class="article-faq-question">آیا Differential تغییرات از Differential قبلی را ذخیره می‌کند؟<i class="bi bi-chevron-down" aria-hidden="true"></i></h3><div class="article-faq-answer"><p>خیر. Differential تغییرات از Full پایهٔ معمولی را نگه می‌دارد. برای Restore از Full سازگار، آخرین Differential مناسب و Logهای موردنیاز به ترتیب استفاده می‌شود.</p></div></div><div class="article-faq-item"><h3 class="article-faq-question">آیا VERIFYONLY جایگزین تست Restore است؟<i class="bi bi-chevron-down" aria-hidden="true"></i></h3><div class="article-faq-answer"><p>خیر. VERIFYONLY خوانایی Backup و Checksumهای موجود را بررسی می‌کند، ولی دیتابیس را Restore نمی‌کند. تست Restore، کنترل DBCC CHECKDB، سازگاری برنامه و اندازه‌گیری RTO همچنان لازم‌اند.</p></div></div><div class="article-faq-item"><h3 class="article-faq-question">چرا بعضی فایل‌های قدیمی‌تر از ۳۰ روز حذف نمی‌شوند؟<i class="bi bi-chevron-down" aria-hidden="true"></i></h3><div class="article-faq-answer"><p>برای بازیابی تمام پنجرهٔ سی‌روزه، Full پایهٔ قبل از مرز Retention و Backupهای بعد از آن لازم‌اند. Cleanup این وابستگی را حفظ می‌کند و فایل پایه یا Logهای موردنیاز را صرفاً به خاطر سن حذف نمی‌کند.</p></div></div><div class="article-faq-item"><h3 class="article-faq-question">چه حسابی باید به فولدر Backup دسترسی داشته باشد؟<i class="bi bi-chevron-down" aria-hidden="true"></i></h3><div class="article-faq-answer"><p>سرویس Database Engine فایل Backup را می‌نویسد و می‌خواند. ساخت فولدر و Cleanup در این راهکار با CmdExec Proxy انجام می‌شوند. هر دو هویت به مجوزهای متناسب روی مسیر اختصاصی نیاز دارند.</p></div></div><div class="article-faq-item"><h3 class="article-faq-question">آیا این Job از master، model، msdb و tempdb بکاپ می‌گیرد؟<i class="bi bi-chevron-down" aria-hidden="true"></i></h3><div class="article-faq-answer"><p>خیر. دیتابیس‌های سیستمی حتی اگر به Whitelist اضافه شوند رد می‌شوند. master، model و msdb باید Job جداگانه داشته باشند؛ tempdb بکاپ‌پذیر نیست.</p></div></div><div class="article-faq-item"><h3 class="article-faq-question">آیا SQL Server Agent به‌تنهایی بکاپ Jira و Confluence را کامل می‌کند؟<i class="bi bi-chevron-down" aria-hidden="true"></i></h3><div class="article-faq-answer"><p>خیر. علاوه بر دیتابیس، Home، Shared Home، Attachmentها و تنظیمات برنامه باید با روش سازگار با نسخهٔ نصب‌شده Backup شوند. نسخهٔ مستقل Off-site و تست راه‌اندازی برنامه پس از Restore نیز لازم است.</p></div></div></div>
+</section>
+<section id="official-references" class="article-section">
+<h2>منابع رسمی و اطلاعات انتشار</h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/backup-overview-sql-server?view&#61;sql-server-ver17" target="_blank" rel="noopener">Microsoft: Backup overview</a></li>
+<li><a href="https://learn.microsoft.com/en-us/sql/t-sql/statements/backup-transact-sql?view&#61;sql-server-ver17" target="_blank" rel="noopener">Microsoft: BACKUP Transact-SQL</a></li>
+<li><a href="https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/enable-or-disable-backup-checksums-during-backup-or-restore-sql-server?view&#61;sql-server-ver17" target="_blank" rel="noopener">Microsoft: Backup CHECKSUM و مجوز سرویس</a></li>
+<li><a href="https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/restore-and-recovery-overview-sql-server?view&#61;sql-server-ver17" target="_blank" rel="noopener">Microsoft: Restore and Recovery</a></li>
+</ul>
+<p><strong>Meta Title:</strong> بکاپ خودکار SQL Server؛ راهنمای Enterprise با Agent | Meet AJ</p>
+<p><strong>Meta Description:</strong> طراحی بکاپ SQL Server برای Jira و Confluence؛ Full، Differential و Log، اسکریپت Whitelist، Retention سی‌روزه، Encryption، مانیتورینگ و تست Restore.</p>
+<p><strong>URL پیشنهادی و حفظ‌شده:</strong> <a href="/articles/sql-server-automatic-backup-job">https://meetaj.ir/articles/sql-server-automatic-backup-job</a></p>
+<p>FAQ Schema از همین سوالات قابل‌مشاهده در Head صفحه تولید می‌شود؛ وجود Schema تضمین نمایش Rich Result در موتور جست‌وجو نیست.</p>
+</section>
+<footer class="article-footer" aria-label="Article footer">
                   <section
                     id="author"
                     class="article-author"
@@ -1034,8 +1033,7 @@ FROM DISK = N'D:\SQLBackup\NewShop_FULL_20260902.bak';</code></pre>
                       ></a
                     >
                   </nav>
-                </footer>
-              </article>
+                </footer></article>
             </div>
           </div>
         </div>

@@ -1,33 +1,19 @@
 <?php
 
-// Render the editorial source and executable snippets without duplicating code.
+// Read the article from its original HTML file; this package is not another article.
 $directory = __DIR__;
 $metadata = json_decode(file_get_contents($directory.'/metadata.json'), true, 512, JSON_THROW_ON_ERROR);
 $escape = fn (string $value): string => htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-$content = preg_replace_callback('/\{\{CODE:([a-z0-9.-]+)\}\}/', function (array $match) use ($directory, $escape): string {
-    $file = $directory.'/'.$match[1];
-    if (! is_file($file)) {
-        throw new RuntimeException('Missing article code file: '.$match[1]);
-    }
-    $language = str_ends_with($file, '.sql') ? 'sql' : 'powershell';
-
-    return '<div class="article-code"><div class="article-code-header"><span class="article-code-label">'
-        .$escape($match[1]).'</span><button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی">کپی</button></div>'
-        .'<pre><code class="language-'.$language.'">'.$escape(file_get_contents($file)).'</code></pre></div>';
-}, file_get_contents($directory.'/article.html'));
-$faqHtml = '';
+$source = file_get_contents($directory.'/../../../legacy/articles/sql-server-automatic-backup-job.html');
+if (! preg_match('~<article\b[^>]*class="article-body"[^>]*>(.*?)</article>~is', $source, $body)) {
+    throw new RuntimeException('Original article body is missing.');
+}
+$content = preg_replace('~<footer\b[^>]*class="article-footer"[^>]*>.*?</footer>~is', '', $body[1]);
 $questions = [];
 foreach ($metadata['faq'] as $item) {
-    $faqHtml .= '<div class="article-faq-item"><h3 class="article-faq-question">'.$escape($item['question'])
-        .'<i class="bi bi-chevron-down" aria-hidden="true"></i></h3><div class="article-faq-answer"><p>'
-        .$escape($item['answer']).'</p></div></div>';
     $questions[] = ['@type' => 'Question', 'name' => $item['question'], 'acceptedAnswer' => [
         '@type' => 'Answer', 'text' => $item['answer'],
     ]];
-}
-$content = str_replace('{{FAQ}}', '<div class="article-faq-list">'.$faqHtml.'</div>', $content);
-if (str_contains($content, '{{')) {
-    throw new RuntimeException('Unresolved article template token.');
 }
 $dom = new DOMDocument;
 @$dom->loadHTML('<?xml encoding="UTF-8">'.$content, LIBXML_NONET);

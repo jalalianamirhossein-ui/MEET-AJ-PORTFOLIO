@@ -1,24 +1,27 @@
 # SQL Server Automatic Backup Job — editorial package
 
 Persian enterprise article for the existing `/articles/sql-server-automatic-backup-job` URL.
-The legacy HTML stays unchanged. Category, tags, images, publication date and URL are preserved.
+The complete article is stored in the original `resources/legacy/articles/sql-server-automatic-backup-job.html`.
+Category, tags, images, publication date and URL are preserved.
 
 ## Website installation
 
 ```powershell
 php scripts/update-sql-backup-article.php          # preview
 php scripts/update-sql-backup-article.php --apply  # update this environment's existing row
+php artisan articles:import-legacy --update-existing --slug=sql-server-automatic-backup-job
 php artisan view:clear
 ```
 
 The updater saves the previous row in `storage/app/private/article-revisions/` before changing it.
 It executes no SQL Server backup, Agent job or PowerShell cleanup. Do not run legacy import with
 `--refresh` after editorial changes: it discards CMS edits. The original-versus-rendered legacy
-content comparison will intentionally differ for this rewritten article.
+content comparison now uses the updated original HTML.
 
-`article.html` is the source text; `metadata.json` supplies title, description and eight visible
-FAQ entries. `build.php` embeds the exact SQL/PowerShell files, HTML-escapes them, and derives
-the table of contents and FAQPage schema. Reapply explicitly when updating this package;
+The original legacy HTML is the source text and contains every complete code block. The SQL/PowerShell
+files are standalone copies for execution; update their corresponding blocks when changing code.
+`metadata.json` describes the title and FAQ entries. `build.php` reads the original HTML and derives
+the table of contents. Reapply explicitly when updating this package;
 it is not an automatic sync that overrides later CMS edits.
 
 ## SQL Server runbook

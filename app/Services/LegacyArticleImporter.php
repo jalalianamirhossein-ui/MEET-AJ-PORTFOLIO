@@ -204,24 +204,27 @@ class LegacyArticleImporter
         $categoryLabelFa = $this->attr($html, 'class="article-category"', 'data-fa');
 
         $schema = $this->jsonLd($html);
+        $contentLanguage = $this->namedMeta($html, 'article:content-language') === 'fa' ? 'fa' : 'en';
         $publishedAt = $this->publishedAt($schema, $relative);
         $seo = [
-            'og_title' => $this->englishOrFallback($this->meta($html, 'og:title'), $heroTitle),
+            'og_title' => $contentLanguage === 'fa' ? $this->meta($html, 'og:title') : $this->englishOrFallback($this->meta($html, 'og:title'), $heroTitle),
             'og_description' => $this->meta($html, 'og:description'),
             'og_type' => $this->meta($html, 'og:type'),
             'og_image' => $this->meta($html, 'og:image'),
             'og_url' => $this->meta($html, 'og:url'),
             'twitter_card' => $this->namedMeta($html, 'twitter:card'),
-            'twitter_title' => $this->englishOrFallback($this->namedMeta($html, 'twitter:title'), $heroTitle),
+            'twitter_title' => $contentLanguage === 'fa' ? $this->namedMeta($html, 'twitter:title') : $this->englishOrFallback($this->namedMeta($html, 'twitter:title'), $heroTitle),
             'twitter_description' => $this->namedMeta($html, 'twitter:description'),
             'twitter_image' => $this->namedMeta($html, 'twitter:image'),
             'robots' => $this->namedMeta($html, 'robots'),
             'original_canonical' => $this->canonical($html),
             'schema' => $schema,
+            'faq_schema' => $this->jsonLd($html, 'FAQPage'),
             'date_provenance' => $publishedAt['provenance'],
         ];
 
         $presentation = array_filter([
+            'content_language' => $contentLanguage === 'fa' ? 'fa' : null,
             'source_file' => $relative,
             'source_hash' => $hash,
             'source_identity' => $relative,
@@ -259,7 +262,7 @@ class LegacyArticleImporter
                 'content' => $body,
                 'featured_image' => $card['thumbnail'] ?? $heroImage,
                 'category_id' => $category?->id,
-                'meta_title' => $heroTitle,
+                'meta_title' => $contentLanguage === 'fa' ? $this->tagContent($html, 'title') : $heroTitle,
                 'meta_description' => $description,
                 'canonical_url' => null,
                 'seo_data' => $seo,
@@ -343,12 +346,10 @@ class LegacyArticleImporter
 
     private function sliceArticleBody(string $html): ?string
     {
-        $startTag = '<article class="article-body">';
-        $from = strpos($html, $startTag);
-        if ($from === false) {
+        if (! preg_match('~<article\b[^>]*class=["\']article-body["\'][^>]*>~i', $html, $start, PREG_OFFSET_CAPTURE)) {
             return null;
         }
-        $from += strlen($startTag);
+        $from = $start[0][1] + strlen($start[0][0]);
         $pos = $from;
         $depth = 1;
         while ($depth > 0) {
@@ -454,14 +455,14 @@ class LegacyArticleImporter
     /**
      * @return array<string, mixed>|null
      */
-    private function jsonLd(string $html): ?array
+    private function jsonLd(string $html, string $type = 'Article'): ?array
     {
         if (! preg_match_all('/<script type="application\/ld\+json">(.*?)<\/script>/is', $html, $matches)) {
             return null;
         }
         foreach ($matches[1] as $json) {
             $data = json_decode(html_entity_decode(trim($json), ENT_QUOTES | ENT_HTML5, 'UTF-8'), true);
-            if (is_array($data) && ($data['@type'] ?? null) === 'Article') {
+            if (is_array($data) && ($data['@type'] ?? null) === $type) {
                 return $data;
             }
         }

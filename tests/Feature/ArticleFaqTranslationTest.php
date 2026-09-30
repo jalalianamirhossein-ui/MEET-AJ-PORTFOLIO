@@ -17,12 +17,18 @@ class ArticleFaqTranslationTest extends TestCase
         foreach (Article::all() as $article) {
             $dom = new \DOMDocument;
             @$dom->loadHTML('<?xml encoding="UTF-8">'.$article->displayContent(), LIBXML_NONET);
-            $nodes = (new \DOMXPath($dom))->query('//section[@id="faq"]//*[@data-en]');
+            $query = data_get($article->presentation, 'content_language') === 'fa'
+                ? '//section[@id="faq"]//*[self::h2 or self::h3 or self::p]'
+                : '//section[@id="faq"]//*[@data-en]';
+            $nodes = (new \DOMXPath($dom))->query($query);
             $this->assertGreaterThan(0, $nodes->length, $article->slug);
             foreach ($nodes as $node) {
-                $this->assertMatchesRegularExpression('/\p{Arabic}/u', $node->getAttribute('data-fa'),
+                $persian = $node->hasAttribute('data-en') ? $node->getAttribute('data-fa') : $node->textContent;
+                $this->assertMatchesRegularExpression('/\p{Arabic}/u', $persian,
                     $article->slug.': '.$node->getAttribute('data-en'));
-                $this->assertNotEmpty($node->getAttribute('data-en'));
+                if ($node->hasAttribute('data-en')) {
+                    $this->assertNotEmpty($node->getAttribute('data-en'));
+                }
             }
         }
     }

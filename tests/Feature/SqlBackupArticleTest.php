@@ -75,4 +75,18 @@ class SqlBackupArticleTest extends TestCase
         $this->assertSame($package['seo_data']['schema']['headline'], $article->seo_data['schema']['headline']);
         $this->assertSame($package['seo_data']['og_title'], $article->seo_data['og_title']);
     }
+
+    public function test_original_html_imports_the_complete_enterprise_article_and_schema(): void
+    {
+        app(LegacyArticleImporter::class)->import(false);
+        $article = Article::where('slug', 'sql-server-automatic-backup-job')->firstOrFail();
+        $package = require resource_path('content/articles/sql-server-automatic-backup-job/build.php');
+        $this->assertSame($package['meta_title'], $article->meta_title);
+        $this->assertSame('fa', $article->presentation['content_language']);
+        $this->assertSame(8, count($article->seo_data['faq_schema']['mainEntity']));
+        $this->assertStringContainsString('usp_BackupWhitelist', $article->content);
+        $this->assertStringContainsString('Cleanup-SqlBackups.ps1', $article->content);
+        $this->assertStringNotContainsString('{{CODE:', $article->content);
+        $this->assertSame(1, Article::where('slug', 'sql-server-automatic-backup-job')->count());
+    }
 }
