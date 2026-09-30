@@ -252,7 +252,7 @@
     />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
     <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
-    <link href="/assets/css/glass-system.css?v=5" rel="stylesheet" />
+    <link href="/assets/css/glass-system.css?v=7" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
