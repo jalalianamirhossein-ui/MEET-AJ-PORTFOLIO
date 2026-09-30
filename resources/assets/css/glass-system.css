@@ -56,6 +56,8 @@ html[dir] body #header.header .navmenu a:focus-visible {
   box-shadow: none;
 }
 body #header.header .logo {
+  max-width: 100%;
+  gap: 0.5rem;
   padding: 0.35rem 0.5rem;
   border-radius: var(--radius-control);
   transition: background-color 180ms ease;
@@ -71,9 +73,19 @@ body #header.header .logo:hover .sitename {
   animation: none;
 }
 body #header.header .logo .sitename {
+  min-width: 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  white-space: normal;
+  text-wrap: balance;
   background: none;
   color: var(--primary-hover);
   -webkit-text-fill-color: currentColor;
+}
+html[lang="fa"] body #header.header .logo .sitename {
+  font-size: 1rem;
+  font-family: var(--persian-font);
+  direction: rtl;
 }
 
 /* Light frosted glass; keep the existing blue identity and dark readable text. */
@@ -377,6 +389,10 @@ body :is(.menu-toggle, .scroll-top) {
 }
 
 /* Article reading surfaces stay opaque; only the title panel uses glass. */
+.article-page [lang="fa"],
+.article-page [lang="fa"] :is(h1, h2, h3, h4, p) {
+  font-family: var(--persian-font);
+}
 .article-page .article-hero-layout {
   padding: clamp(1.25rem, 3vw, 2.5rem);
   background: var(--glass-fill);

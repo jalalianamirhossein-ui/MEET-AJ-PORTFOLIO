@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="{{ data_get($article->presentation, 'content_language', 'en') }}" dir="ltr">
   <head>
     <title>{{ $seo['title'] }}</title>
     <meta charset="UTF-8" />
@@ -40,10 +40,13 @@
     <link id="rtl-style" href="/assets/css/rtl.css?v=1405" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
     <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
-    <link href="/assets/css/glass-system.css?v=8" rel="stylesheet" />
+    <link href="/assets/css/glass-system.css?v=10" rel="stylesheet" />
     <script type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @if (!empty($seo['breadcrumb']))
       <script type="application/ld+json">{!! json_encode($seo['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+    @endif
+    @if (!empty($seo['faq_schema']))
+      <script type="application/ld+json">{!! json_encode($seo['faq_schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @endif
   </head>
   <body class="{{ data_get($article->presentation, 'body_class', 'article-page theme-other') }}" style="{{ $article->accentCustomProperties() }}">
@@ -100,8 +103,13 @@
                   </ul>
                 @endif
               </div>
-              <h1 class="article-title hero-title" data-i18n-lock data-en="{{ $article->englishTitle() }}">{{ $article->englishTitle() }}</h1>
-              <p class="article-excerpt hero-subtitle" data-en="{{ $article->englishExcerpt() }}" data-fa="{{ data_get($article->presentation, 'excerpt_translations.fa', $article->englishExcerpt()) }}">{{ $article->englishExcerpt() }}</p>
+              @if (data_get($article->presentation, 'content_language') === 'fa')
+                <h1 class="article-title hero-title" lang="fa" dir="rtl">{{ data_get($article->presentation, 'hero_title_fa', $article->title) }}</h1>
+                <p class="article-excerpt hero-subtitle" lang="fa" dir="rtl">{{ data_get($article->presentation, 'excerpt_translations.fa', $article->excerpt) }}</p>
+              @else
+                <h1 class="article-title hero-title" data-i18n-lock data-en="{{ $article->englishTitle() }}">{{ $article->englishTitle() }}</h1>
+                <p class="article-excerpt hero-subtitle" data-en="{{ $article->englishExcerpt() }}" data-fa="{{ data_get($article->presentation, 'excerpt_translations.fa', $article->englishExcerpt()) }}">{{ $article->englishExcerpt() }}</p>
+              @endif
             </div>
             <figure class="article-hero-media">
               <img class="article-hero-thumbnail" src="{{ $article->thumbnailUrl() }}" decoding="async" fetchpriority="high" alt="{{ data_get($article->presentation, 'image_alt') ?: $article->title }}" />
@@ -142,7 +150,7 @@
             @if ($tocHtml)
               <aside class="article-toc" aria-label="Table of contents" data-en-aria-label="Table of contents" data-fa-aria-label="فهرست مطالب">
                 <p id="article-toc-heading" class="article-toc-title" data-en="On this page" data-fa="در این مقاله">On this page</p>
-                <nav class="article-toc-nav" tabindex="0" aria-labelledby="article-toc-heading">
+                <nav class="article-toc-nav" tabindex="0" aria-labelledby="article-toc-heading" @if(data_get($article->presentation, 'content_language') === 'fa') lang="fa" dir="rtl" @endif>
                   <ul class="article-toc-list">
                     {!! $tocHtml !!}
                   </ul>
@@ -150,7 +158,7 @@
               </aside>
             @endif
             <div class="article-reading">
-              <article class="article-body">
+              <article class="article-body" @if(data_get($article->presentation, 'content_language') === 'fa') lang="fa" dir="rtl" @endif>
                 {!! $articleContent !!}
               </article>
               @include('articles.partials.related')

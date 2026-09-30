@@ -47,6 +47,8 @@ class ArticleSeo
             'twitter_description' => $seo['twitter_description'] ?? $description,
             'twitter_image' => isset($seo['twitter_image']) ? $this->absolute($seo['twitter_image']) : null,
             'schema' => $schema,
+            'faq_schema' => is_array($seo['faq_schema'] ?? null)
+                && ($seo['faq_schema']['@type'] ?? '') === 'FAQPage' ? $seo['faq_schema'] : null,
             'breadcrumb' => $this->breadcrumb($article, $canonical),
             'robots' => $seo['robots'] ?? 'index, follow',
         ];
@@ -141,6 +143,9 @@ class ArticleSeo
 
     private function englishHeadline(Article $article, ?string $preferred): string
     {
+        if (data_get($article->presentation, 'content_language') === 'fa' && trim((string) $preferred) !== '') {
+            return trim($preferred);
+        }
         $candidates = [
             $preferred,
             $article->englishTitle(),

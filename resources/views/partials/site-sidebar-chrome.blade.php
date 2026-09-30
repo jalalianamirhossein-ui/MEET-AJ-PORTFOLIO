@@ -28,7 +28,7 @@
             fetchpriority="high"
             sizes="40px"
           />
-          <div class="sitename">{{ data_get($siteContent, 'site_name', 'Meet AJ') }}</div>
+          <div class="sitename" data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان">AmirHossein Jalalian</div>
         </a>
       </div>
       <div class="social-links text-center">

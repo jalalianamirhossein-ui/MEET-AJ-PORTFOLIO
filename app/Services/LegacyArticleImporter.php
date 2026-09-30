@@ -494,6 +494,10 @@ class LegacyArticleImporter
      */
     private function ensureEnglishTitles(Article $article, array $parsed): bool
     {
+        // A reviewed Persian editorial package intentionally has Persian SEO.
+        if (data_get($article->presentation, 'content_language') === 'fa') {
+            return false;
+        }
         $english = $this->englishOrFallback($parsed['title'] ?? null, $article->title);
         $changed = false;
 
