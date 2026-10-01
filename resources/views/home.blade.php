@@ -252,7 +252,7 @@
     />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
     <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
-    <link href="/assets/css/glass-system.css?v=11" rel="stylesheet" />
+    <link href="/assets/css/glass-system.css?v=26" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -884,9 +884,10 @@
           <p data-en="{{ data_get($resumeContent, 'intro_en', '') }}" data-fa="{{ data_get($resumeContent, 'intro_fa', '') }}">{{ data_get($resumeContent, 'intro_en', '') }}</p>
         </div>
         <div class="container">
-          <div class="row">
+          <div class="row resume-tree">
             <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
               <h3 class="resume-title" data-en="Education" data-fa="تحصیلات">Education</h3>
+              <div class="resume-branches">
               @foreach (data_get($resumeContent, 'education', []) as $item)
                 <div class="resume-item" data-resume-kind="{{ $item['kind'] ?? 'education' }}">
                   <h4 data-en="{{ $item['title_en'] ?? '' }}" data-fa="{{ $item['title_fa'] ?? ($item['title_en'] ?? '') }}">{{ $item['title_en'] ?? '' }}</h4>
@@ -894,14 +895,19 @@
                   <p><em><a href="{{ $item['url'] ?? '#' }}" target="_blank" rel="noopener" data-en="{{ $item['org_en'] ?? '' }}" data-fa="{{ $item['org_fa'] ?? ($item['org_en'] ?? '') }}">{{ $item['org_en'] ?? '' }}</a></em></p>
                 </div>
               @endforeach
+              </div>
             </div>
             <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
               <h3 class="resume-title" data-en="Professional Experience" data-fa="تجربه کاری">Professional Experience</h3>
+              <div class="resume-branches">
               @foreach (data_get($resumeContent, 'experience', []) as $item)
                 <div class="resume-item" data-resume-kind="experience">
                   <h4 data-en="{{ $item['title_en'] ?? '' }}" data-fa="{{ $item['title_fa'] ?? ($item['title_en'] ?? '') }}">{{ $item['title_en'] ?? '' }}</h4>
                   <h5 data-en="{{ $item['period'] ?? '' }}" data-fa="{{ $item['period_fa'] ?? ($item['period'] ?? '') }}">{{ $item['period'] ?? '' }}</h5>
                   <p><em><a href="{{ $item['url'] ?? '#' }}" target="_blank" rel="noopener" data-en="{{ $item['org_en'] ?? '' }}" data-fa="{{ $item['org_fa'] ?? ($item['org_en'] ?? '') }}">{{ $item['org_en'] ?? '' }}</a></em></p>
+                  @if (! empty($item['body_en']) || ! empty($item['body_fa']) || ! empty($item['highlights']))
+                    <details class="resume-details">
+                      <summary><span data-en="Experience details" data-fa="جزئیات تجربه کاری">Experience details</span><i class="bi bi-chevron-down" aria-hidden="true"></i></summary>
                   @if (! empty($item['body_en']) || ! empty($item['body_fa']))
                     <p data-en="{{ $item['body_en'] ?? '' }}" data-fa="{{ $item['body_fa'] ?? ($item['body_en'] ?? '') }}">{{ $item['body_en'] ?? '' }}</p>
                   @endif
@@ -912,8 +918,11 @@
                       @endforeach
                     </ul>
                   @endif
+                    </details>
+                  @endif
                 </div>
               @endforeach
+              </div>
             </div>
           </div>
         </div>
@@ -1535,8 +1544,8 @@
     <!-- Main Application JavaScript -->
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
     <script src="/assets/js/main.js?v=1415" defer></script>
-    <script src="/assets/js/service-catalog.js?v=1813" defer></script>
-    <script src="/assets/js/scroll-reveal.js?v=1" defer></script>
+    <script src="/assets/js/service-catalog.js?v=1815" defer></script>
+    <script src="/assets/js/scroll-reveal.js?v=2" defer></script>
 
     <!-- Internationalization (i18n) Support -->
     <!-- Language Toggle JavaScript -->

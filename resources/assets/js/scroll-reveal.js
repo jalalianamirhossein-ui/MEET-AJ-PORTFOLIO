@@ -8,7 +8,7 @@
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (reducedMotion.matches || !('IntersectionObserver' in window)) return;
 
-    const selector = '.main [data-aos], .about-domains, .about-secondary, .skill-group, .service-catalog-card, .fi-main .fi-wi-widget, .fi-main > .fi-page .fi-section';
+    const selector = '.main [data-aos], #resume .resume-item, .about-domains, .about-secondary, .skill-group, .service-catalog-card, .fi-main .fi-wi-widget, .fi-main > .fi-page .fi-section';
     const seen = new WeakSet();
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
@@ -30,7 +30,10 @@
         if (seen.has(element)) continue;
         seen.add(element);
         if (element.closest('#hero')) continue;
-        if (element.parentElement.closest('[data-aos], .fi-wi-widget, .fi-section')) continue;
+        // Animate individual resume branches, avoiding motion on their parent columns.
+        if (element.matches('#resume .resume-tree > [data-aos]')) continue;
+        const resumeBranch = element.matches('#resume .resume-item');
+        if (!resumeBranch && element.parentElement.closest('[data-aos], .fi-wi-widget, .fi-section')) continue;
         // Avoid flashing content already visible on load or at a deep link.
         if (element.getBoundingClientRect().top < window.innerHeight) continue;
         observer.observe(element);

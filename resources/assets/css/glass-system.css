@@ -1,5 +1,5 @@
 /** Meet AJ public UI refinement. Loaded last; existing brand and topic tokens win.
- * Blur is limited to navigation, hero and floating controls. Repeated cards use
+ * Blur is limited to navigation, hero, contact panels and floating controls. Repeated cards use
  * translucent fills without blur to keep long libraries inexpensive to render.
  */
 :root {
@@ -579,4 +579,409 @@ body.index-page .about-facts > div { border-radius: var(--radius-md); padding: 0
     transition: none !important;
   }
   body [data-aos] { opacity: 1 !important; transform: none !important; }
+}
+
+/* Compact resume and contact trees. Lines follow the reading direction. */
+body.index-page :is(#resume, #contact) {
+  background: radial-gradient(ellipse at 95% 10%, rgba(111, 163, 225, 0.07), transparent 60%), #f8faff;
+  padding-block: clamp(2rem, 4vw, 3.25rem) !important;
+}
+body.index-page :is(#resume, #contact) .section-title { padding-bottom: 1.5rem; }
+body.index-page :is(#resume, #contact) .section-title h2 { color: #203454; }
+body.index-page :is(#resume, #contact) .section-title p { font-size: 0.87rem; line-height: 1.8; }
+body.index-page #resume .resume-tree {
+  margin-inline: 0;
+  gap: 1.5rem 2.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+body.index-page #resume {
+  background: #f8faff;
+  --branch-offset: -0.5rem;
+}
+html[dir="rtl"] body.index-page #resume { --branch-offset: 0.5rem; }
+html[lang="fa"] body.index-page #resume {
+  --persian-heading-font: "Vazirmatn", "Tahoma", Arial, sans-serif;
+  font-family: var(--persian-font);
+  letter-spacing: normal;
+}
+body.index-page #resume .resume-tree > div {
+  --tree-accent: #527dae;
+  --tree-heading: #365e85;
+  --tree-line: #c4d7e9;
+  --tree-tint: rgba(225, 238, 251, 0.48);
+  --tree-edge: rgba(120, 159, 198, 0.16);
+  --resume-date-width: 6rem;
+  min-width: 0;
+}
+body.index-page #resume .resume-tree > div:nth-child(2) {
+  --tree-accent: #8164a2;
+  --tree-heading: #695484;
+  --tree-line: #d4c8e3;
+  --tree-tint: rgba(235, 225, 248, 0.48);
+  --tree-edge: rgba(146, 120, 181, 0.16);
+  --resume-date-width: 8.25rem;
+}
+body.index-page #resume .resume-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 0.35rem;
+  padding: 0 0 0.8rem;
+  padding-inline-start: calc(var(--resume-date-width) + 0.45rem);
+  border: 0;
+  color: var(--tree-accent);
+  font-size: 1.06rem;
+  font-weight: 600;
+  text-shadow: none;
+}
+body.index-page #resume .resume-title::before {
+  content: '\f6fe';
+  font-family: bootstrap-icons;
+  width: 1.2rem;
+  height: 1.2rem;
+  flex: 0 0 1.2rem;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  font-size: 1rem;
+}
+body.index-page #resume .resume-tree > div:nth-child(2) .resume-title::before { content: '\f1cc'; }
+body.index-page #resume .resume-title::after { content: none; }
+body.index-page #resume .resume-branches { position: relative; margin: 0; }
+body.index-page #resume .resume-branches::before {
+  content: '';
+  position: absolute;
+  inset-block: 0 1rem;
+  inset-inline-start: calc(var(--resume-date-width) + 1.05rem);
+  width: 1px;
+  background: var(--tree-line);
+}
+body.index-page #resume .resume-branches > .resume-item:nth-child(odd) {
+  --tree-tint: rgba(225, 238, 251, 0.35);
+}
+body.index-page #resume .resume-branches > .resume-item:nth-child(even) {
+  --tree-tint: rgba(216, 231, 249, 0.7);
+}
+body.index-page #resume .resume-tree > div:nth-child(2) .resume-item:nth-child(odd) {
+  --tree-tint: rgba(235, 225, 248, 0.35);
+}
+body.index-page #resume .resume-tree > div:nth-child(2) .resume-item:nth-child(even) {
+  --tree-tint: rgba(228, 214, 245, 0.7);
+}
+html[dir] body.index-page #resume .resume-item,
+html[dir] body.index-page #resume .resume-item:hover {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--resume-date-width) 1.2rem minmax(0, 1fr);
+  gap: 0.25rem 0.45rem;
+  padding: 0.65rem 0 0.8rem;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  transform: none;
+  animation: none;
+  min-height: 0;
+  overflow: visible;
+}
+html[dir="rtl"] body.index-page #resume .resume-item,
+html[dir="rtl"] body.index-page #resume .resume-item:hover {
+  border-radius: 0;
+  background: none;
+}
+body.index-page #resume .resume-item:nth-child(2) { --branch-delay: 40ms; }
+body.index-page #resume .resume-item:nth-child(3) { --branch-delay: 80ms; }
+body.index-page #resume .resume-item:nth-child(4) { --branch-delay: 120ms; }
+body.index-page #resume .resume-item:nth-child(n+5) { --branch-delay: 160ms; }
+html[dir] body.index-page #resume .resume-item::before {
+  content: '';
+  position: absolute;
+  inset: auto;
+  inset-inline-start: calc(var(--resume-date-width) + 1.05rem);
+  top: 1.35rem;
+  width: 0.8rem;
+  height: 1px;
+  border: 0;
+  border-radius: 0;
+  background: var(--tree-line);
+  box-shadow: none;
+  transform: none;
+}
+html[dir] body.index-page #resume .resume-item::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: calc(var(--resume-date-width) + 0.84rem);
+  top: 1.15rem;
+  width: 0.42rem;
+  height: 0.42rem;
+  border: 1px solid var(--tree-accent);
+  border-radius: 50%;
+  background: #f8faff;
+  box-shadow: 0 0 0 3px #f8faff;
+}
+body.index-page #resume .resume-item h4 { grid-column: 3; grid-row: 1; margin: 0; color: var(--tree-heading); font-size: 0.94rem; line-height: 1.7; font-weight: 600; }
+body.index-page #resume .resume-item h5,
+body.index-page #resume .resume-item:hover h5 {
+  align-self: start;
+  justify-self: end;
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  display: block;
+  margin: 0;
+  padding: 0.08rem 0.35rem;
+  background: var(--tree-tint);
+  border: 0;
+  border-radius: 0.4rem;
+  color: var(--tree-accent);
+  font-size: 0.75rem;
+  line-height: 1.65;
+  font-weight: 500;
+  box-shadow: none;
+  transform: none;
+  max-width: 10rem;
+}
+body.index-page #resume .resume-item > p { grid-column: 3; grid-row: 2; margin: 0; font-size: 0.82rem; line-height: 1.75; }
+/* Numeric year ranges keep their order despite the shared RTL heading reset. */
+body.index-page #resume .resume-tree > div:first-child .resume-item h5 { direction: ltr !important; unicode-bidi: isolate; }
+body.index-page #resume .resume-item em { font-style: normal; }
+body.index-page #resume .resume-item a { color: #62738a; font-size: inherit; line-height: inherit; font-weight: 400; text-decoration: none; }
+body.index-page #resume .resume-item a:hover { color: var(--tree-accent); text-decoration: underline; }
+body.index-page #resume .resume-item a::after { content: none; }
+body.index-page #resume .resume-details { grid-column: 3; min-width: 0; }
+body.index-page #resume .resume-details summary {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: fit-content;
+  min-height: 2.2rem;
+  list-style: none;
+  color: var(--tree-accent);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+body.index-page #resume .resume-details summary::-webkit-details-marker { display: none; }
+body.index-page #resume .resume-details[open] summary i { transform: rotate(180deg); }
+body.index-page #resume .resume-details p { color: #536277; font-size: 0.82rem; line-height: 1.8; margin-bottom: 0.6rem; }
+html[dir] body.index-page #resume .resume-details ul { list-style: none; padding: 0; margin: 0; }
+html[dir] body.index-page #resume .resume-details li {
+  position: relative;
+  padding: 0.35rem 0;
+  padding-inline-start: 0.9rem;
+  margin: 0;
+  border-inline-start: 1px solid var(--tree-line);
+  font-size: 0.8rem;
+  line-height: 1.75;
+  color: #536277;
+}
+html[dir] body.index-page #resume .resume-details li::before {
+  content: '';
+  position: absolute;
+  inset: auto;
+  inset-inline-start: 0;
+  top: 0.95rem;
+  width: 0.5rem;
+  height: 1px;
+  background: var(--tree-line);
+}
+@media (prefers-reduced-motion: no-preference) {
+  html[dir] body.index-page #resume .resume-item {
+    transition: box-shadow 180ms ease;
+  }
+  body.index-page #resume .resume-item::after {
+    transition: box-shadow 180ms ease, scale 180ms ease;
+  }
+  body.index-page #resume .resume-title::before,
+  body.index-page #resume .resume-details summary i,
+  body.index-page #resume .resume-details summary {
+    transition: transform 180ms ease, background-color 180ms ease;
+  }
+  html[dir] body.index-page #resume .resume-item.meetaj-scroll-reveal {
+    animation: resume-branch-enter 460ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--branch-delay, 0ms);
+  }
+  body.index-page #resume .resume-details[open] > :not(summary) {
+    animation: resume-details-enter 220ms ease-out both;
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  html[dir] body.index-page #resume .resume-item:hover,
+  html[dir] body.index-page #resume .resume-item:focus-within {
+    box-shadow: none;
+  }
+  body.index-page #resume .resume-item:is(:hover, :focus-within)::after {
+    box-shadow: 0 0 0 4px var(--tree-tint), 0 0 8px var(--tree-edge);
+    scale: 1.15;
+  }
+  body.index-page #resume .resume-title:hover::before { transform: translateY(-1px); }
+  body.index-page #resume .resume-details summary:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+}
+@keyframes resume-branch-enter {
+  from { opacity: 0.65; translate: var(--branch-offset) 4px; }
+  to { opacity: 1; translate: 0 0; }
+}
+@keyframes resume-details-enter {
+  from { opacity: 0.5; translate: 0 4px; }
+  to { opacity: 1; translate: 0 0; }
+}
+body.index-page #contact .contact-header { display: block; margin: 0 0 0.7rem; padding-inline-start: 0.9rem; text-align: start; }
+body.index-page #contact .contact-intro { max-width: none; align-items: flex-start; gap: 0.2rem; text-align: start; }
+body.index-page #contact .contact-intro-title { margin: 0 0 0.4rem; color: #2f617e; font-size: 1.02rem; line-height: 1.5; }
+body.index-page #contact .title-accent { color: #377a8b; font-size: 1.1rem; }
+body.index-page #contact .contact-intro-text { max-width: 75ch; margin: 0; font-size: 0.82rem; line-height: 1.8; text-align: start; }
+body.index-page #contact .contact-main-grid { position: relative; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.5rem 2.5rem; align-items: start; }
+body.index-page #contact .contact-main-grid::before { content: ''; position: absolute; inset-inline-start: 0.9rem; inset-inline-end: calc(50% - 1.25rem); top: 0; height: 1px; background: #bcd4db; }
+body.index-page #contact .contact-main-grid::after { content: ''; position: absolute; inset-inline-start: 0.9rem; top: -0.7rem; height: 0.7rem; width: 1px; background: #bcd4db; }
+body.index-page #contact .contact-methods { padding: 0; margin-inline-start: 0.9rem; border: 0; background: none; box-shadow: none; }
+body.index-page #contact .contact-cards-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
+body.index-page #contact .contact-card,
+body.index-page #contact .contact-card:hover {
+  position: relative;
+  --contact-accent: #2c72b7;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0.5rem 0 0.75rem;
+  padding-inline-start: 1.45rem;
+  border: 0 !important;
+  border-inline-start: 1px solid #bcd4db !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  overflow: visible;
+}
+body.index-page #contact .contact-card:nth-child(2) { --contact-accent: #278577; }
+body.index-page #contact .contact-card:nth-child(3) { --contact-accent: #7560a7; }
+body.index-page #contact .contact-card:nth-child(4) { --contact-accent: #2c72b7; }
+body.index-page #contact .contact-card::before,
+body.index-page #contact .location-info::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 1.15rem;
+  width: 1rem;
+  height: 1px;
+  background: #bcd4db;
+}
+body.index-page #contact .card-icon,
+body.index-page #contact .card-icon:hover {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--contact-accent);
+  box-shadow: none;
+  font-size: 1.05rem;
+}
+body.index-page #contact .card-content { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.15rem 0.65rem; align-items: baseline; }
+body.index-page #contact .card-content h4 { margin: 0; font-size: 0.86rem; color: #263b57; text-transform: none; letter-spacing: normal; }
+body.index-page #contact .card-content p { display: block; grid-column: 1 / -1; grid-row: 2; margin: 0; font-size: 0.75rem; line-height: 1.6; color: #66758a; }
+body.index-page #contact .contact-link,
+body.index-page #contact .contact-link:hover { padding: 0; margin: 0; align-self: baseline; color: var(--contact-accent); font-size: 0.77rem; line-height: 1.65; }
+body.index-page #contact .contact-link span { direction: ltr; unicode-bidi: plaintext; }
+body.index-page #contact .location-info {
+  position: relative;
+  margin: 0;
+  padding: 0.6rem 0 0.5rem;
+  padding-inline-start: 1.45rem;
+  border: 0;
+  border-inline-start: 1px solid #bcd4db;
+}
+body.index-page #contact .location-card { padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
+body.index-page #contact .location-header { display: flex; flex-direction: row; justify-content: flex-start; gap: 0.6rem; margin: 0 0 0.15rem; padding: 0; border: 0; background: none; }
+body.index-page #contact .location-header i { font-size: 1.05rem; color: #377a8b; }
+body.index-page #contact .location-header h4 { font-size: 0.86rem; margin: 0; color: #263b57; }
+body.index-page #contact .location-content p { margin: 0; padding-inline-start: 2.1rem; font-size: 0.75rem; line-height: 1.6; text-align: start; }
+body.index-page #contact .contact-form-section { position: relative; padding-inline-start: 1.45rem; border-inline-start: 1px solid #bcd4db; }
+body.index-page #contact .contact-form-section::before { content: ''; position: absolute; inset-inline-start: 0; top: 1.15rem; width: 1rem; height: 1px; background: #bcd4db; }
+body.index-page #contact .form-container {
+  padding: 1rem;
+  border: 1px solid rgba(172, 205, 228, 0.55);
+  border-radius: 0.85rem;
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(71, 199, 187, 0.12), transparent 65%),
+    radial-gradient(ellipse at 100% 100%, rgba(130, 104, 218, 0.08), transparent 65%),
+    rgba(255, 255, 255, 0.78);
+  box-shadow: inset 0 1px 0 #fff, 0 6px 20px rgba(38, 73, 120, 0.05);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+body.index-page #contact .form-header { margin: 0; padding: 0 0 0.7rem; border-bottom: 1px solid rgba(130, 181, 207, 0.25); }
+body.index-page #contact .form-title { display: flex; align-items: center; justify-content: space-between; gap: 0.7rem; margin: 0 0 0.3rem; color: #236e83; font-size: 0.95rem; line-height: 1.6; }
+body.index-page #contact .form-title .title-accent { color: #239b99; }
+body.index-page #contact .form-subtitle { display: block; margin: 0; font-size: 0.77rem; color: #66758a; line-height: 1.75; }
+body.index-page #contact .php-email-form { gap: 0.75rem; padding: 0.9rem 0 0; }
+body.index-page #contact .form-row { gap: 0.7rem; }
+body.index-page #contact .form-group { gap: 0.3rem; }
+body.index-page #contact .form-label { margin: 0; font-size: 0.78rem; color: #395577; }
+body.index-page #contact .form-label i { font-size: 0.8rem; color: #268d9d; }
+body.index-page #contact :is(.form-input, .form-textarea) { min-height: 2.6rem; padding: 0.55rem 0.7rem; border: 1px solid #c3dbe8; border-radius: 0.55rem; background: rgba(255, 255, 255, 0.88); color: #263b57; font-size: 0.83rem; box-shadow: inset 0 1px 3px rgba(52, 114, 152, 0.025); }
+body.index-page #contact .form-textarea { height: 7rem; min-height: 7rem; }
+body.index-page #contact :is(.form-input, .form-textarea):focus { border-color: #4c88d4; outline: 2px solid rgba(76, 136, 212, 0.2); outline-offset: 2px; box-shadow: none; }
+body.index-page #contact :is(.form-input, .form-textarea)::placeholder { color: #75859a; font-style: normal; }
+body.index-page #contact .form-actions { margin: 0; gap: 0.6rem; }
+body.index-page #contact .submit-btn { min-height: 2.6rem; padding: 0.6rem 1rem; font-size: 0.8rem; border-radius: 0.6rem; background: linear-gradient(110deg, #356bbc, #168b8b); color: #fff; box-shadow: 0 4px 12px rgba(36, 111, 158, 0.15); }
+body.index-page #contact .submit-btn:hover { background: linear-gradient(110deg, #2d5a9f, #127474); transform: none; box-shadow: none; }
+body.index-page :is(#resume, #contact) :is(summary, a, button):focus-visible { outline: 2px solid #2c72b7; outline-offset: 3px; border-radius: 0.2rem; }
+@media (max-width: 767px) {
+  body.index-page #resume .resume-tree,
+  body.index-page #contact .contact-main-grid { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+  body.index-page #contact .contact-form-section { margin-inline-start: 0.9rem; }
+  body.index-page #contact .contact-main-grid { gap: 0; }
+  body.index-page #contact .contact-main-grid::before { content: none; }
+  body.index-page #contact .form-row { grid-template-columns: minmax(0, 1fr); }
+  body.index-page #contact .card-content { grid-template-columns: minmax(0, 1fr); }
+  body.index-page #contact .contact-link { grid-row: 3; }
+  body.index-page #contact .contact-link span { unicode-bidi: plaintext; }
+}
+@media (max-width: 575px) {
+  body.index-page #resume .resume-title { padding-inline-start: 0; }
+  body.index-page #resume .resume-branches::before { inset-inline-start: 0.6rem; }
+  html[dir] body.index-page #resume .resume-item { grid-template-columns: 1.2rem minmax(0, 1fr); }
+  html[dir] body.index-page #resume .resume-item::before { inset-inline-start: 0.6rem; top: 1.1rem; }
+  html[dir] body.index-page #resume .resume-item::after { inset-inline-start: 0.39rem; top: 0.9rem; }
+  body.index-page #resume .resume-item h5 { grid-column: 2; grid-row: 1; justify-self: start; }
+  body.index-page #resume .resume-item h4 { grid-column: 2; grid-row: 2; }
+  body.index-page #resume .resume-item > p { grid-column: 2; grid-row: 3; }
+  body.index-page #resume .resume-details { grid-column: 2; }
+}
+
+/* Keep the language control frosted in both language states. The compact
+ * chrome stylesheet uses important resets, so these surface rules match it. */
+html[lang][dir] body .lang-switcher .lang-switcher-toggle {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(222, 239, 255, 0.48)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  border-radius: 0.95rem !important;
+  color: #244878 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(120, 166, 214, 0.12),
+    0 8px 24px rgba(38, 73, 120, 0.12) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+}
+html[lang][dir] body .lang-switcher .lang-switcher-current { color: #2455a0; }
+html[lang][dir] body .lang-switcher .lang-switcher-swap { color: #087f8c; }
+@media (hover: hover) and (pointer: fine) {
+  html[lang][dir] body .lang-switcher .lang-switcher-toggle:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(206, 234, 255, 0.65)) !important;
+    border-color: rgba(87, 160, 221, 0.45) !important;
+    box-shadow: inset 0 1px 0 #fff, 0 10px 28px rgba(38, 73, 120, 0.17) !important;
+  }
+}
+html[lang][dir] body .lang-switcher .lang-switcher-toggle:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 3px;
 }
