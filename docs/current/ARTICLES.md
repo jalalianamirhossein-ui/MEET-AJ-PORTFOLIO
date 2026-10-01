@@ -53,17 +53,16 @@ php artisan articles:sync-tags
 | `/articles` | Library: full card grid, or paginated results when filtered |
 | `/articles?q=…` | Search results, 9 per page, query string preserved |
 | `/articles?tag=…` | Tag filter, same pagination |
-| `/articles/{slug}` | Default English edition and English SEO; clean canonical |
-| `/articles/{slug}?lang=fa` | Persian edition with its own canonical |
-| `/articles/{slug}?lang=en` | Compatible English alias; canonical points to the clean URL |
-| `/articles/{slug}.html` | **301** to `/articles/{slug}`, query string preserved, no redirect chain |
+| `/articles/{slug}` | Saved language preference; English default; clean shared canonical |
+| `/articles/{slug}?lang=…` | **301** to the same path without `lang`; other parameters preserved |
+| `/articles/{slug}.html` | **301** to `/articles/{slug}`, obsolete language parameter removed, other parameters preserved |
 | unknown slug | 404 |
 
 ## Bilingual enterprise editions
 
-All 25 source files contain complete current FA/EN editions. The base URL serves English content and SEO; `?lang=fa` serves Persian. An old `?lang=en` link or an unsupported language value renders English with the clean canonical. Cookies/local storage do not override article URLs. Both pages return reciprocal `fa`/`en` hreflang and an `x-default` pointing to the English base URL. Sitemap entries cover both versions.
+All 25 source files contain complete current FA/EN editions. Both use the same clean URL. The shared preference cookie selects Persian or English content and SEO, with English as the server default. The homepage, library and article controls share local storage and that cookie. Old article language-query URLs redirect to the clean path. One canonical and one sitemap entry represent each article; there are no separate translation alternates.
 
-`ArticleLocalization` selects prose, headings, TOC, metadata, Article/FAQ schemas and sharing titles before Blade renders. Code blocks are shared and protected from translation. With JavaScript, the floating language control update the existing text, direction, metadata, schemas, share links and URL using `history.replaceState`; they do not fetch or reload the document. Direct requests to either language URL return a complete localized response without JavaScript. The inline FA/EN row above the date has been removed; alternate links remain in the document head for SEO. The switch payload contains metadata only, without duplicate article bodies. Related links retain the selected language. Historical editions are removed from public pages, including previously imported content; `docs/enterprise-articles/originals.zip` retains exact original files.
+`ArticleLocalization` selects prose, headings, TOC, metadata, Article/FAQ schemas and sharing titles before Blade renders. Code blocks are shared and protected from translation. With JavaScript, the floating control updates existing text, direction, metadata, schemas and sharing titles without changing the URL or reloading. It saves the preference for navigation and refresh; article HTML uses private HTTP caching to prevent shared-cache language mixing. Requests with the plain preference cookie also render a complete localized response without JavaScript. The inline FA/EN row above the date has been removed. The switch payload contains metadata only, without duplicate article bodies. Related links are clean and inherit the preference. Historical editions are removed from public pages, including previously imported content; `docs/enterprise-articles/originals.zip` retains exact original files.
 
 `LegacyArticleImporter` reads the `article-localizations` JSON block from each source into `presentation.localizations`. Existing database rows need `--update-existing` to receive the replacement sources. On 2026-10-01, all 25 local operational rows were updated after a consistent SQLite backup. The remote server was not updated from this environment. Review `docs/enterprise-articles/bilingual-report.md` and the dry-run before deployment, and publish updated assets through the existing deployment workflow.
 
@@ -109,7 +108,7 @@ Result on 2026-09-21: **Failures: 0** for all 25 articles. Evidence: [../qa/CONT
 
 ## Languages
 
-Articles share an English database identity. The clean URL renders the complete English edition and SEO. `?lang=fa` renders the complete Persian edition and SEO. Both use the same stored bilingual HTML and code; `i18n.js` changes language in place after loading. There are no `/fa/...` article URLs and no German articles. Publishing `language = de` throws `ValidationException`.
+Articles share an English database identity and one clean URL. The saved preference selects the complete English or Persian edition and SEO. Both use the same stored bilingual HTML and code; `i18n.js` changes language in place after loading. There are no `/fa/...` article URLs and no German articles. Publishing `language = de` throws `ValidationException`.
 
 ## Publication rules
 

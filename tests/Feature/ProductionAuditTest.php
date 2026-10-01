@@ -111,12 +111,12 @@ class ProductionAuditTest extends TestCase
         $this->assertSame(25, Article::query()->count());
         foreach (Article::query()->get() as $article) {
             $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', $article->title, $article->slug);
-            $this->get('/articles/'.$article->slug)
+            $this->withUnencryptedCookie('lang', 'en')->get('/articles/'.$article->slug)
                 ->assertOk()
                 ->assertSee('data-en="'.$article->title.'"', false)
                 ->assertSee($article->title)
                 ->assertSee('href="/#contact"', false);
-            $this->get('/articles/'.$article->slug.'?lang=fa')->assertOk()
+            $this->withUnencryptedCookie('lang', 'fa')->get('/articles/'.$article->slug)->assertOk()
                 ->assertSee($article->presentation['localizations']['fa']['title']);
         }
         $listing = $this->get('/articles')->assertOk()->getContent();
@@ -151,7 +151,7 @@ class ProductionAuditTest extends TestCase
         $this->assertStringContainsString('data-fa="نظرات"', $home);
         $this->assertStringContainsString('site-modules.css?v=1853', $home);
         $this->assertStringContainsString('main.js?v=1415', $home);
-        $this->assertStringContainsString('i18n.js?v=1403', $home);
+        $this->assertStringContainsString('i18n.js?v=1407', $home);
         $this->assertStringContainsString('rtl.css?v=1405', $home);
 
         $main = (string) file_get_contents(resource_path('assets/js/main.js'));

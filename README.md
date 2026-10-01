@@ -11,7 +11,7 @@ The site was originally a static English/Persian progressive web app: one homepa
 - the public site renders from Blade views rebuilt from the original HTML, so URLs, CSS hooks and JavaScript contracts are unchanged;
 - homepage sections, articles, services and testimonials live in the database and are editable in the admin panel;
 - contact and quote submissions are stored as requests with a light workflow;
-- all 25 articles have complete English and Persian editions: English at the clean URL, Persian at `?lang=fa`, with instant language switching and RTL support.
+- all 25 articles have complete English and Persian editions at one clean URL, using the same saved language preference as the homepage, with instant switching and RTL support.
 
 The maintained HTML in `resources/legacy/` remains the import and view-generation source. Exact pre-upgrade articles are archived in `docs/enterprise-articles/originals.zip`. It is deliberately **outside** the web document root.
 
@@ -103,7 +103,7 @@ php artisan services:import-legacy      # 6 services with their AED prices
 php artisan articles:sync-tags          # tag vocabulary and links
 ```
 
-`--update-existing` preserves article IDs and translation keys, but replaces content/metadata for changed sources; back up the database and review CMS edits first. A plain import skips existing article bodies. Both importers accept `--dry-run` and `--refresh`. **`--refresh` deletes existing rows** and discards editorial changes — never run it on a database with edits.
+`--update-existing` preserves article IDs, translation keys, publication status and publication dates, but replaces content/metadata for changed sources; back up the database and review CMS edits first. A plain import skips existing article bodies. Both importers accept `--dry-run` and `--refresh`. **`--refresh` deletes existing rows** and discards editorial changes — never run it on a database with edits.
 
 ## Local development
 
@@ -147,11 +147,11 @@ The local database has thirteen published services; twelve render in the homepag
 
 ## Languages
 
-Article URLs select complete server-rendered editions: `/articles/{slug}` is English and `/articles/{slug}?lang=fa` is Persian. Each has localized SEO, a self-canonical, reciprocal `hreflang`, and English `x-default`. The floating toggle changes text, direction, metadata and URL in place without a document reload; code blocks are shared. Homepage/library UI preferences still use client-side translation. German remains draft-only and `/de` returns 404. Detail: [docs/current/MULTILINGUAL.md](docs/current/MULTILINGUAL.md).
+The homepage, library and articles share a saved language preference. `/articles/{slug}` renders Persian when the `lang=fa` preference cookie is set, and English by default. The floating toggle changes text, direction and metadata in place without changing the URL or reloading; code blocks are shared. Both editions use the same canonical URL, and old language-query URLs redirect to it. No separate language alternates are emitted. German remains draft-only and `/de` returns 404. Detail: [docs/current/MULTILINGUAL.md](docs/current/MULTILINGUAL.md).
 
 ## SEO
 
-Canonical URLs, Open Graph, Twitter cards, JSON-LD on the homepage and articles, a dynamic `/sitemap.xml` listing the homepage plus 50 localized article URLs with alternates and modification dates, `/robots.txt` disallowing `/admin`, `/livewire` and `/forms`, and 301s for `/index.html` and legacy article `.html` paths. Removed service detail paths return 404. Detail: [docs/current/SEO.md](docs/current/SEO.md).
+Canonical URLs, Open Graph, Twitter cards, JSON-LD on the homepage and articles, a dynamic `/sitemap.xml` listing the homepage plus 25 clean article URLs with modification dates, `/robots.txt` disallowing `/admin`, `/livewire` and `/forms`, and 301s for `/index.html`, legacy article `.html` paths and retired language queries. Removed service detail paths return 404. Detail: [docs/current/SEO.md](docs/current/SEO.md).
 
 ## PWA
 
@@ -165,7 +165,7 @@ php vendor/phpunit/phpunit/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest
 php artisan site:compare-content                                     # Failures: 0
 ```
 
-Latest review (2026-10-01): **84 tests, 0 failures, 1 skipped**. Assertion counts and live-browser evidence are recorded in [the audit](docs/qa/FULL-AUDIT-2026-10-01.md). The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Homepage CMS details: [docs/current/HOMEPAGE-CMS.md](docs/current/HOMEPAGE-CMS.md). Testing detail: [docs/current/TESTING.md](docs/current/TESTING.md).
+Latest review (2026-10-01): **85 tests, 0 failures, 1 skipped**. Assertion counts and live-browser evidence are recorded in [the audit](docs/qa/FULL-AUDIT-2026-10-01.md). The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Homepage CMS details: [docs/current/HOMEPAGE-CMS.md](docs/current/HOMEPAGE-CMS.md). Testing detail: [docs/current/TESTING.md](docs/current/TESTING.md).
 
 ## Deployment
 

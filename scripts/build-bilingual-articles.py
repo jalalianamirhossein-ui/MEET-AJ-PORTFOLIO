@@ -92,7 +92,9 @@ for f in files:
         def section(m):
             content=re.sub(r'<(h2)\b([^>]*)>(.*?)</h2>',lambda h:dual(h,title),m[2],count=1,flags=re.S)
             if key=='sources':
-                texts=['Sources reviewed: 2026-09-30. Validate procedures on the target environment before deploying infrastructure changes.']
+                # Retire the generated review-date paragraph from existing sources too.
+                content=re.sub(r'<p\b[^>]*>.*?</p>', '', content, flags=re.S)
+                texts=[]
             else:
                 value=en[key]; texts=value if isinstance(value,list) else [value]
             paragraphs=list(re.finditer(r'<(p)\b([^>]*)>(.*?)</p>',content,re.S))
@@ -143,8 +145,7 @@ for f in files:
         faq_fa=previous_metadata['fa']['faq'] if previous_metadata else [[v['name'],v['acceptedAnswer']['text']] for v in existing['mainEntity']]
         faq_en=[[SQL_EN[i],SQL_EN[i+1]] for i in range(138,154,2)]
     localizations={'fa':dict(title=fa_hero,meta_title=fa_title,description=fa_desc,keywords=item['keywords'],faq=faq_fa),'en':dict(title=en['title'],meta_title=en['title']+' | Meet AJ',description=en['description'],keywords=en['keywords'],faq=faq_en)}
-    links=''.join('<link rel="alternate" hreflang="'+lang+'" href="'+escape(target,quote=True)+'" />\n' for lang,target in [('fa',url+'?lang=fa'),('en',url),('x-default',url)])
-    links+='<script id="article-localizations" type="application/json">'+json.dumps(localizations,ensure_ascii=False).replace('<','\\u003c')+'</script>\n'
+    links='<script id="article-localizations" type="application/json">'+json.dumps(localizations,ensure_ascii=False).replace('<','\\u003c')+'</script>\n'
     s=s.replace('</head>',links+'</head>',1)
     # Generated TOC labels use the same bilingual headings as current sections.
     headings={m[1]:(unescape(m[2]),unescape(m[3])) for m in re.finditer(r'<section id="([^"]+)"[^>]*><h2[^>]*data-fa="([^"]*)" data-en="([^"]*)"',s)}
@@ -179,7 +180,7 @@ for f in files:
             if error.errno not in (13, 22) or attempt == 4:
                 raise
             time.sleep(0.25 * (attempt + 1))
-    report.append(dict(file=f.name,title_fa=fa_hero,title_en=localizations['en']['title'],fa_status='Complete',en_status='Complete',missing_sections=[],translation_quality='Editorial English; aligned operational meaning, headings and shared code',seo_status='Localized title, description, keywords and FAQ; reciprocal hreflang; self canonical per language',seo_metadata=localizations,urls={'fa':url+'?lang=fa','en':url},historical_content='Preserved only in docs/enterprise-articles/originals.zip; removed from public pages',code_blocks=len(codes_before),updated_sha256=hashlib.sha256(f.read_bytes()).hexdigest()))
+    report.append(dict(file=f.name,title_fa=fa_hero,title_en=localizations['en']['title'],fa_status='Complete',en_status='Complete',missing_sections=[],translation_quality='Editorial English; aligned operational meaning, headings and shared code',seo_status='Localized title, description, keywords and FAQ; shared clean canonical; saved language preference',seo_metadata=localizations,urls={'fa':url,'en':url},historical_content='Preserved only in docs/enterprise-articles/originals.zip; removed from public pages',code_blocks=len(codes_before),updated_sha256=hashlib.sha256(f.read_bytes()).hexdigest()))
 (DOC/'bilingual-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
 previous=json.loads((DOC/'report.json').read_text(encoding='utf-8'))
 for row in previous:
@@ -194,9 +195,9 @@ fa_lines=['# گزارش ارتقای فارسی و اولویت بازنویسی
 for row in sorted(previous,key=lambda r:(r['priority'],r['file'])):
     fa_lines += ['## '+row['file'],row['analysis'],'','- اولویت: '+str(row['priority']),'- عنوان: '+row['title'],'- Meta Title: '+row['meta_title'],'- Meta Description: '+row['meta_description'],'- URL: '+row['suggested_url'],'- Keywords: '+', '.join(row['keywords']),'']
 (DOC/'report.md').write_text('\n'.join(fa_lines),encoding='utf-8')
-lines=['# گزارش استانداردسازی FA / EN','تعداد: ۲۵ مقاله؛ تاریخ: 2026-09-30','نسخه تاریخی فقط در originals.zip محفوظ است و در صفحه مقاله نمایش داده نمی‌شود.','']
+lines=['# گزارش استانداردسازی FA / EN','تعداد: ۲۵ مقاله؛ تاریخ: 2026-10-01','نسخه تاریخی فقط در originals.zip محفوظ است و در صفحه مقاله نمایش داده نمی‌شود.','']
 for row in report:
-    lines += ['## '+row['file'],'','- File: '+row['file'],'- Title FA: '+row['title_fa'],'- Title EN: '+row['title_en'],'- FA Status: کامل','- EN Status: کامل','- Missing Sections: ندارد','- Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ','- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل','- URL FA: '+row['urls']['fa'],'- URL EN: '+row['urls']['en'],'']
-lines += ['راهنمای URL/Hreflang: https://developers.google.com/search/docs/specialty/international/localized-versions','']
+    lines += ['## '+row['file'],'','- File: '+row['file'],'- Title FA: '+row['title_fa'],'- Title EN: '+row['title_en'],'- FA Status: کامل','- EN Status: کامل','- Missing Sections: ندارد','- Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ','- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده','- URL FA: '+row['urls']['fa'],'- URL EN: '+row['urls']['en'],'']
+lines += ['دو زبان در یک URL نمایش داده می‌شوند؛ Hreflang جداگانه برای این ساختار تولید نمی‌شود.','']
 (DOC/'bilingual-report.md').write_text('\n'.join(lines),encoding='utf-8')
 print('Built',len(report),'bilingual articles. Original code unchanged.')

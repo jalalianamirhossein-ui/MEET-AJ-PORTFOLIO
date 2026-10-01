@@ -48,7 +48,7 @@ class SqlBackupArticleTest extends TestCase
             'slug' => 'sql-server-automatic-backup-job',
             'status' => 'published', 'published_at' => now()->subDay(),
         ]));
-        $response = $this->get('/articles/sql-server-automatic-backup-job?lang=fa')->assertOk();
+        $response = $this->withUnencryptedCookie('lang', 'fa')->get('/articles/sql-server-automatic-backup-job')->assertOk();
         $response->assertSee('<title>'.$package['presentation']['localizations']['fa']['meta_title'].'</title>', false)
             ->assertSee('"@type":"FAQPage"', false)
             ->assertSee('"inLanguage":"fa"', false)

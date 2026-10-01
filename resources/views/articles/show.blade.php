@@ -335,7 +335,7 @@
     <script src="/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
     <script src="/assets/js/main.js?v=1415" defer></script>
     <script src="/assets/js/scroll-reveal.js?v=1" defer></script>
-    <script src="/assets/js/i18n.js?v=1406" defer></script>
+    <script src="/assets/js/i18n.js?v=1407" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {

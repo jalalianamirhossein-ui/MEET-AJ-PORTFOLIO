@@ -22,13 +22,14 @@
   };
 
   const init = (langs) => {
-    const articleLanguage = document.documentElement.dataset.articleLanguage;
-    if (langs.includes(articleLanguage)) return articleLanguage;
     const stored = localStorage.getItem(KEY);
     if (langs.includes(stored)) return stored;
 
     const cookieMatch = document.cookie.match(/(?:^|;\s*)lang=(en|fa|de)\b/);
     if (cookieMatch && langs.includes(cookieMatch[1])) return cookieMatch[1];
+
+    const articleLanguage = document.documentElement.dataset.articleLanguage;
+    if (langs.includes(articleLanguage)) return articleLanguage;
 
     const browserLang = navigator.language || navigator.userLanguage || "";
     if (browserLang.startsWith("fa") && langs.includes("fa")) return "fa";
@@ -164,14 +165,10 @@
         el.dir = isPersian ? "rtl" : "ltr";
       });
       updateArticleSeo(next);
-      // Preserve query filters and anchor position. English uses the clean URL.
+      // Retire old language parameters without changing filters or the anchor.
       const url = new URL(window.location.href);
-      if (next === "fa") url.searchParams.set("lang", "fa");
-      else url.searchParams.delete("lang");
+      url.searchParams.delete("lang");
       if (url.href !== window.location.href) window.history.replaceState(null, "", url);
-      document.querySelectorAll("[data-article-path]").forEach((el) => {
-        el.href = el.dataset.articlePath + (isPersian ? "?lang=fa" : "");
-      });
     }
 
     const rtlStyle = getRtlStyle();
@@ -326,18 +323,10 @@
     const langs = availableLanguages();
     injectLanguageToggle(langs);
     apply(init(langs));
-    if (document.documentElement.dataset.articleLanguage) {
-      document.querySelectorAll(".article-translations a[hreflang]").forEach((link) => {
-        link.addEventListener("click", (event) => {
-          if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0) return;
-          event.preventDefault();
-          apply(link.hreflang);
-        });
-      });
-      window.addEventListener("popstate", () => {
-        apply(new URL(window.location.href).searchParams.get("lang") === "fa" ? "fa" : "en");
-      });
-    }
+    // Back/forward may restore an older page after the preference changed elsewhere.
+    window.addEventListener("pageshow", (event) => {
+      if (event.persisted) apply(init(availableLanguages()));
+    });
   };
 
   if (document.readyState === "loading") {

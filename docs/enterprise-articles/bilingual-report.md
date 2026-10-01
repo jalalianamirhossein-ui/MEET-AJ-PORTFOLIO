@@ -1,5 +1,5 @@
 # گزارش استانداردسازی FA / EN
-تعداد: ۲۵ مقاله؛ تاریخ: 2026-09-30
+تعداد: ۲۵ مقاله؛ تاریخ: 2026-10-01
 نسخه تاریخی فقط در originals.zip محفوظ است و در صفحه مقاله نمایش داده نمی‌شود.
 
 ## creating-a-bootable-usb.html
@@ -11,8 +11,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/creating-a-bootable-usb?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/creating-a-bootable-usb
 - URL EN: https://meetaj.ir/articles/creating-a-bootable-usb
 
 ## downgrade-mikrotik-routeros-firmware-safely.html
@@ -24,8 +24,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/downgrade-mikrotik-routeros-firmware-safely?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/downgrade-mikrotik-routeros-firmware-safely
 - URL EN: https://meetaj.ir/articles/downgrade-mikrotik-routeros-firmware-safely
 
 ## enable-ssh-linux-complete-guide.html
@@ -37,8 +37,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/enable-ssh-linux-complete-guide?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/enable-ssh-linux-complete-guide
 - URL EN: https://meetaj.ir/articles/enable-ssh-linux-complete-guide
 
 ## http-vs-https-ssl-certificate-impact.html
@@ -50,8 +50,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/http-vs-https-ssl-certificate-impact?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/http-vs-https-ssl-certificate-impact
 - URL EN: https://meetaj.ir/articles/http-vs-https-ssl-certificate-impact
 
 ## imap-vs-pop3-email-protocol-comparison.html
@@ -63,8 +63,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/imap-vs-pop3-email-protocol-comparison?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/imap-vs-pop3-email-protocol-comparison
 - URL EN: https://meetaj.ir/articles/imap-vs-pop3-email-protocol-comparison
 
 ## install-dfs-server-windows-server.html
@@ -76,8 +76,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/install-dfs-server-windows-server?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/install-dfs-server-windows-server
 - URL EN: https://meetaj.ir/articles/install-dfs-server-windows-server
 
 ## install-mikrotik-chr-vmware-workstation.html
@@ -89,8 +89,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/install-mikrotik-chr-vmware-workstation?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/install-mikrotik-chr-vmware-workstation
 - URL EN: https://meetaj.ir/articles/install-mikrotik-chr-vmware-workstation
 
 ## install-vmware-esxi-vmware-workstation-vmcisr.html
@@ -102,8 +102,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/install-vmware-esxi-vmware-workstation-vmcisr?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/install-vmware-esxi-vmware-workstation-vmcisr
 - URL EN: https://meetaj.ir/articles/install-vmware-esxi-vmware-workstation-vmcisr
 
 ## linux-cli-common-commands.html
@@ -115,8 +115,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/linux-cli-common-commands?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/linux-cli-common-commands
 - URL EN: https://meetaj.ir/articles/linux-cli-common-commands
 
 ## linux-security-account-access-management.html
@@ -128,8 +128,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/linux-security-account-access-management?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/linux-security-account-access-management
 - URL EN: https://meetaj.ir/articles/linux-security-account-access-management
 
 ## mikrotik-block-port-scanners.html
@@ -141,8 +141,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/mikrotik-block-port-scanners?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/mikrotik-block-port-scanners
 - URL EN: https://meetaj.ir/articles/mikrotik-block-port-scanners
 
 ## mikrotik-block-website.html
@@ -154,8 +154,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/mikrotik-block-website?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/mikrotik-block-website
 - URL EN: https://meetaj.ir/articles/mikrotik-block-website
 
 ## mikrotik-openvpn-setup-v7.html
@@ -167,8 +167,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/mikrotik-openvpn-setup-v7?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/mikrotik-openvpn-setup-v7
 - URL EN: https://meetaj.ir/articles/mikrotik-openvpn-setup-v7
 
 ## mikrotik-unequal-dual-wan-load-balancing-ecmp.html
@@ -180,8 +180,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/mikrotik-unequal-dual-wan-load-balancing-ecmp?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/mikrotik-unequal-dual-wan-load-balancing-ecmp
 - URL EN: https://meetaj.ir/articles/mikrotik-unequal-dual-wan-load-balancing-ecmp
 
 ## netbox-installation-setup-ubuntu.html
@@ -193,8 +193,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/netbox-installation-setup-ubuntu?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/netbox-installation-setup-ubuntu
 - URL EN: https://meetaj.ir/articles/netbox-installation-setup-ubuntu
 
 ## nginx-installation-configuration-ubuntu.html
@@ -206,8 +206,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/nginx-installation-configuration-ubuntu?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/nginx-installation-configuration-ubuntu
 - URL EN: https://meetaj.ir/articles/nginx-installation-configuration-ubuntu
 
 ## oxidized-network-device-configuration-backup.html
@@ -219,8 +219,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/oxidized-network-device-configuration-backup?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/oxidized-network-device-configuration-backup
 - URL EN: https://meetaj.ir/articles/oxidized-network-device-configuration-backup
 
 ## set-static-ip-ubuntu-server-netplan.html
@@ -232,8 +232,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/set-static-ip-ubuntu-server-netplan?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/set-static-ip-ubuntu-server-netplan
 - URL EN: https://meetaj.ir/articles/set-static-ip-ubuntu-server-netplan
 
 ## sql-server-automatic-backup-job.html
@@ -245,8 +245,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/sql-server-automatic-backup-job?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/sql-server-automatic-backup-job
 - URL EN: https://meetaj.ir/articles/sql-server-automatic-backup-job
 
 ## ubuntu-date-time-settings.html
@@ -258,8 +258,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/ubuntu-date-time-settings?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/ubuntu-date-time-settings
 - URL EN: https://meetaj.ir/articles/ubuntu-date-time-settings
 
 ## vmware-esxi-8-installation-basic-configuration.html
@@ -271,8 +271,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/vmware-esxi-8-installation-basic-configuration?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/vmware-esxi-8-installation-basic-configuration
 - URL EN: https://meetaj.ir/articles/vmware-esxi-8-installation-basic-configuration
 
 ## vsphere-standard-switch-vs-distributed-switch.html
@@ -284,8 +284,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/vsphere-standard-switch-vs-distributed-switch?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/vsphere-standard-switch-vs-distributed-switch
 - URL EN: https://meetaj.ir/articles/vsphere-standard-switch-vs-distributed-switch
 
 ## windows-cmd-common-network-commands.html
@@ -297,8 +297,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/windows-cmd-common-network-commands?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/windows-cmd-common-network-commands
 - URL EN: https://meetaj.ir/articles/windows-cmd-common-network-commands
 
 ## windows-hardware-info-cmd-vs-dxdiag.html
@@ -310,8 +310,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/windows-hardware-info-cmd-vs-dxdiag?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/windows-hardware-info-cmd-vs-dxdiag
 - URL EN: https://meetaj.ir/articles/windows-hardware-info-cmd-vs-dxdiag
 
 ## windows-password-reset-secure-access-recovery.html
@@ -323,8 +323,8 @@
 - EN Status: کامل
 - Missing Sections: ندارد
 - Translation Quality: نگارش تخصصی انگلیسی؛ Heading و دستورات هماهنگ
-- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical همان زبان و Hreflang متقابل
-- URL FA: https://meetaj.ir/articles/windows-password-reset-secure-access-recovery?lang=fa
+- SEO Status: عنوان، Description، Keywords و FAQ مستقل؛ Canonical مشترک بدون پارامتر؛ زبان مطابق انتخاب ذخیره‌شده
+- URL FA: https://meetaj.ir/articles/windows-password-reset-secure-access-recovery
 - URL EN: https://meetaj.ir/articles/windows-password-reset-secure-access-recovery
 
-راهنمای URL/Hreflang: https://developers.google.com/search/docs/specialty/international/localized-versions
+دو زبان در یک URL نمایش داده می‌شوند؛ Hreflang جداگانه برای این ساختار تولید نمی‌شود.

@@ -55,7 +55,7 @@ def build():
             faq = item['faq']
             if file.stem != 'sql-server-automatic-backup-job':
                 sections.append('<section id="faq" class="article-section"><h2>پرسش‌های متداول</h2>'+''.join('<h3>'+html.escape(q)+'</h3><p>'+html.escape(a)+'</p>' for q,a in faq)+'</section>')
-            sections.append('<section id="enterprise-sources"><h2>منابع رسمی</h2><ul>'+''.join('<li><a href="'+html.escape(url,quote=True)+'" rel="noopener">'+html.escape(label)+'</a></li>' for label,url in item['sources'])+'</ul><p>تاریخ بررسی منابع: 2026-09-30. اعتبارسنجی عملی روی محیط هدف باید پیش از انتشار تغییر زیرساخت انجام شود.</p></section>')
+            sections.append('<section id="enterprise-sources"><h2>منابع رسمی</h2><ul>'+''.join('<li><a href="'+html.escape(url,quote=True)+'" rel="noopener">'+html.escape(label)+'</a></li>' for label,url in item['sources'])+'</ul></section>')
             if file.stem == 'sql-server-automatic-backup-job':
                 # Existing editorial package is the executable implementation.
                 body = old[start.end():end]+'\n<div lang="fa" dir="rtl">'+''.join(sections)+'</div>'

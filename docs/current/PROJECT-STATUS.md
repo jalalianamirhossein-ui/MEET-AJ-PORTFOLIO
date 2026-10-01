@@ -30,16 +30,16 @@ Before synchronizing articles, a consistent local SQLite backup was saved under 
 
 - Homepage sections, service catalog, testimonials and article data are CMS-backed.
 - The library supports search, tag filters, pagination and related articles. Cards keep English titles.
-- English article content and SEO use the clean URL; Persian uses `?lang=fa`. Both are complete server responses with localized schemas, self-canonicals and reciprocal alternate links.
-- The floating language toggle updates the current DOM/metadata and URL without reloading the document. Code is identical in both editions.
+- English and Persian articles share the clean URL and canonical. The saved homepage language preference selects the content and localized schemas; English is the server default. Old language-query URLs redirect to the clean path and the sitemap lists each article once.
+- The floating language toggle updates the current DOM and metadata without changing the URL or reloading the document. Code is identical in both editions.
 - The extra inline FA/EN row and historical-edition panels are removed. Exact original articles remain in the documentation archive.
 - vSS/vDS and the other comparison topics retain their comparison tables and selection criteria. DFS initial synchronization now gates activation of the second namespace target.
-- The English sidebar name stays on one line. Glass CSS is `?v=11`; main JavaScript is `?v=1415`; article i18n is `?v=1406` (homepage/library `?v=1403`).
+- The English sidebar name stays on one line. Glass CSS is `?v=11`; main JavaScript is `?v=1415`; shared i18n is `?v=1407` on the homepage, library and articles.
 - Contact endpoints retain CSRF, honeypot, validation, throttling and request storage. Services appear in the homepage catalog; removed detail routes return 404. German content remains draft-only.
 
 ## Verification
 
-Full isolated feature suite: **84 tests, 0 failures, 1 skipped** (MySQL-only schema test). Article structural validation: **25 files, zero errors**. Live local content comparison: **Failures: 0**. Browser and syntax-check details are recorded in the dated audit.
+Full isolated feature suite: **85 tests, 5,453 assertions, 0 failures, 1 skipped** (MySQL-only schema test). Article structural validation: **25 files, zero errors**. Live local content comparison: **Failures: 0**. Browser and syntax-check details are recorded in the dated audit.
 
 Deployment setup now refuses an existing `.env`, safely quotes new values and validates them with the installed dotenv parser. The local `.env` and existing `APP_KEY` were preserved.
 

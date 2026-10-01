@@ -8,16 +8,17 @@ All 25 imported articles have complete FA and EN prose, matching headings, share
 
 | Request | Server-rendered edition | Canonical |
 |---------|-------------------------|-----------|
-| `/articles/{slug}` | English, LTR | clean URL |
-| `/articles/{slug}?lang=fa` | Persian, RTL | same URL with `?lang=fa` |
-| `/articles/{slug}?lang=en` | English alias | clean URL |
-| unsupported `lang` | English fallback | clean URL |
+| `/articles/{slug}`, no preference | English, LTR | clean URL |
+| same URL, preference cookie `lang=fa` | Persian, RTL | clean URL |
+| same URL, preference cookie `lang=en` | English, LTR | clean URL |
+| same URL, unsupported cookie value | English fallback | clean URL |
+| retired article `?lang=…` URL | 301 to the path without `lang`; other parameters preserved | clean URL |
 
-The article URL takes precedence over cookies and local storage. Direct FA/EN requests return complete content and SEO without JavaScript. There are no separate `/fa/...` or `/en/...` routes. Legacy `.html` redirects preserve the requested language.
+The homepage, library and articles use the same preference. JavaScript reads local storage first, then the `lang` cookie, then the server-rendered article language or the browser-language fallback on other pages. Laravel accepts the plain, non-sensitive `lang` cookie written by this control; only `fa` selects Persian article content. Direct requests with that cookie return complete content and SEO without JavaScript. There are no separate `/fa/...` or `/en/...` routes. Legacy `.html` redirects remove obsolete `lang` query parameters in the same redirect.
 
 ## Switching in the browser
 
-The shared floating language button updates existing prose, headings, TOC, direction, title, description, keywords, canonical, Open Graph, Article/FAQ schema, share links and related-article links. `history.replaceState` changes the URL without navigating or fetching a second article. The switch payload contains metadata only, not two copies of the article body. The first Persian switch may load the RTL stylesheet.
+The shared floating language button updates existing prose, headings, TOC, direction, title, description, keywords, Open Graph, Article/FAQ schema and sharing titles. Canonical, sharing URLs and article links stay clean in both languages. The control saves the preference for subsequent navigation and refreshes without fetching or reloading the article. A restored back/forward page re-applies the saved language. The switch payload contains metadata only, not two copies of the article body. The first Persian switch may load the RTL stylesheet. All public pages load `i18n.js?v=1407`.
 
 The inline FA/EN row above the article date is removed. Historical article editions are also removed from public pages; exact originals remain in `docs/enterprise-articles/originals.zip`.
 
@@ -25,7 +26,7 @@ Homepage and article-library UI translation still uses the saved preference and 
 
 ## SEO and CMS
 
-Article heads contain reciprocal `fa`, `en` and English `x-default` links. Each language has a self-canonical. The sitemap includes both article editions. See [SEO.md](SEO.md).
+Both languages use one clean canonical. No language-specific `hreflang` URLs are emitted because there are no distinct translation URLs. The sitemap lists each article once. Article responses use private, revalidated HTTP caching so shared caches do not mix cookie-selected languages. See [SEO.md](SEO.md).
 
 `config/cms.php` allows EN/FA publicly and DE in drafts. German publication is rejected and `/de` returns 404. Do not add German alternates without published translations.
 
@@ -33,4 +34,4 @@ The importer reads each source's `article-localizations` JSON. Existing rows req
 
 ## Validation
 
-`BilingualEnterpriseArticleTest` renders every article in both languages and checks titles, schemas, canonical/alternate URLs, FAQ text, section IDs and exact code-block parity. Browser checks cover the floating toggle and URL changes. Full local results: [2026-10-01 audit](../qa/FULL-AUDIT-2026-10-01.md).
+`BilingualEnterpriseArticleTest` renders every article in both languages using the plain preference cookie and checks titles, schemas, shared canonicals, absence of translation URLs, FAQ text, section IDs and exact code-block parity. Browser checks cover homepage-to-article language continuity, the floating toggle, refresh and clean URLs. Full local results: [2026-10-01 audit](../qa/FULL-AUDIT-2026-10-01.md).

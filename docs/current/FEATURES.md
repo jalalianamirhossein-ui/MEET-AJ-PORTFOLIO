@@ -2,7 +2,7 @@
 
 **Authority:** AUTHORITATIVE description of public and CMS features.  
 **Verified:** 2026-09-21 against Blade views, homepage content catalog, Filament resources, and the full PHPUnit suite.
-**Assets in live Blade heads:** `main.css?v=1002`, `lang-toggle.css?v=1403`, `rtl.css?v=1405`, `visual-upgrade.css?v=1713`, `site-modules.css?v=1853`, `main.js?v=1415`, `i18n.js?v=1403`, `contact-form.js?v=1403`, `service-catalog.js?v=1813`; current glass overlay `glass-system.css?v=11` and article-detail `i18n.js?v=1406`.  
+**Assets in live Blade heads:** `main.css?v=1002`, `lang-toggle.css?v=1403`, `rtl.css?v=1405`, `visual-upgrade.css?v=1713`, `site-modules.css?v=1853`, `main.js?v=1415`, `i18n.js?v=1407`, `contact-form.js?v=1403`, `service-catalog.js?v=1813`; current glass overlay `glass-system.css?v=11`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md) · **Detail:** [ARTICLES.md](ARTICLES.md), [SERVICES.md](SERVICES.md), [REQUESTS.md](REQUESTS.md), [ADMIN.md](ADMIN.md), [DESIGN-SYSTEM.md](DESIGN-SYSTEM.md)
 
 ## Public site
@@ -24,7 +24,7 @@
 | Sharing | detail | LinkedIn / WhatsApp / Telegram / copy link. No tracking pixels |
 | Breadcrumbs | detail | Visible `nav[aria-label=Breadcrumb]` + separate `BreadcrumbList` JSON-LD (`$seo['breadcrumb']`) beside Article schema |
 | Services | `/#services` | Database-driven homepage catalog and shared details drawer. Standalone service detail pages are removed |
-| Languages | EN / FA UI | Persian placeholder applied (`عنوان، موضوع یا فناوری`). German remains draft-only. FA/EN articles have localized SEO and hreflang; no DE articles or DE alternates |
+| Languages | EN / FA UI | Persian placeholder applied (`عنوان، موضوع یا فناوری`). Shared saved language on homepage/library/articles, instant toggling, clean shared article URL/canonical and localized SEO. German remains draft-only; no separate language alternates |
 | Contact | `/forms/*.php` | CSRF + honeypot + throttle; rows land in Filament Requests |
 
 ## CMS (Filament 5)

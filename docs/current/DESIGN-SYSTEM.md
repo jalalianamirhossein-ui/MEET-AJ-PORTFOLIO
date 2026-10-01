@@ -43,7 +43,7 @@ Article library teasers are **H3** (after section H2). Homepage skill/value/cert
 - **Homepage Expertise / تخصص‌ها:** five columns with pastel category accents (Infrastructure `#15803d`, Networking `#2563eb`, DevOps `#6d28d9`, Monitoring `#0f766e`, Security `#c2410c`). Title is a tinted pill + icon, not a filled card. Skill rows use a 3px `border-inline-start` (left in LTR, right in RTL).
 - **Filters:** pill buttons, keyboard + touch, min-height 44px.
 - **Nav / i18n:** solid listbox (no glass); DE only if `[data-de]` exists. Fullscreen mobile `#header.header-show` with icy-blue chrome (`visual-upgrade.css` + `site-modules.css`). Closed header is `hidden` + `inert`. Open menu inerts `main` and `footer` (`main.js?v=1415`). Hamburger `inset-inline-start`; language `inset-inline-end`.
-- **Quote form:** hidden until Request a Quote. Same field language as homepage contact. Placeholders: `data-en-placeholder` / `data-fa-placeholder` applied by `i18n.js?v=1403`.
+- **Quote form:** hidden until Request a Quote. Same field language as homepage contact. Placeholders: `data-en-placeholder` / `data-fa-placeholder` applied by `i18n.js?v=1407`.
 
 ## Motion
 

@@ -1,6 +1,6 @@
 # Testing — Meet AJ
 
-Verified **2026-10-01**. Latest full suite: **84 tests, 0 failures, 1 skipped**. Exact assertion count and browser findings are in [FULL-AUDIT-2026-10-01.md](../qa/FULL-AUDIT-2026-10-01.md).
+Verified **2026-10-01**. Latest full suite: **85 tests, 5,453 assertions, 0 failures, 1 skipped**. Browser findings are in [FULL-AUDIT-2026-10-01.md](../qa/FULL-AUDIT-2026-10-01.md).
 
 ## Commands
 
@@ -22,7 +22,9 @@ On this Windows workstation PHP is `.runtime/php84/php.exe`. `composer test` als
 
 The feature suite covers public pages and redirects; CMS roles/policies; contact validation, CSRF, honeypot and throttling; request workflow; homepage content; service catalog; article search/tags/related content; publication rules; image fallbacks; SQL backup package; FA/EN content and SEO; admin layout; and production-template handling.
 
-New regression coverage checks that content comparison detects stale source hashes/missing localization even when markup counts match, skips custom CMS articles without crashing, and excludes drafts. Environment setup round-trips passwords with spaces, quotes, backslashes, dollar signs and comment characters, and refuses to overwrite an existing `.env`. Sitemap checks require both languages to reflect the article update date.
+New regression coverage checks that content comparison detects stale source hashes/missing localization even when markup counts match, skips custom CMS articles without crashing, and excludes drafts. Environment setup round-trips passwords with spaces, quotes, backslashes, dollar signs and comment characters, and refuses to overwrite an existing `.env`. Language checks use the plain preference cookie, verify English fallback and private caching, and require clean related/canonical URLs and one sitemap entry per article with its update date. Old language-query redirects preserve unrelated parameters.
+
+Source-update regression coverage also verifies that importing changed HTML preserves existing draft/scheduled publication status, dates and translation keys.
 
 ## Local operational checks
 
@@ -30,7 +32,7 @@ All 25 local article rows were synchronized after a consistent SQLite backup. `s
 
 The article validator checks 25 maintained HTML files, section IDs, FAQ/schema consistency, archive hashes and embedded Python syntax. Bash and PowerShell examples receive syntax-only checks; infrastructure commands are not executed.
 
-Live browser checks cover the English menu name, local homepage/library navigation, English defaults, Persian article rendering and instant toggling. Evidence is in the dated audit. No real contact messages are sent by the browser checks.
+Live browser checks cover the English menu name, local homepage/library navigation, English defaults, Persian article rendering, shared language preference, refresh and instant toggling at a clean URL. Evidence is in the dated audit. No real contact messages are sent by the browser checks.
 
 ## Limits
 

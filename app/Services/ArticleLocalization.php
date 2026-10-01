@@ -16,7 +16,7 @@ class ArticleLocalization
         $locale = $locale === 'fa' ? 'fa' : 'en';
         $text = $localizations[$locale];
         $base = $article->publicUrl();
-        $canonical = $base.($locale === 'fa' ? '?lang=fa' : '');
+        $canonical = $base;
         // Only this request's model is changed; the database identity stays shared.
         if ($renderContent) {
             $article->content = $this->html((string) $article->content, $locale);
@@ -36,7 +36,8 @@ class ArticleLocalization
             'og_title' => $text['title'], 'og_description' => $text['description'],
             'twitter_title' => $text['title'], 'twitter_description' => $text['description'],
             'keywords' => implode(', ', $text['keywords']),
-            'alternates' => ['fa' => $base.'?lang=fa', 'en' => $base, 'x-default' => $base],
+            // Both languages use the same URL and a saved preference, not separate pages.
+            'alternates' => [],
             'schema' => array_replace(data_get($article->seo_data, 'schema', []) ?? [], [
                 '@context' => 'https://schema.org', '@type' => 'Article',
                 'headline' => $text['title'], 'description' => $text['description'],
@@ -78,6 +79,10 @@ class ArticleLocalization
 
             return $key;
         }, $html) ?? $html;
+        // Previously imported rows may still contain the retired source-review note.
+        $html = preg_replace_callback('~<p\b[^>]*>.*?</p>~is', fn ($match) =>
+            str_contains($match[0], 'تاریخ بررسی منابع') || str_contains($match[0], 'Sources reviewed:')
+                ? '' : $match[0], $html) ?? $html;
         $html = preg_replace_callback('~<(h[1-6]|p|span|li|th|td|summary)\b([^>]*\bdata-'.$locale.'="([^"]*)"[^>]*)>(.*?)</\1\s*>~is', function ($match) use ($locale) {
             $value = html_entity_decode($match[3], ENT_QUOTES | ENT_HTML5, 'UTF-8');
             // Keep source citation links when replacing the surrounding prose.

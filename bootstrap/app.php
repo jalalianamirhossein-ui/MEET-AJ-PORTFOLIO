@@ -29,6 +29,8 @@ return Application::configure(basePath: $basePath)
     ->withRouting(web: __DIR__.'/../routes/web.php', commands: __DIR__.'/../routes/console.php')
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->trustProxies(at: '*');
+        // The shared language switch writes this non-sensitive preference in JavaScript.
+        $middleware->encryptCookies(except: ['lang']);
         $middleware->web(prepend: [
             AcceptLegacyCsrfToken::class,
         ], append: [

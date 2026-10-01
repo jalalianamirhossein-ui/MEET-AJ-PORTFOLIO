@@ -1,47 +1,56 @@
 {
+  "revision_date": "2026-10-01",
   "articles": 25,
   "server_rendered_language_pages": 50,
-  "shared_code_blocks": 89,
+  "shared_code_blocks": 90,
   "checks": [
-    "Matching current section IDs and unchanged code in FA/EN",
-    "No untranslated Persian prose in current English runbooks",
+    "Complete FA/EN editions, matching section IDs and unchanged executable code",
     "Localized title, description, keywords, Article and visible FAQ schemas",
-    "Self canonical, reciprocal hreflang and translation links",
-    "Legacy redirects preserve lang; cookies do not override explicit URL language",
-    "Related links retain locale; GET does not persist model changes",
-    "Sitemap contains 50 article language URLs and 100 reciprocal alternate links",
-    "Original ZIP hashes, final source hashes, HTML/TOC and embedded Python syntax",
-    "Instant language switches on vSS/vDS and SQL Server in the local browser: current text, title, RTL/LTR, canonical, FAQ schema, code parity, share/copy URLs and related links; no document requests (only first Persian stylesheet load)",
-    "Bilingual builder produces identical files on repeated execution",
-    "Original comparison topics restored for vSS/vDS, HTTP/HTTPS, IMAP/POP3, Windows inventory tools; explicit ECMP/PCC design rationale",
-    "Generic Enterprise scenario label and repeated fictional-company prefix removed across all 25 current editions"
+    "Shared clean canonical, sharing, copy and related URLs without a language query",
+    "Plain preference cookie selects server language; saved homepage preference also initializes article language",
+    "Old article language-query URLs return 301 while preserving unrelated parameters",
+    "English fallback without a valid Persian preference; article HTML uses private HTTP caching",
+    "Sitemap lists the homepage and 25 articles once each, with article modification dates",
+    "Original archive hashes and final source hashes match; HTML/TOC and embedded Python syntax pass",
+    "Browser checks passed: homepage/article/related/search navigation, reopening, instant toggles, clean URLs and code parity",
+    "Bilingual builder repeated with all 25 source hashes unchanged",
+    "Source updates preserve draft/scheduled publication status, dates and translation keys",
+    "Obsolete alternate head tags removed; SQL SEO paragraph updated to describe the shared URL; operational prose and executable examples retained",
+    "Generated source-review paragraph removed in FA/EN and the generator; official reference links retained; old stored bodies filtered at render time"
   ],
   "targeted_tests": {
-    "tests": 22,
-    "assertions": 4366,
-    "failures": 0
+    "tests": 15,
+    "assertions": 4202,
+    "failures": 0,
+    "errors": 0
   },
   "full_suite": {
-    "tests": 81,
-    "assertions": 5279,
-    "failures": 1,
+    "tests": 85,
+    "assertions": 5453,
+    "failures": 0,
+    "errors": 0,
     "skipped": 1,
     "skipped_tests": [
       "test_mysql_engine_constraints_when_connected"
-    ],
-    "failure": "Pre-existing homepage asset-version assertion: expected main.js?v=1414, HEAD homepage uses v=1415"
+    ]
   },
-  "deployment": "Source/application files changed; operational database and published site were not updated",
+  "http_checks": {
+    "article_pages": 50,
+    "sitemap_urls": 26,
+    "errors": []
+  },
+  "latest_article_tests": {
+    "tests": 10,
+    "assertions": 3907,
+    "failures": 0,
+    "errors": 0
+  },
+  "deployment": "Local database metadata synchronized after a full SQLite backup and editorial parity check; original dates retained. Remote server not changed.",
   "infrastructure_commands_executed": false,
   "historical_editions": "Removed from public pages; originals retained only in originals.zip",
-  "revision_date": "2026-10-01",
   "default_language": "en",
   "english_url": "/articles/{slug}",
-  "persian_url": "/articles/{slug}?lang=fa",
-  "latest_history_removal_tests": {
-    "tests": 5,
-    "assertions": 3723,
-    "failures": 0,
-    "nested_stored_history": "Verified in FA/EN without removing adjacent content or code"
-  }
+  "persian_url": "/articles/{slug}",
+  "language_selection": "Saved preference shared with homepage and library; no language query parameters",
+  "evidence": "docs/qa/FULL-AUDIT-2026-10-01.md"
 }

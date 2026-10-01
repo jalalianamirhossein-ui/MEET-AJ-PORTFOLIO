@@ -33,8 +33,7 @@ class BilingualEnterpriseArticleTest extends TestCase
             $localeIds = [];
             $original = $article->content;
             foreach (['fa', 'en'] as $lang) {
-                $url = $article->path().($lang === 'fa' ? '?lang=fa' : '');
-                $html = $this->get($url)->assertOk()->getContent();
+                $html = $this->withUnencryptedCookie('lang', $lang)->get($article->path())->assertOk()->getContent();
                 if (getenv('ARTICLE_PREVIEW_EXPORT')) {
                     file_put_contents(storage_path('app/bilingual-preview/'.$article->slug.'.'.$lang.'.html'), $html);
                 }
@@ -50,20 +49,18 @@ class BilingualEnterpriseArticleTest extends TestCase
                 foreach (['fa', 'en'] as $switchLocale) {
                     $this->assertSame($article->presentation['localizations'][$switchLocale]['meta_title'], $switchSeo[$switchLocale]['title']);
                     $this->assertSame($switchLocale, $switchSeo[$switchLocale]['faq_schema']['inLanguage']);
+                    $this->assertSame($article->publicUrl(), $switchSeo[$switchLocale]['canonical']);
                     $this->assertArrayNotHasKey('content', $switchSeo[$switchLocale], 'Switch payload must not duplicate article bodies');
                 }
-                $this->assertSame($article->publicUrl().($lang === 'fa' ? '?lang=fa' : ''), $xp->evaluate('string(//link[@rel="canonical"]/@href)'));
-                foreach (['fa', 'en'] as $alternate) {
-                    $target = $article->publicUrl().($alternate === 'fa' ? '?lang=fa' : '');
-                    $this->assertSame($target, $xp->evaluate('string(//link[@hreflang="'.$alternate.'"]/@href)'));
-                }
+                $this->assertSame($article->publicUrl(), $xp->evaluate('string(//link[@rel="canonical"]/@href)'));
+                $this->assertSame(0, $xp->query('//link[@hreflang]')->length);
                 $this->assertSame(0, $xp->query('//nav[@class="article-translations"]')->length);
                 $this->assertSame('/articles', $xp->evaluate('string(//a[@class="article-back"]/@href)'));
                 $this->assertSame(0, $xp->query('//*[@id="legacy-history"]')->length);
                 $this->assertSame($lang, $xp->evaluate('string(//article[@class="article-body"]/@lang)'));
                 $this->assertSame($lang === 'fa' ? 'rtl' : 'ltr', $xp->evaluate('string(//article[@class="article-body"]/@dir)'));
                 foreach ($xp->query('//a[@class="article-teaser-link"]') as $peer) {
-                    $this->assertSame($lang === 'fa', str_ends_with($peer->getAttribute('href'), '?lang=fa'));
+                    $this->assertStringNotContainsString('?', $peer->getAttribute('href'));
                 }
                 $localeCodes[$lang] = [];
                 foreach ($xp->query('//article[@class="article-body"]//pre/code') as $code) {
@@ -107,16 +104,24 @@ class BilingualEnterpriseArticleTest extends TestCase
         $this->assertSame(25, Article::count());
     }
 
-    public function test_query_language_survives_legacy_redirect_and_is_independent_of_cookie_preferences(): void
+    public function test_saved_language_is_shared_on_clean_urls_and_old_language_parameters_are_removed(): void
     {
         app(LegacyArticleImporter::class)->import(false);
         $path = '/articles/enable-ssh-linux-complete-guide';
-        $this->get($path.'.html?lang=en')->assertRedirect($path.'?lang=en');
-        $this->withCookie('lang', 'en')->get($path.'?lang=fa')->assertOk()->assertSee('data-article-language="fa"', false);
-        $this->withCookie('lang', 'fa')->get($path)->assertOk()->assertSee('data-article-language="en"', false);
-        $this->get($path.'?lang=invalid')->assertOk()->assertSee('data-article-language="en"', false);
-        $alias = $this->get($path.'?lang=en')->assertOk()->getContent();
-        $this->assertSame(url($path), $this->dom($alias)->evaluate('string(//link[@rel="canonical"]/@href)'));
+        $this->get($path)->assertOk()->assertSee('data-article-language="en"', false);
+        $this->withUnencryptedCookie('lang', 'fa')->get($path)->assertOk()
+            ->assertSee('data-article-language="fa"', false)
+            ->assertHeader('Cache-Control', 'max-age=0, must-revalidate, private');
+        $this->withUnencryptedCookie('lang', 'en')->get($path)->assertOk()->assertSee('data-article-language="en"', false);
+        foreach (['de', 'invalid'] as $invalid) {
+            $this->withUnencryptedCookie('lang', $invalid)->get($path)->assertOk()->assertSee('data-article-language="en"', false);
+        }
+        foreach (['fa', 'en', 'invalid'] as $oldLanguage) {
+            $this->get($path.'?lang='.$oldLanguage)->assertStatus(301)->assertRedirect($path);
+            $this->get($path.'.html?lang='.$oldLanguage.'&utm_source=library')->assertStatus(301)->assertRedirect($path.'?utm_source=library');
+        }
+        $this->get($path.'?utm_source=home&lang=fa&q=a%20b')->assertStatus(301)
+            ->assertRedirect($path.'?utm_source=home&q=a%20b');
         $updated = Article::where('slug', 'enable-ssh-linux-complete-guide')->firstOrFail();
         $updated->forceFill(['published_at' => now()->subYear(), 'updated_at' => now()->subDay()])->save();
         $xml = $this->get('/sitemap.xml')->assertOk()->getContent();
@@ -125,18 +130,17 @@ class BilingualEnterpriseArticleTest extends TestCase
         $xp = new \DOMXPath($dom);
         $xp->registerNamespace('s', 'http://www.sitemaps.org/schemas/sitemap/0.9');
         $xp->registerNamespace('x', 'http://www.w3.org/1999/xhtml');
-        $this->assertSame(50, $xp->query('//s:url[contains(s:loc,"/articles/")]')->length);
-        $this->assertSame(100, $xp->query('//s:url/x:link')->length);
-        foreach (['', '?lang=fa'] as $suffix) {
-            $this->assertSame(now()->subDay()->toDateString(), $xp->evaluate('string(//s:url[s:loc="'.url($path).$suffix.'"]/s:lastmod)'));
-        }
+        $this->assertSame(25, $xp->query('//s:url[contains(s:loc,"/articles/")]')->length);
+        $this->assertSame(0, $xp->query('//s:url/x:link')->length);
+        $this->assertStringNotContainsString('lang=', $xml);
+        $this->assertSame(now()->subDay()->toDateString(), $xp->evaluate('string(//s:url[s:loc="'.url($path).'"]/s:lastmod)'));
     }
 
     public function test_sql_editorial_package_supports_the_same_english_route(): void
     {
         $package = require resource_path('content/articles/sql-server-automatic-backup-job/build.php');
         Article::create(array_merge($package, ['slug' => 'sql-server-automatic-backup-job', 'status' => 'published', 'published_at' => now()->subDay()]));
-        $this->get('/articles/sql-server-automatic-backup-job?lang=en')->assertOk()
+        $this->get('/articles/sql-server-automatic-backup-job')->assertOk()
             ->assertSee($package['presentation']['localizations']['en']['title'])
             ->assertSee('"inLanguage":"en"', false)
             ->assertSee('Why is log backup unavailable in SIMPLE?');
@@ -159,7 +163,7 @@ class BilingualEnterpriseArticleTest extends TestCase
         // A routine import skips existing rows even after source files change.
         $this->artisan('articles:import-legacy')->assertSuccessful();
         $this->assertNull(data_get($article->fresh()->presentation, 'localizations'));
-        $this->get($article->path().'?lang=en')->assertOk()->assertSee('متن نسخه قدیمی فارسی');
+        $this->get($article->path())->assertOk()->assertSee('متن نسخه قدیمی فارسی');
 
         // Preview is read-only; the explicit update preserves the shared identity.
         $this->artisan('articles:import-legacy', ['--update-existing' => true, '--dry-run' => true])->assertSuccessful();
@@ -169,13 +173,33 @@ class BilingualEnterpriseArticleTest extends TestCase
         $this->assertSame($id, $article->id);
         $this->assertSame($translationKey, $article->translation_key);
         $this->assertCount(25, Article::all());
-        $this->get($article->path().'?lang=en')->assertOk()
+        $this->get($article->path())->assertOk()
             ->assertSee('data-article-language="en"', false)
             ->assertSee($article->presentation['localizations']['en']['title'])
             ->assertDontSee('متن نسخه قدیمی فارسی');
-        $this->get($article->path().'?lang=fa')->assertOk()
+        $this->withUnencryptedCookie('lang', 'fa')->get($article->path())->assertOk()
             ->assertSee('data-article-language="fa"', false)
             ->assertSee($article->presentation['localizations']['fa']['title']);
+    }
+
+    public function test_source_updates_preserve_drafts_and_scheduled_publication_dates(): void
+    {
+        app(LegacyArticleImporter::class)->import(false);
+        foreach (['draft', 'published'] as $status) {
+            $article = Article::where('slug', $status === 'draft' ? 'enable-ssh-linux-complete-guide' : 'netbox-installation-setup-ubuntu')->firstOrFail();
+            $presentation = $article->presentation;
+            $presentation['source_hash'] = 'previous-source';
+            $scheduledAt = now()->addWeek()->startOfSecond();
+            $article->update(['status' => $status, 'published_at' => $scheduledAt, 'presentation' => $presentation]);
+            $translationKey = $article->translation_key;
+            app(LegacyArticleImporter::class)->import(false, true, [$article->slug]);
+            $article->refresh();
+            $this->assertSame($status, $article->status);
+            $this->assertTrue($article->published_at->equalTo($scheduledAt));
+            $this->assertSame($translationKey, $article->translation_key);
+            $this->assertSame(hash_file('sha256', resource_path('legacy/articles/'.$article->slug.'.html')), $article->presentation['source_hash']);
+            $this->get($article->path())->assertNotFound();
+        }
     }
 
     public function test_comparison_articles_keep_their_original_decision_topic(): void
@@ -189,7 +213,7 @@ class BilingualEnterpriseArticleTest extends TestCase
             'mikrotik-unequal-dual-wan-load-balancing-ecmp' => 'ecmp-pcc-comparison',
         ] as $slug => $section) {
             foreach (['en', 'fa'] as $locale) {
-                $html = $this->get('/articles/'.$slug.($locale === 'fa' ? '?lang=fa' : ''))->assertOk()->getContent();
+                $html = $this->withUnencryptedCookie('lang', $locale)->get('/articles/'.$slug)->assertOk()->getContent();
                 $xp = $this->dom($html);
                 $this->assertGreaterThanOrEqual(3, $xp->query('//section[@id="'.$section.'"]//tbody/tr')->length, $slug);
                 $this->assertSame(1, $xp->query('//ul[@class="article-toc-list"]//a[@href="#'.$section.'"]')->length);

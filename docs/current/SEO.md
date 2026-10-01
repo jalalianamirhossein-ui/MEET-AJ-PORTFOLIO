@@ -4,9 +4,11 @@ Verified locally on **2026-10-01** against routes, `ArticleLocalization`, `Artic
 
 ## Article identity and languages
 
-English uses `/articles/{slug}`; Persian uses `/articles/{slug}?lang=fa`. Each response has a localized title, description, keywords, Open Graph/Twitter copy and a self-canonical. The old `?lang=en` alias has a clean English canonical. The default article edition is English regardless of a saved Persian UI preference.
+English and Persian share `/articles/{slug}`. The saved `lang` cookie selects the server-rendered content and localized title, description, keywords and Open Graph/Twitter copy. English is the default without a valid Persian preference. Both languages have the same clean canonical. Retired `?lang=…` article links return 301 to the same path without that parameter, preserving other query parameters.
 
-Both editions expose reciprocal EN/FA alternate links and an English `x-default`. No German alternate is emitted. The floating language control updates metadata and URL in place. Direct requests also work without JavaScript, so crawler correctness does not depend on clicking the control.
+There are no distinct translation URLs, so no language-specific alternate links are emitted. The floating control updates metadata in place while the URL stays unchanged. Crawlers without a preference receive the complete English edition. Persian content remains accessible through the shared language control and preference cookie; this structure does not provide separately addressable Persian search landing pages.
+
+Google documents separate URLs for independently discoverable language versions and `hreflang` annotations between them. The shared URL here follows the requested homepage-style behavior. See [Google's multilingual site guidance](https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites) and [localized URL annotations](https://developers.google.com/search/docs/specialty/international/localized-versions).
 
 ## Structured data
 
@@ -16,14 +18,14 @@ The homepage retains its existing person/site structured data. Imported images u
 
 ## Sitemap and redirects
 
-`GET /sitemap.xml` is generated from published English article identities. With the current library it contains the homepage plus 50 article edition URLs and 100 EN/FA alternate links. Article `lastmod` uses the stored modification date, including English content updates. Draft/future/German articles and removed service detail pages are excluded. The article library itself is not currently a separate sitemap entry.
+`GET /sitemap.xml` is generated from published English article identities. With the current library it contains the homepage plus 25 clean article URLs. Article `lastmod` uses the stored modification date. Draft/future/German articles and removed service detail pages are excluded. The article library itself is not currently a separate sitemap entry.
 
-Legacy `/articles/{slug}.html` URLs redirect once to the clean path while preserving language. `/index.html` redirects to `/`. Slug-history redirects work through `article_redirects`; unknown or unpublished destinations return 404. Removed `/services/...` routes return 404.
+Legacy `/articles/{slug}.html` URLs redirect once to the clean path, removing `lang` while preserving unrelated query parameters. `/index.html` redirects to `/`. Slug-history redirects work through `article_redirects`; unknown or unpublished destinations return 404. Removed `/services/...` routes return 404.
 
 `robots.txt` excludes `/admin`, `/livewire` and `/forms` and points to the configured sitemap. Robots rules do not replace authorization.
 
 ## Deployment checks
 
-Set `APP_URL` to the real canonical HTTPS origin. Deploy PHP/views/assets and update existing imported rows together. Check both language URLs in page source, then the sitemap and redirects. A CDN must forward `lang` and vary article cache entries by it. Publish the versioned assets and purge stale application/CDN responses after a release.
+Set `APP_URL` to the real canonical HTTPS origin. Deploy PHP/views/assets together. Check the same article URL with no preference and with cookie `lang=fa`, then the sitemap and redirects. A CDN must forward the preference cookie and respect the article response's `Cache-Control: private`; do not force shared caching of article HTML. Publish the versioned assets and purge stale application/CDN responses after a release. Updating source content also requires the reviewed import procedure.
 
 See [DEPLOYMENT.md](DEPLOYMENT.md), [MULTILINGUAL.md](MULTILINGUAL.md) and [the current audit](../qa/FULL-AUDIT-2026-10-01.md). Production crawler/indexing checks were not performed in this local review.

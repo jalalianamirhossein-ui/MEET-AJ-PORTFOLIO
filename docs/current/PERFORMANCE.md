@@ -18,7 +18,7 @@ Published asset sizes in `public/assets/` (measured on disk 2026-09-18 after `si
 | `js/main.js` | 49.1 KB | `?v=1414` |
 | `css/articles.css` | 33.5 KB | article detail |
 | `css/rtl.css` | 20.1 KB | `?v=1405` |
-| `js/i18n.js` | 9.1 KB | `?v=1403` |
+| `js/i18n.js` | 11.7 KB | `?v=1407` |
 | `css/lang-toggle.css` | 2.8 KB | `?v=1403` |
 
 Images under `public/assets/img/` total roughly **38.9 MB** on disk. That is the full library, not the per-page payload, but it is the largest asset category by a wide margin and the most likely place to find real wins.

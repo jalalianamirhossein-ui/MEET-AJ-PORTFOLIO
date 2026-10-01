@@ -49,6 +49,7 @@ Standard Laravel hasher (bcrypt/argon as configured). No plaintext passwords in 
 | `X-Frame-Options` | `SAMEORIGIN` |
 | `Strict-Transport-Security` | `max-age=31536000; includeSubDomains` **only if** `$request->secure()` |
 | Cache-Control | `no-store` on `/admin`, `/livewire`, `/forms`, and all POST |
+| Article caching | `private, max-age=0, must-revalidate`; HTML depends on the language preference cookie |
 
 Not a full CSP. Clickjacking protection is SAMEORIGIN, not DENY.
 

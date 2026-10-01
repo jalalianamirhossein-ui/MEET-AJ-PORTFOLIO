@@ -139,7 +139,7 @@ Detail: [ADMIN.md](ADMIN.md).
 
 ## Assets and document root
 
-Site CSS/JS/images live in `resources/assets/` and are copied into `public/assets/` by `php artisan site:publish-assets`. Public cascade: `main.css?v=1002` → `lang-toggle.css?v=1403` → `rtl.css?v=1405` → `visual-upgrade.css?v=1713` → `site-modules.css?v=1853` → `glass-system.css?v=11` last. Scripts: `main.js?v=1415`; `i18n.js?v=1403` on the homepage/library and `?v=1406` on article detail. Article detail resolves EN/FA content and SEO on the server before the instant client-side toggle runs. See [MULTILINGUAL.md](MULTILINGUAL.md). Admin CSS is **not** in this public overlay — Filament loads `resources/css/filament-admin.css` (published as `public/css/app/meet-aj-admin.css`).
+Site CSS/JS/images live in `resources/assets/` and are copied into `public/assets/` by `php artisan site:publish-assets`. Public cascade: `main.css?v=1002` → `lang-toggle.css?v=1403` → `rtl.css?v=1405` → `visual-upgrade.css?v=1713` → `site-modules.css?v=1853` → `glass-system.css?v=11` last. Scripts: `main.js?v=1415`; shared `i18n.js?v=1407` on the homepage/library and article detail. Article detail resolves EN/FA content and SEO from the saved preference cookie before the instant client-side toggle runs. See [MULTILINGUAL.md](MULTILINGUAL.md). Admin CSS is **not** in this public overlay — Filament loads `resources/css/filament-admin.css` (published as `public/css/app/meet-aj-admin.css`).
 
 Only `public/` may be exposed by the web server. Frontend assets, static files, downloads, and original HTML live under `resources/`. Importers and the publisher read those sources; public URL paths are unchanged. See [PROJECT-STRUCTURE.md](PROJECT-STRUCTURE.md).
 

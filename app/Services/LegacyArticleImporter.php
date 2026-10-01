@@ -62,7 +62,10 @@ class LegacyArticleImporter
                         }
 
                         $translationKey = $existing->translation_key;
-                        $existing->forceFill($parsed['attributes']);
+                        $attributes = $parsed['attributes'];
+                        // Source/SEO updates must not republish drafts or move publication dates.
+                        unset($attributes['status'], $attributes['published_at']);
+                        $existing->forceFill($attributes);
                         $existing->translation_key = $translationKey;
                         $existing->save();
                         $updated++;

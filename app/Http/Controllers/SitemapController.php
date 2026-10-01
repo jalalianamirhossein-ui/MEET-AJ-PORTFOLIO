@@ -16,16 +16,10 @@ class SitemapController extends Controller
 
         $articles = Article::published()->where('language', 'en')->orderByDesc('published_at')->orderBy('sort_order')->get();
         foreach ($articles as $article) {
-            $alternates = data_get($article->presentation, 'localizations')
-                ? ['fa' => $article->publicUrl().'?lang=fa', 'en' => $article->publicUrl()] : [];
             $urls[] = [
                 'loc' => $article->canonicalUrl(),
-                'alternates' => $alternates,
                 'lastmod' => ($article->updated_at ?? $article->published_at)?->toDateString(),
             ];
-            if ($alternates) {
-                $urls[] = ['loc' => $alternates['fa'], 'alternates' => $alternates, 'lastmod' => $article->updated_at?->toDateString()];
-            }
         }
 
         $xml = view('seo.sitemap', compact('urls'))->render();
