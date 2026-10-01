@@ -252,7 +252,7 @@
     />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
     <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
-    <link href="/assets/css/glass-system.css?v=26" rel="stylesheet" />
+    <link href="/assets/css/glass-system.css?v=27" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -733,21 +733,6 @@
         </div>
 
         <div class="container about-secondary">
-          <div class="about-values">
-            <h3 data-en="Core Values" data-fa="ارزش‌های اصلی">Core Values</h3>
-            <ul class="about-value-list">
-              @foreach (data_get($aboutContent, 'values', []) as $value)
-                <li>
-                  <h4 data-en="{{ $value['title_en'] ?? '' }}" data-fa="{{ $value['title_fa'] ?? ($value['title_en'] ?? '') }}">{{ $value['title_en'] ?? '' }}</h4>
-                  <p data-en="{{ $value['body_en'] ?? '' }}" data-fa="{{ $value['body_fa'] ?? ($value['body_en'] ?? '') }}">{{ $value['body_en'] ?? '' }}</p>
-                </li>
-              @endforeach
-            </ul>
-          </div>
-          <blockquote class="about-quote">
-            <p data-en="{{ data_get($aboutContent, 'motto_en', '') }}" data-fa="{{ data_get($aboutContent, 'motto_fa', '') }}">{{ data_get($aboutContent, 'motto_en', '') }}</p>
-            <footer data-en="My Personal Motto" data-fa="شعار شخصی من">My Personal Motto</footer>
-          </blockquote>
           <div class="about-philosophy">
             <h3 data-en="{{ data_get($aboutContent, 'philosophy_title_en', 'My Philosophy') }}" data-fa="{{ data_get($aboutContent, 'philosophy_title_fa', 'فلسفه من') }}">{{ data_get($aboutContent, 'philosophy_title_en', 'My Philosophy') }}</h3>
             <p data-en="{{ data_get($aboutContent, 'philosophy_en', '') }}" data-fa="{{ data_get($aboutContent, 'philosophy_fa', '') }}">
@@ -1545,7 +1530,7 @@
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
     <script src="/assets/js/main.js?v=1415" defer></script>
     <script src="/assets/js/service-catalog.js?v=1815" defer></script>
-    <script src="/assets/js/scroll-reveal.js?v=2" defer></script>
+    <script src="/assets/js/scroll-reveal.js?v=3" defer></script>
 
     <!-- Internationalization (i18n) Support -->
     <!-- Language Toggle JavaScript -->

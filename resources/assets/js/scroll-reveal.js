@@ -8,7 +8,7 @@
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (reducedMotion.matches || !('IntersectionObserver' in window)) return;
 
-    const selector = '.main [data-aos], #resume .resume-item, .about-domains, .about-secondary, .skill-group, .service-catalog-card, .fi-main .fi-wi-widget, .fi-main > .fi-page .fi-section';
+    const selector = '.main [data-aos], #resume .resume-item, .about-domain, .about-secondary, .skill-group, .service-catalog-card, .fi-main .fi-wi-widget, .fi-main > .fi-page .fi-section';
     const seen = new WeakSet();
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
