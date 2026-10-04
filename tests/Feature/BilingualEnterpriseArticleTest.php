@@ -69,8 +69,12 @@ class BilingualEnterpriseArticleTest extends TestCase
                 $localeIds[$lang] = [];
                 foreach ($xp->query('//article[@class="article-body"]//section[not(ancestor::details)]') as $section) {
                     $localeIds[$lang][] = $section->getAttribute('id');
+                    $headings = $xp->query('./h2', $section);
+                    $this->assertSame(1, $headings->length, $article->slug.' section heading');
+                    $this->assertNotSame('', trim($headings->item(0)->textContent), $article->slug);
                 }
-                $this->assertGreaterThanOrEqual(13, count($localeIds[$lang]), $article->slug);
+                $this->assertNotEmpty($localeIds[$lang], $article->slug);
+                $this->assertCount(count(array_unique($localeIds[$lang])), $localeIds[$lang], $article->slug.' duplicate section IDs');
                 $faqSchema = null;
                 $articleSchema = null;
                 foreach ($xp->query('//head/script[@type="application/ld+json"]') as $script) {

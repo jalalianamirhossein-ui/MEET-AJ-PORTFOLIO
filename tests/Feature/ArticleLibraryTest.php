@@ -76,7 +76,8 @@ class ArticleLibraryTest extends TestCase
 
         $this->get('/articles/hidden-draft-needle-xyz')->assertNotFound();
 
-        $published = Article::published()->search('linux')->first();
+        $published = Article::published()->search('linux')
+            ->orderByDesc('published_at')->orderBy('sort_order')->orderBy('id')->first();
         $this->assertNotNull($published);
         $this->get('/articles?q=linux')
             ->assertSee($published->thumbnailUrl(), false)
