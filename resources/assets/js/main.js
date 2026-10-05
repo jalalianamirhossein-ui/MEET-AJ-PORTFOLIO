@@ -1091,7 +1091,14 @@
     window.clearTimeout(navigationScrollTimer);
     window.meetajNavigationScrolling = false;
   };
-  window.addEventListener("scrollend", finishNavigationScroll);
+  // Wait for scrolling to settle: a previous scrollend can arrive after a new click.
+  const settleNavigationScroll = () => {
+    if (!window.meetajNavigationScrolling) return;
+    window.clearTimeout(navigationScrollTimer);
+    navigationScrollTimer = window.setTimeout(finishNavigationScroll, 180);
+  };
+  window.addEventListener("scroll", settleNavigationScroll, { passive: true });
+  window.addEventListener("scrollend", settleNavigationScroll);
 
   const scrollToHash = (hash, instant) => {
     if (!hash || hash === "#") return false;
@@ -1118,11 +1125,15 @@
     const margin = parseFloat(window.getComputedStyle(section).scrollMarginTop) || 0;
     window.clearTimeout(navigationScrollTimer);
     window.meetajNavigationScrolling = !instant && !reduceMotion;
+    const destination = Math.max(0, top - padding - margin);
+    window.dispatchEvent(new CustomEvent("meetaj:navigationstart", {
+      detail: { top: destination },
+    }));
     document.querySelectorAll(".meetaj-scroll-reveal").forEach((element) => {
       element.classList.remove("meetaj-scroll-reveal");
     });
     window.scrollTo({
-      top: Math.max(0, top - padding - margin),
+      top: destination,
       behavior: instant || reduceMotion ? "instant" : "smooth",
     });
     // Fallback for browsers without scrollend, including no-op navigation.

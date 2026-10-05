@@ -1497,9 +1497,9 @@
 
     <!-- Main Application JavaScript -->
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
-    <script src="/assets/js/main.js?v=1420" defer></script>
+    <script src="/assets/js/main.js?v=1421" defer></script>
     <script src="/assets/js/service-catalog.js?v=1816" defer></script>
-    <script src="/assets/js/scroll-reveal.js?v=4" defer></script>
+    <script src="/assets/js/scroll-reveal.js?v=5" defer></script>
 
     <!-- Internationalization (i18n) Support -->
     <!-- Language Toggle JavaScript -->

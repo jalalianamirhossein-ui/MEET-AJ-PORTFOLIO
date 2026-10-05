@@ -10,10 +10,12 @@
 
     const selector = '.main [data-aos], #resume .resume-item, .about-domain, .about-secondary, .skill-group, .service-catalog-card, .fi-main .fi-wi-widget, .fi-main > .fi-page .fi-section';
     const seen = new WeakSet();
+    const pending = new Set();
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
         const element = entry.target;
+        if (!pending.has(element)) continue;
         // Do not interrupt a focused form/control with entry motion.
         if (!window.meetajNavigationScrolling && !element.contains(document.activeElement)) {
           element.classList.add('meetaj-scroll-reveal');
@@ -22,6 +24,7 @@
           }, { once: true });
         }
         observer.unobserve(element);
+        pending.delete(element);
       }
     }, { threshold: 0, rootMargin: '0px 0px -24px 0px' });
 
@@ -37,9 +40,25 @@
         // Avoid flashing content already visible on load or at a deep link.
         if (element.getBoundingClientRect().top < window.innerHeight) continue;
         observer.observe(element);
+        pending.add(element);
       }
     };
     observeBlocks();
+    // Consume entry motion along the entire navigation path before scrolling.
+    // Observer callbacks may arrive after scrollend; they must not restart it.
+    const navigationStart = (event) => {
+      const from = window.scrollY;
+      const to = event.detail.top;
+      const start = Math.min(from, to);
+      const end = Math.max(from, to) + window.innerHeight;
+      for (const element of pending) {
+        const rect = element.getBoundingClientRect();
+        if (rect.bottom + from < start || rect.top + from > end) continue;
+        observer.unobserve(element);
+        pending.delete(element);
+      }
+    };
+    window.addEventListener('meetaj:navigationstart', navigationStart);
     // Filament loads dashboard widgets lazily; observe newly rendered blocks.
     const mutations = new MutationObserver(observeBlocks);
     const main = document.querySelector('.fi-main, .main');
@@ -47,6 +66,7 @@
 
     const stop = () => {
       observer.disconnect();
+      pending.clear();
       mutations.disconnect();
       document.querySelectorAll('.meetaj-scroll-reveal').forEach(element => {
         element.classList.remove('meetaj-scroll-reveal');
@@ -61,6 +81,7 @@
     window.addEventListener('pageshow', restored);
     cleanup = () => {
       stop();
+      window.removeEventListener('meetaj:navigationstart', navigationStart);
       reducedMotion.removeEventListener('change', motionChange);
       window.removeEventListener('pageshow', restored);
     };
