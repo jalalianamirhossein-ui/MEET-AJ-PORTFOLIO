@@ -461,6 +461,8 @@
         return new Set(matched.slice(0, state.visibleCount));
       };
 
+      const previousPositions = new Map();
+
       const capture = () => {
         const map = new Map();
         items().forEach((el) => {
@@ -511,8 +513,12 @@
 
       const animateFilter = ({ loadMore = false } = {}) => {
         const reduce = prefersReducedMotion() || !state.booted;
-        const duration = loadMore ? 620 : 420;
+        const duration = 620;
         const first = reduce ? new Map() : capture();
+        const origin = container.getBoundingClientRect();
+        first.forEach((box, el) => {
+          previousPositions.set(el, { left: box.left - origin.left, top: box.top - origin.top });
+        });
         const visible = nextVisible();
 
         items().forEach((el) => {
@@ -539,8 +545,8 @@
             el.style.zIndex = "0";
             const leave = el.animate(
               [
-                { transform: "translate3d(0,0,0)", opacity: 1 },
-                { transform: "translate3d(0,12px,0)", opacity: 0 },
+                { transform: "scale(1)" },
+                { transform: "scale(0)" },
               ],
               {
                 duration: Math.round(duration * 0.85),
@@ -556,13 +562,17 @@
 
           let entryIndex = 0;
           last.forEach((box, el) => {
-            const prev = first.get(el);
+            const saved = previousPositions.get(el);
+            const prev = first.get(el) || (saved && {
+              left: parent.left + saved.left,
+              top: parent.top + saved.top,
+            });
             if (!prev) {
               el.classList.add("is-flip-enter");
               el.animate(
                 [
-                  { transform: "translate3d(0,18px,0)", opacity: 0 },
-                  { transform: "translate3d(0,0,0)", opacity: 1 },
+                  { transform: "translate3d(0,18px,0) scale(0)" },
+                  { transform: "translate3d(0,0,0) scale(1)" },
                 ],
                 {
                   duration,
@@ -587,7 +597,8 @@
           });
         };
 
-        requestAnimationFrame(run);
+        // Install FLIP transforms before the browser paints the new layout.
+        run();
       };
 
       layout.querySelectorAll(".isotope-filters [data-filter]").forEach((btn) => {
