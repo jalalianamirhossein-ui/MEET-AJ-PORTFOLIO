@@ -1,4 +1,31 @@
 /* Shared editorial layer: loaded after site/glass styles in both languages. */
+/* Desktop hero: image occupies the empty right column; mobile stays stacked. */
+@media (min-width: 1200px) {
+  html[dir] .article-page .article-hero-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 32%);
+    grid-template-areas: "copy media";
+    align-items: start;
+    gap: clamp(24px, 3vw, 48px);
+    direction: ltr !important;
+  }
+  .article-page .article-hero-copy { grid-area: copy; min-width: 0; }
+  html[dir="rtl"] .article-page .article-hero-layout {
+    grid-template-columns: minmax(240px, 32%) minmax(0, 1fr);
+    grid-template-areas: "media copy";
+  }
+  html[dir="rtl"] .article-page .article-hero-copy { direction: rtl; }
+  html[dir="ltr"] .article-page .article-hero-copy { direction: ltr; }
+  .article-page figure.article-hero-media {
+    grid-area: media; min-width: 0; align-self: start;
+    align-items: flex-start;
+  }
+  .article-page .article-hero .article-hero-media img.article-hero-thumbnail {
+    width: 100% !important; max-width: 380px !important;
+    height: auto !important; max-height: none !important;
+    object-fit: contain !important;
+  }
+}
 .article-page {
   --reading-ink: #233247;
   --reading-muted: #596a80;
