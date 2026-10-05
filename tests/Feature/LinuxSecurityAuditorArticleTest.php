@@ -18,7 +18,7 @@ class LinuxSecurityAuditorArticleTest extends TestCase
         app(LegacySitePublisher::class)->publishAssets();
         app(LegacyArticleImporter::class)->import(false);
         $article = Article::where('slug', $slug)->firstOrFail();
-        $this->assertSame(0, (int) $article->sort_order);
+        $this->assertSame(1, (int) $article->sort_order);
         $this->assertSame('linux', $article->category->slug);
         $this->assertSame(['linux', 'ssh', 'ubuntu'], $article->tags()->orderBy('slug')->pluck('slug')->all());
         $this->assertSame('/assets/img/portfolio/linux-8.png', $article->thumbnailUrl());
@@ -74,7 +74,7 @@ class LinuxSecurityAuditorArticleTest extends TestCase
         $this->get('/sitemap.xml')->assertOk()->assertSee('/articles/'.$slug);
     }
 
-    public function test_auditor_is_first_even_when_another_article_has_a_newer_date(): void
+    public function test_auditor_stays_first_in_linux_and_second_in_the_full_library(): void
     {
         app(LegacyArticleImporter::class)->import(false);
         $auditor = Article::where('slug', 'linux-security-auditor-bash')->firstOrFail();
@@ -84,7 +84,10 @@ class LinuxSecurityAuditorArticleTest extends TestCase
         foreach (['/', '/articles', '/articles?tag=linux'] as $path) {
             $response = $this->get($path)->assertOk();
             $items = $response->viewData($path === '/articles?tag=linux' ? 'results' : 'articles');
-            $this->assertSame($auditor->slug, $items->first()->slug, $path);
+            $this->assertSame($path === '/articles?tag=linux' ? $auditor->slug : 'mikrotik-ping-triggered-policy-routing', $items->first()->slug, $path);
+            if ($path !== '/articles?tag=linux') {
+                $this->assertSame($auditor->slug, $items->values()->get(1)->slug);
+            }
         }
     }
 }

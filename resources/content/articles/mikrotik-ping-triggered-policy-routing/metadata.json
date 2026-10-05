@@ -1,0 +1,88 @@
+{
+  "en": {
+    "title": "MikroTik Ping-Triggered Policy Routing with Address Lists",
+    "meta_title": "MikroTik Ping-Triggered Policy Routing with Address Lists",
+    "description": "A RouterOS v7 runbook for ping-controlled client routing, address-list removal, internal-network exclusions, FastTrack, NAT and operational verification.",
+    "keywords": [
+      "MikroTik",
+      "RouterOS v7",
+      "Policy Routing",
+      "Ping Trigger",
+      "Address List",
+      "FastTrack"
+    ],
+    "faq": [
+      [
+        "Can MikroTik remove an IP from an address list directly from a firewall rule?",
+        "No. The v7 firewall action set has addition actions but no source-address removal action. Queue a request and let a script remove the exact host entry."
+      ],
+      [
+        "Does this work with WireGuard?",
+        "Yes, with a validated WireGuard route, peer allowed-address coverage, endpoint underlay reachability and return routing or appropriate NAT. The L2TP gateway example must be adapted to that topology."
+      ],
+      [
+        "Can I use a second ISP instead of a VPN?",
+        "Yes. Use the second ISP next hop in VPN-ROUTE, resolve it through a reachable underlay such as main, and review NAT and return-path symmetry. The table name is only an example label."
+      ],
+      [
+        "Does FastTrack affect policy routing?",
+        "Yes. Non-main routing must be excluded in both directions. Use a stable trigger-eligible population for this scenario; active-list exclusions alone do not fix flows FastTracked before enable."
+      ],
+      [
+        "Will existing connections immediately switch routes?",
+        "Do not expect seamless migration. Packets may receive a new routing mark while the previous NAT mapping remains, or FastTrack/other policy state may retain the earlier path. Test fresh sessions first."
+      ],
+      [
+        "Can multiple clients use the same trigger?",
+        "Yes. Each echo adds its source independently. Clients sharing an upstream NAT identity will appear as one source to this router, so this mechanism cannot distinguish them."
+      ],
+      [
+        "Can I automatically expire PBR access after a specific time?",
+        "Yes. Replace none-dynamic on the enable rule with a finite value such as 30m. Each new matching trigger refreshes the timeout. Verify this on the target release; a strict nonrenewable entitlement needs separate state. Keep stable FastTrack exclusions after expiry and reconnect sessions as needed."
+      ]
+    ]
+  },
+  "fa": {
+    "title": "MikroTik Policy Routing با Ping Trigger و Address List",
+    "meta_title": "MikroTik Policy Routing با Ping Trigger و Address List",
+    "description": "راهنمای RouterOS v7 برای تغییر مسیر Client با Ping، حذف از Address List، استثنای شبکه داخلی، FastTrack، NAT و آزمون عملیاتی.",
+    "keywords": [
+      "MikroTik",
+      "RouterOS v7",
+      "Policy Routing",
+      "Ping Trigger",
+      "Address List",
+      "FastTrack"
+    ],
+    "faq": [
+      [
+        "آیا MikroTik می‌تواند IP را مستقیماً با Firewall Rule از Address List حذف کند؟",
+        "خیر. Actionهای Firewall در v7 گزینه افزودن دارند، اما Action حذف مبدأ ندارند. درخواست را در صف قرار دهید تا Script همان Host Entry را حذف کند."
+      ],
+      [
+        "آیا این روش با WireGuard کار می‌کند؟",
+        "بله؛ Route معتبر WireGuard، پوشش allowed-address مربوط به Peer، دسترسی Endpoint از Underlay و Routing برگشت یا NAT مناسب لازم است. Gateway مثال L2TP باید با آن توپولوژی تطبیق داده شود."
+      ],
+      [
+        "آیا می‌توان به‌جای VPN از ISP دوم استفاده کرد؟",
+        "بله. Next Hop مربوط به ISP دوم را در VPN-ROUTE قرار دهید، آن را از Underlay قابل دسترس مثل main Resolve و NAT و تقارن مسیر برگشت را بررسی کنید. نام Table صرفاً برچسب مثال است."
+      ],
+      [
+        "آیا FastTrack روی Policy Routing اثر دارد؟",
+        "بله. Routing خارج از main باید در هر دو جهت مستثنا شود. در این سناریو جمعیت ثابت مجاز Trigger را مستثنا کنید؛ استثنای List فعال به‌تنهایی Flowهای FastTrackشده قبل از Enable را اصلاح نمی‌کند."
+      ],
+      [
+        "آیا اتصال‌های موجود بلافاصله تغییر مسیر می‌دهند؟",
+        "انتظار مهاجرت بدون اختلال نداشته باشید. Packet ممکن است Mark جدید بگیرد ولی Mapping قبلی NAT باقی بماند، یا FastTrack/Policy دیگر مسیر قبلی را حفظ کند. ابتدا Session تازه را تست کنید."
+      ],
+      [
+        "آیا چند Client می‌توانند از یک Trigger استفاده کنند؟",
+        "بله. هر Echo مبدأ خود را مستقل اضافه می‌کند. Clientهای دارای NAT مشترک در بالادست، برای این روتر یک مبدأ دیده می‌شوند و این مکانیزم آن‌ها را تفکیک نمی‌کند."
+      ],
+      [
+        "آیا می‌توان دسترسی PBR را بعد از زمان مشخص خودکار منقضی کرد؟",
+        "بله. none-dynamic در Rule فعال‌سازی را با زمان محدود مثل 30m جایگزین کنید. هر Trigger منطبق جدید Timeout را تمدید می‌کند. این رفتار را روی Release هدف بررسی کنید؛ دسترسی با پایان قطعی غیرقابل تمدید به State جدا نیاز دارد. استثنای ثابت FastTrack را پس از انقضا حفظ و در صورت نیاز Sessionها را دوباره برقرار کنید."
+      ]
+    ]
+  }
+}

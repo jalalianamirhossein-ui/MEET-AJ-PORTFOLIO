@@ -4,8 +4,14 @@
     <title>Block Domains on MikroTik: DNS and SNI Limits | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta name="description" content="Configure NXDOMAIN and tls-host rules, test DNS and TLS independently, and assess DoH, QUIC and ECH bypass limits." />
-    <meta name="keywords" content="MikroTik Web Access Policy, mikrotik block website, infrastructure operations, production operations, troubleshooting" />
+    <meta
+      name="description"
+      content="Configure NXDOMAIN and tls-host rules, test DNS and TLS independently, and assess DoH, QUIC and ECH bypass limits."
+    />
+    <meta
+      name="keywords"
+      content="MikroTik Web Access Policy, mikrotik block website, infrastructure operations, production operations, troubleshooting"
+    />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <meta name="language" content="fa, en" />
@@ -25,8 +31,14 @@
       content="../assets/img/apple-touch-icon.png"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Block Domains on MikroTik: DNS and SNI Limits" />
-    <meta property="og:description" content="Configure NXDOMAIN and tls-host rules, test DNS and TLS independently, and assess DoH, QUIC and ECH bypass limits." />
+    <meta
+      property="og:title"
+      content="Block Domains on MikroTik: DNS and SNI Limits"
+    />
+    <meta
+      property="og:description"
+      content="Configure NXDOMAIN and tls-host rules, test DNS and TLS independently, and assess DoH, QUIC and ECH bypass limits."
+    />
     <meta
       property="og:image"
       content="../assets/img/portfolio/mikrotik-1.png"
@@ -38,7 +50,10 @@
       property="og:image:alt"
       content="MikroTik Website Blocking Guide - RouterOS Configuration"
     />
-    <meta property="og:url" content="https://meetaj.ir/articles/mikrotik-block-website" />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/mikrotik-block-website"
+    />
     <meta property="og:site_name" content="Meet AJ - Technical Articles" />
     <meta property="twitter:card" content="summary_large_image" />
     <meta
@@ -80,7 +95,6 @@
     <link href="../assets/img/favicon.png" rel="icon" />
     <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
 
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -113,11 +127,91 @@
       rel="stylesheet"
       disabled
     />
-  <meta name="article:content-language" content="en" />
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Block Domains on MikroTik: DNS and SNI Limits", "description": "Configure NXDOMAIN and tls-host rules, test DNS and TLS independently, and assess DoH, QUIC and ECH bypass limits.", "inLanguage": "en", "url": "https://meetaj.ir/articles/mikrotik-block-website", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}, "mainEntityOfPage": "https://meetaj.ir/articles/mikrotik-block-website"}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does tls-host block all HTTPS?", "acceptedAnswer": {"@type": "Answer", "text": "No. ECH, QUIC, fragmentation and VPNs limit its visibility."}}, {"@type": "Question", "name": "Does one destination IP identify one website?", "acceptedAnswer": {"@type": "Answer", "text": "No. A CDN can share an IP across multiple services."}}], "inLanguage": "en"}</script>
-<script id="article-localizations" type="application/json">{"fa": {"title": "مسدودسازی دامنه در MikroTik و محدودیت DNS و SNI", "meta_title": "مسدودسازی دامنه در MikroTik و محدودیت DNS و SNI | Meet AJ", "description": "تنظیم NXDOMAIN و tls-host، آزمون مستقل DNS و TLS و بررسی محدودیت DoH، QUIC و ECH.", "keywords": ["مسدودسازی دامنه در MikroTik و محدودیت DNS و SNI", "عیب‌یابی", "بازیابی", "mikrotik block website"], "faq": [["آیا tls-host همه HTTPS را مسدود می‌کند؟", "خیر. ECH، QUIC، fragmentation و VPN محدودیت ایجاد می‌کنند."], ["آیا یک IP مقصد برابر یک سایت است؟", "خیر. CDN می‌تواند یک IP را بین چندین سرویس مشترک کند."]]}, "en": {"title": "Block Domains on MikroTik: DNS and SNI Limits", "meta_title": "Block Domains on MikroTik: DNS and SNI Limits | Meet AJ", "description": "Configure NXDOMAIN and tls-host rules, test DNS and TLS independently, and assess DoH, QUIC and ECH bypass limits.", "keywords": ["Block Domains on MikroTik: DNS and SNI Limits", "mikrotik block website", "troubleshooting"], "faq": [["Does tls-host block all HTTPS?", "No. ECH, QUIC, fragmentation and VPNs limit its visibility."], ["Does one destination IP identify one website?", "No. A CDN can share an IP across multiple services."]]}}</script>
-</head>
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Block Domains on MikroTik: DNS and SNI Limits",
+        "description": "Configure NXDOMAIN and tls-host rules, test DNS and TLS independently, and assess DoH, QUIC and ECH bypass limits.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/mikrotik-block-website",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/mikrotik-block-website"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does tls-host block all HTTPS?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. ECH, QUIC, fragmentation and VPNs limit its visibility."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does one destination IP identify one website?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. A CDN can share an IP across multiple services."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "مسدودسازی دامنه در MikroTik و محدودیت DNS و SNI",
+          "meta_title": "مسدودسازی دامنه در MikroTik و محدودیت DNS و SNI | Meet AJ",
+          "description": "تنظیم NXDOMAIN و tls-host، آزمون مستقل DNS و TLS و بررسی محدودیت DoH، QUIC و ECH.",
+          "keywords": [
+            "مسدودسازی دامنه در MikroTik و محدودیت DNS و SNI",
+            "عیب‌یابی",
+            "بازیابی",
+            "mikrotik block website"
+          ],
+          "faq": [
+            [
+              "آیا tls-host همه HTTPS را مسدود می‌کند؟",
+              "خیر. ECH، QUIC، fragmentation و VPN محدودیت ایجاد می‌کنند."
+            ],
+            [
+              "آیا یک IP مقصد برابر یک سایت است؟",
+              "خیر. CDN می‌تواند یک IP را بین چندین سرویس مشترک کند."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Block Domains on MikroTik: DNS and SNI Limits",
+          "meta_title": "Block Domains on MikroTik: DNS and SNI Limits | Meet AJ",
+          "description": "Configure NXDOMAIN and tls-host rules, test DNS and TLS independently, and assess DoH, QUIC and ECH bypass limits.",
+          "keywords": [
+            "Block Domains on MikroTik: DNS and SNI Limits",
+            "mikrotik block website",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Does tls-host block all HTTPS?",
+              "No. ECH, QUIC, fragmentation and VPNs limit its visibility."
+            ],
+            [
+              "Does one destination IP identify one website?",
+              "No. A CDN can share an IP across multiple services."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
   <body class="article-page theme-mikrotik">
     <button
       id="menu-toggle"
@@ -266,23 +360,94 @@
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
-          <li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="مسدودسازی دامنه با چه اطلاعاتی؟" data-en="What domain filtering sees">What domain filtering sees</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="DNS Policy با SNI Filtering فرق دارد" data-en="DNS policy and SNI filtering differ">DNS policy and SNI filtering differ</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="Resolver و نسخه RouterOS" data-en="Resolver and RouterOS requirements">Resolver and RouterOS requirements</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-security"><span data-fa="جلوگیری از Open Resolver و قطع CDN" data-en="Avoid open recursion and CDN collateral damage">Avoid open recursion and CDN collateral damage</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="تنظیم دامنه و آزمون جداگانه DNS و TLS" data-en="Configure the domain and test DNS/TLS separately">Configure the domain and test DNS/TLS separately</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="سایت هنوز باز می‌شود" data-en="When the site still opens">When the site still opens</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="سنجش اثر Policy بر کاربران" data-en="Measure user impact">Measure user impact</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="برگشت Policy و Cache" data-en="Undo policy and handle caches">Undo policy and handle caches</span></a></li>
-<li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">Official Sources</span></a></li>
-
-
-
-
-
-
-
+          <li class="article-nav-item">
+            <a href="#enterprise-intro"
+              ><span
+                data-fa="مسدودسازی دامنه با چه اطلاعاتی؟"
+                data-en="What domain filtering sees"
+                >What domain filtering sees</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="DNS Policy با SNI Filtering فرق دارد"
+                data-en="DNS policy and SNI filtering differ"
+                >DNS policy and SNI filtering differ</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="Resolver و نسخه RouterOS"
+                data-en="Resolver and RouterOS requirements"
+                >Resolver and RouterOS requirements</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-security"
+              ><span
+                data-fa="جلوگیری از Open Resolver و قطع CDN"
+                data-en="Avoid open recursion and CDN collateral damage"
+                >Avoid open recursion and CDN collateral damage</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="تنظیم دامنه و آزمون جداگانه DNS و TLS"
+                data-en="Configure the domain and test DNS/TLS separately"
+                >Configure the domain and test DNS/TLS separately</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="سایت هنوز باز می‌شود"
+                data-en="When the site still opens"
+                >When the site still opens</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="سنجش اثر Policy بر کاربران"
+                data-en="Measure user impact"
+                >Measure user impact</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="برگشت Policy و Cache"
+                data-en="Undo policy and handle caches"
+                >Undo policy and handle caches</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#faq"
+              ><span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
+              ></a
+            >
+          </li>
         </ul>
       </nav>
       <button
@@ -305,19 +470,25 @@
                 <span class="article-category">MikroTik</span
                 ><span class="meta-date"
                   ><span class="article-date" data-en="Article" data-fa="مقاله"
-                    >Article</span><time datetime="">MikroTik</time></span
+                    >Article</span
+                  ><time datetime="">MikroTik</time></span
                 >
               </div>
               <h1
                 class="article-title hero-title"
-
-
-               data-fa="مسدودسازی دامنه در MikroTik و محدودیت DNS و SNI" data-en="Block Domains on MikroTik: DNS and SNI Limits">Block Domains on MikroTik: DNS and SNI Limits</h1>
+                data-fa="مسدودسازی دامنه در MikroTik و محدودیت DNS و SNI"
+                data-en="Block Domains on MikroTik: DNS and SNI Limits"
+              >
+                Block Domains on MikroTik: DNS and SNI Limits
+              </h1>
               <p
                 class="article-excerpt hero-subtitle"
-
-
-               data-fa="تنظیم NXDOMAIN و tls-host، آزمون مستقل DNS و TLS و بررسی محدودیت DoH، QUIC و ECH." data-en="Configure NXDOMAIN and tls-host rules, test DNS and TLS independently, and assess DoH, QUIC and ECH bypass limits.">Configure NXDOMAIN and tls-host rules, test DNS and TLS independently, and assess DoH, QUIC and ECH bypass limits.</p>
+                data-fa="تنظیم NXDOMAIN و tls-host، آزمون مستقل DNS و TLS و بررسی محدودیت DoH، QUIC و ECH."
+                data-en="Configure NXDOMAIN and tls-host rules, test DNS and TLS independently, and assess DoH, QUIC and ECH bypass limits."
+              >
+                Configure NXDOMAIN and tls-host rules, test DNS and TLS
+                independently, and assess DoH, QUIC and ECH bypass limits.
+              </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -331,7 +502,9 @@
                       class="banner-subtitle"
                       data-en="Meet AJ technical article"
                       data-fa="مقاله فنی Meet AJ"
-                    >Meet AJ technical article</p>
+                    >
+                      Meet AJ technical article
+                    </p>
                   </div>
                 </div>
               </div>
@@ -342,7 +515,8 @@
                   ><span class="btn-content"
                     ><i class="bi bi-play-circle" aria-hidden="true"></i
                     ><span data-en="Start reading" data-fa="شروع مطالعه"
-                      >Start reading</span></span
+                      >Start reading</span
+                    ></span
                   ></a
                 >
               </div>
@@ -363,33 +537,317 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="en" dir="ltr"><section id="enterprise-intro" class="article-section"><h2 data-fa="مسدودسازی دامنه با چه اطلاعاتی؟" data-en="What domain filtering sees">What domain filtering sees</h2><p data-fa="برای وب‌سایت HTTPS، روتر معمولاً محتوای درخواست را نمی‌بیند. DNS Policy نام دامنه را در Resolver کنترل می‌کند و tls-host از SNI قابل مشاهده استفاده می‌کند. IP مشترک CDN و نام پنهان‌شده با ECH، این روش‌ها را محدود می‌کنند." data-en="For HTTPS sites, the router generally cannot read request content. DNS policy controls names at the resolver, while tls-host inspects visible SNI. Shared CDN addresses and names hidden by ECH limit these approaches.">For HTTPS sites, the router generally cannot read request content. DNS policy controls names at the resolver, while tls-host inspects visible SNI. Shared CDN addresses and names hidden by ECH limit these approaches.</p></section>
-<section id="enterprise-architecture" class="article-section"><h2 data-fa="DNS Policy با SNI Filtering فرق دارد" data-en="DNS policy and SNI filtering differ">DNS policy and SNI filtering differ</h2><p data-fa="NXDOMAIN پاسخ نام را رد می‌کند. tls-host روی ترافیک TCP و ClientHello قابل مشاهده عمل می‌کند. QUIC از UDP استفاده می‌کند، ECH نام را پنهان می‌کند و VPN مسیر را تغییر می‌دهد. برای Policy سخت‌گیرانه، Endpoint و Secure Web Gateway را هم طراحی کنید." data-en="NXDOMAIN rejects name resolution. Tls-host acts on TCP traffic with a visible ClientHello. QUIC uses UDP, ECH hides the name and VPNs change the path. Strict enforcement also needs endpoint and secure-web-gateway design.">NXDOMAIN rejects name resolution. Tls-host acts on TCP traffic with a visible ClientHello. QUIC uses UDP, ECH hides the name and VPNs change the path. Strict enforcement also needs endpoint and secure-web-gateway design.</p><h3 id="enterprise-scenario" data-fa="مثال: Policy روی کلاینت مدیریت‌شده" data-en="Example: a managed-client policy">Example: a managed-client policy</h3><p data-fa="در این مثال، کاربران از Resolver داخلی استفاده می‌کنند و example.com دامنه آزمایش است. مسیر DNS و اتصال TCP را جدا می‌سنجیم. مدیریت Endpoint مسئول کنترل DoH و VPN است. Router Rule به‌تنهایی الزام سراسری را تضمین نمی‌کند." data-en="Users query an internal resolver and example.com is the test domain. Test DNS and TCP independently. Endpoint management controls DoH and VPN use. Router rules alone do not guarantee organization-wide enforcement.">Users query an internal resolver and example.com is the test domain. Test DNS and TCP independently. Endpoint management controls DoH and VPN use. Router rules alone do not guarantee organization-wide enforcement.</p></section>
-<section id="enterprise-prerequisites" class="article-section"><h2 data-fa="Resolver و نسخه RouterOS" data-en="Resolver and RouterOS requirements">Resolver and RouterOS requirements</h2><p data-fa="مثال برای RouterOS v7 است. پشتیبانی type=NXDOMAIN و match-subdomain را روی Patch انتخاب‌شده بررسی کنید. Syntax یک نسخه را برای همه v7ها فرض نکنید." data-en="Use RouterOS v7 and verify type=NXDOMAIN and match-subdomain on the selected patch. Do not assume identical syntax across all v7 releases.">Use RouterOS v7 and verify type=NXDOMAIN and match-subdomain on the selected patch. Do not assume identical syntax across all v7 releases.</p>
-<p data-fa="عضویت LAN و WAN و مسیر IPv6 کاربران را مشخص کنید. قبل از تغییر، CPU و Connection Tracking و Ruleهای FastTrack را ثبت کنید." data-en="Identify LAN/WAN membership and client IPv6 paths. Record CPU, connection tracking and FastTrack rules before the change.">Identify LAN/WAN membership and client IPv6 paths. Record CPU, connection tracking and FastTrack rules before the change.</p>
-<p data-fa="Export خارج روتر و دسترسی Console داشته باشید. Resolver روتر فقط زمانی قابل استفاده است که درخواست LAN مجاز و DNS ورودی WAN بسته باشد." data-en="Keep an off-router export and console access. Use router recursion only with permitted LAN DNS and blocked WAN DNS access.">Keep an off-router export and console access. Use router recursion only with permitted LAN DNS and blocked WAN DNS access.</p><h3 id="enterprise-compatibility" data-fa="Wildcard در DNS و Address List" data-en="Wildcards in DNS and address lists">Wildcards in DNS and address lists</h3><p data-fa="*.example.com در Address List یک Wildcard عمومی DNS نیست. match-subdomain در DNS و GLOB در tls-host رفتار مشخص خود را دارند. نسخه قدیمی Ruleهای Content را راهکار HTTPS جدید حساب نکنید." data-en="An address-list value of *.example.com is not a general DNS wildcard. DNS match-subdomain and tls-host glob syntax have distinct behavior. Historical content rules are not modern HTTPS enforcement.">An address-list value of *.example.com is not a general DNS wildcard. DNS match-subdomain and tls-host glob syntax have distinct behavior. Historical content rules are not modern HTTPS enforcement.</p></section>
-<section id="enterprise-security" class="article-section"><h2 data-fa="جلوگیری از Open Resolver و قطع CDN" data-en="Avoid open recursion and CDN collateral damage">Avoid open recursion and CDN collateral damage</h2><p data-fa="DNS روتر را به WAN باز نکنید. اجبار Resolver را به Subnet کاربر و استثناهای مشخص محدود کنید. یک IP CDN ممکن است چند سرویس نامرتبط را میزبانی کند. آن را صرفاً بر اساس یک پاسخ DNS مسدود نکنید. Layer7 عمومی متن رمزنگاری‌شده HTTPS را قابل اتکا تشخیص نمی‌دهد." data-en="Do not expose router DNS recursion to WAN. Scope resolver enforcement to user subnets with explicit exceptions. A CDN IP might host unrelated services, so avoid blocking it from one DNS answer. Generic Layer7 matching does not reliably inspect encrypted HTTPS content.">Do not expose router DNS recursion to WAN. Scope resolver enforcement to user subnets with explicit exceptions. A CDN IP might host unrelated services, so avoid blocking it from one DNS answer. Generic Layer7 matching does not reliably inspect encrypted HTTPS content.</p></section>
-<section id="enterprise-installation" class="article-section"><h2 data-fa="تنظیم دامنه و آزمون جداگانه DNS و TLS" data-en="Configure the domain and test DNS/TLS separately">Configure the domain and test DNS/TLS separately</h2><p data-fa="وضعیت DNS و Firewall را ثبت کنید. LAN و WAN باید عضوهای درست داشته باشند. ورودی DNS روی TCP و UDP 53 فقط از LAN مجاز باشد و WAN به Resolver نرسد." data-en="Record DNS/firewall state and verify LAN/WAN membership. Permit router TCP/UDP 53 from LAN only and prevent WAN recursion.">Record DNS/firewall state and verify LAN/WAN membership. Permit router TCP/UDP 53 from LAN only and prevent WAN recursion.</p>
-<pre dir="ltr"><code class="language-routeros">/ip dns print
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="مسدودسازی دامنه با چه اطلاعاتی؟"
+                      data-en="What domain filtering sees"
+                    >
+                      What domain filtering sees
+                    </h2>
+                    <p
+                      data-fa="برای وب‌سایت HTTPS، روتر معمولاً محتوای درخواست را نمی‌بیند. DNS Policy نام دامنه را در Resolver کنترل می‌کند و tls-host از SNI قابل مشاهده استفاده می‌کند. IP مشترک CDN و نام پنهان‌شده با ECH، این روش‌ها را محدود می‌کنند."
+                      data-en="For HTTPS sites, the router generally cannot read request content. DNS policy controls names at the resolver, while tls-host inspects visible SNI. Shared CDN addresses and names hidden by ECH limit these approaches."
+                    >
+                      For HTTPS sites, the router generally cannot read request
+                      content. DNS policy controls names at the resolver, while
+                      tls-host inspects visible SNI. Shared CDN addresses and
+                      names hidden by ECH limit these approaches.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="DNS Policy با SNI Filtering فرق دارد"
+                      data-en="DNS policy and SNI filtering differ"
+                    >
+                      DNS policy and SNI filtering differ
+                    </h2>
+                    <p
+                      data-fa="NXDOMAIN پاسخ نام را رد می‌کند. tls-host روی ترافیک TCP و ClientHello قابل مشاهده عمل می‌کند. QUIC از UDP استفاده می‌کند، ECH نام را پنهان می‌کند و VPN مسیر را تغییر می‌دهد. برای Policy سخت‌گیرانه، Endpoint و Secure Web Gateway را هم طراحی کنید."
+                      data-en="NXDOMAIN rejects name resolution. Tls-host acts on TCP traffic with a visible ClientHello. QUIC uses UDP, ECH hides the name and VPNs change the path. Strict enforcement also needs endpoint and secure-web-gateway design."
+                    >
+                      NXDOMAIN rejects name resolution. Tls-host acts on TCP
+                      traffic with a visible ClientHello. QUIC uses UDP, ECH
+                      hides the name and VPNs change the path. Strict
+                      enforcement also needs endpoint and secure-web-gateway
+                      design.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: Policy روی کلاینت مدیریت‌شده"
+                      data-en="Example: a managed-client policy"
+                    >
+                      Example: a managed-client policy
+                    </h3>
+                    <p
+                      data-fa="در این مثال، کاربران از Resolver داخلی استفاده می‌کنند و example.com دامنه آزمایش است. مسیر DNS و اتصال TCP را جدا می‌سنجیم. مدیریت Endpoint مسئول کنترل DoH و VPN است. Router Rule به‌تنهایی الزام سراسری را تضمین نمی‌کند."
+                      data-en="Users query an internal resolver and example.com is the test domain. Test DNS and TCP independently. Endpoint management controls DoH and VPN use. Router rules alone do not guarantee organization-wide enforcement."
+                    >
+                      Users query an internal resolver and example.com is the
+                      test domain. Test DNS and TCP independently. Endpoint
+                      management controls DoH and VPN use. Router rules alone do
+                      not guarantee organization-wide enforcement.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="Resolver و نسخه RouterOS"
+                      data-en="Resolver and RouterOS requirements"
+                    >
+                      Resolver and RouterOS requirements
+                    </h2>
+                    <p
+                      data-fa="مثال برای RouterOS v7 است. پشتیبانی type=NXDOMAIN و match-subdomain را روی Patch انتخاب‌شده بررسی کنید. Syntax یک نسخه را برای همه v7ها فرض نکنید."
+                      data-en="Use RouterOS v7 and verify type=NXDOMAIN and match-subdomain on the selected patch. Do not assume identical syntax across all v7 releases."
+                    >
+                      Use RouterOS v7 and verify type=NXDOMAIN and
+                      match-subdomain on the selected patch. Do not assume
+                      identical syntax across all v7 releases.
+                    </p>
+                    <p
+                      data-fa="عضویت LAN و WAN و مسیر IPv6 کاربران را مشخص کنید. قبل از تغییر، CPU و Connection Tracking و Ruleهای FastTrack را ثبت کنید."
+                      data-en="Identify LAN/WAN membership and client IPv6 paths. Record CPU, connection tracking and FastTrack rules before the change."
+                    >
+                      Identify LAN/WAN membership and client IPv6 paths. Record
+                      CPU, connection tracking and FastTrack rules before the
+                      change.
+                    </p>
+                    <p
+                      data-fa="Export خارج روتر و دسترسی Console داشته باشید. Resolver روتر فقط زمانی قابل استفاده است که درخواست LAN مجاز و DNS ورودی WAN بسته باشد."
+                      data-en="Keep an off-router export and console access. Use router recursion only with permitted LAN DNS and blocked WAN DNS access."
+                    >
+                      Keep an off-router export and console access. Use router
+                      recursion only with permitted LAN DNS and blocked WAN DNS
+                      access.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="Wildcard در DNS و Address List"
+                      data-en="Wildcards in DNS and address lists"
+                    >
+                      Wildcards in DNS and address lists
+                    </h3>
+                    <p
+                      data-fa="*.example.com در Address List یک Wildcard عمومی DNS نیست. match-subdomain در DNS و GLOB در tls-host رفتار مشخص خود را دارند. نسخه قدیمی Ruleهای Content را راهکار HTTPS جدید حساب نکنید."
+                      data-en="An address-list value of *.example.com is not a general DNS wildcard. DNS match-subdomain and tls-host glob syntax have distinct behavior. Historical content rules are not modern HTTPS enforcement."
+                    >
+                      An address-list value of *.example.com is not a general
+                      DNS wildcard. DNS match-subdomain and tls-host glob syntax
+                      have distinct behavior. Historical content rules are not
+                      modern HTTPS enforcement.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="جلوگیری از Open Resolver و قطع CDN"
+                      data-en="Avoid open recursion and CDN collateral damage"
+                    >
+                      Avoid open recursion and CDN collateral damage
+                    </h2>
+                    <p
+                      data-fa="DNS روتر را به WAN باز نکنید. اجبار Resolver را به Subnet کاربر و استثناهای مشخص محدود کنید. یک IP CDN ممکن است چند سرویس نامرتبط را میزبانی کند. آن را صرفاً بر اساس یک پاسخ DNS مسدود نکنید. Layer7 عمومی متن رمزنگاری‌شده HTTPS را قابل اتکا تشخیص نمی‌دهد."
+                      data-en="Do not expose router DNS recursion to WAN. Scope resolver enforcement to user subnets with explicit exceptions. A CDN IP might host unrelated services, so avoid blocking it from one DNS answer. Generic Layer7 matching does not reliably inspect encrypted HTTPS content."
+                    >
+                      Do not expose router DNS recursion to WAN. Scope resolver
+                      enforcement to user subnets with explicit exceptions. A
+                      CDN IP might host unrelated services, so avoid blocking it
+                      from one DNS answer. Generic Layer7 matching does not
+                      reliably inspect encrypted HTTPS content.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="تنظیم دامنه و آزمون جداگانه DNS و TLS"
+                      data-en="Configure the domain and test DNS/TLS separately"
+                    >
+                      Configure the domain and test DNS/TLS separately
+                    </h2>
+                    <p
+                      data-fa="وضعیت DNS و Firewall را ثبت کنید. LAN و WAN باید عضوهای درست داشته باشند. ورودی DNS روی TCP و UDP 53 فقط از LAN مجاز باشد و WAN به Resolver نرسد."
+                      data-en="Record DNS/firewall state and verify LAN/WAN membership. Permit router TCP/UDP 53 from LAN only and prevent WAN recursion."
+                    >
+                      Record DNS/firewall state and verify LAN/WAN membership.
+                      Permit router TCP/UDP 53 from LAN only and prevent WAN
+                      recursion.
+                    </p>
+                    <pre dir="ltr"><code class="language-routeros">/ip dns print
 /ip firewall filter print detail
 /ip dns static add name=example.com match-subdomain=yes type=NXDOMAIN comment=&quot;ENT-WEB DNS policy&quot;
 /ip firewall filter add chain=forward in-interface-list=LAN out-interface-list=WAN protocol=tcp dst-port=443 tls-host=example.com action=drop comment=&quot;ENT-WEB root SNI&quot;
 /ip firewall filter add chain=forward in-interface-list=LAN out-interface-list=WAN protocol=tcp dst-port=443 tls-host=*.example.com action=drop comment=&quot;ENT-WEB subdomain SNI&quot;</code></pre>
-<p data-fa="از Resolver فعالِ محدود استفاده کنید. allow-remote-requests را پیش از تنظیم Firewall روشن نکنید. Ruleهای SNI باید قبل از FastTrack و Accept Established مربوط باشند. برای سنجش، اتصال تازه بسازید." data-en="Use an existing restricted resolver. Do not enable allow-remote-requests before firewall controls. Put SNI rules before relevant FastTrack/established accepts and test fresh connections.">Use an existing restricted resolver. Do not enable allow-remote-requests before firewall controls. Put SNI rules before relevant FastTrack/established accepts and test fresh connections.</p>
-<pre dir="ltr"><code class="language-routeros">/ip firewall filter print stats where comment~&quot;ENT-WEB&quot;
+                    <p
+                      data-fa="از Resolver فعالِ محدود استفاده کنید. allow-remote-requests را پیش از تنظیم Firewall روشن نکنید. Ruleهای SNI باید قبل از FastTrack و Accept Established مربوط باشند. برای سنجش، اتصال تازه بسازید."
+                      data-en="Use an existing restricted resolver. Do not enable allow-remote-requests before firewall controls. Put SNI rules before relevant FastTrack/established accepts and test fresh connections."
+                    >
+                      Use an existing restricted resolver. Do not enable
+                      allow-remote-requests before firewall controls. Put SNI
+                      rules before relevant FastTrack/established accepts and
+                      test fresh connections.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-routeros">/ip firewall filter print stats where comment~&quot;ENT-WEB&quot;
 /ip dns static print detail where comment~&quot;ENT-WEB&quot;</code></pre>
-<p data-fa="روی Client مدیریت‌شده، DNS و TCP TLS را جدا امتحان کنید." data-en="Test DNS and TCP TLS separately from a managed client.">Test DNS and TCP TLS separately from a managed client.</p>
-<pre dir="ltr"><code class="language-bash">dig @10.20.30.1 example.com
+                    <p
+                      data-fa="روی Client مدیریت‌شده، DNS و TCP TLS را جدا امتحان کنید."
+                      data-en="Test DNS and TCP TLS separately from a managed client."
+                    >
+                      Test DNS and TCP TLS separately from a managed client.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">dig @10.20.30.1 example.com
 curl --http1.1 --connect-timeout 5 https://example.com</code></pre>
-<p data-fa="10.20.30.1 را با Resolver واقعی عوض کنید. dig باید NXDOMAIN بدهد. برای آزمون SNI، ابتدا IP را از مسیر DNS مجاز بگیرید و TLS را با نام دامنه واقعی بسنجید. DNS ناموفق دلیل Match شدن TLS نیست." data-en="Replace 10.20.30.1 with the actual resolver. Expect NXDOMAIN from dig. For SNI tests, resolve through an allowed DNS path and test TLS with the real name. Failed DNS does not prove a TLS match.">Replace 10.20.30.1 with the actual resolver. Expect NXDOMAIN from dig. For SNI tests, resolve through an allowed DNS path and test TLS with the real name. Failed DNS does not prove a TLS match.</p></section>
-<section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="سایت هنوز باز می‌شود" data-en="When the site still opens">When the site still opens</h2><p data-fa="ابتدا دامنه اصلی و Subdomain و DNS Cache را بررسی کنید. سپس مسیر DoH، QUIC، ECH، Proxy و IPv6 را جدا کنترل کنید. ClientHello تقسیم‌شده بین چند TCP Segment نیز ممکن است Match نشود. خطای DNS، اثر Rule SNI را ثابت نمی‌کند. برای آن آزمون، Resolve مجاز و اتصال تازه لازم است." data-en="Check root/subdomains and DNS caches first, then isolate DoH, QUIC, ECH, proxies and IPv6. A ClientHello split across TCP segments might not match. DNS failure does not establish SNI-rule effectiveness. Test it with permitted resolution and a fresh connection.">Check root/subdomains and DNS caches first, then isolate DoH, QUIC, ECH, proxies and IPv6. A ClientHello split across TCP segments might not match. DNS failure does not establish SNI-rule effectiveness. Test it with permitted resolution and a fresh connection.</p></section>
-<section id="enterprise-monitoring" class="article-section"><h2 data-fa="سنجش اثر Policy بر کاربران" data-en="Measure user impact">Measure user impact</h2><p data-fa="Counter Rule را با نتیجه واقعی کلاینت مقایسه کنید. حجم UDP/443 و شکایت کاربران و False Positive را ثبت کنید. پیش از مسدودکردن QUIC، رفتار Fallback برنامه‌ها را آزمایش کنید." data-en="Compare rule counters with actual client outcomes. Record UDP/443 volume, user reports and false positives. Test application fallback before blocking QUIC.">Compare rule counters with actual client outcomes. Record UDP/443 volume, user reports and false positives. Test application fallback before blocking QUIC.</p></section>
-<section id="enterprise-recovery" class="article-section"><h2 data-fa="برگشت Policy و Cache" data-en="Undo policy and handle caches">Undo policy and handle caches</h2><p data-fa="برای برگشت، Ruleها و DNS Entryهای ENT-WEB را Disable کنید. سایر تنظیمات Firewall را دست‌نخورده نگه دارید." data-en="Disable ENT-WEB rules and DNS entries to undo this policy, leaving unrelated firewall configuration intact.">Disable ENT-WEB rules and DNS entries to undo this policy, leaving unrelated firewall configuration intact.</p>
-<pre dir="ltr"><code class="language-routeros">/ip firewall filter disable [find where comment~&quot;ENT-WEB&quot;]
+                    <p
+                      data-fa="10.20.30.1 را با Resolver واقعی عوض کنید. dig باید NXDOMAIN بدهد. برای آزمون SNI، ابتدا IP را از مسیر DNS مجاز بگیرید و TLS را با نام دامنه واقعی بسنجید. DNS ناموفق دلیل Match شدن TLS نیست."
+                      data-en="Replace 10.20.30.1 with the actual resolver. Expect NXDOMAIN from dig. For SNI tests, resolve through an allowed DNS path and test TLS with the real name. Failed DNS does not prove a TLS match."
+                    >
+                      Replace 10.20.30.1 with the actual resolver. Expect
+                      NXDOMAIN from dig. For SNI tests, resolve through an
+                      allowed DNS path and test TLS with the real name. Failed
+                      DNS does not prove a TLS match.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="سایت هنوز باز می‌شود"
+                      data-en="When the site still opens"
+                    >
+                      When the site still opens
+                    </h2>
+                    <p
+                      data-fa="ابتدا دامنه اصلی و Subdomain و DNS Cache را بررسی کنید. سپس مسیر DoH، QUIC، ECH، Proxy و IPv6 را جدا کنترل کنید. ClientHello تقسیم‌شده بین چند TCP Segment نیز ممکن است Match نشود. خطای DNS، اثر Rule SNI را ثابت نمی‌کند. برای آن آزمون، Resolve مجاز و اتصال تازه لازم است."
+                      data-en="Check root/subdomains and DNS caches first, then isolate DoH, QUIC, ECH, proxies and IPv6. A ClientHello split across TCP segments might not match. DNS failure does not establish SNI-rule effectiveness. Test it with permitted resolution and a fresh connection."
+                    >
+                      Check root/subdomains and DNS caches first, then isolate
+                      DoH, QUIC, ECH, proxies and IPv6. A ClientHello split
+                      across TCP segments might not match. DNS failure does not
+                      establish SNI-rule effectiveness. Test it with permitted
+                      resolution and a fresh connection.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="سنجش اثر Policy بر کاربران"
+                      data-en="Measure user impact"
+                    >
+                      Measure user impact
+                    </h2>
+                    <p
+                      data-fa="Counter Rule را با نتیجه واقعی کلاینت مقایسه کنید. حجم UDP/443 و شکایت کاربران و False Positive را ثبت کنید. پیش از مسدودکردن QUIC، رفتار Fallback برنامه‌ها را آزمایش کنید."
+                      data-en="Compare rule counters with actual client outcomes. Record UDP/443 volume, user reports and false positives. Test application fallback before blocking QUIC."
+                    >
+                      Compare rule counters with actual client outcomes. Record
+                      UDP/443 volume, user reports and false positives. Test
+                      application fallback before blocking QUIC.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="برگشت Policy و Cache"
+                      data-en="Undo policy and handle caches"
+                    >
+                      Undo policy and handle caches
+                    </h2>
+                    <p
+                      data-fa="برای برگشت، Ruleها و DNS Entryهای ENT-WEB را Disable کنید. سایر تنظیمات Firewall را دست‌نخورده نگه دارید."
+                      data-en="Disable ENT-WEB rules and DNS entries to undo this policy, leaving unrelated firewall configuration intact."
+                    >
+                      Disable ENT-WEB rules and DNS entries to undo this policy,
+                      leaving unrelated firewall configuration intact.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-routeros">/ip firewall filter disable [find where comment~&quot;ENT-WEB&quot;]
 /ip dns static disable [find where comment~&quot;ENT-WEB&quot;]</code></pre>
-<p data-fa="سپس Cache موردنیاز کلاینت و Resolver را طبق روش همان سیستم پاک کنید و دسترسی برنامه را دوباره بسنجید. زمان Cache می‌تواند نتیجه آزمون فوری را تغییر دهد." data-en="Then clear relevant client/resolver caches through their supported methods and retest the application. Cached answers affect immediate test results.">Then clear relevant client/resolver caches through their supported methods and retest the application. Cached answers affect immediate test results.</p><h3 id="enterprise-practices" data-fa="مالک Policy و استثناها" data-en="Policy owners and exceptions">Policy owners and exceptions</h3><p data-fa="دامنه، دامنه فرعی، گروه کاربر و استثنای مجاز را مشخص کنید. برای الزام سازمانی، Router Filtering را همراه Endpoint Management و Gateway وب ارزیابی کنید." data-en="Specify domains, subdomains, user groups and authorized exceptions. Assess router filtering alongside endpoint management and a web gateway for organizational enforcement.">Specify domains, subdomains, user groups and authorized exceptions. Assess router filtering alongside endpoint management and a web gateway for organizational enforcement.</p></section>
-<section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</h2><h3 data-fa="آیا tls-host همه HTTPS را مسدود می‌کند؟" data-en="Does tls-host block all HTTPS?">Does tls-host block all HTTPS?</h3><p data-fa="خیر. ECH، QUIC، fragmentation و VPN محدودیت ایجاد می‌کنند." data-en="No. ECH, QUIC, fragmentation and VPNs limit its visibility.">No. ECH, QUIC, fragmentation and VPNs limit its visibility.</p><h3 data-fa="آیا یک IP مقصد برابر یک سایت است؟" data-en="Does one destination IP identify one website?">Does one destination IP identify one website?</h3><p data-fa="خیر. CDN می‌تواند یک IP را بین چندین سرویس مشترک کند." data-en="No. A CDN can share an IP across multiple services.">No. A CDN can share an IP across multiple services.</p></section>
-<section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">Official Sources</h2><ul><li><a href="https://help.mikrotik.com/docs/spaces/ROS/pages/37748767/DNS" rel="noopener">MikroTik: DNS</a></li><li><a href="https://help.mikrotik.com/docs/spaces/ROS/pages/250708064/Common+Firewall+Matchers+and+Actions" rel="noopener">MikroTik: Matchers</a></li></ul></section></div></article>
+                    <p
+                      data-fa="سپس Cache موردنیاز کلاینت و Resolver را طبق روش همان سیستم پاک کنید و دسترسی برنامه را دوباره بسنجید. زمان Cache می‌تواند نتیجه آزمون فوری را تغییر دهد."
+                      data-en="Then clear relevant client/resolver caches through their supported methods and retest the application. Cached answers affect immediate test results."
+                    >
+                      Then clear relevant client/resolver caches through their
+                      supported methods and retest the application. Cached
+                      answers affect immediate test results.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="مالک Policy و استثناها"
+                      data-en="Policy owners and exceptions"
+                    >
+                      Policy owners and exceptions
+                    </h3>
+                    <p
+                      data-fa="دامنه، دامنه فرعی، گروه کاربر و استثنای مجاز را مشخص کنید. برای الزام سازمانی، Router Filtering را همراه Endpoint Management و Gateway وب ارزیابی کنید."
+                      data-en="Specify domains, subdomains, user groups and authorized exceptions. Assess router filtering alongside endpoint management and a web gateway for organizational enforcement."
+                    >
+                      Specify domains, subdomains, user groups and authorized
+                      exceptions. Assess router filtering alongside endpoint
+                      management and a web gateway for organizational
+                      enforcement.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا tls-host همه HTTPS را مسدود می‌کند؟"
+                      data-en="Does tls-host block all HTTPS?"
+                    >
+                      Does tls-host block all HTTPS?
+                    </h3>
+                    <p
+                      data-fa="خیر. ECH، QUIC، fragmentation و VPN محدودیت ایجاد می‌کنند."
+                      data-en="No. ECH, QUIC, fragmentation and VPNs limit its visibility."
+                    >
+                      No. ECH, QUIC, fragmentation and VPNs limit its
+                      visibility.
+                    </p>
+                    <h3
+                      data-fa="آیا یک IP مقصد برابر یک سایت است؟"
+                      data-en="Does one destination IP identify one website?"
+                    >
+                      Does one destination IP identify one website?
+                    </h3>
+                    <p
+                      data-fa="خیر. CDN می‌تواند یک IP را بین چندین سرویس مشترک کند."
+                      data-en="No. A CDN can share an IP across multiple services."
+                    >
+                      No. A CDN can share an IP across multiple services.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://help.mikrotik.com/docs/spaces/ROS/pages/37748767/DNS"
+                          rel="noopener"
+                          >MikroTik: DNS</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://help.mikrotik.com/docs/spaces/ROS/pages/250708064/Common+Firewall+Matchers+and+Actions"
+                          rel="noopener"
+                          >MikroTik: Matchers</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
+              </article>
             </div>
           </div>
         </div>
@@ -407,18 +865,24 @@ curl --http1.1 --connect-timeout 5 https://example.com</code></pre>
             <div class="footer-brand">
               <h3 class="brand-name">
                 <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
-                  >AmirHossein Jalalian</span>
+                  >AmirHossein Jalalian</span
+                >
               </h3>
               <p
                 class="brand-title"
                 data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
-              >Infrastructure &amp; DevOps Engineer</p>
+              >
+                Infrastructure &amp; DevOps Engineer
+              </p>
               <p
                 class="brand-description"
                 data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
                 data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-              >Delivering reliable, secure, and scalable IT solutions for your business success.</p>
+              >
+                Delivering reliable, secure, and scalable IT solutions for your
+                business success.
+              </p>
             </div>
 
             <!-- Contact Info -->
@@ -427,12 +891,15 @@ curl --http1.1 --connect-timeout 5 https://example.com</code></pre>
                 class="contact-title"
                 data-en="Get In Touch"
                 data-fa="تماس با من"
-              >Get In Touch</h4>
+              >
+                Get In Touch
+              </h4>
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>
                   <span data-en="Tehran, Iran" data-fa="تهران، ایران"
-                    >Tehran, Iran</span>
+                    >Tehran, Iran</span
+                  >
                 </div>
                 <div class="contact-item">
                   <i class="bi bi-telephone"></i>
@@ -457,7 +924,9 @@ curl --http1.1 --connect-timeout 5 https://example.com</code></pre>
                   class="social-title"
                   data-en="Follow Me"
                   data-fa="دنبال کنید"
-                >Follow Me</h5>
+                >
+                  Follow Me
+                </h5>
                 <div class="social-icons">
                   <a
                     href="https://wa.me/989197276219"
@@ -503,12 +972,14 @@ curl --http1.1 --connect-timeout 5 https://example.com</code></pre>
                   <span
                     data-en="All Rights Reserved"
                     data-fa="تمام حقوق محفوظ است"
-                    >All Rights Reserved</span>
+                    >All Rights Reserved</span
+                  >
                 </p>
               </div>
               <div class="footer-heart">
                 <span data-en="Made with" data-fa="ساخته شده با"
-                  >Made with</span>
+                  >Made with</span
+                >
                 <i class="bi bi-heart-fill"></i>
                 <span data-en="in Iran" data-fa="در ایران">in Iran</span>
               </div>

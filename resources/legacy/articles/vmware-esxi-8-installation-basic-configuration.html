@@ -1,10 +1,15 @@
 <!doctype html>
 <html lang="en" dir="ltr" data-article-language="en">
   <head>
-    <title>Install ESXi 8 and Configure Management and Recovery | Meet AJ</title>
+    <title>
+      Install ESXi 8 and Configure Management and Recovery | Meet AJ
+    </title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Check hardware compatibility, install the image, configure VLANs/DNS/NTP and export configuration before adding workloads." />
+    <meta
+      name="description"
+      content="Check hardware compatibility, install the image, configure VLANs/DNS/NTP and export configuration before adding workloads."
+    />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <link
@@ -12,9 +17,18 @@
       href="https://meetaj.ir/articles/vmware-esxi-8-installation-basic-configuration"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Install ESXi 8 and Configure Management and Recovery" />
-    <meta property="og:description" content="Check hardware compatibility, install the image, configure VLANs/DNS/NTP and export configuration before adding workloads." />
-    <meta property="og:url" content="https://meetaj.ir/articles/vmware-esxi-8-installation-basic-configuration" />
+    <meta
+      property="og:title"
+      content="Install ESXi 8 and Configure Management and Recovery"
+    />
+    <meta
+      property="og:description"
+      content="Check hardware compatibility, install the image, configure VLANs/DNS/NTP and export configuration before adding workloads."
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/vmware-esxi-8-installation-basic-configuration"
+    />
     <meta property="og:site_name" content="Meet AJ" />
     <meta name="twitter:card" content="summary" />
     <link href="../assets/img/favicon.png" rel="icon" />
@@ -51,12 +65,95 @@
       rel="stylesheet"
       disabled
     />
-  <meta name="keywords" content="ESXi 8 Deployment, vmware esxi 8 installation basic configuration, infrastructure operations, production operations, troubleshooting" />
-<meta name="article:content-language" content="en" />
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Install ESXi 8 and Configure Management and Recovery", "description": "Check hardware compatibility, install the image, configure VLANs/DNS/NTP and export configuration before adding workloads.", "inLanguage": "en", "url": "https://meetaj.ir/articles/vmware-esxi-8-installation-basic-configuration", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}, "mainEntityOfPage": "https://meetaj.ir/articles/vmware-esxi-8-installation-basic-configuration"}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does a configuration backup include VMs?", "acceptedAnswer": {"@type": "Answer", "text": "No. VMs and datastores need separate backups."}}, {"@type": "Question", "name": "Is a detected NIC necessarily supported?", "acceptedAnswer": {"@type": "Answer", "text": "No. Match model, driver, firmware and build to the compatibility matrix."}}], "inLanguage": "en"}</script>
-<script id="article-localizations" type="application/json">{"fa": {"title": "نصب ESXi 8 و تنظیم اولیه شبکه و بازیابی", "meta_title": "نصب ESXi 8 و تنظیم اولیه شبکه و بازیابی | Meet AJ", "description": "بررسی سازگاری سخت‌افزار، نصب Image، تنظیم VLAN و DNS و NTP و تهیه Config Bundle پیش از Workload.", "keywords": ["نصب ESXi 8 و تنظیم اولیه شبکه و بازیابی", "عیب‌یابی", "بازیابی", "vmware esxi 8 installation basic configuration"], "faq": [["آیا backup config شامل VMهاست؟", "خیر. ماشین‌ها و datastore به backup مستقل نیاز دارند."], ["آیا NIC شناسایی‌شده الزاماً supported است؟", "خیر. model، driver، firmware و build باید در ماتریس سازگاری تطبیق داشته باشند."]]}, "en": {"title": "Install ESXi 8 and Configure Management and Recovery", "meta_title": "Install ESXi 8 and Configure Management and Recovery | Meet AJ", "description": "Check hardware compatibility, install the image, configure VLANs/DNS/NTP and export configuration before adding workloads.", "keywords": ["Install ESXi 8 and Configure Management and Recovery", "vmware esxi 8 installation basic configuration", "troubleshooting"], "faq": [["Does a configuration backup include VMs?", "No. VMs and datastores need separate backups."], ["Is a detected NIC necessarily supported?", "No. Match model, driver, firmware and build to the compatibility matrix."]]}}</script>
-</head>
+    <meta
+      name="keywords"
+      content="ESXi 8 Deployment, vmware esxi 8 installation basic configuration, infrastructure operations, production operations, troubleshooting"
+    />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Install ESXi 8 and Configure Management and Recovery",
+        "description": "Check hardware compatibility, install the image, configure VLANs/DNS/NTP and export configuration before adding workloads.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/vmware-esxi-8-installation-basic-configuration",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/vmware-esxi-8-installation-basic-configuration"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does a configuration backup include VMs?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. VMs and datastores need separate backups."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is a detected NIC necessarily supported?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Match model, driver, firmware and build to the compatibility matrix."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "نصب ESXi 8 و تنظیم اولیه شبکه و بازیابی",
+          "meta_title": "نصب ESXi 8 و تنظیم اولیه شبکه و بازیابی | Meet AJ",
+          "description": "بررسی سازگاری سخت‌افزار، نصب Image، تنظیم VLAN و DNS و NTP و تهیه Config Bundle پیش از Workload.",
+          "keywords": [
+            "نصب ESXi 8 و تنظیم اولیه شبکه و بازیابی",
+            "عیب‌یابی",
+            "بازیابی",
+            "vmware esxi 8 installation basic configuration"
+          ],
+          "faq": [
+            [
+              "آیا backup config شامل VMهاست؟",
+              "خیر. ماشین‌ها و datastore به backup مستقل نیاز دارند."
+            ],
+            [
+              "آیا NIC شناسایی‌شده الزاماً supported است؟",
+              "خیر. model، driver، firmware و build باید در ماتریس سازگاری تطبیق داشته باشند."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Install ESXi 8 and Configure Management and Recovery",
+          "meta_title": "Install ESXi 8 and Configure Management and Recovery | Meet AJ",
+          "description": "Check hardware compatibility, install the image, configure VLANs/DNS/NTP and export configuration before adding workloads.",
+          "keywords": [
+            "Install ESXi 8 and Configure Management and Recovery",
+            "vmware esxi 8 installation basic configuration",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Does a configuration backup include VMs?",
+              "No. VMs and datastores need separate backups."
+            ],
+            [
+              "Is a detected NIC necessarily supported?",
+              "No. Match model, driver, firmware and build to the compatibility matrix."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
   <body class="article-page theme-vmware">
     <button
       id="menu-toggle"
@@ -205,32 +302,94 @@
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
-          <li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="از نصب ESXi تا پذیرش Host" data-en="From installation to host acceptance">From installation to host acceptance</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="Boot، Management و Datastore" data-en="Boot, management and datastore paths">Boot, management and datastore paths</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="HCL، Image و دیسک نصب" data-en="Compatibility, image and installation disk">Compatibility, image and installation disk</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="نصب Image و تنظیم DCUI" data-en="Install the image and configure DCUI">Install the image and configure DCUI</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-security"><span data-fa="مدیریت محدود و SSH موقت" data-en="Restricted management and temporary SSH">Restricted management and temporary SSH</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="سلامت Host و Storage" data-en="Host and storage health">Host and storage health</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="Management یا Datastore قطع است" data-en="Lost management or datastore access">Lost management or datastore access</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="Config Bundle و Backup ماشین‌ها" data-en="Configuration bundles and VM backups">Configuration bundles and VM backups</span></a></li>
-<li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">Official Sources</span></a></li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          <li class="article-nav-item">
+            <a href="#enterprise-intro"
+              ><span
+                data-fa="از نصب ESXi تا پذیرش Host"
+                data-en="From installation to host acceptance"
+                >From installation to host acceptance</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="Boot، Management و Datastore"
+                data-en="Boot, management and datastore paths"
+                >Boot, management and datastore paths</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="HCL، Image و دیسک نصب"
+                data-en="Compatibility, image and installation disk"
+                >Compatibility, image and installation disk</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="نصب Image و تنظیم DCUI"
+                data-en="Install the image and configure DCUI"
+                >Install the image and configure DCUI</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-security"
+              ><span
+                data-fa="مدیریت محدود و SSH موقت"
+                data-en="Restricted management and temporary SSH"
+                >Restricted management and temporary SSH</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="سلامت Host و Storage"
+                data-en="Host and storage health"
+                >Host and storage health</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="Management یا Datastore قطع است"
+                data-en="Lost management or datastore access"
+                >Lost management or datastore access</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="Config Bundle و Backup ماشین‌ها"
+                data-en="Configuration bundles and VM backups"
+                >Configuration bundles and VM backups</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#faq"
+              ><span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
+              ></a
+            >
+          </li>
         </ul>
       </nav>
       <button
@@ -253,19 +412,25 @@
                 <span class="article-category">VMware</span
                 ><span class="meta-date"
                   ><span class="article-date" data-en="Article" data-fa="مقاله"
-                    >Article</span><time datetime="">VMware</time></span
+                    >Article</span
+                  ><time datetime="">VMware</time></span
                 >
               </div>
               <h1
                 class="article-title hero-title"
-
-
-               data-fa="نصب ESXi 8 و تنظیم اولیه شبکه و بازیابی" data-en="Install ESXi 8 and Configure Management and Recovery">Install ESXi 8 and Configure Management and Recovery</h1>
+                data-fa="نصب ESXi 8 و تنظیم اولیه شبکه و بازیابی"
+                data-en="Install ESXi 8 and Configure Management and Recovery"
+              >
+                Install ESXi 8 and Configure Management and Recovery
+              </h1>
               <p
                 class="article-excerpt hero-subtitle"
-
-
-               data-fa="بررسی سازگاری سخت‌افزار، نصب Image، تنظیم VLAN و DNS و NTP و تهیه Config Bundle پیش از Workload." data-en="Check hardware compatibility, install the image, configure VLANs/DNS/NTP and export configuration before adding workloads.">Check hardware compatibility, install the image, configure VLANs/DNS/NTP and export configuration before adding workloads.</p>
+                data-fa="بررسی سازگاری سخت‌افزار، نصب Image، تنظیم VLAN و DNS و NTP و تهیه Config Bundle پیش از Workload."
+                data-en="Check hardware compatibility, install the image, configure VLANs/DNS/NTP and export configuration before adding workloads."
+              >
+                Check hardware compatibility, install the image, configure
+                VLANs/DNS/NTP and export configuration before adding workloads.
+              </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -279,7 +444,9 @@
                       class="banner-subtitle"
                       data-en="Meet AJ technical article"
                       data-fa="مقاله فنی Meet AJ"
-                    >Meet AJ technical article</p>
+                    >
+                      Meet AJ technical article
+                    </p>
                   </div>
                 </div>
               </div>
@@ -290,7 +457,8 @@
                   ><span class="btn-content"
                     ><i class="bi bi-play-circle" aria-hidden="true"></i
                     ><span data-en="Start reading" data-fa="شروع مطالعه"
-                      >Start reading</span></span
+                      >Start reading</span
+                    ></span
                   ></a
                 >
               </div>
@@ -311,36 +479,348 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="en" dir="ltr"><section id="enterprise-intro" class="article-section"><h2 data-fa="از نصب ESXi تا پذیرش Host" data-en="From installation to host acceptance">From installation to host acceptance</h2><p data-fa="ESXi روی سخت‌افزار اجرا می‌شود و Resource ماشین‌های مجازی را مدیریت می‌کند. پیش از نصب، سازگاری CPU و NIC و Storage و Firmware را با Build هدف بررسی کنید. پس از نصب، شبکه مدیریت و DNS و NTP و Datastore باید آزموده شوند." data-en="ESXi runs on hardware and manages VM resources. Before installation, match CPU, NICs, storage and firmware to the target build. After installation, validate management networking, DNS, NTP and datastores.">ESXi runs on hardware and manages VM resources. Before installation, match CPU, NICs, storage and firmware to the target build. After installation, validate management networking, DNS, NTP and datastores.</p></section>
-<section id="enterprise-architecture" class="article-section"><h2 data-fa="Boot، Management و Datastore" data-en="Boot, management and datastore paths">Boot, management and datastore paths</h2><p data-fa="Boot Device سیستم‌عامل را نگه می‌دارد. VMkernel مدیریت از Switch مجازی و vmnic به VLAN مدیریت وصل می‌شود. Datastore داده VM را نگه می‌دارد. مسیر خرابی و بازیابی این سه را جدا ثبت کنید." data-en="The boot device holds the operating system. Management VMkernel reaches its VLAN through a virtual switch and vmnic. Datastores hold VM data. Document failure and recovery paths for all three separately.">The boot device holds the operating system. Management VMkernel reaches its VLAN through a virtual switch and vmnic. Datastores hold VM data. Document failure and recovery paths for all three separately.</p><h3 id="enterprise-scenario" data-fa="مثال: افزودن Host خالی به Cluster" data-en="Example: add an empty host to a cluster">Example: add an empty host to a cluster</h3><p data-fa="Host جدید هنوز Workload ندارد. Management در VLAN 30 با دو Uplink و Console خارج شبکه آماده است. یک VM آزمایشی را پیش از انتقال ماشین‌های سرویس روی آن اجرا کنید." data-en="The new host has no workloads. Management uses VLAN 30, two uplinks and out-of-band console access. Run a canary VM before moving service VMs onto it.">The new host has no workloads. Management uses VLAN 30, two uplinks and out-of-band console access. Run a canary VM before moving service VMs onto it.</p></section>
-<section id="enterprise-prerequisites" class="article-section"><h2 data-fa="HCL، Image و دیسک نصب" data-en="Compatibility, image and installation disk">Compatibility, image and installation disk</h2><p data-fa="برای ESXi 8، Patch و OEM Image مورد تأیید و vCenter سازگار را انتخاب کنید. مدل دقیق و Driver و Firmware باید با Compatibility Guide تطبیق داشته باشند." data-en="Select an approved ESXi 8 patch/OEM image and compatible vCenter. Match exact models, drivers and firmware to the Compatibility Guide.">Select an approved ESXi 8 patch/OEM image and compatible vCenter. Match exact models, drivers and firmware to the Compatibility Guide.</p>
-<p data-fa="Boot Device و Datastore را بر اساس الزامات Build انتخاب کنید. NIC شناسایی‌شده الزاماً پشتیبانی‌شده نیست. ظرفیت Workload را جدا از حد نصب اندازه بگیرید." data-en="Choose boot/datastore devices using build requirements. Detected NICs are not necessarily supported. Plan workload capacity separately from installation minimums.">Choose boot/datastore devices using build requirements. Detected NICs are not necessarily supported. Plan workload capacity separately from installation minimums.</p>
-<p data-fa="Console، Credential، License و DNS و NTP و VLAN آماده داشته باشید. نصب روی دیسک انتخاب‌شده داده آن را بازنویسی می‌کند. Serial را قبل از پذیرش مقصد بررسی کنید." data-en="Prepare console, credentials, license, DNS, NTP and VLANs. Installation overwrites the selected disk. Verify its serial before accepting the target.">Prepare console, credentials, license, DNS, NTP and VLANs. Installation overwrites the selected disk. Verify its serial before accepting the target.</p><h3 id="enterprise-compatibility" data-fa="Build و شرایط پشتیبانی" data-en="Build and support conditions">Build and support conditions</h3><p data-fa="راهنما برای ESXi 8 است. Lifecycle و Entitlement و سازگاری vCenter را پیش از Deploy بررسی کنید. Nested ESXi در Workstation، HCL سخت‌افزار واقعی را اعتبارسنجی نمی‌کند." data-en="This guide targets ESXi 8. Check lifecycle, entitlement and vCenter compatibility before deployment. Nested ESXi on Workstation does not validate physical hardware compatibility.">This guide targets ESXi 8. Check lifecycle, entitlement and vCenter compatibility before deployment. Nested ESXi on Workstation does not validate physical hardware compatibility.</p></section>
-<section id="enterprise-installation" class="article-section"><h2 data-fa="نصب Image و تنظیم DCUI" data-en="Install the image and configure DCUI">Install the image and configure DCUI</h2><p data-fa="۱. مدل CPU/NIC/controller و firmware را با build هدف و image OEM تطبیق دهید. hash ISO را ثبت و boot device را با serial دقیق تأیید کنید." data-en="Match CPU/NIC/controller and firmware to the target build/OEM image. Record the ISO hash and verify the boot device by its serial.">Match CPU/NIC/controller and firmware to the target build/OEM image. Record the ISO hash and verify the boot device by its serial.</p>
-<p data-fa="۲. از installer نصب را روی boot device تعیین‌شده انجام دهید. قبل انتخاب، datastore موجود و disk حاوی داده را شناسایی کنید. اولین boot از DCUI انجام شود." data-en="Install on the designated boot device after identifying existing datastores and data-bearing disks. Use DCUI for first boot.">Install on the designated boot device after identifying existing datastores and data-bearing disks. Use DCUI for first boot.</p>
-<p data-fa="۳. در F2 → Configure Management Network، NICهای مدیریت، VLAN ID مطابق switch port، static IP و DNS را تنظیم کنید. Test Management Network باید gateway و DNS را بررسی کند. IP مثال 10.20.30.11/24 و GW 10.20.30.1 است." data-en="In F2 → Configure Management Network, select management NICs, the switch-compatible VLAN ID, static IP and DNS. Test gateway/DNS. Sample IP is 10.20.30.11/24 with gateway 10.20.30.1.">In F2 → Configure Management Network, select management NICs, the switch-compatible VLAN ID, static IP and DNS. Test gateway/DNS. Sample IP is 10.20.30.11/24 with gateway 10.20.30.1.</p>
-<p data-fa="۴. Host Client را با hostname ثبت‌شده و گواهی معتبر باز کنید. SSH فقط موقتاً در پنجره تغییر فعال شود. از ESXi Shell دستورهای read-only زیر را اجرا کنید." data-en="Open Host Client with the registered hostname and a valid certificate. Enable SSH temporarily for the change window only. Run these read-only ESXi Shell commands.">Open Host Client with the registered hostname and a valid certificate. Enable SSH temporarily for the change window only. Run these read-only ESXi Shell commands.</p>
-<pre dir="ltr"><code class="language-sh">vmware -v
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="از نصب ESXi تا پذیرش Host"
+                      data-en="From installation to host acceptance"
+                    >
+                      From installation to host acceptance
+                    </h2>
+                    <p
+                      data-fa="ESXi روی سخت‌افزار اجرا می‌شود و Resource ماشین‌های مجازی را مدیریت می‌کند. پیش از نصب، سازگاری CPU و NIC و Storage و Firmware را با Build هدف بررسی کنید. پس از نصب، شبکه مدیریت و DNS و NTP و Datastore باید آزموده شوند."
+                      data-en="ESXi runs on hardware and manages VM resources. Before installation, match CPU, NICs, storage and firmware to the target build. After installation, validate management networking, DNS, NTP and datastores."
+                    >
+                      ESXi runs on hardware and manages VM resources. Before
+                      installation, match CPU, NICs, storage and firmware to the
+                      target build. After installation, validate management
+                      networking, DNS, NTP and datastores.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="Boot، Management و Datastore"
+                      data-en="Boot, management and datastore paths"
+                    >
+                      Boot, management and datastore paths
+                    </h2>
+                    <p
+                      data-fa="Boot Device سیستم‌عامل را نگه می‌دارد. VMkernel مدیریت از Switch مجازی و vmnic به VLAN مدیریت وصل می‌شود. Datastore داده VM را نگه می‌دارد. مسیر خرابی و بازیابی این سه را جدا ثبت کنید."
+                      data-en="The boot device holds the operating system. Management VMkernel reaches its VLAN through a virtual switch and vmnic. Datastores hold VM data. Document failure and recovery paths for all three separately."
+                    >
+                      The boot device holds the operating system. Management
+                      VMkernel reaches its VLAN through a virtual switch and
+                      vmnic. Datastores hold VM data. Document failure and
+                      recovery paths for all three separately.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: افزودن Host خالی به Cluster"
+                      data-en="Example: add an empty host to a cluster"
+                    >
+                      Example: add an empty host to a cluster
+                    </h3>
+                    <p
+                      data-fa="Host جدید هنوز Workload ندارد. Management در VLAN 30 با دو Uplink و Console خارج شبکه آماده است. یک VM آزمایشی را پیش از انتقال ماشین‌های سرویس روی آن اجرا کنید."
+                      data-en="The new host has no workloads. Management uses VLAN 30, two uplinks and out-of-band console access. Run a canary VM before moving service VMs onto it."
+                    >
+                      The new host has no workloads. Management uses VLAN 30,
+                      two uplinks and out-of-band console access. Run a canary
+                      VM before moving service VMs onto it.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="HCL، Image و دیسک نصب"
+                      data-en="Compatibility, image and installation disk"
+                    >
+                      Compatibility, image and installation disk
+                    </h2>
+                    <p
+                      data-fa="برای ESXi 8، Patch و OEM Image مورد تأیید و vCenter سازگار را انتخاب کنید. مدل دقیق و Driver و Firmware باید با Compatibility Guide تطبیق داشته باشند."
+                      data-en="Select an approved ESXi 8 patch/OEM image and compatible vCenter. Match exact models, drivers and firmware to the Compatibility Guide."
+                    >
+                      Select an approved ESXi 8 patch/OEM image and compatible
+                      vCenter. Match exact models, drivers and firmware to the
+                      Compatibility Guide.
+                    </p>
+                    <p
+                      data-fa="Boot Device و Datastore را بر اساس الزامات Build انتخاب کنید. NIC شناسایی‌شده الزاماً پشتیبانی‌شده نیست. ظرفیت Workload را جدا از حد نصب اندازه بگیرید."
+                      data-en="Choose boot/datastore devices using build requirements. Detected NICs are not necessarily supported. Plan workload capacity separately from installation minimums."
+                    >
+                      Choose boot/datastore devices using build requirements.
+                      Detected NICs are not necessarily supported. Plan workload
+                      capacity separately from installation minimums.
+                    </p>
+                    <p
+                      data-fa="Console، Credential، License و DNS و NTP و VLAN آماده داشته باشید. نصب روی دیسک انتخاب‌شده داده آن را بازنویسی می‌کند. Serial را قبل از پذیرش مقصد بررسی کنید."
+                      data-en="Prepare console, credentials, license, DNS, NTP and VLANs. Installation overwrites the selected disk. Verify its serial before accepting the target."
+                    >
+                      Prepare console, credentials, license, DNS, NTP and VLANs.
+                      Installation overwrites the selected disk. Verify its
+                      serial before accepting the target.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="Build و شرایط پشتیبانی"
+                      data-en="Build and support conditions"
+                    >
+                      Build and support conditions
+                    </h3>
+                    <p
+                      data-fa="راهنما برای ESXi 8 است. Lifecycle و Entitlement و سازگاری vCenter را پیش از Deploy بررسی کنید. Nested ESXi در Workstation، HCL سخت‌افزار واقعی را اعتبارسنجی نمی‌کند."
+                      data-en="This guide targets ESXi 8. Check lifecycle, entitlement and vCenter compatibility before deployment. Nested ESXi on Workstation does not validate physical hardware compatibility."
+                    >
+                      This guide targets ESXi 8. Check lifecycle, entitlement
+                      and vCenter compatibility before deployment. Nested ESXi
+                      on Workstation does not validate physical hardware
+                      compatibility.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="نصب Image و تنظیم DCUI"
+                      data-en="Install the image and configure DCUI"
+                    >
+                      Install the image and configure DCUI
+                    </h2>
+                    <p
+                      data-fa="۱. مدل CPU/NIC/controller و firmware را با build هدف و image OEM تطبیق دهید. hash ISO را ثبت و boot device را با serial دقیق تأیید کنید."
+                      data-en="Match CPU/NIC/controller and firmware to the target build/OEM image. Record the ISO hash and verify the boot device by its serial."
+                    >
+                      Match CPU/NIC/controller and firmware to the target
+                      build/OEM image. Record the ISO hash and verify the boot
+                      device by its serial.
+                    </p>
+                    <p
+                      data-fa="۲. از installer نصب را روی boot device تعیین‌شده انجام دهید. قبل انتخاب، datastore موجود و disk حاوی داده را شناسایی کنید. اولین boot از DCUI انجام شود."
+                      data-en="Install on the designated boot device after identifying existing datastores and data-bearing disks. Use DCUI for first boot."
+                    >
+                      Install on the designated boot device after identifying
+                      existing datastores and data-bearing disks. Use DCUI for
+                      first boot.
+                    </p>
+                    <p
+                      data-fa="۳. در F2 → Configure Management Network، NICهای مدیریت، VLAN ID مطابق switch port، static IP و DNS را تنظیم کنید. Test Management Network باید gateway و DNS را بررسی کند. IP مثال 10.20.30.11/24 و GW 10.20.30.1 است."
+                      data-en="In F2 → Configure Management Network, select management NICs, the switch-compatible VLAN ID, static IP and DNS. Test gateway/DNS. Sample IP is 10.20.30.11/24 with gateway 10.20.30.1."
+                    >
+                      In F2 → Configure Management Network, select management
+                      NICs, the switch-compatible VLAN ID, static IP and DNS.
+                      Test gateway/DNS. Sample IP is 10.20.30.11/24 with gateway
+                      10.20.30.1.
+                    </p>
+                    <p
+                      data-fa="۴. Host Client را با hostname ثبت‌شده و گواهی معتبر باز کنید. SSH فقط موقتاً در پنجره تغییر فعال شود. از ESXi Shell دستورهای read-only زیر را اجرا کنید."
+                      data-en="Open Host Client with the registered hostname and a valid certificate. Enable SSH temporarily for the change window only. Run these read-only ESXi Shell commands."
+                    >
+                      Open Host Client with the registered hostname and a valid
+                      certificate. Enable SSH temporarily for the change window
+                      only. Run these read-only ESXi Shell commands.
+                    </p>
+                    <pre dir="ltr"><code class="language-sh">vmware -v
 esxcli system version get
 esxcli network nic list
 esxcli network ip interface ipv4 get
 esxcli network ip route ipv4 list
 esxcli system ntp get</code></pre>
-<p data-fa="انتظار: build هدف، vmk management با IP صحیح و هر دو uplink طبق طراحی. DNS و NTP را در Host Client تنظیم و start policy بررسی کنید. سپس host را به vCenter اضافه، یک VM canary ایجاد و شبکه، datastore و restart آزمایشی workload را تأیید کنید." data-en="Expect the target build, correct management IP and both uplinks as designed. Configure DNS/NTP and check start policy. Join vCenter, deploy a canary VM and validate networking, datastore and a test workload restart.">Expect the target build, correct management IP and both uplinks as designed. Configure DNS/NTP and check start policy. Join vCenter, deploy a canary VM and validate networking, datastore and a test workload restart.</p></section>
-<section id="enterprise-security" class="article-section"><h2 data-fa="مدیریت محدود و SSH موقت" data-en="Restricted management and temporary SSH">Restricted management and temporary SSH</h2><p data-fa="Management را به شبکه مجاز محدود کنید و در vCenter حساب نام‌دار و نقش کمینه بدهید. SSH و Shell را پس از تغییر ببندید. Lockdown Mode را پس از آزمون Exception و Console Recovery فعال کنید. گواهی و Syslog نیز مسیر اعتماد روشن داشته باشند." data-en="Restrict management networks and use named least-privilege vCenter identities. Close SSH/Shell after changes. Test exceptions and console recovery before Lockdown Mode. Establish trusted certificate and syslog paths.">Restrict management networks and use named least-privilege vCenter identities. Close SSH/Shell after changes. Test exceptions and console recovery before Lockdown Mode. Establish trusted certificate and syslog paths.</p></section>
-<section id="enterprise-monitoring" class="article-section"><h2 data-fa="سلامت Host و Storage" data-en="Host and storage health">Host and storage health</h2><p data-fa="Uplink و Sensor سخت‌افزار و قطع Host و Latency Storage را در vCenter پایش کنید. حساب مانیتورینگ API را محدود نگه دارید. کمبود فضای Boot و Datastore و خطای NTP نیز بررسی شوند. CPU پایین به‌تنهایی سلامت Host نیست." data-en="Monitor uplinks, hardware sensors, host disconnects and storage latency through vCenter. Restrict monitoring API access. Check boot/datastore capacity and NTP too. Low CPU alone is not host health.">Monitor uplinks, hardware sensors, host disconnects and storage latency through vCenter. Restrict monitoring API access. Check boot/datastore capacity and NTP too. Low CPU alone is not host health.</p></section>
-<section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="Management یا Datastore قطع است" data-en="Lost management or datastore access">Lost management or datastore access</h2><p data-fa="برای قطع Management از Console، vmnic و VLAN و Gateway را بررسی کنید. NIC گم‌شده به بررسی OEM Image و Driver/HCL نیاز دارد. Datastore ناموجود را از Path و Controller بررسی کنید و دوباره Format نکنید." data-en="For management loss, inspect vmnic, VLAN and gateway through the console. Missing NICs require OEM-image and driver/compatibility checks. Investigate missing datastores through paths/controllers, not reformatting.">For management loss, inspect vmnic, VLAN and gateway through the console. Missing NICs require OEM-image and driver/compatibility checks. Investigate missing datastores through paths/controllers, not reformatting.</p>
-<pre dir="ltr"><code class="language-sh">esxcli storage core path list
+                    <p
+                      data-fa="انتظار: build هدف، vmk management با IP صحیح و هر دو uplink طبق طراحی. DNS و NTP را در Host Client تنظیم و start policy بررسی کنید. سپس host را به vCenter اضافه، یک VM canary ایجاد و شبکه، datastore و restart آزمایشی workload را تأیید کنید."
+                      data-en="Expect the target build, correct management IP and both uplinks as designed. Configure DNS/NTP and check start policy. Join vCenter, deploy a canary VM and validate networking, datastore and a test workload restart."
+                    >
+                      Expect the target build, correct management IP and both
+                      uplinks as designed. Configure DNS/NTP and check start
+                      policy. Join vCenter, deploy a canary VM and validate
+                      networking, datastore and a test workload restart.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="مدیریت محدود و SSH موقت"
+                      data-en="Restricted management and temporary SSH"
+                    >
+                      Restricted management and temporary SSH
+                    </h2>
+                    <p
+                      data-fa="Management را به شبکه مجاز محدود کنید و در vCenter حساب نام‌دار و نقش کمینه بدهید. SSH و Shell را پس از تغییر ببندید. Lockdown Mode را پس از آزمون Exception و Console Recovery فعال کنید. گواهی و Syslog نیز مسیر اعتماد روشن داشته باشند."
+                      data-en="Restrict management networks and use named least-privilege vCenter identities. Close SSH/Shell after changes. Test exceptions and console recovery before Lockdown Mode. Establish trusted certificate and syslog paths."
+                    >
+                      Restrict management networks and use named least-privilege
+                      vCenter identities. Close SSH/Shell after changes. Test
+                      exceptions and console recovery before Lockdown Mode.
+                      Establish trusted certificate and syslog paths.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="سلامت Host و Storage"
+                      data-en="Host and storage health"
+                    >
+                      Host and storage health
+                    </h2>
+                    <p
+                      data-fa="Uplink و Sensor سخت‌افزار و قطع Host و Latency Storage را در vCenter پایش کنید. حساب مانیتورینگ API را محدود نگه دارید. کمبود فضای Boot و Datastore و خطای NTP نیز بررسی شوند. CPU پایین به‌تنهایی سلامت Host نیست."
+                      data-en="Monitor uplinks, hardware sensors, host disconnects and storage latency through vCenter. Restrict monitoring API access. Check boot/datastore capacity and NTP too. Low CPU alone is not host health."
+                    >
+                      Monitor uplinks, hardware sensors, host disconnects and
+                      storage latency through vCenter. Restrict monitoring API
+                      access. Check boot/datastore capacity and NTP too. Low CPU
+                      alone is not host health.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="Management یا Datastore قطع است"
+                      data-en="Lost management or datastore access"
+                    >
+                      Lost management or datastore access
+                    </h2>
+                    <p
+                      data-fa="برای قطع Management از Console، vmnic و VLAN و Gateway را بررسی کنید. NIC گم‌شده به بررسی OEM Image و Driver/HCL نیاز دارد. Datastore ناموجود را از Path و Controller بررسی کنید و دوباره Format نکنید."
+                      data-en="For management loss, inspect vmnic, VLAN and gateway through the console. Missing NICs require OEM-image and driver/compatibility checks. Investigate missing datastores through paths/controllers, not reformatting."
+                    >
+                      For management loss, inspect vmnic, VLAN and gateway
+                      through the console. Missing NICs require OEM-image and
+                      driver/compatibility checks. Investigate missing
+                      datastores through paths/controllers, not reformatting.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-sh">esxcli storage core path list
 esxcli network vswitch standard list
 tail -n 80 /var/log/vmkernel.log
 tail -n 80 /var/log/hostd.log</code></pre>
-<p data-fa="Tag در VMkernel و Switch فیزیکی باید با طراحی هماهنگ باشد. Double Tagging دسترسی را قطع می‌کند. خطای گواهی را با DNS و Chain حل کنید و Validation را عمومی غیرفعال نکنید." data-en="Align VMkernel and physical-switch tagging to the design. Double tagging breaks access. Correct certificate errors through DNS/chains rather than globally disabling validation.">Align VMkernel and physical-switch tagging to the design. Double tagging breaks access. Correct certificate errors through DNS/chains rather than globally disabling validation.</p></section>
-<section id="enterprise-recovery" class="article-section"><h2 data-fa="Config Bundle و Backup ماشین‌ها" data-en="Configuration bundles and VM backups">Configuration bundles and VM backups</h2><p data-fa="از Shell موقت، Config Bundle بسازید و URL خروجی را از Workstation مجاز دانلود کنید. پس از دریافت، Shell را ببندید." data-en="Create the bundle through temporary Shell access, download its returned URL from an approved workstation, then close the Shell.">Create the bundle through temporary Shell access, download its returned URL from an approved workstation, then close the Shell.</p>
-<pre dir="ltr"><code class="language-sh">vim-cmd hostsvc/firmware/sync_config
+                    <p
+                      data-fa="Tag در VMkernel و Switch فیزیکی باید با طراحی هماهنگ باشد. Double Tagging دسترسی را قطع می‌کند. خطای گواهی را با DNS و Chain حل کنید و Validation را عمومی غیرفعال نکنید."
+                      data-en="Align VMkernel and physical-switch tagging to the design. Double tagging breaks access. Correct certificate errors through DNS/chains rather than globally disabling validation."
+                    >
+                      Align VMkernel and physical-switch tagging to the design.
+                      Double tagging breaks access. Correct certificate errors
+                      through DNS/chains rather than globally disabling
+                      validation.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="Config Bundle و Backup ماشین‌ها"
+                      data-en="Configuration bundles and VM backups"
+                    >
+                      Configuration bundles and VM backups
+                    </h2>
+                    <p
+                      data-fa="از Shell موقت، Config Bundle بسازید و URL خروجی را از Workstation مجاز دانلود کنید. پس از دریافت، Shell را ببندید."
+                      data-en="Create the bundle through temporary Shell access, download its returned URL from an approved workstation, then close the Shell."
+                    >
+                      Create the bundle through temporary Shell access, download
+                      its returned URL from an approved workstation, then close
+                      the Shell.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-sh">vim-cmd hostsvc/firmware/sync_config
 vim-cmd hostsvc/firmware/backup_config</code></pre>
-<p data-fa="Bundle شامل Config است، نه VM و Datastore. Restore به Build و UUID وابسته است. Image و License و VLAN و Credential را خارج Host نگه دارید و روش جایگزینی Host را با KB همان نسخه بررسی کنید." data-en="The bundle contains configuration, not VMs or datastores. Restore depends on build/UUID requirements. Keep image, licensing, VLAN and credential records off-host and follow the version’s replacement-host KB.">The bundle contains configuration, not VMs or datastores. Restore depends on build/UUID requirements. Keep image, licensing, VLAN and credential records off-host and follow the version’s replacement-host KB.</p><h3 id="enterprise-practices" data-fa="آزمون Host پیش از ورود سرویس" data-en="Test the host before service workloads">Test the host before service workloads</h3><p data-fa="VM آزمایشی، Network و Storage و راه‌اندازی دوباره را بررسی کند. Firmware و Driver را هماهنگ Patch کنید. USB یا SD قدیمی را بدون بررسی الزامات Storage نسخه هدف انتخاب نکنید." data-en="Use a canary to test network, storage and restart behavior. Keep firmware/driver patches aligned. Check target storage requirements before selecting older USB/SD boot media.">Use a canary to test network, storage and restart behavior. Keep firmware/driver patches aligned. Check target storage requirements before selecting older USB/SD boot media.</p><p><span data-fa="برای انتخاب Switch و مسیر مهاجرت، مقایسه vSS و vDS را ببینید." data-en="See the vSS/vDS comparison for switch selection and migration.">See the vSS/vDS comparison for switch selection and migration.</span> <a href="/articles/vsphere-standard-switch-vs-distributed-switch"><span data-fa="راهنمای مرتبط" data-en="Related guide">Related guide</span></a></p></section>
-<section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</h2><h3 data-fa="آیا backup config شامل VMهاست؟" data-en="Does a configuration backup include VMs?">Does a configuration backup include VMs?</h3><p data-fa="خیر. ماشین‌ها و datastore به backup مستقل نیاز دارند." data-en="No. VMs and datastores need separate backups.">No. VMs and datastores need separate backups.</p><h3 data-fa="آیا NIC شناسایی‌شده الزاماً supported است؟" data-en="Is a detected NIC necessarily supported?">Is a detected NIC necessarily supported?</h3><p data-fa="خیر. model، driver، firmware و build باید در ماتریس سازگاری تطبیق داشته باشند." data-en="No. Match model, driver, firmware and build to the compatibility matrix.">No. Match model, driver, firmware and build to the compatibility matrix.</p></section>
-<section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">Official Sources</h2><ul><li><a href="https://knowledge.broadcom.com/external/article/313510/how-to-back-up-and-restore-the-esxi-host.html" rel="noopener">Broadcom: ESXi configuration backup</a></li><li><a href="https://compatibilityguide.broadcom.com/" rel="noopener">Broadcom: Compatibility Guide</a></li></ul></section></div></article>
+                    <p
+                      data-fa="Bundle شامل Config است، نه VM و Datastore. Restore به Build و UUID وابسته است. Image و License و VLAN و Credential را خارج Host نگه دارید و روش جایگزینی Host را با KB همان نسخه بررسی کنید."
+                      data-en="The bundle contains configuration, not VMs or datastores. Restore depends on build/UUID requirements. Keep image, licensing, VLAN and credential records off-host and follow the version’s replacement-host KB."
+                    >
+                      The bundle contains configuration, not VMs or datastores.
+                      Restore depends on build/UUID requirements. Keep image,
+                      licensing, VLAN and credential records off-host and follow
+                      the version’s replacement-host KB.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="آزمون Host پیش از ورود سرویس"
+                      data-en="Test the host before service workloads"
+                    >
+                      Test the host before service workloads
+                    </h3>
+                    <p
+                      data-fa="VM آزمایشی، Network و Storage و راه‌اندازی دوباره را بررسی کند. Firmware و Driver را هماهنگ Patch کنید. USB یا SD قدیمی را بدون بررسی الزامات Storage نسخه هدف انتخاب نکنید."
+                      data-en="Use a canary to test network, storage and restart behavior. Keep firmware/driver patches aligned. Check target storage requirements before selecting older USB/SD boot media."
+                    >
+                      Use a canary to test network, storage and restart
+                      behavior. Keep firmware/driver patches aligned. Check
+                      target storage requirements before selecting older USB/SD
+                      boot media.
+                    </p>
+                    <p>
+                      <span
+                        data-fa="برای انتخاب Switch و مسیر مهاجرت، مقایسه vSS و vDS را ببینید."
+                        data-en="See the vSS/vDS comparison for switch selection and migration."
+                        >See the vSS/vDS comparison for switch selection and
+                        migration.</span
+                      >
+                      <a
+                        href="/articles/vsphere-standard-switch-vs-distributed-switch"
+                        ><span data-fa="راهنمای مرتبط" data-en="Related guide"
+                          >Related guide</span
+                        ></a
+                      >
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا backup config شامل VMهاست؟"
+                      data-en="Does a configuration backup include VMs?"
+                    >
+                      Does a configuration backup include VMs?
+                    </h3>
+                    <p
+                      data-fa="خیر. ماشین‌ها و datastore به backup مستقل نیاز دارند."
+                      data-en="No. VMs and datastores need separate backups."
+                    >
+                      No. VMs and datastores need separate backups.
+                    </p>
+                    <h3
+                      data-fa="آیا NIC شناسایی‌شده الزاماً supported است؟"
+                      data-en="Is a detected NIC necessarily supported?"
+                    >
+                      Is a detected NIC necessarily supported?
+                    </h3>
+                    <p
+                      data-fa="خیر. model، driver، firmware و build باید در ماتریس سازگاری تطبیق داشته باشند."
+                      data-en="No. Match model, driver, firmware and build to the compatibility matrix."
+                    >
+                      No. Match model, driver, firmware and build to the
+                      compatibility matrix.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://knowledge.broadcom.com/external/article/313510/how-to-back-up-and-restore-the-esxi-host.html"
+                          rel="noopener"
+                          >Broadcom: ESXi configuration backup</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://compatibilityguide.broadcom.com/"
+                          rel="noopener"
+                          >Broadcom: Compatibility Guide</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
+              </article>
             </div>
           </div>
         </div>
@@ -358,18 +838,24 @@ vim-cmd hostsvc/firmware/backup_config</code></pre>
             <div class="footer-brand">
               <h3 class="brand-name">
                 <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
-                  >AmirHossein Jalalian</span>
+                  >AmirHossein Jalalian</span
+                >
               </h3>
               <p
                 class="brand-title"
                 data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
-              >Infrastructure &amp; DevOps Engineer</p>
+              >
+                Infrastructure &amp; DevOps Engineer
+              </p>
               <p
                 class="brand-description"
                 data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
                 data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-              >Delivering reliable, secure, and scalable IT solutions for your business success.</p>
+              >
+                Delivering reliable, secure, and scalable IT solutions for your
+                business success.
+              </p>
             </div>
 
             <!-- Contact Info -->
@@ -378,12 +864,15 @@ vim-cmd hostsvc/firmware/backup_config</code></pre>
                 class="contact-title"
                 data-en="Get In Touch"
                 data-fa="تماس با من"
-              >Get In Touch</h4>
+              >
+                Get In Touch
+              </h4>
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>
                   <span data-en="Tehran, Iran" data-fa="تهران، ایران"
-                    >Tehran, Iran</span>
+                    >Tehran, Iran</span
+                  >
                 </div>
                 <div class="contact-item">
                   <i class="bi bi-telephone"></i>
@@ -408,7 +897,9 @@ vim-cmd hostsvc/firmware/backup_config</code></pre>
                   class="social-title"
                   data-en="Follow Me"
                   data-fa="دنبال کنید"
-                >Follow Me</h5>
+                >
+                  Follow Me
+                </h5>
                 <div class="social-icons">
                   <a
                     href="https://wa.me/989197276219"
@@ -454,12 +945,14 @@ vim-cmd hostsvc/firmware/backup_config</code></pre>
                   <span
                     data-en="All Rights Reserved"
                     data-fa="تمام حقوق محفوظ است"
-                    >All Rights Reserved</span>
+                    >All Rights Reserved</span
+                  >
                 </p>
               </div>
               <div class="footer-heart">
                 <span data-en="Made with" data-fa="ساخته شده با"
-                  >Made with</span>
+                  >Made with</span
+                >
                 <i class="bi bi-heart-fill"></i>
                 <span data-en="in Iran" data-fa="در ایران">in Iran</span>
               </div>

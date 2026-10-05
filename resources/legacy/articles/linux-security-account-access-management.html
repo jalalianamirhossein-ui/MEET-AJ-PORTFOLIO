@@ -4,7 +4,10 @@
     <title>Linux Accounts and Restricted sudo Access | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Create a restricted account, validate exact sudo rules and revoke keys, credentials and sessions during offboarding." />
+    <meta
+      name="description"
+      content="Create a restricted account, validate exact sudo rules and revoke keys, credentials and sessions during offboarding."
+    />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <link
@@ -12,9 +15,18 @@
       href="https://meetaj.ir/articles/linux-security-account-access-management"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Linux Accounts and Restricted sudo Access" />
-    <meta property="og:description" content="Create a restricted account, validate exact sudo rules and revoke keys, credentials and sessions during offboarding." />
-    <meta property="og:url" content="https://meetaj.ir/articles/linux-security-account-access-management" />
+    <meta
+      property="og:title"
+      content="Linux Accounts and Restricted sudo Access"
+    />
+    <meta
+      property="og:description"
+      content="Create a restricted account, validate exact sudo rules and revoke keys, credentials and sessions during offboarding."
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/linux-security-account-access-management"
+    />
     <meta property="og:site_name" content="Meet AJ" />
     <meta name="twitter:card" content="summary" />
     <link href="../assets/img/favicon.png" rel="icon" />
@@ -51,12 +63,95 @@
       rel="stylesheet"
       disabled
     />
-  <meta name="keywords" content="Linux Access Management, linux security account access management, infrastructure operations, production operations, troubleshooting" />
-<meta name="article:content-language" content="en" />
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Linux Accounts and Restricted sudo Access", "description": "Create a restricted account, validate exact sudo rules and revoke keys, credentials and sessions during offboarding.", "inLanguage": "en", "url": "https://meetaj.ir/articles/linux-security-account-access-management", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}, "mainEntityOfPage": "https://meetaj.ir/articles/linux-security-account-access-management"}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does passwd -l disable an SSH key?", "acceptedAnswer": {"@type": "Answer", "text": "No. Keys and other credentials require separate revocation."}}, {"@type": "Question", "name": "Why include --no-pager in a sudo rule?", "acceptedAnswer": {"@type": "Answer", "text": "A pager may provide a shell using the privileges of the invoking command."}}], "inLanguage": "en"}</script>
-<script id="article-localizations" type="application/json">{"fa": {"title": "مدیریت حساب Linux و محدودکردن دسترسی sudo", "meta_title": "مدیریت حساب Linux و محدودکردن دسترسی sudo | Meet AJ", "description": "ایجاد حساب کم‌اختیار، Rule دقیق sudo، آزمون مجوز و لغو دسترسی SSH و نشست‌ها هنگام خروج کاربر.", "keywords": ["مدیریت حساب Linux و محدودکردن دسترسی sudo", "عیب‌یابی", "بازیابی", "linux security account access management"], "faq": [["آیا passwd -l کلید SSH را غیرفعال می‌کند؟", "خیر. مسیر کلید و سایر credentialها باید جدا لغو شوند."], ["چرا --no-pager در sudo لازم است؟", "Pager ممکن است امکان اجرای shell با privilege فرمان را فراهم کند."]]}, "en": {"title": "Linux Accounts and Restricted sudo Access", "meta_title": "Linux Accounts and Restricted sudo Access | Meet AJ", "description": "Create a restricted account, validate exact sudo rules and revoke keys, credentials and sessions during offboarding.", "keywords": ["Linux Accounts and Restricted sudo Access", "linux security account access management", "troubleshooting"], "faq": [["Does passwd -l disable an SSH key?", "No. Keys and other credentials require separate revocation."], ["Why include --no-pager in a sudo rule?", "A pager may provide a shell using the privileges of the invoking command."]]}}</script>
-</head>
+    <meta
+      name="keywords"
+      content="Linux Access Management, linux security account access management, infrastructure operations, production operations, troubleshooting"
+    />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Linux Accounts and Restricted sudo Access",
+        "description": "Create a restricted account, validate exact sudo rules and revoke keys, credentials and sessions during offboarding.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/linux-security-account-access-management",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/linux-security-account-access-management"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does passwd -l disable an SSH key?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Keys and other credentials require separate revocation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why include --no-pager in a sudo rule?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A pager may provide a shell using the privileges of the invoking command."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "مدیریت حساب Linux و محدودکردن دسترسی sudo",
+          "meta_title": "مدیریت حساب Linux و محدودکردن دسترسی sudo | Meet AJ",
+          "description": "ایجاد حساب کم‌اختیار، Rule دقیق sudo، آزمون مجوز و لغو دسترسی SSH و نشست‌ها هنگام خروج کاربر.",
+          "keywords": [
+            "مدیریت حساب Linux و محدودکردن دسترسی sudo",
+            "عیب‌یابی",
+            "بازیابی",
+            "linux security account access management"
+          ],
+          "faq": [
+            [
+              "آیا passwd -l کلید SSH را غیرفعال می‌کند؟",
+              "خیر. مسیر کلید و سایر credentialها باید جدا لغو شوند."
+            ],
+            [
+              "چرا --no-pager در sudo لازم است؟",
+              "Pager ممکن است امکان اجرای shell با privilege فرمان را فراهم کند."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Linux Accounts and Restricted sudo Access",
+          "meta_title": "Linux Accounts and Restricted sudo Access | Meet AJ",
+          "description": "Create a restricted account, validate exact sudo rules and revoke keys, credentials and sessions during offboarding.",
+          "keywords": [
+            "Linux Accounts and Restricted sudo Access",
+            "linux security account access management",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Does passwd -l disable an SSH key?",
+              "No. Keys and other credentials require separate revocation."
+            ],
+            [
+              "Why include --no-pager in a sudo rule?",
+              "A pager may provide a shell using the privileges of the invoking command."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
   <body class="article-page theme-linux">
     <button
       id="menu-toggle"
@@ -205,28 +300,94 @@
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
-          <li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="احراز هویت با مجوز اجرای فرمان فرق دارد" data-en="Authentication and command privileges differ">Authentication and command privileges differ</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="از گروه تا Rule دقیق sudo" data-en="From groups to exact sudo rules">From groups to exact sudo rules</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="حساب محلی و دسترسی مدیر" data-en="Local account and administrator access">Local account and administrator access</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="ایجاد حساب و بررسی Rule" data-en="Create the account and validate the rule">Create the account and validate the rule</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="خطای مجوز یا خطای سرویس؟" data-en="Privilege failure or service failure?">Privilege failure or service failure?</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-security"><span data-fa="فرمان محدود و مسیرهای دورزدن آن" data-en="Restricted commands and escape paths">Restricted commands and escape paths</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="ممیزی تغییر حساب و مجوز" data-en="Audit account and privilege changes">Audit account and privilege changes</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="برگشت Rule و نگهداری داده کاربر" data-en="Undo a rule and retain user data">Undo a rule and retain user data</span></a></li>
-<li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">Official Sources</span></a></li>
-
-
-
-
-
-
-
-
-
-
-
-
+          <li class="article-nav-item">
+            <a href="#enterprise-intro"
+              ><span
+                data-fa="احراز هویت با مجوز اجرای فرمان فرق دارد"
+                data-en="Authentication and command privileges differ"
+                >Authentication and command privileges differ</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="از گروه تا Rule دقیق sudo"
+                data-en="From groups to exact sudo rules"
+                >From groups to exact sudo rules</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="حساب محلی و دسترسی مدیر"
+                data-en="Local account and administrator access"
+                >Local account and administrator access</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="ایجاد حساب و بررسی Rule"
+                data-en="Create the account and validate the rule"
+                >Create the account and validate the rule</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="خطای مجوز یا خطای سرویس؟"
+                data-en="Privilege failure or service failure?"
+                >Privilege failure or service failure?</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-security"
+              ><span
+                data-fa="فرمان محدود و مسیرهای دورزدن آن"
+                data-en="Restricted commands and escape paths"
+                >Restricted commands and escape paths</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="ممیزی تغییر حساب و مجوز"
+                data-en="Audit account and privilege changes"
+                >Audit account and privilege changes</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="برگشت Rule و نگهداری داده کاربر"
+                data-en="Undo a rule and retain user data"
+                >Undo a rule and retain user data</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#faq"
+              ><span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
+              ></a
+            >
+          </li>
         </ul>
       </nav>
       <button
@@ -249,19 +410,25 @@
                 <span class="article-category">Linux</span
                 ><span class="meta-date"
                   ><span class="article-date" data-en="Article" data-fa="مقاله"
-                    >Article</span><time datetime="">Linux</time></span
+                    >Article</span
+                  ><time datetime="">Linux</time></span
                 >
               </div>
               <h1
                 class="article-title hero-title"
-
-
-               data-fa="مدیریت حساب Linux و محدودکردن دسترسی sudo" data-en="Linux Accounts and Restricted sudo Access">Linux Accounts and Restricted sudo Access</h1>
+                data-fa="مدیریت حساب Linux و محدودکردن دسترسی sudo"
+                data-en="Linux Accounts and Restricted sudo Access"
+              >
+                Linux Accounts and Restricted sudo Access
+              </h1>
               <p
                 class="article-excerpt hero-subtitle"
-
-
-               data-fa="ایجاد حساب کم‌اختیار، Rule دقیق sudo، آزمون مجوز و لغو دسترسی SSH و نشست‌ها هنگام خروج کاربر." data-en="Create a restricted account, validate exact sudo rules and revoke keys, credentials and sessions during offboarding.">Create a restricted account, validate exact sudo rules and revoke keys, credentials and sessions during offboarding.</p>
+                data-fa="ایجاد حساب کم‌اختیار، Rule دقیق sudo، آزمون مجوز و لغو دسترسی SSH و نشست‌ها هنگام خروج کاربر."
+                data-en="Create a restricted account, validate exact sudo rules and revoke keys, credentials and sessions during offboarding."
+              >
+                Create a restricted account, validate exact sudo rules and
+                revoke keys, credentials and sessions during offboarding.
+              </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -275,7 +442,9 @@
                       class="banner-subtitle"
                       data-en="Meet AJ technical article"
                       data-fa="مقاله فنی Meet AJ"
-                    >Meet AJ technical article</p>
+                    >
+                      Meet AJ technical article
+                    </p>
                   </div>
                 </div>
               </div>
@@ -286,7 +455,8 @@
                   ><span class="btn-content"
                     ><i class="bi bi-play-circle" aria-hidden="true"></i
                     ><span data-en="Start reading" data-fa="شروع مطالعه"
-                      >Start reading</span></span
+                      >Start reading</span
+                    ></span
                   ></a
                 >
               </div>
@@ -307,36 +477,318 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="en" dir="ltr"><section id="enterprise-intro" class="article-section"><h2 data-fa="احراز هویت با مجوز اجرای فرمان فرق دارد" data-en="Authentication and command privileges differ">Authentication and command privileges differ</h2><p data-fa="حساب Linux، روش ورود و مجوز sudo سه بخش جدا هستند. برای کاربر پشتیبانی، فقط فرمان لازم را مجاز کنید و نتیجه منفی را هم آزمایش کنید. هنگام خروج کاربر، قفل Password کافی نیست. کلید، Token و نشست فعال نیز باید بررسی شوند." data-en="Linux accounts, login methods and sudo privileges are separate controls. Grant support users only the necessary command and test denied operations too. During offboarding, password locking alone is insufficient. Review keys, tokens and active sessions.">Linux accounts, login methods and sudo privileges are separate controls. Grant support users only the necessary command and test denied operations too. During offboarding, password locking alone is insufficient. Review keys, tokens and active sessions.</p></section>
-<section id="enterprise-architecture" class="article-section"><h2 data-fa="از گروه تا Rule دقیق sudo" data-en="From groups to exact sudo rules">From groups to exact sudo rules</h2><p data-fa="هویت و گروه تعیین می‌کنند کاربر چگونه وارد شود. sudo فرمان مجاز را مشخص می‌کند. حساب انسانی را از Service Account جدا نگه دارید. برای Automation، Credential قابل چرخش و مالک مشخص داشته باشید." data-en="Identity and groups control admission. Sudo specifies permitted commands. Separate human and service accounts, and assign rotatable automation credentials with accountable owners.">Identity and groups control admission. Sudo specifies permitted commands. Separate human and service accounts, and assign rotatable automation credentials with accountable owners.</p><h3 id="enterprise-scenario" data-fa="مثال: مشاهده وضعیت Nginx بدون Restart" data-en="Example: inspect Nginx without restart rights">Example: inspect Nginx without restart rights</h3><p data-fa="opsreader فقط وضعیت nginx.service را می‌خواند. این حساب عضو sudo نیست و Rule اختصاصی دارد. پس از تنظیم، خواندن وضعیت باید مجاز باشد ولی Restart و ویرایش Unit نباید مجاز باشند." data-en="opsreader reads only nginx.service status. It is not a sudo-group member and receives a dedicated rule. Status inspection must work while restart and unit editing remain denied.">opsreader reads only nginx.service status. It is not a sudo-group member and receives a dedicated rule. Status inspection must work while restart and unit editing remain denied.</p></section>
-<section id="enterprise-prerequisites" class="article-section"><h2 data-fa="حساب محلی و دسترسی مدیر" data-en="Local account and administrator access">Local account and administrator access</h2><p data-fa="فرمان‌ها برای Ubuntu 24.04 LTS با sudo و OpenSSH هستند. مسیر systemctl را روی میزبان بررسی کنید. برای کاربر LDAP یا SSSD، Policy هویت سازمان را نیز بررسی کنید." data-en="Commands target Ubuntu 24.04 LTS with sudo and OpenSSH. Check the local systemctl path. For LDAP or SSSD users, also inspect organizational identity policy.">Commands target Ubuntu 24.04 LTS with sudo and OpenSSH. Check the local systemctl path. For LDAP or SSSD users, also inspect organizational identity policy.</p>
-<p data-fa="این کار به Resource اضافی نیاز ندارد. Console مدیر و نسخه سالم sudoers برای اصلاح خطای Policy لازم است." data-en="No extra compute allocation is required. Keep an administrator console and known-good sudoers configuration for policy recovery.">No extra compute allocation is required. Keep an administrator console and known-good sudoers configuration for policy recovery.</p>
-<p data-fa="opsreader نام نمونه است. پیش از ساخت، وجود حساب و عضویت گروه‌های آن را بررسی کنید. داشتن Rule محدود، مجوز وسیع از یک گروه دیگر را خنثی نمی‌کند." data-en="opsreader is an example name. Check account existence and group memberships first. A restricted rule does not cancel broader privileges granted by another group.">opsreader is an example name. Check account existence and group memberships first. A restricted rule does not cancel broader privileges granted by another group.</p><h3 id="enterprise-compatibility" data-fa="عضویت sudo و قفل Password" data-en="sudo membership and password locks">sudo membership and password locks</h3><p data-fa="usermod -aG sudo معمولاً دسترسی وسیع می‌دهد و برای نقش خواندن وضعیت مناسب نیست. passwd -l فقط Password را قفل می‌کند. غیرفعال‌کردن کل مسیرهای ورود به Policy SSH و هویت نیز وابسته است." data-en="usermod -aG sudo usually grants broad access and does not fit this status-only role. Passwd -l locks the password. Disabling every login path also involves SSH and identity policy.">usermod -aG sudo usually grants broad access and does not fit this status-only role. Passwd -l locks the password. Disabling every login path also involves SSH and identity policy.</p></section>
-<section id="enterprise-installation" class="article-section"><h2 data-fa="ایجاد حساب و بررسی Rule" data-en="Create the account and validate the rule">Create the account and validate the rule</h2><p data-fa="ابتدا وجود حساب را بررسی کنید. اگر موجود نیست، حساب نمونه را بدون عضویت گروه sudo بسازید. مسیر systemctl را پیش از نوشتن Rule مشخص کنید." data-en="Check account existence first. Create the sample account without sudo-group membership if absent. Identify systemctl’s path before writing the rule.">Check account existence first. Create the sample account without sudo-group membership if absent. Identify systemctl’s path before writing the rule.</p>
-<pre dir="ltr"><code class="language-bash">getent passwd opsreader
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="احراز هویت با مجوز اجرای فرمان فرق دارد"
+                      data-en="Authentication and command privileges differ"
+                    >
+                      Authentication and command privileges differ
+                    </h2>
+                    <p
+                      data-fa="حساب Linux، روش ورود و مجوز sudo سه بخش جدا هستند. برای کاربر پشتیبانی، فقط فرمان لازم را مجاز کنید و نتیجه منفی را هم آزمایش کنید. هنگام خروج کاربر، قفل Password کافی نیست. کلید، Token و نشست فعال نیز باید بررسی شوند."
+                      data-en="Linux accounts, login methods and sudo privileges are separate controls. Grant support users only the necessary command and test denied operations too. During offboarding, password locking alone is insufficient. Review keys, tokens and active sessions."
+                    >
+                      Linux accounts, login methods and sudo privileges are
+                      separate controls. Grant support users only the necessary
+                      command and test denied operations too. During
+                      offboarding, password locking alone is insufficient.
+                      Review keys, tokens and active sessions.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="از گروه تا Rule دقیق sudo"
+                      data-en="From groups to exact sudo rules"
+                    >
+                      From groups to exact sudo rules
+                    </h2>
+                    <p
+                      data-fa="هویت و گروه تعیین می‌کنند کاربر چگونه وارد شود. sudo فرمان مجاز را مشخص می‌کند. حساب انسانی را از Service Account جدا نگه دارید. برای Automation، Credential قابل چرخش و مالک مشخص داشته باشید."
+                      data-en="Identity and groups control admission. Sudo specifies permitted commands. Separate human and service accounts, and assign rotatable automation credentials with accountable owners."
+                    >
+                      Identity and groups control admission. Sudo specifies
+                      permitted commands. Separate human and service accounts,
+                      and assign rotatable automation credentials with
+                      accountable owners.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: مشاهده وضعیت Nginx بدون Restart"
+                      data-en="Example: inspect Nginx without restart rights"
+                    >
+                      Example: inspect Nginx without restart rights
+                    </h3>
+                    <p
+                      data-fa="opsreader فقط وضعیت nginx.service را می‌خواند. این حساب عضو sudo نیست و Rule اختصاصی دارد. پس از تنظیم، خواندن وضعیت باید مجاز باشد ولی Restart و ویرایش Unit نباید مجاز باشند."
+                      data-en="opsreader reads only nginx.service status. It is not a sudo-group member and receives a dedicated rule. Status inspection must work while restart and unit editing remain denied."
+                    >
+                      opsreader reads only nginx.service status. It is not a
+                      sudo-group member and receives a dedicated rule. Status
+                      inspection must work while restart and unit editing remain
+                      denied.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="حساب محلی و دسترسی مدیر"
+                      data-en="Local account and administrator access"
+                    >
+                      Local account and administrator access
+                    </h2>
+                    <p
+                      data-fa="فرمان‌ها برای Ubuntu 24.04 LTS با sudo و OpenSSH هستند. مسیر systemctl را روی میزبان بررسی کنید. برای کاربر LDAP یا SSSD، Policy هویت سازمان را نیز بررسی کنید."
+                      data-en="Commands target Ubuntu 24.04 LTS with sudo and OpenSSH. Check the local systemctl path. For LDAP or SSSD users, also inspect organizational identity policy."
+                    >
+                      Commands target Ubuntu 24.04 LTS with sudo and OpenSSH.
+                      Check the local systemctl path. For LDAP or SSSD users,
+                      also inspect organizational identity policy.
+                    </p>
+                    <p
+                      data-fa="این کار به Resource اضافی نیاز ندارد. Console مدیر و نسخه سالم sudoers برای اصلاح خطای Policy لازم است."
+                      data-en="No extra compute allocation is required. Keep an administrator console and known-good sudoers configuration for policy recovery."
+                    >
+                      No extra compute allocation is required. Keep an
+                      administrator console and known-good sudoers configuration
+                      for policy recovery.
+                    </p>
+                    <p
+                      data-fa="opsreader نام نمونه است. پیش از ساخت، وجود حساب و عضویت گروه‌های آن را بررسی کنید. داشتن Rule محدود، مجوز وسیع از یک گروه دیگر را خنثی نمی‌کند."
+                      data-en="opsreader is an example name. Check account existence and group memberships first. A restricted rule does not cancel broader privileges granted by another group."
+                    >
+                      opsreader is an example name. Check account existence and
+                      group memberships first. A restricted rule does not cancel
+                      broader privileges granted by another group.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="عضویت sudo و قفل Password"
+                      data-en="sudo membership and password locks"
+                    >
+                      sudo membership and password locks
+                    </h3>
+                    <p
+                      data-fa="usermod -aG sudo معمولاً دسترسی وسیع می‌دهد و برای نقش خواندن وضعیت مناسب نیست. passwd -l فقط Password را قفل می‌کند. غیرفعال‌کردن کل مسیرهای ورود به Policy SSH و هویت نیز وابسته است."
+                      data-en="usermod -aG sudo usually grants broad access and does not fit this status-only role. Passwd -l locks the password. Disabling every login path also involves SSH and identity policy."
+                    >
+                      usermod -aG sudo usually grants broad access and does not
+                      fit this status-only role. Passwd -l locks the password.
+                      Disabling every login path also involves SSH and identity
+                      policy.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="ایجاد حساب و بررسی Rule"
+                      data-en="Create the account and validate the rule"
+                    >
+                      Create the account and validate the rule
+                    </h2>
+                    <p
+                      data-fa="ابتدا وجود حساب را بررسی کنید. اگر موجود نیست، حساب نمونه را بدون عضویت گروه sudo بسازید. مسیر systemctl را پیش از نوشتن Rule مشخص کنید."
+                      data-en="Check account existence first. Create the sample account without sudo-group membership if absent. Identify systemctl’s path before writing the rule."
+                    >
+                      Check account existence first. Create the sample account
+                      without sudo-group membership if absent. Identify
+                      systemctl’s path before writing the rule.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">getent passwd opsreader
 sudo adduser opsreader
 id opsreader
 command -v systemctl
 sudo visudo -f /etc/sudoers.d/opsreader-nginx</code></pre>
-<p data-fa="خط زیر Rule کامل است. مسیر Binary باید با میزبان یکسان باشد. --no-pager خروجی را بدون Pager تعاملی می‌دهد و مسیر Shell Escape آن را می‌بندد." data-en="This is the complete rule. Match the binary path to the host. --no-pager avoids interactive-pager shell escapes.">This is the complete rule. Match the binary path to the host. --no-pager avoids interactive-pager shell escapes.</p>
-<pre dir="ltr"><code class="language-sudoers">opsreader ALL=(root) /usr/bin/systemctl --no-pager status nginx.service</code></pre>
-<pre dir="ltr"><code class="language-bash">sudo chmod 440 /etc/sudoers.d/opsreader-nginx
+                    <p
+                      data-fa="خط زیر Rule کامل است. مسیر Binary باید با میزبان یکسان باشد. --no-pager خروجی را بدون Pager تعاملی می‌دهد و مسیر Shell Escape آن را می‌بندد."
+                      data-en="This is the complete rule. Match the binary path to the host. --no-pager avoids interactive-pager shell escapes."
+                    >
+                      This is the complete rule. Match the binary path to the
+                      host. --no-pager avoids interactive-pager shell escapes.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-sudoers">opsreader ALL=(root) /usr/bin/systemctl --no-pager status nginx.service</code></pre>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">sudo chmod 440 /etc/sudoers.d/opsreader-nginx
 sudo visudo -cf /etc/sudoers
 sudo -l -U opsreader
 sudo -u opsreader sudo /usr/bin/systemctl --no-pager status nginx.service</code></pre>
-<p data-fa="visudo باید Syntax سالم نشان دهد و sudo -l فقط Grant موردنظر را نمایش دهد. Inactive بودن Nginx برای status کد غیرصفر دارد. در Staging رد Restart را هم بسنجید و آن را با خطای سرویس اشتباه نگیرید." data-en="Expect valid syntax from visudo and only the intended grant from sudo -l. Inactive Nginx gives status a nonzero code. In staging, test restart denial and distinguish it from a service error.">Expect valid syntax from visudo and only the intended grant from sudo -l. Inactive Nginx gives status a nonzero code. In staging, test restart denial and distinguish it from a service error.</p></section>
-<section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="خطای مجوز یا خطای سرویس؟" data-en="Privilege failure or service failure?">Privilege failure or service failure?</h2><p data-fa="ابتدا sudo -l را بررسی کنید. Syntax با visudo -cf کنترل می‌شود. status برای سرویس Inactive کد غیرصفر می‌دهد و این الزاماً رد مجوز نیست. ورود با Password قفل‌شده احتمالاً از کلید یا روش دیگری انجام شده است." data-en="Start with sudo -l and validate syntax using visudo -cf. Status returns nonzero for inactive services without implying denied privileges. Login with a locked password might use a key or another method.">Start with sudo -l and validate syntax using visudo -cf. Status returns nonzero for inactive services without implying denied privileges. Login with a locked password might use a key or another method.</p>
-<pre dir="ltr"><code class="language-bash">sudo -l -U opsreader
+                    <p
+                      data-fa="visudo باید Syntax سالم نشان دهد و sudo -l فقط Grant موردنظر را نمایش دهد. Inactive بودن Nginx برای status کد غیرصفر دارد. در Staging رد Restart را هم بسنجید و آن را با خطای سرویس اشتباه نگیرید."
+                      data-en="Expect valid syntax from visudo and only the intended grant from sudo -l. Inactive Nginx gives status a nonzero code. In staging, test restart denial and distinguish it from a service error."
+                    >
+                      Expect valid syntax from visudo and only the intended
+                      grant from sudo -l. Inactive Nginx gives status a nonzero
+                      code. In staging, test restart denial and distinguish it
+                      from a service error.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="خطای مجوز یا خطای سرویس؟"
+                      data-en="Privilege failure or service failure?"
+                    >
+                      Privilege failure or service failure?
+                    </h2>
+                    <p
+                      data-fa="ابتدا sudo -l را بررسی کنید. Syntax با visudo -cf کنترل می‌شود. status برای سرویس Inactive کد غیرصفر می‌دهد و این الزاماً رد مجوز نیست. ورود با Password قفل‌شده احتمالاً از کلید یا روش دیگری انجام شده است."
+                      data-en="Start with sudo -l and validate syntax using visudo -cf. Status returns nonzero for inactive services without implying denied privileges. Login with a locked password might use a key or another method."
+                    >
+                      Start with sudo -l and validate syntax using visudo -cf.
+                      Status returns nonzero for inactive services without
+                      implying denied privileges. Login with a locked password
+                      might use a key or another method.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">sudo -l -U opsreader
 sudo chage -l opsreader
 loginctl list-sessions
 getent group sudo
 sudo journalctl _COMM=sudo -n 50 --no-pager</code></pre>
-<p data-fa="عضویت گروه جاری را با Policy جدید مقایسه کنید. Cache هویت و نشست قدیمی ممکن است تغییر را فوراً منعکس نکنند. قبل از خاتمه Session، UID و Jobهای در حال اجرا را بررسی کنید." data-en="Compare current session groups with new policy. Identity caches and existing sessions might delay changes. Confirm UID and running jobs before terminating sessions.">Compare current session groups with new policy. Identity caches and existing sessions might delay changes. Confirm UID and running jobs before terminating sessions.</p></section>
-<section id="enterprise-security" class="article-section"><h2 data-fa="فرمان محدود و مسیرهای دورزدن آن" data-en="Restricted commands and escape paths">Restricted commands and escape paths</h2><p data-fa="Shell، Editor و Package Manager اغلب امکان اجرای کد Root دارند. Wildcard گسترده را مجوز محدود حساب نکنید. --no-pager مانع ورود به Pager تعاملی از فرمان نمونه می‌شود. Service Account بدون نیاز واقعی ورود تعاملی نداشته باشد. در Offboarding، کلید SSH، Directory، API Token، Cron، sudo و نشست را جدا لغو کنید." data-en="Shells, editors and package managers often execute root code. Broad wildcards are not restricted privileges. --no-pager keeps the example out of an interactive pager. Avoid unnecessary interactive service-account login. Revoke keys, directory access, API tokens, cron, sudo and sessions independently.">Shells, editors and package managers often execute root code. Broad wildcards are not restricted privileges. --no-pager keeps the example out of an interactive pager. Avoid unnecessary interactive service-account login. Revoke keys, directory access, API tokens, cron, sudo and sessions independently.</p></section>
-<section id="enterprise-monitoring" class="article-section"><h2 data-fa="ممیزی تغییر حساب و مجوز" data-en="Audit account and privilege changes">Audit account and privilege changes</h2><p data-fa="رویدادهای sudo و SSH را در Log مرکزی نگه دارید. تغییر passwd، group و sudoers.d را با Audit Policy مناسب ثبت کنید. تعداد حساب‌های UID صفر را با فهرست مجاز مقایسه کنید." data-en="Retain sudo and SSH events centrally. Audit changes to passwd, group and sudoers.d with appropriate policy. Compare UID-zero accounts against the approved list.">Retain sudo and SSH events centrally. Audit changes to passwd, group and sudoers.d with appropriate policy. Compare UID-zero accounts against the approved list.</p></section>
-<section id="enterprise-recovery" class="article-section"><h2 data-fa="برگشت Rule و نگهداری داده کاربر" data-en="Undo a rule and retain user data">Undo a rule and retain user data</h2><p data-fa="برای لغو Grant، فایل اختصاصی را خارج sudoers.d ببرید و دوباره visudo را اجرا کنید. UID/GID و Policy را نسخه‌بندی کنید. shadow و Key را رمزنگاری‌شده نگه دارید. در Offboarding ابتدا دسترسی را لغو کنید و HOME را تا تعیین Retention و تحویل داده حذف نکنید." data-en="Remove the dedicated file from sudoers.d and rerun visudo to revoke the grant. Version UID/GID mappings and policy. Encrypt shadow and key backups. During offboarding, revoke access before removing HOME, following retention and data-handover requirements.">Remove the dedicated file from sudoers.d and rerun visudo to revoke the grant. Version UID/GID mappings and policy. Encrypt shadow and key backups. During offboarding, revoke access before removing HOME, following retention and data-handover requirements.</p><h3 id="enterprise-practices" data-fa="آزمون مثبت و منفی" data-en="Positive and negative permission tests">Positive and negative permission tests</h3><p data-fa="با حساب هدف هم فرمان مجاز و هم فرمان ممنوع را در محیط آزمایشی امتحان کنید. Credential اضطراری در Vault و تغییر Rule در سابقه مدیریت دسترسی نگهداری شود." data-en="Test permitted and forbidden commands as the target user in staging. Keep emergency credentials in a vault and rule changes in access-management records.">Test permitted and forbidden commands as the target user in staging. Keep emergency credentials in a vault and rule changes in access-management records.</p></section>
-<section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</h2><h3 data-fa="آیا passwd -l کلید SSH را غیرفعال می‌کند؟" data-en="Does passwd -l disable an SSH key?">Does passwd -l disable an SSH key?</h3><p data-fa="خیر. مسیر کلید و سایر credentialها باید جدا لغو شوند." data-en="No. Keys and other credentials require separate revocation.">No. Keys and other credentials require separate revocation.</p><h3 data-fa="چرا --no-pager در sudo لازم است؟" data-en="Why include --no-pager in a sudo rule?">Why include --no-pager in a sudo rule?</h3><p data-fa="Pager ممکن است امکان اجرای shell با privilege فرمان را فراهم کند." data-en="A pager may provide a shell using the privileges of the invoking command.">A pager may provide a shell using the privileges of the invoking command.</p></section>
-<section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">Official Sources</h2><ul><li><a href="https://documentation.ubuntu.com/server/how-to/security/user-management/" rel="noopener">Canonical: user management</a></li><li><a href="https://www.sudo.ws/docs/man/sudoers.man/" rel="noopener">sudoers manual</a></li></ul></section></div></article>
+                    <p
+                      data-fa="عضویت گروه جاری را با Policy جدید مقایسه کنید. Cache هویت و نشست قدیمی ممکن است تغییر را فوراً منعکس نکنند. قبل از خاتمه Session، UID و Jobهای در حال اجرا را بررسی کنید."
+                      data-en="Compare current session groups with new policy. Identity caches and existing sessions might delay changes. Confirm UID and running jobs before terminating sessions."
+                    >
+                      Compare current session groups with new policy. Identity
+                      caches and existing sessions might delay changes. Confirm
+                      UID and running jobs before terminating sessions.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="فرمان محدود و مسیرهای دورزدن آن"
+                      data-en="Restricted commands and escape paths"
+                    >
+                      Restricted commands and escape paths
+                    </h2>
+                    <p
+                      data-fa="Shell، Editor و Package Manager اغلب امکان اجرای کد Root دارند. Wildcard گسترده را مجوز محدود حساب نکنید. --no-pager مانع ورود به Pager تعاملی از فرمان نمونه می‌شود. Service Account بدون نیاز واقعی ورود تعاملی نداشته باشد. در Offboarding، کلید SSH، Directory، API Token، Cron، sudo و نشست را جدا لغو کنید."
+                      data-en="Shells, editors and package managers often execute root code. Broad wildcards are not restricted privileges. --no-pager keeps the example out of an interactive pager. Avoid unnecessary interactive service-account login. Revoke keys, directory access, API tokens, cron, sudo and sessions independently."
+                    >
+                      Shells, editors and package managers often execute root
+                      code. Broad wildcards are not restricted privileges.
+                      --no-pager keeps the example out of an interactive pager.
+                      Avoid unnecessary interactive service-account login.
+                      Revoke keys, directory access, API tokens, cron, sudo and
+                      sessions independently.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="ممیزی تغییر حساب و مجوز"
+                      data-en="Audit account and privilege changes"
+                    >
+                      Audit account and privilege changes
+                    </h2>
+                    <p
+                      data-fa="رویدادهای sudo و SSH را در Log مرکزی نگه دارید. تغییر passwd، group و sudoers.d را با Audit Policy مناسب ثبت کنید. تعداد حساب‌های UID صفر را با فهرست مجاز مقایسه کنید."
+                      data-en="Retain sudo and SSH events centrally. Audit changes to passwd, group and sudoers.d with appropriate policy. Compare UID-zero accounts against the approved list."
+                    >
+                      Retain sudo and SSH events centrally. Audit changes to
+                      passwd, group and sudoers.d with appropriate policy.
+                      Compare UID-zero accounts against the approved list.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="برگشت Rule و نگهداری داده کاربر"
+                      data-en="Undo a rule and retain user data"
+                    >
+                      Undo a rule and retain user data
+                    </h2>
+                    <p
+                      data-fa="برای لغو Grant، فایل اختصاصی را خارج sudoers.d ببرید و دوباره visudo را اجرا کنید. UID/GID و Policy را نسخه‌بندی کنید. shadow و Key را رمزنگاری‌شده نگه دارید. در Offboarding ابتدا دسترسی را لغو کنید و HOME را تا تعیین Retention و تحویل داده حذف نکنید."
+                      data-en="Remove the dedicated file from sudoers.d and rerun visudo to revoke the grant. Version UID/GID mappings and policy. Encrypt shadow and key backups. During offboarding, revoke access before removing HOME, following retention and data-handover requirements."
+                    >
+                      Remove the dedicated file from sudoers.d and rerun visudo
+                      to revoke the grant. Version UID/GID mappings and policy.
+                      Encrypt shadow and key backups. During offboarding, revoke
+                      access before removing HOME, following retention and
+                      data-handover requirements.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="آزمون مثبت و منفی"
+                      data-en="Positive and negative permission tests"
+                    >
+                      Positive and negative permission tests
+                    </h3>
+                    <p
+                      data-fa="با حساب هدف هم فرمان مجاز و هم فرمان ممنوع را در محیط آزمایشی امتحان کنید. Credential اضطراری در Vault و تغییر Rule در سابقه مدیریت دسترسی نگهداری شود."
+                      data-en="Test permitted and forbidden commands as the target user in staging. Keep emergency credentials in a vault and rule changes in access-management records."
+                    >
+                      Test permitted and forbidden commands as the target user
+                      in staging. Keep emergency credentials in a vault and rule
+                      changes in access-management records.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا passwd -l کلید SSH را غیرفعال می‌کند؟"
+                      data-en="Does passwd -l disable an SSH key?"
+                    >
+                      Does passwd -l disable an SSH key?
+                    </h3>
+                    <p
+                      data-fa="خیر. مسیر کلید و سایر credentialها باید جدا لغو شوند."
+                      data-en="No. Keys and other credentials require separate revocation."
+                    >
+                      No. Keys and other credentials require separate
+                      revocation.
+                    </p>
+                    <h3
+                      data-fa="چرا --no-pager در sudo لازم است؟"
+                      data-en="Why include --no-pager in a sudo rule?"
+                    >
+                      Why include --no-pager in a sudo rule?
+                    </h3>
+                    <p
+                      data-fa="Pager ممکن است امکان اجرای shell با privilege فرمان را فراهم کند."
+                      data-en="A pager may provide a shell using the privileges of the invoking command."
+                    >
+                      A pager may provide a shell using the privileges of the
+                      invoking command.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://documentation.ubuntu.com/server/how-to/security/user-management/"
+                          rel="noopener"
+                          >Canonical: user management</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://www.sudo.ws/docs/man/sudoers.man/"
+                          rel="noopener"
+                          >sudoers manual</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
+              </article>
             </div>
           </div>
         </div>
@@ -354,18 +806,24 @@ sudo journalctl _COMM=sudo -n 50 --no-pager</code></pre>
             <div class="footer-brand">
               <h3 class="brand-name">
                 <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
-                  >AmirHossein Jalalian</span>
+                  >AmirHossein Jalalian</span
+                >
               </h3>
               <p
                 class="brand-title"
                 data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
-              >Infrastructure &amp; DevOps Engineer</p>
+              >
+                Infrastructure &amp; DevOps Engineer
+              </p>
               <p
                 class="brand-description"
                 data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
                 data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-              >Delivering reliable, secure, and scalable IT solutions for your business success.</p>
+              >
+                Delivering reliable, secure, and scalable IT solutions for your
+                business success.
+              </p>
             </div>
 
             <!-- Contact Info -->
@@ -374,12 +832,15 @@ sudo journalctl _COMM=sudo -n 50 --no-pager</code></pre>
                 class="contact-title"
                 data-en="Get In Touch"
                 data-fa="تماس با من"
-              >Get In Touch</h4>
+              >
+                Get In Touch
+              </h4>
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>
                   <span data-en="Tehran, Iran" data-fa="تهران، ایران"
-                    >Tehran, Iran</span>
+                    >Tehran, Iran</span
+                  >
                 </div>
                 <div class="contact-item">
                   <i class="bi bi-telephone"></i>
@@ -404,7 +865,9 @@ sudo journalctl _COMM=sudo -n 50 --no-pager</code></pre>
                   class="social-title"
                   data-en="Follow Me"
                   data-fa="دنبال کنید"
-                >Follow Me</h5>
+                >
+                  Follow Me
+                </h5>
                 <div class="social-icons">
                   <a
                     href="https://wa.me/989197276219"
@@ -450,12 +913,14 @@ sudo journalctl _COMM=sudo -n 50 --no-pager</code></pre>
                   <span
                     data-en="All Rights Reserved"
                     data-fa="تمام حقوق محفوظ است"
-                    >All Rights Reserved</span>
+                    >All Rights Reserved</span
+                  >
                 </p>
               </div>
               <div class="footer-heart">
                 <span data-en="Made with" data-fa="ساخته شده با"
-                  >Made with</span>
+                  >Made with</span
+                >
                 <i class="bi bi-heart-fill"></i>
                 <span data-en="in Iran" data-fa="در ایران">in Iran</span>
               </div>

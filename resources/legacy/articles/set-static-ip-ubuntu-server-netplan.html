@@ -4,7 +4,10 @@
     <title>Set a Static IP on Ubuntu Server with Netplan | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Inspect YAML ownership, configure routes and DNS, use netplan try, and diagnose failures with a rollback path." />
+    <meta
+      name="description"
+      content="Inspect YAML ownership, configure routes and DNS, use netplan try, and diagnose failures with a rollback path."
+    />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <link
@@ -12,9 +15,18 @@
       href="https://meetaj.ir/articles/set-static-ip-ubuntu-server-netplan"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Set a Static IP on Ubuntu Server with Netplan" />
-    <meta property="og:description" content="Inspect YAML ownership, configure routes and DNS, use netplan try, and diagnose failures with a rollback path." />
-    <meta property="og:url" content="https://meetaj.ir/articles/set-static-ip-ubuntu-server-netplan" />
+    <meta
+      property="og:title"
+      content="Set a Static IP on Ubuntu Server with Netplan"
+    />
+    <meta
+      property="og:description"
+      content="Inspect YAML ownership, configure routes and DNS, use netplan try, and diagnose failures with a rollback path."
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/set-static-ip-ubuntu-server-netplan"
+    />
     <meta property="og:site_name" content="Meet AJ" />
     <meta name="twitter:card" content="summary" />
     <link href="../assets/img/favicon.png" rel="icon" />
@@ -51,12 +63,95 @@
       rel="stylesheet"
       disabled
     />
-  <meta name="keywords" content="Ubuntu Server Netplan, set static ip ubuntu server netplan, infrastructure operations, production operations, troubleshooting" />
-<meta name="article:content-language" content="en" />
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Set a Static IP on Ubuntu Server with Netplan", "description": "Inspect YAML ownership, configure routes and DNS, use netplan try, and diagnose failures with a rollback path.", "inLanguage": "en", "url": "https://meetaj.ir/articles/set-static-ip-ubuntu-server-netplan", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}, "mainEntityOfPage": "https://meetaj.ir/articles/set-static-ip-ubuntu-server-netplan"}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does netplan try guarantee recovery?", "acceptedAnswer": {"@type": "Answer", "text": "No. Review rollback limitations and retain an independent console."}}, {"@type": "Question", "name": "Why do settings revert after reboot?", "acceptedAnswer": {"@type": "Answer", "text": "Cloud-init or a configuration management tool usually still generates the file."}}], "inLanguage": "en"}</script>
-<script id="article-localizations" type="application/json">{"fa": {"title": "تنظیم IP ثابت در Ubuntu Server با Netplan", "meta_title": "تنظیم IP ثابت در Ubuntu Server با Netplan | Meet AJ", "description": "بررسی مالک YAML، تنظیم Route و DNS، اجرای netplan try و تشخیص خطای شبکه با مسیر برگشت.", "keywords": ["تنظیم IP ثابت در Ubuntu Server با Netplan", "عیب‌یابی", "بازیابی", "set static ip ubuntu server netplan"], "faq": [["آیا netplan try تضمین بازیابی است؟", "خیر. محدودیت‌های rollback را بررسی کنید و console مستقل داشته باشید."], ["چرا تغییر بعد reboot برمی‌گردد؟", "معمولاً cloud-init یا ابزار مدیریت پیکربندی هنوز فایل را تولید می‌کند."]]}, "en": {"title": "Set a Static IP on Ubuntu Server with Netplan", "meta_title": "Set a Static IP on Ubuntu Server with Netplan | Meet AJ", "description": "Inspect YAML ownership, configure routes and DNS, use netplan try, and diagnose failures with a rollback path.", "keywords": ["Set a Static IP on Ubuntu Server with Netplan", "set static ip ubuntu server netplan", "troubleshooting"], "faq": [["Does netplan try guarantee recovery?", "No. Review rollback limitations and retain an independent console."], ["Why do settings revert after reboot?", "Cloud-init or a configuration management tool usually still generates the file."]]}}</script>
-</head>
+    <meta
+      name="keywords"
+      content="Ubuntu Server Netplan, set static ip ubuntu server netplan, infrastructure operations, production operations, troubleshooting"
+    />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Set a Static IP on Ubuntu Server with Netplan",
+        "description": "Inspect YAML ownership, configure routes and DNS, use netplan try, and diagnose failures with a rollback path.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/set-static-ip-ubuntu-server-netplan",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/set-static-ip-ubuntu-server-netplan"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does netplan try guarantee recovery?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Review rollback limitations and retain an independent console."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why do settings revert after reboot?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Cloud-init or a configuration management tool usually still generates the file."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "تنظیم IP ثابت در Ubuntu Server با Netplan",
+          "meta_title": "تنظیم IP ثابت در Ubuntu Server با Netplan | Meet AJ",
+          "description": "بررسی مالک YAML، تنظیم Route و DNS، اجرای netplan try و تشخیص خطای شبکه با مسیر برگشت.",
+          "keywords": [
+            "تنظیم IP ثابت در Ubuntu Server با Netplan",
+            "عیب‌یابی",
+            "بازیابی",
+            "set static ip ubuntu server netplan"
+          ],
+          "faq": [
+            [
+              "آیا netplan try تضمین بازیابی است؟",
+              "خیر. محدودیت‌های rollback را بررسی کنید و console مستقل داشته باشید."
+            ],
+            [
+              "چرا تغییر بعد reboot برمی‌گردد؟",
+              "معمولاً cloud-init یا ابزار مدیریت پیکربندی هنوز فایل را تولید می‌کند."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Set a Static IP on Ubuntu Server with Netplan",
+          "meta_title": "Set a Static IP on Ubuntu Server with Netplan | Meet AJ",
+          "description": "Inspect YAML ownership, configure routes and DNS, use netplan try, and diagnose failures with a rollback path.",
+          "keywords": [
+            "Set a Static IP on Ubuntu Server with Netplan",
+            "set static ip ubuntu server netplan",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Does netplan try guarantee recovery?",
+              "No. Review rollback limitations and retain an independent console."
+            ],
+            [
+              "Why do settings revert after reboot?",
+              "Cloud-init or a configuration management tool usually still generates the file."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
   <body class="article-page theme-linux">
     <button
       id="menu-toggle"
@@ -205,28 +300,94 @@
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
-          <li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="IP ثابت بدون قطع مدیریت" data-en="Change the IP while preserving access">Change the IP while preserving access</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="YAML، Renderer و Resolver" data-en="YAML, renderer and resolver">YAML, renderer and resolver</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="Interface و مالک فایل شبکه" data-en="Interface and network-file ownership">Interface and network-file ownership</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="نوشتن YAML و پذیرش netplan try" data-en="Write YAML and confirm netplan try">Write YAML and confirm netplan try</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="آزمون پس از تغییر و Reboot" data-en="Tests after the change and reboot">Tests after the change and reboot</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="YAML سالم اما شبکه خراب" data-en="Valid YAML with broken networking">Valid YAML with broken networking</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-security"><span data-fa="فایل محدود و مسیر IPv6" data-en="Restricted files and IPv6 paths">Restricted files and IPv6 paths</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="برگشت YAML از Console" data-en="Restore YAML through the console">Restore YAML through the console</span></a></li>
-<li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">Official Sources</span></a></li>
-
-
-
-
-
-
-
-
-
-
-
-
+          <li class="article-nav-item">
+            <a href="#enterprise-intro"
+              ><span
+                data-fa="IP ثابت بدون قطع مدیریت"
+                data-en="Change the IP while preserving access"
+                >Change the IP while preserving access</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="YAML، Renderer و Resolver"
+                data-en="YAML, renderer and resolver"
+                >YAML, renderer and resolver</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="Interface و مالک فایل شبکه"
+                data-en="Interface and network-file ownership"
+                >Interface and network-file ownership</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="نوشتن YAML و پذیرش netplan try"
+                data-en="Write YAML and confirm netplan try"
+                >Write YAML and confirm netplan try</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="آزمون پس از تغییر و Reboot"
+                data-en="Tests after the change and reboot"
+                >Tests after the change and reboot</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="YAML سالم اما شبکه خراب"
+                data-en="Valid YAML with broken networking"
+                >Valid YAML with broken networking</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-security"
+              ><span
+                data-fa="فایل محدود و مسیر IPv6"
+                data-en="Restricted files and IPv6 paths"
+                >Restricted files and IPv6 paths</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="برگشت YAML از Console"
+                data-en="Restore YAML through the console"
+                >Restore YAML through the console</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#faq"
+              ><span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
+              ></a
+            >
+          </li>
         </ul>
       </nav>
       <button
@@ -249,19 +410,25 @@
                 <span class="article-category">Linux</span
                 ><span class="meta-date"
                   ><span class="article-date" data-en="Article" data-fa="مقاله"
-                    >Article</span><time datetime="">Linux</time></span
+                    >Article</span
+                  ><time datetime="">Linux</time></span
                 >
               </div>
               <h1
                 class="article-title hero-title"
-
-
-               data-fa="تنظیم IP ثابت در Ubuntu Server با Netplan" data-en="Set a Static IP on Ubuntu Server with Netplan">Set a Static IP on Ubuntu Server with Netplan</h1>
+                data-fa="تنظیم IP ثابت در Ubuntu Server با Netplan"
+                data-en="Set a Static IP on Ubuntu Server with Netplan"
+              >
+                Set a Static IP on Ubuntu Server with Netplan
+              </h1>
               <p
                 class="article-excerpt hero-subtitle"
-
-
-               data-fa="بررسی مالک YAML، تنظیم Route و DNS، اجرای netplan try و تشخیص خطای شبکه با مسیر برگشت." data-en="Inspect YAML ownership, configure routes and DNS, use netplan try, and diagnose failures with a rollback path.">Inspect YAML ownership, configure routes and DNS, use netplan try, and diagnose failures with a rollback path.</p>
+                data-fa="بررسی مالک YAML، تنظیم Route و DNS، اجرای netplan try و تشخیص خطای شبکه با مسیر برگشت."
+                data-en="Inspect YAML ownership, configure routes and DNS, use netplan try, and diagnose failures with a rollback path."
+              >
+                Inspect YAML ownership, configure routes and DNS, use netplan
+                try, and diagnose failures with a rollback path.
+              </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -275,7 +442,9 @@
                       class="banner-subtitle"
                       data-en="Meet AJ technical article"
                       data-fa="مقاله فنی Meet AJ"
-                    >Meet AJ technical article</p>
+                    >
+                      Meet AJ technical article
+                    </p>
                   </div>
                 </div>
               </div>
@@ -286,7 +455,8 @@
                   ><span class="btn-content"
                     ><i class="bi bi-play-circle" aria-hidden="true"></i
                     ><span data-en="Start reading" data-fa="شروع مطالعه"
-                      >Start reading</span></span
+                      >Start reading</span
+                    ></span
                   ></a
                 >
               </div>
@@ -307,19 +477,141 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="en" dir="ltr"><section id="enterprise-intro" class="article-section"><h2 data-fa="IP ثابت بدون قطع مدیریت" data-en="Change the IP while preserving access">Change the IP while preserving access</h2><p data-fa="Netplan تنظیم شبکه Ubuntu را از YAML تولید می‌کند. برای تغییر DHCP به IP ثابت، Interface و Prefix و Gateway و DNS را آماده کنید. تغییر از SSH اتصال جاری را در معرض قطع قرار می‌دهد. Console و آزمون کلاینت دوم، بخشی از همین تغییرند." data-en="Netplan generates Ubuntu networking from YAML. To move from DHCP to static addressing, prepare interface, prefix, gateway and DNS values. An SSH-based change risks the active connection. Console access and a second-client test are part of the procedure.">Netplan generates Ubuntu networking from YAML. To move from DHCP to static addressing, prepare interface, prefix, gateway and DNS values. An SSH-based change risks the active connection. Console access and a second-client test are part of the procedure.</p></section>
-<section id="enterprise-architecture" class="article-section"><h2 data-fa="YAML، Renderer و Resolver" data-en="YAML, renderer and resolver">YAML, renderer and resolver</h2><p data-fa="Netplan از YAML برای Renderer انتخاب‌شده تنظیم می‌سازد. در این نمونه networkd شبکه و resolved نام‌گذاری را مدیریت می‌کنند. نوشتن فایل تازه تنظیم قبلی Interface را لزوماً حذف نمی‌کند. نتیجه Merge را با netplan get ببینید." data-en="Netplan generates settings for the selected renderer. Here networkd manages interfaces and resolved handles DNS. A new file does not necessarily replace prior interface settings. Inspect the merged result with netplan get.">Netplan generates settings for the selected renderer. Here networkd manages interfaces and resolved handles DNS. A new file does not necessarily replace prior interface settings. Inspect the merged result with netplan get.</p><h3 id="enterprise-scenario" data-fa="مثال: VM در VLAN 30" data-en="Example: a VM in VLAN 30">Example: a VM in VLAN 30</h3><p data-fa="VM از DHCP به 10.20.30.10/24 با Gateway برابر 10.20.30.1 منتقل می‌شود. آدرس باید خارج DHCP Pool یا به‌درستی رزرو شده باشد. VLAN و ACL مسیر مدیریت را پیش از تغییر تأیید کنید." data-en="The VM moves from DHCP to 10.20.30.10/24 via 10.20.30.1. Exclude the address from DHCP allocation or reserve it correctly. Validate VLANs and management ACLs before changing it.">The VM moves from DHCP to 10.20.30.10/24 via 10.20.30.1. Exclude the address from DHCP allocation or reserve it correctly. Validate VLANs and management ACLs before changing it.</p></section>
-<section id="enterprise-prerequisites" class="article-section"><h2 data-fa="Interface و مالک فایل شبکه" data-en="Interface and network-file ownership">Interface and network-file ownership</h2><p data-fa="مثال برای Ubuntu 24.04 LTS با netplan.io و systemd-networkd است. نام ens160 را با ip -br address روی میزبان بررسی کنید." data-en="Use Ubuntu 24.04 LTS with netplan.io and systemd-networkd. Confirm the actual interface instead of assuming ens160.">Use Ubuntu 24.04 LTS with netplan.io and systemd-networkd. Confirm the actual interface instead of assuming ens160.</p>
-<p data-fa="این تنظیم به VM با ظرفیت خاص نیاز ندارد. IPAM، Console فعال و دسترسی کلاینت آزمایشی مهم‌اند. Subnet و DNS نمونه را با شبکه واقعی تطبیق دهید." data-en="No particular VM allocation is required. IPAM, an active console and a test client matter. Match sample subnets and DNS to the actual network.">No particular VM allocation is required. IPAM, an active console and a test client matter. Match sample subnets and DNS to the actual network.</p>
-<p data-fa="کل /etc/netplan را بررسی کنید. فایل تولیدشده Cloud-init یا Automation را بدون تغییر منبع مالکیت، دستی بازنویسی نکنید. YAMLهای چندگانه با هم Merge می‌شوند." data-en="Inspect all of /etc/netplan. Do not manually overwrite cloud-init or automation output without changing its authoritative source. Multiple YAML files merge.">Inspect all of /etc/netplan. Do not manually overwrite cloud-init or automation output without changing its authoritative source. Multiple YAML files merge.</p><h3 id="enterprise-compatibility" data-fa="NetworkManager و محدودیت Rollback" data-en="NetworkManager and rollback limitations">NetworkManager and rollback limitations</h3><p data-fa="برای Default Route از routes استفاده کنید. gateway4 در نمونه‌های قدیمی Deprecated است. Renderer دسکتاپ ممکن است NetworkManager باشد. در ساختارهای Virtual Link، Rollback مربوط به try محدودیت دارد. پس از Timeout، وضعیت واقعی و فایل روی دیسک را بررسی کنید." data-en="Use routes for the default route. Older gateway4 syntax is deprecated. Desktops might use NetworkManager. Try has rollback limitations around virtual links. After timeout, verify actual state and on-disk files.">Use routes for the default route. Older gateway4 syntax is deprecated. Desktops might use NetworkManager. Try has rollback limitations around virtual links. After timeout, verify actual state and on-disk files.</p></section>
-<section id="enterprise-installation" class="article-section"><h2 data-fa="نوشتن YAML و پذیرش netplan try" data-en="Write YAML and confirm netplan try">Write YAML and confirm netplan try</h2><p data-fa="از console وضعیت را ثبت و کل پوشه را backup کنید." data-en="Record the current state from the console and back up the entire directory.">Record the current state from the console and back up the entire directory.</p>
-<pre dir="ltr"><code class="language-bash">ip -br address
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="IP ثابت بدون قطع مدیریت"
+                      data-en="Change the IP while preserving access"
+                    >
+                      Change the IP while preserving access
+                    </h2>
+                    <p
+                      data-fa="Netplan تنظیم شبکه Ubuntu را از YAML تولید می‌کند. برای تغییر DHCP به IP ثابت، Interface و Prefix و Gateway و DNS را آماده کنید. تغییر از SSH اتصال جاری را در معرض قطع قرار می‌دهد. Console و آزمون کلاینت دوم، بخشی از همین تغییرند."
+                      data-en="Netplan generates Ubuntu networking from YAML. To move from DHCP to static addressing, prepare interface, prefix, gateway and DNS values. An SSH-based change risks the active connection. Console access and a second-client test are part of the procedure."
+                    >
+                      Netplan generates Ubuntu networking from YAML. To move
+                      from DHCP to static addressing, prepare interface, prefix,
+                      gateway and DNS values. An SSH-based change risks the
+                      active connection. Console access and a second-client test
+                      are part of the procedure.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="YAML، Renderer و Resolver"
+                      data-en="YAML, renderer and resolver"
+                    >
+                      YAML, renderer and resolver
+                    </h2>
+                    <p
+                      data-fa="Netplan از YAML برای Renderer انتخاب‌شده تنظیم می‌سازد. در این نمونه networkd شبکه و resolved نام‌گذاری را مدیریت می‌کنند. نوشتن فایل تازه تنظیم قبلی Interface را لزوماً حذف نمی‌کند. نتیجه Merge را با netplan get ببینید."
+                      data-en="Netplan generates settings for the selected renderer. Here networkd manages interfaces and resolved handles DNS. A new file does not necessarily replace prior interface settings. Inspect the merged result with netplan get."
+                    >
+                      Netplan generates settings for the selected renderer. Here
+                      networkd manages interfaces and resolved handles DNS. A
+                      new file does not necessarily replace prior interface
+                      settings. Inspect the merged result with netplan get.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: VM در VLAN 30"
+                      data-en="Example: a VM in VLAN 30"
+                    >
+                      Example: a VM in VLAN 30
+                    </h3>
+                    <p
+                      data-fa="VM از DHCP به 10.20.30.10/24 با Gateway برابر 10.20.30.1 منتقل می‌شود. آدرس باید خارج DHCP Pool یا به‌درستی رزرو شده باشد. VLAN و ACL مسیر مدیریت را پیش از تغییر تأیید کنید."
+                      data-en="The VM moves from DHCP to 10.20.30.10/24 via 10.20.30.1. Exclude the address from DHCP allocation or reserve it correctly. Validate VLANs and management ACLs before changing it."
+                    >
+                      The VM moves from DHCP to 10.20.30.10/24 via 10.20.30.1.
+                      Exclude the address from DHCP allocation or reserve it
+                      correctly. Validate VLANs and management ACLs before
+                      changing it.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="Interface و مالک فایل شبکه"
+                      data-en="Interface and network-file ownership"
+                    >
+                      Interface and network-file ownership
+                    </h2>
+                    <p
+                      data-fa="مثال برای Ubuntu 24.04 LTS با netplan.io و systemd-networkd است. نام ens160 را با ip -br address روی میزبان بررسی کنید."
+                      data-en="Use Ubuntu 24.04 LTS with netplan.io and systemd-networkd. Confirm the actual interface instead of assuming ens160."
+                    >
+                      Use Ubuntu 24.04 LTS with netplan.io and systemd-networkd.
+                      Confirm the actual interface instead of assuming ens160.
+                    </p>
+                    <p
+                      data-fa="این تنظیم به VM با ظرفیت خاص نیاز ندارد. IPAM، Console فعال و دسترسی کلاینت آزمایشی مهم‌اند. Subnet و DNS نمونه را با شبکه واقعی تطبیق دهید."
+                      data-en="No particular VM allocation is required. IPAM, an active console and a test client matter. Match sample subnets and DNS to the actual network."
+                    >
+                      No particular VM allocation is required. IPAM, an active
+                      console and a test client matter. Match sample subnets and
+                      DNS to the actual network.
+                    </p>
+                    <p
+                      data-fa="کل /etc/netplan را بررسی کنید. فایل تولیدشده Cloud-init یا Automation را بدون تغییر منبع مالکیت، دستی بازنویسی نکنید. YAMLهای چندگانه با هم Merge می‌شوند."
+                      data-en="Inspect all of /etc/netplan. Do not manually overwrite cloud-init or automation output without changing its authoritative source. Multiple YAML files merge."
+                    >
+                      Inspect all of /etc/netplan. Do not manually overwrite
+                      cloud-init or automation output without changing its
+                      authoritative source. Multiple YAML files merge.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="NetworkManager و محدودیت Rollback"
+                      data-en="NetworkManager and rollback limitations"
+                    >
+                      NetworkManager and rollback limitations
+                    </h3>
+                    <p
+                      data-fa="برای Default Route از routes استفاده کنید. gateway4 در نمونه‌های قدیمی Deprecated است. Renderer دسکتاپ ممکن است NetworkManager باشد. در ساختارهای Virtual Link، Rollback مربوط به try محدودیت دارد. پس از Timeout، وضعیت واقعی و فایل روی دیسک را بررسی کنید."
+                      data-en="Use routes for the default route. Older gateway4 syntax is deprecated. Desktops might use NetworkManager. Try has rollback limitations around virtual links. After timeout, verify actual state and on-disk files."
+                    >
+                      Use routes for the default route. Older gateway4 syntax is
+                      deprecated. Desktops might use NetworkManager. Try has
+                      rollback limitations around virtual links. After timeout,
+                      verify actual state and on-disk files.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="نوشتن YAML و پذیرش netplan try"
+                      data-en="Write YAML and confirm netplan try"
+                    >
+                      Write YAML and confirm netplan try
+                    </h2>
+                    <p
+                      data-fa="از console وضعیت را ثبت و کل پوشه را backup کنید."
+                      data-en="Record the current state from the console and back up the entire directory."
+                    >
+                      Record the current state from the console and back up the
+                      entire directory.
+                    </p>
+                    <pre dir="ltr"><code class="language-bash">ip -br address
 ip route
 resolvectl status
 sudo netplan get
 sudo cp -a /etc/netplan /root/netplan-before-change</code></pre>
-<p data-fa="نمونه زیر فقط برای VM تک NIC و یک فایل مالک شبکه است. فایل فعال قبلی را شناسایی کنید. YAML متداخل باقی نگذارید. اگر cloud-init آن را تولید می‌کند ابتدا مالکیت را از cloud به سیستم منتقل کنید یا تغییر را در منبع cloud انجام دهید." data-en="This configuration targets a single-NIC VM with one authoritative network file. Identify the active file and remove conflicting YAML ownership. If cloud-init generates it, transfer ownership deliberately or update the cloud configuration source.">This configuration targets a single-NIC VM with one authoritative network file. Identify the active file and remove conflicting YAML ownership. If cloud-init generates it, transfer ownership deliberately or update the cloud configuration source.</p>
-<pre dir="ltr"><code class="language-bash">sudo tee /etc/netplan/01-production.yaml &gt;/dev/null &lt;&lt;&#x27;EOF&#x27;
+                    <p
+                      data-fa="نمونه زیر فقط برای VM تک NIC و یک فایل مالک شبکه است. فایل فعال قبلی را شناسایی کنید. YAML متداخل باقی نگذارید. اگر cloud-init آن را تولید می‌کند ابتدا مالکیت را از cloud به سیستم منتقل کنید یا تغییر را در منبع cloud انجام دهید."
+                      data-en="This configuration targets a single-NIC VM with one authoritative network file. Identify the active file and remove conflicting YAML ownership. If cloud-init generates it, transfer ownership deliberately or update the cloud configuration source."
+                    >
+                      This configuration targets a single-NIC VM with one
+                      authoritative network file. Identify the active file and
+                      remove conflicting YAML ownership. If cloud-init generates
+                      it, transfer ownership deliberately or update the cloud
+                      configuration source.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">sudo tee /etc/netplan/01-production.yaml &gt;/dev/null &lt;&lt;&#x27;EOF&#x27;
 network:
   version: 2
   renderer: networkd
@@ -337,27 +629,202 @@ EOF
 sudo chmod 600 /etc/netplan/01-production.yaml
 sudo netplan generate
 sudo netplan try --timeout 120</code></pre>
-<p data-fa="پیش از تأیید try از کلاینت دوم gateway، SSH و DNS را آزمایش کنید. انتظار: آدرس مشخص روی ens160 و فقط default route طراحی‌شده. generate بدون خطا. بازگشت timeout را روی محیط هدف آزمایش کنید و به آن به‌تنهایی برای بازیابی تکیه نکنید." data-en="Before accepting netplan try, test the gateway, SSH and DNS from another client. Expect the specified address on ens160, only the intended default route and no generator errors. Test timeout rollback on the target platform. Keep console recovery available rather than relying on it alone.">Before accepting netplan try, test the gateway, SSH and DNS from another client. Expect the specified address on ens160, only the intended default route and no generator errors. Test timeout rollback on the target platform. Keep console recovery available rather than relying on it alone.</p>
-<pre dir="ltr"><code class="language-bash">ip -br address show ens160
+                    <p
+                      data-fa="پیش از تأیید try از کلاینت دوم gateway، SSH و DNS را آزمایش کنید. انتظار: آدرس مشخص روی ens160 و فقط default route طراحی‌شده. generate بدون خطا. بازگشت timeout را روی محیط هدف آزمایش کنید و به آن به‌تنهایی برای بازیابی تکیه نکنید."
+                      data-en="Before accepting netplan try, test the gateway, SSH and DNS from another client. Expect the specified address on ens160, only the intended default route and no generator errors. Test timeout rollback on the target platform. Keep console recovery available rather than relying on it alone."
+                    >
+                      Before accepting netplan try, test the gateway, SSH and
+                      DNS from another client. Expect the specified address on
+                      ens160, only the intended default route and no generator
+                      errors. Test timeout rollback on the target platform. Keep
+                      console recovery available rather than relying on it
+                      alone.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">ip -br address show ens160
 ip route get 10.20.30.53
 resolvectl query files01.corp.example.com
-ping -c 3 10.20.30.1</code></pre><p data-fa="files01.corp.example.com باید یک رکورد موجود در DNS داخلی شما باشد. آن را جایگزین کنید. وجود Zone به‌تنهایی داشتن رکورد A در ریشه Zone را تضمین نمی‌کند." data-en="Replace files01.corp.example.com with an existing internal DNS record. A zone’s existence does not guarantee an A record at its root.">Replace files01.corp.example.com with an existing internal DNS record. A zone’s existence does not guarantee an A record at its root.</p></section>
-<section id="enterprise-monitoring" class="article-section"><h2 data-fa="آزمون پس از تغییر و Reboot" data-en="Tests after the change and reboot">Tests after the change and reboot</h2><p data-fa="از Subnet مدیریت، SSH و از Subnet مصرف‌کننده، برنامه را بسنجید. IP و Route و DNS را ثبت کنید. پس از Reboot کنترل‌شده نیز همین آزمون را انجام دهید تا تغییر Cloud-init یا Automation دیده شود." data-en="Test SSH from management and the application from its consumer subnet. Record IP, routes and DNS. Repeat after a controlled reboot to detect cloud-init or automation overwrites.">Test SSH from management and the application from its consumer subnet. Record IP, routes and DNS. Repeat after a controlled reboot to detect cloud-init or automation overwrites.</p></section>
-<section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="YAML سالم اما شبکه خراب" data-en="Valid YAML with broken networking">Valid YAML with broken networking</h2><p data-fa="generate خطای Syntax و Indentation را نشان می‌دهد. Tab را با Space جایگزین کنید. Default Route اضافی ممکن است از Merge یا DHCP باقی‌مانده باشد." data-en="generate identifies syntax/indentation errors. Use spaces instead of tabs. Extra default routes might come from merged files or remaining DHCP.">generate identifies syntax/indentation errors. Use spaces instead of tabs. Extra default routes might come from merged files or remaining DHCP.</p>
-<pre dir="ltr"><code class="language-bash">sudo netplan --debug generate
+ping -c 3 10.20.30.1</code></pre>
+                    <p
+                      data-fa="files01.corp.example.com باید یک رکورد موجود در DNS داخلی شما باشد. آن را جایگزین کنید. وجود Zone به‌تنهایی داشتن رکورد A در ریشه Zone را تضمین نمی‌کند."
+                      data-en="Replace files01.corp.example.com with an existing internal DNS record. A zone’s existence does not guarantee an A record at its root."
+                    >
+                      Replace files01.corp.example.com with an existing internal
+                      DNS record. A zone’s existence does not guarantee an A
+                      record at its root.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="آزمون پس از تغییر و Reboot"
+                      data-en="Tests after the change and reboot"
+                    >
+                      Tests after the change and reboot
+                    </h2>
+                    <p
+                      data-fa="از Subnet مدیریت، SSH و از Subnet مصرف‌کننده، برنامه را بسنجید. IP و Route و DNS را ثبت کنید. پس از Reboot کنترل‌شده نیز همین آزمون را انجام دهید تا تغییر Cloud-init یا Automation دیده شود."
+                      data-en="Test SSH from management and the application from its consumer subnet. Record IP, routes and DNS. Repeat after a controlled reboot to detect cloud-init or automation overwrites."
+                    >
+                      Test SSH from management and the application from its
+                      consumer subnet. Record IP, routes and DNS. Repeat after a
+                      controlled reboot to detect cloud-init or automation
+                      overwrites.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="YAML سالم اما شبکه خراب"
+                      data-en="Valid YAML with broken networking"
+                    >
+                      Valid YAML with broken networking
+                    </h2>
+                    <p
+                      data-fa="generate خطای Syntax و Indentation را نشان می‌دهد. Tab را با Space جایگزین کنید. Default Route اضافی ممکن است از Merge یا DHCP باقی‌مانده باشد."
+                      data-en="generate identifies syntax/indentation errors. Use spaces instead of tabs. Extra default routes might come from merged files or remaining DHCP."
+                    >
+                      generate identifies syntax/indentation errors. Use spaces
+                      instead of tabs. Extra default routes might come from
+                      merged files or remaining DHCP.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">sudo netplan --debug generate
 networkctl status ens160
 sudo journalctl -u systemd-networkd -n 100 --no-pager
 resolvectl status ens160</code></pre>
-<p data-fa="اگر IP درست است ولی Gateway پاسخ نمی‌دهد، Mask و VLAN و Neighbor را بررسی کنید. DNS خراب با Route سالم به Resolver و ACL/53 مربوط است. برگشت تنظیم پس از Boot به بررسی مالک فایل نیاز دارد." data-en="Correct IP with an unreachable gateway requires mask, VLAN and neighbor checks. Broken DNS with working routes calls for resolver and port-53 ACL checks. Settings reverting after boot require file-ownership investigation.">Correct IP with an unreachable gateway requires mask, VLAN and neighbor checks. Broken DNS with working routes calls for resolver and port-53 ACL checks. Settings reverting after boot require file-ownership investigation.</p></section>
-<section id="enterprise-security" class="article-section"><h2 data-fa="فایل محدود و مسیر IPv6" data-en="Restricted files and IPv6 paths">Restricted files and IPv6 paths</h2><p data-fa="YAML را با Mode 600 نگه دارید، چون بعضی تنظیمات شبکه Secret دارند. Static IP جای Firewall نیست. مسیر DNS و مدیریت و IPv6 را هم بررسی کنید. پاسخ Ping فقط همان ICMP را ثابت می‌کند." data-en="Use mode 600 because some network YAML contains secrets. Static IP does not replace a firewall. Check DNS, management and IPv6 paths too. A ping response establishes only that ICMP path.">Use mode 600 because some network YAML contains secrets. Static IP does not replace a firewall. Check DNS, management and IPv6 paths too. A ping response establishes only that ICMP path.</p></section>
-<section id="enterprise-recovery" class="article-section"><h2 data-fa="برگشت YAML از Console" data-en="Restore YAML through the console">Restore YAML through the console</h2><p data-fa="از Console، فایل جدید را خارج پوشه بگذارید و نسخه قبلی را Restore کنید. فایل اضافی متداخل باقی نگذارید. generate را پیش از apply اجرا کنید." data-en="From the console, move the new file out and restore prior YAML. Leave no overlapping extra file. Run generate before apply.">From the console, move the new file out and restore prior YAML. Leave no overlapping extra file. Run generate before apply.</p>
-<pre dir="ltr"><code class="language-bash">sudo mv /etc/netplan/01-production.yaml /root/01-production.yaml.failed
+                    <p
+                      data-fa="اگر IP درست است ولی Gateway پاسخ نمی‌دهد، Mask و VLAN و Neighbor را بررسی کنید. DNS خراب با Route سالم به Resolver و ACL/53 مربوط است. برگشت تنظیم پس از Boot به بررسی مالک فایل نیاز دارد."
+                      data-en="Correct IP with an unreachable gateway requires mask, VLAN and neighbor checks. Broken DNS with working routes calls for resolver and port-53 ACL checks. Settings reverting after boot require file-ownership investigation."
+                    >
+                      Correct IP with an unreachable gateway requires mask, VLAN
+                      and neighbor checks. Broken DNS with working routes calls
+                      for resolver and port-53 ACL checks. Settings reverting
+                      after boot require file-ownership investigation.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="فایل محدود و مسیر IPv6"
+                      data-en="Restricted files and IPv6 paths"
+                    >
+                      Restricted files and IPv6 paths
+                    </h2>
+                    <p
+                      data-fa="YAML را با Mode 600 نگه دارید، چون بعضی تنظیمات شبکه Secret دارند. Static IP جای Firewall نیست. مسیر DNS و مدیریت و IPv6 را هم بررسی کنید. پاسخ Ping فقط همان ICMP را ثابت می‌کند."
+                      data-en="Use mode 600 because some network YAML contains secrets. Static IP does not replace a firewall. Check DNS, management and IPv6 paths too. A ping response establishes only that ICMP path."
+                    >
+                      Use mode 600 because some network YAML contains secrets.
+                      Static IP does not replace a firewall. Check DNS,
+                      management and IPv6 paths too. A ping response establishes
+                      only that ICMP path.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="برگشت YAML از Console"
+                      data-en="Restore YAML through the console"
+                    >
+                      Restore YAML through the console
+                    </h2>
+                    <p
+                      data-fa="از Console، فایل جدید را خارج پوشه بگذارید و نسخه قبلی را Restore کنید. فایل اضافی متداخل باقی نگذارید. generate را پیش از apply اجرا کنید."
+                      data-en="From the console, move the new file out and restore prior YAML. Leave no overlapping extra file. Run generate before apply."
+                    >
+                      From the console, move the new file out and restore prior
+                      YAML. Leave no overlapping extra file. Run generate before
+                      apply.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">sudo mv /etc/netplan/01-production.yaml /root/01-production.yaml.failed
 sudo cp -a /root/netplan-before-change/. /etc/netplan/
 sudo netplan generate
 sudo netplan apply</code></pre>
-<p data-fa="پس از برگشت، Route و DNS و SSH و برنامه را دوباره امتحان کنید. نقشه VLAN و IPAM باید خارج VM در دسترس باشد. netplan try جای Console مستقل را نمی‌گیرد." data-en="After rollback, retest routes, DNS, SSH and the application. Keep VLAN/IPAM records outside the VM. Netplan try does not replace an independent console.">After rollback, retest routes, DNS, SSH and the application. Keep VLAN/IPAM records outside the VM. Netplan try does not replace an independent console.</p><h3 id="enterprise-practices" data-fa="تغییر یک جزء در هر مرحله" data-en="Change one part at a time">Change one part at a time</h3><p data-fa="NIC و VLAN و IP را هم‌زمان عوض نکنید. پیش از اجرا تداخل آدرس را بررسی کنید. داخل فرصت try، از کلاینت دوم ورود و DNS را آزمایش کنید و تنها پس از موفقیت تأیید کنید." data-en="Avoid changing NIC, VLAN and IP simultaneously. Check address conflicts first. During try, test login/DNS from a second client and confirm only after success.">Avoid changing NIC, VLAN and IP simultaneously. Check address conflicts first. During try, test login/DNS from a second client and confirm only after success.</p></section>
-<section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</h2><h3 data-fa="آیا netplan try تضمین بازیابی است؟" data-en="Does netplan try guarantee recovery?">Does netplan try guarantee recovery?</h3><p data-fa="خیر. محدودیت‌های rollback را بررسی کنید و console مستقل داشته باشید." data-en="No. Review rollback limitations and retain an independent console.">No. Review rollback limitations and retain an independent console.</p><h3 data-fa="چرا تغییر بعد reboot برمی‌گردد؟" data-en="Why do settings revert after reboot?">Why do settings revert after reboot?</h3><p data-fa="معمولاً cloud-init یا ابزار مدیریت پیکربندی هنوز فایل را تولید می‌کند." data-en="Cloud-init or a configuration management tool usually still generates the file.">Cloud-init or a configuration management tool usually still generates the file.</p></section>
-<section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">Official Sources</h2><ul><li><a href="https://netplan.readthedocs.io/en/stable/netplan-try/" rel="noopener">Netplan: try</a></li><li><a href="https://netplan.readthedocs.io/en/stable/using-static-ip-addresses/" rel="noopener">Netplan: static IP</a></li></ul></section></div></article>
+                    <p
+                      data-fa="پس از برگشت، Route و DNS و SSH و برنامه را دوباره امتحان کنید. نقشه VLAN و IPAM باید خارج VM در دسترس باشد. netplan try جای Console مستقل را نمی‌گیرد."
+                      data-en="After rollback, retest routes, DNS, SSH and the application. Keep VLAN/IPAM records outside the VM. Netplan try does not replace an independent console."
+                    >
+                      After rollback, retest routes, DNS, SSH and the
+                      application. Keep VLAN/IPAM records outside the VM.
+                      Netplan try does not replace an independent console.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="تغییر یک جزء در هر مرحله"
+                      data-en="Change one part at a time"
+                    >
+                      Change one part at a time
+                    </h3>
+                    <p
+                      data-fa="NIC و VLAN و IP را هم‌زمان عوض نکنید. پیش از اجرا تداخل آدرس را بررسی کنید. داخل فرصت try، از کلاینت دوم ورود و DNS را آزمایش کنید و تنها پس از موفقیت تأیید کنید."
+                      data-en="Avoid changing NIC, VLAN and IP simultaneously. Check address conflicts first. During try, test login/DNS from a second client and confirm only after success."
+                    >
+                      Avoid changing NIC, VLAN and IP simultaneously. Check
+                      address conflicts first. During try, test login/DNS from a
+                      second client and confirm only after success.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا netplan try تضمین بازیابی است؟"
+                      data-en="Does netplan try guarantee recovery?"
+                    >
+                      Does netplan try guarantee recovery?
+                    </h3>
+                    <p
+                      data-fa="خیر. محدودیت‌های rollback را بررسی کنید و console مستقل داشته باشید."
+                      data-en="No. Review rollback limitations and retain an independent console."
+                    >
+                      No. Review rollback limitations and retain an independent
+                      console.
+                    </p>
+                    <h3
+                      data-fa="چرا تغییر بعد reboot برمی‌گردد؟"
+                      data-en="Why do settings revert after reboot?"
+                    >
+                      Why do settings revert after reboot?
+                    </h3>
+                    <p
+                      data-fa="معمولاً cloud-init یا ابزار مدیریت پیکربندی هنوز فایل را تولید می‌کند."
+                      data-en="Cloud-init or a configuration management tool usually still generates the file."
+                    >
+                      Cloud-init or a configuration management tool usually
+                      still generates the file.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://netplan.readthedocs.io/en/stable/netplan-try/"
+                          rel="noopener"
+                          >Netplan: try</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://netplan.readthedocs.io/en/stable/using-static-ip-addresses/"
+                          rel="noopener"
+                          >Netplan: static IP</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
+              </article>
             </div>
           </div>
         </div>
@@ -375,18 +842,24 @@ sudo netplan apply</code></pre>
             <div class="footer-brand">
               <h3 class="brand-name">
                 <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
-                  >AmirHossein Jalalian</span>
+                  >AmirHossein Jalalian</span
+                >
               </h3>
               <p
                 class="brand-title"
                 data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
-              >Infrastructure &amp; DevOps Engineer</p>
+              >
+                Infrastructure &amp; DevOps Engineer
+              </p>
               <p
                 class="brand-description"
                 data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
                 data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-              >Delivering reliable, secure, and scalable IT solutions for your business success.</p>
+              >
+                Delivering reliable, secure, and scalable IT solutions for your
+                business success.
+              </p>
             </div>
 
             <!-- Contact Info -->
@@ -395,12 +868,15 @@ sudo netplan apply</code></pre>
                 class="contact-title"
                 data-en="Get In Touch"
                 data-fa="تماس با من"
-              >Get In Touch</h4>
+              >
+                Get In Touch
+              </h4>
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>
                   <span data-en="Tehran, Iran" data-fa="تهران، ایران"
-                    >Tehran, Iran</span>
+                    >Tehran, Iran</span
+                  >
                 </div>
                 <div class="contact-item">
                   <i class="bi bi-telephone"></i>
@@ -425,7 +901,9 @@ sudo netplan apply</code></pre>
                   class="social-title"
                   data-en="Follow Me"
                   data-fa="دنبال کنید"
-                >Follow Me</h5>
+                >
+                  Follow Me
+                </h5>
                 <div class="social-icons">
                   <a
                     href="https://wa.me/989197276219"
@@ -471,12 +949,14 @@ sudo netplan apply</code></pre>
                   <span
                     data-en="All Rights Reserved"
                     data-fa="تمام حقوق محفوظ است"
-                    >All Rights Reserved</span>
+                    >All Rights Reserved</span
+                  >
                 </p>
               </div>
               <div class="footer-heart">
                 <span data-en="Made with" data-fa="ساخته شده با"
-                  >Made with</span>
+                  >Made with</span
+                >
                 <i class="bi bi-heart-fill"></i>
                 <span data-en="in Iran" data-fa="در ایران">in Iran</span>
               </div>

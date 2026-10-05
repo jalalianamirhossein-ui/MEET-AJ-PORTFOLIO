@@ -302,7 +302,9 @@
             <div class="footer-bottom-content">
               <div class="copyright">
                 <p>
-                  © <span data-current-year>2026</span>
+                  © @endverbatim
+<x-localized-year />
+@verbatim
                   <strong
                     data-en="AmirHossein Jalalian"
                     data-fa="امیرحسین جلالیان"
@@ -333,7 +335,7 @@
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
-    <script src="/assets/js/main.js?v=1415" defer></script>
+    <script src="/assets/js/main.js?v=1416" defer></script>
     <script src="/assets/js/scroll-reveal.js?v=1" defer></script>
     <script src="/assets/js/service-catalog.js?v=1813" defer></script>
     <script src="/assets/js/i18n.js?v=1407" defer></script>

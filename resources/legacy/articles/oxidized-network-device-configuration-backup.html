@@ -1,54 +1,388 @@
-<!doctype html><html lang="en" dir="ltr" data-article-language="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Back Up Network Device Configurations with Oxidized and Git | Meet AJ</title><meta name="description" content="Install Oxidized, verify SSH host keys, store configurations in bare Git, and check backup freshness and device recovery." /><meta name="robots" content="index, follow"><link rel="canonical" href="https://meetaj.ir/articles/oxidized-network-device-configuration-backup"><meta property="og:type" content="article"><meta property="og:title" content="Back Up Network Device Configurations with Oxidized and Git" /><meta property="og:description" content="Install Oxidized, verify SSH host keys, store configurations in bare Git, and check backup freshness and device recovery." /><meta property="og:image" content="../assets/img/portfolio/oxidized-banner.png"><meta property="og:url" content="https://meetaj.ir/articles/oxidized-network-device-configuration-backup" /><meta name="keywords" content="Oxidized Network Backups, oxidized network device configuration backup, infrastructure operations, production operations, troubleshooting" />
-<meta name="article:content-language" content="en" />
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Back Up Network Device Configurations with Oxidized and Git", "description": "Install Oxidized, verify SSH host keys, store configurations in bare Git, and check backup freshness and device recovery.", "inLanguage": "en", "url": "https://meetaj.ir/articles/oxidized-network-device-configuration-backup", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}, "mainEntityOfPage": "https://meetaj.ir/articles/oxidized-network-device-configuration-backup"}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why is there no config file to cat in the Git repository?", "acceptedAnswer": {"@type": "Answer", "text": "The output can be bare. Use git ls-tree and git show to read its objects."}}, {"@type": "Question", "name": "Does an export fully restore a device?", "acceptedAnswer": {"@type": "Answer", "text": "No. Secrets, certificates, licenses and binary state may need separate backups."}}], "inLanguage": "en"}</script>
-<script id="article-localizations" type="application/json">{"fa": {"title": "Backup تنظیمات تجهیزات شبکه با Oxidized و Git", "meta_title": "Backup تنظیمات تجهیزات شبکه با Oxidized و Git | Meet AJ", "description": "نصب Oxidized، تأیید SSH Host Key، ذخیره در Bare Git و کنترل تازگی Backup و Restore دستگاه.", "keywords": ["Backup تنظیمات تجهیزات شبکه با Oxidized و Git", "عیب‌یابی", "بازیابی", "oxidized network device configuration backup"], "faq": [["چرا فایل config با cat در Git repo پیدا نمی‌شود؟", "Git output می‌تواند bare باشد. git ls-tree و git show برای خواندن object استفاده شوند."], ["آیا export برای بازیابی کامل دستگاه کافی است؟", "خیر. secret، certificate، license و binary state ممکن است جدا نیاز باشند."]]}, "en": {"title": "Back Up Network Device Configurations with Oxidized and Git", "meta_title": "Back Up Network Device Configurations with Oxidized and Git | Meet AJ", "description": "Install Oxidized, verify SSH host keys, store configurations in bare Git, and check backup freshness and device recovery.", "keywords": ["Back Up Network Device Configurations with Oxidized and Git", "oxidized network device configuration backup", "troubleshooting"], "faq": [["Why is there no config file to cat in the Git repository?", "The output can be bare. Use git ls-tree and git show to read its objects."], ["Does an export fully restore a device?", "No. Secrets, certificates, licenses and binary state may need separate backups."]]}}</script>
-</head><body class="article-page theme-linux"><nav id="navmenu" class="navmenu navmenu--article-toc"><ul><li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="جمع‌آوری Config و تاریخچه تغییر" data-en="Collect configuration and change history">Collect configuration and change history</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="از SSH تا Bare Repository" data-en="From SSH to a bare repository">From SSH to a bare repository</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="Ruby، Model و حساب تجهیز" data-en="Ruby, models and device accounts">Ruby, models and device accounts</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-security"><span data-fa="Known Hosts و Secretهای تاریخچه" data-en="Known hosts and historical secrets">Known hosts and historical secrets</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="نصب Gem، Config و Systemd Unit" data-en="Install the gem, configuration and systemd unit">Install the gem, configuration and systemd unit</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="تازگی Fetch با تاریخ Commit فرق دارد" data-en="Fetch freshness differs from commit age">Fetch freshness differs from commit age</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="Node Failed و Config ناقص" data-en="Failed nodes and incomplete configuration">Failed nodes and incomplete configuration</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="بازیابی Commit روی تجهیز مشابه" data-en="Restore a commit on matching hardware">Restore a commit on matching hardware</span></a></li>
-<li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">Official Sources</span></a></li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</ul></nav><main id="main-content"><section class="article-hero"><p class="article-category" data-en="Linux" data-fa="لینوکس">Linux</p><h1 class="article-title hero-title" data-fa="Backup تنظیمات تجهیزات شبکه با Oxidized و Git" data-en="Back Up Network Device Configurations with Oxidized and Git">Back Up Network Device Configurations with Oxidized and Git</h1><p class="article-excerpt hero-subtitle" data-fa="نصب Oxidized، تأیید SSH Host Key، ذخیره در Bare Git و کنترل تازگی Backup و Restore دستگاه." data-en="Install Oxidized, verify SSH host keys, store configurations in bare Git, and check backup freshness and device recovery.">Install Oxidized, verify SSH host keys, store configurations in bare Git, and check backup freshness and device recovery.</p><img class="article-hero-thumbnail" src="../assets/img/portfolio/oxidized-banner.png" alt="Oxidized network configuration backup on Ubuntu"></section><article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="en" dir="ltr"><section id="enterprise-intro" class="article-section"><h2 data-fa="جمع‌آوری Config و تاریخچه تغییر" data-en="Collect configuration and change history">Collect configuration and change history</h2><p data-fa="Oxidized به تجهیز وصل می‌شود، Config را با Model مربوط می‌خواند و تغییر را در Git نگه می‌دارد. فایل جمع‌آوری‌شده باید کامل و تازه باشد. برای بازیابی، تنظیم را روی مدل و Firmware واقعی بررسی کنید. وجود فایل به‌تنهایی Restore را ثابت نمی‌کند." data-en="Oxidized connects to devices, reads configuration through a model and stores changes in Git. Collected files must be complete and fresh. Validate restore against the actual model/firmware. File presence alone does not establish recoverability.">Oxidized connects to devices, reads configuration through a model and stores changes in Git. Collected files must be complete and fresh. Validate restore against the actual model/firmware. File presence alone does not establish recoverability.</p></section>
-<section id="enterprise-architecture" class="article-section"><h2 data-fa="از SSH تا Bare Repository" data-en="From SSH to a bare repository">From SSH to a bare repository</h2><p data-fa="SSH خروجی Model را به Oxidized می‌دهد و Git نسخه‌ها را ذخیره می‌کند. remove_secret برخی Secretها را حذف می‌کند و بازگردانی را ناقص می‌سازد. Certificate و License و Backup بومی تجهیز را جدا نگه دارید." data-en="SSH supplies model output to Oxidized and Git stores versions. Remove_secret strips some secrets and limits restoration. Protect certificates, licenses and native device backups separately.">SSH supplies model output to Oxidized and Git stores versions. Remove_secret strips some secrets and limits restoration. Protect certificates, licenses and native device backups separately.</p><h3 id="enterprise-scenario" data-fa="مثال: Poll ساعتی تجهیزات" data-en="Example: hourly device polling">Example: hourly device polling</h3><p data-fa="برای ۱۲۰ تجهیز، Interval یک ساعت نمونه است. تازگی آخرین Fetch موفق هر Node را بررسی کنید. نبود Commit جدید ممکن است به معنی نبود تغییر باشد، نه شکست Fetch." data-en="For 120 devices, hourly polling is an example. Monitor each node’s last successful fetch. No new commit might mean unchanged configuration rather than collection failure.">For 120 devices, hourly polling is an example. Monitor each node’s last successful fetch. No new commit might mean unchanged configuration rather than collection failure.</p></section>
-<section id="enterprise-prerequisites" class="article-section"><h2 data-fa="Ruby، Model و حساب تجهیز" data-en="Ruby, models and device accounts">Ruby, models and device accounts</h2><p data-fa="مثال Oxidized 0.37.0 با Ruby 3.2 روی Ubuntu 24.04 است. نسخه برنامه و Dependencyهای حل‌شده را ثبت کنید. Model باید با Firmware تجهیز آزموده شود." data-en="The baseline is Oxidized 0.37.0 with Ruby 3.2 on Ubuntu 24.04. Record application/resolved dependency versions and test models against device firmware.">The baseline is Oxidized 0.37.0 with Ruby 3.2 on Ubuntu 24.04. Record application/resolved dependency versions and test models against device firmware.</p>
-<p data-fa="دو vCPU و چهار GiB RAM برای شروع نمونه‌اند. دیسک را برای تاریخچه Git و Threads را با Latency تجهیز و ظرفیت AAA تعیین کنید." data-en="Two vCPUs and 4 GiB RAM are starting examples. Size disk for Git history and threads for device latency and AAA capacity.">Two vCPUs and 4 GiB RAM are starting examples. Size disk for Git history and threads for device latency and AAA capacity.</p>
-<p data-fa="حساب Service بدون Login و حساب تجهیز با فرمان‌های لازم Model داشته باشید. SSH را فقط به مدیریت تجهیزات بدهید. Read-only باید با Command Authorization واقعی آزموده شود." data-en="Use a non-login service account and device identities authorized for model-required commands. Restrict SSH to management. Verify read-only access through actual command authorization.">Use a non-login service account and device identities authorized for model-required commands. Restrict SSH to management. Verify read-only access through actual command authorization.</p><h3 id="enterprise-compatibility" data-fa="Model و Dependencyهای تثبیت‌شده" data-en="Pinned models and dependencies">Pinned models and dependencies</h3><p data-fa="IOS، RouterOS و SwOS Model و Transport یکسان ندارند. تثبیت Gem اصلی به‌تنهایی تمام Dependencyها را تثبیت نمی‌کند. برای تکرار نصب، Artifact یا Lockfile نسخه‌های حل‌شده را نگه دارید." data-en="IOS, RouterOS and SwOS have distinct models/transports. Pinning the main gem does not pin every dependency. Preserve resolved versions in artifacts or lockfiles for reproducible deployment.">IOS, RouterOS and SwOS have distinct models/transports. Pinning the main gem does not pin every dependency. Preserve resolved versions in artifacts or lockfiles for reproducible deployment.</p></section>
-<section id="enterprise-security" class="article-section"><h2 data-fa="Known Hosts و Secretهای تاریخچه" data-en="Known hosts and historical secrets">Known hosts and historical secrets</h2><p data-fa="در 0.37.0، secure: true بررسی Host Key را به Net::SSH با حالت always می‌دهد. Known Hosts حساب Service را با کلید تأییدشده آماده کنید. Git ممکن است Secret قدیمی را در History نگه دارد. Repository و Credential را محدود و نسخه خارج Host را رمزنگاری کنید. REST یا UI اختیاری را بدون Auth عمومی نکنید." data-en="In 0.37.0, secure: true enables Net::SSH’s always host-key verification. Provision the service account’s known hosts with verified keys. Git history might retain old secrets. Restrict repositories/credentials and encrypt off-host copies. Do not expose optional REST/UI without authentication.">In 0.37.0, secure: true enables Net::SSH’s always host-key verification. Provision the service account’s known hosts with verified keys. Git history might retain old secrets. Restrict repositories/credentials and encrypt off-host copies. Do not expose optional REST/UI without authentication.</p></section>
-<section id="enterprise-installation" class="article-section"><h2 data-fa="نصب Gem، Config و Systemd Unit" data-en="Install the gem, configuration and systemd unit">Install the gem, configuration and systemd unit</h2><p data-fa="نمونه lab روی VM تازه است. مسیر executable با command -v بررسی شود. بسته gem مصوب را نصب و نسخه واقعی در manifest ثبت کنید." data-en="This lab example uses a fresh VM. Check executable location with command -v, install the approved gem and record actual versions.">This lab example uses a fresh VM. Check executable location with command -v, install the approved gem and record actual versions.</p>
-<pre dir="ltr"><code class="language-bash">sudo apt-get update
+<!doctype html>
+<html lang="en" dir="ltr" data-article-language="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      Back Up Network Device Configurations with Oxidized and Git | Meet AJ
+    </title>
+    <meta
+      name="description"
+      content="Install Oxidized, verify SSH host keys, store configurations in bare Git, and check backup freshness and device recovery."
+    />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://meetaj.ir/articles/oxidized-network-device-configuration-backup"
+    />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="Back Up Network Device Configurations with Oxidized and Git"
+    />
+    <meta
+      property="og:description"
+      content="Install Oxidized, verify SSH host keys, store configurations in bare Git, and check backup freshness and device recovery."
+    />
+    <meta
+      property="og:image"
+      content="../assets/img/portfolio/oxidized-banner.png"
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/oxidized-network-device-configuration-backup"
+    />
+    <meta
+      name="keywords"
+      content="Oxidized Network Backups, oxidized network device configuration backup, infrastructure operations, production operations, troubleshooting"
+    />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Back Up Network Device Configurations with Oxidized and Git",
+        "description": "Install Oxidized, verify SSH host keys, store configurations in bare Git, and check backup freshness and device recovery.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/oxidized-network-device-configuration-backup",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/oxidized-network-device-configuration-backup"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Why is there no config file to cat in the Git repository?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The output can be bare. Use git ls-tree and git show to read its objects."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does an export fully restore a device?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Secrets, certificates, licenses and binary state may need separate backups."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "Backup تنظیمات تجهیزات شبکه با Oxidized و Git",
+          "meta_title": "Backup تنظیمات تجهیزات شبکه با Oxidized و Git | Meet AJ",
+          "description": "نصب Oxidized، تأیید SSH Host Key، ذخیره در Bare Git و کنترل تازگی Backup و Restore دستگاه.",
+          "keywords": [
+            "Backup تنظیمات تجهیزات شبکه با Oxidized و Git",
+            "عیب‌یابی",
+            "بازیابی",
+            "oxidized network device configuration backup"
+          ],
+          "faq": [
+            [
+              "چرا فایل config با cat در Git repo پیدا نمی‌شود؟",
+              "Git output می‌تواند bare باشد. git ls-tree و git show برای خواندن object استفاده شوند."
+            ],
+            [
+              "آیا export برای بازیابی کامل دستگاه کافی است؟",
+              "خیر. secret، certificate، license و binary state ممکن است جدا نیاز باشند."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Back Up Network Device Configurations with Oxidized and Git",
+          "meta_title": "Back Up Network Device Configurations with Oxidized and Git | Meet AJ",
+          "description": "Install Oxidized, verify SSH host keys, store configurations in bare Git, and check backup freshness and device recovery.",
+          "keywords": [
+            "Back Up Network Device Configurations with Oxidized and Git",
+            "oxidized network device configuration backup",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Why is there no config file to cat in the Git repository?",
+              "The output can be bare. Use git ls-tree and git show to read its objects."
+            ],
+            [
+              "Does an export fully restore a device?",
+              "No. Secrets, certificates, licenses and binary state may need separate backups."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
+  <body class="article-page theme-linux">
+    <nav id="navmenu" class="navmenu navmenu--article-toc">
+      <ul>
+        <li class="article-nav-item">
+          <a href="#enterprise-intro"
+            ><span
+              data-fa="جمع‌آوری Config و تاریخچه تغییر"
+              data-en="Collect configuration and change history"
+              >Collect configuration and change history</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#enterprise-architecture"
+            ><span
+              data-fa="از SSH تا Bare Repository"
+              data-en="From SSH to a bare repository"
+              >From SSH to a bare repository</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#enterprise-prerequisites"
+            ><span
+              data-fa="Ruby، Model و حساب تجهیز"
+              data-en="Ruby, models and device accounts"
+              >Ruby, models and device accounts</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#enterprise-security"
+            ><span
+              data-fa="Known Hosts و Secretهای تاریخچه"
+              data-en="Known hosts and historical secrets"
+              >Known hosts and historical secrets</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#enterprise-installation"
+            ><span
+              data-fa="نصب Gem، Config و Systemd Unit"
+              data-en="Install the gem, configuration and systemd unit"
+              >Install the gem, configuration and systemd unit</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#enterprise-monitoring"
+            ><span
+              data-fa="تازگی Fetch با تاریخ Commit فرق دارد"
+              data-en="Fetch freshness differs from commit age"
+              >Fetch freshness differs from commit age</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#enterprise-troubleshooting"
+            ><span
+              data-fa="Node Failed و Config ناقص"
+              data-en="Failed nodes and incomplete configuration"
+              >Failed nodes and incomplete configuration</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#enterprise-recovery"
+            ><span
+              data-fa="بازیابی Commit روی تجهیز مشابه"
+              data-en="Restore a commit on matching hardware"
+              >Restore a commit on matching hardware</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#faq"
+            ><span
+              data-fa="پرسش‌های متداول"
+              data-en="Frequently Asked Questions"
+              >Frequently Asked Questions</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#enterprise-sources"
+            ><span data-fa="منابع رسمی" data-en="Official Sources"
+              >Official Sources</span
+            ></a
+          >
+        </li>
+      </ul>
+    </nav>
+    <main id="main-content">
+      <section class="article-hero">
+        <p class="article-category" data-en="Linux" data-fa="لینوکس">Linux</p>
+        <h1
+          class="article-title hero-title"
+          data-fa="Backup تنظیمات تجهیزات شبکه با Oxidized و Git"
+          data-en="Back Up Network Device Configurations with Oxidized and Git"
+        >
+          Back Up Network Device Configurations with Oxidized and Git
+        </h1>
+        <p
+          class="article-excerpt hero-subtitle"
+          data-fa="نصب Oxidized، تأیید SSH Host Key، ذخیره در Bare Git و کنترل تازگی Backup و Restore دستگاه."
+          data-en="Install Oxidized, verify SSH host keys, store configurations in bare Git, and check backup freshness and device recovery."
+        >
+          Install Oxidized, verify SSH host keys, store configurations in bare
+          Git, and check backup freshness and device recovery.
+        </p>
+        <img
+          class="article-hero-thumbnail"
+          src="../assets/img/portfolio/oxidized-banner.png"
+          alt="Oxidized network configuration backup on Ubuntu"
+        />
+      </section>
+      <article class="article-body" data-article-bilingual="true">
+        <div class="enterprise-runbook" lang="en" dir="ltr">
+          <section id="enterprise-intro" class="article-section">
+            <h2
+              data-fa="جمع‌آوری Config و تاریخچه تغییر"
+              data-en="Collect configuration and change history"
+            >
+              Collect configuration and change history
+            </h2>
+            <p
+              data-fa="Oxidized به تجهیز وصل می‌شود، Config را با Model مربوط می‌خواند و تغییر را در Git نگه می‌دارد. فایل جمع‌آوری‌شده باید کامل و تازه باشد. برای بازیابی، تنظیم را روی مدل و Firmware واقعی بررسی کنید. وجود فایل به‌تنهایی Restore را ثابت نمی‌کند."
+              data-en="Oxidized connects to devices, reads configuration through a model and stores changes in Git. Collected files must be complete and fresh. Validate restore against the actual model/firmware. File presence alone does not establish recoverability."
+            >
+              Oxidized connects to devices, reads configuration through a model
+              and stores changes in Git. Collected files must be complete and
+              fresh. Validate restore against the actual model/firmware. File
+              presence alone does not establish recoverability.
+            </p>
+          </section>
+          <section id="enterprise-architecture" class="article-section">
+            <h2
+              data-fa="از SSH تا Bare Repository"
+              data-en="From SSH to a bare repository"
+            >
+              From SSH to a bare repository
+            </h2>
+            <p
+              data-fa="SSH خروجی Model را به Oxidized می‌دهد و Git نسخه‌ها را ذخیره می‌کند. remove_secret برخی Secretها را حذف می‌کند و بازگردانی را ناقص می‌سازد. Certificate و License و Backup بومی تجهیز را جدا نگه دارید."
+              data-en="SSH supplies model output to Oxidized and Git stores versions. Remove_secret strips some secrets and limits restoration. Protect certificates, licenses and native device backups separately."
+            >
+              SSH supplies model output to Oxidized and Git stores versions.
+              Remove_secret strips some secrets and limits restoration. Protect
+              certificates, licenses and native device backups separately.
+            </p>
+            <h3
+              id="enterprise-scenario"
+              data-fa="مثال: Poll ساعتی تجهیزات"
+              data-en="Example: hourly device polling"
+            >
+              Example: hourly device polling
+            </h3>
+            <p
+              data-fa="برای ۱۲۰ تجهیز، Interval یک ساعت نمونه است. تازگی آخرین Fetch موفق هر Node را بررسی کنید. نبود Commit جدید ممکن است به معنی نبود تغییر باشد، نه شکست Fetch."
+              data-en="For 120 devices, hourly polling is an example. Monitor each node’s last successful fetch. No new commit might mean unchanged configuration rather than collection failure."
+            >
+              For 120 devices, hourly polling is an example. Monitor each node’s
+              last successful fetch. No new commit might mean unchanged
+              configuration rather than collection failure.
+            </p>
+          </section>
+          <section id="enterprise-prerequisites" class="article-section">
+            <h2
+              data-fa="Ruby، Model و حساب تجهیز"
+              data-en="Ruby, models and device accounts"
+            >
+              Ruby, models and device accounts
+            </h2>
+            <p
+              data-fa="مثال Oxidized 0.37.0 با Ruby 3.2 روی Ubuntu 24.04 است. نسخه برنامه و Dependencyهای حل‌شده را ثبت کنید. Model باید با Firmware تجهیز آزموده شود."
+              data-en="The baseline is Oxidized 0.37.0 with Ruby 3.2 on Ubuntu 24.04. Record application/resolved dependency versions and test models against device firmware."
+            >
+              The baseline is Oxidized 0.37.0 with Ruby 3.2 on Ubuntu 24.04.
+              Record application/resolved dependency versions and test models
+              against device firmware.
+            </p>
+            <p
+              data-fa="دو vCPU و چهار GiB RAM برای شروع نمونه‌اند. دیسک را برای تاریخچه Git و Threads را با Latency تجهیز و ظرفیت AAA تعیین کنید."
+              data-en="Two vCPUs and 4 GiB RAM are starting examples. Size disk for Git history and threads for device latency and AAA capacity."
+            >
+              Two vCPUs and 4 GiB RAM are starting examples. Size disk for Git
+              history and threads for device latency and AAA capacity.
+            </p>
+            <p
+              data-fa="حساب Service بدون Login و حساب تجهیز با فرمان‌های لازم Model داشته باشید. SSH را فقط به مدیریت تجهیزات بدهید. Read-only باید با Command Authorization واقعی آزموده شود."
+              data-en="Use a non-login service account and device identities authorized for model-required commands. Restrict SSH to management. Verify read-only access through actual command authorization."
+            >
+              Use a non-login service account and device identities authorized
+              for model-required commands. Restrict SSH to management. Verify
+              read-only access through actual command authorization.
+            </p>
+            <h3
+              id="enterprise-compatibility"
+              data-fa="Model و Dependencyهای تثبیت‌شده"
+              data-en="Pinned models and dependencies"
+            >
+              Pinned models and dependencies
+            </h3>
+            <p
+              data-fa="IOS، RouterOS و SwOS Model و Transport یکسان ندارند. تثبیت Gem اصلی به‌تنهایی تمام Dependencyها را تثبیت نمی‌کند. برای تکرار نصب، Artifact یا Lockfile نسخه‌های حل‌شده را نگه دارید."
+              data-en="IOS, RouterOS and SwOS have distinct models/transports. Pinning the main gem does not pin every dependency. Preserve resolved versions in artifacts or lockfiles for reproducible deployment."
+            >
+              IOS, RouterOS and SwOS have distinct models/transports. Pinning
+              the main gem does not pin every dependency. Preserve resolved
+              versions in artifacts or lockfiles for reproducible deployment.
+            </p>
+          </section>
+          <section id="enterprise-security" class="article-section">
+            <h2
+              data-fa="Known Hosts و Secretهای تاریخچه"
+              data-en="Known hosts and historical secrets"
+            >
+              Known hosts and historical secrets
+            </h2>
+            <p
+              data-fa="در 0.37.0، secure: true بررسی Host Key را به Net::SSH با حالت always می‌دهد. Known Hosts حساب Service را با کلید تأییدشده آماده کنید. Git ممکن است Secret قدیمی را در History نگه دارد. Repository و Credential را محدود و نسخه خارج Host را رمزنگاری کنید. REST یا UI اختیاری را بدون Auth عمومی نکنید."
+              data-en="In 0.37.0, secure: true enables Net::SSH’s always host-key verification. Provision the service account’s known hosts with verified keys. Git history might retain old secrets. Restrict repositories/credentials and encrypt off-host copies. Do not expose optional REST/UI without authentication."
+            >
+              In 0.37.0, secure: true enables Net::SSH’s always host-key
+              verification. Provision the service account’s known hosts with
+              verified keys. Git history might retain old secrets. Restrict
+              repositories/credentials and encrypt off-host copies. Do not
+              expose optional REST/UI without authentication.
+            </p>
+          </section>
+          <section id="enterprise-installation" class="article-section">
+            <h2
+              data-fa="نصب Gem، Config و Systemd Unit"
+              data-en="Install the gem, configuration and systemd unit"
+            >
+              Install the gem, configuration and systemd unit
+            </h2>
+            <p
+              data-fa="نمونه lab روی VM تازه است. مسیر executable با command -v بررسی شود. بسته gem مصوب را نصب و نسخه واقعی در manifest ثبت کنید."
+              data-en="This lab example uses a fresh VM. Check executable location with command -v, install the approved gem and record actual versions."
+            >
+              This lab example uses a fresh VM. Check executable location with
+              command -v, install the approved gem and record actual versions.
+            </p>
+            <pre dir="ltr"><code class="language-bash">sudo apt-get update
 sudo apt-get install -y ruby ruby-dev ruby-bundler build-essential libsqlite3-dev libssl-dev pkg-config cmake libssh2-1-dev libicu-dev zlib1g-dev libyaml-dev git
 sudo gem install oxidized --version 0.37.0 --no-document
 gem list oxidized
 command -v oxidized
 sudo useradd --system --create-home --home-dir /var/lib/oxidized --shell /usr/sbin/nologin oxidized
 sudo install -d -o oxidized -g oxidized -m 700 /var/lib/oxidized/.config/oxidized</code></pre>
-<p data-fa="پیش از تکرار در Production، نسخه خروجی gem را در deployment pin و artifact آن را نگهداری کنید. config کامل در /var/lib/oxidized/.config/oxidized/config با mode 600 قرار گیرد. credential placeholder با secret vault جایگزین شود." data-en="Pin the observed version and preserve its artifact before production rollout. Store complete config at /var/lib/oxidized/.config/oxidized/config with mode 600. Replace credentials with vault secrets.">Pin the observed version and preserve its artifact before production rollout. Store complete config at /var/lib/oxidized/.config/oxidized/config with mode 600. Replace credentials with vault secrets.</p>
-<pre dir="ltr"><code class="language-yaml">---
+            <p
+              data-fa="پیش از تکرار در Production، نسخه خروجی gem را در deployment pin و artifact آن را نگهداری کنید. config کامل در /var/lib/oxidized/.config/oxidized/config با mode 600 قرار گیرد. credential placeholder با secret vault جایگزین شود."
+              data-en="Pin the observed version and preserve its artifact before production rollout. Store complete config at /var/lib/oxidized/.config/oxidized/config with mode 600. Replace credentials with vault secrets."
+            >
+              Pin the observed version and preserve its artifact before
+              production rollout. Store complete config at
+              /var/lib/oxidized/.config/oxidized/config with mode 600. Replace
+              credentials with vault secrets.
+            </p>
+            <pre dir="ltr"><code class="language-yaml">---
 username: oxidized
 password: REPLACE_WITH_DEVICE_READ_SECRET
 model: ios
@@ -76,10 +410,28 @@ source:
       model: 1
 vars:
   remove_secret: true</code></pre>
-<p data-fa="router.db نمونه یک‌خطی: core-sw01.corp.example.com:ios . DNS و SSH host key آن را از مسیر معتبر تأیید کنید. flag secure و روش strict verification را با SSH input همان نسخه آزمون منفی کنید. credential read-only باید commands مورد نیاز model را مجاز کند. privilege 15 پیش‌فرض ندهید." data-en="The sample router.db line is core-sw01.corp.example.com:ios. Verify DNS/SSH fingerprints through a trusted path and negatively test secure/strict-verification behavior for this input version. Permit model-required commands without assigning privilege 15 by default.">The sample router.db line is core-sw01.corp.example.com:ios. Verify DNS/SSH fingerprints through a trusted path and negatively test secure/strict-verification behavior for this input version. Permit model-required commands without assigning privilege 15 by default.</p>
-<pre dir="ltr"><code class="language-bash">sudo -u oxidized env HOME=/var/lib/oxidized /usr/local/bin/oxidized</code></pre>
-<p data-fa="این foreground test است. مسیر binary را با خروجی واقعی جایگزین کنید. پس از یک poll موفق آن را متوقف و unit زیر با همین مسیر واقعی نصب کنید." data-en="This is a foreground test. Substitute the actual executable path. Stop it after a successful poll, then install the unit with that same path.">This is a foreground test. Substitute the actual executable path. Stop it after a successful poll, then install the unit with that same path.</p>
-<pre dir="ltr"><code class="language-ini">[Unit]
+            <p
+              data-fa="router.db نمونه یک‌خطی: core-sw01.corp.example.com:ios . DNS و SSH host key آن را از مسیر معتبر تأیید کنید. flag secure و روش strict verification را با SSH input همان نسخه آزمون منفی کنید. credential read-only باید commands مورد نیاز model را مجاز کند. privilege 15 پیش‌فرض ندهید."
+              data-en="The sample router.db line is core-sw01.corp.example.com:ios. Verify DNS/SSH fingerprints through a trusted path and negatively test secure/strict-verification behavior for this input version. Permit model-required commands without assigning privilege 15 by default."
+            >
+              The sample router.db line is core-sw01.corp.example.com:ios.
+              Verify DNS/SSH fingerprints through a trusted path and negatively
+              test secure/strict-verification behavior for this input version.
+              Permit model-required commands without assigning privilege 15 by
+              default.
+            </p>
+            <pre
+              dir="ltr"
+            ><code class="language-bash">sudo -u oxidized env HOME=/var/lib/oxidized /usr/local/bin/oxidized</code></pre>
+            <p
+              data-fa="این foreground test است. مسیر binary را با خروجی واقعی جایگزین کنید. پس از یک poll موفق آن را متوقف و unit زیر با همین مسیر واقعی نصب کنید."
+              data-en="This is a foreground test. Substitute the actual executable path. Stop it after a successful poll, then install the unit with that same path."
+            >
+              This is a foreground test. Substitute the actual executable path.
+              Stop it after a successful poll, then install the unit with that
+              same path.
+            </p>
+            <pre dir="ltr"><code class="language-ini">[Unit]
 Description=Network configuration collection
 After=network-online.target
 Wants=network-online.target
@@ -95,13 +447,177 @@ NoNewPrivileges=true
 PrivateTmp=true
 [Install]
 WantedBy=multi-user.target</code></pre>
-<pre dir="ltr"><code class="language-bash">sudo systemctl daemon-reload
+            <pre
+              dir="ltr"
+            ><code class="language-bash">sudo systemctl daemon-reload
 sudo systemctl enable --now oxidized
 sudo -u oxidized git --git-dir=/var/lib/oxidized/configs.git log -1 --oneline
 sudo -u oxidized git --git-dir=/var/lib/oxidized/configs.git ls-tree --name-only HEAD</code></pre>
-<p data-fa="Git output معمولاً bare است. cat مسیر فایل داخل repo روش خواندن config نیست. git show HEAD:نام-node بعد از ls-tree محتوای نسخه را نمایش می‌دهد. log موفق باید با node واقعاً جمع‌آوری‌شده تطبیق داشته باشد." data-en="Git output is commonly bare: cat on a working-tree path is inappropriate. Inspect ls-tree, then git show HEAD:node-name. Match successful logs to an actually collected node.">Git output is commonly bare: cat on a working-tree path is inappropriate. Inspect ls-tree, then git show HEAD:node-name. Match successful logs to an actually collected node.</p><p data-fa="پیش از آزمون Foreground، Known Hosts همان حساب Service را بسازید. ssh-keyscan کلید را جمع می‌کند ولی هویت را تأیید نمی‌کند. Fingerprint را با Console مقایسه و سپس ورودی تأییدشده را نصب کنید." data-en="Before the foreground test, provision known hosts for the service identity. Ssh-keyscan collects keys but does not authenticate them. Compare fingerprints through the console before installing approved entries.">Before the foreground test, provision known hosts for the service identity. Ssh-keyscan collects keys but does not authenticate them. Compare fingerprints through the console before installing approved entries.</p></section>
-<section id="enterprise-monitoring" class="article-section"><h2 data-fa="تازگی Fetch با تاریخ Commit فرق دارد" data-en="Fetch freshness differs from commit age">Fetch freshness differs from commit age</h2><p data-fa="مدت Fetch، خطای Node و زمان آخرین Fetch موفق را ثبت کنید. تاریخ آخرین Commit معیار تازگی Poll نیست، زیرا Config بدون تغییر Commit تازه ایجاد نمی‌کند. دو Interval عقب‌افتادگی آستانه نمونه است. Active بودن Systemd کافی نیست." data-en="Record fetch duration, node failures and last successful fetch. Commit age is not poll freshness because unchanged configurations create no new commit. Two missed intervals are an example threshold. Active systemd state is insufficient.">Record fetch duration, node failures and last successful fetch. Commit age is not poll freshness because unchanged configurations create no new commit. Two missed intervals are an example threshold. Active systemd state is insufficient.</p></section>
-<section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="Node Failed و Config ناقص" data-en="Failed nodes and incomplete configuration">Failed nodes and incomplete configuration</h2><p data-fa="برای Node Failed، DNS و SSH و AAA و Model را بررسی کنید. Repository از نوع Bare، Working Tree ندارد. از git show استفاده کنید. Permission خطا به مالک Service و مسیر مربوط است. Host Key جدید را از Console تأیید کنید. خروجی ناقص به Command Authorization یا Parser نیاز دارد." data-en="For failed nodes, check DNS, SSH, AAA and models. Bare repositories have no working tree, so use git show. Permission failures require service/path ownership checks. Verify changed host keys through a console. Incomplete output points to command authorization or parser behavior.">For failed nodes, check DNS, SSH, AAA and models. Bare repositories have no working tree, so use git show. Permission failures require service/path ownership checks. Verify changed host keys through a console. Incomplete output points to command authorization or parser behavior.</p></section>
-<section id="enterprise-recovery" class="article-section"><h2 data-fa="بازیابی Commit روی تجهیز مشابه" data-en="Restore a commit on matching hardware">Restore a commit on matching hardware</h2><p data-fa="Repository، Config، Inventory و مرجع Credential را خارج Host نگه دارید. Commit شناخته‌شده را استخراج کنید و روی دستگاه مشابه، Diff و Syntax و Interfaceها را بررسی کنید. تغییر IP یا Interface مدیریت را قطع می‌کند. Export Git تمام State بومی تجهیز نیست." data-en="Keep repositories, configuration, inventory and credential references off-host. Extract a known commit and review diff, syntax and interfaces on matching hardware. IP/interface changes risk management loss. Git exports do not contain all native device state.">Keep repositories, configuration, inventory and credential references off-host. Extract a known commit and review diff, syntax and interfaces on matching hardware. IP/interface changes risk management loss. Git exports do not contain all native device state.</p><h3 id="enterprise-practices" data-fa="پیش از افزودن Model جدید" data-en="Before adding a new model">Before adding a new model</h3><p data-fa="خروجی کامل و مجوز کمینه Model را روی Firmware واقعی امتحان کنید. اگر Inventory از NetBox می‌آید، پاسخ API را به Schema Source Oxidized تبدیل کنید. این دو قالب یکسان نیستند." data-en="Test full output and minimum model privileges on the actual firmware. If NetBox supplies inventory, convert its API response into Oxidized’s source schema. The formats differ.">Test full output and minimum model privileges on the actual firmware. If NetBox supplies inventory, convert its API response into Oxidized’s source schema. The formats differ.</p><p><span data-fa="برای مرجع Inventory، راهنمای نصب NetBox را بررسی کنید." data-en="For an inventory source of truth, review the NetBox installation guide.">For an inventory source of truth, review the NetBox installation guide.</span> <a href="/articles/netbox-installation-setup-ubuntu"><span data-fa="راهنمای مرتبط" data-en="Related guide">Related guide</span></a></p></section>
-<section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</h2><h3 data-fa="چرا فایل config با cat در Git repo پیدا نمی‌شود؟" data-en="Why is there no config file to cat in the Git repository?">Why is there no config file to cat in the Git repository?</h3><p data-fa="Git output می‌تواند bare باشد. git ls-tree و git show برای خواندن object استفاده شوند." data-en="The output can be bare. Use git ls-tree and git show to read its objects.">The output can be bare. Use git ls-tree and git show to read its objects.</p><h3 data-fa="آیا export برای بازیابی کامل دستگاه کافی است؟" data-en="Does an export fully restore a device?">Does an export fully restore a device?</h3><p data-fa="خیر. secret، certificate، license و binary state ممکن است جدا نیاز باشند." data-en="No. Secrets, certificates, licenses and binary state may need separate backups.">No. Secrets, certificates, licenses and binary state may need separate backups.</p></section>
-<section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">Official Sources</h2><ul><li><a href="https://rubygems.org/gems/oxidized/versions/0.37.0" rel="noopener">Oxidized release</a></li><li><a href="https://github.com/ytti/oxidized" rel="noopener">Oxidized project</a></li><li><a href="https://github.com/ytti/oxidized/blob/master/docs/Configuration.md" rel="noopener">Oxidized configuration</a></li><li><a href="https://github.com/ytti/oxidized/blob/master/docs/Outputs.md" rel="noopener">Oxidized output</a></li></ul></section></div></article></main></body></html>
+            <p
+              data-fa="Git output معمولاً bare است. cat مسیر فایل داخل repo روش خواندن config نیست. git show HEAD:نام-node بعد از ls-tree محتوای نسخه را نمایش می‌دهد. log موفق باید با node واقعاً جمع‌آوری‌شده تطبیق داشته باشد."
+              data-en="Git output is commonly bare: cat on a working-tree path is inappropriate. Inspect ls-tree, then git show HEAD:node-name. Match successful logs to an actually collected node."
+            >
+              Git output is commonly bare: cat on a working-tree path is
+              inappropriate. Inspect ls-tree, then git show HEAD:node-name.
+              Match successful logs to an actually collected node.
+            </p>
+            <p
+              data-fa="پیش از آزمون Foreground، Known Hosts همان حساب Service را بسازید. ssh-keyscan کلید را جمع می‌کند ولی هویت را تأیید نمی‌کند. Fingerprint را با Console مقایسه و سپس ورودی تأییدشده را نصب کنید."
+              data-en="Before the foreground test, provision known hosts for the service identity. Ssh-keyscan collects keys but does not authenticate them. Compare fingerprints through the console before installing approved entries."
+            >
+              Before the foreground test, provision known hosts for the service
+              identity. Ssh-keyscan collects keys but does not authenticate
+              them. Compare fingerprints through the console before installing
+              approved entries.
+            </p>
+          </section>
+          <section id="enterprise-monitoring" class="article-section">
+            <h2
+              data-fa="تازگی Fetch با تاریخ Commit فرق دارد"
+              data-en="Fetch freshness differs from commit age"
+            >
+              Fetch freshness differs from commit age
+            </h2>
+            <p
+              data-fa="مدت Fetch، خطای Node و زمان آخرین Fetch موفق را ثبت کنید. تاریخ آخرین Commit معیار تازگی Poll نیست، زیرا Config بدون تغییر Commit تازه ایجاد نمی‌کند. دو Interval عقب‌افتادگی آستانه نمونه است. Active بودن Systemd کافی نیست."
+              data-en="Record fetch duration, node failures and last successful fetch. Commit age is not poll freshness because unchanged configurations create no new commit. Two missed intervals are an example threshold. Active systemd state is insufficient."
+            >
+              Record fetch duration, node failures and last successful fetch.
+              Commit age is not poll freshness because unchanged configurations
+              create no new commit. Two missed intervals are an example
+              threshold. Active systemd state is insufficient.
+            </p>
+          </section>
+          <section id="enterprise-troubleshooting" class="article-section">
+            <h2
+              data-fa="Node Failed و Config ناقص"
+              data-en="Failed nodes and incomplete configuration"
+            >
+              Failed nodes and incomplete configuration
+            </h2>
+            <p
+              data-fa="برای Node Failed، DNS و SSH و AAA و Model را بررسی کنید. Repository از نوع Bare، Working Tree ندارد. از git show استفاده کنید. Permission خطا به مالک Service و مسیر مربوط است. Host Key جدید را از Console تأیید کنید. خروجی ناقص به Command Authorization یا Parser نیاز دارد."
+              data-en="For failed nodes, check DNS, SSH, AAA and models. Bare repositories have no working tree, so use git show. Permission failures require service/path ownership checks. Verify changed host keys through a console. Incomplete output points to command authorization or parser behavior."
+            >
+              For failed nodes, check DNS, SSH, AAA and models. Bare
+              repositories have no working tree, so use git show. Permission
+              failures require service/path ownership checks. Verify changed
+              host keys through a console. Incomplete output points to command
+              authorization or parser behavior.
+            </p>
+          </section>
+          <section id="enterprise-recovery" class="article-section">
+            <h2
+              data-fa="بازیابی Commit روی تجهیز مشابه"
+              data-en="Restore a commit on matching hardware"
+            >
+              Restore a commit on matching hardware
+            </h2>
+            <p
+              data-fa="Repository، Config، Inventory و مرجع Credential را خارج Host نگه دارید. Commit شناخته‌شده را استخراج کنید و روی دستگاه مشابه، Diff و Syntax و Interfaceها را بررسی کنید. تغییر IP یا Interface مدیریت را قطع می‌کند. Export Git تمام State بومی تجهیز نیست."
+              data-en="Keep repositories, configuration, inventory and credential references off-host. Extract a known commit and review diff, syntax and interfaces on matching hardware. IP/interface changes risk management loss. Git exports do not contain all native device state."
+            >
+              Keep repositories, configuration, inventory and credential
+              references off-host. Extract a known commit and review diff,
+              syntax and interfaces on matching hardware. IP/interface changes
+              risk management loss. Git exports do not contain all native device
+              state.
+            </p>
+            <h3
+              id="enterprise-practices"
+              data-fa="پیش از افزودن Model جدید"
+              data-en="Before adding a new model"
+            >
+              Before adding a new model
+            </h3>
+            <p
+              data-fa="خروجی کامل و مجوز کمینه Model را روی Firmware واقعی امتحان کنید. اگر Inventory از NetBox می‌آید، پاسخ API را به Schema Source Oxidized تبدیل کنید. این دو قالب یکسان نیستند."
+              data-en="Test full output and minimum model privileges on the actual firmware. If NetBox supplies inventory, convert its API response into Oxidized’s source schema. The formats differ."
+            >
+              Test full output and minimum model privileges on the actual
+              firmware. If NetBox supplies inventory, convert its API response
+              into Oxidized’s source schema. The formats differ.
+            </p>
+            <p>
+              <span
+                data-fa="برای مرجع Inventory، راهنمای نصب NetBox را بررسی کنید."
+                data-en="For an inventory source of truth, review the NetBox installation guide."
+                >For an inventory source of truth, review the NetBox
+                installation guide.</span
+              >
+              <a href="/articles/netbox-installation-setup-ubuntu"
+                ><span data-fa="راهنمای مرتبط" data-en="Related guide"
+                  >Related guide</span
+                ></a
+              >
+            </p>
+          </section>
+          <section id="faq" class="article-section">
+            <h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">
+              Frequently Asked Questions
+            </h2>
+            <h3
+              data-fa="چرا فایل config با cat در Git repo پیدا نمی‌شود؟"
+              data-en="Why is there no config file to cat in the Git repository?"
+            >
+              Why is there no config file to cat in the Git repository?
+            </h3>
+            <p
+              data-fa="Git output می‌تواند bare باشد. git ls-tree و git show برای خواندن object استفاده شوند."
+              data-en="The output can be bare. Use git ls-tree and git show to read its objects."
+            >
+              The output can be bare. Use git ls-tree and git show to read its
+              objects.
+            </p>
+            <h3
+              data-fa="آیا export برای بازیابی کامل دستگاه کافی است؟"
+              data-en="Does an export fully restore a device?"
+            >
+              Does an export fully restore a device?
+            </h3>
+            <p
+              data-fa="خیر. secret، certificate، license و binary state ممکن است جدا نیاز باشند."
+              data-en="No. Secrets, certificates, licenses and binary state may need separate backups."
+            >
+              No. Secrets, certificates, licenses and binary state may need
+              separate backups.
+            </p>
+          </section>
+          <section id="enterprise-sources">
+            <h2 data-fa="منابع رسمی" data-en="Official Sources">
+              Official Sources
+            </h2>
+            <ul>
+              <li>
+                <a
+                  href="https://rubygems.org/gems/oxidized/versions/0.37.0"
+                  rel="noopener"
+                  >Oxidized release</a
+                >
+              </li>
+              <li>
+                <a href="https://github.com/ytti/oxidized" rel="noopener"
+                  >Oxidized project</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://github.com/ytti/oxidized/blob/master/docs/Configuration.md"
+                  rel="noopener"
+                  >Oxidized configuration</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://github.com/ytti/oxidized/blob/master/docs/Outputs.md"
+                  rel="noopener"
+                  >Oxidized output</a
+                >
+              </li>
+            </ul>
+          </section>
+        </div>
+      </article>
+    </main>
+  </body>
+</html>

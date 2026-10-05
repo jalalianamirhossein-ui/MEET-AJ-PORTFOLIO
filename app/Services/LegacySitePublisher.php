@@ -86,6 +86,7 @@ class LegacySitePublisher
         $footer = $this->sliceInclusive($html, '<footer id="footer"', '</footer>');
         $assembled = $chrome."\n    <main id=\"main-content\" class=\"main\" role=\"main\">\n".$section."\n    </main>\n".$footer;
         $assembled = $this->toBlade($assembled);
+        $assembled = preg_replace('/<span data-current-year>[^<]*<\/span>/', "@endverbatim\n<x-localized-year />\n@verbatim", $assembled) ?? $assembled;
         $assembled = $this->replacePortfolioGrid($assembled);
         $assembled = $this->injectArticleLibrary($assembled, true);
         $assembled = $this->replaceSidebarChrome($assembled, '/#hero');
@@ -123,7 +124,7 @@ BLADE;
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
-    <script src="/assets/js/main.js?v=1415" defer></script>
+    <script src="/assets/js/main.js?v=1416" defer></script>
     <script src="/assets/js/scroll-reveal.js?v=1" defer></script>
     <script src="/assets/js/service-catalog.js?v=1813" defer></script>
     <script src="/assets/js/i18n.js?v=1407" defer></script>

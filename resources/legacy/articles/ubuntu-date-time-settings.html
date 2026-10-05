@@ -4,7 +4,10 @@
     <title>Configure Ubuntu Time Synchronization with Chrony | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Configure internal NTP, inspect offset and reach, select Asia/Tehran and investigate VM clock jumps." />
+    <meta
+      name="description"
+      content="Configure internal NTP, inspect offset and reach, select Asia/Tehran and investigate VM clock jumps."
+    />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <link
@@ -12,9 +15,18 @@
       href="https://meetaj.ir/articles/ubuntu-date-time-settings"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Configure Ubuntu Time Synchronization with Chrony" />
-    <meta property="og:description" content="Configure internal NTP, inspect offset and reach, select Asia/Tehran and investigate VM clock jumps." />
-    <meta property="og:url" content="https://meetaj.ir/articles/ubuntu-date-time-settings" />
+    <meta
+      property="og:title"
+      content="Configure Ubuntu Time Synchronization with Chrony"
+    />
+    <meta
+      property="og:description"
+      content="Configure internal NTP, inspect offset and reach, select Asia/Tehran and investigate VM clock jumps."
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/ubuntu-date-time-settings"
+    />
     <meta property="og:site_name" content="Meet AJ" />
     <meta name="twitter:card" content="summary" />
     <link href="../assets/img/favicon.png" rel="icon" />
@@ -51,12 +63,95 @@
       rel="stylesheet"
       disabled
     />
-  <meta name="keywords" content="Ubuntu Production Time, ubuntu date time settings, infrastructure operations, production operations, troubleshooting" />
-<meta name="article:content-language" content="en" />
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Configure Ubuntu Time Synchronization with Chrony", "description": "Configure internal NTP, inspect offset and reach, select Asia/Tehran and investigate VM clock jumps.", "inLanguage": "en", "url": "https://meetaj.ir/articles/ubuntu-date-time-settings", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}, "mainEntityOfPage": "https://meetaj.ir/articles/ubuntu-date-time-settings"}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does a wrong timezone cause TLS failure?", "acceptedAnswer": {"@type": "Answer", "text": "TLS relies on the actual clock. Timezone settings change only its display."}}, {"@type": "Question", "name": "Does an active chrony service mean it is synchronized?", "acceptedAnswer": {"@type": "Answer", "text": "No. Check selected sources, offset and Leap status."}}], "inLanguage": "en"}</script>
-<script id="article-localizations" type="application/json">{"fa": {"title": "تنظیم زمان Ubuntu با Chrony و منطقه زمانی", "meta_title": "تنظیم زمان Ubuntu با Chrony و منطقه زمانی | Meet AJ", "description": "تنظیم NTP داخلی، بررسی Offset و Reach، انتخاب Asia/Tehran و تشخیص جهش ساعت VM.", "keywords": ["تنظیم زمان Ubuntu با Chrony و منطقه زمانی", "عیب‌یابی", "بازیابی", "ubuntu date time settings"], "faq": [["آیا timezone اشتباه باعث TLS failure است؟", "TLS بر زمان واقعی تکیه دارد. timezone فقط نمایش را تغییر می‌دهد."], ["آیا active بودن chrony یعنی sync برقرار است؟", "خیر. source selection، offset و Leap status باید بررسی شوند."]]}, "en": {"title": "Configure Ubuntu Time Synchronization with Chrony", "meta_title": "Configure Ubuntu Time Synchronization with Chrony | Meet AJ", "description": "Configure internal NTP, inspect offset and reach, select Asia/Tehran and investigate VM clock jumps.", "keywords": ["Configure Ubuntu Time Synchronization with Chrony", "ubuntu date time settings", "troubleshooting"], "faq": [["Does a wrong timezone cause TLS failure?", "TLS relies on the actual clock. Timezone settings change only its display."], ["Does an active chrony service mean it is synchronized?", "No. Check selected sources, offset and Leap status."]]}}</script>
-</head>
+    <meta
+      name="keywords"
+      content="Ubuntu Production Time, ubuntu date time settings, infrastructure operations, production operations, troubleshooting"
+    />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Configure Ubuntu Time Synchronization with Chrony",
+        "description": "Configure internal NTP, inspect offset and reach, select Asia/Tehran and investigate VM clock jumps.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/ubuntu-date-time-settings",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/ubuntu-date-time-settings"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does a wrong timezone cause TLS failure?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "TLS relies on the actual clock. Timezone settings change only its display."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does an active chrony service mean it is synchronized?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Check selected sources, offset and Leap status."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "تنظیم زمان Ubuntu با Chrony و منطقه زمانی",
+          "meta_title": "تنظیم زمان Ubuntu با Chrony و منطقه زمانی | Meet AJ",
+          "description": "تنظیم NTP داخلی، بررسی Offset و Reach، انتخاب Asia/Tehran و تشخیص جهش ساعت VM.",
+          "keywords": [
+            "تنظیم زمان Ubuntu با Chrony و منطقه زمانی",
+            "عیب‌یابی",
+            "بازیابی",
+            "ubuntu date time settings"
+          ],
+          "faq": [
+            [
+              "آیا timezone اشتباه باعث TLS failure است؟",
+              "TLS بر زمان واقعی تکیه دارد. timezone فقط نمایش را تغییر می‌دهد."
+            ],
+            [
+              "آیا active بودن chrony یعنی sync برقرار است؟",
+              "خیر. source selection، offset و Leap status باید بررسی شوند."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Configure Ubuntu Time Synchronization with Chrony",
+          "meta_title": "Configure Ubuntu Time Synchronization with Chrony | Meet AJ",
+          "description": "Configure internal NTP, inspect offset and reach, select Asia/Tehran and investigate VM clock jumps.",
+          "keywords": [
+            "Configure Ubuntu Time Synchronization with Chrony",
+            "ubuntu date time settings",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Does a wrong timezone cause TLS failure?",
+              "TLS relies on the actual clock. Timezone settings change only its display."
+            ],
+            [
+              "Does an active chrony service mean it is synchronized?",
+              "No. Check selected sources, offset and Leap status."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
   <body class="article-page theme-linux">
     <button
       id="menu-toggle"
@@ -205,28 +300,94 @@
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
-          <li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="ساعت واقعی با Timezone فرق دارد" data-en="Clock time and timezone are different">Clock time and timezone are different</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="Source، Kernel Clock و برنامه" data-en="Sources, kernel clock and applications">Sources, kernel clock and applications</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="Daemon زمان و مسیر NTP" data-en="Time daemon and NTP reachability">Time daemon and NTP reachability</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-security"><span data-fa="NTP محدود و سیاست Step" data-en="Restrict NTP and review clock steps">Restrict NTP and review clock steps</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="تنظیم Source و بررسی Sync" data-en="Configure sources and verify synchronization">Configure sources and verify synchronization</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="Offset و Source منتخب" data-en="Offsets and the selected source">Offsets and the selected source</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="Reach صفر یا جهش ساعت" data-en="Zero reach or clock jumps">Zero reach or clock jumps</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="بازگشت Source و شروع Workload" data-en="Restore sources before sensitive workloads">Restore sources before sensitive workloads</span></a></li>
-<li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">Official Sources</span></a></li>
-
-
-
-
-
-
-
-
-
-
-
-
+          <li class="article-nav-item">
+            <a href="#enterprise-intro"
+              ><span
+                data-fa="ساعت واقعی با Timezone فرق دارد"
+                data-en="Clock time and timezone are different"
+                >Clock time and timezone are different</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="Source، Kernel Clock و برنامه"
+                data-en="Sources, kernel clock and applications"
+                >Sources, kernel clock and applications</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="Daemon زمان و مسیر NTP"
+                data-en="Time daemon and NTP reachability"
+                >Time daemon and NTP reachability</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-security"
+              ><span
+                data-fa="NTP محدود و سیاست Step"
+                data-en="Restrict NTP and review clock steps"
+                >Restrict NTP and review clock steps</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="تنظیم Source و بررسی Sync"
+                data-en="Configure sources and verify synchronization"
+                >Configure sources and verify synchronization</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="Offset و Source منتخب"
+                data-en="Offsets and the selected source"
+                >Offsets and the selected source</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="Reach صفر یا جهش ساعت"
+                data-en="Zero reach or clock jumps"
+                >Zero reach or clock jumps</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="بازگشت Source و شروع Workload"
+                data-en="Restore sources before sensitive workloads"
+                >Restore sources before sensitive workloads</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#faq"
+              ><span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
+              ></a
+            >
+          </li>
         </ul>
       </nav>
       <button
@@ -249,19 +410,25 @@
                 <span class="article-category">Linux</span
                 ><span class="meta-date"
                   ><span class="article-date" data-en="Article" data-fa="مقاله"
-                    >Article</span><time datetime="">Linux</time></span
+                    >Article</span
+                  ><time datetime="">Linux</time></span
                 >
               </div>
               <h1
                 class="article-title hero-title"
-
-
-               data-fa="تنظیم زمان Ubuntu با Chrony و منطقه زمانی" data-en="Configure Ubuntu Time Synchronization with Chrony">Configure Ubuntu Time Synchronization with Chrony</h1>
+                data-fa="تنظیم زمان Ubuntu با Chrony و منطقه زمانی"
+                data-en="Configure Ubuntu Time Synchronization with Chrony"
+              >
+                Configure Ubuntu Time Synchronization with Chrony
+              </h1>
               <p
                 class="article-excerpt hero-subtitle"
-
-
-               data-fa="تنظیم NTP داخلی، بررسی Offset و Reach، انتخاب Asia/Tehran و تشخیص جهش ساعت VM." data-en="Configure internal NTP, inspect offset and reach, select Asia/Tehran and investigate VM clock jumps.">Configure internal NTP, inspect offset and reach, select Asia/Tehran and investigate VM clock jumps.</p>
+                data-fa="تنظیم NTP داخلی، بررسی Offset و Reach، انتخاب Asia/Tehran و تشخیص جهش ساعت VM."
+                data-en="Configure internal NTP, inspect offset and reach, select Asia/Tehran and investigate VM clock jumps."
+              >
+                Configure internal NTP, inspect offset and reach, select
+                Asia/Tehran and investigate VM clock jumps.
+              </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -275,7 +442,9 @@
                       class="banner-subtitle"
                       data-en="Meet AJ technical article"
                       data-fa="مقاله فنی Meet AJ"
-                    >Meet AJ technical article</p>
+                    >
+                      Meet AJ technical article
+                    </p>
                   </div>
                 </div>
               </div>
@@ -286,7 +455,8 @@
                   ><span class="btn-content"
                     ><i class="bi bi-play-circle" aria-hidden="true"></i
                     ><span data-en="Start reading" data-fa="شروع مطالعه"
-                      >Start reading</span></span
+                      >Start reading</span
+                    ></span
                   ></a
                 >
               </div>
@@ -307,39 +477,328 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="en" dir="ltr"><section id="enterprise-intro" class="article-section"><h2 data-fa="ساعت واقعی با Timezone فرق دارد" data-en="Clock time and timezone are different">Clock time and timezone are different</h2><p data-fa="Timezone شیوه نمایش زمان را تغییر می‌دهد. Chrony ساعت واقعی را با NTP همگام می‌کند. برای خطای TLS یا Kerberos، ساعت و Source و Offset را بررسی کنید. تغییر Asia/Tehran به UTC به‌تنهایی Clock Skew را اصلاح نمی‌کند." data-en="Timezone changes display. Chrony synchronizes the underlying clock through NTP. For TLS or Kerberos failures, inspect clock, sources and offset. Switching Asia/Tehran to UTC does not itself correct clock skew.">Timezone changes display. Chrony synchronizes the underlying clock through NTP. For TLS or Kerberos failures, inspect clock, sources and offset. Switching Asia/Tehran to UTC does not itself correct clock skew.</p></section>
-<section id="enterprise-architecture" class="article-section"><h2 data-fa="Source، Kernel Clock و برنامه" data-en="Sources, kernel clock and applications">Sources, kernel clock and applications</h2><p data-fa="Chronyd با اندازه‌گیری پاسخ Sourceها، خطای ساعت Kernel را اصلاح می‌کند. برنامه زمان را از سیستم می‌گیرد و Timezone فقط نمایش آن را تعیین می‌کند. جهش ناگهانی Clock روی Scheduling و Database اثر دارد." data-en="Chronyd uses source measurements to correct kernel-clock error. Applications read system time, while timezone controls display. Abrupt clock steps affect scheduling and databases.">Chronyd uses source measurements to correct kernel-clock error. Applications read system time, while timezone controls display. Abrupt clock steps affect scheduling and databases.</p><h3 id="enterprise-scenario" data-fa="مثال: دو Source داخلی" data-en="Example: two internal sources">Example: two internal sources</h3><p data-fa="سرورها از 10.20.30.53 و 10.20.30.54 زمان می‌گیرند و Log مرکزی UTC است. دو Source باید وابستگی مستقل داشته باشند. با دو منبع مخالف، تشخیص منبع درست قطعی نیست. برای تحمل خطای منبع، تعداد و تنوع بیشتر را طراحی کنید." data-en="Servers use 10.20.30.53 and 10.20.30.54, with central logs in UTC. Sources need independent dependencies. Two disagreeing sources do not establish which is correct. Design additional source diversity for fault tolerance.">Servers use 10.20.30.53 and 10.20.30.54, with central logs in UTC. Sources need independent dependencies. Two disagreeing sources do not establish which is correct. Design additional source diversity for fault tolerance.</p></section>
-<section id="enterprise-prerequisites" class="article-section"><h2 data-fa="Daemon زمان و مسیر NTP" data-en="Time daemon and NTP reachability">Time daemon and NTP reachability</h2><p data-fa="مثال از Ubuntu 24.04 LTS و Chrony استفاده می‌کند. نسخه نصب‌شده و Daemon فعال را ثبت کنید." data-en="The example uses Ubuntu 24.04 LTS and Chrony. Record the installed version and active time daemon.">The example uses Ubuntu 24.04 LTS and Chrony. Record the installed version and active time daemon.</p>
-<p data-fa="به Capacity مخصوص نیاز ندارید. در VM، تنظیم Sync Hypervisor را بررسی کنید تا دو روش مستقل مرتب ساعت را تغییر ندهند." data-en="No special compute capacity is needed. In VMs, inspect hypervisor synchronization so competing mechanisms do not repeatedly change the clock.">No special compute capacity is needed. In VMs, inspect hypervisor synchronization so competing mechanisms do not repeatedly change the clock.</p>
-<p data-fa="sudo و دسترسی UDP/123 به Sourceهای واقعی لازم است. آدرس‌ها نمونه‌اند. برای NTS، پشتیبانی Source و مسیر TLS لازم را جدا آماده کنید." data-en="Prepare sudo and UDP/123 access to real sources, replacing sample addresses. NTS also requires supported sources and its separate TLS path.">Prepare sudo and UDP/123 access to real sources, replacing sample addresses. NTS also requires supported sources and its separate TLS path.</p><h3 id="enterprise-compatibility" data-fa="Chrony در برابر timesyncd" data-en="Chrony and timesyncd">Chrony and timesyncd</h3><p data-fa="timesyncd برای Client ساده گزینه دیگری است. در این مسیر Chrony مالک Sync است. timedatectl timesync-status وضعیت timesyncd را می‌دهد. برای Chrony از sources و tracking استفاده کنید." data-en="timesyncd is another option for simple clients. Chrony owns synchronization here. Timedatectl timesync-status reports timesyncd. Use sources and tracking for Chrony.">timesyncd is another option for simple clients. Chrony owns synchronization here. Timedatectl timesync-status reports timesyncd. Use sources and tracking for Chrony.</p></section>
-<section id="enterprise-security" class="article-section"><h2 data-fa="NTP محدود و سیاست Step" data-en="Restrict NTP and review clock steps">Restrict NTP and review clock steps</h2><p data-fa="Sourceها را به مقصد مجاز محدود کنید و Client را بی‌دلیل NTP Server عمومی نکنید. پیش از Restart، makestep موجود را بررسی کنید. Restart شمارنده Update را از نو شروع می‌کند و Policy آغازین ممکن است ساعت را Step کند، حتی اگر فرمان دستی makestep اجرا نکنید." data-en="Restrict sources to approved destinations and avoid unintentionally exposing a public NTP server. Inspect existing makestep before restart. Restart resets the update count, so startup policy might step time without a manual makestep command.">Restrict sources to approved destinations and avoid unintentionally exposing a public NTP server. Inspect existing makestep before restart. Restart resets the update count, so startup policy might step time without a manual makestep command.</p></section>
-<section id="enterprise-installation" class="article-section"><h2 data-fa="تنظیم Source و بررسی Sync" data-en="Configure sources and verify synchronization">Configure sources and verify synchronization</h2><p data-fa="ابتدا وضعیت موجود را ثبت کنید. فقط یک daemon مالک همگام‌سازی باشد. نصب chrony معمولاً timesyncd را جایگزین می‌کند اما وضعیت را verify کنید." data-en="Record the current state. Only one daemon should own synchronization. Installing chrony normally replaces timesyncd, but verify the resulting service states.">Record the current state. Only one daemon should own synchronization. Installing chrony normally replaces timesyncd, but verify the resulting service states.</p>
-<pre dir="ltr"><code class="language-bash">timedatectl status
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="ساعت واقعی با Timezone فرق دارد"
+                      data-en="Clock time and timezone are different"
+                    >
+                      Clock time and timezone are different
+                    </h2>
+                    <p
+                      data-fa="Timezone شیوه نمایش زمان را تغییر می‌دهد. Chrony ساعت واقعی را با NTP همگام می‌کند. برای خطای TLS یا Kerberos، ساعت و Source و Offset را بررسی کنید. تغییر Asia/Tehran به UTC به‌تنهایی Clock Skew را اصلاح نمی‌کند."
+                      data-en="Timezone changes display. Chrony synchronizes the underlying clock through NTP. For TLS or Kerberos failures, inspect clock, sources and offset. Switching Asia/Tehran to UTC does not itself correct clock skew."
+                    >
+                      Timezone changes display. Chrony synchronizes the
+                      underlying clock through NTP. For TLS or Kerberos
+                      failures, inspect clock, sources and offset. Switching
+                      Asia/Tehran to UTC does not itself correct clock skew.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="Source، Kernel Clock و برنامه"
+                      data-en="Sources, kernel clock and applications"
+                    >
+                      Sources, kernel clock and applications
+                    </h2>
+                    <p
+                      data-fa="Chronyd با اندازه‌گیری پاسخ Sourceها، خطای ساعت Kernel را اصلاح می‌کند. برنامه زمان را از سیستم می‌گیرد و Timezone فقط نمایش آن را تعیین می‌کند. جهش ناگهانی Clock روی Scheduling و Database اثر دارد."
+                      data-en="Chronyd uses source measurements to correct kernel-clock error. Applications read system time, while timezone controls display. Abrupt clock steps affect scheduling and databases."
+                    >
+                      Chronyd uses source measurements to correct kernel-clock
+                      error. Applications read system time, while timezone
+                      controls display. Abrupt clock steps affect scheduling and
+                      databases.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: دو Source داخلی"
+                      data-en="Example: two internal sources"
+                    >
+                      Example: two internal sources
+                    </h3>
+                    <p
+                      data-fa="سرورها از 10.20.30.53 و 10.20.30.54 زمان می‌گیرند و Log مرکزی UTC است. دو Source باید وابستگی مستقل داشته باشند. با دو منبع مخالف، تشخیص منبع درست قطعی نیست. برای تحمل خطای منبع، تعداد و تنوع بیشتر را طراحی کنید."
+                      data-en="Servers use 10.20.30.53 and 10.20.30.54, with central logs in UTC. Sources need independent dependencies. Two disagreeing sources do not establish which is correct. Design additional source diversity for fault tolerance."
+                    >
+                      Servers use 10.20.30.53 and 10.20.30.54, with central logs
+                      in UTC. Sources need independent dependencies. Two
+                      disagreeing sources do not establish which is correct.
+                      Design additional source diversity for fault tolerance.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="Daemon زمان و مسیر NTP"
+                      data-en="Time daemon and NTP reachability"
+                    >
+                      Time daemon and NTP reachability
+                    </h2>
+                    <p
+                      data-fa="مثال از Ubuntu 24.04 LTS و Chrony استفاده می‌کند. نسخه نصب‌شده و Daemon فعال را ثبت کنید."
+                      data-en="The example uses Ubuntu 24.04 LTS and Chrony. Record the installed version and active time daemon."
+                    >
+                      The example uses Ubuntu 24.04 LTS and Chrony. Record the
+                      installed version and active time daemon.
+                    </p>
+                    <p
+                      data-fa="به Capacity مخصوص نیاز ندارید. در VM، تنظیم Sync Hypervisor را بررسی کنید تا دو روش مستقل مرتب ساعت را تغییر ندهند."
+                      data-en="No special compute capacity is needed. In VMs, inspect hypervisor synchronization so competing mechanisms do not repeatedly change the clock."
+                    >
+                      No special compute capacity is needed. In VMs, inspect
+                      hypervisor synchronization so competing mechanisms do not
+                      repeatedly change the clock.
+                    </p>
+                    <p
+                      data-fa="sudo و دسترسی UDP/123 به Sourceهای واقعی لازم است. آدرس‌ها نمونه‌اند. برای NTS، پشتیبانی Source و مسیر TLS لازم را جدا آماده کنید."
+                      data-en="Prepare sudo and UDP/123 access to real sources, replacing sample addresses. NTS also requires supported sources and its separate TLS path."
+                    >
+                      Prepare sudo and UDP/123 access to real sources, replacing
+                      sample addresses. NTS also requires supported sources and
+                      its separate TLS path.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="Chrony در برابر timesyncd"
+                      data-en="Chrony and timesyncd"
+                    >
+                      Chrony and timesyncd
+                    </h3>
+                    <p
+                      data-fa="timesyncd برای Client ساده گزینه دیگری است. در این مسیر Chrony مالک Sync است. timedatectl timesync-status وضعیت timesyncd را می‌دهد. برای Chrony از sources و tracking استفاده کنید."
+                      data-en="timesyncd is another option for simple clients. Chrony owns synchronization here. Timedatectl timesync-status reports timesyncd. Use sources and tracking for Chrony."
+                    >
+                      timesyncd is another option for simple clients. Chrony
+                      owns synchronization here. Timedatectl timesync-status
+                      reports timesyncd. Use sources and tracking for Chrony.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="NTP محدود و سیاست Step"
+                      data-en="Restrict NTP and review clock steps"
+                    >
+                      Restrict NTP and review clock steps
+                    </h2>
+                    <p
+                      data-fa="Sourceها را به مقصد مجاز محدود کنید و Client را بی‌دلیل NTP Server عمومی نکنید. پیش از Restart، makestep موجود را بررسی کنید. Restart شمارنده Update را از نو شروع می‌کند و Policy آغازین ممکن است ساعت را Step کند، حتی اگر فرمان دستی makestep اجرا نکنید."
+                      data-en="Restrict sources to approved destinations and avoid unintentionally exposing a public NTP server. Inspect existing makestep before restart. Restart resets the update count, so startup policy might step time without a manual makestep command."
+                    >
+                      Restrict sources to approved destinations and avoid
+                      unintentionally exposing a public NTP server. Inspect
+                      existing makestep before restart. Restart resets the
+                      update count, so startup policy might step time without a
+                      manual makestep command.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="تنظیم Source و بررسی Sync"
+                      data-en="Configure sources and verify synchronization"
+                    >
+                      Configure sources and verify synchronization
+                    </h2>
+                    <p
+                      data-fa="ابتدا وضعیت موجود را ثبت کنید. فقط یک daemon مالک همگام‌سازی باشد. نصب chrony معمولاً timesyncd را جایگزین می‌کند اما وضعیت را verify کنید."
+                      data-en="Record the current state. Only one daemon should own synchronization. Installing chrony normally replaces timesyncd, but verify the resulting service states."
+                    >
+                      Record the current state. Only one daemon should own
+                      synchronization. Installing chrony normally replaces
+                      timesyncd, but verify the resulting service states.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">timedatectl status
 date -u --iso-8601=seconds
 sudo apt-get update
 sudo apt-get install -y chrony
 systemctl is-active chrony systemd-timesyncd
 sudo cp -a /etc/chrony /root/chrony-before-change</code></pre>
-<p data-fa="در فایل /etc/chrony/chrony.conf خطوط pool/server فعلی و sourcedirهای تولیدشده را بازبینی کنید. sourceهای متداخل را فقط پس از تعیین مالکیت حذف کنید. دو خط زیر نمونه source سازمان‌اند و باید جایگزین sourceهای public شوند." data-en="Review existing pool/server lines and generated sourcedir entries in /etc/chrony/chrony.conf. Remove conflicting sources only after identifying their ownership. These complete source lines replace public sources with approved internal ones.">Review existing pool/server lines and generated sourcedir entries in /etc/chrony/chrony.conf. Remove conflicting sources only after identifying their ownership. These complete source lines replace public sources with approved internal ones.</p>
-<pre dir="ltr"><code class="language-text">server 10.20.30.53 iburst
+                    <p
+                      data-fa="در فایل /etc/chrony/chrony.conf خطوط pool/server فعلی و sourcedirهای تولیدشده را بازبینی کنید. sourceهای متداخل را فقط پس از تعیین مالکیت حذف کنید. دو خط زیر نمونه source سازمان‌اند و باید جایگزین sourceهای public شوند."
+                      data-en="Review existing pool/server lines and generated sourcedir entries in /etc/chrony/chrony.conf. Remove conflicting sources only after identifying their ownership. These complete source lines replace public sources with approved internal ones."
+                    >
+                      Review existing pool/server lines and generated sourcedir
+                      entries in /etc/chrony/chrony.conf. Remove conflicting
+                      sources only after identifying their ownership. These
+                      complete source lines replace public sources with approved
+                      internal ones.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-text">server 10.20.30.53 iburst
 server 10.20.30.54 iburst</code></pre>
-<pre dir="ltr"><code class="language-bash">sudo chronyd -p -f /etc/chrony/chrony.conf
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">sudo chronyd -p -f /etc/chrony/chrony.conf
 sudo systemctl restart chrony
 chronyc sources -v
 chronyc tracking
 sudo timedatectl set-timezone Asia/Tehran
 date -u --iso-8601=seconds</code></pre>
-<p data-fa="انتظار: یک source با ^*، Reach پس از چند poll رو به 377 و Leap status: Normal. hostname source ممکن است reverse DNS نمایش داده شود. اگر offset بزرگ است روی Production makestep اجرا نکنید. ابتدا اثر آن بر database و scheduling را ارزیابی کنید." data-en="Expect a source marked ^*, Reach approaching 377 over multiple polls and Leap status: Normal. Reverse DNS may change the displayed source name. Do not run makestep on production with a large offset until its effects on databases and scheduling have been assessed.">Expect a source marked ^*, Reach approaching 377 over multiple polls and Leap status: Normal. Reverse DNS may change the displayed source name. Do not run makestep on production with a large offset until its effects on databases and scheduling have been assessed.</p><p data-fa="پیش از Restart، خروجی Config چاپ‌شده را برای makestep و Sourceهای DHCP بررسی کنید. اگر اصلاح ناگهانی مجاز نیست، Policy را با نیاز برنامه هماهنگ کنید و تغییر را در پنجره مناسب انجام دهید." data-en="Before restart, inspect the printed configuration for makestep and DHCP-supplied sources. If abrupt correction is unacceptable, align policy with the workload and use an appropriate maintenance window.">Before restart, inspect the printed configuration for makestep and DHCP-supplied sources. If abrupt correction is unacceptable, align policy with the workload and use an appropriate maintenance window.</p></section>
-<section id="enterprise-monitoring" class="article-section"><h2 data-fa="Offset و Source منتخب" data-en="Offsets and the selected source">Offsets and the selected source</h2><p data-fa="Offset و Stratum و Reach و تغییر Source را پایش کنید. ۱۰۰ ms برای پنج دقیقه آستانه نمونه است و باید با نیاز برنامه تطبیق یابد. Active بودن Chrony، Sync را ثابت نمی‌کند." data-en="Monitor offset, stratum, reach and source changes. A 100 ms offset for five minutes is an example threshold to align with application needs. Active Chrony does not establish synchronization.">Monitor offset, stratum, reach and source changes. A 100 ms offset for five minutes is an example threshold to align with application needs. Active Chrony does not establish synchronization.</p></section>
-<section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="Reach صفر یا جهش ساعت" data-en="Zero reach or clock jumps">Zero reach or clock jumps</h2><p data-fa="^? یعنی Source فعلاً قابل استفاده نیست. UDP و DNS و ساعت Source را بررسی کنید. ^x یعنی Source ناسازگار تشخیص داده شده است." data-en="^? marks a currently unusable source. Check UDP, DNS and its clock. ^x marks a source identified as a falseticker.">^? marks a currently unusable source. Check UDP, DNS and its clock. ^x marks a source identified as a falseticker.</p>
-<pre dir="ltr"><code class="language-bash">chronyc sources -v
+                    <p
+                      data-fa="انتظار: یک source با ^*، Reach پس از چند poll رو به 377 و Leap status: Normal. hostname source ممکن است reverse DNS نمایش داده شود. اگر offset بزرگ است روی Production makestep اجرا نکنید. ابتدا اثر آن بر database و scheduling را ارزیابی کنید."
+                      data-en="Expect a source marked ^*, Reach approaching 377 over multiple polls and Leap status: Normal. Reverse DNS may change the displayed source name. Do not run makestep on production with a large offset until its effects on databases and scheduling have been assessed."
+                    >
+                      Expect a source marked ^*, Reach approaching 377 over
+                      multiple polls and Leap status: Normal. Reverse DNS may
+                      change the displayed source name. Do not run makestep on
+                      production with a large offset until its effects on
+                      databases and scheduling have been assessed.
+                    </p>
+                    <p
+                      data-fa="پیش از Restart، خروجی Config چاپ‌شده را برای makestep و Sourceهای DHCP بررسی کنید. اگر اصلاح ناگهانی مجاز نیست، Policy را با نیاز برنامه هماهنگ کنید و تغییر را در پنجره مناسب انجام دهید."
+                      data-en="Before restart, inspect the printed configuration for makestep and DHCP-supplied sources. If abrupt correction is unacceptable, align policy with the workload and use an appropriate maintenance window."
+                    >
+                      Before restart, inspect the printed configuration for
+                      makestep and DHCP-supplied sources. If abrupt correction
+                      is unacceptable, align policy with the workload and use an
+                      appropriate maintenance window.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="Offset و Source منتخب"
+                      data-en="Offsets and the selected source"
+                    >
+                      Offsets and the selected source
+                    </h2>
+                    <p
+                      data-fa="Offset و Stratum و Reach و تغییر Source را پایش کنید. ۱۰۰ ms برای پنج دقیقه آستانه نمونه است و باید با نیاز برنامه تطبیق یابد. Active بودن Chrony، Sync را ثابت نمی‌کند."
+                      data-en="Monitor offset, stratum, reach and source changes. A 100 ms offset for five minutes is an example threshold to align with application needs. Active Chrony does not establish synchronization."
+                    >
+                      Monitor offset, stratum, reach and source changes. A 100
+                      ms offset for five minutes is an example threshold to
+                      align with application needs. Active Chrony does not
+                      establish synchronization.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="Reach صفر یا جهش ساعت"
+                      data-en="Zero reach or clock jumps"
+                    >
+                      Zero reach or clock jumps
+                    </h2>
+                    <p
+                      data-fa="^? یعنی Source فعلاً قابل استفاده نیست. UDP و DNS و ساعت Source را بررسی کنید. ^x یعنی Source ناسازگار تشخیص داده شده است."
+                      data-en="^? marks a currently unusable source. Check UDP, DNS and its clock. ^x marks a source identified as a falseticker."
+                    >
+                      ^? marks a currently unusable source. Check UDP, DNS and
+                      its clock. ^x marks a source identified as a falseticker.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">chronyc sources -v
 chronyc sourcestats -v
 chronyc tracking
 sudo journalctl -u chrony -n 80 --no-pager</code></pre>
-<p data-fa="Reach صفر یعنی Poll موفق ثبت نشده است. برای جهش تکراری VM، Sync میزبان و Daemon Guest و Policy Step را مقایسه کنید. Expiry گواهی را با ساعت واقعی و notAfter بررسی کنید، نه Timezone." data-en="Zero reach means no successful polls were recorded. Repeated VM jumps require comparing host sync, guest daemon and step policy. Diagnose certificate expiry from clock time and notAfter, not timezone.">Zero reach means no successful polls were recorded. Repeated VM jumps require comparing host sync, guest daemon and step policy. Diagnose certificate expiry from clock time and notAfter, not timezone.</p></section>
-<section id="enterprise-recovery" class="article-section"><h2 data-fa="بازگشت Source و شروع Workload" data-en="Restore sources before sensitive workloads">Restore sources before sensitive workloads</h2><p data-fa="Config و فهرست Source و Timezone را نسخه‌بندی کنید. برای برگشت، تنظیم قبلی را با بررسی Step Policy اعمال کنید و Tracking را بسنجید. پس از خاموشی طولانی، Sync را پیش از شروع Workload حساس تأیید کنید." data-en="Version configuration, source inventory and timezone. Restore prior settings after reviewing step policy and inspect tracking. Confirm synchronization after long downtime before starting sensitive workloads.">Version configuration, source inventory and timezone. Restore prior settings after reviewing step policy and inspect tracking. Confirm synchronization after long downtime before starting sensitive workloads.</p><h3 id="enterprise-practices" data-fa="ثبت UTC و نمایش محلی" data-en="UTC records and local display">UTC records and local display</h3><p data-fa="Log را با زمان UTC و نمایش کاربر را با منطقه مناسب نگه دارید. تغییر ساعت دستی و تغییر Source را با اثر بر Workload ارزیابی کنید. Offset بزرگ را بدون برنامه روی Production Step نکنید." data-en="Use UTC for logs and suitable local display for users. Assess workload effects of manual clock or source changes. Avoid unplanned production steps for large offsets.">Use UTC for logs and suitable local display for users. Assess workload effects of manual clock or source changes. Avoid unplanned production steps for large offsets.</p></section>
-<section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</h2><h3 data-fa="آیا timezone اشتباه باعث TLS failure است؟" data-en="Does a wrong timezone cause TLS failure?">Does a wrong timezone cause TLS failure?</h3><p data-fa="TLS بر زمان واقعی تکیه دارد. timezone فقط نمایش را تغییر می‌دهد." data-en="TLS relies on the actual clock. Timezone settings change only its display.">TLS relies on the actual clock. Timezone settings change only its display.</p><h3 data-fa="آیا active بودن chrony یعنی sync برقرار است؟" data-en="Does an active chrony service mean it is synchronized?">Does an active chrony service mean it is synchronized?</h3><p data-fa="خیر. source selection، offset و Leap status باید بررسی شوند." data-en="No. Check selected sources, offset and Leap status.">No. Check selected sources, offset and Leap status.</p></section>
-<section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">Official Sources</h2><ul><li><a href="https://documentation.ubuntu.com/server/how-to/networking/chrony-client/" rel="noopener">Canonical: Chrony</a></li><li><a href="https://chrony-project.org/doc/4.5/chronyc.html" rel="noopener">Chrony: chronyc</a></li></ul></section></div></article>
+                    <p
+                      data-fa="Reach صفر یعنی Poll موفق ثبت نشده است. برای جهش تکراری VM، Sync میزبان و Daemon Guest و Policy Step را مقایسه کنید. Expiry گواهی را با ساعت واقعی و notAfter بررسی کنید، نه Timezone."
+                      data-en="Zero reach means no successful polls were recorded. Repeated VM jumps require comparing host sync, guest daemon and step policy. Diagnose certificate expiry from clock time and notAfter, not timezone."
+                    >
+                      Zero reach means no successful polls were recorded.
+                      Repeated VM jumps require comparing host sync, guest
+                      daemon and step policy. Diagnose certificate expiry from
+                      clock time and notAfter, not timezone.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="بازگشت Source و شروع Workload"
+                      data-en="Restore sources before sensitive workloads"
+                    >
+                      Restore sources before sensitive workloads
+                    </h2>
+                    <p
+                      data-fa="Config و فهرست Source و Timezone را نسخه‌بندی کنید. برای برگشت، تنظیم قبلی را با بررسی Step Policy اعمال کنید و Tracking را بسنجید. پس از خاموشی طولانی، Sync را پیش از شروع Workload حساس تأیید کنید."
+                      data-en="Version configuration, source inventory and timezone. Restore prior settings after reviewing step policy and inspect tracking. Confirm synchronization after long downtime before starting sensitive workloads."
+                    >
+                      Version configuration, source inventory and timezone.
+                      Restore prior settings after reviewing step policy and
+                      inspect tracking. Confirm synchronization after long
+                      downtime before starting sensitive workloads.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="ثبت UTC و نمایش محلی"
+                      data-en="UTC records and local display"
+                    >
+                      UTC records and local display
+                    </h3>
+                    <p
+                      data-fa="Log را با زمان UTC و نمایش کاربر را با منطقه مناسب نگه دارید. تغییر ساعت دستی و تغییر Source را با اثر بر Workload ارزیابی کنید. Offset بزرگ را بدون برنامه روی Production Step نکنید."
+                      data-en="Use UTC for logs and suitable local display for users. Assess workload effects of manual clock or source changes. Avoid unplanned production steps for large offsets."
+                    >
+                      Use UTC for logs and suitable local display for users.
+                      Assess workload effects of manual clock or source changes.
+                      Avoid unplanned production steps for large offsets.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا timezone اشتباه باعث TLS failure است؟"
+                      data-en="Does a wrong timezone cause TLS failure?"
+                    >
+                      Does a wrong timezone cause TLS failure?
+                    </h3>
+                    <p
+                      data-fa="TLS بر زمان واقعی تکیه دارد. timezone فقط نمایش را تغییر می‌دهد."
+                      data-en="TLS relies on the actual clock. Timezone settings change only its display."
+                    >
+                      TLS relies on the actual clock. Timezone settings change
+                      only its display.
+                    </p>
+                    <h3
+                      data-fa="آیا active بودن chrony یعنی sync برقرار است؟"
+                      data-en="Does an active chrony service mean it is synchronized?"
+                    >
+                      Does an active chrony service mean it is synchronized?
+                    </h3>
+                    <p
+                      data-fa="خیر. source selection، offset و Leap status باید بررسی شوند."
+                      data-en="No. Check selected sources, offset and Leap status."
+                    >
+                      No. Check selected sources, offset and Leap status.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://documentation.ubuntu.com/server/how-to/networking/chrony-client/"
+                          rel="noopener"
+                          >Canonical: Chrony</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://chrony-project.org/doc/4.5/chronyc.html"
+                          rel="noopener"
+                          >Chrony: chronyc</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
+              </article>
             </div>
           </div>
         </div>
@@ -357,18 +816,24 @@ sudo journalctl -u chrony -n 80 --no-pager</code></pre>
             <div class="footer-brand">
               <h3 class="brand-name">
                 <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
-                  >AmirHossein Jalalian</span>
+                  >AmirHossein Jalalian</span
+                >
               </h3>
               <p
                 class="brand-title"
                 data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
-              >Infrastructure &amp; DevOps Engineer</p>
+              >
+                Infrastructure &amp; DevOps Engineer
+              </p>
               <p
                 class="brand-description"
                 data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
                 data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-              >Delivering reliable, secure, and scalable IT solutions for your business success.</p>
+              >
+                Delivering reliable, secure, and scalable IT solutions for your
+                business success.
+              </p>
             </div>
 
             <!-- Contact Info -->
@@ -377,12 +842,15 @@ sudo journalctl -u chrony -n 80 --no-pager</code></pre>
                 class="contact-title"
                 data-en="Get In Touch"
                 data-fa="تماس با من"
-              >Get In Touch</h4>
+              >
+                Get In Touch
+              </h4>
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>
                   <span data-en="Tehran, Iran" data-fa="تهران، ایران"
-                    >Tehran, Iran</span>
+                    >Tehran, Iran</span
+                  >
                 </div>
                 <div class="contact-item">
                   <i class="bi bi-telephone"></i>
@@ -407,7 +875,9 @@ sudo journalctl -u chrony -n 80 --no-pager</code></pre>
                   class="social-title"
                   data-en="Follow Me"
                   data-fa="دنبال کنید"
-                >Follow Me</h5>
+                >
+                  Follow Me
+                </h5>
                 <div class="social-icons">
                   <a
                     href="https://wa.me/989197276219"
@@ -453,12 +923,14 @@ sudo journalctl -u chrony -n 80 --no-pager</code></pre>
                   <span
                     data-en="All Rights Reserved"
                     data-fa="تمام حقوق محفوظ است"
-                    >All Rights Reserved</span>
+                    >All Rights Reserved</span
+                  >
                 </p>
               </div>
               <div class="footer-heart">
                 <span data-en="Made with" data-fa="ساخته شده با"
-                  >Made with</span>
+                  >Made with</span
+                >
                 <i class="bi bi-heart-fill"></i>
                 <span data-en="in Iran" data-fa="در ایران">in Iran</span>
               </div>

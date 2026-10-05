@@ -18,7 +18,11 @@
   "use strict";
 
   document.querySelectorAll("[data-current-year]").forEach((element) => {
-    element.textContent = String(new Date().getFullYear());
+    const locale = document.documentElement.lang === "fa" ? "fa" : "en";
+    element.textContent = element.getAttribute(`data-${locale}`) || new Intl.DateTimeFormat(
+      locale === "fa" ? "fa-IR-u-ca-persian" : "en-US-u-ca-gregory",
+      { year: "numeric", timeZone: "Asia/Tehran" },
+    ).format(new Date());
   });
 
   const headerToggleBtn = document.querySelector("#menu-toggle");

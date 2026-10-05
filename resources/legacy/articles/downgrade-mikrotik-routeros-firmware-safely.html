@@ -4,7 +4,10 @@
     <title>Downgrade RouterOS Safely and Check RouterBOOT | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Check factory-version limits and architecture, save backups, install matching packages and verify routing and VPNs after downgrade." />
+    <meta
+      name="description"
+      content="Check factory-version limits and architecture, save backups, install matching packages and verify routing and VPNs after downgrade."
+    />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <link
@@ -12,9 +15,18 @@
       href="https://meetaj.ir/articles/downgrade-mikrotik-routeros-firmware-safely"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Downgrade RouterOS Safely and Check RouterBOOT" />
-    <meta property="og:description" content="Check factory-version limits and architecture, save backups, install matching packages and verify routing and VPNs after downgrade." />
-    <meta property="og:url" content="https://meetaj.ir/articles/downgrade-mikrotik-routeros-firmware-safely" />
+    <meta
+      property="og:title"
+      content="Downgrade RouterOS Safely and Check RouterBOOT"
+    />
+    <meta
+      property="og:description"
+      content="Check factory-version limits and architecture, save backups, install matching packages and verify routing and VPNs after downgrade."
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/downgrade-mikrotik-routeros-firmware-safely"
+    />
     <meta property="og:site_name" content="Meet AJ" />
     <meta name="twitter:card" content="summary" />
     <link href="../assets/img/favicon.png" rel="icon" />
@@ -51,12 +63,95 @@
       rel="stylesheet"
       disabled
     />
-  <meta name="keywords" content="Safe RouterOS Downgrade, downgrade mikrotik routeros firmware safely, infrastructure operations, production operations, troubleshooting" />
-<meta name="article:content-language" content="en" />
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Downgrade RouterOS Safely and Check RouterBOOT", "description": "Check factory-version limits and architecture, save backups, install matching packages and verify routing and VPNs after downgrade.", "inLanguage": "en", "url": "https://meetaj.ir/articles/downgrade-mikrotik-routeros-firmware-safely", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}, "mainEntityOfPage": "https://meetaj.ir/articles/downgrade-mikrotik-routeros-firmware-safely"}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Must RouterBOOT be downgraded too?", "acceptedAnswer": {"@type": "Answer", "text": "No. A bootloader change needs its own documented justification."}}, {"@type": "Question", "name": "Does an export recover every secret?", "acceptedAnswer": {"@type": "Answer", "text": "No. Certificates, private keys and other state need separate protection."}}], "inLanguage": "en"}</script>
-<script id="article-localizations" type="application/json">{"fa": {"title": "Downgrade امن RouterOS و بررسی RouterBOOT", "meta_title": "Downgrade امن RouterOS و بررسی RouterBOOT | Meet AJ", "description": "بررسی نسخه کارخانه و Architecture، تهیه Backup، نصب Package قدیمی و آزمون Routing و VPN پس از Downgrade.", "keywords": ["Downgrade امن RouterOS و بررسی RouterBOOT", "عیب‌یابی", "بازیابی", "downgrade mikrotik routeros firmware safely"], "faq": [["آیا RouterBOOT باید هم‌زمان downgrade شود؟", "خیر. تغییر bootloader نیاز مستقل و مستند می‌خواهد."], ["آیا export تمام secretها را بازیابی می‌کند؟", "خیر. certificate، private key و برخی stateها باید جدا محافظت شوند."]]}, "en": {"title": "Downgrade RouterOS Safely and Check RouterBOOT", "meta_title": "Downgrade RouterOS Safely and Check RouterBOOT | Meet AJ", "description": "Check factory-version limits and architecture, save backups, install matching packages and verify routing and VPNs after downgrade.", "keywords": ["Downgrade RouterOS Safely and Check RouterBOOT", "downgrade mikrotik routeros firmware safely", "troubleshooting"], "faq": [["Must RouterBOOT be downgraded too?", "No. A bootloader change needs its own documented justification."], ["Does an export recover every secret?", "No. Certificates, private keys and other state need separate protection."]]}}</script>
-</head>
+    <meta
+      name="keywords"
+      content="Safe RouterOS Downgrade, downgrade mikrotik routeros firmware safely, infrastructure operations, production operations, troubleshooting"
+    />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Downgrade RouterOS Safely and Check RouterBOOT",
+        "description": "Check factory-version limits and architecture, save backups, install matching packages and verify routing and VPNs after downgrade.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/downgrade-mikrotik-routeros-firmware-safely",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/downgrade-mikrotik-routeros-firmware-safely"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Must RouterBOOT be downgraded too?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. A bootloader change needs its own documented justification."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does an export recover every secret?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Certificates, private keys and other state need separate protection."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "Downgrade امن RouterOS و بررسی RouterBOOT",
+          "meta_title": "Downgrade امن RouterOS و بررسی RouterBOOT | Meet AJ",
+          "description": "بررسی نسخه کارخانه و Architecture، تهیه Backup، نصب Package قدیمی و آزمون Routing و VPN پس از Downgrade.",
+          "keywords": [
+            "Downgrade امن RouterOS و بررسی RouterBOOT",
+            "عیب‌یابی",
+            "بازیابی",
+            "downgrade mikrotik routeros firmware safely"
+          ],
+          "faq": [
+            [
+              "آیا RouterBOOT باید هم‌زمان downgrade شود؟",
+              "خیر. تغییر bootloader نیاز مستقل و مستند می‌خواهد."
+            ],
+            [
+              "آیا export تمام secretها را بازیابی می‌کند؟",
+              "خیر. certificate، private key و برخی stateها باید جدا محافظت شوند."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Downgrade RouterOS Safely and Check RouterBOOT",
+          "meta_title": "Downgrade RouterOS Safely and Check RouterBOOT | Meet AJ",
+          "description": "Check factory-version limits and architecture, save backups, install matching packages and verify routing and VPNs after downgrade.",
+          "keywords": [
+            "Downgrade RouterOS Safely and Check RouterBOOT",
+            "downgrade mikrotik routeros firmware safely",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Must RouterBOOT be downgraded too?",
+              "No. A bootloader change needs its own documented justification."
+            ],
+            [
+              "Does an export recover every secret?",
+              "No. Certificates, private keys and other state need separate protection."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
   <body class="article-page theme-mikrotik">
     <button
       id="menu-toggle"
@@ -205,30 +300,94 @@
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
-          <li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="چه زمانی Downgrade لازم است؟" data-en="When a downgrade is warranted">When a downgrade is warranted</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="تفاوت RouterOS و RouterBOOT" data-en="RouterOS and RouterBOOT are separate">RouterOS and RouterBOOT are separate</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="ثبت نسخه و آماده‌سازی دسترسی محلی" data-en="Record versions and arrange local access">Record versions and arrange local access</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-security"><span data-fa="انتخاب نسخه مقصد و حفاظت از Backup" data-en="Target-version and backup security">Target-version and backup security</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="بازگشت به نسخه سالم و Netinstall" data-en="Return to a working release or use Netinstall">Return to a working release or use Netinstall</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="Backup، بارگذاری Package و Downgrade" data-en="Back up, upload packages and downgrade">Back up, upload packages and downgrade</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="آزمون سرویس پس از راه‌اندازی" data-en="Service checks after reboot">Service checks after reboot</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="Package رد می‌شود یا سرویس برنمی‌گردد" data-en="Rejected packages or missing services">Rejected packages or missing services</span></a></li>
-<li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">Official Sources</span></a></li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          <li class="article-nav-item">
+            <a href="#enterprise-intro"
+              ><span
+                data-fa="چه زمانی Downgrade لازم است؟"
+                data-en="When a downgrade is warranted"
+                >When a downgrade is warranted</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="تفاوت RouterOS و RouterBOOT"
+                data-en="RouterOS and RouterBOOT are separate"
+                >RouterOS and RouterBOOT are separate</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="ثبت نسخه و آماده‌سازی دسترسی محلی"
+                data-en="Record versions and arrange local access"
+                >Record versions and arrange local access</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-security"
+              ><span
+                data-fa="انتخاب نسخه مقصد و حفاظت از Backup"
+                data-en="Target-version and backup security"
+                >Target-version and backup security</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="بازگشت به نسخه سالم و Netinstall"
+                data-en="Return to a working release or use Netinstall"
+                >Return to a working release or use Netinstall</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="Backup، بارگذاری Package و Downgrade"
+                data-en="Back up, upload packages and downgrade"
+                >Back up, upload packages and downgrade</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="آزمون سرویس پس از راه‌اندازی"
+                data-en="Service checks after reboot"
+                >Service checks after reboot</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="Package رد می‌شود یا سرویس برنمی‌گردد"
+                data-en="Rejected packages or missing services"
+                >Rejected packages or missing services</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#faq"
+              ><span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
+              ></a
+            >
+          </li>
         </ul>
       </nav>
       <button
@@ -251,19 +410,26 @@
                 <span class="article-category">MikroTik</span
                 ><span class="meta-date"
                   ><span class="article-date" data-en="Article" data-fa="مقاله"
-                    >Article</span><time datetime="">MikroTik</time></span
+                    >Article</span
+                  ><time datetime="">MikroTik</time></span
                 >
               </div>
               <h1
                 class="article-title hero-title"
-
-
-               data-fa="Downgrade امن RouterOS و بررسی RouterBOOT" data-en="Downgrade RouterOS Safely and Check RouterBOOT">Downgrade RouterOS Safely and Check RouterBOOT</h1>
+                data-fa="Downgrade امن RouterOS و بررسی RouterBOOT"
+                data-en="Downgrade RouterOS Safely and Check RouterBOOT"
+              >
+                Downgrade RouterOS Safely and Check RouterBOOT
+              </h1>
               <p
                 class="article-excerpt hero-subtitle"
-
-
-               data-fa="بررسی نسخه کارخانه و Architecture، تهیه Backup، نصب Package قدیمی و آزمون Routing و VPN پس از Downgrade." data-en="Check factory-version limits and architecture, save backups, install matching packages and verify routing and VPNs after downgrade.">Check factory-version limits and architecture, save backups, install matching packages and verify routing and VPNs after downgrade.</p>
+                data-fa="بررسی نسخه کارخانه و Architecture، تهیه Backup، نصب Package قدیمی و آزمون Routing و VPN پس از Downgrade."
+                data-en="Check factory-version limits and architecture, save backups, install matching packages and verify routing and VPNs after downgrade."
+              >
+                Check factory-version limits and architecture, save backups,
+                install matching packages and verify routing and VPNs after
+                downgrade.
+              </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -277,7 +443,9 @@
                       class="banner-subtitle"
                       data-en="Meet AJ technical article"
                       data-fa="مقاله فنی Meet AJ"
-                    >Meet AJ technical article</p>
+                    >
+                      Meet AJ technical article
+                    </p>
                   </div>
                 </div>
               </div>
@@ -288,7 +456,8 @@
                   ><span class="btn-content"
                     ><i class="bi bi-play-circle" aria-hidden="true"></i
                     ><span data-en="Start reading" data-fa="شروع مطالعه"
-                      >Start reading</span></span
+                      >Start reading</span
+                    ></span
                   ></a
                 >
               </div>
@@ -309,33 +478,329 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="en" dir="ltr"><section id="enterprise-intro" class="article-section"><h2 data-fa="چه زمانی Downgrade لازم است؟" data-en="When a downgrade is warranted">When a downgrade is warranted</h2><p data-fa="اگر پس از ارتقای RouterOS یک سرویس مشخص خراب شده است، ابتدا تغییر نسخه را با Log و آزمون همان سرویس مرتبط کنید. Downgrade برای بازگشت از Regression کاربرد دارد، اما احتمال ناسازگاری تنظیمات و بازگشت آسیب‌پذیری‌های نسخه قدیمی را هم دارد." data-en="When a service fails after a RouterOS upgrade, correlate the failure with logs and a repeatable service test. Downgrade is a response to a confirmed regression, with configuration-compatibility and old-version security risks to assess.">When a service fails after a RouterOS upgrade, correlate the failure with logs and a repeatable service test. Downgrade is a response to a confirmed regression, with configuration-compatibility and old-version security risks to assess.</p></section>
-<section id="enterprise-architecture" class="article-section"><h2 data-fa="تفاوت RouterOS و RouterBOOT" data-en="RouterOS and RouterBOOT are separate">RouterOS and RouterBOOT are separate</h2><p data-fa="RouterOS سیستم‌عامل روتر است. RouterBOOT، Bootloader دستگاه RouterBOARD است و چرخه تغییر جداگانه دارد. برای بازگشت نسخه سیستم‌عامل، Package سازگار نصب می‌کنید. تغییر Bootloader فقط با نیاز مشخص و دستورالعمل مدل دستگاه انجام می‌شود." data-en="RouterOS is the operating system. RouterBOOT is the RouterBOARD bootloader and has a separate update lifecycle. An OS rollback installs compatible packages. Change the bootloader only for a specific requirement covered by device guidance.">RouterOS is the operating system. RouterBOOT is the RouterBOARD bootloader and has a separate update lifecycle. An OS rollback installs compatible packages. Change the bootloader only for a specific requirement covered by device guidance.</p><h3 id="enterprise-scenario" data-fa="مثال: قطع Tunnel شعبه پس از ارتقا" data-en="Example: a branch tunnel fails after an upgrade">Example: a branch tunnel fails after an upgrade</h3><p data-fa="تنظیمات Tunnel و مسیر ارتقا را روی CHR آزمایش کنید. این آزمون رفتار نرم‌افزار را بررسی می‌کند، اما محدودیت سخت‌افزار RouterBOARD را شبیه‌سازی نمی‌کند. برای روتر شعبه، Console محلی و زمان نگهداری مشخص داشته باشید." data-en="Reproduce the tunnel and upgrade path on CHR. This tests software behavior but does not reproduce RouterBOARD hardware restrictions. Arrange a local console and maintenance window for the branch router.">Reproduce the tunnel and upgrade path on CHR. This tests software behavior but does not reproduce RouterBOARD hardware restrictions. Arrange a local console and maintenance window for the branch router.</p></section>
-<section id="enterprise-prerequisites" class="article-section"><h2 data-fa="ثبت نسخه و آماده‌سازی دسترسی محلی" data-en="Record versions and arrange local access">Record versions and arrange local access</h2><p data-fa="این روش برای RouterOS v7 است. نسخه دقیق، Architecture و factory-software را ثبت کنید و Release Note نسخه مقصد را بخوانید. نسخه پایین‌تر از حد کارخانه دستگاه قابل نصب نیست." data-en="This procedure targets RouterOS v7. Record the exact release, architecture and factory-software, then review the target release notes. Device factory-version limits constrain the downgrade.">This procedure targets RouterOS v7. Record the exact release, architecture and factory-software, then review the target release notes. Device factory-version limits constrain the downgrade.</p>
-<p data-fa="فضای آزاد برای Packageهای لازم و فایل Backup را بررسی کنید. برای CHR، وضعیت License و نسخه Image را ثبت کنید. دستورات RouterBOARD روی CHR کاربرد ندارند." data-en="Check free space for required packages and backup files. For CHR, record licensing and image version. RouterBOARD commands do not apply to CHR.">Check free space for required packages and backup files. For CHR, record licensing and image version. RouterBOARD commands do not apply to CHR.</p>
-<p data-fa="از شبکه مدیریت وصل شوید و پیش از تغییر، Export و Backup را خارج روتر ذخیره کنید. Safe Mode برای تغییرات زنده تنظیمات مفید است، اما Downgrade و Reboot را به‌طور خودکار برنمی‌گرداند. Console و برنامه بازیابی مستقل لازم‌اند." data-en="Connect through management and copy exports/backups off the router first. Safe Mode helps with live configuration changes but does not automatically undo a downgrade or reboot. Keep independent console access and a recovery plan.">Connect through management and copy exports/backups off the router first. Safe Mode helps with live configuration changes but does not automatically undo a downgrade or reboot. Keep independent console access and a recovery plan.</p><h3 id="enterprise-compatibility" data-fa="بازگشت از v7 به v6" data-en="Moving from v7 to v6">Moving from v7 to v6</h3><p data-fa="مسیر v7 به v6 را با مدل و نسخه کارخانه بررسی کنید. تغییر ساختار Routing و Packageها احتمال از دست رفتن تنظیمات را دارد. Export به‌تنهایی Certificate، Private Key و تمام State دستگاه را حفظ نمی‌کند." data-en="Check v7-to-v6 eligibility against the model and factory release. Routing and package changes risk configuration loss. An export alone does not preserve certificates, private keys and every device state.">Check v7-to-v6 eligibility against the model and factory release. Routing and package changes risk configuration loss. An export alone does not preserve certificates, private keys and every device state.</p></section>
-<section id="enterprise-security" class="article-section"><h2 data-fa="انتخاب نسخه مقصد و حفاظت از Backup" data-en="Target-version and backup security">Target-version and backup security</h2><p data-fa="نسخه‌ای را انتخاب کنید که مشکل موردنظر را رفع کند و آسیب‌پذیری مرتبط شناخته‌شده نداشته باشد. Package را از MikroTik بگیرید. Backup رمزنگاری‌شده را خارج روتر با دسترسی محدود نگه دارید، زیرا اطلاعات احراز هویت در آن وجود دارد." data-en="Choose a target that avoids the regression and known relevant vulnerabilities. Obtain packages from MikroTik. Restrict access to encrypted off-router backups because they contain authentication material.">Choose a target that avoids the regression and known relevant vulnerabilities. Obtain packages from MikroTik. Restrict access to encrypted off-router backups because they contain authentication material.</p></section>
-<section id="enterprise-recovery" class="article-section"><h2 data-fa="بازگشت به نسخه سالم و Netinstall" data-en="Return to a working release or use Netinstall">Return to a working release or use Netinstall</h2><p data-fa="Packageهای نسخه سالم، Backup و Export را روی دستگاه دیگری آماده داشته باشید. Binary Backup را روی همان روتر و ترجیحاً همان نسخه مبنا Restore کنید. در خرابی Boot، روش Netinstall مدل دستگاه را با دسترسی محلی اجرا کنید و سپس Routing، VPN و دسترسی مدیریت را جدا آزمایش کنید." data-en="Keep known-good packages, backups and exports on another machine. Restore a binary backup to the same router, preferably using its original software version. For boot failure, follow the model’s local Netinstall procedure, then test routing, VPNs and management independently.">Keep known-good packages, backups and exports on another machine. Restore a binary backup to the same router, preferably using its original software version. For boot failure, follow the model’s local Netinstall procedure, then test routing, VPNs and management independently.</p><h3 id="enterprise-practices" data-fa="معیار پذیرش تغییر" data-en="Accept or reject the rollback">Accept or reject the rollback</h3><p data-fa="پیش از تغییر مشخص کنید کدام Tunnel، Route و برنامه باید سالم باشند. اگر یکی از این آزمون‌ها رد شد، روتر را صرفاً به‌دلیل در دسترس بودن مدیریت آماده سرویس اعلام نکنید." data-en="Define the required tunnel, route and application tests before the change. Failed service tests prevent acceptance even when management is reachable.">Define the required tunnel, route and application tests before the change. Failed service tests prevent acceptance even when management is reachable.</p></section>
-<section id="enterprise-installation" class="article-section"><h2 data-fa="Backup، بارگذاری Package و Downgrade" data-en="Back up, upload packages and downgrade">Back up, upload packages and downgrade</h2><p data-fa="نسخه و Architecture و حد کارخانه را با دستورات زیر ثبت کنید. routerboard print فقط روی RouterBOARD کاربرد دارد. برای CHR آن را اجرا نکنید." data-en="Record release, architecture and factory limits with these commands. Routerboard print applies to RouterBOARD hardware, so omit it for CHR.">Record release, architecture and factory limits with these commands. Routerboard print applies to RouterBOARD hardware, so omit it for CHR.</p>
-<pre dir="ltr"><code class="language-routeros">/system resource print
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="چه زمانی Downgrade لازم است؟"
+                      data-en="When a downgrade is warranted"
+                    >
+                      When a downgrade is warranted
+                    </h2>
+                    <p
+                      data-fa="اگر پس از ارتقای RouterOS یک سرویس مشخص خراب شده است، ابتدا تغییر نسخه را با Log و آزمون همان سرویس مرتبط کنید. Downgrade برای بازگشت از Regression کاربرد دارد، اما احتمال ناسازگاری تنظیمات و بازگشت آسیب‌پذیری‌های نسخه قدیمی را هم دارد."
+                      data-en="When a service fails after a RouterOS upgrade, correlate the failure with logs and a repeatable service test. Downgrade is a response to a confirmed regression, with configuration-compatibility and old-version security risks to assess."
+                    >
+                      When a service fails after a RouterOS upgrade, correlate
+                      the failure with logs and a repeatable service test.
+                      Downgrade is a response to a confirmed regression, with
+                      configuration-compatibility and old-version security risks
+                      to assess.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="تفاوت RouterOS و RouterBOOT"
+                      data-en="RouterOS and RouterBOOT are separate"
+                    >
+                      RouterOS and RouterBOOT are separate
+                    </h2>
+                    <p
+                      data-fa="RouterOS سیستم‌عامل روتر است. RouterBOOT، Bootloader دستگاه RouterBOARD است و چرخه تغییر جداگانه دارد. برای بازگشت نسخه سیستم‌عامل، Package سازگار نصب می‌کنید. تغییر Bootloader فقط با نیاز مشخص و دستورالعمل مدل دستگاه انجام می‌شود."
+                      data-en="RouterOS is the operating system. RouterBOOT is the RouterBOARD bootloader and has a separate update lifecycle. An OS rollback installs compatible packages. Change the bootloader only for a specific requirement covered by device guidance."
+                    >
+                      RouterOS is the operating system. RouterBOOT is the
+                      RouterBOARD bootloader and has a separate update
+                      lifecycle. An OS rollback installs compatible packages.
+                      Change the bootloader only for a specific requirement
+                      covered by device guidance.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: قطع Tunnel شعبه پس از ارتقا"
+                      data-en="Example: a branch tunnel fails after an upgrade"
+                    >
+                      Example: a branch tunnel fails after an upgrade
+                    </h3>
+                    <p
+                      data-fa="تنظیمات Tunnel و مسیر ارتقا را روی CHR آزمایش کنید. این آزمون رفتار نرم‌افزار را بررسی می‌کند، اما محدودیت سخت‌افزار RouterBOARD را شبیه‌سازی نمی‌کند. برای روتر شعبه، Console محلی و زمان نگهداری مشخص داشته باشید."
+                      data-en="Reproduce the tunnel and upgrade path on CHR. This tests software behavior but does not reproduce RouterBOARD hardware restrictions. Arrange a local console and maintenance window for the branch router."
+                    >
+                      Reproduce the tunnel and upgrade path on CHR. This tests
+                      software behavior but does not reproduce RouterBOARD
+                      hardware restrictions. Arrange a local console and
+                      maintenance window for the branch router.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="ثبت نسخه و آماده‌سازی دسترسی محلی"
+                      data-en="Record versions and arrange local access"
+                    >
+                      Record versions and arrange local access
+                    </h2>
+                    <p
+                      data-fa="این روش برای RouterOS v7 است. نسخه دقیق، Architecture و factory-software را ثبت کنید و Release Note نسخه مقصد را بخوانید. نسخه پایین‌تر از حد کارخانه دستگاه قابل نصب نیست."
+                      data-en="This procedure targets RouterOS v7. Record the exact release, architecture and factory-software, then review the target release notes. Device factory-version limits constrain the downgrade."
+                    >
+                      This procedure targets RouterOS v7. Record the exact
+                      release, architecture and factory-software, then review
+                      the target release notes. Device factory-version limits
+                      constrain the downgrade.
+                    </p>
+                    <p
+                      data-fa="فضای آزاد برای Packageهای لازم و فایل Backup را بررسی کنید. برای CHR، وضعیت License و نسخه Image را ثبت کنید. دستورات RouterBOARD روی CHR کاربرد ندارند."
+                      data-en="Check free space for required packages and backup files. For CHR, record licensing and image version. RouterBOARD commands do not apply to CHR."
+                    >
+                      Check free space for required packages and backup files.
+                      For CHR, record licensing and image version. RouterBOARD
+                      commands do not apply to CHR.
+                    </p>
+                    <p
+                      data-fa="از شبکه مدیریت وصل شوید و پیش از تغییر، Export و Backup را خارج روتر ذخیره کنید. Safe Mode برای تغییرات زنده تنظیمات مفید است، اما Downgrade و Reboot را به‌طور خودکار برنمی‌گرداند. Console و برنامه بازیابی مستقل لازم‌اند."
+                      data-en="Connect through management and copy exports/backups off the router first. Safe Mode helps with live configuration changes but does not automatically undo a downgrade or reboot. Keep independent console access and a recovery plan."
+                    >
+                      Connect through management and copy exports/backups off
+                      the router first. Safe Mode helps with live configuration
+                      changes but does not automatically undo a downgrade or
+                      reboot. Keep independent console access and a recovery
+                      plan.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="بازگشت از v7 به v6"
+                      data-en="Moving from v7 to v6"
+                    >
+                      Moving from v7 to v6
+                    </h3>
+                    <p
+                      data-fa="مسیر v7 به v6 را با مدل و نسخه کارخانه بررسی کنید. تغییر ساختار Routing و Packageها احتمال از دست رفتن تنظیمات را دارد. Export به‌تنهایی Certificate، Private Key و تمام State دستگاه را حفظ نمی‌کند."
+                      data-en="Check v7-to-v6 eligibility against the model and factory release. Routing and package changes risk configuration loss. An export alone does not preserve certificates, private keys and every device state."
+                    >
+                      Check v7-to-v6 eligibility against the model and factory
+                      release. Routing and package changes risk configuration
+                      loss. An export alone does not preserve certificates,
+                      private keys and every device state.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="انتخاب نسخه مقصد و حفاظت از Backup"
+                      data-en="Target-version and backup security"
+                    >
+                      Target-version and backup security
+                    </h2>
+                    <p
+                      data-fa="نسخه‌ای را انتخاب کنید که مشکل موردنظر را رفع کند و آسیب‌پذیری مرتبط شناخته‌شده نداشته باشد. Package را از MikroTik بگیرید. Backup رمزنگاری‌شده را خارج روتر با دسترسی محدود نگه دارید، زیرا اطلاعات احراز هویت در آن وجود دارد."
+                      data-en="Choose a target that avoids the regression and known relevant vulnerabilities. Obtain packages from MikroTik. Restrict access to encrypted off-router backups because they contain authentication material."
+                    >
+                      Choose a target that avoids the regression and known
+                      relevant vulnerabilities. Obtain packages from MikroTik.
+                      Restrict access to encrypted off-router backups because
+                      they contain authentication material.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="بازگشت به نسخه سالم و Netinstall"
+                      data-en="Return to a working release or use Netinstall"
+                    >
+                      Return to a working release or use Netinstall
+                    </h2>
+                    <p
+                      data-fa="Packageهای نسخه سالم، Backup و Export را روی دستگاه دیگری آماده داشته باشید. Binary Backup را روی همان روتر و ترجیحاً همان نسخه مبنا Restore کنید. در خرابی Boot، روش Netinstall مدل دستگاه را با دسترسی محلی اجرا کنید و سپس Routing، VPN و دسترسی مدیریت را جدا آزمایش کنید."
+                      data-en="Keep known-good packages, backups and exports on another machine. Restore a binary backup to the same router, preferably using its original software version. For boot failure, follow the model’s local Netinstall procedure, then test routing, VPNs and management independently."
+                    >
+                      Keep known-good packages, backups and exports on another
+                      machine. Restore a binary backup to the same router,
+                      preferably using its original software version. For boot
+                      failure, follow the model’s local Netinstall procedure,
+                      then test routing, VPNs and management independently.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="معیار پذیرش تغییر"
+                      data-en="Accept or reject the rollback"
+                    >
+                      Accept or reject the rollback
+                    </h3>
+                    <p
+                      data-fa="پیش از تغییر مشخص کنید کدام Tunnel، Route و برنامه باید سالم باشند. اگر یکی از این آزمون‌ها رد شد، روتر را صرفاً به‌دلیل در دسترس بودن مدیریت آماده سرویس اعلام نکنید."
+                      data-en="Define the required tunnel, route and application tests before the change. Failed service tests prevent acceptance even when management is reachable."
+                    >
+                      Define the required tunnel, route and application tests
+                      before the change. Failed service tests prevent acceptance
+                      even when management is reachable.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="Backup، بارگذاری Package و Downgrade"
+                      data-en="Back up, upload packages and downgrade"
+                    >
+                      Back up, upload packages and downgrade
+                    </h2>
+                    <p
+                      data-fa="نسخه و Architecture و حد کارخانه را با دستورات زیر ثبت کنید. routerboard print فقط روی RouterBOARD کاربرد دارد. برای CHR آن را اجرا نکنید."
+                      data-en="Record release, architecture and factory limits with these commands. Routerboard print applies to RouterBOARD hardware, so omit it for CHR."
+                    >
+                      Record release, architecture and factory limits with these
+                      commands. Routerboard print applies to RouterBOARD
+                      hardware, so omit it for CHR.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-routeros">/system resource print
 /system package print
 /system routerboard print
 /export file=before-downgrade
 /system backup save name=before-downgrade password=&quot;REPLACE_WITH_UNIQUE_BACKUP_SECRET&quot; encryption=aes-sha256</code></pre>
-<p data-fa="رمز نمونه Backup را با Secret یکتا جایگزین کنید. فایل‌های .backup و .rsc را از Files خارج روتر دانلود کنید. Packageهای موردنیاز را با Architecture درست و نسخه یکسان از MikroTik بگیرید و در ریشه Files بارگذاری کنید. Package قدیمی نامرتبط را کنار بگذارید." data-en="Replace the sample backup password with a unique secret. Download .backup/.rsc off the router. Upload required same-version packages for the correct architecture from MikroTik to the Files root, removing unrelated older packages.">Replace the sample backup password with a unique secret. Download .backup/.rsc off the router. Upload required same-version packages for the correct architecture from MikroTik to the Files root, removing unrelated older packages.</p>
-<pre dir="ltr"><code class="language-routeros">/file print detail
+                    <p
+                      data-fa="رمز نمونه Backup را با Secret یکتا جایگزین کنید. فایل‌های .backup و .rsc را از Files خارج روتر دانلود کنید. Packageهای موردنیاز را با Architecture درست و نسخه یکسان از MikroTik بگیرید و در ریشه Files بارگذاری کنید. Package قدیمی نامرتبط را کنار بگذارید."
+                      data-en="Replace the sample backup password with a unique secret. Download .backup/.rsc off the router. Upload required same-version packages for the correct architecture from MikroTik to the Files root, removing unrelated older packages."
+                    >
+                      Replace the sample backup password with a unique secret.
+                      Download .backup/.rsc off the router. Upload required
+                      same-version packages for the correct architecture from
+                      MikroTik to the Files root, removing unrelated older
+                      packages.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-routeros">/file print detail
 /system package downgrade</code></pre>
-<p data-fa="package downgrade دستگاه را Reboot می‌کند. پس از Boot، نسخه همه Packageهای نصب‌شده را با مقصد مقایسه کنید. اتصال WinBox پایان آزمون نیست." data-en="package downgrade reboots the device. Compare every installed package with the target release after boot. WinBox connectivity is not the end of validation.">package downgrade reboots the device. Compare every installed package with the target release after boot. WinBox connectivity is not the end of validation.</p>
-<pre dir="ltr"><code class="language-routeros">/system resource print
+                    <p
+                      data-fa="package downgrade دستگاه را Reboot می‌کند. پس از Boot، نسخه همه Packageهای نصب‌شده را با مقصد مقایسه کنید. اتصال WinBox پایان آزمون نیست."
+                      data-en="package downgrade reboots the device. Compare every installed package with the target release after boot. WinBox connectivity is not the end of validation."
+                    >
+                      package downgrade reboots the device. Compare every
+                      installed package with the target release after boot.
+                      WinBox connectivity is not the end of validation.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-routeros">/system resource print
 /system package print
 /ip route print detail
 /interface print stats
 /log print</code></pre>
-<p data-fa="از LAN، DNS و VPN و برنامه شعبه را آزمایش کنید. اگر Management در زمان معمول Boot برنمی‌گردد، Console و برنامه Recovery را به کار بگیرید. Reboot تکراری بدون بررسی Log انجام ندهید." data-en="From LAN, test DNS, VPN and the branch application. If management does not return in the expected boot period, use console recovery. Avoid repeated reboots without investigating logs.">From LAN, test DNS, VPN and the branch application. If management does not return in the expected boot period, use console recovery. Avoid repeated reboots without investigating logs.</p></section>
-<section id="enterprise-monitoring" class="article-section"><h2 data-fa="آزمون سرویس پس از راه‌اندازی" data-en="Service checks after reboot">Service checks after reboot</h2><p data-fa="نسخه Package، Uptime، وضعیت Interface و Tunnel را با وضعیت قبل مقایسه کنید. از شعبه و مرکز، DNS و برنامه واقعی را آزمایش کنید. اتصال WinBox فقط دسترسی مدیریتی را ثابت می‌کند." data-en="Compare package versions, uptime, interfaces and tunnels with the pre-change state. Test DNS and the actual application from the branch and headquarters. WinBox connectivity establishes only management access.">Compare package versions, uptime, interfaces and tunnels with the pre-change state. Test DNS and the actual application from the branch and headquarters. WinBox connectivity establishes only management access.</p></section>
-<section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="Package رد می‌شود یا سرویس برنمی‌گردد" data-en="Rejected packages or missing services">Rejected packages or missing services</h2><p data-fa="در صورت رد Package، Architecture، نسخه کارخانه، فضای Files و هم‌نسخه‌بودن Packageها را بررسی کنید. اگر Feature ناپدید شده است، Package لازم و Syntax نسخه مقصد را کنترل کنید. Export نسخه جدید را یکجا روی نسخه قدیمی Import نکنید. پس از زمان معمول Boot، از Console علت قطع مدیریت را بررسی کنید و از Rebootهای پشت‌سرهم پرهیز کنید." data-en="For rejected packages, check architecture, factory limits, Files capacity and matching package versions. Missing features require package and target-syntax checks. Do not import a whole newer-version export into an older release. If management stays unavailable beyond normal boot time, investigate through the console rather than repeatedly rebooting.">For rejected packages, check architecture, factory limits, Files capacity and matching package versions. Missing features require package and target-syntax checks. Do not import a whole newer-version export into an older release. If management stays unavailable beyond normal boot time, investigate through the console rather than repeatedly rebooting.</p></section>
-<section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</h2><h3 data-fa="آیا RouterBOOT باید هم‌زمان downgrade شود؟" data-en="Must RouterBOOT be downgraded too?">Must RouterBOOT be downgraded too?</h3><p data-fa="خیر. تغییر bootloader نیاز مستقل و مستند می‌خواهد." data-en="No. A bootloader change needs its own documented justification.">No. A bootloader change needs its own documented justification.</p><h3 data-fa="آیا export تمام secretها را بازیابی می‌کند؟" data-en="Does an export recover every secret?">Does an export recover every secret?</h3><p data-fa="خیر. certificate، private key و برخی stateها باید جدا محافظت شوند." data-en="No. Certificates, private keys and other state need separate protection.">No. Certificates, private keys and other state need separate protection.</p></section>
-<section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">Official Sources</h2><ul><li><a href="https://help.mikrotik.com/docs/spaces/ROS/pages/40992872/Packages" rel="noopener">MikroTik: Packages</a></li><li><a href="https://help.mikrotik.com/docs/spaces/ROS/pages/40992852/Backup" rel="noopener">MikroTik: Backup</a></li><li><a href="https://help.mikrotik.com/docs/spaces/ROS/pages/24805390/Netinstall" rel="noopener">MikroTik: Netinstall</a></li></ul></section></div></article>
+                    <p
+                      data-fa="از LAN، DNS و VPN و برنامه شعبه را آزمایش کنید. اگر Management در زمان معمول Boot برنمی‌گردد، Console و برنامه Recovery را به کار بگیرید. Reboot تکراری بدون بررسی Log انجام ندهید."
+                      data-en="From LAN, test DNS, VPN and the branch application. If management does not return in the expected boot period, use console recovery. Avoid repeated reboots without investigating logs."
+                    >
+                      From LAN, test DNS, VPN and the branch application. If
+                      management does not return in the expected boot period,
+                      use console recovery. Avoid repeated reboots without
+                      investigating logs.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="آزمون سرویس پس از راه‌اندازی"
+                      data-en="Service checks after reboot"
+                    >
+                      Service checks after reboot
+                    </h2>
+                    <p
+                      data-fa="نسخه Package، Uptime، وضعیت Interface و Tunnel را با وضعیت قبل مقایسه کنید. از شعبه و مرکز، DNS و برنامه واقعی را آزمایش کنید. اتصال WinBox فقط دسترسی مدیریتی را ثابت می‌کند."
+                      data-en="Compare package versions, uptime, interfaces and tunnels with the pre-change state. Test DNS and the actual application from the branch and headquarters. WinBox connectivity establishes only management access."
+                    >
+                      Compare package versions, uptime, interfaces and tunnels
+                      with the pre-change state. Test DNS and the actual
+                      application from the branch and headquarters. WinBox
+                      connectivity establishes only management access.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="Package رد می‌شود یا سرویس برنمی‌گردد"
+                      data-en="Rejected packages or missing services"
+                    >
+                      Rejected packages or missing services
+                    </h2>
+                    <p
+                      data-fa="در صورت رد Package، Architecture، نسخه کارخانه، فضای Files و هم‌نسخه‌بودن Packageها را بررسی کنید. اگر Feature ناپدید شده است، Package لازم و Syntax نسخه مقصد را کنترل کنید. Export نسخه جدید را یکجا روی نسخه قدیمی Import نکنید. پس از زمان معمول Boot، از Console علت قطع مدیریت را بررسی کنید و از Rebootهای پشت‌سرهم پرهیز کنید."
+                      data-en="For rejected packages, check architecture, factory limits, Files capacity and matching package versions. Missing features require package and target-syntax checks. Do not import a whole newer-version export into an older release. If management stays unavailable beyond normal boot time, investigate through the console rather than repeatedly rebooting."
+                    >
+                      For rejected packages, check architecture, factory limits,
+                      Files capacity and matching package versions. Missing
+                      features require package and target-syntax checks. Do not
+                      import a whole newer-version export into an older release.
+                      If management stays unavailable beyond normal boot time,
+                      investigate through the console rather than repeatedly
+                      rebooting.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا RouterBOOT باید هم‌زمان downgrade شود؟"
+                      data-en="Must RouterBOOT be downgraded too?"
+                    >
+                      Must RouterBOOT be downgraded too?
+                    </h3>
+                    <p
+                      data-fa="خیر. تغییر bootloader نیاز مستقل و مستند می‌خواهد."
+                      data-en="No. A bootloader change needs its own documented justification."
+                    >
+                      No. A bootloader change needs its own documented
+                      justification.
+                    </p>
+                    <h3
+                      data-fa="آیا export تمام secretها را بازیابی می‌کند؟"
+                      data-en="Does an export recover every secret?"
+                    >
+                      Does an export recover every secret?
+                    </h3>
+                    <p
+                      data-fa="خیر. certificate، private key و برخی stateها باید جدا محافظت شوند."
+                      data-en="No. Certificates, private keys and other state need separate protection."
+                    >
+                      No. Certificates, private keys and other state need
+                      separate protection.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://help.mikrotik.com/docs/spaces/ROS/pages/40992872/Packages"
+                          rel="noopener"
+                          >MikroTik: Packages</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://help.mikrotik.com/docs/spaces/ROS/pages/40992852/Backup"
+                          rel="noopener"
+                          >MikroTik: Backup</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://help.mikrotik.com/docs/spaces/ROS/pages/24805390/Netinstall"
+                          rel="noopener"
+                          >MikroTik: Netinstall</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
+              </article>
             </div>
           </div>
         </div>
@@ -353,18 +818,24 @@
             <div class="footer-brand">
               <h3 class="brand-name">
                 <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
-                  >AmirHossein Jalalian</span>
+                  >AmirHossein Jalalian</span
+                >
               </h3>
               <p
                 class="brand-title"
                 data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
-              >Infrastructure &amp; DevOps Engineer</p>
+              >
+                Infrastructure &amp; DevOps Engineer
+              </p>
               <p
                 class="brand-description"
                 data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
                 data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-              >Delivering reliable, secure, and scalable IT solutions for your business success.</p>
+              >
+                Delivering reliable, secure, and scalable IT solutions for your
+                business success.
+              </p>
             </div>
 
             <!-- Contact Info -->
@@ -373,12 +844,15 @@
                 class="contact-title"
                 data-en="Get In Touch"
                 data-fa="تماس با من"
-              >Get In Touch</h4>
+              >
+                Get In Touch
+              </h4>
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>
                   <span data-en="Tehran, Iran" data-fa="تهران، ایران"
-                    >Tehran, Iran</span>
+                    >Tehran, Iran</span
+                  >
                 </div>
                 <div class="contact-item">
                   <i class="bi bi-telephone"></i>
@@ -403,7 +877,9 @@
                   class="social-title"
                   data-en="Follow Me"
                   data-fa="دنبال کنید"
-                >Follow Me</h5>
+                >
+                  Follow Me
+                </h5>
                 <div class="social-icons">
                   <a
                     href="https://wa.me/989197276219"
@@ -449,12 +925,14 @@
                   <span
                     data-en="All Rights Reserved"
                     data-fa="تمام حقوق محفوظ است"
-                    >All Rights Reserved</span>
+                    >All Rights Reserved</span
+                  >
                 </p>
               </div>
               <div class="footer-heart">
                 <span data-en="Made with" data-fa="ساخته شده با"
-                  >Made with</span>
+                  >Made with</span
+                >
                 <i class="bi bi-heart-fill"></i>
                 <span data-en="in Iran" data-fa="در ایران">in Iran</span>
               </div>

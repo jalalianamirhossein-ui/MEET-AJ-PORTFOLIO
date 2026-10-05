@@ -4,7 +4,10 @@
     <title>Create a Bootable USB for Ubuntu or Windows Server | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Verify an ISO, write it with Rufus, match UEFI and Secure Boot settings, and troubleshoot boot and storage detection." />
+    <meta
+      name="description"
+      content="Verify an ISO, write it with Rufus, match UEFI and Secure Boot settings, and troubleshoot boot and storage detection."
+    />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <link
@@ -12,9 +15,18 @@
       href="https://meetaj.ir/articles/creating-a-bootable-usb"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Create a Bootable USB for Ubuntu or Windows Server" />
-    <meta property="og:description" content="Verify an ISO, write it with Rufus, match UEFI and Secure Boot settings, and troubleshoot boot and storage detection." />
-    <meta property="og:url" content="https://meetaj.ir/articles/creating-a-bootable-usb" />
+    <meta
+      property="og:title"
+      content="Create a Bootable USB for Ubuntu or Windows Server"
+    />
+    <meta
+      property="og:description"
+      content="Verify an ISO, write it with Rufus, match UEFI and Secure Boot settings, and troubleshoot boot and storage detection."
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/creating-a-bootable-usb"
+    />
     <meta property="og:site_name" content="Meet AJ" />
     <meta name="twitter:card" content="summary" />
     <link href="../assets/img/favicon.png" rel="icon" />
@@ -51,12 +63,95 @@
       rel="stylesheet"
       disabled
     />
-  <meta name="keywords" content="Bootable USB Media, creating a bootable usb, infrastructure operations, production operations, troubleshooting" />
-<meta name="article:content-language" content="en" />
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Create a Bootable USB for Ubuntu or Windows Server", "description": "Verify an ISO, write it with Rufus, match UEFI and Secure Boot settings, and troubleshoot boot and storage detection.", "inLanguage": "en", "url": "https://meetaj.ir/articles/creating-a-bootable-usb", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}, "mainEntityOfPage": "https://meetaj.ir/articles/creating-a-bootable-usb"}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is installation USB a server backup?", "acceptedAnswer": {"@type": "Answer", "text": "No. It supplies installation/recovery tools. Application data needs separate backup."}}, {"@type": "Question", "name": "Must Secure Boot be disabled?", "acceptedAnswer": {"@type": "Answer", "text": "Only for a documented incompatibility and an approved decision. Keep it enabled when compatible."}}], "inLanguage": "en"}</script>
-<script id="article-localizations" type="application/json">{"fa": {"title": "ساخت USB بوتیبل برای Ubuntu و Windows Server", "meta_title": "ساخت USB بوتیبل برای Ubuntu و Windows Server | Meet AJ", "description": "انتخاب ISO معتبر، ساخت USB با Rufus، بررسی UEFI و Secure Boot و عیب‌یابی بوت و شناسایی دیسک.", "keywords": ["ساخت USB بوتیبل برای Ubuntu و Windows Server", "عیب‌یابی", "بازیابی", "creating a bootable usb"], "faq": [["آیا USB نصب همان backup سرور است؟", "خیر. فقط ابزار نصب یا recovery است و داده کاربردی جدا backup می‌شود."], ["آیا باید Secure Boot را خاموش کرد؟", "فقط برای ناسازگاری مستند و تصمیم مجاز. در حالت سازگار فعال بماند."]]}, "en": {"title": "Create a Bootable USB for Ubuntu or Windows Server", "meta_title": "Create a Bootable USB for Ubuntu or Windows Server | Meet AJ", "description": "Verify an ISO, write it with Rufus, match UEFI and Secure Boot settings, and troubleshoot boot and storage detection.", "keywords": ["Create a Bootable USB for Ubuntu or Windows Server", "creating a bootable usb", "troubleshooting"], "faq": [["Is installation USB a server backup?", "No. It supplies installation/recovery tools. Application data needs separate backup."], ["Must Secure Boot be disabled?", "Only for a documented incompatibility and an approved decision. Keep it enabled when compatible."]]}}</script>
-</head>
+    <meta
+      name="keywords"
+      content="Bootable USB Media, creating a bootable usb, infrastructure operations, production operations, troubleshooting"
+    />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Create a Bootable USB for Ubuntu or Windows Server",
+        "description": "Verify an ISO, write it with Rufus, match UEFI and Secure Boot settings, and troubleshoot boot and storage detection.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/creating-a-bootable-usb",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/creating-a-bootable-usb"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is installation USB a server backup?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. It supplies installation/recovery tools. Application data needs separate backup."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Must Secure Boot be disabled?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Only for a documented incompatibility and an approved decision. Keep it enabled when compatible."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "ساخت USB بوتیبل برای Ubuntu و Windows Server",
+          "meta_title": "ساخت USB بوتیبل برای Ubuntu و Windows Server | Meet AJ",
+          "description": "انتخاب ISO معتبر، ساخت USB با Rufus، بررسی UEFI و Secure Boot و عیب‌یابی بوت و شناسایی دیسک.",
+          "keywords": [
+            "ساخت USB بوتیبل برای Ubuntu و Windows Server",
+            "عیب‌یابی",
+            "بازیابی",
+            "creating a bootable usb"
+          ],
+          "faq": [
+            [
+              "آیا USB نصب همان backup سرور است؟",
+              "خیر. فقط ابزار نصب یا recovery است و داده کاربردی جدا backup می‌شود."
+            ],
+            [
+              "آیا باید Secure Boot را خاموش کرد؟",
+              "فقط برای ناسازگاری مستند و تصمیم مجاز. در حالت سازگار فعال بماند."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Create a Bootable USB for Ubuntu or Windows Server",
+          "meta_title": "Create a Bootable USB for Ubuntu or Windows Server | Meet AJ",
+          "description": "Verify an ISO, write it with Rufus, match UEFI and Secure Boot settings, and troubleshoot boot and storage detection.",
+          "keywords": [
+            "Create a Bootable USB for Ubuntu or Windows Server",
+            "creating a bootable usb",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Is installation USB a server backup?",
+              "No. It supplies installation/recovery tools. Application data needs separate backup."
+            ],
+            [
+              "Must Secure Boot be disabled?",
+              "Only for a documented incompatibility and an approved decision. Keep it enabled when compatible."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
   <body class="article-page theme-other">
     <button
       id="menu-toggle"
@@ -205,28 +300,94 @@
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
-          <li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="USB بوتیبل چه کاری انجام می‌دهد؟" data-en="What bootable media provides">What bootable media provides</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="ISO، UEFI و نوع رسانه" data-en="ISO, UEFI and media layout">ISO, UEFI and media layout</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="قبل از نوشتن روی فلش" data-en="Before writing the USB">Before writing the USB</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-security"><span data-fa="اعتماد به Image و حفاظت از کلیدها" data-en="Image trust and credential protection">Image trust and credential protection</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="بررسی ISO و ساخت فلش با Rufus" data-en="Verify the ISO and write it with Rufus">Verify the ISO and write it with Rufus</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="آزمون بوت روی دستگاه مقصد" data-en="Boot-test the target hardware">Boot-test the target hardware</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="وقتی فلش بوت نمی‌شود" data-en="When the USB does not boot">When the USB does not boot</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="بازسازی رسانه و آماده‌سازی Restore" data-en="Rebuild media and prepare restore">Rebuild media and prepare restore</span></a></li>
-<li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">Official Sources</span></a></li>
-
-
-
-
-
-
-
-
-
-
-
-
+          <li class="article-nav-item">
+            <a href="#enterprise-intro"
+              ><span
+                data-fa="USB بوتیبل چه کاری انجام می‌دهد؟"
+                data-en="What bootable media provides"
+                >What bootable media provides</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="ISO، UEFI و نوع رسانه"
+                data-en="ISO, UEFI and media layout"
+                >ISO, UEFI and media layout</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="قبل از نوشتن روی فلش"
+                data-en="Before writing the USB"
+                >Before writing the USB</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-security"
+              ><span
+                data-fa="اعتماد به Image و حفاظت از کلیدها"
+                data-en="Image trust and credential protection"
+                >Image trust and credential protection</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="بررسی ISO و ساخت فلش با Rufus"
+                data-en="Verify the ISO and write it with Rufus"
+                >Verify the ISO and write it with Rufus</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="آزمون بوت روی دستگاه مقصد"
+                data-en="Boot-test the target hardware"
+                >Boot-test the target hardware</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="وقتی فلش بوت نمی‌شود"
+                data-en="When the USB does not boot"
+                >When the USB does not boot</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="بازسازی رسانه و آماده‌سازی Restore"
+                data-en="Rebuild media and prepare restore"
+                >Rebuild media and prepare restore</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#faq"
+              ><span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
+              ></a
+            >
+          </li>
         </ul>
       </nav>
       <button
@@ -247,23 +408,30 @@
             <div class="col-lg-10 mx-auto">
               <div class="article-meta">
                 <span class="article-category" data-en="Other" data-fa="سایر"
-                  >Other</span><span class="meta-date"
+                  >Other</span
+                ><span class="meta-date"
                   ><span class="article-date" data-en="Article" data-fa="مقاله"
-                    >Article</span><time datetime="" data-en="Other" data-fa="سایر"
+                    >Article</span
+                  ><time datetime="" data-en="Other" data-fa="سایر"
                     >Other</time
                   ></span
                 >
               </div>
               <h1
                 class="article-title hero-title"
-
-
-               data-fa="ساخت USB بوتیبل برای Ubuntu و Windows Server" data-en="Create a Bootable USB for Ubuntu or Windows Server">Create a Bootable USB for Ubuntu or Windows Server</h1>
+                data-fa="ساخت USB بوتیبل برای Ubuntu و Windows Server"
+                data-en="Create a Bootable USB for Ubuntu or Windows Server"
+              >
+                Create a Bootable USB for Ubuntu or Windows Server
+              </h1>
               <p
                 class="article-excerpt hero-subtitle"
-
-
-               data-fa="انتخاب ISO معتبر، ساخت USB با Rufus، بررسی UEFI و Secure Boot و عیب‌یابی بوت و شناسایی دیسک." data-en="Verify an ISO, write it with Rufus, match UEFI and Secure Boot settings, and troubleshoot boot and storage detection.">Verify an ISO, write it with Rufus, match UEFI and Secure Boot settings, and troubleshoot boot and storage detection.</p>
+                data-fa="انتخاب ISO معتبر، ساخت USB با Rufus، بررسی UEFI و Secure Boot و عیب‌یابی بوت و شناسایی دیسک."
+                data-en="Verify an ISO, write it with Rufus, match UEFI and Secure Boot settings, and troubleshoot boot and storage detection."
+              >
+                Verify an ISO, write it with Rufus, match UEFI and Secure Boot
+                settings, and troubleshoot boot and storage detection.
+              </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -272,12 +440,16 @@
                     alt="Creating a Bootable USB"
                   />
                   <div class="banner-content">
-                    <h2 class="banner-title" data-en="Other" data-fa="سایر">Other</h2>
+                    <h2 class="banner-title" data-en="Other" data-fa="سایر">
+                      Other
+                    </h2>
                     <p
                       class="banner-subtitle"
                       data-en="Meet AJ technical article"
                       data-fa="مقاله فنی Meet AJ"
-                    >Meet AJ technical article</p>
+                    >
+                      Meet AJ technical article
+                    </p>
                   </div>
                 </div>
               </div>
@@ -288,7 +460,8 @@
                   ><span class="btn-content"
                     ><i class="bi bi-play-circle" aria-hidden="true"></i
                     ><span data-en="Start reading" data-fa="شروع مطالعه"
-                      >Start reading</span></span
+                      >Start reading</span
+                    ></span
                   ></a
                 >
               </div>
@@ -309,26 +482,320 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="en" dir="ltr"><section id="enterprise-intro" class="article-section"><h2 data-fa="USB بوتیبل چه کاری انجام می‌دهد؟" data-en="What bootable media provides">What bootable media provides</h2><p data-fa="USB بوتیبل سیستم را به محیط نصب یا بازیابی می‌برد. برای ساخت آن، فایل ISO معتبر، فلش مناسب و تنظیم سازگار با Firmware مقصد لازم است. کپی‌کردن فایل ISO روی فلش معمولی آن را بوتیبل نمی‌کند." data-en="A bootable USB starts an installer or recovery environment. It needs a trusted ISO, suitable media and settings that match the target firmware. Copying an ISO file onto an ordinary USB does not make it bootable.">A bootable USB starts an installer or recovery environment. It needs a trusted ISO, suitable media and settings that match the target firmware. Copying an ISO file onto an ordinary USB does not make it bootable.</p></section>
-<section id="enterprise-architecture" class="article-section"><h2 data-fa="ISO، UEFI و نوع رسانه" data-en="ISO, UEFI and media layout">ISO, UEFI and media layout</h2><p data-fa="Checksum معتبر کمک می‌کند فایل دانلودشده را با فایل ناشر مقایسه کنید. سپس ابزار نوشتن، ساختار قابل بوت را می‌سازد و UEFI یا BIOS آن را بارگذاری می‌کند. رسانه نصب ابزار راه‌اندازی است. داده برنامه، کلید رمزنگاری و Backup باید جدا در دسترس باشند." data-en="A trusted checksum compares the download with the publisher’s file. The writer then builds bootable media for UEFI or BIOS to load. Installation media supplies startup tools. Application data, encryption keys and backups must be available separately.">A trusted checksum compares the download with the publisher’s file. The writer then builds bootable media for UEFI or BIOS to load. Installation media supplies startup tools. Application data, encryption keys and backups must be available separately.</p><h3 id="enterprise-scenario" data-fa="مثال: آماده‌سازی رسانه بازیابی" data-en="Example: prepare recovery media">Example: prepare recovery media</h3><p data-fa="برای سرور جایگزین، فلش را پیش از حادثه آماده کنید. نام سیستم‌عامل، نسخه ISO و تاریخ آخرین آزمون بوت را روی برچسب بنویسید. Hash فایل را در کنار سابقه دانلود نگه دارید تا بعداً همان رسانه را بازسازی کنید." data-en="Prepare media before a replacement server is needed. Label it with the operating system, ISO version and last boot-test date. Keep the image hash with the download record so the media is reproducible.">Prepare media before a replacement server is needed. Label it with the operating system, ISO version and last boot-test date. Keep the image hash with the download record so the media is reproducible.</p></section>
-<section id="enterprise-prerequisites" class="article-section"><h2 data-fa="قبل از نوشتن روی فلش" data-en="Before writing the USB">Before writing the USB</h2><p data-fa="ISO را از وب‌سایت رسمی Ubuntu یا Microsoft بگیرید. این مثال برای Ubuntu 24.04 LTS و Windows Server 2022/2025 است. Media Creation Tool ویندوز دسکتاپ، ابزار دریافت ISO سرور نیست." data-en="Download the ISO from Ubuntu or Microsoft. This example covers Ubuntu 24.04 LTS and Windows Server 2022/2025. The desktop Windows Media Creation Tool is not a Server ISO download tool.">Download the ISO from Ubuntu or Microsoft. This example covers Ubuntu 24.04 LTS and Windows Server 2022/2025. The desktop Windows Media Creation Tool is not a Server ISO download tool.</p>
-<p data-fa="ظرفیت فلش باید برای روش نوشتن و اندازه Image کافی باشد. فلش ۱۶ GiB برای بسیاری از Imageها مناسب است، اما اندازه فایل را بررسی کنید. مدل Storage Controller و NIC سرور نیز باید با سیستم‌عامل سازگار باشد." data-en="Choose capacity for the image and writing method. A 16 GiB USB suits many images, but check the actual size. Confirm operating-system support for the target storage controller and NIC.">Choose capacity for the image and writing method. A 16 GiB USB suits many images, but check the actual size. Confirm operating-system support for the target storage controller and NIC.</p>
-<p data-fa="Rufus را از منبع رسمی روی Windows اجرا کنید. از داده‌های فلش نسخه دیگری داشته باشید و شماره دیسک، ظرفیت و Serial مقصد را بررسی کنید. نوشتن Image تمام داده‌های فلش انتخاب‌شده را پاک می‌کند." data-en="Run an official Rufus build on Windows. Preserve any USB data elsewhere, then check the target disk number, size and serial. Writing the image erases the selected USB.">Run an official Rufus build on Windows. Preserve any USB data elsewhere, then check the target disk number, size and serial. Writing the image erases the selected USB.</p><h3 id="enterprise-compatibility" data-fa="سازگاری با BIOS قدیمی" data-en="Legacy BIOS compatibility">Legacy BIOS compatibility</h3><p data-fa="برای دستگاهی که فقط Legacy BIOS دارد، تنظیم سازگار همان دستگاه را انتخاب کنید. GPT یا MBR را صرفاً بر اساس نام سیستم‌عامل انتخاب نکنید. Firmware مقصد و روش پیشنهادی Image تعیین‌کننده‌اند." data-en="For a Legacy BIOS machine, select its compatible layout. Do not choose GPT or MBR solely from the operating-system name. Target firmware and the image’s writing instructions determine the choice.">For a Legacy BIOS machine, select its compatible layout. Do not choose GPT or MBR solely from the operating-system name. Target firmware and the image’s writing instructions determine the choice.</p></section>
-<section id="enterprise-security" class="article-section"><h2 data-fa="اعتماد به Image و حفاظت از کلیدها" data-en="Image trust and credential protection">Image trust and credential protection</h2><p data-fa="ISO و ابزار نوشتن را از منبع رسمی تهیه کنید. رمزها و Secretهای نصب خودکار را روی فلش مشترک نگذارید. Secure Boot را در صورت سازگاری فعال نگه دارید و خطای امضا را با بررسی Image و زنجیره اعتماد پیگیری کنید." data-en="Obtain the ISO and writer from official sources. Keep unattended-installation passwords off shared media. Leave Secure Boot enabled for compatible images and investigate signature failures through image and trust-chain checks.">Obtain the ISO and writer from official sources. Keep unattended-installation passwords off shared media. Leave Secure Boot enabled for compatible images and investigate signature failures through image and trust-chain checks.</p></section>
-<section id="enterprise-installation" class="article-section"><h2 data-fa="بررسی ISO و ساخت فلش با Rufus" data-en="Verify the ISO and write it with Rufus">Verify the ISO and write it with Rufus</h2><p data-fa="ISO و Checksum را از کانال رسمی بگیرید. مسیر IsoPath در فرمان زیر نمونه است. آن را با مسیر فایل موجود خود جایگزین کنید. فرمان‌ها فقط Hash و مشخصات دیسک را می‌خوانند." data-en="Obtain the ISO and checksum through official channels. Replace the sample IsoPath with your existing file. These commands read hashes and disk identity only.">Obtain the ISO and checksum through official channels. Replace the sample IsoPath with your existing file. These commands read hashes and disk identity only.</p>
-<pre dir="ltr"><code class="language-powershell">$IsoPath = &#x27;C:\InstallMedia\ubuntu-24.04-live-server-amd64.iso&#x27;
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="USB بوتیبل چه کاری انجام می‌دهد؟"
+                      data-en="What bootable media provides"
+                    >
+                      What bootable media provides
+                    </h2>
+                    <p
+                      data-fa="USB بوتیبل سیستم را به محیط نصب یا بازیابی می‌برد. برای ساخت آن، فایل ISO معتبر، فلش مناسب و تنظیم سازگار با Firmware مقصد لازم است. کپی‌کردن فایل ISO روی فلش معمولی آن را بوتیبل نمی‌کند."
+                      data-en="A bootable USB starts an installer or recovery environment. It needs a trusted ISO, suitable media and settings that match the target firmware. Copying an ISO file onto an ordinary USB does not make it bootable."
+                    >
+                      A bootable USB starts an installer or recovery
+                      environment. It needs a trusted ISO, suitable media and
+                      settings that match the target firmware. Copying an ISO
+                      file onto an ordinary USB does not make it bootable.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="ISO، UEFI و نوع رسانه"
+                      data-en="ISO, UEFI and media layout"
+                    >
+                      ISO, UEFI and media layout
+                    </h2>
+                    <p
+                      data-fa="Checksum معتبر کمک می‌کند فایل دانلودشده را با فایل ناشر مقایسه کنید. سپس ابزار نوشتن، ساختار قابل بوت را می‌سازد و UEFI یا BIOS آن را بارگذاری می‌کند. رسانه نصب ابزار راه‌اندازی است. داده برنامه، کلید رمزنگاری و Backup باید جدا در دسترس باشند."
+                      data-en="A trusted checksum compares the download with the publisher’s file. The writer then builds bootable media for UEFI or BIOS to load. Installation media supplies startup tools. Application data, encryption keys and backups must be available separately."
+                    >
+                      A trusted checksum compares the download with the
+                      publisher’s file. The writer then builds bootable media
+                      for UEFI or BIOS to load. Installation media supplies
+                      startup tools. Application data, encryption keys and
+                      backups must be available separately.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: آماده‌سازی رسانه بازیابی"
+                      data-en="Example: prepare recovery media"
+                    >
+                      Example: prepare recovery media
+                    </h3>
+                    <p
+                      data-fa="برای سرور جایگزین، فلش را پیش از حادثه آماده کنید. نام سیستم‌عامل، نسخه ISO و تاریخ آخرین آزمون بوت را روی برچسب بنویسید. Hash فایل را در کنار سابقه دانلود نگه دارید تا بعداً همان رسانه را بازسازی کنید."
+                      data-en="Prepare media before a replacement server is needed. Label it with the operating system, ISO version and last boot-test date. Keep the image hash with the download record so the media is reproducible."
+                    >
+                      Prepare media before a replacement server is needed. Label
+                      it with the operating system, ISO version and last
+                      boot-test date. Keep the image hash with the download
+                      record so the media is reproducible.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="قبل از نوشتن روی فلش"
+                      data-en="Before writing the USB"
+                    >
+                      Before writing the USB
+                    </h2>
+                    <p
+                      data-fa="ISO را از وب‌سایت رسمی Ubuntu یا Microsoft بگیرید. این مثال برای Ubuntu 24.04 LTS و Windows Server 2022/2025 است. Media Creation Tool ویندوز دسکتاپ، ابزار دریافت ISO سرور نیست."
+                      data-en="Download the ISO from Ubuntu or Microsoft. This example covers Ubuntu 24.04 LTS and Windows Server 2022/2025. The desktop Windows Media Creation Tool is not a Server ISO download tool."
+                    >
+                      Download the ISO from Ubuntu or Microsoft. This example
+                      covers Ubuntu 24.04 LTS and Windows Server 2022/2025. The
+                      desktop Windows Media Creation Tool is not a Server ISO
+                      download tool.
+                    </p>
+                    <p
+                      data-fa="ظرفیت فلش باید برای روش نوشتن و اندازه Image کافی باشد. فلش ۱۶ GiB برای بسیاری از Imageها مناسب است، اما اندازه فایل را بررسی کنید. مدل Storage Controller و NIC سرور نیز باید با سیستم‌عامل سازگار باشد."
+                      data-en="Choose capacity for the image and writing method. A 16 GiB USB suits many images, but check the actual size. Confirm operating-system support for the target storage controller and NIC."
+                    >
+                      Choose capacity for the image and writing method. A 16 GiB
+                      USB suits many images, but check the actual size. Confirm
+                      operating-system support for the target storage controller
+                      and NIC.
+                    </p>
+                    <p
+                      data-fa="Rufus را از منبع رسمی روی Windows اجرا کنید. از داده‌های فلش نسخه دیگری داشته باشید و شماره دیسک، ظرفیت و Serial مقصد را بررسی کنید. نوشتن Image تمام داده‌های فلش انتخاب‌شده را پاک می‌کند."
+                      data-en="Run an official Rufus build on Windows. Preserve any USB data elsewhere, then check the target disk number, size and serial. Writing the image erases the selected USB."
+                    >
+                      Run an official Rufus build on Windows. Preserve any USB
+                      data elsewhere, then check the target disk number, size
+                      and serial. Writing the image erases the selected USB.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="سازگاری با BIOS قدیمی"
+                      data-en="Legacy BIOS compatibility"
+                    >
+                      Legacy BIOS compatibility
+                    </h3>
+                    <p
+                      data-fa="برای دستگاهی که فقط Legacy BIOS دارد، تنظیم سازگار همان دستگاه را انتخاب کنید. GPT یا MBR را صرفاً بر اساس نام سیستم‌عامل انتخاب نکنید. Firmware مقصد و روش پیشنهادی Image تعیین‌کننده‌اند."
+                      data-en="For a Legacy BIOS machine, select its compatible layout. Do not choose GPT or MBR solely from the operating-system name. Target firmware and the image’s writing instructions determine the choice."
+                    >
+                      For a Legacy BIOS machine, select its compatible layout.
+                      Do not choose GPT or MBR solely from the operating-system
+                      name. Target firmware and the image’s writing instructions
+                      determine the choice.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="اعتماد به Image و حفاظت از کلیدها"
+                      data-en="Image trust and credential protection"
+                    >
+                      Image trust and credential protection
+                    </h2>
+                    <p
+                      data-fa="ISO و ابزار نوشتن را از منبع رسمی تهیه کنید. رمزها و Secretهای نصب خودکار را روی فلش مشترک نگذارید. Secure Boot را در صورت سازگاری فعال نگه دارید و خطای امضا را با بررسی Image و زنجیره اعتماد پیگیری کنید."
+                      data-en="Obtain the ISO and writer from official sources. Keep unattended-installation passwords off shared media. Leave Secure Boot enabled for compatible images and investigate signature failures through image and trust-chain checks."
+                    >
+                      Obtain the ISO and writer from official sources. Keep
+                      unattended-installation passwords off shared media. Leave
+                      Secure Boot enabled for compatible images and investigate
+                      signature failures through image and trust-chain checks.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="بررسی ISO و ساخت فلش با Rufus"
+                      data-en="Verify the ISO and write it with Rufus"
+                    >
+                      Verify the ISO and write it with Rufus
+                    </h2>
+                    <p
+                      data-fa="ISO و Checksum را از کانال رسمی بگیرید. مسیر IsoPath در فرمان زیر نمونه است. آن را با مسیر فایل موجود خود جایگزین کنید. فرمان‌ها فقط Hash و مشخصات دیسک را می‌خوانند."
+                      data-en="Obtain the ISO and checksum through official channels. Replace the sample IsoPath with your existing file. These commands read hashes and disk identity only."
+                    >
+                      Obtain the ISO and checksum through official channels.
+                      Replace the sample IsoPath with your existing file. These
+                      commands read hashes and disk identity only.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-powershell">$IsoPath = &#x27;C:\InstallMedia\ubuntu-24.04-live-server-amd64.iso&#x27;
 Get-Item -LiteralPath $IsoPath -ErrorAction Stop | Select-Object Name,Length
 Get-FileHash -LiteralPath $IsoPath -Algorithm SHA256
 Get-Disk | Select-Object Number,FriendlyName,SerialNumber,BusType,Size</code></pre>
-<p data-fa="SHA256 باید دقیقاً با مقدار ناشر یکسان باشد. Hashی که خودتان تولید کرده‌اید برای تشخیص تغییر بعدی مفید است، اما اصالت دانلود را ثابت نمی‌کند." data-en="The SHA256 must match the publisher exactly. A hash you generate yourself detects later changes but does not authenticate the download.">The SHA256 must match the publisher exactly. A hash you generate yourself detects later changes but does not authenticate the download.</p>
-<p data-fa="در Rufus، فلش را با ظرفیت و Serial شناسایی کنید و ISO را انتخاب کنید. Firmware مقصد و روش پیشنهادی Distribution را بررسی کنید. برای UEFI معمولاً GPT مناسب است، اما ISO/DD را طبق راهنمای Image انتخاب کنید." data-en="Identify the USB by size/serial in Rufus and select the ISO. Check target firmware and distribution guidance. GPT generally suits UEFI, while ISO/DD mode follows the image’s instructions.">Identify the USB by size/serial in Rufus and select the ISO. Check target firmware and distribution guidance. GPT generally suits UEFI, while ISO/DD mode follows the image’s instructions.</p>
-<p data-fa="قبل از Start دوباره مقصد را بررسی کنید. داده‌های آن پاک می‌شود. پس از پایان و Eject، از Boot Menu موقت دستگاه آزمایشی فلش را انتخاب کنید." data-en="Recheck the target before Start because its data is erased. After writing/ejecting, select the USB from the test machine’s temporary boot menu.">Recheck the target before Start because its data is erased. After writing/ejecting, select the USB from the test machine’s temporary boot menu.</p>
-<p data-fa="Secure Boot را برای Image سازگار روشن نگه دارید. در Installer، شناسایی Storage و NIC را بررسی کنید و دسترسی Recovery به Backup آزمایشی را بسنجید. روی دیسک Production نصب نکنید." data-en="Keep Secure Boot enabled for compatible images. Check storage/NIC detection in the installer and recovery access to a test backup. Do not install onto production disks.">Keep Secure Boot enabled for compatible images. Check storage/NIC detection in the installer and recovery access to a test backup. Do not install onto production disks.</p></section>
-<section id="enterprise-monitoring" class="article-section"><h2 data-fa="آزمون بوت روی دستگاه مقصد" data-en="Boot-test the target hardware">Boot-test the target hardware</h2><p data-fa="از منوی موقت Boot، فلش را روی دستگاه آزمایشی هم‌مدل سرور مقصد اجرا کنید. رسیدن به Installer کافی نیست. شناسایی دیسک و کارت شبکه و دسترسی محیط Recovery به Backup آزمایشی را نیز بررسی کنید. نتیجه و تاریخ آزمون را ثبت کنید." data-en="Use the temporary boot menu on a test machine matching the target model. Reaching the installer is only the first check. Verify disk and NIC detection and recovery-environment access to a test backup. Record the result and date.">Use the temporary boot menu on a test machine matching the target model. Reaching the installer is only the first check. Verify disk and NIC detection and recovery-environment access to a test backup. Record the result and date.</p><h3 id="enterprise-practices" data-fa="خطاهای رایج در آزمون رسانه" data-en="Common media-test mistakes">Common media-test mistakes</h3><p data-fa="بوت موفق روی لپ‌تاپ، سازگاری با Storage سرور را ثابت نمی‌کند. آزمون را روی سخت‌افزار مشابه انجام دهید و در آزمون اولیه وارد مرحله نصب روی دیسک دارای داده نشوید." data-en="A successful laptop boot does not establish server-storage compatibility. Test equivalent hardware and stop before installing onto a data-bearing disk.">A successful laptop boot does not establish server-storage compatibility. Test equivalent hardware and stop before installing onto a data-bearing disk.</p></section>
-<section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="وقتی فلش بوت نمی‌شود" data-en="When the USB does not boot">When the USB does not boot</h2><p data-fa="اگر فلش در منوی Boot نیست، پورت دیگری را امتحان کنید و حالت UEFI/BIOS را با تنظیم Rufus تطبیق دهید. اگر Installer دیسک را نمی‌بیند، Driver کنترلر و حالت آن را بررسی کنید. دیسک را برای رفع مشکل شناسایی Format نکنید. خطای Secure Boot به بررسی امضا و سازگاری Image نیاز دارد. FAT32 فایل منفرد بزرگ‌تر از ۴ GiB را نمی‌پذیرد. برای Image ویندوز دارای فایل بزرگ، از روش سازگار ابزار نوشتن یا روش رسمی Microsoft استفاده کنید." data-en="If the USB is absent from the boot menu, try another port and match UEFI/BIOS mode to Rufus settings. If the installer misses storage, inspect controller drivers and mode rather than formatting disks. Secure Boot errors require image-signature and compatibility checks. FAT32 does not accept a single file larger than 4 GiB. Use a compatible writer workflow or Microsoft’s documented method for Windows images containing large files.">If the USB is absent from the boot menu, try another port and match UEFI/BIOS mode to Rufus settings. If the installer misses storage, inspect controller drivers and mode rather than formatting disks. Secure Boot errors require image-signature and compatibility checks. FAT32 does not accept a single file larger than 4 GiB. Use a compatible writer workflow or Microsoft’s documented method for Windows images containing large files.</p></section>
-<section id="enterprise-recovery" class="article-section"><h2 data-fa="بازسازی رسانه و آماده‌سازی Restore" data-en="Rebuild media and prepare restore">Rebuild media and prepare restore</h2><p data-fa="ISO، Checksum ناشر، نسخه ابزار و تنظیمات نوشتن را نگه دارید. با این اطلاعات فلش خراب را دوباره می‌سازید. برای بازیابی سرویس، دسترسی به Backup، کلید رمزنگاری و Driverهای لازم را پیش از حادثه از همان محیط Recovery آزمایش کنید." data-en="Retain the ISO, publisher checksum, writer version and settings to rebuild damaged media. Before an incident, use the recovery environment to test access to backups, encryption keys and required drivers.">Retain the ISO, publisher checksum, writer version and settings to rebuild damaged media. Before an incident, use the recovery environment to test access to backups, encryption keys and required drivers.</p></section>
-<section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</h2><h3 data-fa="آیا USB نصب همان backup سرور است؟" data-en="Is installation USB a server backup?">Is installation USB a server backup?</h3><p data-fa="خیر. فقط ابزار نصب یا recovery است و داده کاربردی جدا backup می‌شود." data-en="No. It supplies installation/recovery tools. Application data needs separate backup.">No. It supplies installation/recovery tools. Application data needs separate backup.</p><h3 data-fa="آیا باید Secure Boot را خاموش کرد؟" data-en="Must Secure Boot be disabled?">Must Secure Boot be disabled?</h3><p data-fa="فقط برای ناسازگاری مستند و تصمیم مجاز. در حالت سازگار فعال بماند." data-en="Only for a documented incompatibility and an approved decision. Keep it enabled when compatible.">Only for a documented incompatibility and an approved decision. Keep it enabled when compatible.</p></section>
-<section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">Official Sources</h2><ul><li><a href="https://documentation.ubuntu.com/desktop/en/24.04/how-to/create-a-bootable-usb-stick/" rel="noopener">Canonical: bootable USB</a></li><li><a href="https://rufus.ie/" rel="noopener">Rufus official</a></li><li><a href="https://learn.microsoft.com/en-us/windows-server/get-started/install-windows-server" rel="noopener">Microsoft: Windows Server installation</a></li></ul></section></div></article>
+                    <p
+                      data-fa="SHA256 باید دقیقاً با مقدار ناشر یکسان باشد. Hashی که خودتان تولید کرده‌اید برای تشخیص تغییر بعدی مفید است، اما اصالت دانلود را ثابت نمی‌کند."
+                      data-en="The SHA256 must match the publisher exactly. A hash you generate yourself detects later changes but does not authenticate the download."
+                    >
+                      The SHA256 must match the publisher exactly. A hash you
+                      generate yourself detects later changes but does not
+                      authenticate the download.
+                    </p>
+                    <p
+                      data-fa="در Rufus، فلش را با ظرفیت و Serial شناسایی کنید و ISO را انتخاب کنید. Firmware مقصد و روش پیشنهادی Distribution را بررسی کنید. برای UEFI معمولاً GPT مناسب است، اما ISO/DD را طبق راهنمای Image انتخاب کنید."
+                      data-en="Identify the USB by size/serial in Rufus and select the ISO. Check target firmware and distribution guidance. GPT generally suits UEFI, while ISO/DD mode follows the image’s instructions."
+                    >
+                      Identify the USB by size/serial in Rufus and select the
+                      ISO. Check target firmware and distribution guidance. GPT
+                      generally suits UEFI, while ISO/DD mode follows the
+                      image’s instructions.
+                    </p>
+                    <p
+                      data-fa="قبل از Start دوباره مقصد را بررسی کنید. داده‌های آن پاک می‌شود. پس از پایان و Eject، از Boot Menu موقت دستگاه آزمایشی فلش را انتخاب کنید."
+                      data-en="Recheck the target before Start because its data is erased. After writing/ejecting, select the USB from the test machine’s temporary boot menu."
+                    >
+                      Recheck the target before Start because its data is
+                      erased. After writing/ejecting, select the USB from the
+                      test machine’s temporary boot menu.
+                    </p>
+                    <p
+                      data-fa="Secure Boot را برای Image سازگار روشن نگه دارید. در Installer، شناسایی Storage و NIC را بررسی کنید و دسترسی Recovery به Backup آزمایشی را بسنجید. روی دیسک Production نصب نکنید."
+                      data-en="Keep Secure Boot enabled for compatible images. Check storage/NIC detection in the installer and recovery access to a test backup. Do not install onto production disks."
+                    >
+                      Keep Secure Boot enabled for compatible images. Check
+                      storage/NIC detection in the installer and recovery access
+                      to a test backup. Do not install onto production disks.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="آزمون بوت روی دستگاه مقصد"
+                      data-en="Boot-test the target hardware"
+                    >
+                      Boot-test the target hardware
+                    </h2>
+                    <p
+                      data-fa="از منوی موقت Boot، فلش را روی دستگاه آزمایشی هم‌مدل سرور مقصد اجرا کنید. رسیدن به Installer کافی نیست. شناسایی دیسک و کارت شبکه و دسترسی محیط Recovery به Backup آزمایشی را نیز بررسی کنید. نتیجه و تاریخ آزمون را ثبت کنید."
+                      data-en="Use the temporary boot menu on a test machine matching the target model. Reaching the installer is only the first check. Verify disk and NIC detection and recovery-environment access to a test backup. Record the result and date."
+                    >
+                      Use the temporary boot menu on a test machine matching the
+                      target model. Reaching the installer is only the first
+                      check. Verify disk and NIC detection and
+                      recovery-environment access to a test backup. Record the
+                      result and date.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="خطاهای رایج در آزمون رسانه"
+                      data-en="Common media-test mistakes"
+                    >
+                      Common media-test mistakes
+                    </h3>
+                    <p
+                      data-fa="بوت موفق روی لپ‌تاپ، سازگاری با Storage سرور را ثابت نمی‌کند. آزمون را روی سخت‌افزار مشابه انجام دهید و در آزمون اولیه وارد مرحله نصب روی دیسک دارای داده نشوید."
+                      data-en="A successful laptop boot does not establish server-storage compatibility. Test equivalent hardware and stop before installing onto a data-bearing disk."
+                    >
+                      A successful laptop boot does not establish server-storage
+                      compatibility. Test equivalent hardware and stop before
+                      installing onto a data-bearing disk.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="وقتی فلش بوت نمی‌شود"
+                      data-en="When the USB does not boot"
+                    >
+                      When the USB does not boot
+                    </h2>
+                    <p
+                      data-fa="اگر فلش در منوی Boot نیست، پورت دیگری را امتحان کنید و حالت UEFI/BIOS را با تنظیم Rufus تطبیق دهید. اگر Installer دیسک را نمی‌بیند، Driver کنترلر و حالت آن را بررسی کنید. دیسک را برای رفع مشکل شناسایی Format نکنید. خطای Secure Boot به بررسی امضا و سازگاری Image نیاز دارد. FAT32 فایل منفرد بزرگ‌تر از ۴ GiB را نمی‌پذیرد. برای Image ویندوز دارای فایل بزرگ، از روش سازگار ابزار نوشتن یا روش رسمی Microsoft استفاده کنید."
+                      data-en="If the USB is absent from the boot menu, try another port and match UEFI/BIOS mode to Rufus settings. If the installer misses storage, inspect controller drivers and mode rather than formatting disks. Secure Boot errors require image-signature and compatibility checks. FAT32 does not accept a single file larger than 4 GiB. Use a compatible writer workflow or Microsoft’s documented method for Windows images containing large files."
+                    >
+                      If the USB is absent from the boot menu, try another port
+                      and match UEFI/BIOS mode to Rufus settings. If the
+                      installer misses storage, inspect controller drivers and
+                      mode rather than formatting disks. Secure Boot errors
+                      require image-signature and compatibility checks. FAT32
+                      does not accept a single file larger than 4 GiB. Use a
+                      compatible writer workflow or Microsoft’s documented
+                      method for Windows images containing large files.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="بازسازی رسانه و آماده‌سازی Restore"
+                      data-en="Rebuild media and prepare restore"
+                    >
+                      Rebuild media and prepare restore
+                    </h2>
+                    <p
+                      data-fa="ISO، Checksum ناشر، نسخه ابزار و تنظیمات نوشتن را نگه دارید. با این اطلاعات فلش خراب را دوباره می‌سازید. برای بازیابی سرویس، دسترسی به Backup، کلید رمزنگاری و Driverهای لازم را پیش از حادثه از همان محیط Recovery آزمایش کنید."
+                      data-en="Retain the ISO, publisher checksum, writer version and settings to rebuild damaged media. Before an incident, use the recovery environment to test access to backups, encryption keys and required drivers."
+                    >
+                      Retain the ISO, publisher checksum, writer version and
+                      settings to rebuild damaged media. Before an incident, use
+                      the recovery environment to test access to backups,
+                      encryption keys and required drivers.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا USB نصب همان backup سرور است؟"
+                      data-en="Is installation USB a server backup?"
+                    >
+                      Is installation USB a server backup?
+                    </h3>
+                    <p
+                      data-fa="خیر. فقط ابزار نصب یا recovery است و داده کاربردی جدا backup می‌شود."
+                      data-en="No. It supplies installation/recovery tools. Application data needs separate backup."
+                    >
+                      No. It supplies installation/recovery tools. Application
+                      data needs separate backup.
+                    </p>
+                    <h3
+                      data-fa="آیا باید Secure Boot را خاموش کرد؟"
+                      data-en="Must Secure Boot be disabled?"
+                    >
+                      Must Secure Boot be disabled?
+                    </h3>
+                    <p
+                      data-fa="فقط برای ناسازگاری مستند و تصمیم مجاز. در حالت سازگار فعال بماند."
+                      data-en="Only for a documented incompatibility and an approved decision. Keep it enabled when compatible."
+                    >
+                      Only for a documented incompatibility and an approved
+                      decision. Keep it enabled when compatible.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://documentation.ubuntu.com/desktop/en/24.04/how-to/create-a-bootable-usb-stick/"
+                          rel="noopener"
+                          >Canonical: bootable USB</a
+                        >
+                      </li>
+                      <li>
+                        <a href="https://rufus.ie/" rel="noopener"
+                          >Rufus official</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://learn.microsoft.com/en-us/windows-server/get-started/install-windows-server"
+                          rel="noopener"
+                          >Microsoft: Windows Server installation</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
+              </article>
             </div>
           </div>
         </div>
@@ -346,18 +813,24 @@ Get-Disk | Select-Object Number,FriendlyName,SerialNumber,BusType,Size</code></p
             <div class="footer-brand">
               <h3 class="brand-name">
                 <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
-                  >AmirHossein Jalalian</span>
+                  >AmirHossein Jalalian</span
+                >
               </h3>
               <p
                 class="brand-title"
                 data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
-              >Infrastructure &amp; DevOps Engineer</p>
+              >
+                Infrastructure &amp; DevOps Engineer
+              </p>
               <p
                 class="brand-description"
                 data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
                 data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-              >Delivering reliable, secure, and scalable IT solutions for your business success.</p>
+              >
+                Delivering reliable, secure, and scalable IT solutions for your
+                business success.
+              </p>
             </div>
 
             <!-- Contact Info -->
@@ -366,12 +839,15 @@ Get-Disk | Select-Object Number,FriendlyName,SerialNumber,BusType,Size</code></p
                 class="contact-title"
                 data-en="Get In Touch"
                 data-fa="تماس با من"
-              >Get In Touch</h4>
+              >
+                Get In Touch
+              </h4>
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>
                   <span data-en="Tehran, Iran" data-fa="تهران، ایران"
-                    >Tehran, Iran</span>
+                    >Tehran, Iran</span
+                  >
                 </div>
                 <div class="contact-item">
                   <i class="bi bi-telephone"></i>
@@ -396,7 +872,9 @@ Get-Disk | Select-Object Number,FriendlyName,SerialNumber,BusType,Size</code></p
                   class="social-title"
                   data-en="Follow Me"
                   data-fa="دنبال کنید"
-                >Follow Me</h5>
+                >
+                  Follow Me
+                </h5>
                 <div class="social-icons">
                   <a
                     href="https://wa.me/989197276219"
@@ -442,12 +920,14 @@ Get-Disk | Select-Object Number,FriendlyName,SerialNumber,BusType,Size</code></p
                   <span
                     data-en="All Rights Reserved"
                     data-fa="تمام حقوق محفوظ است"
-                    >All Rights Reserved</span>
+                    >All Rights Reserved</span
+                  >
                 </p>
               </div>
               <div class="footer-heart">
                 <span data-en="Made with" data-fa="ساخته شده با"
-                  >Made with</span>
+                  >Made with</span
+                >
                 <i class="bi bi-heart-fill"></i>
                 <span data-en="in Iran" data-fa="در ایران">in Iran</span>
               </div>

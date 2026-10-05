@@ -4,7 +4,10 @@
     <title>IMAP vs POP3: Synchronization and Client Setup | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Compare IMAP and POP3, check TLS and OAuth, and diagnose retrieval separately from SMTP sending." />
+    <meta
+      name="description"
+      content="Compare IMAP and POP3, check TLS and OAuth, and diagnose retrieval separately from SMTP sending."
+    />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <link
@@ -12,9 +15,18 @@
       href="https://meetaj.ir/articles/imap-vs-pop3-email-protocol-comparison"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="IMAP vs POP3: Synchronization and Client Setup" />
-    <meta property="og:description" content="Compare IMAP and POP3, check TLS and OAuth, and diagnose retrieval separately from SMTP sending." />
-    <meta property="og:url" content="https://meetaj.ir/articles/imap-vs-pop3-email-protocol-comparison" />
+    <meta
+      property="og:title"
+      content="IMAP vs POP3: Synchronization and Client Setup"
+    />
+    <meta
+      property="og:description"
+      content="Compare IMAP and POP3, check TLS and OAuth, and diagnose retrieval separately from SMTP sending."
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/imap-vs-pop3-email-protocol-comparison"
+    />
     <meta property="og:site_name" content="Meet AJ" />
     <meta name="twitter:card" content="summary" />
     <link href="../assets/img/favicon.png" rel="icon" />
@@ -51,12 +63,95 @@
       rel="stylesheet"
       disabled
     />
-  <meta name="keywords" content="IMAP vs POP3: Synchronization, Retention and Protocol Selection, imap vs pop3 email protocol comparison, infrastructure operations, production operations, troubleshooting" />
-<meta name="article:content-language" content="en" />
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "IMAP vs POP3: Synchronization and Client Setup", "description": "Compare IMAP and POP3, check TLS and OAuth, and diagnose retrieval separately from SMTP sending.", "inLanguage": "en", "url": "https://meetaj.ir/articles/imap-vs-pop3-email-protocol-comparison", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}, "mainEntityOfPage": "https://meetaj.ir/articles/imap-vs-pop3-email-protocol-comparison"}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is IMAP an email backup?", "acceptedAnswer": {"@type": "Answer", "text": "No. Deletions synchronize. Backup and retention must be independent."}}, {"@type": "Question", "name": "Does working retrieval prove sending works?", "acceptedAnswer": {"@type": "Answer", "text": "No. SMTP submission has a separate path and authentication."}}], "inLanguage": "en"}</script>
-<script id="article-localizations" type="application/json">{"fa": {"title": "تفاوت IMAP و POP3 و انتخاب تنظیم ایمیل", "meta_title": "تفاوت IMAP و POP3 و انتخاب تنظیم ایمیل | Meet AJ", "description": "مقایسه IMAP و POP3، بررسی TLS و OAuth و تشخیص مشکل دریافت و ارسال ایمیل.", "keywords": ["تفاوت IMAP و POP3 و انتخاب تنظیم ایمیل", "عیب‌یابی", "بازیابی", "imap vs pop3 email protocol comparison"], "faq": [["آیا IMAP backup ایمیل است؟", "خیر. حذف همگام می‌شود و retention/backup مستقل لازم است."], ["آیا دریافت سالم یعنی ارسال سالم است؟", "خیر. SMTP submission مسیر و authentication جدا دارد."]]}, "en": {"title": "IMAP vs POP3: Synchronization and Client Setup", "meta_title": "IMAP vs POP3: Synchronization and Client Setup | Meet AJ", "description": "Compare IMAP and POP3, check TLS and OAuth, and diagnose retrieval separately from SMTP sending.", "keywords": ["IMAP vs POP3: Synchronization and Client Setup", "imap vs pop3 email protocol comparison", "troubleshooting"], "faq": [["Is IMAP an email backup?", "No. Deletions synchronize. Backup and retention must be independent."], ["Does working retrieval prove sending works?", "No. SMTP submission has a separate path and authentication."]]}}</script>
-</head>
+    <meta
+      name="keywords"
+      content="IMAP vs POP3: Synchronization, Retention and Protocol Selection, imap vs pop3 email protocol comparison, infrastructure operations, production operations, troubleshooting"
+    />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "IMAP vs POP3: Synchronization and Client Setup",
+        "description": "Compare IMAP and POP3, check TLS and OAuth, and diagnose retrieval separately from SMTP sending.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/imap-vs-pop3-email-protocol-comparison",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/imap-vs-pop3-email-protocol-comparison"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is IMAP an email backup?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Deletions synchronize. Backup and retention must be independent."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does working retrieval prove sending works?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. SMTP submission has a separate path and authentication."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "تفاوت IMAP و POP3 و انتخاب تنظیم ایمیل",
+          "meta_title": "تفاوت IMAP و POP3 و انتخاب تنظیم ایمیل | Meet AJ",
+          "description": "مقایسه IMAP و POP3، بررسی TLS و OAuth و تشخیص مشکل دریافت و ارسال ایمیل.",
+          "keywords": [
+            "تفاوت IMAP و POP3 و انتخاب تنظیم ایمیل",
+            "عیب‌یابی",
+            "بازیابی",
+            "imap vs pop3 email protocol comparison"
+          ],
+          "faq": [
+            [
+              "آیا IMAP backup ایمیل است؟",
+              "خیر. حذف همگام می‌شود و retention/backup مستقل لازم است."
+            ],
+            [
+              "آیا دریافت سالم یعنی ارسال سالم است؟",
+              "خیر. SMTP submission مسیر و authentication جدا دارد."
+            ]
+          ]
+        },
+        "en": {
+          "title": "IMAP vs POP3: Synchronization and Client Setup",
+          "meta_title": "IMAP vs POP3: Synchronization and Client Setup | Meet AJ",
+          "description": "Compare IMAP and POP3, check TLS and OAuth, and diagnose retrieval separately from SMTP sending.",
+          "keywords": [
+            "IMAP vs POP3: Synchronization and Client Setup",
+            "imap vs pop3 email protocol comparison",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Is IMAP an email backup?",
+              "No. Deletions synchronize. Backup and retention must be independent."
+            ],
+            [
+              "Does working retrieval prove sending works?",
+              "No. SMTP submission has a separate path and authentication."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
   <body class="article-page theme-security">
     <button
       id="menu-toggle"
@@ -205,29 +300,103 @@
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
-          <li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="پیام روی سرور می‌ماند یا دانلود می‌شود؟" data-en="Server mailbox or downloaded messages?">Server mailbox or downloaded messages?</span></a></li>
-<li class="article-nav-item"><a href="#mail-protocol-comparison"><span data-fa="جدول مقایسه IMAP و POP3" data-en="IMAP vs POP3 Comparison">IMAP vs POP3 Comparison</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="دریافت، ارسال و احراز هویت" data-en="Retrieval, sending and authentication">Retrieval, sending and authentication</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="اطلاعات Provider و مجوز پروتکل" data-en="Provider settings and protocol access">Provider settings and protocol access</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="تنظیم کلاینت و آزمون TLS" data-en="Configure the client and test TLS">Configure the client and test TLS</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="تفکیک مشکل دریافت و ارسال" data-en="Separate retrieval and sending failures">Separate retrieval and sending failures</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-security"><span data-fa="TLS و روش ورود پشتیبانی‌شده" data-en="TLS and supported authentication">TLS and supported authentication</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="سلامت Sync و Quota" data-en="Synchronization health and quota">Synchronization health and quota</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="Backup پیام و مهاجرت کلاینت" data-en="Message backups and client migration">Message backups and client migration</span></a></li>
-<li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">Official Sources</span></a></li>
-
-
-
-
-
-
-
-
-
-
-
-
+          <li class="article-nav-item">
+            <a href="#enterprise-intro"
+              ><span
+                data-fa="پیام روی سرور می‌ماند یا دانلود می‌شود؟"
+                data-en="Server mailbox or downloaded messages?"
+                >Server mailbox or downloaded messages?</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#mail-protocol-comparison"
+              ><span
+                data-fa="جدول مقایسه IMAP و POP3"
+                data-en="IMAP vs POP3 Comparison"
+                >IMAP vs POP3 Comparison</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="دریافت، ارسال و احراز هویت"
+                data-en="Retrieval, sending and authentication"
+                >Retrieval, sending and authentication</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="اطلاعات Provider و مجوز پروتکل"
+                data-en="Provider settings and protocol access"
+                >Provider settings and protocol access</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="تنظیم کلاینت و آزمون TLS"
+                data-en="Configure the client and test TLS"
+                >Configure the client and test TLS</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="تفکیک مشکل دریافت و ارسال"
+                data-en="Separate retrieval and sending failures"
+                >Separate retrieval and sending failures</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-security"
+              ><span
+                data-fa="TLS و روش ورود پشتیبانی‌شده"
+                data-en="TLS and supported authentication"
+                >TLS and supported authentication</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="سلامت Sync و Quota"
+                data-en="Synchronization health and quota"
+                >Synchronization health and quota</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="Backup پیام و مهاجرت کلاینت"
+                data-en="Message backups and client migration"
+                >Message backups and client migration</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#faq"
+              ><span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
+              ></a
+            >
+          </li>
         </ul>
       </nav>
       <button
@@ -248,23 +417,30 @@
             <div class="col-lg-10 mx-auto">
               <div class="article-meta">
                 <span class="article-category" data-en="Other" data-fa="سایر"
-                  >Other</span><span class="meta-date"
+                  >Other</span
+                ><span class="meta-date"
                   ><span class="article-date" data-en="Article" data-fa="مقاله"
-                    >Article</span><time datetime="" data-en="Other" data-fa="سایر"
+                    >Article</span
+                  ><time datetime="" data-en="Other" data-fa="سایر"
                     >Other</time
                   ></span
                 >
               </div>
               <h1
                 class="article-title hero-title"
-
-
-               data-fa="تفاوت IMAP و POP3 و انتخاب تنظیم ایمیل" data-en="IMAP vs POP3: Synchronization and Client Setup">IMAP vs POP3: Synchronization and Client Setup</h1>
+                data-fa="تفاوت IMAP و POP3 و انتخاب تنظیم ایمیل"
+                data-en="IMAP vs POP3: Synchronization and Client Setup"
+              >
+                IMAP vs POP3: Synchronization and Client Setup
+              </h1>
               <p
                 class="article-excerpt hero-subtitle"
-
-
-               data-fa="مقایسه IMAP و POP3، بررسی TLS و OAuth و تشخیص مشکل دریافت و ارسال ایمیل." data-en="Compare IMAP and POP3, check TLS and OAuth, and diagnose retrieval separately from SMTP sending.">Compare IMAP and POP3, check TLS and OAuth, and diagnose retrieval separately from SMTP sending.</p>
+                data-fa="مقایسه IMAP و POP3، بررسی TLS و OAuth و تشخیص مشکل دریافت و ارسال ایمیل."
+                data-en="Compare IMAP and POP3, check TLS and OAuth, and diagnose retrieval separately from SMTP sending."
+              >
+                Compare IMAP and POP3, check TLS and OAuth, and diagnose
+                retrieval separately from SMTP sending.
+              </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -273,12 +449,16 @@
                     alt="IMAP vs POP3: Email Protocol Comparison"
                   />
                   <div class="banner-content">
-                    <h2 class="banner-title" data-en="Other" data-fa="سایر">Other</h2>
+                    <h2 class="banner-title" data-en="Other" data-fa="سایر">
+                      Other
+                    </h2>
                     <p
                       class="banner-subtitle"
                       data-en="Meet AJ technical article"
                       data-fa="مقاله فنی Meet AJ"
-                    >Meet AJ technical article</p>
+                    >
+                      Meet AJ technical article
+                    </p>
                   </div>
                 </div>
               </div>
@@ -289,7 +469,8 @@
                   ><span class="btn-content"
                     ><i class="bi bi-play-circle" aria-hidden="true"></i
                     ><span data-en="Start reading" data-fa="شروع مطالعه"
-                      >Start reading</span></span
+                      >Start reading</span
+                    ></span
                   ></a
                 >
               </div>
@@ -310,28 +491,443 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="en" dir="ltr"><section id="enterprise-intro" class="article-section"><h2 data-fa="پیام روی سرور می‌ماند یا دانلود می‌شود؟" data-en="Server mailbox or downloaded messages?">Server mailbox or downloaded messages?</h2><p data-fa="IMAP برای کار با Mailbox و Folderهای سرور طراحی شده است. POP3 پیام‌ها را از Maildrop دریافت می‌کند و نگهداری نسخه سرور به تنظیم کلاینت وابسته است. برای چند دستگاه، تفاوت مهم در همگام‌سازی وضعیت پیام‌هاست. هیچ‌کدام جای Backup را نمی‌گیرد." data-en="IMAP works with server mailboxes and folders. POP3 retrieves messages from a maildrop, with server retention affected by client settings. For multiple devices, message-state synchronization is the key difference. Neither replaces backups.">IMAP works with server mailboxes and folders. POP3 retrieves messages from a maildrop, with server retention affected by client settings. For multiple devices, message-state synchronization is the key difference. Neither replaces backups.</p></section>
-<section id="mail-protocol-comparison" class="article-section"><h2 data-fa="جدول مقایسه IMAP و POP3" data-en="IMAP vs POP3 Comparison">IMAP vs POP3 Comparison</h2><div class="table-responsive"><table class="table"><thead><tr><th data-fa="معیار" data-en="Criterion">Criterion</th><th data-fa="IMAP" data-en="IMAP">IMAP</th><th data-fa="POP3" data-en="POP3">POP3</th></tr></thead><tbody><tr><td data-fa="مدل دسترسی" data-en="Access model">Access model</td><td data-fa="کار با Mailbox و Folder روی سرور" data-en="Works with server mailboxes and folders">Works with server mailboxes and folders</td><td data-fa="دریافت پیام از Maildrop" data-en="Retrieves messages from a maildrop">Retrieves messages from a maildrop</td></tr><tr><td data-fa="چند دستگاه" data-en="Multiple devices">Multiple devices</td><td data-fa="Folder و وضعیت پیام همگام می‌شود" data-en="Synchronizes folders and message state">Synchronizes folders and message state</td><td data-fa="همگام‌سازی Folder و وضعیت خواندن ندارد" data-en="No folder or read-state synchronization">No folder or read-state synchronization</td></tr><tr><td data-fa="حذف و نگهداری" data-en="Deletion and retention">Deletion and retention</td><td data-fa="حذف می‌تواند روی همه Clientها دیده شود" data-en="Deletion can propagate to other clients">Deletion can propagate to other clients</td><td data-fa="حفظ نسخه سرور به تنظیم Client و Policy وابسته است" data-en="Server-copy retention depends on client settings and policy">Server-copy retention depends on client settings and policy</td></tr><tr><td data-fa="TLS ضمنی" data-en="Implicit TLS">Implicit TLS</td><td data-fa="معمولاً TCP/993" data-en="Typically TCP/993">Typically TCP/993</td><td data-fa="معمولاً TCP/995" data-en="Typically TCP/995">Typically TCP/995</td></tr><tr><td data-fa="ارسال ایمیل" data-en="Sending mail">Sending mail</td><td data-fa="SMTP سرویس جداگانه است" data-en="SMTP is a separate service">SMTP is a separate service</td><td data-fa="SMTP سرویس جداگانه است" data-en="SMTP is a separate service">SMTP is a separate service</td></tr></tbody></table></div><p data-fa="IMAP معمولاً برای کاربر چند دستگاه مناسب‌تر است. POP3 ممکن است برای Workflow قدیمی دریافت پیام لازم باشد. هیچ‌کدام به‌تنهایی Backup نیستند. پشتیبانی OAuth و محدودیت Authentication را برای Provider واقعی بررسی کنید. انتخاب پروتکل به معنی فعال بودن Basic Authentication نیست." data-en="IMAP generally fits multi-device users. A legacy retrieval workflow may still require POP3. Neither protocol is a backup strategy. Check OAuth support and authentication restrictions for the actual provider. Selecting a protocol does not imply that Basic Authentication is available.">IMAP generally fits multi-device users. A legacy retrieval workflow may still require POP3. Neither protocol is a backup strategy. Check OAuth support and authentication restrictions for the actual provider. Selecting a protocol does not imply that Basic Authentication is available.</p></section>
-<section id="enterprise-architecture" class="article-section"><h2 data-fa="دریافت، ارسال و احراز هویت" data-en="Retrieval, sending and authentication">Retrieval, sending and authentication</h2><p data-fa="IMAP و POP3 مسیر دریافت‌اند. SMTP Submission مسیر ارسال است و تنظیم احراز هویت خود را دارد. TLS انتقال را محافظت می‌کند و OAuth دسترسی هویتی را کنترل می‌کند. TLS موفق، مجوز ورود یا ارسال را ثابت نمی‌کند." data-en="IMAP and POP3 handle retrieval. SMTP submission handles sending with its own authentication. TLS protects transport, while OAuth manages identity access. Working TLS proves neither login nor submission permission.">IMAP and POP3 handle retrieval. SMTP submission handles sending with its own authentication. TLS protects transport, while OAuth manages identity access. Working TLS proves neither login nor submission permission.</p><h3 id="enterprise-scenario" data-fa="مثال: موبایل و دسکتاپ یک کاربر" data-en="Example: one user on mobile and desktop">Example: one user on mobile and desktop</h3><p data-fa="برای Folder و وضعیت خواندن مشترک، IMAP یا کلاینت رسمی Provider مناسب‌تر است. پیش از مهاجرت از POP3، پیام‌های فقط محلی را Export کنید و رفتار حذف را با Mailbox آزمایشی بسنجید." data-en="For shared folders and read state, prefer IMAP or the provider’s native client. Before migrating from POP3, export local-only messages and test deletion behavior with a dedicated mailbox.">For shared folders and read state, prefer IMAP or the provider’s native client. Before migrating from POP3, export local-only messages and test deletion behavior with a dedicated mailbox.</p></section>
-<section id="enterprise-prerequisites" class="article-section"><h2 data-fa="اطلاعات Provider و مجوز پروتکل" data-en="Provider settings and protocol access">Provider settings and protocol access</h2><p data-fa="کلاینت باید روش احراز هویت Provider را پشتیبانی کند. در Exchange Online، OAuth و Policy فعال‌سازی پروتکل را بررسی کنید. تنظیمات Cloud را به Exchange داخلی تعمیم ندهید." data-en="Check provider-compatible authentication, OAuth and protocol enablement for Exchange Online. Do not transfer cloud assumptions to on-premises Exchange.">Check provider-compatible authentication, OAuth and protocol enablement for Exchange Online. Do not transfer cloud assumptions to on-premises Exchange.</p>
-<p data-fa="Quota، Cache محلی و Archive را با نیاز نگهداری پیام تعیین کنید. انتخاب پروتکل دریافت به نصب Mail Server یا VM جدید نیاز ندارد." data-en="Size quota, local cache and archives for retention. Choosing a retrieval protocol requires no new mail server or VM.">Size quota, local cache and archives for retention. Choosing a retrieval protocol requires no new mail server or VM.</p>
-<p data-fa="Hostname، پورت و روش TLS را از مدیر ایمیل بگیرید. TLS ضمنی معمولاً از 993 برای IMAP و 995 برای POP3 استفاده می‌کند. تنظیم SMTP برای ارسال جداست." data-en="Obtain hostnames, ports and TLS settings from mail administration. Implicit TLS commonly uses IMAP 993 and POP3 995. Sending needs separate SMTP settings.">Obtain hostnames, ports and TLS settings from mail administration. Implicit TLS commonly uses IMAP 993 and POP3 995. Sending needs separate SMTP settings.</p><h3 id="enterprise-compatibility" data-fa="باورهای اشتباه درباره POP3" data-en="Common POP3 assumptions">Common POP3 assumptions</h3><p data-fa="POP3 الزاماً پیام را پس از دریافت حذف نمی‌کند. تنظیم کلاینت و سرور تعیین‌کننده است. نگه‌داشتن پیام روی سرور نیز بازیابی نسخه حذف‌شده را تضمین نمی‌کند." data-en="POP3 does not invariably delete retrieved messages. Client and server settings determine retention. Keeping a server copy still does not guarantee deleted-version recovery.">POP3 does not invariably delete retrieved messages. Client and server settings determine retention. Keeping a server copy still does not guarantee deleted-version recovery.</p></section>
-<section id="enterprise-installation" class="article-section"><h2 data-fa="تنظیم کلاینت و آزمون TLS" data-en="Configure the client and test TLS">Configure the client and test TLS</h2><p data-fa="فعال‌بودن پروتکل را برای Tenant و Mailbox هدف بررسی کنید. فعال‌سازی سراسری لازم نیست. Provider ممکن است Basic Authentication را نپذیرد." data-en="Check protocol enablement for the target tenant/mailbox. Fleet-wide enablement is unnecessary. The provider might reject Basic authentication.">Check protocol enablement for the target tenant/mailbox. Fleet-wide enablement is unnecessary. The provider might reject Basic authentication.</p>
-<p data-fa="mail.example.com نام نمونه است. نام واقعی را از Provider بگیرید و پیش از ارسال Credential، Chain و Hostname را بسنجید." data-en="Replace mail.example.com with the provider hostname. Verify chain/name before transmitting credentials.">Replace mail.example.com with the provider hostname. Verify chain/name before transmitting credentials.</p>
-<pre dir="ltr"><code class="language-bash">MAILHOST=&#x27;mail.example.com&#x27;
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="پیام روی سرور می‌ماند یا دانلود می‌شود؟"
+                      data-en="Server mailbox or downloaded messages?"
+                    >
+                      Server mailbox or downloaded messages?
+                    </h2>
+                    <p
+                      data-fa="IMAP برای کار با Mailbox و Folderهای سرور طراحی شده است. POP3 پیام‌ها را از Maildrop دریافت می‌کند و نگهداری نسخه سرور به تنظیم کلاینت وابسته است. برای چند دستگاه، تفاوت مهم در همگام‌سازی وضعیت پیام‌هاست. هیچ‌کدام جای Backup را نمی‌گیرد."
+                      data-en="IMAP works with server mailboxes and folders. POP3 retrieves messages from a maildrop, with server retention affected by client settings. For multiple devices, message-state synchronization is the key difference. Neither replaces backups."
+                    >
+                      IMAP works with server mailboxes and folders. POP3
+                      retrieves messages from a maildrop, with server retention
+                      affected by client settings. For multiple devices,
+                      message-state synchronization is the key difference.
+                      Neither replaces backups.
+                    </p>
+                  </section>
+                  <section
+                    id="mail-protocol-comparison"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="جدول مقایسه IMAP و POP3"
+                      data-en="IMAP vs POP3 Comparison"
+                    >
+                      IMAP vs POP3 Comparison
+                    </h2>
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th data-fa="معیار" data-en="Criterion">
+                              Criterion
+                            </th>
+                            <th data-fa="IMAP" data-en="IMAP">IMAP</th>
+                            <th data-fa="POP3" data-en="POP3">POP3</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td data-fa="مدل دسترسی" data-en="Access model">
+                              Access model
+                            </td>
+                            <td
+                              data-fa="کار با Mailbox و Folder روی سرور"
+                              data-en="Works with server mailboxes and folders"
+                            >
+                              Works with server mailboxes and folders
+                            </td>
+                            <td
+                              data-fa="دریافت پیام از Maildrop"
+                              data-en="Retrieves messages from a maildrop"
+                            >
+                              Retrieves messages from a maildrop
+                            </td>
+                          </tr>
+                          <tr>
+                            <td data-fa="چند دستگاه" data-en="Multiple devices">
+                              Multiple devices
+                            </td>
+                            <td
+                              data-fa="Folder و وضعیت پیام همگام می‌شود"
+                              data-en="Synchronizes folders and message state"
+                            >
+                              Synchronizes folders and message state
+                            </td>
+                            <td
+                              data-fa="همگام‌سازی Folder و وضعیت خواندن ندارد"
+                              data-en="No folder or read-state synchronization"
+                            >
+                              No folder or read-state synchronization
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              data-fa="حذف و نگهداری"
+                              data-en="Deletion and retention"
+                            >
+                              Deletion and retention
+                            </td>
+                            <td
+                              data-fa="حذف می‌تواند روی همه Clientها دیده شود"
+                              data-en="Deletion can propagate to other clients"
+                            >
+                              Deletion can propagate to other clients
+                            </td>
+                            <td
+                              data-fa="حفظ نسخه سرور به تنظیم Client و Policy وابسته است"
+                              data-en="Server-copy retention depends on client settings and policy"
+                            >
+                              Server-copy retention depends on client settings
+                              and policy
+                            </td>
+                          </tr>
+                          <tr>
+                            <td data-fa="TLS ضمنی" data-en="Implicit TLS">
+                              Implicit TLS
+                            </td>
+                            <td
+                              data-fa="معمولاً TCP/993"
+                              data-en="Typically TCP/993"
+                            >
+                              Typically TCP/993
+                            </td>
+                            <td
+                              data-fa="معمولاً TCP/995"
+                              data-en="Typically TCP/995"
+                            >
+                              Typically TCP/995
+                            </td>
+                          </tr>
+                          <tr>
+                            <td data-fa="ارسال ایمیل" data-en="Sending mail">
+                              Sending mail
+                            </td>
+                            <td
+                              data-fa="SMTP سرویس جداگانه است"
+                              data-en="SMTP is a separate service"
+                            >
+                              SMTP is a separate service
+                            </td>
+                            <td
+                              data-fa="SMTP سرویس جداگانه است"
+                              data-en="SMTP is a separate service"
+                            >
+                              SMTP is a separate service
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <p
+                      data-fa="IMAP معمولاً برای کاربر چند دستگاه مناسب‌تر است. POP3 ممکن است برای Workflow قدیمی دریافت پیام لازم باشد. هیچ‌کدام به‌تنهایی Backup نیستند. پشتیبانی OAuth و محدودیت Authentication را برای Provider واقعی بررسی کنید. انتخاب پروتکل به معنی فعال بودن Basic Authentication نیست."
+                      data-en="IMAP generally fits multi-device users. A legacy retrieval workflow may still require POP3. Neither protocol is a backup strategy. Check OAuth support and authentication restrictions for the actual provider. Selecting a protocol does not imply that Basic Authentication is available."
+                    >
+                      IMAP generally fits multi-device users. A legacy retrieval
+                      workflow may still require POP3. Neither protocol is a
+                      backup strategy. Check OAuth support and authentication
+                      restrictions for the actual provider. Selecting a protocol
+                      does not imply that Basic Authentication is available.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="دریافت، ارسال و احراز هویت"
+                      data-en="Retrieval, sending and authentication"
+                    >
+                      Retrieval, sending and authentication
+                    </h2>
+                    <p
+                      data-fa="IMAP و POP3 مسیر دریافت‌اند. SMTP Submission مسیر ارسال است و تنظیم احراز هویت خود را دارد. TLS انتقال را محافظت می‌کند و OAuth دسترسی هویتی را کنترل می‌کند. TLS موفق، مجوز ورود یا ارسال را ثابت نمی‌کند."
+                      data-en="IMAP and POP3 handle retrieval. SMTP submission handles sending with its own authentication. TLS protects transport, while OAuth manages identity access. Working TLS proves neither login nor submission permission."
+                    >
+                      IMAP and POP3 handle retrieval. SMTP submission handles
+                      sending with its own authentication. TLS protects
+                      transport, while OAuth manages identity access. Working
+                      TLS proves neither login nor submission permission.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: موبایل و دسکتاپ یک کاربر"
+                      data-en="Example: one user on mobile and desktop"
+                    >
+                      Example: one user on mobile and desktop
+                    </h3>
+                    <p
+                      data-fa="برای Folder و وضعیت خواندن مشترک، IMAP یا کلاینت رسمی Provider مناسب‌تر است. پیش از مهاجرت از POP3، پیام‌های فقط محلی را Export کنید و رفتار حذف را با Mailbox آزمایشی بسنجید."
+                      data-en="For shared folders and read state, prefer IMAP or the provider’s native client. Before migrating from POP3, export local-only messages and test deletion behavior with a dedicated mailbox."
+                    >
+                      For shared folders and read state, prefer IMAP or the
+                      provider’s native client. Before migrating from POP3,
+                      export local-only messages and test deletion behavior with
+                      a dedicated mailbox.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="اطلاعات Provider و مجوز پروتکل"
+                      data-en="Provider settings and protocol access"
+                    >
+                      Provider settings and protocol access
+                    </h2>
+                    <p
+                      data-fa="کلاینت باید روش احراز هویت Provider را پشتیبانی کند. در Exchange Online، OAuth و Policy فعال‌سازی پروتکل را بررسی کنید. تنظیمات Cloud را به Exchange داخلی تعمیم ندهید."
+                      data-en="Check provider-compatible authentication, OAuth and protocol enablement for Exchange Online. Do not transfer cloud assumptions to on-premises Exchange."
+                    >
+                      Check provider-compatible authentication, OAuth and
+                      protocol enablement for Exchange Online. Do not transfer
+                      cloud assumptions to on-premises Exchange.
+                    </p>
+                    <p
+                      data-fa="Quota، Cache محلی و Archive را با نیاز نگهداری پیام تعیین کنید. انتخاب پروتکل دریافت به نصب Mail Server یا VM جدید نیاز ندارد."
+                      data-en="Size quota, local cache and archives for retention. Choosing a retrieval protocol requires no new mail server or VM."
+                    >
+                      Size quota, local cache and archives for retention.
+                      Choosing a retrieval protocol requires no new mail server
+                      or VM.
+                    </p>
+                    <p
+                      data-fa="Hostname، پورت و روش TLS را از مدیر ایمیل بگیرید. TLS ضمنی معمولاً از 993 برای IMAP و 995 برای POP3 استفاده می‌کند. تنظیم SMTP برای ارسال جداست."
+                      data-en="Obtain hostnames, ports and TLS settings from mail administration. Implicit TLS commonly uses IMAP 993 and POP3 995. Sending needs separate SMTP settings."
+                    >
+                      Obtain hostnames, ports and TLS settings from mail
+                      administration. Implicit TLS commonly uses IMAP 993 and
+                      POP3 995. Sending needs separate SMTP settings.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="باورهای اشتباه درباره POP3"
+                      data-en="Common POP3 assumptions"
+                    >
+                      Common POP3 assumptions
+                    </h3>
+                    <p
+                      data-fa="POP3 الزاماً پیام را پس از دریافت حذف نمی‌کند. تنظیم کلاینت و سرور تعیین‌کننده است. نگه‌داشتن پیام روی سرور نیز بازیابی نسخه حذف‌شده را تضمین نمی‌کند."
+                      data-en="POP3 does not invariably delete retrieved messages. Client and server settings determine retention. Keeping a server copy still does not guarantee deleted-version recovery."
+                    >
+                      POP3 does not invariably delete retrieved messages. Client
+                      and server settings determine retention. Keeping a server
+                      copy still does not guarantee deleted-version recovery.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="تنظیم کلاینت و آزمون TLS"
+                      data-en="Configure the client and test TLS"
+                    >
+                      Configure the client and test TLS
+                    </h2>
+                    <p
+                      data-fa="فعال‌بودن پروتکل را برای Tenant و Mailbox هدف بررسی کنید. فعال‌سازی سراسری لازم نیست. Provider ممکن است Basic Authentication را نپذیرد."
+                      data-en="Check protocol enablement for the target tenant/mailbox. Fleet-wide enablement is unnecessary. The provider might reject Basic authentication."
+                    >
+                      Check protocol enablement for the target tenant/mailbox.
+                      Fleet-wide enablement is unnecessary. The provider might
+                      reject Basic authentication.
+                    </p>
+                    <p
+                      data-fa="mail.example.com نام نمونه است. نام واقعی را از Provider بگیرید و پیش از ارسال Credential، Chain و Hostname را بسنجید."
+                      data-en="Replace mail.example.com with the provider hostname. Verify chain/name before transmitting credentials."
+                    >
+                      Replace mail.example.com with the provider hostname.
+                      Verify chain/name before transmitting credentials.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">MAILHOST=&#x27;mail.example.com&#x27;
 openssl s_client -connect &quot;$MAILHOST:993&quot; -servername &quot;$MAILHOST&quot; -verify_hostname &quot;$MAILHOST&quot; -verify_return_error -crlf</code></pre>
-<p data-fa="پس از Banner، فرمان‌های بدون Credential زیر را وارد کنید. این Transcript مخصوص IMAP است." data-en="After the banner, enter these credential-free commands. This transcript is for IMAP.">After the banner, enter these credential-free commands. This transcript is for IMAP.</p>
-<pre dir="ltr"><code class="language-text">a001 CAPABILITY
+                    <p
+                      data-fa="پس از Banner، فرمان‌های بدون Credential زیر را وارد کنید. این Transcript مخصوص IMAP است."
+                      data-en="After the banner, enter these credential-free commands. This transcript is for IMAP."
+                    >
+                      After the banner, enter these credential-free commands.
+                      This transcript is for IMAP.
+                    </p>
+                    <pre dir="ltr"><code class="language-text">a001 CAPABILITY
 a002 LOGOUT</code></pre>
-<p data-fa="پاسخ Tagged و Capabilityها را بررسی کنید. OK برای فرمان موفق است. برای POP3S اتصال TLS مستقل بسازید." data-en="Inspect tagged responses and capabilities. Successful commands return OK. Establish a separate TLS connection for POP3S.">Inspect tagged responses and capabilities. Successful commands return OK. Establish a separate TLS connection for POP3S.</p>
-<pre dir="ltr"><code class="language-bash">openssl s_client -connect &quot;$MAILHOST:995&quot; -servername &quot;$MAILHOST&quot; -verify_hostname &quot;$MAILHOST&quot; -verify_return_error -crlf</code></pre>
-<p data-fa="پس از Banner مربوط به POP3، CAPA و QUIT را وارد کنید. در کلاینت مصوب، OAuth و Mailbox آزمایشی را تنظیم و دریافت و Sync پوشه و وضعیت خواندن را بین دو دستگاه بسنجید. ارسال را با SMTP جدا آزمون کنید." data-en="After the POP3 banner, enter CAPA and QUIT. Configure OAuth/test mailbox in an approved client, then check retrieval, folders and read state across devices. Test SMTP sending separately.">After the POP3 banner, enter CAPA and QUIT. Configure OAuth/test mailbox in an approved client, then check retrieval, folders and read state across devices. Test SMTP sending separately.</p></section>
-<section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="تفکیک مشکل دریافت و ارسال" data-en="Separate retrieval and sending failures">Separate retrieval and sending failures</h2><p data-fa="TLS سالم با Login ناموفق به بررسی پروتکل، OAuth و Policy حساب نیاز دارد. برای پیام گم‌شده، Subscription پوشه، Cache و تنظیم حذف POP3 را بررسی کنید. دریافت سالم با ارسال ناموفق به SMTP مربوط است. پیش از حذف Profile، پیام محلی و PST را حفظ کنید." data-en="For working TLS with rejected login, inspect protocols, OAuth and account policy. Missing messages require subscription, cache and POP3 deletion checks. Healthy retrieval with failed sending points to SMTP. Preserve local messages and PST files before deleting profiles.">For working TLS with rejected login, inspect protocols, OAuth and account policy. Missing messages require subscription, cache and POP3 deletion checks. Healthy retrieval with failed sending points to SMTP. Preserve local messages and PST files before deleting profiles.</p></section>
-<section id="enterprise-security" class="article-section"><h2 data-fa="TLS و روش ورود پشتیبانی‌شده" data-en="TLS and supported authentication">TLS and supported authentication</h2><p data-fa="روی 110 و 143 بدون STARTTLS اجباری Credential ارسال نکنید. روی 993 و 995، TLS از شروع اتصال فعال است. SMTP روی 587 معمولاً از STARTTLS استفاده می‌کند. Basic Authentication یا App Password را فقط با پشتیبانی Provider و Policy مجاز انتخاب کنید." data-en="Never send credentials on 110 or 143 without enforced STARTTLS. Ports 993 and 995 start TLS immediately, while SMTP 587 commonly uses STARTTLS. Use Basic authentication or app passwords only where provider support and policy permit them.">Never send credentials on 110 or 143 without enforced STARTTLS. Ports 993 and 995 start TLS immediately, while SMTP 587 commonly uses STARTTLS. Use Basic authentication or app passwords only where provider support and policy permit them.</p></section>
-<section id="enterprise-monitoring" class="article-section"><h2 data-fa="سلامت Sync و Quota" data-en="Synchronization health and quota">Synchronization health and quota</h2><p data-fa="خطای ورود، پرشدن Mailbox و تأخیر Sync را جدا از تأخیر تحویل ثبت کنید. برای آزمون خودکار، Mailbox کم‌اختیار اختصاصی داشته باشید و Credential آن را در Dashboard منتشر نکنید." data-en="Track authentication failures, mailbox capacity and sync delays separately from delivery latency. Use a dedicated restricted mailbox for synthetic tests and keep credentials out of dashboards.">Track authentication failures, mailbox capacity and sync delays separately from delivery latency. Use a dedicated restricted mailbox for synthetic tests and keep credentials out of dashboards.</p></section>
-<section id="enterprise-recovery" class="article-section"><h2 data-fa="Backup پیام و مهاجرت کلاینت" data-en="Message backups and client migration">Message backups and client migration</h2><p data-fa="حذف در IMAP همگام می‌شود. Leave on Server در POP3 نیز Backup نیست. Retention و Backup را در سطح سرویس تعریف کنید و Restore پیام همراه Header و Attachment را در Mailbox جدا آزمایش کنید." data-en="IMAP synchronizes deletions. POP3 Leave on Server is not a backup either. Define service-level retention and backups, then test restoring message headers and attachments into a separate mailbox.">IMAP synchronizes deletions. POP3 Leave on Server is not a backup either. Define service-level retention and backups, then test restoring message headers and attachments into a separate mailbox.</p><h3 id="enterprise-practices" data-fa="انتخاب بر اساس رفتار کاربر" data-en="Choose for the user’s workflow">Choose for the user’s workflow</h3><p data-fa="برای چند دستگاه، Sync پوشه و وضعیت خواندن را معیار قرار دهید. برای Workflow قدیمی POP3، پیام‌های محلی و حذف را بررسی کنید. سازگاری روش ورود Provider پیش از نام پروتکل تعیین‌کننده است." data-en="Prioritize folder and read-state sync for multiple devices. For legacy POP3 workflows, inspect local messages and deletion behavior. Provider authentication compatibility constrains protocol choice.">Prioritize folder and read-state sync for multiple devices. For legacy POP3 workflows, inspect local messages and deletion behavior. Provider authentication compatibility constrains protocol choice.</p></section>
-<section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</h2><h3 data-fa="آیا IMAP backup ایمیل است؟" data-en="Is IMAP an email backup?">Is IMAP an email backup?</h3><p data-fa="خیر. حذف همگام می‌شود و retention/backup مستقل لازم است." data-en="No. Deletions synchronize. Backup and retention must be independent.">No. Deletions synchronize. Backup and retention must be independent.</p><h3 data-fa="آیا دریافت سالم یعنی ارسال سالم است؟" data-en="Does working retrieval prove sending works?">Does working retrieval prove sending works?</h3><p data-fa="خیر. SMTP submission مسیر و authentication جدا دارد." data-en="No. SMTP submission has a separate path and authentication.">No. SMTP submission has a separate path and authentication.</p></section>
-<section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">Official Sources</h2><ul><li><a href="https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/pop3-and-imap4/pop3-and-imap4" rel="noopener">Microsoft: POP/IMAP Exchange Online</a></li><li><a href="https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth" rel="noopener">Microsoft: OAuth POP/IMAP/SMTP</a></li><li><a href="https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/pop3-and-imap4/pop3-and-imap4" rel="noopener">Microsoft: POP3 and IMAP4 behavior</a></li></ul></section></div></article>
+                    <p
+                      data-fa="پاسخ Tagged و Capabilityها را بررسی کنید. OK برای فرمان موفق است. برای POP3S اتصال TLS مستقل بسازید."
+                      data-en="Inspect tagged responses and capabilities. Successful commands return OK. Establish a separate TLS connection for POP3S."
+                    >
+                      Inspect tagged responses and capabilities. Successful
+                      commands return OK. Establish a separate TLS connection
+                      for POP3S.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">openssl s_client -connect &quot;$MAILHOST:995&quot; -servername &quot;$MAILHOST&quot; -verify_hostname &quot;$MAILHOST&quot; -verify_return_error -crlf</code></pre>
+                    <p
+                      data-fa="پس از Banner مربوط به POP3، CAPA و QUIT را وارد کنید. در کلاینت مصوب، OAuth و Mailbox آزمایشی را تنظیم و دریافت و Sync پوشه و وضعیت خواندن را بین دو دستگاه بسنجید. ارسال را با SMTP جدا آزمون کنید."
+                      data-en="After the POP3 banner, enter CAPA and QUIT. Configure OAuth/test mailbox in an approved client, then check retrieval, folders and read state across devices. Test SMTP sending separately."
+                    >
+                      After the POP3 banner, enter CAPA and QUIT. Configure
+                      OAuth/test mailbox in an approved client, then check
+                      retrieval, folders and read state across devices. Test
+                      SMTP sending separately.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="تفکیک مشکل دریافت و ارسال"
+                      data-en="Separate retrieval and sending failures"
+                    >
+                      Separate retrieval and sending failures
+                    </h2>
+                    <p
+                      data-fa="TLS سالم با Login ناموفق به بررسی پروتکل، OAuth و Policy حساب نیاز دارد. برای پیام گم‌شده، Subscription پوشه، Cache و تنظیم حذف POP3 را بررسی کنید. دریافت سالم با ارسال ناموفق به SMTP مربوط است. پیش از حذف Profile، پیام محلی و PST را حفظ کنید."
+                      data-en="For working TLS with rejected login, inspect protocols, OAuth and account policy. Missing messages require subscription, cache and POP3 deletion checks. Healthy retrieval with failed sending points to SMTP. Preserve local messages and PST files before deleting profiles."
+                    >
+                      For working TLS with rejected login, inspect protocols,
+                      OAuth and account policy. Missing messages require
+                      subscription, cache and POP3 deletion checks. Healthy
+                      retrieval with failed sending points to SMTP. Preserve
+                      local messages and PST files before deleting profiles.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="TLS و روش ورود پشتیبانی‌شده"
+                      data-en="TLS and supported authentication"
+                    >
+                      TLS and supported authentication
+                    </h2>
+                    <p
+                      data-fa="روی 110 و 143 بدون STARTTLS اجباری Credential ارسال نکنید. روی 993 و 995، TLS از شروع اتصال فعال است. SMTP روی 587 معمولاً از STARTTLS استفاده می‌کند. Basic Authentication یا App Password را فقط با پشتیبانی Provider و Policy مجاز انتخاب کنید."
+                      data-en="Never send credentials on 110 or 143 without enforced STARTTLS. Ports 993 and 995 start TLS immediately, while SMTP 587 commonly uses STARTTLS. Use Basic authentication or app passwords only where provider support and policy permit them."
+                    >
+                      Never send credentials on 110 or 143 without enforced
+                      STARTTLS. Ports 993 and 995 start TLS immediately, while
+                      SMTP 587 commonly uses STARTTLS. Use Basic authentication
+                      or app passwords only where provider support and policy
+                      permit them.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="سلامت Sync و Quota"
+                      data-en="Synchronization health and quota"
+                    >
+                      Synchronization health and quota
+                    </h2>
+                    <p
+                      data-fa="خطای ورود، پرشدن Mailbox و تأخیر Sync را جدا از تأخیر تحویل ثبت کنید. برای آزمون خودکار، Mailbox کم‌اختیار اختصاصی داشته باشید و Credential آن را در Dashboard منتشر نکنید."
+                      data-en="Track authentication failures, mailbox capacity and sync delays separately from delivery latency. Use a dedicated restricted mailbox for synthetic tests and keep credentials out of dashboards."
+                    >
+                      Track authentication failures, mailbox capacity and sync
+                      delays separately from delivery latency. Use a dedicated
+                      restricted mailbox for synthetic tests and keep
+                      credentials out of dashboards.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="Backup پیام و مهاجرت کلاینت"
+                      data-en="Message backups and client migration"
+                    >
+                      Message backups and client migration
+                    </h2>
+                    <p
+                      data-fa="حذف در IMAP همگام می‌شود. Leave on Server در POP3 نیز Backup نیست. Retention و Backup را در سطح سرویس تعریف کنید و Restore پیام همراه Header و Attachment را در Mailbox جدا آزمایش کنید."
+                      data-en="IMAP synchronizes deletions. POP3 Leave on Server is not a backup either. Define service-level retention and backups, then test restoring message headers and attachments into a separate mailbox."
+                    >
+                      IMAP synchronizes deletions. POP3 Leave on Server is not a
+                      backup either. Define service-level retention and backups,
+                      then test restoring message headers and attachments into a
+                      separate mailbox.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="انتخاب بر اساس رفتار کاربر"
+                      data-en="Choose for the user’s workflow"
+                    >
+                      Choose for the user’s workflow
+                    </h3>
+                    <p
+                      data-fa="برای چند دستگاه، Sync پوشه و وضعیت خواندن را معیار قرار دهید. برای Workflow قدیمی POP3، پیام‌های محلی و حذف را بررسی کنید. سازگاری روش ورود Provider پیش از نام پروتکل تعیین‌کننده است."
+                      data-en="Prioritize folder and read-state sync for multiple devices. For legacy POP3 workflows, inspect local messages and deletion behavior. Provider authentication compatibility constrains protocol choice."
+                    >
+                      Prioritize folder and read-state sync for multiple
+                      devices. For legacy POP3 workflows, inspect local messages
+                      and deletion behavior. Provider authentication
+                      compatibility constrains protocol choice.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا IMAP backup ایمیل است؟"
+                      data-en="Is IMAP an email backup?"
+                    >
+                      Is IMAP an email backup?
+                    </h3>
+                    <p
+                      data-fa="خیر. حذف همگام می‌شود و retention/backup مستقل لازم است."
+                      data-en="No. Deletions synchronize. Backup and retention must be independent."
+                    >
+                      No. Deletions synchronize. Backup and retention must be
+                      independent.
+                    </p>
+                    <h3
+                      data-fa="آیا دریافت سالم یعنی ارسال سالم است؟"
+                      data-en="Does working retrieval prove sending works?"
+                    >
+                      Does working retrieval prove sending works?
+                    </h3>
+                    <p
+                      data-fa="خیر. SMTP submission مسیر و authentication جدا دارد."
+                      data-en="No. SMTP submission has a separate path and authentication."
+                    >
+                      No. SMTP submission has a separate path and
+                      authentication.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/pop3-and-imap4/pop3-and-imap4"
+                          rel="noopener"
+                          >Microsoft: POP/IMAP Exchange Online</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth"
+                          rel="noopener"
+                          >Microsoft: OAuth POP/IMAP/SMTP</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/pop3-and-imap4/pop3-and-imap4"
+                          rel="noopener"
+                          >Microsoft: POP3 and IMAP4 behavior</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
+              </article>
             </div>
           </div>
         </div>
@@ -349,18 +945,24 @@ a002 LOGOUT</code></pre>
             <div class="footer-brand">
               <h3 class="brand-name">
                 <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
-                  >AmirHossein Jalalian</span>
+                  >AmirHossein Jalalian</span
+                >
               </h3>
               <p
                 class="brand-title"
                 data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
-              >Infrastructure &amp; DevOps Engineer</p>
+              >
+                Infrastructure &amp; DevOps Engineer
+              </p>
               <p
                 class="brand-description"
                 data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
                 data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-              >Delivering reliable, secure, and scalable IT solutions for your business success.</p>
+              >
+                Delivering reliable, secure, and scalable IT solutions for your
+                business success.
+              </p>
             </div>
 
             <!-- Contact Info -->
@@ -369,12 +971,15 @@ a002 LOGOUT</code></pre>
                 class="contact-title"
                 data-en="Get In Touch"
                 data-fa="تماس با من"
-              >Get In Touch</h4>
+              >
+                Get In Touch
+              </h4>
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>
                   <span data-en="Tehran, Iran" data-fa="تهران، ایران"
-                    >Tehran, Iran</span>
+                    >Tehran, Iran</span
+                  >
                 </div>
                 <div class="contact-item">
                   <i class="bi bi-telephone"></i>
@@ -399,7 +1004,9 @@ a002 LOGOUT</code></pre>
                   class="social-title"
                   data-en="Follow Me"
                   data-fa="دنبال کنید"
-                >Follow Me</h5>
+                >
+                  Follow Me
+                </h5>
                 <div class="social-icons">
                   <a
                     href="https://wa.me/989197276219"
@@ -445,12 +1052,14 @@ a002 LOGOUT</code></pre>
                   <span
                     data-en="All Rights Reserved"
                     data-fa="تمام حقوق محفوظ است"
-                    >All Rights Reserved</span>
+                    >All Rights Reserved</span
+                  >
                 </p>
               </div>
               <div class="footer-heart">
                 <span data-en="Made with" data-fa="ساخته شده با"
-                  >Made with</span>
+                  >Made with</span
+                >
                 <i class="bi bi-heart-fill"></i>
                 <span data-en="in Iran" data-fa="در ایران">in Iran</span>
               </div>

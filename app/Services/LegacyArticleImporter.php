@@ -282,7 +282,11 @@ class LegacyArticleImporter
                 'canonical_url' => null,
                 'seo_data' => $seo,
                 'presentation' => $presentation,
-                'sort_order' => $slug === 'linux-security-auditor-bash' ? 0 : ($card['sort_order'] ?? $index),
+                'sort_order' => match ($slug) {
+                    'mikrotik-ping-triggered-policy-routing' => 0,
+                    'linux-security-auditor-bash' => 1,
+                    default => $card['sort_order'] ?? $index,
+                },
                 'status' => 'published',
                 'published_at' => $publishedAt['date'],
             ],

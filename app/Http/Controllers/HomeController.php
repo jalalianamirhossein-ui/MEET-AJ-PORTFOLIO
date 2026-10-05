@@ -18,7 +18,7 @@ class HomeController extends Controller
         $articles = Article::published()
             ->forListing()
             ->with(['category', 'tags'])
-            ->orderByRaw('CASE WHEN articles.slug = ? THEN 0 ELSE 1 END', ['linux-security-auditor-bash'])
+            ->orderByRaw('CASE WHEN articles.slug = ? THEN 0 WHEN articles.slug = ? THEN 1 ELSE 2 END', ['mikrotik-ping-triggered-policy-routing', 'linux-security-auditor-bash'])
             ->orderByDesc('published_at')
             ->orderBy('sort_order')
             ->orderBy('id')

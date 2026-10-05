@@ -1,11 +1,19 @@
 <!doctype html>
 <html lang="en" dir="ltr" data-article-language="en">
   <head>
-    <title>Enable SSH on Ubuntu Linux and Set Up Key Authentication | Meet AJ</title>
+    <title>
+      Enable SSH on Ubuntu Linux and Set Up Key Authentication | Meet AJ
+    </title>
     <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta name="description" content="Install OpenSSH, configure keys, inspect effective sshd settings and diagnose login failures while preserving server access." />
-    <meta name="keywords" content="Production SSH, enable ssh linux complete guide, infrastructure operations, production operations, troubleshooting" />
+    <meta
+      name="description"
+      content="Install OpenSSH, configure keys, inspect effective sshd settings and diagnose login failures while preserving server access."
+    />
+    <meta
+      name="keywords"
+      content="Production SSH, enable ssh linux complete guide, infrastructure operations, production operations, troubleshooting"
+    />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <meta name="language" content="fa, en" />
@@ -25,8 +33,14 @@
       content="../assets/img/apple-touch-icon.png"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Enable SSH on Ubuntu Linux and Set Up Key Authentication" />
-    <meta property="og:description" content="Install OpenSSH, configure keys, inspect effective sshd settings and diagnose login failures while preserving server access." />
+    <meta
+      property="og:title"
+      content="Enable SSH on Ubuntu Linux and Set Up Key Authentication"
+    />
+    <meta
+      property="og:description"
+      content="Install OpenSSH, configure keys, inspect effective sshd settings and diagnose login failures while preserving server access."
+    />
     <meta property="og:image" content="../assets/img/my-profile-img.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -34,7 +48,10 @@
       property="og:image:alt"
       content="آموزش پیکربندی SSH در لینوکس - AmirHossein Jalalian"
     />
-    <meta property="og:url" content="https://meetaj.ir/articles/enable-ssh-linux-complete-guide" />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/enable-ssh-linux-complete-guide"
+    />
     <meta property="og:site_name" content="Meet AJ - Technical Articles" />
     <meta property="og:locale" content="fa_IR" />
     <meta property="twitter:card" content="summary_large_image" />
@@ -85,7 +102,6 @@
     <link href="../assets/img/favicon.png" rel="icon" />
     <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
 
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -118,11 +134,91 @@
       rel="stylesheet"
       disabled
     />
-  <meta name="article:content-language" content="en" />
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Enable SSH on Ubuntu Linux and Set Up Key Authentication", "description": "Install OpenSSH, configure keys, inspect effective sshd settings and diagnose login failures while preserving server access.", "inLanguage": "en", "url": "https://meetaj.ir/articles/enable-ssh-linux-complete-guide", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}, "mainEntityOfPage": "https://meetaj.ir/articles/enable-ssh-linux-complete-guide"}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is changing the SSH port enough?", "acceptedAnswer": {"@type": "Answer", "text": "No. Source restrictions, keys, account lifecycle controls and audit records are still required."}}, {"@type": "Question", "name": "What must pass before password login is disabled?", "acceptedAnswer": {"@type": "Answer", "text": "Key login and sudo in an independent session, with console recovery available."}}], "inLanguage": "en"}</script>
-<script id="article-localizations" type="application/json">{"fa": {"title": "فعال‌سازی SSH در Ubuntu Linux و ورود امن با کلید", "meta_title": "فعال‌سازی SSH در Ubuntu Linux و ورود امن با کلید | Meet AJ", "description": "نصب OpenSSH، ساخت کلید، بررسی تنظیم مؤثر sshd و عیب‌یابی ورود بدون از دست دادن دسترسی سرور.", "keywords": ["فعال‌سازی SSH در Ubuntu Linux و ورود امن با کلید", "عیب‌یابی", "بازیابی", "enable ssh linux complete guide"], "faq": [["آیا تغییر پورت SSH کافی است؟", "خیر. کنترل مبدا، کلید، مدیریت حساب و ثبت رویداد لازم است."], ["قبل از غیرفعال‌کردن Password چه چیزی باید تست شود؟", "ورود با کلید و sudo در نشست مستقل همراه با دسترسی console."]]}, "en": {"title": "Enable SSH on Ubuntu Linux and Set Up Key Authentication", "meta_title": "Enable SSH on Ubuntu Linux and Set Up Key Authentication | Meet AJ", "description": "Install OpenSSH, configure keys, inspect effective sshd settings and diagnose login failures while preserving server access.", "keywords": ["Enable SSH on Ubuntu Linux and Set Up Key Authentication", "enable ssh linux complete guide", "troubleshooting"], "faq": [["Is changing the SSH port enough?", "No. Source restrictions, keys, account lifecycle controls and audit records are still required."], ["What must pass before password login is disabled?", "Key login and sudo in an independent session, with console recovery available."]]}}</script>
-</head>
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Enable SSH on Ubuntu Linux and Set Up Key Authentication",
+        "description": "Install OpenSSH, configure keys, inspect effective sshd settings and diagnose login failures while preserving server access.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/enable-ssh-linux-complete-guide",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/enable-ssh-linux-complete-guide"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is changing the SSH port enough?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Source restrictions, keys, account lifecycle controls and audit records are still required."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What must pass before password login is disabled?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Key login and sudo in an independent session, with console recovery available."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "فعال‌سازی SSH در Ubuntu Linux و ورود امن با کلید",
+          "meta_title": "فعال‌سازی SSH در Ubuntu Linux و ورود امن با کلید | Meet AJ",
+          "description": "نصب OpenSSH، ساخت کلید، بررسی تنظیم مؤثر sshd و عیب‌یابی ورود بدون از دست دادن دسترسی سرور.",
+          "keywords": [
+            "فعال‌سازی SSH در Ubuntu Linux و ورود امن با کلید",
+            "عیب‌یابی",
+            "بازیابی",
+            "enable ssh linux complete guide"
+          ],
+          "faq": [
+            [
+              "آیا تغییر پورت SSH کافی است؟",
+              "خیر. کنترل مبدا، کلید، مدیریت حساب و ثبت رویداد لازم است."
+            ],
+            [
+              "قبل از غیرفعال‌کردن Password چه چیزی باید تست شود؟",
+              "ورود با کلید و sudo در نشست مستقل همراه با دسترسی console."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Enable SSH on Ubuntu Linux and Set Up Key Authentication",
+          "meta_title": "Enable SSH on Ubuntu Linux and Set Up Key Authentication | Meet AJ",
+          "description": "Install OpenSSH, configure keys, inspect effective sshd settings and diagnose login failures while preserving server access.",
+          "keywords": [
+            "Enable SSH on Ubuntu Linux and Set Up Key Authentication",
+            "enable ssh linux complete guide",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Is changing the SSH port enough?",
+              "No. Source restrictions, keys, account lifecycle controls and audit records are still required."
+            ],
+            [
+              "What must pass before password login is disabled?",
+              "Key login and sudo in an independent session, with console recovery available."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
   <body class="article-page theme-linux">
     <button
       id="menu-toggle"
@@ -271,25 +367,94 @@
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
-          <li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="SSH و مسیر دسترسی به سرور" data-en="SSH and the server access path">SSH and the server access path</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="کلید کاربر و Fingerprint سرور" data-en="User keys and server fingerprints">User keys and server fingerprints</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="حساب کاربری، Console و بسته‌های لازم" data-en="Account, console and package requirements">Account, console and package requirements</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="نصب سرویس و آزمون ورود با کلید" data-en="Install the service and test key login">Install the service and test key login</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-security"><span data-fa="محدودیت مبدا و سازگاری با MFA" data-en="Source restrictions and MFA compatibility">Source restrictions and MFA compatibility</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="ثبت ورود و آزمون دسترسی" data-en="Login records and access probes">Login records and access probes</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="از خطای اتصال تا رد کلید" data-en="From connection failure to rejected keys">From connection failure to rejected keys</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="برگشت تنظیمات بدون بستن آخرین نشست" data-en="Roll back while a session remains open">Roll back while a session remains open</span></a></li>
-<li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">Official Sources</span></a></li>
-
-
-
-
-
-
-
-
-
+          <li class="article-nav-item">
+            <a href="#enterprise-intro"
+              ><span
+                data-fa="SSH و مسیر دسترسی به سرور"
+                data-en="SSH and the server access path"
+                >SSH and the server access path</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="کلید کاربر و Fingerprint سرور"
+                data-en="User keys and server fingerprints"
+                >User keys and server fingerprints</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="حساب کاربری، Console و بسته‌های لازم"
+                data-en="Account, console and package requirements"
+                >Account, console and package requirements</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="نصب سرویس و آزمون ورود با کلید"
+                data-en="Install the service and test key login"
+                >Install the service and test key login</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-security"
+              ><span
+                data-fa="محدودیت مبدا و سازگاری با MFA"
+                data-en="Source restrictions and MFA compatibility"
+                >Source restrictions and MFA compatibility</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="ثبت ورود و آزمون دسترسی"
+                data-en="Login records and access probes"
+                >Login records and access probes</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="از خطای اتصال تا رد کلید"
+                data-en="From connection failure to rejected keys"
+                >From connection failure to rejected keys</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="برگشت تنظیمات بدون بستن آخرین نشست"
+                data-en="Roll back while a session remains open"
+                >Roll back while a session remains open</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#faq"
+              ><span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
+              ></a
+            >
+          </li>
         </ul>
       </nav>
       <button
@@ -312,19 +477,25 @@
                 <span class="article-category">Linux</span
                 ><span class="meta-date"
                   ><span class="article-date" data-en="Article" data-fa="مقاله"
-                    >Article</span><time datetime="">Linux</time></span
+                    >Article</span
+                  ><time datetime="">Linux</time></span
                 >
               </div>
               <h1
                 class="article-title hero-title"
-
-
-               data-fa="فعال‌سازی SSH در Ubuntu Linux و ورود امن با کلید" data-en="Enable SSH on Ubuntu Linux and Set Up Key Authentication">Enable SSH on Ubuntu Linux and Set Up Key Authentication</h1>
+                data-fa="فعال‌سازی SSH در Ubuntu Linux و ورود امن با کلید"
+                data-en="Enable SSH on Ubuntu Linux and Set Up Key Authentication"
+              >
+                Enable SSH on Ubuntu Linux and Set Up Key Authentication
+              </h1>
               <p
                 class="article-excerpt hero-subtitle"
-
-
-               data-fa="نصب OpenSSH، ساخت کلید، بررسی تنظیم مؤثر sshd و عیب‌یابی ورود بدون از دست دادن دسترسی سرور." data-en="Install OpenSSH, configure keys, inspect effective sshd settings and diagnose login failures while preserving server access.">Install OpenSSH, configure keys, inspect effective sshd settings and diagnose login failures while preserving server access.</p>
+                data-fa="نصب OpenSSH، ساخت کلید، بررسی تنظیم مؤثر sshd و عیب‌یابی ورود بدون از دست دادن دسترسی سرور."
+                data-en="Install OpenSSH, configure keys, inspect effective sshd settings and diagnose login failures while preserving server access."
+              >
+                Install OpenSSH, configure keys, inspect effective sshd settings
+                and diagnose login failures while preserving server access.
+              </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -338,7 +509,9 @@
                       class="banner-subtitle"
                       data-en="Meet AJ technical article"
                       data-fa="مقاله فنی Meet AJ"
-                    >Meet AJ technical article</p>
+                    >
+                      Meet AJ technical article
+                    </p>
                   </div>
                 </div>
               </div>
@@ -349,7 +522,8 @@
                   ><span class="btn-content"
                     ><i class="bi bi-play-circle" aria-hidden="true"></i
                     ><span data-en="Start reading" data-fa="شروع مطالعه"
-                      >Start reading</span></span
+                      >Start reading</span
+                    ></span
                   ></a
                 >
               </div>
@@ -370,24 +544,166 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="en" dir="ltr"><section id="enterprise-intro" class="article-section"><h2 data-fa="SSH و مسیر دسترسی به سرور" data-en="SSH and the server access path">SSH and the server access path</h2><p data-fa="SSH ارتباط مدیریت از راه دور را رمزنگاری می‌کند و ورود با کلید را فراهم می‌سازد. در Ubuntu، بسته openssh-server سرویس سمت سرور را نصب می‌کند. ابتدا اتصال و ورود با کلید را تأیید کنید، سپس محدودیت‌های ورود را اعمال کنید تا دسترسی خودتان قطع نشود." data-en="SSH encrypts remote administration and supports key authentication. Ubuntu’s openssh-server package provides the server. Establish connectivity and key login before tightening admission rules so the change preserves your access.">SSH encrypts remote administration and supports key authentication. Ubuntu’s openssh-server package provides the server. Establish connectivity and key login before tightening admission rules so the change preserves your access.</p></section>
-<section id="enterprise-architecture" class="article-section"><h2 data-fa="کلید کاربر و Fingerprint سرور" data-en="User keys and server fingerprints">User keys and server fingerprints</h2><p data-fa="کلید خصوصی روی کلاینت می‌ماند و کلید عمومی در authorized_keys حساب سرور قرار می‌گیرد. Host Key سرور موضوع دیگری است. Fingerprint آن را از Console یا مسیر مورد اعتماد بگیرید و پیش از پذیرش اولین اتصال مقایسه کنید. در شبکه سازمانی، Bastion و Firewall مسیر ورود را محدود می‌کنند." data-en="The private key stays on the client, while its public key goes in the server account’s authorized_keys. The server host key is separate. Obtain its fingerprint through a console or trusted channel before accepting the first connection. Bastion and firewall rules restrict the organizational access path.">The private key stays on the client, while its public key goes in the server account’s authorized_keys. The server host key is separate. Obtain its fingerprint through a console or trusted channel before accepting the first connection. Bastion and firewall rules restrict the organizational access path.</p><h3 id="enterprise-scenario" data-fa="مثال: دسترسی از Bastion" data-en="Example: access through a bastion">Example: access through a bastion</h3><p data-fa="در این مثال، حساب opsadmin از شبکه مدیریت 10.20.30.0/24 به سرور 10.20.30.10 وصل می‌شود. نام حساب و آدرس‌ها را با محیط خود جایگزین کنید. برای چند سرور، تغییر را ابتدا روی یک ماشین آزمایشی اجرا کنید." data-en="The example uses opsadmin to reach 10.20.30.10 from management subnet 10.20.30.0/24. Replace these values for your environment. For a fleet, validate one test host before rollout.">The example uses opsadmin to reach 10.20.30.10 from management subnet 10.20.30.0/24. Replace these values for your environment. For a fleet, validate one test host before rollout.</p></section>
-<section id="enterprise-prerequisites" class="article-section"><h2 data-fa="حساب کاربری، Console و بسته‌های لازم" data-en="Account, console and package requirements">Account, console and package requirements</h2><p data-fa="دستورات نصب و نام سرویس برای Ubuntu Server 24.04 LTS هستند. نسخه OpenSSH نصب‌شده را ثبت کنید. در سیستم‌های دیگر، Package Manager و نام سرویس را با توزیع تطبیق دهید." data-en="Installation commands and service names target Ubuntu Server 24.04 LTS. Record the installed OpenSSH version. Other distributions require their own package manager and service names.">Installation commands and service names target Ubuntu Server 24.04 LTS. Record the installed OpenSSH version. Other distributions require their own package manager and service names.</p>
-<p data-fa="برای فعال‌سازی SSH به VM با ظرفیت خاص نیاز ندارید. Console مستقل از شبکه و یک نشست مدیریتی باز برای برگشت تنظیمات مهم‌ترند. دسترسی TCP/22 را از مسیر واقعی مدیریت بررسی کنید." data-en="Enabling SSH requires no particular VM sizing. An independent console and an open administrator session provide recovery access. Check TCP/22 through the actual management path.">Enabling SSH requires no particular VM sizing. An independent console and an open administrator session provide recovery access. Check TCP/22 through the actual management path.</p>
-<p data-fa="روی سرور sudo و openssh-server و روی کلاینت openssh-client لازم است. حساب opsadmin باید از قبل وجود داشته باشد و مجوز sudo آن جدا آزموده شود. AllowUsers را با تمام حساب‌های انسانی و Automation لازم تطبیق دهید." data-en="The server needs sudo and openssh-server, and the client needs openssh-client. Create opsadmin beforehand and test its sudo privileges separately. Include every required human and automation account in AllowUsers.">The server needs sudo and openssh-server, and the client needs openssh-client. Create opsadmin beforehand and test its sudo privileges separately. Include every required human and automation account in AllowUsers.</p><h3 id="enterprise-compatibility" data-fa="تفاوت سرویس و تنظیم مؤثر" data-en="Service names and effective settings">Service names and effective settings</h3><p data-fa="در RHEL نام سرویس معمولاً sshd است و دستورات apt کاربرد ندارند. OpenSSH برای بسیاری از گزینه‌ها نخستین مقدار خوانده‌شده را می‌پذیرد. ترتیب Include و فایل‌های Cloud را با sshd -T بررسی کنید. نتیجه را از روی نام فایل جدید حدس نزنید." data-en="On RHEL the service is usually sshd and apt commands do not apply. For many OpenSSH options, the first obtained value wins. Check include order and cloud snippets with sshd -T rather than inferring precedence from the new filename.">On RHEL the service is usually sshd and apt commands do not apply. For many OpenSSH options, the first obtained value wins. Check include order and cloud snippets with sshd -T rather than inferring precedence from the new filename.</p></section>
-<section id="enterprise-installation" class="article-section"><h2 data-fa="نصب سرویس و آزمون ورود با کلید" data-en="Install the service and test key login">Install the service and test key login</h2><p data-fa="بسته سرور را نصب و نسخه و Service و Listener را بررسی کنید. این نصب را با Full Upgrade سیستم ترکیب نکنید. کپی تنظیمات را فقط یک بار در مسیر Backup تازه بگیرید." data-en="Install the server package and inspect its version, services and listener. Keep this separate from a full OS upgrade. Copy configuration once into a fresh backup destination.">Install the server package and inspect its version, services and listener. Keep this separate from a full OS upgrade. Copy configuration once into a fresh backup destination.</p>
-<pre dir="ltr"><code class="language-bash">sudo apt-get update
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="SSH و مسیر دسترسی به سرور"
+                      data-en="SSH and the server access path"
+                    >
+                      SSH and the server access path
+                    </h2>
+                    <p
+                      data-fa="SSH ارتباط مدیریت از راه دور را رمزنگاری می‌کند و ورود با کلید را فراهم می‌سازد. در Ubuntu، بسته openssh-server سرویس سمت سرور را نصب می‌کند. ابتدا اتصال و ورود با کلید را تأیید کنید، سپس محدودیت‌های ورود را اعمال کنید تا دسترسی خودتان قطع نشود."
+                      data-en="SSH encrypts remote administration and supports key authentication. Ubuntu’s openssh-server package provides the server. Establish connectivity and key login before tightening admission rules so the change preserves your access."
+                    >
+                      SSH encrypts remote administration and supports key
+                      authentication. Ubuntu’s openssh-server package provides
+                      the server. Establish connectivity and key login before
+                      tightening admission rules so the change preserves your
+                      access.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="کلید کاربر و Fingerprint سرور"
+                      data-en="User keys and server fingerprints"
+                    >
+                      User keys and server fingerprints
+                    </h2>
+                    <p
+                      data-fa="کلید خصوصی روی کلاینت می‌ماند و کلید عمومی در authorized_keys حساب سرور قرار می‌گیرد. Host Key سرور موضوع دیگری است. Fingerprint آن را از Console یا مسیر مورد اعتماد بگیرید و پیش از پذیرش اولین اتصال مقایسه کنید. در شبکه سازمانی، Bastion و Firewall مسیر ورود را محدود می‌کنند."
+                      data-en="The private key stays on the client, while its public key goes in the server account’s authorized_keys. The server host key is separate. Obtain its fingerprint through a console or trusted channel before accepting the first connection. Bastion and firewall rules restrict the organizational access path."
+                    >
+                      The private key stays on the client, while its public key
+                      goes in the server account’s authorized_keys. The server
+                      host key is separate. Obtain its fingerprint through a
+                      console or trusted channel before accepting the first
+                      connection. Bastion and firewall rules restrict the
+                      organizational access path.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: دسترسی از Bastion"
+                      data-en="Example: access through a bastion"
+                    >
+                      Example: access through a bastion
+                    </h3>
+                    <p
+                      data-fa="در این مثال، حساب opsadmin از شبکه مدیریت 10.20.30.0/24 به سرور 10.20.30.10 وصل می‌شود. نام حساب و آدرس‌ها را با محیط خود جایگزین کنید. برای چند سرور، تغییر را ابتدا روی یک ماشین آزمایشی اجرا کنید."
+                      data-en="The example uses opsadmin to reach 10.20.30.10 from management subnet 10.20.30.0/24. Replace these values for your environment. For a fleet, validate one test host before rollout."
+                    >
+                      The example uses opsadmin to reach 10.20.30.10 from
+                      management subnet 10.20.30.0/24. Replace these values for
+                      your environment. For a fleet, validate one test host
+                      before rollout.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="حساب کاربری، Console و بسته‌های لازم"
+                      data-en="Account, console and package requirements"
+                    >
+                      Account, console and package requirements
+                    </h2>
+                    <p
+                      data-fa="دستورات نصب و نام سرویس برای Ubuntu Server 24.04 LTS هستند. نسخه OpenSSH نصب‌شده را ثبت کنید. در سیستم‌های دیگر، Package Manager و نام سرویس را با توزیع تطبیق دهید."
+                      data-en="Installation commands and service names target Ubuntu Server 24.04 LTS. Record the installed OpenSSH version. Other distributions require their own package manager and service names."
+                    >
+                      Installation commands and service names target Ubuntu
+                      Server 24.04 LTS. Record the installed OpenSSH version.
+                      Other distributions require their own package manager and
+                      service names.
+                    </p>
+                    <p
+                      data-fa="برای فعال‌سازی SSH به VM با ظرفیت خاص نیاز ندارید. Console مستقل از شبکه و یک نشست مدیریتی باز برای برگشت تنظیمات مهم‌ترند. دسترسی TCP/22 را از مسیر واقعی مدیریت بررسی کنید."
+                      data-en="Enabling SSH requires no particular VM sizing. An independent console and an open administrator session provide recovery access. Check TCP/22 through the actual management path."
+                    >
+                      Enabling SSH requires no particular VM sizing. An
+                      independent console and an open administrator session
+                      provide recovery access. Check TCP/22 through the actual
+                      management path.
+                    </p>
+                    <p
+                      data-fa="روی سرور sudo و openssh-server و روی کلاینت openssh-client لازم است. حساب opsadmin باید از قبل وجود داشته باشد و مجوز sudo آن جدا آزموده شود. AllowUsers را با تمام حساب‌های انسانی و Automation لازم تطبیق دهید."
+                      data-en="The server needs sudo and openssh-server, and the client needs openssh-client. Create opsadmin beforehand and test its sudo privileges separately. Include every required human and automation account in AllowUsers."
+                    >
+                      The server needs sudo and openssh-server, and the client
+                      needs openssh-client. Create opsadmin beforehand and test
+                      its sudo privileges separately. Include every required
+                      human and automation account in AllowUsers.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="تفاوت سرویس و تنظیم مؤثر"
+                      data-en="Service names and effective settings"
+                    >
+                      Service names and effective settings
+                    </h3>
+                    <p
+                      data-fa="در RHEL نام سرویس معمولاً sshd است و دستورات apt کاربرد ندارند. OpenSSH برای بسیاری از گزینه‌ها نخستین مقدار خوانده‌شده را می‌پذیرد. ترتیب Include و فایل‌های Cloud را با sshd -T بررسی کنید. نتیجه را از روی نام فایل جدید حدس نزنید."
+                      data-en="On RHEL the service is usually sshd and apt commands do not apply. For many OpenSSH options, the first obtained value wins. Check include order and cloud snippets with sshd -T rather than inferring precedence from the new filename."
+                    >
+                      On RHEL the service is usually sshd and apt commands do
+                      not apply. For many OpenSSH options, the first obtained
+                      value wins. Check include order and cloud snippets with
+                      sshd -T rather than inferring precedence from the new
+                      filename.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="نصب سرویس و آزمون ورود با کلید"
+                      data-en="Install the service and test key login"
+                    >
+                      Install the service and test key login
+                    </h2>
+                    <p
+                      data-fa="بسته سرور را نصب و نسخه و Service و Listener را بررسی کنید. این نصب را با Full Upgrade سیستم ترکیب نکنید. کپی تنظیمات را فقط یک بار در مسیر Backup تازه بگیرید."
+                      data-en="Install the server package and inspect its version, services and listener. Keep this separate from a full OS upgrade. Copy configuration once into a fresh backup destination."
+                    >
+                      Install the server package and inspect its version,
+                      services and listener. Keep this separate from a full OS
+                      upgrade. Copy configuration once into a fresh backup
+                      destination.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">sudo apt-get update
 sudo apt-get install -y openssh-server
 dpkg-query -W openssh-server
 systemctl status ssh.service ssh.socket --no-pager
 sudo ss -lntp &#x27;( sport = :22 )&#x27;
 sudo cp -a /etc/ssh /root/ssh-before-change</code></pre>
-<p data-fa="روی کلاینت، کلید با Passphrase بسازید و Public Key را برای حساب موجود نصب کنید. پیش از پذیرش Host Key، Fingerprint را مقایسه کنید. فرمان سوم ورود بدون Password را می‌سنجد." data-en="Generate a passphrase-protected client key and install its public key for the existing account. Compare the host fingerprint before acceptance. The third command tests password-free login.">Generate a passphrase-protected client key and install its public key for the existing account. Compare the host fingerprint before acceptance. The third command tests password-free login.</p>
-<pre dir="ltr"><code class="language-bash">ssh-keygen -t ed25519 -f &quot;$HOME/.ssh/ops_ed25519&quot;
+                    <p
+                      data-fa="روی کلاینت، کلید با Passphrase بسازید و Public Key را برای حساب موجود نصب کنید. پیش از پذیرش Host Key، Fingerprint را مقایسه کنید. فرمان سوم ورود بدون Password را می‌سنجد."
+                      data-en="Generate a passphrase-protected client key and install its public key for the existing account. Compare the host fingerprint before acceptance. The third command tests password-free login."
+                    >
+                      Generate a passphrase-protected client key and install its
+                      public key for the existing account. Compare the host
+                      fingerprint before acceptance. The third command tests
+                      password-free login.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">ssh-keygen -t ed25519 -f &quot;$HOME/.ssh/ops_ed25519&quot;
 ssh-copy-id -i &quot;$HOME/.ssh/ops_ed25519.pub&quot; opsadmin@10.20.30.10
 ssh -i &quot;$HOME/.ssh/ops_ed25519&quot; -o PasswordAuthentication=no opsadmin@10.20.30.10</code></pre>
-<p data-fa="در حساب هدف روی سرور، Permission مربوط به .ssh را بررسی کنید. پس از موفقیت نشست مستقل و sudo، Snippet را از نشست مدیر بنویسید. AllowUsers را پیش از اجرا با حساب‌های واقعی تطبیق دهید." data-en="Check .ssh permissions as the target account. After independent login and sudo succeed, write the snippet from an administrator session. Adapt AllowUsers to actual accounts first.">Check .ssh permissions as the target account. After independent login and sudo succeed, write the snippet from an administrator session. Adapt AllowUsers to actual accounts first.</p>
-<pre dir="ltr"><code class="language-bash">chmod 700 &quot;$HOME/.ssh&quot;
+                    <p
+                      data-fa="در حساب هدف روی سرور، Permission مربوط به .ssh را بررسی کنید. پس از موفقیت نشست مستقل و sudo، Snippet را از نشست مدیر بنویسید. AllowUsers را پیش از اجرا با حساب‌های واقعی تطبیق دهید."
+                      data-en="Check .ssh permissions as the target account. After independent login and sudo succeed, write the snippet from an administrator session. Adapt AllowUsers to actual accounts first."
+                    >
+                      Check .ssh permissions as the target account. After
+                      independent login and sudo succeed, write the snippet from
+                      an administrator session. Adapt AllowUsers to actual
+                      accounts first.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">chmod 700 &quot;$HOME/.ssh&quot;
 chmod 600 &quot;$HOME/.ssh/authorized_keys&quot;
 sudo tee /etc/ssh/sshd_config.d/00-enterprise.conf &gt;/dev/null &lt;&lt;&#x27;EOF&#x27;
 PermitRootLogin no
@@ -401,21 +717,207 @@ EOF
 sudo /usr/sbin/sshd -t
 sudo /usr/sbin/sshd -T | grep -E &#x27;permitrootlogin|passwordauthentication|allowusers&#x27;
 sudo systemctl reload ssh.service</code></pre>
-<p data-fa="sshd -t در موفقیت خروجی ندارد. sshd -T باید PasswordAuthentication را no نشان دهد. نشست قبلی را باز نگه دارید و ورود با کلید و sudo را در یک نشست تازه تأیید کنید. خروجی مؤثر، از نام فایل مهم‌تر است." data-en="Successful sshd -t is silent. Sshd -T must report passwordauthentication no. Keep the old session open while testing fresh key login and sudo. Effective output matters more than the filename.">Successful sshd -t is silent. Sshd -T must report passwordauthentication no. Keep the old session open while testing fresh key login and sudo. Effective output matters more than the filename.</p></section>
-<section id="enterprise-security" class="article-section"><h2 data-fa="محدودیت مبدا و سازگاری با MFA" data-en="Source restrictions and MFA compatibility">Source restrictions and MFA compatibility</h2><p data-fa="TCP/22 را در Firewall به مبداهای مدیریت محدود کنید. اگر UFW از قبل فعال است، Rule متناسب با همان مسیر اضافه کنید. فعال‌کردن Firewall خاموش از طریق SSH بدون بررسی Ruleها احتمال قطع دسترسی دارد. تغییر Port جای کلید و کنترل حساب را نمی‌گیرد. KbdInteractiveAuthentication no را روی طراحی PAM MFA بدون بازبینی اجرا نکنید. در محیط FIPS، سازگاری Ed25519 را بررسی کنید و در صورت لزوم از RSA با امضای SHA-2 استفاده کنید." data-en="Restrict TCP/22 to management sources. Add a suitable rule when UFW is already deployed. Enabling an unconfigured firewall over SSH risks lockout. A port change does not replace keys or account controls. Review KbdInteractiveAuthentication no against PAM MFA before applying it. For FIPS environments, check Ed25519 support and use RSA with SHA-2 signatures where required.">Restrict TCP/22 to management sources. Add a suitable rule when UFW is already deployed. Enabling an unconfigured firewall over SSH risks lockout. A port change does not replace keys or account controls. Review KbdInteractiveAuthentication no against PAM MFA before applying it. For FIPS environments, check Ed25519 support and use RSA with SHA-2 signatures where required.</p></section>
-<section id="enterprise-monitoring" class="article-section"><h2 data-fa="ثبت ورود و آزمون دسترسی" data-en="Login records and access probes">Login records and access probes</h2><p data-fa="لاگ ssh.service را برای ورود و رد احراز هویت بررسی کنید. آزمون TCP و ورود مجاز دو بررسی جدا هستند. هشدار باید نام سرور، مبدا و زمان رخداد را داشته باشد. آستانه تعداد ورود ناموفق را با الگوی واقعی شبکه تنظیم کنید و کلید یا Token را در Log نگذارید." data-en="Inspect ssh.service logs for successful and rejected authentication. A TCP probe and an authorized login test measure different things. Include host, source and timestamp in alerts. Set failure thresholds from observed traffic and keep keys and tokens out of logs.">Inspect ssh.service logs for successful and rejected authentication. A TCP probe and an authorized login test measure different things. Include host, source and timestamp in alerts. Set failure thresholds from observed traffic and keep keys and tokens out of logs.</p></section>
-<section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="از خطای اتصال تا رد کلید" data-en="From connection failure to rejected keys">From connection failure to rejected keys</h2><p data-fa="برای Connection refused، Listener و Ruleهای Reject را بررسی کنید. برای Timeout، مسیر و Dropهای Firewall را کنترل کنید. اگر اتصال برقرار می‌شود اما ورود رد می‌شود، بررسی را به حساب، کلید و تنظیمات sshd محدود کنید." data-en="For Connection refused, inspect listeners and reject rules. For a timeout, check routing and firewall drops. Once transport works but login fails, focus on the account, key and sshd policy.">For Connection refused, inspect listeners and reject rules. For a timeout, check routing and firewall drops. Once transport works but login fails, focus on the account, key and sshd policy.</p>
-<pre dir="ltr"><code class="language-bash">sudo journalctl -u ssh.service -n 100 --no-pager
+                    <p
+                      data-fa="sshd -t در موفقیت خروجی ندارد. sshd -T باید PasswordAuthentication را no نشان دهد. نشست قبلی را باز نگه دارید و ورود با کلید و sudo را در یک نشست تازه تأیید کنید. خروجی مؤثر، از نام فایل مهم‌تر است."
+                      data-en="Successful sshd -t is silent. Sshd -T must report passwordauthentication no. Keep the old session open while testing fresh key login and sudo. Effective output matters more than the filename."
+                    >
+                      Successful sshd -t is silent. Sshd -T must report
+                      passwordauthentication no. Keep the old session open while
+                      testing fresh key login and sudo. Effective output matters
+                      more than the filename.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="محدودیت مبدا و سازگاری با MFA"
+                      data-en="Source restrictions and MFA compatibility"
+                    >
+                      Source restrictions and MFA compatibility
+                    </h2>
+                    <p
+                      data-fa="TCP/22 را در Firewall به مبداهای مدیریت محدود کنید. اگر UFW از قبل فعال است، Rule متناسب با همان مسیر اضافه کنید. فعال‌کردن Firewall خاموش از طریق SSH بدون بررسی Ruleها احتمال قطع دسترسی دارد. تغییر Port جای کلید و کنترل حساب را نمی‌گیرد. KbdInteractiveAuthentication no را روی طراحی PAM MFA بدون بازبینی اجرا نکنید. در محیط FIPS، سازگاری Ed25519 را بررسی کنید و در صورت لزوم از RSA با امضای SHA-2 استفاده کنید."
+                      data-en="Restrict TCP/22 to management sources. Add a suitable rule when UFW is already deployed. Enabling an unconfigured firewall over SSH risks lockout. A port change does not replace keys or account controls. Review KbdInteractiveAuthentication no against PAM MFA before applying it. For FIPS environments, check Ed25519 support and use RSA with SHA-2 signatures where required."
+                    >
+                      Restrict TCP/22 to management sources. Add a suitable rule
+                      when UFW is already deployed. Enabling an unconfigured
+                      firewall over SSH risks lockout. A port change does not
+                      replace keys or account controls. Review
+                      KbdInteractiveAuthentication no against PAM MFA before
+                      applying it. For FIPS environments, check Ed25519 support
+                      and use RSA with SHA-2 signatures where required.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="ثبت ورود و آزمون دسترسی"
+                      data-en="Login records and access probes"
+                    >
+                      Login records and access probes
+                    </h2>
+                    <p
+                      data-fa="لاگ ssh.service را برای ورود و رد احراز هویت بررسی کنید. آزمون TCP و ورود مجاز دو بررسی جدا هستند. هشدار باید نام سرور، مبدا و زمان رخداد را داشته باشد. آستانه تعداد ورود ناموفق را با الگوی واقعی شبکه تنظیم کنید و کلید یا Token را در Log نگذارید."
+                      data-en="Inspect ssh.service logs for successful and rejected authentication. A TCP probe and an authorized login test measure different things. Include host, source and timestamp in alerts. Set failure thresholds from observed traffic and keep keys and tokens out of logs."
+                    >
+                      Inspect ssh.service logs for successful and rejected
+                      authentication. A TCP probe and an authorized login test
+                      measure different things. Include host, source and
+                      timestamp in alerts. Set failure thresholds from observed
+                      traffic and keep keys and tokens out of logs.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="از خطای اتصال تا رد کلید"
+                      data-en="From connection failure to rejected keys"
+                    >
+                      From connection failure to rejected keys
+                    </h2>
+                    <p
+                      data-fa="برای Connection refused، Listener و Ruleهای Reject را بررسی کنید. برای Timeout، مسیر و Dropهای Firewall را کنترل کنید. اگر اتصال برقرار می‌شود اما ورود رد می‌شود، بررسی را به حساب، کلید و تنظیمات sshd محدود کنید."
+                      data-en="For Connection refused, inspect listeners and reject rules. For a timeout, check routing and firewall drops. Once transport works but login fails, focus on the account, key and sshd policy."
+                    >
+                      For Connection refused, inspect listeners and reject
+                      rules. For a timeout, check routing and firewall drops.
+                      Once transport works but login fails, focus on the
+                      account, key and sshd policy.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">sudo journalctl -u ssh.service -n 100 --no-pager
 sudo /usr/sbin/sshd -T
 ssh -vvv -i &quot;$HOME/.ssh/ops_ed25519&quot; opsadmin@10.20.30.10</code></pre>
-<p data-fa="خطای مالکیت در Log به HOME یا .ssh اشاره دارد. Permission و مالک واقعی حساب را بررسی کنید. برای کلید معتبرِ ردشده، AllowUsers و Match و خروجی sshd -T -C را کنترل کنید. در Ubuntu دارای ssh.socket، Listener تحت مدیریت Systemd است. تغییر Port به بررسی Socket نیز نیاز دارد." data-en="Ownership errors point to HOME or .ssh. Check permissions and the account owner. For a valid key rejected by policy, inspect AllowUsers, Match and sshd -T -C output. On Ubuntu with ssh.socket, systemd manages the listener, so port changes also require socket checks.">Ownership errors point to HOME or .ssh. Check permissions and the account owner. For a valid key rejected by policy, inspect AllowUsers, Match and sshd -T -C output. On Ubuntu with ssh.socket, systemd manages the listener, so port changes also require socket checks.</p></section>
-<section id="enterprise-recovery" class="article-section"><h2 data-fa="برگشت تنظیمات بدون بستن آخرین نشست" data-en="Roll back while a session remains open">Roll back while a session remains open</h2><p data-fa="کپی /etc/ssh شامل Host Key است و باید محدود و رمزنگاری‌شده نگهداری شود. برای برگشت این تغییر، فقط فایل جدید را از پوشه Include خارج کنید، Syntax را بررسی و سرویس را Reload کنید. این کار را از Console یا نشست باز انجام دهید." data-en="The /etc/ssh copy contains host keys and needs restricted, encrypted storage. To undo this change, move only the new include file out, validate syntax and reload. Use the console or an existing session.">The /etc/ssh copy contains host keys and needs restricted, encrypted storage. To undo this change, move only the new include file out, validate syntax and reload. Use the console or an existing session.</p>
-<pre dir="ltr"><code class="language-bash">sudo mv /etc/ssh/sshd_config.d/00-enterprise.conf /root/00-enterprise.conf.failed
+                    <p
+                      data-fa="خطای مالکیت در Log به HOME یا .ssh اشاره دارد. Permission و مالک واقعی حساب را بررسی کنید. برای کلید معتبرِ ردشده، AllowUsers و Match و خروجی sshd -T -C را کنترل کنید. در Ubuntu دارای ssh.socket، Listener تحت مدیریت Systemd است. تغییر Port به بررسی Socket نیز نیاز دارد."
+                      data-en="Ownership errors point to HOME or .ssh. Check permissions and the account owner. For a valid key rejected by policy, inspect AllowUsers, Match and sshd -T -C output. On Ubuntu with ssh.socket, systemd manages the listener, so port changes also require socket checks."
+                    >
+                      Ownership errors point to HOME or .ssh. Check permissions
+                      and the account owner. For a valid key rejected by policy,
+                      inspect AllowUsers, Match and sshd -T -C output. On Ubuntu
+                      with ssh.socket, systemd manages the listener, so port
+                      changes also require socket checks.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="برگشت تنظیمات بدون بستن آخرین نشست"
+                      data-en="Roll back while a session remains open"
+                    >
+                      Roll back while a session remains open
+                    </h2>
+                    <p
+                      data-fa="کپی /etc/ssh شامل Host Key است و باید محدود و رمزنگاری‌شده نگهداری شود. برای برگشت این تغییر، فقط فایل جدید را از پوشه Include خارج کنید، Syntax را بررسی و سرویس را Reload کنید. این کار را از Console یا نشست باز انجام دهید."
+                      data-en="The /etc/ssh copy contains host keys and needs restricted, encrypted storage. To undo this change, move only the new include file out, validate syntax and reload. Use the console or an existing session."
+                    >
+                      The /etc/ssh copy contains host keys and needs restricted,
+                      encrypted storage. To undo this change, move only the new
+                      include file out, validate syntax and reload. Use the
+                      console or an existing session.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">sudo mv /etc/ssh/sshd_config.d/00-enterprise.conf /root/00-enterprise.conf.failed
 sudo /usr/sbin/sshd -t
 sudo systemctl reload ssh.service</code></pre>
-<p data-fa="اگر فایل قبلی را هم تغییر داده‌اید، آن را از نسخه ثبت‌شده برگردانید. پیش از بستن نشست قدیمی، ورود با کلید و sudo را در نشست تازه امتحان کنید. Clone سرورها نباید Host Key مشترک ایجاد کند." data-en="Restore any pre-existing files you also changed from their recorded copies. Before closing the old session, test key login and sudo in a fresh session. Avoid duplicate host keys when cloning servers.">Restore any pre-existing files you also changed from their recorded copies. Before closing the old session, test key login and sudo in a fresh session. Avoid duplicate host keys when cloning servers.</p><h3 id="enterprise-practices" data-fa="مدیریت کلید در طول عمر حساب" data-en="Keys throughout the account lifecycle">Keys throughout the account lifecycle</h3><p data-fa="برای هر فرد حساب و کلید مشخص داشته باشید. کلید را با Passphrase محافظت کنید، کلید فرد جداشده را حذف کنید و مجوز sudo را دوره‌ای بازبینی کنید. موفقیت یک ورود به معنی مناسب‌بودن مجوزهای آن حساب نیست." data-en="Assign identifiable accounts and keys to people. Protect keys with passphrases, revoke departed staff keys and review sudo regularly. Successful authentication does not establish that an account’s privileges are appropriate.">Assign identifiable accounts and keys to people. Protect keys with passphrases, revoke departed staff keys and review sudo regularly. Successful authentication does not establish that an account’s privileges are appropriate.</p><p><span data-fa="مجوز sudo و لغو دسترسی کاربر در راهنمای مدیریت حساب آمده است." data-en="The account-management guide covers sudo permissions and access revocation.">The account-management guide covers sudo permissions and access revocation.</span> <a href="/articles/linux-security-account-access-management"><span data-fa="راهنمای مرتبط" data-en="Related guide">Related guide</span></a></p></section>
-<section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</h2><h3 data-fa="آیا تغییر پورت SSH کافی است؟" data-en="Is changing the SSH port enough?">Is changing the SSH port enough?</h3><p data-fa="خیر. کنترل مبدا، کلید، مدیریت حساب و ثبت رویداد لازم است." data-en="No. Source restrictions, keys, account lifecycle controls and audit records are still required.">No. Source restrictions, keys, account lifecycle controls and audit records are still required.</p><h3 data-fa="قبل از غیرفعال‌کردن Password چه چیزی باید تست شود؟" data-en="What must pass before password login is disabled?">What must pass before password login is disabled?</h3><p data-fa="ورود با کلید و sudo در نشست مستقل همراه با دسترسی console." data-en="Key login and sudo in an independent session, with console recovery available.">Key login and sudo in an independent session, with console recovery available.</p></section>
-<section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">Official Sources</h2><ul><li><a href="https://documentation.ubuntu.com/server/how-to/security/openssh-server/" rel="noopener">Canonical: OpenSSH</a></li><li><a href="https://man.openbsd.org/sshd_config" rel="noopener">OpenBSD: sshd_config</a></li></ul></section></div></article>
+                    <p
+                      data-fa="اگر فایل قبلی را هم تغییر داده‌اید، آن را از نسخه ثبت‌شده برگردانید. پیش از بستن نشست قدیمی، ورود با کلید و sudo را در نشست تازه امتحان کنید. Clone سرورها نباید Host Key مشترک ایجاد کند."
+                      data-en="Restore any pre-existing files you also changed from their recorded copies. Before closing the old session, test key login and sudo in a fresh session. Avoid duplicate host keys when cloning servers."
+                    >
+                      Restore any pre-existing files you also changed from their
+                      recorded copies. Before closing the old session, test key
+                      login and sudo in a fresh session. Avoid duplicate host
+                      keys when cloning servers.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="مدیریت کلید در طول عمر حساب"
+                      data-en="Keys throughout the account lifecycle"
+                    >
+                      Keys throughout the account lifecycle
+                    </h3>
+                    <p
+                      data-fa="برای هر فرد حساب و کلید مشخص داشته باشید. کلید را با Passphrase محافظت کنید، کلید فرد جداشده را حذف کنید و مجوز sudo را دوره‌ای بازبینی کنید. موفقیت یک ورود به معنی مناسب‌بودن مجوزهای آن حساب نیست."
+                      data-en="Assign identifiable accounts and keys to people. Protect keys with passphrases, revoke departed staff keys and review sudo regularly. Successful authentication does not establish that an account’s privileges are appropriate."
+                    >
+                      Assign identifiable accounts and keys to people. Protect
+                      keys with passphrases, revoke departed staff keys and
+                      review sudo regularly. Successful authentication does not
+                      establish that an account’s privileges are appropriate.
+                    </p>
+                    <p>
+                      <span
+                        data-fa="مجوز sudo و لغو دسترسی کاربر در راهنمای مدیریت حساب آمده است."
+                        data-en="The account-management guide covers sudo permissions and access revocation."
+                        >The account-management guide covers sudo permissions
+                        and access revocation.</span
+                      >
+                      <a
+                        href="/articles/linux-security-account-access-management"
+                        ><span data-fa="راهنمای مرتبط" data-en="Related guide"
+                          >Related guide</span
+                        ></a
+                      >
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا تغییر پورت SSH کافی است؟"
+                      data-en="Is changing the SSH port enough?"
+                    >
+                      Is changing the SSH port enough?
+                    </h3>
+                    <p
+                      data-fa="خیر. کنترل مبدا، کلید، مدیریت حساب و ثبت رویداد لازم است."
+                      data-en="No. Source restrictions, keys, account lifecycle controls and audit records are still required."
+                    >
+                      No. Source restrictions, keys, account lifecycle controls
+                      and audit records are still required.
+                    </p>
+                    <h3
+                      data-fa="قبل از غیرفعال‌کردن Password چه چیزی باید تست شود؟"
+                      data-en="What must pass before password login is disabled?"
+                    >
+                      What must pass before password login is disabled?
+                    </h3>
+                    <p
+                      data-fa="ورود با کلید و sudo در نشست مستقل همراه با دسترسی console."
+                      data-en="Key login and sudo in an independent session, with console recovery available."
+                    >
+                      Key login and sudo in an independent session, with console
+                      recovery available.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://documentation.ubuntu.com/server/how-to/security/openssh-server/"
+                          rel="noopener"
+                          >Canonical: OpenSSH</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://man.openbsd.org/sshd_config"
+                          rel="noopener"
+                          >OpenBSD: sshd_config</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
+              </article>
             </div>
           </div>
         </div>
@@ -433,18 +935,24 @@ sudo systemctl reload ssh.service</code></pre>
             <div class="footer-brand">
               <h3 class="brand-name">
                 <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
-                  >AmirHossein Jalalian</span>
+                  >AmirHossein Jalalian</span
+                >
               </h3>
               <p
                 class="brand-title"
                 data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
-              >Infrastructure &amp; DevOps Engineer</p>
+              >
+                Infrastructure &amp; DevOps Engineer
+              </p>
               <p
                 class="brand-description"
                 data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
                 data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-              >Delivering reliable, secure, and scalable IT solutions for your business success.</p>
+              >
+                Delivering reliable, secure, and scalable IT solutions for your
+                business success.
+              </p>
             </div>
 
             <!-- Contact Info -->
@@ -453,12 +961,15 @@ sudo systemctl reload ssh.service</code></pre>
                 class="contact-title"
                 data-en="Get In Touch"
                 data-fa="تماس با من"
-              >Get In Touch</h4>
+              >
+                Get In Touch
+              </h4>
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>
                   <span data-en="Tehran, Iran" data-fa="تهران، ایران"
-                    >Tehran, Iran</span>
+                    >Tehran, Iran</span
+                  >
                 </div>
                 <div class="contact-item">
                   <i class="bi bi-telephone"></i>
@@ -483,7 +994,9 @@ sudo systemctl reload ssh.service</code></pre>
                   class="social-title"
                   data-en="Follow Me"
                   data-fa="دنبال کنید"
-                >Follow Me</h5>
+                >
+                  Follow Me
+                </h5>
                 <div class="social-icons">
                   <a
                     href="https://wa.me/989197276219"
@@ -529,12 +1042,14 @@ sudo systemctl reload ssh.service</code></pre>
                   <span
                     data-en="All Rights Reserved"
                     data-fa="تمام حقوق محفوظ است"
-                    >All Rights Reserved</span>
+                    >All Rights Reserved</span
+                  >
                 </p>
               </div>
               <div class="footer-heart">
                 <span data-en="Made with" data-fa="ساخته شده با"
-                  >Made with</span>
+                  >Made with</span
+                >
                 <i class="bi bi-heart-fill"></i>
                 <span data-en="in Iran" data-fa="در ایران">in Iran</span>
               </div>

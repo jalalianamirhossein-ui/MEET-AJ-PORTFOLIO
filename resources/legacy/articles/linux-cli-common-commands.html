@@ -4,7 +4,10 @@
     <title>Linux Commands for Server Diagnostics | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Inspect CPU, memory, storage, services and networking, and interpret results before changing a Linux server." />
+    <meta
+      name="description"
+      content="Inspect CPU, memory, storage, services and networking, and interpret results before changing a Linux server."
+    />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <link
@@ -13,8 +16,14 @@
     />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Linux Commands for Server Diagnostics" />
-    <meta property="og:description" content="Inspect CPU, memory, storage, services and networking, and interpret results before changing a Linux server." />
-    <meta property="og:url" content="https://meetaj.ir/articles/linux-cli-common-commands" />
+    <meta
+      property="og:description"
+      content="Inspect CPU, memory, storage, services and networking, and interpret results before changing a Linux server."
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/linux-cli-common-commands"
+    />
     <meta property="og:site_name" content="Meet AJ" />
     <meta name="twitter:card" content="summary" />
     <link href="../assets/img/favicon.png" rel="icon" />
@@ -51,12 +60,95 @@
       rel="stylesheet"
       disabled
     />
-  <meta name="keywords" content="Linux Incident Runbook, linux cli common commands, infrastructure operations, production operations, troubleshooting" />
-<meta name="article:content-language" content="en" />
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Linux Commands for Server Diagnostics", "description": "Inspect CPU, memory, storage, services and networking, and interpret results before changing a Linux server.", "inLanguage": "en", "url": "https://meetaj.ir/articles/linux-cli-common-commands", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}, "mainEntityOfPage": "https://meetaj.ir/articles/linux-cli-common-commands"}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why can df and du disagree?", "acceptedAnswer": {"@type": "Answer", "text": "Open deleted files, mount layout and traversal scope can account for the difference."}}, {"@type": "Question", "name": "Does high load always indicate a CPU bottleneck?", "acceptedAnswer": {"@type": "Answer", "text": "No. Tasks waiting on IO can also increase load."}}], "inLanguage": "en"}</script>
-<script id="article-localizations" type="application/json">{"fa": {"title": "دستورات کاربردی Linux برای تشخیص مشکل سرور", "meta_title": "دستورات کاربردی Linux برای تشخیص مشکل سرور | Meet AJ", "description": "بررسی CPU، RAM، دیسک، سرویس و شبکه با دستورات Linux و تفسیر نتیجه پیش از تغییر سرور.", "keywords": ["دستورات کاربردی Linux برای تشخیص مشکل سرور", "عیب‌یابی", "بازیابی", "linux cli common commands"], "faq": [["چرا df و du متفاوت‌اند؟", "فایل حذف‌شده و باز، mount و محدوده پیمایش می‌توانند اختلاف ایجاد کنند."], ["آیا load بالا همیشه CPU bottleneck است؟", "خیر. taskهای منتظر IO نیز می‌توانند load را افزایش دهند."]]}, "en": {"title": "Linux Commands for Server Diagnostics", "meta_title": "Linux Commands for Server Diagnostics | Meet AJ", "description": "Inspect CPU, memory, storage, services and networking, and interpret results before changing a Linux server.", "keywords": ["Linux Commands for Server Diagnostics", "linux cli common commands", "troubleshooting"], "faq": [["Why can df and du disagree?", "Open deleted files, mount layout and traversal scope can account for the difference."], ["Does high load always indicate a CPU bottleneck?", "No. Tasks waiting on IO can also increase load."]]}}</script>
-</head>
+    <meta
+      name="keywords"
+      content="Linux Incident Runbook, linux cli common commands, infrastructure operations, production operations, troubleshooting"
+    />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Linux Commands for Server Diagnostics",
+        "description": "Inspect CPU, memory, storage, services and networking, and interpret results before changing a Linux server.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/linux-cli-common-commands",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/linux-cli-common-commands"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Why can df and du disagree?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Open deleted files, mount layout and traversal scope can account for the difference."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does high load always indicate a CPU bottleneck?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Tasks waiting on IO can also increase load."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "دستورات کاربردی Linux برای تشخیص مشکل سرور",
+          "meta_title": "دستورات کاربردی Linux برای تشخیص مشکل سرور | Meet AJ",
+          "description": "بررسی CPU، RAM، دیسک، سرویس و شبکه با دستورات Linux و تفسیر نتیجه پیش از تغییر سرور.",
+          "keywords": [
+            "دستورات کاربردی Linux برای تشخیص مشکل سرور",
+            "عیب‌یابی",
+            "بازیابی",
+            "linux cli common commands"
+          ],
+          "faq": [
+            [
+              "چرا df و du متفاوت‌اند؟",
+              "فایل حذف‌شده و باز، mount و محدوده پیمایش می‌توانند اختلاف ایجاد کنند."
+            ],
+            [
+              "آیا load بالا همیشه CPU bottleneck است؟",
+              "خیر. taskهای منتظر IO نیز می‌توانند load را افزایش دهند."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Linux Commands for Server Diagnostics",
+          "meta_title": "Linux Commands for Server Diagnostics | Meet AJ",
+          "description": "Inspect CPU, memory, storage, services and networking, and interpret results before changing a Linux server.",
+          "keywords": [
+            "Linux Commands for Server Diagnostics",
+            "linux cli common commands",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Why can df and du disagree?",
+              "Open deleted files, mount layout and traversal scope can account for the difference."
+            ],
+            [
+              "Does high load always indicate a CPU bottleneck?",
+              "No. Tasks waiting on IO can also increase load."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
   <body class="article-page theme-linux">
     <button
       id="menu-toggle"
@@ -205,29 +297,92 @@
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
-          <li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="از نشانه خرابی به فرمان تشخیص" data-en="Choose commands from the failure symptom">Choose commands from the failure symptom</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="محیط اجرای فرمان‌ها" data-en="Command environment">Command environment</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="ترتیب بررسی در رخداد" data-en="Order of investigation">Order of investigation</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="CPU، RAM، دیسک و وضعیت سرویس" data-en="CPU, memory, disks and service state">CPU, memory, disks and service state</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="اختلاف df و du و خطای شبکه" data-en="df/du disagreement and network failures">df/du disagreement and network failures</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="مقایسه Snapshot با Trend" data-en="Compare snapshots with trends">Compare snapshots with trends</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-security"><span data-fa="حفاظت از شواهد و محدودکردن sudo" data-en="Protect evidence and limit sudo">Protect evidence and limit sudo</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="قبل و بعد از تغییر" data-en="Before and after a correction">Before and after a correction</span></a></li>
-<li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">Official Sources</span></a></li>
-
-
-
-
-
-
-
-
-
-
-
-
-
+          <li class="article-nav-item">
+            <a href="#enterprise-intro"
+              ><span
+                data-fa="از نشانه خرابی به فرمان تشخیص"
+                data-en="Choose commands from the failure symptom"
+                >Choose commands from the failure symptom</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span data-fa="محیط اجرای فرمان‌ها" data-en="Command environment"
+                >Command environment</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="ترتیب بررسی در رخداد"
+                data-en="Order of investigation"
+                >Order of investigation</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="CPU، RAM، دیسک و وضعیت سرویس"
+                data-en="CPU, memory, disks and service state"
+                >CPU, memory, disks and service state</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="اختلاف df و du و خطای شبکه"
+                data-en="df/du disagreement and network failures"
+                >df/du disagreement and network failures</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="مقایسه Snapshot با Trend"
+                data-en="Compare snapshots with trends"
+                >Compare snapshots with trends</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-security"
+              ><span
+                data-fa="حفاظت از شواهد و محدودکردن sudo"
+                data-en="Protect evidence and limit sudo"
+                >Protect evidence and limit sudo</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="قبل و بعد از تغییر"
+                data-en="Before and after a correction"
+                >Before and after a correction</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#faq"
+              ><span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
+              ></a
+            >
+          </li>
         </ul>
       </nav>
       <button
@@ -250,19 +405,25 @@
                 <span class="article-category">Linux</span
                 ><span class="meta-date"
                   ><span class="article-date" data-en="Article" data-fa="مقاله"
-                    >Article</span><time datetime="">Linux</time></span
+                    >Article</span
+                  ><time datetime="">Linux</time></span
                 >
               </div>
               <h1
                 class="article-title hero-title"
-
-
-               data-fa="دستورات کاربردی Linux برای تشخیص مشکل سرور" data-en="Linux Commands for Server Diagnostics">Linux Commands for Server Diagnostics</h1>
+                data-fa="دستورات کاربردی Linux برای تشخیص مشکل سرور"
+                data-en="Linux Commands for Server Diagnostics"
+              >
+                Linux Commands for Server Diagnostics
+              </h1>
               <p
                 class="article-excerpt hero-subtitle"
-
-
-               data-fa="بررسی CPU، RAM، دیسک، سرویس و شبکه با دستورات Linux و تفسیر نتیجه پیش از تغییر سرور." data-en="Inspect CPU, memory, storage, services and networking, and interpret results before changing a Linux server.">Inspect CPU, memory, storage, services and networking, and interpret results before changing a Linux server.</p>
+                data-fa="بررسی CPU، RAM، دیسک، سرویس و شبکه با دستورات Linux و تفسیر نتیجه پیش از تغییر سرور."
+                data-en="Inspect CPU, memory, storage, services and networking, and interpret results before changing a Linux server."
+              >
+                Inspect CPU, memory, storage, services and networking, and
+                interpret results before changing a Linux server.
+              </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -276,7 +437,9 @@
                       class="banner-subtitle"
                       data-en="Meet AJ technical article"
                       data-fa="مقاله فنی Meet AJ"
-                    >Meet AJ technical article</p>
+                    >
+                      Meet AJ technical article
+                    </p>
                   </div>
                 </div>
               </div>
@@ -287,7 +450,8 @@
                   ><span class="btn-content"
                     ><i class="bi bi-play-circle" aria-hidden="true"></i
                     ><span data-en="Start reading" data-fa="شروع مطالعه"
-                      >Start reading</span></span
+                      >Start reading</span
+                    ></span
                   ></a
                 >
               </div>
@@ -308,13 +472,128 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="en" dir="ltr"><section id="enterprise-intro" class="article-section"><h2 data-fa="از نشانه خرابی به فرمان تشخیص" data-en="Choose commands from the failure symptom">Choose commands from the failure symptom</h2><p data-fa="برای سرور کند، ابتدا مشخص کنید تأخیر در کدام سرویس و از چه زمانی شروع شده است. سپس CPU، RAM، دیسک و وابستگی‌ها را بررسی کنید. Restart یا حذف Log پیش از ثبت شواهد، علت را پنهان می‌کند. این فرمان‌ها برای تشخیص‌اند، نه اجرای یک فهرست ثابت روی هر رخداد." data-en="For a slow server, identify the affected service and when latency began, then inspect CPU, memory, storage and dependencies. Restarting or deleting logs before evidence collection hides the cause. Select these diagnostics for the symptom rather than running a fixed checklist on every incident.">For a slow server, identify the affected service and when latency began, then inspect CPU, memory, storage and dependencies. Restarting or deleting logs before evidence collection hides the cause. Select these diagnostics for the symptom rather than running a fixed checklist on every incident.</p><h3 id="enterprise-scenario" data-fa="مثال: Nginx کند با CPU پایین" data-en="Example: slow Nginx with low CPU">Example: slow Nginx with low CPU</h3><p data-fa="CPU پایین، کمبود Resource را رد نمی‌کند. ممکن است برنامه منتظر دیسک یا Backend باشد. زمان پاسخ Endpoint را با IO Wait، حافظه Available و وضعیت Upstream مقایسه کنید." data-en="Low CPU does not rule out resource pressure. The application might be waiting for storage or its backend. Compare endpoint latency with IO wait, available memory and upstream health.">Low CPU does not rule out resource pressure. The application might be waiting for storage or its backend. Compare endpoint latency with IO wait, available memory and upstream health.</p></section>
-<section id="enterprise-prerequisites" class="article-section"><h2 data-fa="محیط اجرای فرمان‌ها" data-en="Command environment">Command environment</h2><p data-fa="مثال‌ها برای Ubuntu 24.04 LTS با Bash، Systemd و iproute2 هستند. در توزیع دیگر نام Package و سرویس را بررسی کنید." data-en="Examples use Ubuntu 24.04 LTS, Bash, systemd and iproute2. Check package and service names on other distributions.">Examples use Ubuntu 24.04 LTS, Bash, systemd and iproute2. Check package and service names on other distributions.</p>
-<p data-fa="این فرمان‌ها روی سرور موجود اجرا می‌شوند و به ظرفیت VM جدا نیاز ندارند. پیمایش سنگین دیسک مانند du روی Storage پربار هزینه دارد." data-en="Run these commands on the existing server. No separate VM allocation is required. Disk walks such as du add load to busy storage.">Run these commands on the existing server. No separate VM allocation is required. Disk walks such as du add load to busy storage.</p>
-<p data-fa="coreutils، procps، iproute2 و curl ابزارهای اصلی‌اند. برای Log محافظت‌شده یا دیدن PID همه Listenerها از sudo استفاده کنید. سایر بررسی‌ها معمولاً دسترسی عادی کافی دارند." data-en="Core tools are coreutils, procps, iproute2 and curl. Protected logs and all-listener PID inspection need sudo. Standard privileges usually suffice for other checks.">Core tools are coreutils, procps, iproute2 and curl. Protected logs and all-listener PID inspection need sudo. Standard privileges usually suffice for other checks.</p><h3 id="enterprise-compatibility" data-fa="Container و ابزارهای قدیمی" data-en="Containers and older tools">Containers and older tools</h3><p data-fa="در Container، /proc و ابزار شبکه معمولاً Namespace همان Container را می‌بینند. برای وضعیت Host، روی Host بررسی کنید. ifconfig و netstat در همه توزیع‌ها نصب نیستند و مثال‌ها از ip و ss استفاده می‌کنند." data-en="Inside a container, /proc and network tools usually report that container’s namespace. Inspect the host for host-level state. Ifconfig and netstat are not installed everywhere, so examples use ip and ss.">Inside a container, /proc and network tools usually report that container’s namespace. Inspect the host for host-level state. Ifconfig and netstat are not installed everywhere, so examples use ip and ss.</p></section>
-<section id="enterprise-architecture" class="article-section"><h2 data-fa="ترتیب بررسی در رخداد" data-en="Order of investigation">Order of investigation</h2><p data-fa="زمان و اثر خرابی را ثبت کنید. Resource را بررسی کنید، سپس Log سرویس و مسیر DNS و شبکه را با نتیجه مقایسه کنید. بعد از انتخاب علت محتمل، یک تغییر محدود انجام دهید و همان آزمون اولیه را تکرار کنید." data-en="Record timing and impact, inspect resources, then correlate service logs and DNS/network checks. Once evidence supports a cause, make a limited change and repeat the original failing test.">Record timing and impact, inspect resources, then correlate service logs and DNS/network checks. Once evidence supports a cause, make a limited change and repeat the original failing test.</p></section>
-<section id="enterprise-installation" class="article-section"><h2 data-fa="CPU، RAM، دیسک و وضعیت سرویس" data-en="CPU, memory, disks and service state">CPU, memory, disks and service state</h2><p data-fa="ابزارها معمولاً نصب‌اند. فقط Package مفقود را از Repository همان سیستم اضافه کنید. ابتدا فرمان‌های خواندنی زیر را برای ثبت وضعیت اجرا کنید." data-en="Tools are commonly present. Install only missing packages from the matching repository. Begin with these read-only state checks.">Tools are commonly present. Install only missing packages from the matching repository. Begin with these read-only state checks.</p>
-<pre dir="ltr"><code class="language-bash">date -u --iso-8601=seconds
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="از نشانه خرابی به فرمان تشخیص"
+                      data-en="Choose commands from the failure symptom"
+                    >
+                      Choose commands from the failure symptom
+                    </h2>
+                    <p
+                      data-fa="برای سرور کند، ابتدا مشخص کنید تأخیر در کدام سرویس و از چه زمانی شروع شده است. سپس CPU، RAM، دیسک و وابستگی‌ها را بررسی کنید. Restart یا حذف Log پیش از ثبت شواهد، علت را پنهان می‌کند. این فرمان‌ها برای تشخیص‌اند، نه اجرای یک فهرست ثابت روی هر رخداد."
+                      data-en="For a slow server, identify the affected service and when latency began, then inspect CPU, memory, storage and dependencies. Restarting or deleting logs before evidence collection hides the cause. Select these diagnostics for the symptom rather than running a fixed checklist on every incident."
+                    >
+                      For a slow server, identify the affected service and when
+                      latency began, then inspect CPU, memory, storage and
+                      dependencies. Restarting or deleting logs before evidence
+                      collection hides the cause. Select these diagnostics for
+                      the symptom rather than running a fixed checklist on every
+                      incident.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: Nginx کند با CPU پایین"
+                      data-en="Example: slow Nginx with low CPU"
+                    >
+                      Example: slow Nginx with low CPU
+                    </h3>
+                    <p
+                      data-fa="CPU پایین، کمبود Resource را رد نمی‌کند. ممکن است برنامه منتظر دیسک یا Backend باشد. زمان پاسخ Endpoint را با IO Wait، حافظه Available و وضعیت Upstream مقایسه کنید."
+                      data-en="Low CPU does not rule out resource pressure. The application might be waiting for storage or its backend. Compare endpoint latency with IO wait, available memory and upstream health."
+                    >
+                      Low CPU does not rule out resource pressure. The
+                      application might be waiting for storage or its backend.
+                      Compare endpoint latency with IO wait, available memory
+                      and upstream health.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="محیط اجرای فرمان‌ها"
+                      data-en="Command environment"
+                    >
+                      Command environment
+                    </h2>
+                    <p
+                      data-fa="مثال‌ها برای Ubuntu 24.04 LTS با Bash، Systemd و iproute2 هستند. در توزیع دیگر نام Package و سرویس را بررسی کنید."
+                      data-en="Examples use Ubuntu 24.04 LTS, Bash, systemd and iproute2. Check package and service names on other distributions."
+                    >
+                      Examples use Ubuntu 24.04 LTS, Bash, systemd and iproute2.
+                      Check package and service names on other distributions.
+                    </p>
+                    <p
+                      data-fa="این فرمان‌ها روی سرور موجود اجرا می‌شوند و به ظرفیت VM جدا نیاز ندارند. پیمایش سنگین دیسک مانند du روی Storage پربار هزینه دارد."
+                      data-en="Run these commands on the existing server. No separate VM allocation is required. Disk walks such as du add load to busy storage."
+                    >
+                      Run these commands on the existing server. No separate VM
+                      allocation is required. Disk walks such as du add load to
+                      busy storage.
+                    </p>
+                    <p
+                      data-fa="coreutils، procps، iproute2 و curl ابزارهای اصلی‌اند. برای Log محافظت‌شده یا دیدن PID همه Listenerها از sudo استفاده کنید. سایر بررسی‌ها معمولاً دسترسی عادی کافی دارند."
+                      data-en="Core tools are coreutils, procps, iproute2 and curl. Protected logs and all-listener PID inspection need sudo. Standard privileges usually suffice for other checks."
+                    >
+                      Core tools are coreutils, procps, iproute2 and curl.
+                      Protected logs and all-listener PID inspection need sudo.
+                      Standard privileges usually suffice for other checks.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="Container و ابزارهای قدیمی"
+                      data-en="Containers and older tools"
+                    >
+                      Containers and older tools
+                    </h3>
+                    <p
+                      data-fa="در Container، /proc و ابزار شبکه معمولاً Namespace همان Container را می‌بینند. برای وضعیت Host، روی Host بررسی کنید. ifconfig و netstat در همه توزیع‌ها نصب نیستند و مثال‌ها از ip و ss استفاده می‌کنند."
+                      data-en="Inside a container, /proc and network tools usually report that container’s namespace. Inspect the host for host-level state. Ifconfig and netstat are not installed everywhere, so examples use ip and ss."
+                    >
+                      Inside a container, /proc and network tools usually report
+                      that container’s namespace. Inspect the host for
+                      host-level state. Ifconfig and netstat are not installed
+                      everywhere, so examples use ip and ss.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="ترتیب بررسی در رخداد"
+                      data-en="Order of investigation"
+                    >
+                      Order of investigation
+                    </h2>
+                    <p
+                      data-fa="زمان و اثر خرابی را ثبت کنید. Resource را بررسی کنید، سپس Log سرویس و مسیر DNS و شبکه را با نتیجه مقایسه کنید. بعد از انتخاب علت محتمل، یک تغییر محدود انجام دهید و همان آزمون اولیه را تکرار کنید."
+                      data-en="Record timing and impact, inspect resources, then correlate service logs and DNS/network checks. Once evidence supports a cause, make a limited change and repeat the original failing test."
+                    >
+                      Record timing and impact, inspect resources, then
+                      correlate service logs and DNS/network checks. Once
+                      evidence supports a cause, make a limited change and
+                      repeat the original failing test.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="CPU، RAM، دیسک و وضعیت سرویس"
+                      data-en="CPU, memory, disks and service state"
+                    >
+                      CPU, memory, disks and service state
+                    </h2>
+                    <p
+                      data-fa="ابزارها معمولاً نصب‌اند. فقط Package مفقود را از Repository همان سیستم اضافه کنید. ابتدا فرمان‌های خواندنی زیر را برای ثبت وضعیت اجرا کنید."
+                      data-en="Tools are commonly present. Install only missing packages from the matching repository. Begin with these read-only state checks."
+                    >
+                      Tools are commonly present. Install only missing packages
+                      from the matching repository. Begin with these read-only
+                      state checks.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">date -u --iso-8601=seconds
 uptime
 free -h
 vmstat 1 5
@@ -325,23 +604,188 @@ systemctl --failed --no-pager
 ip -br address
 ip route
 ss -lnt</code></pre>
-<p data-fa="Load را با تعداد CPU و IO Wait بسنجید. در free به Available توجه کنید، زیرا Cache قابل آزادشدن است. df -i کمبود Inode را جدا از کمبود Byte نشان می‌دهد. در vmstat نمونه نخست میانگین از Boot است و نمونه‌های بعدی بازه جاری‌اند." data-en="Interpret load with CPU count and IO wait. In free, inspect available memory because cache is reclaimable. Df -i separates inode from byte exhaustion. Vmstat’s first sample averages since boot, while subsequent samples cover current intervals.">Interpret load with CPU count and IO wait. In free, inspect available memory because cache is reclaimable. Df -i separates inode from byte exhaustion. Vmstat’s first sample averages since boot, while subsequent samples cover current intervals.</p>
-<pre dir="ltr"><code class="language-bash">systemctl status nginx --no-pager
+                    <p
+                      data-fa="Load را با تعداد CPU و IO Wait بسنجید. در free به Available توجه کنید، زیرا Cache قابل آزادشدن است. df -i کمبود Inode را جدا از کمبود Byte نشان می‌دهد. در vmstat نمونه نخست میانگین از Boot است و نمونه‌های بعدی بازه جاری‌اند."
+                      data-en="Interpret load with CPU count and IO wait. In free, inspect available memory because cache is reclaimable. Df -i separates inode from byte exhaustion. Vmstat’s first sample averages since boot, while subsequent samples cover current intervals."
+                    >
+                      Interpret load with CPU count and IO wait. In free,
+                      inspect available memory because cache is reclaimable. Df
+                      -i separates inode from byte exhaustion. Vmstat’s first
+                      sample averages since boot, while subsequent samples cover
+                      current intervals.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">systemctl status nginx --no-pager
 sudo journalctl -u nginx --since &#x27;15 minutes ago&#x27; --no-pager
 curl --fail --max-time 5 -I https://example.com
 sudo du -xhd1 /var/log</code></pre>
-<p data-fa="example.com مقصد عمومی نمونه است. آن را با Endpoint خراب عوض کنید. du -x از عبور به File System دیگر جلوگیری می‌کند، اما پیمایش آن هنوز IO دارد. نتیجه را با زمان پاسخ همان برنامه مقایسه کنید." data-en="Replace the public example.com sample with the failing endpoint. Du -x avoids other filesystems but still incurs IO. Compare results with that application’s latency.">Replace the public example.com sample with the failing endpoint. Du -x avoids other filesystems but still incurs IO. Compare results with that application’s latency.</p></section>
-<section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="اختلاف df و du و خطای شبکه" data-en="df/du disagreement and network failures">df/du disagreement and network failures</h2><p data-fa="اگر df دیسک را پر نشان می‌دهد ولی du کوچک است، فایل حذف‌شده باز یا داده پنهان‌شده زیر Mount را بررسی کنید. lsof در صورت نصب، Process نگه‌دارنده فایل را نشان می‌دهد." data-en="When df reports full storage but du totals are small, inspect open deleted files or data hidden beneath mounts. Installed lsof identifies processes holding deleted files.">When df reports full storage but du totals are small, inspect open deleted files or data hidden beneath mounts. Installed lsof identifies processes holding deleted files.</p>
-<pre dir="ltr"><code class="language-bash">sudo lsof +L1
+                    <p
+                      data-fa="example.com مقصد عمومی نمونه است. آن را با Endpoint خراب عوض کنید. du -x از عبور به File System دیگر جلوگیری می‌کند، اما پیمایش آن هنوز IO دارد. نتیجه را با زمان پاسخ همان برنامه مقایسه کنید."
+                      data-en="Replace the public example.com sample with the failing endpoint. Du -x avoids other filesystems but still incurs IO. Compare results with that application’s latency."
+                    >
+                      Replace the public example.com sample with the failing
+                      endpoint. Du -x avoids other filesystems but still incurs
+                      IO. Compare results with that application’s latency.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="اختلاف df و du و خطای شبکه"
+                      data-en="df/du disagreement and network failures"
+                    >
+                      df/du disagreement and network failures
+                    </h2>
+                    <p
+                      data-fa="اگر df دیسک را پر نشان می‌دهد ولی du کوچک است، فایل حذف‌شده باز یا داده پنهان‌شده زیر Mount را بررسی کنید. lsof در صورت نصب، Process نگه‌دارنده فایل را نشان می‌دهد."
+                      data-en="When df reports full storage but du totals are small, inspect open deleted files or data hidden beneath mounts. Installed lsof identifies processes holding deleted files."
+                    >
+                      When df reports full storage but du totals are small,
+                      inspect open deleted files or data hidden beneath mounts.
+                      Installed lsof identifies processes holding deleted files.
+                    </p>
+                    <pre dir="ltr"><code class="language-bash">sudo lsof +L1
 sudo ss -lntp
 ip route get 1.1.1.1
 resolvectl status</code></pre>
-<p data-fa="پس از شناسایی Process، روش مستند Reopen یا Reload لاگ را به کار ببرید. سرویس Active با Endpoint خراب به بررسی وابستگی نیاز دارد. برای Permission، مسیر واقعی را با namei -l و Policy AppArmor بررسی کنید." data-en="Use the process’s supported log-reopen or reload method. Active services with failing endpoints require dependency checks. For permissions, inspect the actual path with namei -l and review AppArmor policy.">Use the process’s supported log-reopen or reload method. Active services with failing endpoints require dependency checks. For permissions, inspect the actual path with namei -l and review AppArmor policy.</p></section>
-<section id="enterprise-monitoring" class="article-section"><h2 data-fa="مقایسه Snapshot با Trend" data-en="Compare snapshots with trends">Compare snapshots with trends</h2><p data-fa="خروجی فرمان، وضعیت همان لحظه است. برای ظرفیت، روند Available Memory، فضای دیسک و Inode را با Latency برنامه مقایسه کنید. Prometheus node_exporter یا Zabbix داده زمانی می‌دهند که یک Snapshot ندارد. هشدار پرشدن را با نرخ رشد تنظیم کنید." data-en="Commands show a moment in time. Compare memory, disk and inode trends with application latency. Prometheus node_exporter or Zabbix supplies history absent from a snapshot. Set capacity alerts using growth rates.">Commands show a moment in time. Compare memory, disk and inode trends with application latency. Prometheus node_exporter or Zabbix supplies history absent from a snapshot. Set capacity alerts using growth rates.</p><h3 id="enterprise-practices" data-fa="ثبت نتیجه و Exit Code" data-en="Record results and exit codes">Record results and exit codes</h3><p data-fa="زمان، فرمان و نتیجه را کنار فرضیه رخداد نگه دارید. خروجی غیرصفر را با معنای همان ابزار تفسیر کنید. Reboot را پس از بررسی علت و اثر آن انتخاب کنید، نه برای خالی‌کردن فهرست خطاها." data-en="Keep timestamps, commands and results with the incident hypothesis. Interpret nonzero exit codes using the tool’s semantics. Choose reboot after assessing cause and impact, rather than to clear visible errors.">Keep timestamps, commands and results with the incident hypothesis. Interpret nonzero exit codes using the tool’s semantics. Choose reboot after assessing cause and impact, rather than to clear visible errors.</p></section>
-<section id="enterprise-security" class="article-section"><h2 data-fa="حفاظت از شواهد و محدودکردن sudo" data-en="Protect evidence and limit sudo">Protect evidence and limit sudo</h2><p data-fa="خروجی Process، Environment و Config ممکن است Secret داشته باشد. آن را در Ticket عمومی نگذارید. Permission را فقط برای مسیر و مالک تأییدشده اصلاح کنید. chmod یا chown بازگشتی روی یک پوشه بزرگ، راه‌حل عمومی Permission denied نیست." data-en="Process, environment and configuration output might contain secrets. Keep it out of public tickets. Correct permissions only for verified paths and owners. Broad recursive chmod or chown is not a general Permission denied fix.">Process, environment and configuration output might contain secrets. Keep it out of public tickets. Correct permissions only for verified paths and owners. Broad recursive chmod or chown is not a general Permission denied fix.</p></section>
-<section id="enterprise-recovery" class="article-section"><h2 data-fa="قبل و بعد از تغییر" data-en="Before and after a correction">Before and after a correction</h2><p data-fa="فرمان‌های بالا تنظیم سرویس را تغییر نمی‌دهند، اما اجرای برخی از آن‌ها بار دارد. پیش از اصلاح Config، نسخه و مالکیت آن را حفظ کنید. در Disk Full، فایل را پس از تعیین Retention و Backup حذف کنید و سپس df و آزمون برنامه را تکرار کنید." data-en="These checks do not change service configuration, though some add load. Preserve configuration and ownership before corrections. During disk-full incidents, establish retention and backups before deleting files, then repeat df and the application test.">These checks do not change service configuration, though some add load. Preserve configuration and ownership before corrections. During disk-full incidents, establish retention and backups before deleting files, then repeat df and the application test.</p></section>
-<section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</h2><h3 data-fa="چرا df و du متفاوت‌اند؟" data-en="Why can df and du disagree?">Why can df and du disagree?</h3><p data-fa="فایل حذف‌شده و باز، mount و محدوده پیمایش می‌توانند اختلاف ایجاد کنند." data-en="Open deleted files, mount layout and traversal scope can account for the difference.">Open deleted files, mount layout and traversal scope can account for the difference.</p><h3 data-fa="آیا load بالا همیشه CPU bottleneck است؟" data-en="Does high load always indicate a CPU bottleneck?">Does high load always indicate a CPU bottleneck?</h3><p data-fa="خیر. taskهای منتظر IO نیز می‌توانند load را افزایش دهند." data-en="No. Tasks waiting on IO can also increase load.">No. Tasks waiting on IO can also increase load.</p></section>
-<section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">Official Sources</h2><ul><li><a href="https://documentation.ubuntu.com/server/reference/cli/" rel="noopener">Canonical: CLI reference</a></li><li><a href="https://www.freedesktop.org/software/systemd/man/latest/journalctl.html" rel="noopener">systemd: journalctl</a></li></ul></section></div></article>
+                    <p
+                      data-fa="پس از شناسایی Process، روش مستند Reopen یا Reload لاگ را به کار ببرید. سرویس Active با Endpoint خراب به بررسی وابستگی نیاز دارد. برای Permission، مسیر واقعی را با namei -l و Policy AppArmor بررسی کنید."
+                      data-en="Use the process’s supported log-reopen or reload method. Active services with failing endpoints require dependency checks. For permissions, inspect the actual path with namei -l and review AppArmor policy."
+                    >
+                      Use the process’s supported log-reopen or reload method.
+                      Active services with failing endpoints require dependency
+                      checks. For permissions, inspect the actual path with
+                      namei -l and review AppArmor policy.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="مقایسه Snapshot با Trend"
+                      data-en="Compare snapshots with trends"
+                    >
+                      Compare snapshots with trends
+                    </h2>
+                    <p
+                      data-fa="خروجی فرمان، وضعیت همان لحظه است. برای ظرفیت، روند Available Memory، فضای دیسک و Inode را با Latency برنامه مقایسه کنید. Prometheus node_exporter یا Zabbix داده زمانی می‌دهند که یک Snapshot ندارد. هشدار پرشدن را با نرخ رشد تنظیم کنید."
+                      data-en="Commands show a moment in time. Compare memory, disk and inode trends with application latency. Prometheus node_exporter or Zabbix supplies history absent from a snapshot. Set capacity alerts using growth rates."
+                    >
+                      Commands show a moment in time. Compare memory, disk and
+                      inode trends with application latency. Prometheus
+                      node_exporter or Zabbix supplies history absent from a
+                      snapshot. Set capacity alerts using growth rates.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="ثبت نتیجه و Exit Code"
+                      data-en="Record results and exit codes"
+                    >
+                      Record results and exit codes
+                    </h3>
+                    <p
+                      data-fa="زمان، فرمان و نتیجه را کنار فرضیه رخداد نگه دارید. خروجی غیرصفر را با معنای همان ابزار تفسیر کنید. Reboot را پس از بررسی علت و اثر آن انتخاب کنید، نه برای خالی‌کردن فهرست خطاها."
+                      data-en="Keep timestamps, commands and results with the incident hypothesis. Interpret nonzero exit codes using the tool’s semantics. Choose reboot after assessing cause and impact, rather than to clear visible errors."
+                    >
+                      Keep timestamps, commands and results with the incident
+                      hypothesis. Interpret nonzero exit codes using the tool’s
+                      semantics. Choose reboot after assessing cause and impact,
+                      rather than to clear visible errors.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="حفاظت از شواهد و محدودکردن sudo"
+                      data-en="Protect evidence and limit sudo"
+                    >
+                      Protect evidence and limit sudo
+                    </h2>
+                    <p
+                      data-fa="خروجی Process، Environment و Config ممکن است Secret داشته باشد. آن را در Ticket عمومی نگذارید. Permission را فقط برای مسیر و مالک تأییدشده اصلاح کنید. chmod یا chown بازگشتی روی یک پوشه بزرگ، راه‌حل عمومی Permission denied نیست."
+                      data-en="Process, environment and configuration output might contain secrets. Keep it out of public tickets. Correct permissions only for verified paths and owners. Broad recursive chmod or chown is not a general Permission denied fix."
+                    >
+                      Process, environment and configuration output might
+                      contain secrets. Keep it out of public tickets. Correct
+                      permissions only for verified paths and owners. Broad
+                      recursive chmod or chown is not a general Permission
+                      denied fix.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="قبل و بعد از تغییر"
+                      data-en="Before and after a correction"
+                    >
+                      Before and after a correction
+                    </h2>
+                    <p
+                      data-fa="فرمان‌های بالا تنظیم سرویس را تغییر نمی‌دهند، اما اجرای برخی از آن‌ها بار دارد. پیش از اصلاح Config، نسخه و مالکیت آن را حفظ کنید. در Disk Full، فایل را پس از تعیین Retention و Backup حذف کنید و سپس df و آزمون برنامه را تکرار کنید."
+                      data-en="These checks do not change service configuration, though some add load. Preserve configuration and ownership before corrections. During disk-full incidents, establish retention and backups before deleting files, then repeat df and the application test."
+                    >
+                      These checks do not change service configuration, though
+                      some add load. Preserve configuration and ownership before
+                      corrections. During disk-full incidents, establish
+                      retention and backups before deleting files, then repeat
+                      df and the application test.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="چرا df و du متفاوت‌اند؟"
+                      data-en="Why can df and du disagree?"
+                    >
+                      Why can df and du disagree?
+                    </h3>
+                    <p
+                      data-fa="فایل حذف‌شده و باز، mount و محدوده پیمایش می‌توانند اختلاف ایجاد کنند."
+                      data-en="Open deleted files, mount layout and traversal scope can account for the difference."
+                    >
+                      Open deleted files, mount layout and traversal scope can
+                      account for the difference.
+                    </p>
+                    <h3
+                      data-fa="آیا load بالا همیشه CPU bottleneck است؟"
+                      data-en="Does high load always indicate a CPU bottleneck?"
+                    >
+                      Does high load always indicate a CPU bottleneck?
+                    </h3>
+                    <p
+                      data-fa="خیر. taskهای منتظر IO نیز می‌توانند load را افزایش دهند."
+                      data-en="No. Tasks waiting on IO can also increase load."
+                    >
+                      No. Tasks waiting on IO can also increase load.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://documentation.ubuntu.com/server/reference/cli/"
+                          rel="noopener"
+                          >Canonical: CLI reference</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://www.freedesktop.org/software/systemd/man/latest/journalctl.html"
+                          rel="noopener"
+                          >systemd: journalctl</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
+              </article>
             </div>
           </div>
         </div>
@@ -359,18 +803,24 @@ resolvectl status</code></pre>
             <div class="footer-brand">
               <h3 class="brand-name">
                 <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
-                  >AmirHossein Jalalian</span>
+                  >AmirHossein Jalalian</span
+                >
               </h3>
               <p
                 class="brand-title"
                 data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
-              >Infrastructure &amp; DevOps Engineer</p>
+              >
+                Infrastructure &amp; DevOps Engineer
+              </p>
               <p
                 class="brand-description"
                 data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
                 data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-              >Delivering reliable, secure, and scalable IT solutions for your business success.</p>
+              >
+                Delivering reliable, secure, and scalable IT solutions for your
+                business success.
+              </p>
             </div>
 
             <!-- Contact Info -->
@@ -379,12 +829,15 @@ resolvectl status</code></pre>
                 class="contact-title"
                 data-en="Get In Touch"
                 data-fa="تماس با من"
-              >Get In Touch</h4>
+              >
+                Get In Touch
+              </h4>
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>
                   <span data-en="Tehran, Iran" data-fa="تهران، ایران"
-                    >Tehran, Iran</span>
+                    >Tehran, Iran</span
+                  >
                 </div>
                 <div class="contact-item">
                   <i class="bi bi-telephone"></i>
@@ -409,7 +862,9 @@ resolvectl status</code></pre>
                   class="social-title"
                   data-en="Follow Me"
                   data-fa="دنبال کنید"
-                >Follow Me</h5>
+                >
+                  Follow Me
+                </h5>
                 <div class="social-icons">
                   <a
                     href="https://wa.me/989197276219"
@@ -455,12 +910,14 @@ resolvectl status</code></pre>
                   <span
                     data-en="All Rights Reserved"
                     data-fa="تمام حقوق محفوظ است"
-                    >All Rights Reserved</span>
+                    >All Rights Reserved</span
+                  >
                 </p>
               </div>
               <div class="footer-heart">
                 <span data-en="Made with" data-fa="ساخته شده با"
-                  >Made with</span>
+                  >Made with</span
+                >
                 <i class="bi bi-heart-fill"></i>
                 <span data-en="in Iran" data-fa="در ایران">in Iran</span>
               </div>

@@ -98,7 +98,7 @@
               @include('articles.partials.breadcrumbs')
               <div class="article-meta">
                 @if ($article->published_at)
-                  <time class="meta-date article-date" datetime="{{ $article->published_at->toAtomString() }}">{{ $article->published_at->timezone(config('cms.display_timezone', config('app.timezone')))->format('M j, Y') }}</time>
+                  <x-localized-date class="meta-date article-date" :date="$article->published_at" :locale="data_get($article->presentation, 'content_language', 'en')" />
                 @endif
                 <span class="article-readtime">{{ $article->readingMinutes() }} <span data-en="min read" data-fa="دقیقه مطالعه">min read</span></span>
               </div>
@@ -298,7 +298,7 @@
             <div class="footer-bottom-content">
               <div class="copyright">
                 <p>
-                  © <span>{{ now()->year }}</span>
+                  © <x-localized-year />
                   <strong
                     data-en="AmirHossein Jalalian"
                     data-fa="امیرحسین جلالیان"
@@ -333,7 +333,7 @@
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1415" defer></script>
+    <script src="/assets/js/main.js?v=1416" defer></script>
     <script src="/assets/js/scroll-reveal.js?v=1" defer></script>
     <script src="/assets/js/i18n.js?v=1407" defer></script>
     <script>

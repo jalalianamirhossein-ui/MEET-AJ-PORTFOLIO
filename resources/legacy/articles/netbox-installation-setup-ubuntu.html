@@ -4,8 +4,14 @@
     <title>Install NetBox on Ubuntu with PostgreSQL and Nginx | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta name="description" content="Install NetBox 4.7.2, configure its database, Redis and Gunicorn, verify API/workers, and test backup and restore." />
-    <meta name="keywords" content="NetBox 4.7.2 on Ubuntu, netbox installation setup ubuntu, infrastructure operations, production operations, troubleshooting" />
+    <meta
+      name="description"
+      content="Install NetBox 4.7.2, configure its database, Redis and Gunicorn, verify API/workers, and test backup and restore."
+    />
+    <meta
+      name="keywords"
+      content="NetBox 4.7.2 on Ubuntu, netbox installation setup ubuntu, infrastructure operations, production operations, troubleshooting"
+    />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <meta name="language" content="fa, en" />
@@ -25,8 +31,14 @@
       content="../assets/img/apple-touch-icon.png"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Install NetBox on Ubuntu with PostgreSQL and Nginx" />
-    <meta property="og:description" content="Install NetBox 4.7.2, configure its database, Redis and Gunicorn, verify API/workers, and test backup and restore." />
+    <meta
+      property="og:title"
+      content="Install NetBox on Ubuntu with PostgreSQL and Nginx"
+    />
+    <meta
+      property="og:description"
+      content="Install NetBox 4.7.2, configure its database, Redis and Gunicorn, verify API/workers, and test backup and restore."
+    />
     <meta property="og:image" content="../assets/img/portfolio/linux-7.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -35,7 +47,10 @@
       property="og:image:alt"
       content="NetBox Ubuntu Installation Guide - IPAM DCIM Setup"
     />
-    <meta property="og:url" content="https://meetaj.ir/articles/netbox-installation-setup-ubuntu" />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/netbox-installation-setup-ubuntu"
+    />
     <meta property="og:site_name" content="Meet AJ - Technical Articles" />
     <meta property="twitter:card" content="summary_large_image" />
     <meta
@@ -77,7 +92,6 @@
     <link href="../assets/img/favicon.png" rel="icon" />
     <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
 
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -110,11 +124,91 @@
       rel="stylesheet"
       disabled
     />
-  <meta name="article:content-language" content="en" />
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Install NetBox on Ubuntu with PostgreSQL and Nginx", "description": "Install NetBox 4.7.2, configure its database, Redis and Gunicorn, verify API/workers, and test backup and restore.", "inLanguage": "en", "url": "https://meetaj.ir/articles/netbox-installation-setup-ubuntu", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}, "mainEntityOfPage": "https://meetaj.ir/articles/netbox-installation-setup-ubuntu"}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is a PostgreSQL backup enough?", "acceptedAnswer": {"@type": "Answer", "text": "No. Retain media, configuration, secret key, pepper and plugin versions."}}, {"@type": "Question", "name": "Can code simply be downgraded after a migration?", "acceptedAnswer": {"@type": "Answer", "text": "No. Rollback must account for schema compatibility and the pre-change database backup."}}], "inLanguage": "en"}</script>
-<script id="article-localizations" type="application/json">{"fa": {"title": "نصب NetBox روی Ubuntu با PostgreSQL و Nginx", "meta_title": "نصب NetBox روی Ubuntu با PostgreSQL و Nginx | Meet AJ", "description": "نصب NetBox 4.7.2، تنظیم Database و Redis و Gunicorn، بررسی API و Worker و آزمون Backup و Restore.", "keywords": ["نصب NetBox روی Ubuntu با PostgreSQL و Nginx", "عیب‌یابی", "بازیابی", "netbox installation setup ubuntu"], "faq": [["آیا backup PostgreSQL به‌تنهایی کافی است؟", "خیر. media، configuration، secret key، pepper و نسخه pluginها نیز باید حفظ شوند."], ["آیا بعد migration می‌توان فقط code را downgrade کرد؟", "خیر. rollback باید سازگاری schema و بازیابی DB پیش از تغییر را در نظر بگیرد."]]}, "en": {"title": "Install NetBox on Ubuntu with PostgreSQL and Nginx", "meta_title": "Install NetBox on Ubuntu with PostgreSQL and Nginx | Meet AJ", "description": "Install NetBox 4.7.2, configure its database, Redis and Gunicorn, verify API/workers, and test backup and restore.", "keywords": ["Install NetBox on Ubuntu with PostgreSQL and Nginx", "netbox installation setup ubuntu", "troubleshooting"], "faq": [["Is a PostgreSQL backup enough?", "No. Retain media, configuration, secret key, pepper and plugin versions."], ["Can code simply be downgraded after a migration?", "No. Rollback must account for schema compatibility and the pre-change database backup."]]}}</script>
-</head>
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Install NetBox on Ubuntu with PostgreSQL and Nginx",
+        "description": "Install NetBox 4.7.2, configure its database, Redis and Gunicorn, verify API/workers, and test backup and restore.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/netbox-installation-setup-ubuntu",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/netbox-installation-setup-ubuntu"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is a PostgreSQL backup enough?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Retain media, configuration, secret key, pepper and plugin versions."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can code simply be downgraded after a migration?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Rollback must account for schema compatibility and the pre-change database backup."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "نصب NetBox روی Ubuntu با PostgreSQL و Nginx",
+          "meta_title": "نصب NetBox روی Ubuntu با PostgreSQL و Nginx | Meet AJ",
+          "description": "نصب NetBox 4.7.2، تنظیم Database و Redis و Gunicorn، بررسی API و Worker و آزمون Backup و Restore.",
+          "keywords": [
+            "نصب NetBox روی Ubuntu با PostgreSQL و Nginx",
+            "عیب‌یابی",
+            "بازیابی",
+            "netbox installation setup ubuntu"
+          ],
+          "faq": [
+            [
+              "آیا backup PostgreSQL به‌تنهایی کافی است؟",
+              "خیر. media، configuration، secret key، pepper و نسخه pluginها نیز باید حفظ شوند."
+            ],
+            [
+              "آیا بعد migration می‌توان فقط code را downgrade کرد؟",
+              "خیر. rollback باید سازگاری schema و بازیابی DB پیش از تغییر را در نظر بگیرد."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Install NetBox on Ubuntu with PostgreSQL and Nginx",
+          "meta_title": "Install NetBox on Ubuntu with PostgreSQL and Nginx | Meet AJ",
+          "description": "Install NetBox 4.7.2, configure its database, Redis and Gunicorn, verify API/workers, and test backup and restore.",
+          "keywords": [
+            "Install NetBox on Ubuntu with PostgreSQL and Nginx",
+            "netbox installation setup ubuntu",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Is a PostgreSQL backup enough?",
+              "No. Retain media, configuration, secret key, pepper and plugin versions."
+            ],
+            [
+              "Can code simply be downgraded after a migration?",
+              "No. Rollback must account for schema compatibility and the pre-change database backup."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
   <body class="article-page theme-linux">
     <button
       id="menu-toggle"
@@ -245,19 +339,114 @@
       <!-- ===============================================
       ==================== NAVIGATION MENU ================
       =============================================== -->
-      <nav id="navmenu" class="navmenu navmenu--article-toc" aria-label="Article navigation">
-<ul>
-<li><a href="../index.html#hero"><i class="bi bi-house navicon" aria-hidden="true"></i><span data-en="Home" data-fa="خانه">Home</span></a></li>
-<li><a href="../index.html#portfolio"><i class="bi bi-journal-text navicon" aria-hidden="true"></i><span data-en="Articles" data-fa="مقالات">Articles</span></a></li><li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="NetBox به‌عنوان مرجع شبکه" data-en="NetBox as a network source of truth">NetBox as a network source of truth</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="سرویس وب، Database و Worker" data-en="Web service, database and worker">Web service, database and worker</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="نسخه‌های مبنا و دامنه سرویس" data-en="Baseline versions and hostname">Baseline versions and hostname</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="نصب Dependency و راه‌اندازی سرویس‌ها" data-en="Install dependencies and start services">Install dependencies and start services</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-security"><span data-fa="API Permission و حفاظت Secretها" data-en="API permissions and secret protection">API permissions and secret protection</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="UI سالم با Job متوقف" data-en="Healthy UI with stalled jobs">Healthy UI with stalled jobs</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="502، CSRF و Queue" data-en="502, CSRF and queue failures">502, CSRF and queue failures</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="Backup هماهنگ و Restore ایزوله" data-en="Coordinated backup and isolated restore">Coordinated backup and isolated restore</span></a></li>
-<li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">Official Sources</span></a></li></ul></nav>
+      <nav
+        id="navmenu"
+        class="navmenu navmenu--article-toc"
+        aria-label="Article navigation"
+      >
+        <ul>
+          <li>
+            <a href="../index.html#hero"
+              ><i class="bi bi-house navicon" aria-hidden="true"></i
+              ><span data-en="Home" data-fa="خانه">Home</span></a
+            >
+          </li>
+          <li>
+            <a href="../index.html#portfolio"
+              ><i class="bi bi-journal-text navicon" aria-hidden="true"></i
+              ><span data-en="Articles" data-fa="مقالات">Articles</span></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-intro"
+              ><span
+                data-fa="NetBox به‌عنوان مرجع شبکه"
+                data-en="NetBox as a network source of truth"
+                >NetBox as a network source of truth</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="سرویس وب، Database و Worker"
+                data-en="Web service, database and worker"
+                >Web service, database and worker</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="نسخه‌های مبنا و دامنه سرویس"
+                data-en="Baseline versions and hostname"
+                >Baseline versions and hostname</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="نصب Dependency و راه‌اندازی سرویس‌ها"
+                data-en="Install dependencies and start services"
+                >Install dependencies and start services</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-security"
+              ><span
+                data-fa="API Permission و حفاظت Secretها"
+                data-en="API permissions and secret protection"
+                >API permissions and secret protection</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="UI سالم با Job متوقف"
+                data-en="Healthy UI with stalled jobs"
+                >Healthy UI with stalled jobs</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="502، CSRF و Queue"
+                data-en="502, CSRF and queue failures"
+                >502, CSRF and queue failures</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="Backup هماهنگ و Restore ایزوله"
+                data-en="Coordinated backup and isolated restore"
+                >Coordinated backup and isolated restore</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#faq"
+              ><span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
+              ></a
+            >
+          </li>
+        </ul>
+      </nav>
       <button
         id="lang-toggle"
         class="i18n-link"
@@ -278,15 +467,25 @@
                 <span class="article-category">Linux</span
                 ><span class="meta-date"
                   ><span class="article-date" data-en="Article" data-fa="مقاله"
-                    >Article</span><time datetime="2026-09-19">NetBox 4.7.1</time></span
+                    >Article</span
+                  ><time datetime="2026-09-19">NetBox 4.7.1</time></span
                 >
               </div>
               <h1
                 class="article-title hero-title"
-                data-fa="نصب NetBox روی Ubuntu با PostgreSQL و Nginx" data-en="Install NetBox on Ubuntu with PostgreSQL and Nginx">Install NetBox on Ubuntu with PostgreSQL and Nginx</h1>
+                data-fa="نصب NetBox روی Ubuntu با PostgreSQL و Nginx"
+                data-en="Install NetBox on Ubuntu with PostgreSQL and Nginx"
+              >
+                Install NetBox on Ubuntu with PostgreSQL and Nginx
+              </h1>
               <p
                 class="article-excerpt hero-subtitle"
-                data-fa="نصب NetBox 4.7.2، تنظیم Database و Redis و Gunicorn، بررسی API و Worker و آزمون Backup و Restore." data-en="Install NetBox 4.7.2, configure its database, Redis and Gunicorn, verify API/workers, and test backup and restore.">Install NetBox 4.7.2, configure its database, Redis and Gunicorn, verify API/workers, and test backup and restore.</p>
+                data-fa="نصب NetBox 4.7.2، تنظیم Database و Redis و Gunicorn، بررسی API و Worker و آزمون Backup و Restore."
+                data-en="Install NetBox 4.7.2, configure its database, Redis and Gunicorn, verify API/workers, and test backup and restore."
+              >
+                Install NetBox 4.7.2, configure its database, Redis and
+                Gunicorn, verify API/workers, and test backup and restore.
+              </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -300,7 +499,9 @@
                       class="banner-subtitle"
                       data-en="Meet AJ technical article"
                       data-fa="مقاله فنی Meet AJ"
-                    >Meet AJ technical article</p>
+                    >
+                      Meet AJ technical article
+                    </p>
                   </div>
                 </div>
               </div>
@@ -311,7 +512,8 @@
                   ><span class="btn-content"
                     ><i class="bi bi-play-circle" aria-hidden="true"></i
                     ><span data-en="Start reading" data-fa="شروع مطالعه"
-                      >Start reading</span></span
+                      >Start reading</span
+                    ></span
                   ></a
                 >
               </div>
@@ -332,13 +534,129 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="en" dir="ltr"><section id="enterprise-intro" class="article-section"><h2 data-fa="NetBox به‌عنوان مرجع شبکه" data-en="NetBox as a network source of truth">NetBox as a network source of truth</h2><p data-fa="NetBox برای ثبت Device، IP، Prefix و VLAN و ارتباط آن‌هاست. برای قابل اعتماد بودن این اطلاعات، فقط نصب UI کافی نیست. دسترسی API، کار Worker و بازیابی Database و فایل‌ها را نیز تنظیم کنید. این مثال یک نصب تک‌سرور را تا آزمون عملی پیش می‌برد." data-en="NetBox records devices, addresses, prefixes, VLANs and their relationships. Reliable inventory needs more than a working UI. Configure API permissions, workers and recovery of database/files. This example takes a single-server deployment through practical validation.">NetBox records devices, addresses, prefixes, VLANs and their relationships. Reliable inventory needs more than a working UI. Configure API permissions, workers and recovery of database/files. This example takes a single-server deployment through practical validation.</p></section>
-<section id="enterprise-architecture" class="article-section"><h2 data-fa="سرویس وب، Database و Worker" data-en="Web service, database and worker">Web service, database and worker</h2><p data-fa="Nginx درخواست HTTPS را به Gunicorn روی Loopback می‌دهد. NetBox داده را در PostgreSQL نگه می‌دارد و Worker از Redis برای Jobها استفاده می‌کند. Tasks و Cache در مثال Databaseهای Redis جدا دارند. Backup باید Database، Media، Config و Secretها را هماهنگ حفظ کند." data-en="Nginx forwards HTTPS to loopback Gunicorn. NetBox stores data in PostgreSQL and workers use Redis for jobs. Tasks and cache use separate Redis databases here. Protect database, media, configuration and secrets together.">Nginx forwards HTTPS to loopback Gunicorn. NetBox stores data in PostgreSQL and workers use Redis for jobs. Tasks and cache use separate Redis databases here. Protect database, media, configuration and secrets together.</p><h3 id="enterprise-scenario" data-fa="مثال: Inventory سه دیتاسنتر" data-en="Example: inventory for three datacenters">Example: inventory for three datacenters</h3><p data-fa="گروه مالک شبکه Device و Prefix را ثبت می‌کند. Automation با Token محدود می‌خواند و حق نوشتن فقط به نقش‌های مشخص داده می‌شود. برای آزمون، یک Site و Prefix بسازید و رد درخواست Write حساب Read-only را بررسی کنید." data-en="The network-owner group maintains devices/prefixes. Automation reads with restricted tokens, while defined roles control writes. Test with one site/prefix and confirm a read-only identity’s write request is rejected.">The network-owner group maintains devices/prefixes. Automation reads with restricted tokens, while defined roles control writes. Test with one site/prefix and confirm a read-only identity’s write request is rejected.</p></section>
-<section id="enterprise-prerequisites" class="article-section"><h2 data-fa="نسخه‌های مبنا و دامنه سرویس" data-en="Baseline versions and hostname">Baseline versions and hostname</h2><p data-fa="این مسیر NetBox 4.7.2 روی Ubuntu 24.04 LTS با Python 3.12، PostgreSQL 16 و Redis 7 را هدف گرفته است. پیش از اجرا سازگاری Pluginها و نیازمندی همان Release را بررسی کنید." data-en="The baseline is NetBox 4.7.2 on Ubuntu 24.04 LTS with Python 3.12, PostgreSQL 16 and Redis 7. Check plugins and that release’s requirements before execution.">The baseline is NetBox 4.7.2 on Ubuntu 24.04 LTS with Python 3.12, PostgreSQL 16 and Redis 7. Check plugins and that release’s requirements before execution.</p>
-<p data-fa="۴ vCPU، هشت GiB RAM و ۶۰ GiB SSD ظرفیت شروع نمونه‌اند. رشد Database و Media و تعداد Job را اندازه بگیرید. این طرح تک‌Node است و HA پیاده نمی‌کند." data-en="Four vCPUs, 8 GiB RAM and 60 GiB SSD are example starting allocations. Measure database/media growth and job load. This single-node design does not implement HA.">Four vCPUs, 8 GiB RAM and 60 GiB SSD are example starting allocations. Measure database/media growth and job load. This single-node design does not implement HA.</p>
-<p data-fa="sudo، DNS واقعی و گواهی معتبر و حساب اختصاصی PostgreSQL لازم‌اند. netbox.example.com را در Config و Nginx با دامنه خود جایگزین کنید. SECRET_KEY و Pepper برای این نصب تازه تولید می‌شوند." data-en="Prepare sudo, actual DNS, a trusted certificate and dedicated PostgreSQL identity. Replace netbox.example.com in configuration and Nginx. Generate new SECRET_KEY and pepper values for this installation.">Prepare sudo, actual DNS, a trusted certificate and dedicated PostgreSQL identity. Replace netbox.example.com in configuration and Nginx. Generate new SECRET_KEY and pepper values for this installation.</p><h3 id="enterprise-compatibility" data-fa="وابستگی Config به Release" data-en="Release-specific configuration">Release-specific configuration</h3><p data-fa="این Config برای 4.7.2 است. DATABASES و API_TOKEN_PEPPERS و رفتار Token را با همان Release تطبیق دهید. این مسیر از Git استفاده می‌کند. نصب Python Package در 4.7 وضعیت آزمایشی دارد." data-en="This configuration targets 4.7.2. Match DATABASES, API_TOKEN_PEPPERS and token behavior to that release. This procedure uses Git. Python-package installation is experimental in 4.7.">This configuration targets 4.7.2. Match DATABASES, API_TOKEN_PEPPERS and token behavior to that release. This procedure uses Git. Python-package installation is experimental in 4.7.</p></section>
-<section id="enterprise-installation" class="article-section"><h2 data-fa="نصب Dependency و راه‌اندازی سرویس‌ها" data-en="Install dependencies and start services">Install dependencies and start services</h2><p data-fa="نمونه برای VM تازه با DB محلی است. ابتدا dependency نصب و نسخه‌ها ثبت شوند. full upgrade خودکار انجام نمی‌شود." data-en="Use a fresh VM with local DB. Install dependencies and record versions first. This does not perform an automatic full OS upgrade.">Use a fresh VM with local DB. Install dependencies and record versions first. This does not perform an automatic full OS upgrade.</p>
-<pre dir="ltr"><code class="language-bash">sudo apt-get update
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="NetBox به‌عنوان مرجع شبکه"
+                      data-en="NetBox as a network source of truth"
+                    >
+                      NetBox as a network source of truth
+                    </h2>
+                    <p
+                      data-fa="NetBox برای ثبت Device، IP، Prefix و VLAN و ارتباط آن‌هاست. برای قابل اعتماد بودن این اطلاعات، فقط نصب UI کافی نیست. دسترسی API، کار Worker و بازیابی Database و فایل‌ها را نیز تنظیم کنید. این مثال یک نصب تک‌سرور را تا آزمون عملی پیش می‌برد."
+                      data-en="NetBox records devices, addresses, prefixes, VLANs and their relationships. Reliable inventory needs more than a working UI. Configure API permissions, workers and recovery of database/files. This example takes a single-server deployment through practical validation."
+                    >
+                      NetBox records devices, addresses, prefixes, VLANs and
+                      their relationships. Reliable inventory needs more than a
+                      working UI. Configure API permissions, workers and
+                      recovery of database/files. This example takes a
+                      single-server deployment through practical validation.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="سرویس وب، Database و Worker"
+                      data-en="Web service, database and worker"
+                    >
+                      Web service, database and worker
+                    </h2>
+                    <p
+                      data-fa="Nginx درخواست HTTPS را به Gunicorn روی Loopback می‌دهد. NetBox داده را در PostgreSQL نگه می‌دارد و Worker از Redis برای Jobها استفاده می‌کند. Tasks و Cache در مثال Databaseهای Redis جدا دارند. Backup باید Database، Media، Config و Secretها را هماهنگ حفظ کند."
+                      data-en="Nginx forwards HTTPS to loopback Gunicorn. NetBox stores data in PostgreSQL and workers use Redis for jobs. Tasks and cache use separate Redis databases here. Protect database, media, configuration and secrets together."
+                    >
+                      Nginx forwards HTTPS to loopback Gunicorn. NetBox stores
+                      data in PostgreSQL and workers use Redis for jobs. Tasks
+                      and cache use separate Redis databases here. Protect
+                      database, media, configuration and secrets together.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: Inventory سه دیتاسنتر"
+                      data-en="Example: inventory for three datacenters"
+                    >
+                      Example: inventory for three datacenters
+                    </h3>
+                    <p
+                      data-fa="گروه مالک شبکه Device و Prefix را ثبت می‌کند. Automation با Token محدود می‌خواند و حق نوشتن فقط به نقش‌های مشخص داده می‌شود. برای آزمون، یک Site و Prefix بسازید و رد درخواست Write حساب Read-only را بررسی کنید."
+                      data-en="The network-owner group maintains devices/prefixes. Automation reads with restricted tokens, while defined roles control writes. Test with one site/prefix and confirm a read-only identity’s write request is rejected."
+                    >
+                      The network-owner group maintains devices/prefixes.
+                      Automation reads with restricted tokens, while defined
+                      roles control writes. Test with one site/prefix and
+                      confirm a read-only identity’s write request is rejected.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="نسخه‌های مبنا و دامنه سرویس"
+                      data-en="Baseline versions and hostname"
+                    >
+                      Baseline versions and hostname
+                    </h2>
+                    <p
+                      data-fa="این مسیر NetBox 4.7.2 روی Ubuntu 24.04 LTS با Python 3.12، PostgreSQL 16 و Redis 7 را هدف گرفته است. پیش از اجرا سازگاری Pluginها و نیازمندی همان Release را بررسی کنید."
+                      data-en="The baseline is NetBox 4.7.2 on Ubuntu 24.04 LTS with Python 3.12, PostgreSQL 16 and Redis 7. Check plugins and that release’s requirements before execution."
+                    >
+                      The baseline is NetBox 4.7.2 on Ubuntu 24.04 LTS with
+                      Python 3.12, PostgreSQL 16 and Redis 7. Check plugins and
+                      that release’s requirements before execution.
+                    </p>
+                    <p
+                      data-fa="۴ vCPU، هشت GiB RAM و ۶۰ GiB SSD ظرفیت شروع نمونه‌اند. رشد Database و Media و تعداد Job را اندازه بگیرید. این طرح تک‌Node است و HA پیاده نمی‌کند."
+                      data-en="Four vCPUs, 8 GiB RAM and 60 GiB SSD are example starting allocations. Measure database/media growth and job load. This single-node design does not implement HA."
+                    >
+                      Four vCPUs, 8 GiB RAM and 60 GiB SSD are example starting
+                      allocations. Measure database/media growth and job load.
+                      This single-node design does not implement HA.
+                    </p>
+                    <p
+                      data-fa="sudo، DNS واقعی و گواهی معتبر و حساب اختصاصی PostgreSQL لازم‌اند. netbox.example.com را در Config و Nginx با دامنه خود جایگزین کنید. SECRET_KEY و Pepper برای این نصب تازه تولید می‌شوند."
+                      data-en="Prepare sudo, actual DNS, a trusted certificate and dedicated PostgreSQL identity. Replace netbox.example.com in configuration and Nginx. Generate new SECRET_KEY and pepper values for this installation."
+                    >
+                      Prepare sudo, actual DNS, a trusted certificate and
+                      dedicated PostgreSQL identity. Replace netbox.example.com
+                      in configuration and Nginx. Generate new SECRET_KEY and
+                      pepper values for this installation.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="وابستگی Config به Release"
+                      data-en="Release-specific configuration"
+                    >
+                      Release-specific configuration
+                    </h3>
+                    <p
+                      data-fa="این Config برای 4.7.2 است. DATABASES و API_TOKEN_PEPPERS و رفتار Token را با همان Release تطبیق دهید. این مسیر از Git استفاده می‌کند. نصب Python Package در 4.7 وضعیت آزمایشی دارد."
+                      data-en="This configuration targets 4.7.2. Match DATABASES, API_TOKEN_PEPPERS and token behavior to that release. This procedure uses Git. Python-package installation is experimental in 4.7."
+                    >
+                      This configuration targets 4.7.2. Match DATABASES,
+                      API_TOKEN_PEPPERS and token behavior to that release. This
+                      procedure uses Git. Python-package installation is
+                      experimental in 4.7.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="نصب Dependency و راه‌اندازی سرویس‌ها"
+                      data-en="Install dependencies and start services"
+                    >
+                      Install dependencies and start services
+                    </h2>
+                    <p
+                      data-fa="نمونه برای VM تازه با DB محلی است. ابتدا dependency نصب و نسخه‌ها ثبت شوند. full upgrade خودکار انجام نمی‌شود."
+                      data-en="Use a fresh VM with local DB. Install dependencies and record versions first. This does not perform an automatic full OS upgrade."
+                    >
+                      Use a fresh VM with local DB. Install dependencies and
+                      record versions first. This does not perform an automatic
+                      full OS upgrade.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">sudo apt-get update
 sudo apt-get install -y postgresql redis-server python3 python3-venv python3-dev build-essential libxml2-dev libxslt1-dev libffi-dev libpq-dev libssl-dev zlib1g-dev git nginx
 python3 --version
 psql --version
@@ -350,8 +668,20 @@ sudo -u postgres psql -d netbox -c &#x27;GRANT CREATE ON SCHEMA public TO netbox
 sudo git clone --branch v4.7.2 --depth 1 https://github.com/netbox-community/netbox.git /opt/netbox
 sudo adduser --system --group netbox
 sudo chown -R netbox:netbox /opt/netbox/netbox/media /opt/netbox/netbox/reports /opt/netbox/netbox/scripts</code></pre>
-<p data-fa="\password رمز را تعاملی می‌گیرد. همین رمز در configuration وارد شود. برای host تازه createuser/createdb است. روی نصب موجود اجرا نکنید. Redis باید روی loopback بماند. config کامل را با Python بسازید. prompt رمز DB را می‌گیرد. hostname نمونه را پیش از اجرا با نام واقعی جایگزین کنید." data-en="The password command prompts interactively. Reuse that value in configuration. Createuser/createdb are for a fresh installation only. Keep Redis on loopback. Generate the complete configuration with Python, entering the DB password at its prompt and replacing the sample hostname first.">The password command prompts interactively. Reuse that value in configuration. Createuser/createdb are for a fresh installation only. Keep Redis on loopback. Generate the complete configuration with Python, entering the DB password at its prompt and replacing the sample hostname first.</p>
-<pre dir="ltr"><code class="language-bash">sudo python3 - &lt;&lt;&#x27;PY&#x27;
+                    <p
+                      data-fa="\password رمز را تعاملی می‌گیرد. همین رمز در configuration وارد شود. برای host تازه createuser/createdb است. روی نصب موجود اجرا نکنید. Redis باید روی loopback بماند. config کامل را با Python بسازید. prompt رمز DB را می‌گیرد. hostname نمونه را پیش از اجرا با نام واقعی جایگزین کنید."
+                      data-en="The password command prompts interactively. Reuse that value in configuration. Createuser/createdb are for a fresh installation only. Keep Redis on loopback. Generate the complete configuration with Python, entering the DB password at its prompt and replacing the sample hostname first."
+                    >
+                      The password command prompts interactively. Reuse that
+                      value in configuration. Createuser/createdb are for a
+                      fresh installation only. Keep Redis on loopback. Generate
+                      the complete configuration with Python, entering the DB
+                      password at its prompt and replacing the sample hostname
+                      first.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">sudo python3 - &lt;&lt;&#x27;PY&#x27;
 from pathlib import Path
 import getpass, secrets
 db_password = getpass.getpass(&#x27;PostgreSQL netbox password: &#x27;)
@@ -380,8 +710,17 @@ sudo cp /opt/netbox/contrib/gunicorn.py /opt/netbox/gunicorn.py
 sudo cp /opt/netbox/contrib/netbox.service /opt/netbox/contrib/netbox-rq.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now netbox netbox-rq</code></pre>
-<p data-fa="check باید بدون error و serviceها active باشند. Gunicorn contrib معمولاً 127.0.0.1:8001 است. bind را از فایل و ss بررسی کنید. Nginx نمونه کامل زیر را با hostname و certificate واقعی بنویسید. static alias به همان checkout اشاره کند." data-en="Checks must pass without errors and services must be active. Contrib Gunicorn normally binds 127.0.0.1:8001. Inspect its file and ss. Write this complete Nginx configuration with the real hostname/certificate. Static alias must reference the same checkout.">Checks must pass without errors and services must be active. Contrib Gunicorn normally binds 127.0.0.1:8001. Inspect its file and ss. Write this complete Nginx configuration with the real hostname/certificate. Static alias must reference the same checkout.</p>
-<pre dir="ltr"><code class="language-nginx">server {
+                    <p
+                      data-fa="check باید بدون error و serviceها active باشند. Gunicorn contrib معمولاً 127.0.0.1:8001 است. bind را از فایل و ss بررسی کنید. Nginx نمونه کامل زیر را با hostname و certificate واقعی بنویسید. static alias به همان checkout اشاره کند."
+                      data-en="Checks must pass without errors and services must be active. Contrib Gunicorn normally binds 127.0.0.1:8001. Inspect its file and ss. Write this complete Nginx configuration with the real hostname/certificate. Static alias must reference the same checkout."
+                    >
+                      Checks must pass without errors and services must be
+                      active. Contrib Gunicorn normally binds 127.0.0.1:8001.
+                      Inspect its file and ss. Write this complete Nginx
+                      configuration with the real hostname/certificate. Static
+                      alias must reference the same checkout.
+                    </p>
+                    <pre dir="ltr"><code class="language-nginx">server {
     listen 443 ssl;
     server_name netbox.example.com;
     ssl_certificate /etc/nginx/tls/fullchain.pem;
@@ -396,28 +735,229 @@ sudo systemctl enable --now netbox netbox-rq</code></pre>
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 }</code></pre>
-<p data-fa="فایل را در sites-available/netbox ذخیره، symlink نخستین نصب بسازید، nginx -t و reload انجام دهید. گواهی قبل test موجود باشد. curl --fail https://netbox.example.com/login/، login و یک API read با token محدود آزموده شود. سایت و prefix نمونه را با UI بسازید و permission منفی write را برای حساب read-only تست کنید." data-en="Save as sites-available/netbox, create the initial symlink, run nginx -t and reload. Certificates must exist before testing. Test curl --fail https://netbox.example.com/login/, login and API reads with a restricted token. Create a sample site/prefix in UI and verify read-only write denial.">Save as sites-available/netbox, create the initial symlink, run nginx -t and reload. Certificates must exist before testing. Test curl --fail https://netbox.example.com/login/, login and API reads with a restricted token. Create a sample site/prefix in UI and verify read-only write denial.</p></section>
-<section id="enterprise-security" class="article-section"><h2 data-fa="API Permission و حفاظت Secretها" data-en="API permissions and secret protection">API permissions and secret protection</h2><p data-fa="PostgreSQL و Redis را روی شبکه عمومی Bind نکنید. API Token را با Role محدود و زمان انقضا بدهید و Superuser را برای کار روزانه استفاده نکنید. SECRET_KEY و API_TOKEN_PEPPERS را در Backup رمزنگاری‌شده حفظ کنید. چرخش بدون برنامه به Credential و Session اثر می‌گذارد." data-en="Keep PostgreSQL/Redis off public interfaces. Restrict API tokens by role and expiry, and avoid daily superuser use. Retain SECRET_KEY/API_TOKEN_PEPPERS in encrypted backups. Unplanned rotation affects credentials and sessions.">Keep PostgreSQL/Redis off public interfaces. Restrict API tokens by role and expiry, and avoid daily superuser use. Retain SECRET_KEY/API_TOKEN_PEPPERS in encrypted backups. Unplanned rotation affects credentials and sessions.</p></section>
-<section id="enterprise-monitoring" class="article-section"><h2 data-fa="UI سالم با Job متوقف" data-en="Healthy UI with stalled jobs">Healthy UI with stalled jobs</h2><p data-fa="Login و API Read را از مسیر واقعی بسنجید. netbox-rq، سن Queue و مصرف Database و Disk و انقضای Certificate را جدا پایش کنید. Nginx Active به معنی اجرای Job نیست. Metrics را فقط به شبکه مانیتورینگ بدهید." data-en="Probe login and API reads through the real path. Monitor netbox-rq, queue age, database load, disks and certificates separately. Active Nginx does not prove jobs execute. Restrict metrics to monitoring networks.">Probe login and API reads through the real path. Monitor netbox-rq, queue age, database load, disks and certificates separately. Active Nginx does not prove jobs execute. Restrict metrics to monitoring networks.</p></section>
-<section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="502، CSRF و Queue" data-en="502, CSRF and queue failures">502, CSRF and queue failures</h2><p data-fa="برای 502، Bind و Log مربوط به Gunicorn را بررسی کنید. DisallowedHost به ALLOWED_HOSTS واقعی نیاز دارد. برای CSRF 403، Origin و X-Forwarded-Proto را کنترل کنید. Job منتظر به بررسی Redis Tasks و netbox-rq نیاز دارد." data-en="For 502, inspect Gunicorn bind and logs. DisallowedHost requires matching ALLOWED_HOSTS. For CSRF 403, check origin and X-Forwarded-Proto. Pending jobs require Redis tasks and netbox-rq checks.">For 502, inspect Gunicorn bind and logs. DisallowedHost requires matching ALLOWED_HOSTS. For CSRF 403, check origin and X-Forwarded-Proto. Pending jobs require Redis tasks and netbox-rq checks.</p>
-<pre dir="ltr"><code class="language-bash">systemctl is-active postgresql redis-server netbox netbox-rq nginx
+                    <p
+                      data-fa="فایل را در sites-available/netbox ذخیره، symlink نخستین نصب بسازید، nginx -t و reload انجام دهید. گواهی قبل test موجود باشد. curl --fail https://netbox.example.com/login/، login و یک API read با token محدود آزموده شود. سایت و prefix نمونه را با UI بسازید و permission منفی write را برای حساب read-only تست کنید."
+                      data-en="Save as sites-available/netbox, create the initial symlink, run nginx -t and reload. Certificates must exist before testing. Test curl --fail https://netbox.example.com/login/, login and API reads with a restricted token. Create a sample site/prefix in UI and verify read-only write denial."
+                    >
+                      Save as sites-available/netbox, create the initial
+                      symlink, run nginx -t and reload. Certificates must exist
+                      before testing. Test curl --fail
+                      https://netbox.example.com/login/, login and API reads
+                      with a restricted token. Create a sample site/prefix in UI
+                      and verify read-only write denial.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="API Permission و حفاظت Secretها"
+                      data-en="API permissions and secret protection"
+                    >
+                      API permissions and secret protection
+                    </h2>
+                    <p
+                      data-fa="PostgreSQL و Redis را روی شبکه عمومی Bind نکنید. API Token را با Role محدود و زمان انقضا بدهید و Superuser را برای کار روزانه استفاده نکنید. SECRET_KEY و API_TOKEN_PEPPERS را در Backup رمزنگاری‌شده حفظ کنید. چرخش بدون برنامه به Credential و Session اثر می‌گذارد."
+                      data-en="Keep PostgreSQL/Redis off public interfaces. Restrict API tokens by role and expiry, and avoid daily superuser use. Retain SECRET_KEY/API_TOKEN_PEPPERS in encrypted backups. Unplanned rotation affects credentials and sessions."
+                    >
+                      Keep PostgreSQL/Redis off public interfaces. Restrict API
+                      tokens by role and expiry, and avoid daily superuser use.
+                      Retain SECRET_KEY/API_TOKEN_PEPPERS in encrypted backups.
+                      Unplanned rotation affects credentials and sessions.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="UI سالم با Job متوقف"
+                      data-en="Healthy UI with stalled jobs"
+                    >
+                      Healthy UI with stalled jobs
+                    </h2>
+                    <p
+                      data-fa="Login و API Read را از مسیر واقعی بسنجید. netbox-rq، سن Queue و مصرف Database و Disk و انقضای Certificate را جدا پایش کنید. Nginx Active به معنی اجرای Job نیست. Metrics را فقط به شبکه مانیتورینگ بدهید."
+                      data-en="Probe login and API reads through the real path. Monitor netbox-rq, queue age, database load, disks and certificates separately. Active Nginx does not prove jobs execute. Restrict metrics to monitoring networks."
+                    >
+                      Probe login and API reads through the real path. Monitor
+                      netbox-rq, queue age, database load, disks and
+                      certificates separately. Active Nginx does not prove jobs
+                      execute. Restrict metrics to monitoring networks.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="502، CSRF و Queue"
+                      data-en="502, CSRF and queue failures"
+                    >
+                      502, CSRF and queue failures
+                    </h2>
+                    <p
+                      data-fa="برای 502، Bind و Log مربوط به Gunicorn را بررسی کنید. DisallowedHost به ALLOWED_HOSTS واقعی نیاز دارد. برای CSRF 403، Origin و X-Forwarded-Proto را کنترل کنید. Job منتظر به بررسی Redis Tasks و netbox-rq نیاز دارد."
+                      data-en="For 502, inspect Gunicorn bind and logs. DisallowedHost requires matching ALLOWED_HOSTS. For CSRF 403, check origin and X-Forwarded-Proto. Pending jobs require Redis tasks and netbox-rq checks."
+                    >
+                      For 502, inspect Gunicorn bind and logs. DisallowedHost
+                      requires matching ALLOWED_HOSTS. For CSRF 403, check
+                      origin and X-Forwarded-Proto. Pending jobs require Redis
+                      tasks and netbox-rq checks.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">systemctl is-active postgresql redis-server netbox netbox-rq nginx
 sudo journalctl -u netbox -u netbox-rq -n 100 --no-pager
 sudo ss -lntp
 redis-cli ping
 sudo -u netbox /opt/netbox/venv/bin/python /opt/netbox/netbox/manage.py check</code></pre>
-<p data-fa="Config دارای Secret را در Ticket عمومی نگذارید. پس از Upgrade، Plugin و Release Note و Log Migration را بررسی کنید. حذف Migration History راه‌حل خطای Upgrade نیست." data-en="Keep secret-bearing configuration out of public tickets. After upgrades, inspect plugins, release notes and migration logs. Deleting migration history is not an upgrade repair.">Keep secret-bearing configuration out of public tickets. After upgrades, inspect plugins, release notes and migration logs. Deleting migration history is not an upgrade repair.</p></section>
-<section id="enterprise-recovery" class="article-section"><h2 data-fa="Backup هماهنگ و Restore ایزوله" data-en="Coordinated backup and isolated restore">Coordinated backup and isolated restore</h2><p data-fa="Backup روزانه برای RPO نمونه ۲۴ ساعته است. برای هماهنگی Database و Media، نویسنده‌ها و Jobهای مرتبط را در پنجره Backup متوقف کنید. برای RPO کوتاه‌تر، PostgreSQL PITR را جدا طراحی کنید." data-en="Daily backups target the example 24-hour RPO. Coordinate database/media by stopping relevant writers and jobs during backup. Design PostgreSQL PITR separately for a shorter RPO.">Daily backups target the example 24-hour RPO. Coordinate database/media by stopping relevant writers and jobs during backup. Design PostgreSQL PITR separately for a shorter RPO.</p>
-<pre dir="ltr"><code class="language-bash">sudo install -d -m 700 /var/backups/netbox
+                    <p
+                      data-fa="Config دارای Secret را در Ticket عمومی نگذارید. پس از Upgrade، Plugin و Release Note و Log Migration را بررسی کنید. حذف Migration History راه‌حل خطای Upgrade نیست."
+                      data-en="Keep secret-bearing configuration out of public tickets. After upgrades, inspect plugins, release notes and migration logs. Deleting migration history is not an upgrade repair."
+                    >
+                      Keep secret-bearing configuration out of public tickets.
+                      After upgrades, inspect plugins, release notes and
+                      migration logs. Deleting migration history is not an
+                      upgrade repair.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="Backup هماهنگ و Restore ایزوله"
+                      data-en="Coordinated backup and isolated restore"
+                    >
+                      Coordinated backup and isolated restore
+                    </h2>
+                    <p
+                      data-fa="Backup روزانه برای RPO نمونه ۲۴ ساعته است. برای هماهنگی Database و Media، نویسنده‌ها و Jobهای مرتبط را در پنجره Backup متوقف کنید. برای RPO کوتاه‌تر، PostgreSQL PITR را جدا طراحی کنید."
+                      data-en="Daily backups target the example 24-hour RPO. Coordinate database/media by stopping relevant writers and jobs during backup. Design PostgreSQL PITR separately for a shorter RPO."
+                    >
+                      Daily backups target the example 24-hour RPO. Coordinate
+                      database/media by stopping relevant writers and jobs
+                      during backup. Design PostgreSQL PITR separately for a
+                      shorter RPO.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">sudo install -d -m 700 /var/backups/netbox
 sudo bash -c &#x27;umask 077; sudo -u postgres pg_dump -Fc netbox &gt; /var/backups/netbox/netbox.dump&#x27;
 sudo bash -c &#x27;umask 077; tar -czf /var/backups/netbox/application-state.tar.gz -C /opt/netbox netbox/media netbox/reports netbox/scripts netbox/netbox/configuration.py&#x27;
 sudo chmod 600 /var/backups/netbox/application-state.tar.gz</code></pre>
-<p data-fa="Redirection در مثال داخل Shell دارای مجوز Root انجام می‌شود. فایل‌ها را خارج Host به مخزن امن منتقل کنید. Restore را با همان نسخه و Pluginها روی سرور جدا انجام دهید." data-en="The example redirects within a root-authorized shell. Copy files off-host to protected storage. Restore on an isolated server with matching version/plugins.">The example redirects within a root-authorized shell. Copy files off-host to protected storage. Restore on an isolated server with matching version/plugins.</p>
-<pre dir="ltr"><code class="language-bash">sudo -u postgres createdb -O netbox netbox_restore
+                    <p
+                      data-fa="Redirection در مثال داخل Shell دارای مجوز Root انجام می‌شود. فایل‌ها را خارج Host به مخزن امن منتقل کنید. Restore را با همان نسخه و Pluginها روی سرور جدا انجام دهید."
+                      data-en="The example redirects within a root-authorized shell. Copy files off-host to protected storage. Restore on an isolated server with matching version/plugins."
+                    >
+                      The example redirects within a root-authorized shell. Copy
+                      files off-host to protected storage. Restore on an
+                      isolated server with matching version/plugins.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">sudo -u postgres createdb -O netbox netbox_restore
 sudo bash -c &#x27;sudo -u postgres pg_restore --no-owner --role=netbox -d netbox_restore &lt; /var/backups/netbox/netbox.dump&#x27;
 sudo -u postgres psql -d netbox_restore -c &#x27;SELECT count(*) FROM dcim_site;&#x27;</code></pre>
-<p data-fa="Config مقصد را به netbox_restore تغییر دهید و Media و Secret و Pepper را برگردانید. Webhook و Automation خروجی را خاموش نگه دارید. Login، تعداد Object، API و Job آزمایشی را بسنجید و زمان Restore را ثبت کنید. برگشت فقط Code پس از Migration کافی نیست." data-en="Point destination configuration at netbox_restore and restore media, secrets and peppers. Disable outbound webhooks/automation. Test login, object counts, API and a canary job, recording restore duration. Code-only rollback after migrations is insufficient.">Point destination configuration at netbox_restore and restore media, secrets and peppers. Disable outbound webhooks/automation. Test login, object counts, API and a canary job, recording restore duration. Code-only rollback after migrations is insufficient.</p><p data-fa="Reports و Scripts سفارشی نیز در Archive بالا حفظ می‌شوند. محیط Restore نباید Jobهای Production را به تجهیزات واقعی بفرستد." data-en="The archive also retains custom reports and scripts. Keep the restored environment from sending production jobs to real devices.">The archive also retains custom reports and scripts. Keep the restored environment from sending production jobs to real devices.</p><h3 id="enterprise-practices" data-fa="مالک داده و فرآیند Upgrade" data-en="Data ownership and upgrades">Data ownership and upgrades</h3><p data-fa="NetBox ابزار NMS یا Discovery خودکار نیست. مالک و روش به‌روزرسانی Inventory را مشخص کنید. نسخه و Plugin را تثبیت و Migration را با Backup قابل Restore در Staging امتحان کنید." data-en="NetBox is not an NMS or automatic discovery tool. Assign inventory owners and update procedures. Pin versions/plugins and test migrations in staging with a restorable backup.">NetBox is not an NMS or automatic discovery tool. Assign inventory owners and update procedures. Pin versions/plugins and test migrations in staging with a restorable backup.</p></section>
-<section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</h2><h3 data-fa="آیا backup PostgreSQL به‌تنهایی کافی است؟" data-en="Is a PostgreSQL backup enough?">Is a PostgreSQL backup enough?</h3><p data-fa="خیر. media، configuration، secret key، pepper و نسخه pluginها نیز باید حفظ شوند." data-en="No. Retain media, configuration, secret key, pepper and plugin versions.">No. Retain media, configuration, secret key, pepper and plugin versions.</p><h3 data-fa="آیا بعد migration می‌توان فقط code را downgrade کرد؟" data-en="Can code simply be downgraded after a migration?">Can code simply be downgraded after a migration?</h3><p data-fa="خیر. rollback باید سازگاری schema و بازیابی DB پیش از تغییر را در نظر بگیرد." data-en="No. Rollback must account for schema compatibility and the pre-change database backup.">No. Rollback must account for schema compatibility and the pre-change database backup.</p></section>
-<section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">Official Sources</h2><ul><li><a href="https://netbox.readthedocs.io/en/stable/installation/" rel="noopener">NetBox: installation</a></li><li><a href="https://netbox.readthedocs.io/en/stable/installation/3-netbox/" rel="noopener">NetBox: Git installation</a></li><li><a href="https://netbox.readthedocs.io/en/stable/release-notes/version-4.7/" rel="noopener">NetBox: 4.7 release notes</a></li><li><a href="https://netbox.readthedocs.io/en/stable/administration/replicating-netbox/" rel="noopener">NetBox: replicating</a></li></ul></section></div></article>
+                    <p
+                      data-fa="Config مقصد را به netbox_restore تغییر دهید و Media و Secret و Pepper را برگردانید. Webhook و Automation خروجی را خاموش نگه دارید. Login، تعداد Object، API و Job آزمایشی را بسنجید و زمان Restore را ثبت کنید. برگشت فقط Code پس از Migration کافی نیست."
+                      data-en="Point destination configuration at netbox_restore and restore media, secrets and peppers. Disable outbound webhooks/automation. Test login, object counts, API and a canary job, recording restore duration. Code-only rollback after migrations is insufficient."
+                    >
+                      Point destination configuration at netbox_restore and
+                      restore media, secrets and peppers. Disable outbound
+                      webhooks/automation. Test login, object counts, API and a
+                      canary job, recording restore duration. Code-only rollback
+                      after migrations is insufficient.
+                    </p>
+                    <p
+                      data-fa="Reports و Scripts سفارشی نیز در Archive بالا حفظ می‌شوند. محیط Restore نباید Jobهای Production را به تجهیزات واقعی بفرستد."
+                      data-en="The archive also retains custom reports and scripts. Keep the restored environment from sending production jobs to real devices."
+                    >
+                      The archive also retains custom reports and scripts. Keep
+                      the restored environment from sending production jobs to
+                      real devices.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="مالک داده و فرآیند Upgrade"
+                      data-en="Data ownership and upgrades"
+                    >
+                      Data ownership and upgrades
+                    </h3>
+                    <p
+                      data-fa="NetBox ابزار NMS یا Discovery خودکار نیست. مالک و روش به‌روزرسانی Inventory را مشخص کنید. نسخه و Plugin را تثبیت و Migration را با Backup قابل Restore در Staging امتحان کنید."
+                      data-en="NetBox is not an NMS or automatic discovery tool. Assign inventory owners and update procedures. Pin versions/plugins and test migrations in staging with a restorable backup."
+                    >
+                      NetBox is not an NMS or automatic discovery tool. Assign
+                      inventory owners and update procedures. Pin
+                      versions/plugins and test migrations in staging with a
+                      restorable backup.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا backup PostgreSQL به‌تنهایی کافی است؟"
+                      data-en="Is a PostgreSQL backup enough?"
+                    >
+                      Is a PostgreSQL backup enough?
+                    </h3>
+                    <p
+                      data-fa="خیر. media، configuration، secret key، pepper و نسخه pluginها نیز باید حفظ شوند."
+                      data-en="No. Retain media, configuration, secret key, pepper and plugin versions."
+                    >
+                      No. Retain media, configuration, secret key, pepper and
+                      plugin versions.
+                    </p>
+                    <h3
+                      data-fa="آیا بعد migration می‌توان فقط code را downgrade کرد؟"
+                      data-en="Can code simply be downgraded after a migration?"
+                    >
+                      Can code simply be downgraded after a migration?
+                    </h3>
+                    <p
+                      data-fa="خیر. rollback باید سازگاری schema و بازیابی DB پیش از تغییر را در نظر بگیرد."
+                      data-en="No. Rollback must account for schema compatibility and the pre-change database backup."
+                    >
+                      No. Rollback must account for schema compatibility and the
+                      pre-change database backup.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://netbox.readthedocs.io/en/stable/installation/"
+                          rel="noopener"
+                          >NetBox: installation</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://netbox.readthedocs.io/en/stable/installation/3-netbox/"
+                          rel="noopener"
+                          >NetBox: Git installation</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://netbox.readthedocs.io/en/stable/release-notes/version-4.7/"
+                          rel="noopener"
+                          >NetBox: 4.7 release notes</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://netbox.readthedocs.io/en/stable/administration/replicating-netbox/"
+                          rel="noopener"
+                          >NetBox: replicating</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
+              </article>
             </div>
           </div>
         </div>
@@ -435,18 +975,24 @@ sudo -u postgres psql -d netbox_restore -c &#x27;SELECT count(*) FROM dcim_site;
             <div class="footer-brand">
               <h3 class="brand-name">
                 <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
-                  >AmirHossein Jalalian</span>
+                  >AmirHossein Jalalian</span
+                >
               </h3>
               <p
                 class="brand-title"
                 data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
-              >Infrastructure &amp; DevOps Engineer</p>
+              >
+                Infrastructure &amp; DevOps Engineer
+              </p>
               <p
                 class="brand-description"
                 data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
                 data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-              >Delivering reliable, secure, and scalable IT solutions for your business success.</p>
+              >
+                Delivering reliable, secure, and scalable IT solutions for your
+                business success.
+              </p>
             </div>
 
             <!-- Contact Info -->
@@ -455,12 +1001,15 @@ sudo -u postgres psql -d netbox_restore -c &#x27;SELECT count(*) FROM dcim_site;
                 class="contact-title"
                 data-en="Get In Touch"
                 data-fa="تماس با من"
-              >Get In Touch</h4>
+              >
+                Get In Touch
+              </h4>
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>
                   <span data-en="Tehran, Iran" data-fa="تهران، ایران"
-                    >Tehran, Iran</span>
+                    >Tehran, Iran</span
+                  >
                 </div>
                 <div class="contact-item">
                   <i class="bi bi-telephone"></i>
@@ -485,7 +1034,9 @@ sudo -u postgres psql -d netbox_restore -c &#x27;SELECT count(*) FROM dcim_site;
                   class="social-title"
                   data-en="Follow Me"
                   data-fa="دنبال کنید"
-                >Follow Me</h5>
+                >
+                  Follow Me
+                </h5>
                 <div class="social-icons">
                   <a
                     href="https://wa.me/989197276219"
@@ -531,12 +1082,14 @@ sudo -u postgres psql -d netbox_restore -c &#x27;SELECT count(*) FROM dcim_site;
                   <span
                     data-en="All Rights Reserved"
                     data-fa="تمام حقوق محفوظ است"
-                    >All Rights Reserved</span>
+                    >All Rights Reserved</span
+                  >
                 </p>
               </div>
               <div class="footer-heart">
                 <span data-en="Made with" data-fa="ساخته شده با"
-                  >Made with</span>
+                  >Made with</span
+                >
                 <i class="bi bi-heart-fill"></i>
                 <span data-en="in Iran" data-fa="در ایران">in Iran</span>
               </div>

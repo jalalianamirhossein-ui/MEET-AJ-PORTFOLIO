@@ -1,10 +1,15 @@
 <!doctype html>
 <html lang="en" dir="ltr" data-article-language="en">
   <head>
-    <title>Install Nested ESXi in Workstation and Diagnose VMCISr | Meet AJ</title>
+    <title>
+      Install Nested ESXi in Workstation and Diagnose VMCISr | Meet AJ
+    </title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Configure nested virtualization, install a lab ESXi host and diagnose VMCI failures using logs and exact builds." />
+    <meta
+      name="description"
+      content="Configure nested virtualization, install a lab ESXi host and diagnose VMCI failures using logs and exact builds."
+    />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <link
@@ -12,9 +17,18 @@
       href="https://meetaj.ir/articles/install-vmware-esxi-vmware-workstation-vmcisr"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Install Nested ESXi in Workstation and Diagnose VMCISr" />
-    <meta property="og:description" content="Configure nested virtualization, install a lab ESXi host and diagnose VMCI failures using logs and exact builds." />
-    <meta property="og:url" content="https://meetaj.ir/articles/install-vmware-esxi-vmware-workstation-vmcisr" />
+    <meta
+      property="og:title"
+      content="Install Nested ESXi in Workstation and Diagnose VMCISr"
+    />
+    <meta
+      property="og:description"
+      content="Configure nested virtualization, install a lab ESXi host and diagnose VMCI failures using logs and exact builds."
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/install-vmware-esxi-vmware-workstation-vmcisr"
+    />
     <meta property="og:site_name" content="Meet AJ" />
     <meta name="twitter:card" content="summary" />
     <link href="../assets/img/favicon.png" rel="icon" />
@@ -51,12 +65,95 @@
       rel="stylesheet"
       disabled
     />
-  <meta name="keywords" content="Nested ESXi on VMware Workstation, install vmware esxi vmware workstation vmcisr, infrastructure operations, production operations, troubleshooting" />
-<meta name="article:content-language" content="en" />
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Install Nested ESXi in Workstation and Diagnose VMCISr", "description": "Configure nested virtualization, install a lab ESXi host and diagnose VMCI failures using logs and exact builds.", "inLanguage": "en", "url": "https://meetaj.ir/articles/install-vmware-esxi-vmware-workstation-vmcisr", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}, "mainEntityOfPage": "https://meetaj.ir/articles/install-vmware-esxi-vmware-workstation-vmcisr"}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is nested ESXi on Workstation supported for production?", "acceptedAnswer": {"@type": "Answer", "text": "Check the vendor support matrix. This procedure covers a lab only."}}, {"@type": "Question", "name": "Does deleting a device always fix VMCI failures?", "acceptedAnswer": {"@type": "Answer", "text": "No. Establish the cause using logs and the build-specific KB."}}], "inLanguage": "en"}</script>
-<script id="article-localizations" type="application/json">{"fa": {"title": "نصب Nested ESXi در Workstation و بررسی خطای VMCISr", "meta_title": "نصب Nested ESXi در Workstation و بررسی خطای VMCISr | Meet AJ", "description": "تنظیم Nested Virtualization، نصب ESXi آزمایشگاهی و تشخیص خطای VMCI با Log و Build دقیق.", "keywords": ["نصب Nested ESXi در Workstation و بررسی خطای VMCISr", "عیب‌یابی", "بازیابی", "install vmware esxi vmware workstation vmcisr"], "faq": [["آیا nested ESXi روی Workstation پشتیبانی Production دارد؟", "باید ماتریس support سازنده بررسی شود. این مقاله فقط آزمایشگاه است."], ["آیا خطای VMCI همیشه با حذف device حل می‌شود؟", "خیر. log و KB مربوط به build باید علت را مشخص کنند."]]}, "en": {"title": "Install Nested ESXi in Workstation and Diagnose VMCISr", "meta_title": "Install Nested ESXi in Workstation and Diagnose VMCISr | Meet AJ", "description": "Configure nested virtualization, install a lab ESXi host and diagnose VMCI failures using logs and exact builds.", "keywords": ["Install Nested ESXi in Workstation and Diagnose VMCISr", "install vmware esxi vmware workstation vmcisr", "troubleshooting"], "faq": [["Is nested ESXi on Workstation supported for production?", "Check the vendor support matrix. This procedure covers a lab only."], ["Does deleting a device always fix VMCI failures?", "No. Establish the cause using logs and the build-specific KB."]]}}</script>
-</head>
+    <meta
+      name="keywords"
+      content="Nested ESXi on VMware Workstation, install vmware esxi vmware workstation vmcisr, infrastructure operations, production operations, troubleshooting"
+    />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Install Nested ESXi in Workstation and Diagnose VMCISr",
+        "description": "Configure nested virtualization, install a lab ESXi host and diagnose VMCI failures using logs and exact builds.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/install-vmware-esxi-vmware-workstation-vmcisr",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/install-vmware-esxi-vmware-workstation-vmcisr"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is nested ESXi on Workstation supported for production?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Check the vendor support matrix. This procedure covers a lab only."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does deleting a device always fix VMCI failures?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Establish the cause using logs and the build-specific KB."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "نصب Nested ESXi در Workstation و بررسی خطای VMCISr",
+          "meta_title": "نصب Nested ESXi در Workstation و بررسی خطای VMCISr | Meet AJ",
+          "description": "تنظیم Nested Virtualization، نصب ESXi آزمایشگاهی و تشخیص خطای VMCI با Log و Build دقیق.",
+          "keywords": [
+            "نصب Nested ESXi در Workstation و بررسی خطای VMCISr",
+            "عیب‌یابی",
+            "بازیابی",
+            "install vmware esxi vmware workstation vmcisr"
+          ],
+          "faq": [
+            [
+              "آیا nested ESXi روی Workstation پشتیبانی Production دارد؟",
+              "باید ماتریس support سازنده بررسی شود. این مقاله فقط آزمایشگاه است."
+            ],
+            [
+              "آیا خطای VMCI همیشه با حذف device حل می‌شود؟",
+              "خیر. log و KB مربوط به build باید علت را مشخص کنند."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Install Nested ESXi in Workstation and Diagnose VMCISr",
+          "meta_title": "Install Nested ESXi in Workstation and Diagnose VMCISr | Meet AJ",
+          "description": "Configure nested virtualization, install a lab ESXi host and diagnose VMCI failures using logs and exact builds.",
+          "keywords": [
+            "Install Nested ESXi in Workstation and Diagnose VMCISr",
+            "install vmware esxi vmware workstation vmcisr",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Is nested ESXi on Workstation supported for production?",
+              "Check the vendor support matrix. This procedure covers a lab only."
+            ],
+            [
+              "Does deleting a device always fix VMCI failures?",
+              "No. Establish the cause using logs and the build-specific KB."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
   <body class="article-page theme-vmware">
     <button
       id="menu-toggle"
@@ -205,27 +302,94 @@
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
-          <li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="کاربرد Nested ESXi" data-en="What nested ESXi is useful for">What nested ESXi is useful for</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="دو لایه Virtualization" data-en="Two virtualization layers">Two virtualization layers</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="CPU، میزبان و Build سازگار" data-en="CPU, host and compatible builds">CPU, host and compatible builds</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="ساخت ماشین ESXi و آزمون Host Client" data-en="Build the ESXi VM and test Host Client">Build the ESXi VM and test Host Client</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="بررسی VMCISr و VT-x" data-en="Investigate VMCISr and VT-x failures">Investigate VMCISr and VT-x failures</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-security"><span data-fa="امنیت میزبان هنگام Workaround" data-en="Host security during workarounds">Host security during workarounds</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="منابع میزبان و Guest" data-en="Host and guest resource pressure">Host and guest resource pressure</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="بازگرداندن VMX و داده Lab" data-en="Restore VMX and lab data">Restore VMX and lab data</span></a></li>
-<li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">Official Sources</span></a></li>
-
-
-
-
-
-
-
-
-
-
-
+          <li class="article-nav-item">
+            <a href="#enterprise-intro"
+              ><span
+                data-fa="کاربرد Nested ESXi"
+                data-en="What nested ESXi is useful for"
+                >What nested ESXi is useful for</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="دو لایه Virtualization"
+                data-en="Two virtualization layers"
+                >Two virtualization layers</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="CPU، میزبان و Build سازگار"
+                data-en="CPU, host and compatible builds"
+                >CPU, host and compatible builds</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="ساخت ماشین ESXi و آزمون Host Client"
+                data-en="Build the ESXi VM and test Host Client"
+                >Build the ESXi VM and test Host Client</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="بررسی VMCISr و VT-x"
+                data-en="Investigate VMCISr and VT-x failures"
+                >Investigate VMCISr and VT-x failures</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-security"
+              ><span
+                data-fa="امنیت میزبان هنگام Workaround"
+                data-en="Host security during workarounds"
+                >Host security during workarounds</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="منابع میزبان و Guest"
+                data-en="Host and guest resource pressure"
+                >Host and guest resource pressure</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="بازگرداندن VMX و داده Lab"
+                data-en="Restore VMX and lab data"
+                >Restore VMX and lab data</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#faq"
+              ><span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
+              ></a
+            >
+          </li>
         </ul>
       </nav>
       <button
@@ -248,19 +412,25 @@
                 <span class="article-category">VMware</span
                 ><span class="meta-date"
                   ><span class="article-date" data-en="Article" data-fa="مقاله"
-                    >Article</span><time datetime="">VMware</time></span
+                    >Article</span
+                  ><time datetime="">VMware</time></span
                 >
               </div>
               <h1
                 class="article-title hero-title"
-
-
-               data-fa="نصب Nested ESXi در Workstation و بررسی خطای VMCISr" data-en="Install Nested ESXi in Workstation and Diagnose VMCISr">Install Nested ESXi in Workstation and Diagnose VMCISr</h1>
+                data-fa="نصب Nested ESXi در Workstation و بررسی خطای VMCISr"
+                data-en="Install Nested ESXi in Workstation and Diagnose VMCISr"
+              >
+                Install Nested ESXi in Workstation and Diagnose VMCISr
+              </h1>
               <p
                 class="article-excerpt hero-subtitle"
-
-
-               data-fa="تنظیم Nested Virtualization، نصب ESXi آزمایشگاهی و تشخیص خطای VMCI با Log و Build دقیق." data-en="Configure nested virtualization, install a lab ESXi host and diagnose VMCI failures using logs and exact builds.">Configure nested virtualization, install a lab ESXi host and diagnose VMCI failures using logs and exact builds.</p>
+                data-fa="تنظیم Nested Virtualization، نصب ESXi آزمایشگاهی و تشخیص خطای VMCI با Log و Build دقیق."
+                data-en="Configure nested virtualization, install a lab ESXi host and diagnose VMCI failures using logs and exact builds."
+              >
+                Configure nested virtualization, install a lab ESXi host and
+                diagnose VMCI failures using logs and exact builds.
+              </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -274,7 +444,9 @@
                       class="banner-subtitle"
                       data-en="Meet AJ technical article"
                       data-fa="مقاله فنی Meet AJ"
-                    >Meet AJ technical article</p>
+                    >
+                      Meet AJ technical article
+                    </p>
                   </div>
                 </div>
               </div>
@@ -285,7 +457,8 @@
                   ><span class="btn-content"
                     ><i class="bi bi-play-circle" aria-hidden="true"></i
                     ><span data-en="Start reading" data-fa="شروع مطالعه"
-                      >Start reading</span></span
+                      >Start reading</span
+                    ></span
                   ></a
                 >
               </div>
@@ -306,23 +479,305 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="en" dir="ltr"><section id="enterprise-intro" class="article-section"><h2 data-fa="کاربرد Nested ESXi" data-en="What nested ESXi is useful for">What nested ESXi is useful for</h2><p data-fa="Nested ESXi یک ESXi مجازی داخل Workstation است. برای تمرین شبکه مجازی و API مناسب است، اما نصب موفق آن پشتیبانی یا Performance سخت‌افزار Production را ثابت نمی‌کند. خطای VMCISr پیش از روشن‌شدن VM باید از Log همان ماشین بررسی شود." data-en="Nested ESXi runs as a VM inside Workstation. It suits virtual-network and API rehearsal, but successful installation establishes neither production support nor hardware performance. Diagnose pre-power-on VMCISr failures from that VM’s logs.">Nested ESXi runs as a VM inside Workstation. It suits virtual-network and API rehearsal, but successful installation establishes neither production support nor hardware performance. Diagnose pre-power-on VMCISr failures from that VM’s logs.</p></section>
-<section id="enterprise-architecture" class="article-section"><h2 data-fa="دو لایه Virtualization" data-en="Two virtualization layers">Two virtualization layers</h2><p data-fa="Workstation ویژگی‌های CPU را به ESXi می‌دهد و ESXi آن‌ها را برای VMهای داخلی استفاده می‌کند. بالا آمدن خود ESXi به معنی در دسترس بودن Nested Virtualization برای VMهای داخل آن نیست. یک VM کوچک را هم Boot کنید." data-en="Workstation exposes CPU features to ESXi, which uses them for its guest VMs. Booting ESXi alone does not prove nested virtualization is available to those guests. Boot a small nested VM too.">Workstation exposes CPU features to ESXi, which uses them for its guest VMs. Booting ESXi alone does not prove nested virtualization is available to those guests. Boot a small nested VM too.</p><h3 id="enterprise-scenario" data-fa="مثال: تمرین تغییر vSwitch" data-en="Example: rehearse a vSwitch change">Example: rehearse a vSwitch change</h3><p data-fa="یک ESXi و دو VM کوچک داخل آن بسازید. شبکه مدیریت را Host-only نگه دارید و دسترسی بیرونی لازم را از NAT بدهید. این جداسازی مانع ورود ترافیک آزمایشی به LAN شرکت می‌شود." data-en="Build one ESXi host with two small nested VMs. Keep management host-only and provide required outbound access through NAT. This keeps test traffic out of the company LAN.">Build one ESXi host with two small nested VMs. Keep management host-only and provide required outbound access through NAT. This keeps test traffic out of the company LAN.</p></section>
-<section id="enterprise-prerequisites" class="article-section"><h2 data-fa="CPU، میزبان و Build سازگار" data-en="CPU, host and compatible builds">CPU, host and compatible builds</h2><p data-fa="ESXi 8.x و Workstation سازگار با سیستم‌عامل میزبان لازم است. نسخه دقیق و متن کامل خطا را ثبت کنید. Workaround مربوط به Build دیگر را بدون بررسی اجرا نکنید." data-en="Use ESXi 8.x and Workstation compatible with the host OS. Record exact versions and the full error. Check applicability before borrowing another build’s workaround.">Use ESXi 8.x and Workstation compatible with the host OS. Record exact versions and the full error. Check applicability before borrowing another build’s workaround.</p>
-<p data-fa="برای Lab نمونه، میزبان با ۳۲ GiB RAM و SSD و CPU دارای VT-x/EPT یا AMD-V/RVI در نظر گرفته شده است. به ESXi چهار vCPU و هشت GiB RAM و دیسک Boot و Datastore مناسب بدهید. این مقادیر تضمین سرعت نیستند." data-en="The example host has 32 GiB RAM, SSD and VT-x/EPT or AMD-V/RVI. Allocate four vCPUs, 8 GiB RAM and suitable boot/datastore disks to ESXi. These allocations are not speed guarantees.">The example host has 32 GiB RAM, SSD and VT-x/EPT or AMD-V/RVI. Allocate four vCPUs, 8 GiB RAM and suitable boot/datastore disks to ESXi. These allocations are not speed guarantees.</p>
-<p data-fa="Virtualization در Firmware میزبان باید فعال باشد و Workstation قابلیت لازم را به Guest بدهد. دسترسی Admin و Console و Image معتبر داشته باشید." data-en="Enable virtualization in host firmware and expose the required guest features through Workstation. Keep administrator/console access and a valid image.">Enable virtualization in host firmware and expose the required guest features through Workstation. Keep administrator/console access and a valid image.</p><h3 id="enterprise-compatibility" data-fa="حدود پشتیبانی Nested" data-en="Nested support limitations">Nested support limitations</h3><p data-fa="این مسیر برای آزمایشگاه است. شرایط پشتیبانی Nested را در مستندات Broadcom بررسی کنید. VMCISr نام ماژول در خطاست و علت واحدی برای همه نسخه‌ها مشخص نمی‌کند." data-en="This workflow is for a lab. Check Broadcom’s nested-support conditions. VMCISr names the failing module rather than one universal cause across versions.">This workflow is for a lab. Check Broadcom’s nested-support conditions. VMCISr names the failing module rather than one universal cause across versions.</p></section>
-<section id="enterprise-installation" class="article-section"><h2 data-fa="ساخت ماشین ESXi و آزمون Host Client" data-en="Build the ESXi VM and test Host Client">Build the ESXi VM and test Host Client</h2><p data-fa="Firmware Virtualization میزبان را فعال کنید. در تنظیم CPU ماشین، Virtualize Intel VT-x/EPT or AMD-V/RVI را انتخاب کنید. نسخه Workstation و OS میزبان را ثبت کنید." data-en="Enable host-firmware virtualization and select Virtualize Intel VT-x/EPT or AMD-V/RVI in VM CPU settings. Record Workstation and host-OS versions.">Enable host-firmware virtualization and select Virtualize Intel VT-x/EPT or AMD-V/RVI in VM CPU settings. Record Workstation and host-OS versions.</p>
-<p data-fa="Guest Type مربوط به ESXi و Adapter سازگار با Image را انتخاب کنید. ISO معتبر را وصل و دیسک نصب اختصاصی را تأیید کنید. سپس ESXi را نصب کنید." data-en="Select the ESXi guest type and image-compatible adapter. Attach a valid ISO, verify the dedicated target disk, then install ESXi.">Select the ESXi guest type and image-compatible adapter. Attach a valid ISO, verify the dedicated target disk, then install ESXi.</p>
-<p data-fa="در DCUI از F2 و Configure Management Network، IP و DNS و Hostname را تنظیم کنید. 10.99.0.11/24 نمونه Host-only است و باید با VMnet شما تطبیق یابد. Test Management Network را اجرا کنید." data-en="Use DCUI F2 → Configure Management Network for IP, DNS and hostname. Replace the sample host-only 10.99.0.11/24 to match VMnet. Run Test Management Network.">Use DCUI F2 → Configure Management Network for IP, DNS and hostname. Replace the sample host-only 10.99.0.11/24 to match VMnet. Run Test Management Network.</p>
-<p data-fa="از Workstation، TCP/443 را با فرمان زیر بسنجید." data-en="Test TCP/443 from the workstation with this command.">Test TCP/443 from the workstation with this command.</p>
-<pre dir="ltr"><code class="language-powershell">Test-NetConnection -ComputerName 10.99.0.11 -Port 443</code></pre>
-<p data-fa="TcpTestSucceeded: True فقط اتصال TCP را تأیید می‌کند. Host Client را باز کنید و Fingerprint گواهی Lab را از Console مقایسه کنید. سپس VM داخلی کوچک را Boot و Network و Storage آن را بررسی کنید." data-en="TcpTestSucceeded: True establishes TCP reachability only. Open Host Client and verify the lab certificate fingerprint through the console. Then boot a small nested VM and test its network/storage.">TcpTestSucceeded: True establishes TCP reachability only. Open Host Client and verify the lab certificate fingerprint through the console. Then boot a small nested VM and test its network/storage.</p></section>
-<section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="بررسی VMCISr و VT-x" data-en="Investigate VMCISr and VT-x failures">Investigate VMCISr and VT-x failures</h2><p data-fa="برای Module VMCISr power on failed، vmware.log پوشه VM، تنظیم VMCI و KB همان Build را بررسی کنید. حذف vmci0 راه‌حل نسخه‌مستقل نیست. برای VT-x unavailable، Firmware و گزینه Nested و موتور Virtualization میزبان را بررسی کنید. NIC ناموجود به تطبیق Adapter و Image نیاز دارد. Driver ناشناخته به ISO اضافه نکنید." data-en="For Module VMCISr power on failed, inspect the VM folder’s vmware.log, VMCI settings and the matching-build KB. Deleting vmci0 is not a version-independent fix. For unavailable VT-x, check firmware, nested settings and the host virtualization engine. Missing NICs require adapter/image compatibility checks, not arbitrary driver injection.">For Module VMCISr power on failed, inspect the VM folder’s vmware.log, VMCI settings and the matching-build KB. Deleting vmci0 is not a version-independent fix. For unavailable VT-x, check firmware, nested settings and the host virtualization engine. Missing NICs require adapter/image compatibility checks, not arbitrary driver injection.</p></section>
-<section id="enterprise-security" class="article-section"><h2 data-fa="امنیت میزبان هنگام Workaround" data-en="Host security during workarounds">Host security during workarounds</h2><p data-fa="از Credential مخصوص Lab استفاده کنید و Management را روی اینترنت نگذارید. اگر KB به تغییر Hyper-V، VBS یا Secure Boot اشاره دارد، Build و اثر امنیتی آن را بررسی کنید. خاموش‌کردن عمومی کنترل‌های میزبان راه‌حل هر خطای Nested نیست." data-en="Use lab-specific credentials and keep management off the Internet. When a KB calls for Hyper-V, VBS or Secure Boot changes, check its build scope and security impact. Disabling host controls is not a general nested-error fix.">Use lab-specific credentials and keep management off the Internet. When a KB calls for Hyper-V, VBS or Secure Boot changes, check its build scope and security impact. Disabling host controls is not a general nested-error fix.</p></section>
-<section id="enterprise-monitoring" class="article-section"><h2 data-fa="منابع میزبان و Guest" data-en="Host and guest resource pressure">Host and guest resource pressure</h2><p data-fa="RAM میزبان، Swapping داخل ESXi و Latency دیسک را بررسی کنید. VM کند در Lab ممکن است از Oversubscription میزبان باشد. نتیجه را همراه منابع تخصیص‌یافته ثبت کنید." data-en="Inspect host RAM, ESXi swapping and disk latency. Slow lab guests might reflect host oversubscription. Record results with the allocated resources.">Inspect host RAM, ESXi swapping and disk latency. Slow lab guests might reflect host oversubscription. Record results with the allocated resources.</p></section>
-<section id="enterprise-recovery" class="article-section"><h2 data-fa="بازگرداندن VMX و داده Lab" data-en="Restore VMX and lab data">Restore VMX and lab data</h2><p data-fa="از VM خاموش و فایل VMX نسخه نگه دارید. تغییر VMX را فقط در حالت خاموش از نسخه ثبت‌شده برگردانید. برای داده برنامه داخل VMهای Nested، Backup داخل Guest نیز لازم است. Snapshot Lab جای آن را نمی‌گیرد." data-en="Keep a copy of the powered-off VM and VMX. Undo VMX edits only while powered off, using the recorded copy. Application data inside nested guests needs in-guest backups too. Lab snapshots do not replace them.">Keep a copy of the powered-off VM and VMX. Undo VMX edits only while powered off, using the recorded copy. Application data inside nested guests needs in-guest backups too. Lab snapshots do not replace them.</p><h3 id="enterprise-practices" data-fa="ثبت خطا برای آزمون تکرارپذیر" data-en="Record reproducible failures">Record reproducible failures</h3><p data-fa="متن خطا، Build میزبان و Workstation و ESXi و تنظیم CPU را کنار نتیجه ثبت کنید. سپس هر Workaround را جدا اعمال و دوباره Power-on و Boot ماشین داخلی را آزمایش کنید." data-en="Record the error, host/Workstation/ESXi builds and CPU settings together. Apply each workaround independently and repeat power-on and nested-guest boot tests.">Record the error, host/Workstation/ESXi builds and CPU settings together. Apply each workaround independently and repeat power-on and nested-guest boot tests.</p></section>
-<section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</h2><h3 data-fa="آیا nested ESXi روی Workstation پشتیبانی Production دارد؟" data-en="Is nested ESXi on Workstation supported for production?">Is nested ESXi on Workstation supported for production?</h3><p data-fa="باید ماتریس support سازنده بررسی شود. این مقاله فقط آزمایشگاه است." data-en="Check the vendor support matrix. This procedure covers a lab only.">Check the vendor support matrix. This procedure covers a lab only.</p><h3 data-fa="آیا خطای VMCI همیشه با حذف device حل می‌شود؟" data-en="Does deleting a device always fix VMCI failures?">Does deleting a device always fix VMCI failures?</h3><p data-fa="خیر. log و KB مربوط به build باید علت را مشخص کنند." data-en="No. Establish the cause using logs and the build-specific KB.">No. Establish the cause using logs and the build-specific KB.</p></section>
-<section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">Official Sources</h2><ul><li><a href="https://knowledge.broadcom.com/external/article/313547/support-for-running-esxi-as-a-nested-vir.html" rel="noopener">Broadcom: nested ESXi support</a></li><li><a href="https://knowledge.broadcom.com/external/article/389469" rel="noopener">Broadcom: Workstation virtualization</a></li></ul></section></div></article>
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="کاربرد Nested ESXi"
+                      data-en="What nested ESXi is useful for"
+                    >
+                      What nested ESXi is useful for
+                    </h2>
+                    <p
+                      data-fa="Nested ESXi یک ESXi مجازی داخل Workstation است. برای تمرین شبکه مجازی و API مناسب است، اما نصب موفق آن پشتیبانی یا Performance سخت‌افزار Production را ثابت نمی‌کند. خطای VMCISr پیش از روشن‌شدن VM باید از Log همان ماشین بررسی شود."
+                      data-en="Nested ESXi runs as a VM inside Workstation. It suits virtual-network and API rehearsal, but successful installation establishes neither production support nor hardware performance. Diagnose pre-power-on VMCISr failures from that VM’s logs."
+                    >
+                      Nested ESXi runs as a VM inside Workstation. It suits
+                      virtual-network and API rehearsal, but successful
+                      installation establishes neither production support nor
+                      hardware performance. Diagnose pre-power-on VMCISr
+                      failures from that VM’s logs.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="دو لایه Virtualization"
+                      data-en="Two virtualization layers"
+                    >
+                      Two virtualization layers
+                    </h2>
+                    <p
+                      data-fa="Workstation ویژگی‌های CPU را به ESXi می‌دهد و ESXi آن‌ها را برای VMهای داخلی استفاده می‌کند. بالا آمدن خود ESXi به معنی در دسترس بودن Nested Virtualization برای VMهای داخل آن نیست. یک VM کوچک را هم Boot کنید."
+                      data-en="Workstation exposes CPU features to ESXi, which uses them for its guest VMs. Booting ESXi alone does not prove nested virtualization is available to those guests. Boot a small nested VM too."
+                    >
+                      Workstation exposes CPU features to ESXi, which uses them
+                      for its guest VMs. Booting ESXi alone does not prove
+                      nested virtualization is available to those guests. Boot a
+                      small nested VM too.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: تمرین تغییر vSwitch"
+                      data-en="Example: rehearse a vSwitch change"
+                    >
+                      Example: rehearse a vSwitch change
+                    </h3>
+                    <p
+                      data-fa="یک ESXi و دو VM کوچک داخل آن بسازید. شبکه مدیریت را Host-only نگه دارید و دسترسی بیرونی لازم را از NAT بدهید. این جداسازی مانع ورود ترافیک آزمایشی به LAN شرکت می‌شود."
+                      data-en="Build one ESXi host with two small nested VMs. Keep management host-only and provide required outbound access through NAT. This keeps test traffic out of the company LAN."
+                    >
+                      Build one ESXi host with two small nested VMs. Keep
+                      management host-only and provide required outbound access
+                      through NAT. This keeps test traffic out of the company
+                      LAN.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="CPU، میزبان و Build سازگار"
+                      data-en="CPU, host and compatible builds"
+                    >
+                      CPU, host and compatible builds
+                    </h2>
+                    <p
+                      data-fa="ESXi 8.x و Workstation سازگار با سیستم‌عامل میزبان لازم است. نسخه دقیق و متن کامل خطا را ثبت کنید. Workaround مربوط به Build دیگر را بدون بررسی اجرا نکنید."
+                      data-en="Use ESXi 8.x and Workstation compatible with the host OS. Record exact versions and the full error. Check applicability before borrowing another build’s workaround."
+                    >
+                      Use ESXi 8.x and Workstation compatible with the host OS.
+                      Record exact versions and the full error. Check
+                      applicability before borrowing another build’s workaround.
+                    </p>
+                    <p
+                      data-fa="برای Lab نمونه، میزبان با ۳۲ GiB RAM و SSD و CPU دارای VT-x/EPT یا AMD-V/RVI در نظر گرفته شده است. به ESXi چهار vCPU و هشت GiB RAM و دیسک Boot و Datastore مناسب بدهید. این مقادیر تضمین سرعت نیستند."
+                      data-en="The example host has 32 GiB RAM, SSD and VT-x/EPT or AMD-V/RVI. Allocate four vCPUs, 8 GiB RAM and suitable boot/datastore disks to ESXi. These allocations are not speed guarantees."
+                    >
+                      The example host has 32 GiB RAM, SSD and VT-x/EPT or
+                      AMD-V/RVI. Allocate four vCPUs, 8 GiB RAM and suitable
+                      boot/datastore disks to ESXi. These allocations are not
+                      speed guarantees.
+                    </p>
+                    <p
+                      data-fa="Virtualization در Firmware میزبان باید فعال باشد و Workstation قابلیت لازم را به Guest بدهد. دسترسی Admin و Console و Image معتبر داشته باشید."
+                      data-en="Enable virtualization in host firmware and expose the required guest features through Workstation. Keep administrator/console access and a valid image."
+                    >
+                      Enable virtualization in host firmware and expose the
+                      required guest features through Workstation. Keep
+                      administrator/console access and a valid image.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="حدود پشتیبانی Nested"
+                      data-en="Nested support limitations"
+                    >
+                      Nested support limitations
+                    </h3>
+                    <p
+                      data-fa="این مسیر برای آزمایشگاه است. شرایط پشتیبانی Nested را در مستندات Broadcom بررسی کنید. VMCISr نام ماژول در خطاست و علت واحدی برای همه نسخه‌ها مشخص نمی‌کند."
+                      data-en="This workflow is for a lab. Check Broadcom’s nested-support conditions. VMCISr names the failing module rather than one universal cause across versions."
+                    >
+                      This workflow is for a lab. Check Broadcom’s
+                      nested-support conditions. VMCISr names the failing module
+                      rather than one universal cause across versions.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="ساخت ماشین ESXi و آزمون Host Client"
+                      data-en="Build the ESXi VM and test Host Client"
+                    >
+                      Build the ESXi VM and test Host Client
+                    </h2>
+                    <p
+                      data-fa="Firmware Virtualization میزبان را فعال کنید. در تنظیم CPU ماشین، Virtualize Intel VT-x/EPT or AMD-V/RVI را انتخاب کنید. نسخه Workstation و OS میزبان را ثبت کنید."
+                      data-en="Enable host-firmware virtualization and select Virtualize Intel VT-x/EPT or AMD-V/RVI in VM CPU settings. Record Workstation and host-OS versions."
+                    >
+                      Enable host-firmware virtualization and select Virtualize
+                      Intel VT-x/EPT or AMD-V/RVI in VM CPU settings. Record
+                      Workstation and host-OS versions.
+                    </p>
+                    <p
+                      data-fa="Guest Type مربوط به ESXi و Adapter سازگار با Image را انتخاب کنید. ISO معتبر را وصل و دیسک نصب اختصاصی را تأیید کنید. سپس ESXi را نصب کنید."
+                      data-en="Select the ESXi guest type and image-compatible adapter. Attach a valid ISO, verify the dedicated target disk, then install ESXi."
+                    >
+                      Select the ESXi guest type and image-compatible adapter.
+                      Attach a valid ISO, verify the dedicated target disk, then
+                      install ESXi.
+                    </p>
+                    <p
+                      data-fa="در DCUI از F2 و Configure Management Network، IP و DNS و Hostname را تنظیم کنید. 10.99.0.11/24 نمونه Host-only است و باید با VMnet شما تطبیق یابد. Test Management Network را اجرا کنید."
+                      data-en="Use DCUI F2 → Configure Management Network for IP, DNS and hostname. Replace the sample host-only 10.99.0.11/24 to match VMnet. Run Test Management Network."
+                    >
+                      Use DCUI F2 → Configure Management Network for IP, DNS and
+                      hostname. Replace the sample host-only 10.99.0.11/24 to
+                      match VMnet. Run Test Management Network.
+                    </p>
+                    <p
+                      data-fa="از Workstation، TCP/443 را با فرمان زیر بسنجید."
+                      data-en="Test TCP/443 from the workstation with this command."
+                    >
+                      Test TCP/443 from the workstation with this command.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-powershell">Test-NetConnection -ComputerName 10.99.0.11 -Port 443</code></pre>
+                    <p
+                      data-fa="TcpTestSucceeded: True فقط اتصال TCP را تأیید می‌کند. Host Client را باز کنید و Fingerprint گواهی Lab را از Console مقایسه کنید. سپس VM داخلی کوچک را Boot و Network و Storage آن را بررسی کنید."
+                      data-en="TcpTestSucceeded: True establishes TCP reachability only. Open Host Client and verify the lab certificate fingerprint through the console. Then boot a small nested VM and test its network/storage."
+                    >
+                      TcpTestSucceeded: True establishes TCP reachability only.
+                      Open Host Client and verify the lab certificate
+                      fingerprint through the console. Then boot a small nested
+                      VM and test its network/storage.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="بررسی VMCISr و VT-x"
+                      data-en="Investigate VMCISr and VT-x failures"
+                    >
+                      Investigate VMCISr and VT-x failures
+                    </h2>
+                    <p
+                      data-fa="برای Module VMCISr power on failed، vmware.log پوشه VM، تنظیم VMCI و KB همان Build را بررسی کنید. حذف vmci0 راه‌حل نسخه‌مستقل نیست. برای VT-x unavailable، Firmware و گزینه Nested و موتور Virtualization میزبان را بررسی کنید. NIC ناموجود به تطبیق Adapter و Image نیاز دارد. Driver ناشناخته به ISO اضافه نکنید."
+                      data-en="For Module VMCISr power on failed, inspect the VM folder’s vmware.log, VMCI settings and the matching-build KB. Deleting vmci0 is not a version-independent fix. For unavailable VT-x, check firmware, nested settings and the host virtualization engine. Missing NICs require adapter/image compatibility checks, not arbitrary driver injection."
+                    >
+                      For Module VMCISr power on failed, inspect the VM folder’s
+                      vmware.log, VMCI settings and the matching-build KB.
+                      Deleting vmci0 is not a version-independent fix. For
+                      unavailable VT-x, check firmware, nested settings and the
+                      host virtualization engine. Missing NICs require
+                      adapter/image compatibility checks, not arbitrary driver
+                      injection.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="امنیت میزبان هنگام Workaround"
+                      data-en="Host security during workarounds"
+                    >
+                      Host security during workarounds
+                    </h2>
+                    <p
+                      data-fa="از Credential مخصوص Lab استفاده کنید و Management را روی اینترنت نگذارید. اگر KB به تغییر Hyper-V، VBS یا Secure Boot اشاره دارد، Build و اثر امنیتی آن را بررسی کنید. خاموش‌کردن عمومی کنترل‌های میزبان راه‌حل هر خطای Nested نیست."
+                      data-en="Use lab-specific credentials and keep management off the Internet. When a KB calls for Hyper-V, VBS or Secure Boot changes, check its build scope and security impact. Disabling host controls is not a general nested-error fix."
+                    >
+                      Use lab-specific credentials and keep management off the
+                      Internet. When a KB calls for Hyper-V, VBS or Secure Boot
+                      changes, check its build scope and security impact.
+                      Disabling host controls is not a general nested-error fix.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="منابع میزبان و Guest"
+                      data-en="Host and guest resource pressure"
+                    >
+                      Host and guest resource pressure
+                    </h2>
+                    <p
+                      data-fa="RAM میزبان، Swapping داخل ESXi و Latency دیسک را بررسی کنید. VM کند در Lab ممکن است از Oversubscription میزبان باشد. نتیجه را همراه منابع تخصیص‌یافته ثبت کنید."
+                      data-en="Inspect host RAM, ESXi swapping and disk latency. Slow lab guests might reflect host oversubscription. Record results with the allocated resources."
+                    >
+                      Inspect host RAM, ESXi swapping and disk latency. Slow lab
+                      guests might reflect host oversubscription. Record results
+                      with the allocated resources.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="بازگرداندن VMX و داده Lab"
+                      data-en="Restore VMX and lab data"
+                    >
+                      Restore VMX and lab data
+                    </h2>
+                    <p
+                      data-fa="از VM خاموش و فایل VMX نسخه نگه دارید. تغییر VMX را فقط در حالت خاموش از نسخه ثبت‌شده برگردانید. برای داده برنامه داخل VMهای Nested، Backup داخل Guest نیز لازم است. Snapshot Lab جای آن را نمی‌گیرد."
+                      data-en="Keep a copy of the powered-off VM and VMX. Undo VMX edits only while powered off, using the recorded copy. Application data inside nested guests needs in-guest backups too. Lab snapshots do not replace them."
+                    >
+                      Keep a copy of the powered-off VM and VMX. Undo VMX edits
+                      only while powered off, using the recorded copy.
+                      Application data inside nested guests needs in-guest
+                      backups too. Lab snapshots do not replace them.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="ثبت خطا برای آزمون تکرارپذیر"
+                      data-en="Record reproducible failures"
+                    >
+                      Record reproducible failures
+                    </h3>
+                    <p
+                      data-fa="متن خطا، Build میزبان و Workstation و ESXi و تنظیم CPU را کنار نتیجه ثبت کنید. سپس هر Workaround را جدا اعمال و دوباره Power-on و Boot ماشین داخلی را آزمایش کنید."
+                      data-en="Record the error, host/Workstation/ESXi builds and CPU settings together. Apply each workaround independently and repeat power-on and nested-guest boot tests."
+                    >
+                      Record the error, host/Workstation/ESXi builds and CPU
+                      settings together. Apply each workaround independently and
+                      repeat power-on and nested-guest boot tests.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا nested ESXi روی Workstation پشتیبانی Production دارد؟"
+                      data-en="Is nested ESXi on Workstation supported for production?"
+                    >
+                      Is nested ESXi on Workstation supported for production?
+                    </h3>
+                    <p
+                      data-fa="باید ماتریس support سازنده بررسی شود. این مقاله فقط آزمایشگاه است."
+                      data-en="Check the vendor support matrix. This procedure covers a lab only."
+                    >
+                      Check the vendor support matrix. This procedure covers a
+                      lab only.
+                    </p>
+                    <h3
+                      data-fa="آیا خطای VMCI همیشه با حذف device حل می‌شود؟"
+                      data-en="Does deleting a device always fix VMCI failures?"
+                    >
+                      Does deleting a device always fix VMCI failures?
+                    </h3>
+                    <p
+                      data-fa="خیر. log و KB مربوط به build باید علت را مشخص کنند."
+                      data-en="No. Establish the cause using logs and the build-specific KB."
+                    >
+                      No. Establish the cause using logs and the build-specific
+                      KB.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://knowledge.broadcom.com/external/article/313547/support-for-running-esxi-as-a-nested-vir.html"
+                          rel="noopener"
+                          >Broadcom: nested ESXi support</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://knowledge.broadcom.com/external/article/389469"
+                          rel="noopener"
+                          >Broadcom: Workstation virtualization</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
+              </article>
             </div>
           </div>
         </div>
@@ -340,18 +795,24 @@
             <div class="footer-brand">
               <h3 class="brand-name">
                 <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
-                  >AmirHossein Jalalian</span>
+                  >AmirHossein Jalalian</span
+                >
               </h3>
               <p
                 class="brand-title"
                 data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
-              >Infrastructure &amp; DevOps Engineer</p>
+              >
+                Infrastructure &amp; DevOps Engineer
+              </p>
               <p
                 class="brand-description"
                 data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
                 data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-              >Delivering reliable, secure, and scalable IT solutions for your business success.</p>
+              >
+                Delivering reliable, secure, and scalable IT solutions for your
+                business success.
+              </p>
             </div>
 
             <!-- Contact Info -->
@@ -360,12 +821,15 @@
                 class="contact-title"
                 data-en="Get In Touch"
                 data-fa="تماس با من"
-              >Get In Touch</h4>
+              >
+                Get In Touch
+              </h4>
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>
                   <span data-en="Tehran, Iran" data-fa="تهران، ایران"
-                    >Tehran, Iran</span>
+                    >Tehran, Iran</span
+                  >
                 </div>
                 <div class="contact-item">
                   <i class="bi bi-telephone"></i>
@@ -390,7 +854,9 @@
                   class="social-title"
                   data-en="Follow Me"
                   data-fa="دنبال کنید"
-                >Follow Me</h5>
+                >
+                  Follow Me
+                </h5>
                 <div class="social-icons">
                   <a
                     href="https://wa.me/989197276219"
@@ -436,12 +902,14 @@
                   <span
                     data-en="All Rights Reserved"
                     data-fa="تمام حقوق محفوظ است"
-                    >All Rights Reserved</span>
+                    >All Rights Reserved</span
+                  >
                 </p>
               </div>
               <div class="footer-heart">
                 <span data-en="Made with" data-fa="ساخته شده با"
-                  >Made with</span>
+                  >Made with</span
+                >
                 <i class="bi bi-heart-fill"></i>
                 <span data-en="in Iran" data-fa="در ایران">in Iran</span>
               </div>

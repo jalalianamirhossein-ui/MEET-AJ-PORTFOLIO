@@ -4,7 +4,10 @@
     <title>Detect Port Scans on MikroTik with psd | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Configure TCP scan detection, inspect counters and address lists, and preserve legitimate router management." />
+    <meta
+      name="description"
+      content="Configure TCP scan detection, inspect counters and address lists, and preserve legitimate router management."
+    />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <link
@@ -12,9 +15,18 @@
       href="https://meetaj.ir/articles/mikrotik-block-port-scanners"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Detect Port Scans on MikroTik with psd" />
-    <meta property="og:description" content="Configure TCP scan detection, inspect counters and address lists, and preserve legitimate router management." />
-    <meta property="og:url" content="https://meetaj.ir/articles/mikrotik-block-port-scanners" />
+    <meta
+      property="og:title"
+      content="Detect Port Scans on MikroTik with psd"
+    />
+    <meta
+      property="og:description"
+      content="Configure TCP scan detection, inspect counters and address lists, and preserve legitimate router management."
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/mikrotik-block-port-scanners"
+    />
     <meta property="og:site_name" content="Meet AJ" />
     <meta name="twitter:card" content="summary" />
     <link href="../assets/img/favicon.png" rel="icon" />
@@ -51,12 +63,95 @@
       rel="stylesheet"
       disabled
     />
-  <meta name="keywords" content="MikroTik Firewall, mikrotik block port scanners, infrastructure operations, production operations, troubleshooting" />
-<meta name="article:content-language" content="en" />
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Detect Port Scans on MikroTik with psd", "description": "Configure TCP scan detection, inspect counters and address lists, and preserve legitimate router management.", "inLanguage": "en", "url": "https://meetaj.ir/articles/mikrotik-block-port-scanners", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}, "mainEntityOfPage": "https://meetaj.ir/articles/mikrotik-block-port-scanners"}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does input protect LAN servers?", "acceptedAnswer": {"@type": "Answer", "text": "No. Transit traffic requires a forward policy."}}, {"@type": "Question", "name": "Does psd detect every scan?", "acceptedAnswer": {"@type": "Answer", "text": "No. It is a limited heuristic and does not replace default deny or an IDS."}}], "inLanguage": "en"}</script>
-<script id="article-localizations" type="application/json">{"fa": {"title": "تشخیص Port Scan در MikroTik با psd", "meta_title": "تشخیص Port Scan در MikroTik با psd | Meet AJ", "description": "تنظیم Rule تشخیص TCP Scan، بررسی Counter و Address List و جلوگیری از قطع مدیریت روتر.", "keywords": ["تشخیص Port Scan در MikroTik با psd", "عیب‌یابی", "بازیابی", "mikrotik block port scanners"], "faq": [["آیا input از سرورهای LAN حفاظت می‌کند؟", "خیر. ترافیک عبوری به سیاست forward نیاز دارد."], ["آیا psd همه scanها را کشف می‌کند؟", "خیر. heuristic محدود است و جای default deny و IDS را نمی‌گیرد."]]}, "en": {"title": "Detect Port Scans on MikroTik with psd", "meta_title": "Detect Port Scans on MikroTik with psd | Meet AJ", "description": "Configure TCP scan detection, inspect counters and address lists, and preserve legitimate router management.", "keywords": ["Detect Port Scans on MikroTik with psd", "mikrotik block port scanners", "troubleshooting"], "faq": [["Does input protect LAN servers?", "No. Transit traffic requires a forward policy."], ["Does psd detect every scan?", "No. It is a limited heuristic and does not replace default deny or an IDS."]]}}</script>
-</head>
+    <meta
+      name="keywords"
+      content="MikroTik Firewall, mikrotik block port scanners, infrastructure operations, production operations, troubleshooting"
+    />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Detect Port Scans on MikroTik with psd",
+        "description": "Configure TCP scan detection, inspect counters and address lists, and preserve legitimate router management.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/mikrotik-block-port-scanners",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/mikrotik-block-port-scanners"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does input protect LAN servers?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Transit traffic requires a forward policy."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does psd detect every scan?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. It is a limited heuristic and does not replace default deny or an IDS."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "تشخیص Port Scan در MikroTik با psd",
+          "meta_title": "تشخیص Port Scan در MikroTik با psd | Meet AJ",
+          "description": "تنظیم Rule تشخیص TCP Scan، بررسی Counter و Address List و جلوگیری از قطع مدیریت روتر.",
+          "keywords": [
+            "تشخیص Port Scan در MikroTik با psd",
+            "عیب‌یابی",
+            "بازیابی",
+            "mikrotik block port scanners"
+          ],
+          "faq": [
+            [
+              "آیا input از سرورهای LAN حفاظت می‌کند؟",
+              "خیر. ترافیک عبوری به سیاست forward نیاز دارد."
+            ],
+            [
+              "آیا psd همه scanها را کشف می‌کند؟",
+              "خیر. heuristic محدود است و جای default deny و IDS را نمی‌گیرد."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Detect Port Scans on MikroTik with psd",
+          "meta_title": "Detect Port Scans on MikroTik with psd | Meet AJ",
+          "description": "Configure TCP scan detection, inspect counters and address lists, and preserve legitimate router management.",
+          "keywords": [
+            "Detect Port Scans on MikroTik with psd",
+            "mikrotik block port scanners",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Does input protect LAN servers?",
+              "No. Transit traffic requires a forward policy."
+            ],
+            [
+              "Does psd detect every scan?",
+              "No. It is a limited heuristic and does not replace default deny or an IDS."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
   <body class="article-page theme-mikrotik">
     <button
       id="menu-toggle"
@@ -205,27 +300,94 @@
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
             >
           </li>
-          <li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="نقش psd در Firewall" data-en="Where psd fits in the firewall">Where psd fits in the firewall</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="ترتیب تشخیص و Drop" data-en="Detection and drop ordering">Detection and drop ordering</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="بررسی Ruleهای موجود" data-en="Inspect the existing rules">Inspect the existing rules</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="افزودن Rule و آزمون Counter" data-en="Add rules and test counters">Add rules and test counters</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="Counter صفر و False Positive" data-en="Zero counters and false positives">Zero counters and false positives</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-security"><span data-fa="Allowlist، IPv6 و Default Deny" data-en="Allowlists, IPv6 and default deny">Allowlists, IPv6 and default deny</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="حجم List و فشار Connection Tracking" data-en="List size and connection-tracking pressure">List size and connection-tracking pressure</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="لغو Rule بدون خاموش‌کردن Firewall" data-en="Undo rules without disabling the firewall">Undo rules without disabling the firewall</span></a></li>
-<li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">Official Sources</span></a></li>
-
-
-
-
-
-
-
-
-
-
-
+          <li class="article-nav-item">
+            <a href="#enterprise-intro"
+              ><span
+                data-fa="نقش psd در Firewall"
+                data-en="Where psd fits in the firewall"
+                >Where psd fits in the firewall</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="ترتیب تشخیص و Drop"
+                data-en="Detection and drop ordering"
+                >Detection and drop ordering</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="بررسی Ruleهای موجود"
+                data-en="Inspect the existing rules"
+                >Inspect the existing rules</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="افزودن Rule و آزمون Counter"
+                data-en="Add rules and test counters"
+                >Add rules and test counters</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="Counter صفر و False Positive"
+                data-en="Zero counters and false positives"
+                >Zero counters and false positives</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-security"
+              ><span
+                data-fa="Allowlist، IPv6 و Default Deny"
+                data-en="Allowlists, IPv6 and default deny"
+                >Allowlists, IPv6 and default deny</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="حجم List و فشار Connection Tracking"
+                data-en="List size and connection-tracking pressure"
+                >List size and connection-tracking pressure</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="لغو Rule بدون خاموش‌کردن Firewall"
+                data-en="Undo rules without disabling the firewall"
+                >Undo rules without disabling the firewall</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#faq"
+              ><span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
+              ></a
+            >
+          </li>
         </ul>
       </nav>
       <button
@@ -248,19 +410,25 @@
                 <span class="article-category">MikroTik</span
                 ><span class="meta-date"
                   ><span class="article-date" data-en="Article" data-fa="مقاله"
-                    >Article</span><time datetime="">MikroTik</time></span
+                    >Article</span
+                  ><time datetime="">MikroTik</time></span
                 >
               </div>
               <h1
                 class="article-title hero-title"
-
-
-               data-fa="تشخیص Port Scan در MikroTik با psd" data-en="Detect Port Scans on MikroTik with psd">Detect Port Scans on MikroTik with psd</h1>
+                data-fa="تشخیص Port Scan در MikroTik با psd"
+                data-en="Detect Port Scans on MikroTik with psd"
+              >
+                Detect Port Scans on MikroTik with psd
+              </h1>
               <p
                 class="article-excerpt hero-subtitle"
-
-
-               data-fa="تنظیم Rule تشخیص TCP Scan، بررسی Counter و Address List و جلوگیری از قطع مدیریت روتر." data-en="Configure TCP scan detection, inspect counters and address lists, and preserve legitimate router management.">Configure TCP scan detection, inspect counters and address lists, and preserve legitimate router management.</p>
+                data-fa="تنظیم Rule تشخیص TCP Scan، بررسی Counter و Address List و جلوگیری از قطع مدیریت روتر."
+                data-en="Configure TCP scan detection, inspect counters and address lists, and preserve legitimate router management."
+              >
+                Configure TCP scan detection, inspect counters and address
+                lists, and preserve legitimate router management.
+              </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
@@ -274,7 +442,9 @@
                       class="banner-subtitle"
                       data-en="Meet AJ technical article"
                       data-fa="مقاله فنی Meet AJ"
-                    >Meet AJ technical article</p>
+                    >
+                      Meet AJ technical article
+                    </p>
                   </div>
                 </div>
               </div>
@@ -285,7 +455,8 @@
                   ><span class="btn-content"
                     ><i class="bi bi-play-circle" aria-hidden="true"></i
                     ><span data-en="Start reading" data-fa="شروع مطالعه"
-                      >Start reading</span></span
+                      >Start reading</span
+                    ></span
                   ></a
                 >
               </div>
@@ -306,31 +477,307 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="en" dir="ltr"><section id="enterprise-intro" class="article-section"><h2 data-fa="نقش psd در Firewall" data-en="Where psd fits in the firewall">Where psd fits in the firewall</h2><p data-fa="psd یک Matcher برای تشخیص الگوی Scan در TCP و UDP است. نمونه این مقاله با protocol=tcp فقط TCP را بررسی می‌کند. Rule تشخیص مکمل Default Deny است و نتیجه ندادن آن به معنی امن‌بودن ترافیک نیست." data-en="psd is a heuristic matcher for TCP and UDP scan patterns. This example explicitly selects protocol=tcp and inspects TCP only. Detection supplements default deny. A nonmatch does not establish safe traffic.">psd is a heuristic matcher for TCP and UDP scan patterns. This example explicitly selects protocol=tcp and inspects TCP only. Detection supplements default deny. A nonmatch does not establish safe traffic.</p></section>
-<section id="enterprise-architecture" class="article-section"><h2 data-fa="ترتیب تشخیص و Drop" data-en="Detection and drop ordering">Detection and drop ordering</h2><p data-fa="پذیرش Established و مدیریت مجاز پیش از Heuristic قرار می‌گیرد. Rule اول مبدا مشکوک را موقتاً ثبت می‌کند و Rule دوم ترافیک آن را Drop می‌کند. اگر Accept عمومی پیش از این Ruleها باشد، Matcher اجرا نمی‌شود." data-en="Handle established traffic and permitted management before the heuristic. The first rule temporarily records suspicious sources. The second drops their traffic. Earlier broad accepts prevent the matcher from running.">Handle established traffic and permitted management before the heuristic. The first rule temporarily records suspicious sources. The second drops their traffic. Earlier broad accepts prevent the matcher from running.</p><h3 id="enterprise-scenario" data-fa="روتر در برابر ترافیک عبوری" data-en="Router traffic versus transit traffic">Router traffic versus transit traffic</h3><p data-fa="Ruleهای Input از خود روتر حفاظت می‌کنند. برای سرور پشت NAT یا LAN، مسیر Forward را جدا بررسی کنید. Scanner مجاز شبکه مدیریت 10.20.30.0/24 در نمونه از تشخیص مستثناست." data-en="Input rules protect the router itself. LAN or NAT-published servers require separate forward-policy checks. The sample exempts approved scanners from management subnet 10.20.30.0/24.">Input rules protect the router itself. LAN or NAT-published servers require separate forward-policy checks. The sample exempts approved scanners from management subnet 10.20.30.0/24.</p></section>
-<section id="enterprise-prerequisites" class="article-section"><h2 data-fa="بررسی Ruleهای موجود" data-en="Inspect the existing rules">Inspect the existing rules</h2><p data-fa="مثال برای RouterOS v7 است. نسخه و Architecture را ثبت کنید و Syntax همان نسخه را بررسی کنید." data-en="This example targets RouterOS v7. Record version and architecture and check the selected release’s syntax.">This example targets RouterOS v7. Record version and architecture and check the selected release’s syntax.</p>
-<p data-fa="Interface List با نام WAN باید عضوهای واقعی WAN را داشته باشد. برای آزمون، روتر یا CHR جدا و Scanner مجاز لازم است. CPU و Connection Tracking را زیر بار اندازه بگیرید." data-en="WAN must contain the actual WAN interfaces. Test on an isolated router or CHR using an authorized scanner. Measure CPU and connection tracking under load.">WAN must contain the actual WAN interfaces. Test on an isolated router or CHR using an authorized scanner. Measure CPU and connection tracking under load.</p>
-<p data-fa="از Console یا مسیر مدیریت مطمئن استفاده کنید. Export خارج روتر و Safe Mode برای تغییر Rule داشته باشید. Address List مدیریت را با مبداهای واقعی جایگزین کنید." data-en="Use console or reliable management access. Keep an off-router export and use Safe Mode for rule edits. Replace the management address list with actual sources.">Use console or reliable management access. Keep an off-router export and use Safe Mode for rule edits. Replace the management address list with actual sources.</p><h3 id="enterprise-compatibility" data-fa="محدودیت Heuristic" data-en="Heuristic limitations">Heuristic limitations</h3><p data-fa="psd جای IDS نیست. FastTrack عمدتاً Forward Established را تحت تأثیر قرار می‌دهد. موفقیت Rule Input، حفاظت مسیر Forward یا IPv6 را ثابت نمی‌کند." data-en="psd is not an IDS. FastTrack primarily affects established forward traffic. A successful input rule does not establish forward or IPv6 protection.">psd is not an IDS. FastTrack primarily affects established forward traffic. A successful input rule does not establish forward or IPv6 protection.</p></section>
-<section id="enterprise-installation" class="article-section"><h2 data-fa="افزودن Rule و آزمون Counter" data-en="Add rules and test counters">Add rules and test counters</h2><p data-fa="ترتیب Firewall و عضویت WAN را ببینید. Address List مدیریت را با مبدا معتبر خود تنظیم کنید. مقادیر نمونه را مستقیم به Policy واقعی منتقل نکنید." data-en="Inspect firewall order and WAN membership. Populate management sources with trusted actual values. Do not transfer sample values blindly into production policy.">Inspect firewall order and WAN membership. Populate management sources with trusted actual values. Do not transfer sample values blindly into production policy.</p>
-<pre dir="ltr"><code class="language-routeros">/interface list member print
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="نقش psd در Firewall"
+                      data-en="Where psd fits in the firewall"
+                    >
+                      Where psd fits in the firewall
+                    </h2>
+                    <p
+                      data-fa="psd یک Matcher برای تشخیص الگوی Scan در TCP و UDP است. نمونه این مقاله با protocol=tcp فقط TCP را بررسی می‌کند. Rule تشخیص مکمل Default Deny است و نتیجه ندادن آن به معنی امن‌بودن ترافیک نیست."
+                      data-en="psd is a heuristic matcher for TCP and UDP scan patterns. This example explicitly selects protocol=tcp and inspects TCP only. Detection supplements default deny. A nonmatch does not establish safe traffic."
+                    >
+                      psd is a heuristic matcher for TCP and UDP scan patterns.
+                      This example explicitly selects protocol=tcp and inspects
+                      TCP only. Detection supplements default deny. A nonmatch
+                      does not establish safe traffic.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="ترتیب تشخیص و Drop"
+                      data-en="Detection and drop ordering"
+                    >
+                      Detection and drop ordering
+                    </h2>
+                    <p
+                      data-fa="پذیرش Established و مدیریت مجاز پیش از Heuristic قرار می‌گیرد. Rule اول مبدا مشکوک را موقتاً ثبت می‌کند و Rule دوم ترافیک آن را Drop می‌کند. اگر Accept عمومی پیش از این Ruleها باشد، Matcher اجرا نمی‌شود."
+                      data-en="Handle established traffic and permitted management before the heuristic. The first rule temporarily records suspicious sources. The second drops their traffic. Earlier broad accepts prevent the matcher from running."
+                    >
+                      Handle established traffic and permitted management before
+                      the heuristic. The first rule temporarily records
+                      suspicious sources. The second drops their traffic.
+                      Earlier broad accepts prevent the matcher from running.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="روتر در برابر ترافیک عبوری"
+                      data-en="Router traffic versus transit traffic"
+                    >
+                      Router traffic versus transit traffic
+                    </h3>
+                    <p
+                      data-fa="Ruleهای Input از خود روتر حفاظت می‌کنند. برای سرور پشت NAT یا LAN، مسیر Forward را جدا بررسی کنید. Scanner مجاز شبکه مدیریت 10.20.30.0/24 در نمونه از تشخیص مستثناست."
+                      data-en="Input rules protect the router itself. LAN or NAT-published servers require separate forward-policy checks. The sample exempts approved scanners from management subnet 10.20.30.0/24."
+                    >
+                      Input rules protect the router itself. LAN or
+                      NAT-published servers require separate forward-policy
+                      checks. The sample exempts approved scanners from
+                      management subnet 10.20.30.0/24.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="بررسی Ruleهای موجود"
+                      data-en="Inspect the existing rules"
+                    >
+                      Inspect the existing rules
+                    </h2>
+                    <p
+                      data-fa="مثال برای RouterOS v7 است. نسخه و Architecture را ثبت کنید و Syntax همان نسخه را بررسی کنید."
+                      data-en="This example targets RouterOS v7. Record version and architecture and check the selected release’s syntax."
+                    >
+                      This example targets RouterOS v7. Record version and
+                      architecture and check the selected release’s syntax.
+                    </p>
+                    <p
+                      data-fa="Interface List با نام WAN باید عضوهای واقعی WAN را داشته باشد. برای آزمون، روتر یا CHR جدا و Scanner مجاز لازم است. CPU و Connection Tracking را زیر بار اندازه بگیرید."
+                      data-en="WAN must contain the actual WAN interfaces. Test on an isolated router or CHR using an authorized scanner. Measure CPU and connection tracking under load."
+                    >
+                      WAN must contain the actual WAN interfaces. Test on an
+                      isolated router or CHR using an authorized scanner.
+                      Measure CPU and connection tracking under load.
+                    </p>
+                    <p
+                      data-fa="از Console یا مسیر مدیریت مطمئن استفاده کنید. Export خارج روتر و Safe Mode برای تغییر Rule داشته باشید. Address List مدیریت را با مبداهای واقعی جایگزین کنید."
+                      data-en="Use console or reliable management access. Keep an off-router export and use Safe Mode for rule edits. Replace the management address list with actual sources."
+                    >
+                      Use console or reliable management access. Keep an
+                      off-router export and use Safe Mode for rule edits.
+                      Replace the management address list with actual sources.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="محدودیت Heuristic"
+                      data-en="Heuristic limitations"
+                    >
+                      Heuristic limitations
+                    </h3>
+                    <p
+                      data-fa="psd جای IDS نیست. FastTrack عمدتاً Forward Established را تحت تأثیر قرار می‌دهد. موفقیت Rule Input، حفاظت مسیر Forward یا IPv6 را ثابت نمی‌کند."
+                      data-en="psd is not an IDS. FastTrack primarily affects established forward traffic. A successful input rule does not establish forward or IPv6 protection."
+                    >
+                      psd is not an IDS. FastTrack primarily affects established
+                      forward traffic. A successful input rule does not
+                      establish forward or IPv6 protection.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="افزودن Rule و آزمون Counter"
+                      data-en="Add rules and test counters"
+                    >
+                      Add rules and test counters
+                    </h2>
+                    <p
+                      data-fa="ترتیب Firewall و عضویت WAN را ببینید. Address List مدیریت را با مبدا معتبر خود تنظیم کنید. مقادیر نمونه را مستقیم به Policy واقعی منتقل نکنید."
+                      data-en="Inspect firewall order and WAN membership. Populate management sources with trusted actual values. Do not transfer sample values blindly into production policy."
+                    >
+                      Inspect firewall order and WAN membership. Populate
+                      management sources with trusted actual values. Do not
+                      transfer sample values blindly into production policy.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-routeros">/interface list member print
 /ip firewall filter print detail
 /ip firewall connection tracking print
 /ip firewall address-list add list=mgmt-approved address=10.20.30.0/24 comment=&quot;Approved management subnet&quot;</code></pre>
-<p data-fa="در Safe Mode Ruleها را اضافه کنید. افزودن آن‌ها به انتهای Firewall کافی نیست. در WinBox پس از Accept مدیریت و پیش از Accept عمومی یا Drop نهایی قرار دهید." data-en="Add rules in Safe Mode. Appending them alone is insufficient. In WinBox, place them after management accepts and before broad accepts/final drop.">Add rules in Safe Mode. Appending them alone is insufficient. In WinBox, place them after management accepts and before broad accepts/final drop.</p>
-<pre dir="ltr"><code class="language-routeros">/ip firewall filter add chain=input in-interface-list=WAN protocol=tcp connection-state=new src-address-list=!mgmt-approved psd=21,3s,3,1 action=add-src-to-address-list address-list=port_scanners address-list-timeout=1h comment=&quot;ENT-SCAN detect&quot;
+                    <p
+                      data-fa="در Safe Mode Ruleها را اضافه کنید. افزودن آن‌ها به انتهای Firewall کافی نیست. در WinBox پس از Accept مدیریت و پیش از Accept عمومی یا Drop نهایی قرار دهید."
+                      data-en="Add rules in Safe Mode. Appending them alone is insufficient. In WinBox, place them after management accepts and before broad accepts/final drop."
+                    >
+                      Add rules in Safe Mode. Appending them alone is
+                      insufficient. In WinBox, place them after management
+                      accepts and before broad accepts/final drop.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-routeros">/ip firewall filter add chain=input in-interface-list=WAN protocol=tcp connection-state=new src-address-list=!mgmt-approved psd=21,3s,3,1 action=add-src-to-address-list address-list=port_scanners address-list-timeout=1h comment=&quot;ENT-SCAN detect&quot;
 /ip firewall filter add chain=input in-interface-list=WAN src-address-list=port_scanners action=drop comment=&quot;ENT-SCAN drop&quot;
 /ip firewall filter print stats where comment~&quot;ENT-SCAN&quot;
 /ip firewall address-list print where list=port_scanners</code></pre>
-<p data-fa="از Scanner مجاز در Lab یک TCP Scan انجام دهید. Counter تشخیص و Drop و Address List را ببینید و دسترسی مدیریت را همزمان امتحان کنید. Log نامحدود Packet فعال نکنید." data-en="Run an authorized lab TCP scan. Inspect detection/drop counters and the address list while testing management access. Avoid unlimited packet logs.">Run an authorized lab TCP scan. Inspect detection/drop counters and the address list while testing management access. Avoid unlimited packet logs.</p></section>
-<section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="Counter صفر و False Positive" data-en="Zero counters and false positives">Zero counters and false positives</h2><p data-fa="Counter صفر را با ترتیب Rule، عضویت WAN و Chain واقعی ترافیک بررسی کنید. برای False Positive، NAT مشترک و سرعت درخواست و Timeout را بسنجید. Scan آهسته ممکن است آستانه را رد نکند. UDP در این نمونه بررسی نمی‌شود، چون Rule به TCP محدود شده است." data-en="For zero counters, inspect rule order, WAN membership and the traffic’s actual chain. For false positives, examine shared NAT, request rate and timeout. Slow scans might stay below thresholds. UDP is outside this example because its rule selects TCP.">For zero counters, inspect rule order, WAN membership and the traffic’s actual chain. For false positives, examine shared NAT, request rate and timeout. Slow scans might stay below thresholds. UDP is outside this example because its rule selects TCP.</p></section>
-<section id="enterprise-security" class="article-section"><h2 data-fa="Allowlist، IPv6 و Default Deny" data-en="Allowlists, IPv6 and default deny">Allowlists, IPv6 and default deny</h2><p data-fa="Allowlist باید از مسیر قابل اعتماد استفاده کند. IP قابل جعل روی WAN را استثنای مطمئن حساب نکنید. IPv6 Rule مستقل می‌خواهد. SNMP و مدیریت اینترنتی را محدود کنید و Default Deny را به تشخیص Scan وابسته نکنید." data-en="Allowlists require trusted paths. Spoofable WAN source addresses are not reliable exemptions. IPv6 needs separate rules. Restrict SNMP/public management and keep default deny independent of scan detection.">Allowlists require trusted paths. Spoofable WAN source addresses are not reliable exemptions. IPv6 needs separate rules. Restrict SNMP/public management and keep default deny independent of scan detection.</p></section>
-<section id="enterprise-monitoring" class="article-section"><h2 data-fa="حجم List و فشار Connection Tracking" data-en="List size and connection-tracking pressure">List size and connection-tracking pressure</h2><p data-fa="Counter تشخیص و Drop، اندازه Address List، CPU و تعداد Connection را پایش کنید. افزایش Scan همراه با فشار Resource اهمیت بیشتری از یک Scan منفرد دارد. Log هر Packet را بدون Rate Limit فعال نکنید." data-en="Monitor detection/drop counters, address-list size, CPU and connection count. A scan surge with resource pressure matters more than an isolated scan. Avoid unlimited per-packet logging.">Monitor detection/drop counters, address-list size, CPU and connection count. A scan surge with resource pressure matters more than an isolated scan. Avoid unlimited per-packet logging.</p></section>
-<section id="enterprise-recovery" class="article-section"><h2 data-fa="لغو Rule بدون خاموش‌کردن Firewall" data-en="Undo rules without disabling the firewall">Undo rules without disabling the firewall</h2><p data-fa="برای برگشت فقط Ruleهای ENT-SCAN را Disable کنید. پیش از حذف Entry اشتباه، IP و زمان را با رخداد تطبیق دهید. پاک‌کردن کل Address List شواهد تشخیص را از بین می‌برد." data-en="Disable only ENT-SCAN rules to undo the change. Match an erroneous entry’s IP and timing to the incident before removing it. Clearing the entire list loses detection evidence.">Disable only ENT-SCAN rules to undo the change. Match an erroneous entry’s IP and timing to the incident before removing it. Clearing the entire list loses detection evidence.</p>
-<pre dir="ltr"><code class="language-routeros">/ip firewall filter disable [find where comment~&quot;ENT-SCAN&quot;]
+                    <p
+                      data-fa="از Scanner مجاز در Lab یک TCP Scan انجام دهید. Counter تشخیص و Drop و Address List را ببینید و دسترسی مدیریت را همزمان امتحان کنید. Log نامحدود Packet فعال نکنید."
+                      data-en="Run an authorized lab TCP scan. Inspect detection/drop counters and the address list while testing management access. Avoid unlimited packet logs."
+                    >
+                      Run an authorized lab TCP scan. Inspect detection/drop
+                      counters and the address list while testing management
+                      access. Avoid unlimited packet logs.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="Counter صفر و False Positive"
+                      data-en="Zero counters and false positives"
+                    >
+                      Zero counters and false positives
+                    </h2>
+                    <p
+                      data-fa="Counter صفر را با ترتیب Rule، عضویت WAN و Chain واقعی ترافیک بررسی کنید. برای False Positive، NAT مشترک و سرعت درخواست و Timeout را بسنجید. Scan آهسته ممکن است آستانه را رد نکند. UDP در این نمونه بررسی نمی‌شود، چون Rule به TCP محدود شده است."
+                      data-en="For zero counters, inspect rule order, WAN membership and the traffic’s actual chain. For false positives, examine shared NAT, request rate and timeout. Slow scans might stay below thresholds. UDP is outside this example because its rule selects TCP."
+                    >
+                      For zero counters, inspect rule order, WAN membership and
+                      the traffic’s actual chain. For false positives, examine
+                      shared NAT, request rate and timeout. Slow scans might
+                      stay below thresholds. UDP is outside this example because
+                      its rule selects TCP.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="Allowlist، IPv6 و Default Deny"
+                      data-en="Allowlists, IPv6 and default deny"
+                    >
+                      Allowlists, IPv6 and default deny
+                    </h2>
+                    <p
+                      data-fa="Allowlist باید از مسیر قابل اعتماد استفاده کند. IP قابل جعل روی WAN را استثنای مطمئن حساب نکنید. IPv6 Rule مستقل می‌خواهد. SNMP و مدیریت اینترنتی را محدود کنید و Default Deny را به تشخیص Scan وابسته نکنید."
+                      data-en="Allowlists require trusted paths. Spoofable WAN source addresses are not reliable exemptions. IPv6 needs separate rules. Restrict SNMP/public management and keep default deny independent of scan detection."
+                    >
+                      Allowlists require trusted paths. Spoofable WAN source
+                      addresses are not reliable exemptions. IPv6 needs separate
+                      rules. Restrict SNMP/public management and keep default
+                      deny independent of scan detection.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="حجم List و فشار Connection Tracking"
+                      data-en="List size and connection-tracking pressure"
+                    >
+                      List size and connection-tracking pressure
+                    </h2>
+                    <p
+                      data-fa="Counter تشخیص و Drop، اندازه Address List، CPU و تعداد Connection را پایش کنید. افزایش Scan همراه با فشار Resource اهمیت بیشتری از یک Scan منفرد دارد. Log هر Packet را بدون Rate Limit فعال نکنید."
+                      data-en="Monitor detection/drop counters, address-list size, CPU and connection count. A scan surge with resource pressure matters more than an isolated scan. Avoid unlimited per-packet logging."
+                    >
+                      Monitor detection/drop counters, address-list size, CPU
+                      and connection count. A scan surge with resource pressure
+                      matters more than an isolated scan. Avoid unlimited
+                      per-packet logging.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="لغو Rule بدون خاموش‌کردن Firewall"
+                      data-en="Undo rules without disabling the firewall"
+                    >
+                      Undo rules without disabling the firewall
+                    </h2>
+                    <p
+                      data-fa="برای برگشت فقط Ruleهای ENT-SCAN را Disable کنید. پیش از حذف Entry اشتباه، IP و زمان را با رخداد تطبیق دهید. پاک‌کردن کل Address List شواهد تشخیص را از بین می‌برد."
+                      data-en="Disable only ENT-SCAN rules to undo the change. Match an erroneous entry’s IP and timing to the incident before removing it. Clearing the entire list loses detection evidence."
+                    >
+                      Disable only ENT-SCAN rules to undo the change. Match an
+                      erroneous entry’s IP and timing to the incident before
+                      removing it. Clearing the entire list loses detection
+                      evidence.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-routeros">/ip firewall filter disable [find where comment~&quot;ENT-SCAN&quot;]
 /ip firewall address-list print where list=port_scanners</code></pre>
-<p data-fa="پس از برگشت، دسترسی مدیریت و سرویس‌های موردنیاز را از همان مسیر اولیه امتحان کنید. Export پیش از تغییر باید خارج دستگاه موجود باشد." data-en="After rollback, repeat management and required-service tests through the original path. Keep the pre-change export off-device.">After rollback, repeat management and required-service tests through the original path. Keep the pre-change export off-device.</p><h3 id="enterprise-practices" data-fa="آستانه متناسب با ترافیک" data-en="Traffic-appropriate thresholds">Traffic-appropriate thresholds</h3><p data-fa="آستانه 21,3s,3,1 در نمونه را مقدار جهانی امنیت حساب نکنید. رفتار Scanner مجاز و کاربران پشت NAT را در آزمون مثبت و منفی بررسی کنید و Timeout را با نتیجه تنظیم کنید." data-en="Do not treat the sample 21,3s,3,1 values as universal security settings. Test approved scanners and NAT-shared users positively and negatively, then tune timeout from results.">Do not treat the sample 21,3s,3,1 values as universal security settings. Test approved scanners and NAT-shared users positively and negatively, then tune timeout from results.</p></section>
-<section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</h2><h3 data-fa="آیا input از سرورهای LAN حفاظت می‌کند؟" data-en="Does input protect LAN servers?">Does input protect LAN servers?</h3><p data-fa="خیر. ترافیک عبوری به سیاست forward نیاز دارد." data-en="No. Transit traffic requires a forward policy.">No. Transit traffic requires a forward policy.</p><h3 data-fa="آیا psd همه scanها را کشف می‌کند؟" data-en="Does psd detect every scan?">Does psd detect every scan?</h3><p data-fa="خیر. heuristic محدود است و جای default deny و IDS را نمی‌گیرد." data-en="No. It is a limited heuristic and does not replace default deny or an IDS.">No. It is a limited heuristic and does not replace default deny or an IDS.</p></section>
-<section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">Official Sources</h2><ul><li><a href="https://help.mikrotik.com/docs/spaces/ROS/pages/48660574/Filter" rel="noopener">MikroTik: Filter</a></li><li><a href="https://help.mikrotik.com/docs/spaces/ROS/pages/250708064/Common+Firewall+Matchers+and+Actions" rel="noopener">MikroTik: Matchers</a></li></ul></section></div></article>
+                    <p
+                      data-fa="پس از برگشت، دسترسی مدیریت و سرویس‌های موردنیاز را از همان مسیر اولیه امتحان کنید. Export پیش از تغییر باید خارج دستگاه موجود باشد."
+                      data-en="After rollback, repeat management and required-service tests through the original path. Keep the pre-change export off-device."
+                    >
+                      After rollback, repeat management and required-service
+                      tests through the original path. Keep the pre-change
+                      export off-device.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="آستانه متناسب با ترافیک"
+                      data-en="Traffic-appropriate thresholds"
+                    >
+                      Traffic-appropriate thresholds
+                    </h3>
+                    <p
+                      data-fa="آستانه 21,3s,3,1 در نمونه را مقدار جهانی امنیت حساب نکنید. رفتار Scanner مجاز و کاربران پشت NAT را در آزمون مثبت و منفی بررسی کنید و Timeout را با نتیجه تنظیم کنید."
+                      data-en="Do not treat the sample 21,3s,3,1 values as universal security settings. Test approved scanners and NAT-shared users positively and negatively, then tune timeout from results."
+                    >
+                      Do not treat the sample 21,3s,3,1 values as universal
+                      security settings. Test approved scanners and NAT-shared
+                      users positively and negatively, then tune timeout from
+                      results.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا input از سرورهای LAN حفاظت می‌کند؟"
+                      data-en="Does input protect LAN servers?"
+                    >
+                      Does input protect LAN servers?
+                    </h3>
+                    <p
+                      data-fa="خیر. ترافیک عبوری به سیاست forward نیاز دارد."
+                      data-en="No. Transit traffic requires a forward policy."
+                    >
+                      No. Transit traffic requires a forward policy.
+                    </p>
+                    <h3
+                      data-fa="آیا psd همه scanها را کشف می‌کند؟"
+                      data-en="Does psd detect every scan?"
+                    >
+                      Does psd detect every scan?
+                    </h3>
+                    <p
+                      data-fa="خیر. heuristic محدود است و جای default deny و IDS را نمی‌گیرد."
+                      data-en="No. It is a limited heuristic and does not replace default deny or an IDS."
+                    >
+                      No. It is a limited heuristic and does not replace default
+                      deny or an IDS.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://help.mikrotik.com/docs/spaces/ROS/pages/48660574/Filter"
+                          rel="noopener"
+                          >MikroTik: Filter</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://help.mikrotik.com/docs/spaces/ROS/pages/250708064/Common+Firewall+Matchers+and+Actions"
+                          rel="noopener"
+                          >MikroTik: Matchers</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
+              </article>
             </div>
           </div>
         </div>
@@ -348,18 +795,24 @@
             <div class="footer-brand">
               <h3 class="brand-name">
                 <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
-                  >AmirHossein Jalalian</span>
+                  >AmirHossein Jalalian</span
+                >
               </h3>
               <p
                 class="brand-title"
                 data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
-              >Infrastructure &amp; DevOps Engineer</p>
+              >
+                Infrastructure &amp; DevOps Engineer
+              </p>
               <p
                 class="brand-description"
                 data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
                 data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-              >Delivering reliable, secure, and scalable IT solutions for your business success.</p>
+              >
+                Delivering reliable, secure, and scalable IT solutions for your
+                business success.
+              </p>
             </div>
 
             <!-- Contact Info -->
@@ -368,12 +821,15 @@
                 class="contact-title"
                 data-en="Get In Touch"
                 data-fa="تماس با من"
-              >Get In Touch</h4>
+              >
+                Get In Touch
+              </h4>
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>
                   <span data-en="Tehran, Iran" data-fa="تهران، ایران"
-                    >Tehran, Iran</span>
+                    >Tehran, Iran</span
+                  >
                 </div>
                 <div class="contact-item">
                   <i class="bi bi-telephone"></i>
@@ -398,7 +854,9 @@
                   class="social-title"
                   data-en="Follow Me"
                   data-fa="دنبال کنید"
-                >Follow Me</h5>
+                >
+                  Follow Me
+                </h5>
                 <div class="social-icons">
                   <a
                     href="https://wa.me/989197276219"
@@ -444,12 +902,14 @@
                   <span
                     data-en="All Rights Reserved"
                     data-fa="تمام حقوق محفوظ است"
-                    >All Rights Reserved</span>
+                    >All Rights Reserved</span
+                  >
                 </p>
               </div>
               <div class="footer-heart">
                 <span data-en="Made with" data-fa="ساخته شده با"
-                  >Made with</span>
+                  >Made with</span
+                >
                 <i class="bi bi-heart-fill"></i>
                 <span data-en="in Iran" data-fa="در ایران">in Iran</span>
               </div>

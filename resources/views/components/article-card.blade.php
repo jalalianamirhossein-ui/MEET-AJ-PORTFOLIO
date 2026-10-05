@@ -45,7 +45,7 @@
                         @if ($article->published_at)
                           <span>
                             <i class="bi bi-calendar3" aria-hidden="true"></i>
-                            <time datetime="{{ $article->published_at->toDateString() }}">{{ $article->published_at->format('M j, Y') }}</time>
+                            <x-localized-date :date="$article->published_at" :locale="$pageLocale ?? null" />
                           </span>
                         @endif
                         <span>{{ $article->readingMinutes() }} <span data-en="min read" data-fa="دقیقه مطالعه">min read</span></span>
@@ -111,7 +111,7 @@
                       @if ($article->published_at)
                         <p class="article-teaser-meta">
                           <i class="bi bi-calendar3" aria-hidden="true"></i>
-                          <time datetime="{{ $article->published_at->toDateString() }}">{{ $article->published_at->format('M j, Y') }}</time>
+                          <x-localized-date :date="$article->published_at" :locale="$pageLocale ?? null" />
                         </p>
                       @endif
                       <div class="portfolio-links">

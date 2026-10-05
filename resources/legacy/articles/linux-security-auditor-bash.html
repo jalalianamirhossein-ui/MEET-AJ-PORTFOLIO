@@ -1,66 +1,1470 @@
-<!doctype html><html lang="en" dir="ltr" data-article-language="en"><head><meta charset="UTF-8" /><title>Linux Security Auditor with Bash: A Practical Guide | Meet AJ</title><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="description" content="Use Linux Security Auditor to review your server’s users, SSH, updates, firewall and containers. Learn how to run the Bash script and read its report." /><meta name="keywords" content="Linux Security Audit, Linux Hardening, Bash Security Script, Ubuntu Security, Linux Server Security, SSH Hardening, Linux Firewall Audit, CIS-aligned controls" /><meta name="article:content-language" content="en" /><meta name="author" content="AmirHossein Jalalian" /><meta name="robots" content="index, follow" /><link rel="canonical" href="https://meetaj.ir/articles/linux-security-auditor-bash" /><meta property="og:type" content="article" /><meta property="og:title" content="Building an Enterprise Linux Security Auditor with Bash" /><meta property="og:description" content="Use Linux Security Auditor to review your server’s users, SSH, updates, firewall and containers. Learn how to run the Bash script and read its report." /><meta property="og:url" content="https://meetaj.ir/articles/linux-security-auditor-bash" /><meta property="og:image" content="https://meetaj.ir/assets/img/portfolio/linux-8.png" /><meta name="twitter:card" content="summary_large_image" /><script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Building an Enterprise Linux Security Auditor with Bash","description":"Use Linux Security Auditor to review your server’s users, SSH, updates, firewall and containers. Learn how to run the Bash script and read its report.","inLanguage":"en","url":"https://meetaj.ir/articles/linux-security-auditor-bash","mainEntityOfPage":"https://meetaj.ir/articles/linux-security-auditor-bash","image":"https://meetaj.ir/assets/img/portfolio/linux-8.png","datePublished":"2026-10-05T00:00:00+03:30","dateModified":"2026-10-05","author":{"@type":"Person","name":"AmirHossein Jalalian"}}</script><script id="article-localizations" type="application/json">{"en":{"title":"Building an Enterprise Linux Security Auditor with Bash","meta_title":"Linux Security Auditor with Bash: A Practical Guide | Meet AJ","description":"Use Linux Security Auditor to review your server’s users, SSH, updates, firewall and containers. Learn how to run the Bash script and read its report.","keywords":["Linux Security Audit","Linux Hardening","Bash Security Script","Ubuntu Security","Linux Server Security","SSH Hardening","Linux Firewall Audit","CIS-aligned controls"],"faq":[["Does the auditor change server configuration?","It creates private temporary files and requested reports. It does not upgrade packages, change firewall rules or permissions, restart services, or write sysctls."],["Does a score of 100 mean the server cannot be compromised?","No. Points describe observed controls within the selected scope. Unknown evidence reduces coverage, and external exposure, CVEs and recovery need separate validation."],["Is this a certified CIS Benchmark assessment?","No. The profiles select locally implemented CIS-aligned controls. Official benchmark section mappings and certification are not claimed."]]},"fa":{"title":"ساخت ابزار بررسی امنیت سرور لینوکس با Bash | Linux Security Auditor","meta_title":"بررسی امنیت سرور لینوکس با Bash و Linux Security Auditor | Meet AJ","description":"با Linux Security Auditor کاربران، SSH، آپدیت‌ها، فایروال و کانتینرهای سرور را بررسی کنید. راهنمای اجرای اسکریپت Bash و خواندن گزارش آن.","keywords":["بررسی امنیت لینوکس","امن‌سازی سرور لینوکس","اسکریپت امنیتی Bash","امنیت اوبونتو","امن‌سازی SSH","ممیزی فایروال لینوکس","کنترل‌های همسو با CIS"],"faq":[["آیا ابزار تنظیمات سرور را تغییر می‌دهد؟","فقط فایل‌های موقت خصوصی و گزارش‌های درخواستی ساخته می‌شوند. ابزار بسته‌ها را ارتقا نمی‌دهد، فایروال و مجوزها را تغییر نمی‌دهد، سرویس را Restart نمی‌کند و sysctl نمی‌نویسد."],["آیا امتیاز ۱۰۰ یعنی سرور قابل نفوذ نیست؟","خیر. امتیاز وضعیت کنترل‌های مشاهده‌شده در محدوده منتخب را نشان می‌دهد. شواهد نامشخص پوشش را کم می‌کنند و دسترسی بیرونی، CVE و بازیابی بررسی مستقل می‌خواهند."],["آیا این گزارش تأییدیه CIS Benchmark است؟","خیر. Profileها فقط کنترل‌های محلی پیاده‌سازی‌شده و همسو با CIS را انتخاب می‌کنند. نگاشت رسمی شماره بندها و گواهی انطباق ادعا نمی‌شود."]]}}</script></head><body class="article-page theme-linux"><header><nav><ul><li class="article-nav-item"><a href="#introduction"><span data-en="A firewall is only part of the picture" data-fa="امنیت سرور فقط به فایروال ختم نمی‌شود">A firewall is only part of the picture</span></a></li>
-<li class="article-nav-item"><a href="#architecture"><span data-en="What does Linux Security Auditor do?" data-fa="Linux Security Auditor چه کاری انجام می‌دهد؟">What does Linux Security Auditor do?</span></a></li>
-<li class="article-nav-item"><a href="#distributions"><span data-en="Which Linux distributions can it check?" data-fa="روی چه توزیع‌هایی می‌توان اجرا کرد؟">Which Linux distributions can it check?</span></a></li>
-<li class="article-nav-item"><a href="#scoring"><span data-en="What does the security score mean?" data-fa="امتیاز امنیت را چطور بخوانیم؟">What does the security score mean?</span></a></li>
-<li class="article-nav-item"><a href="#statuses"><span data-en="Pass, warning and unknown" data-fa="معنی وضعیت‌های گزارش">Pass, warning and unknown</span></a></li>
-<li class="article-nav-item"><a href="#installation"><span data-en="Download and run the script" data-fa="دانلود و اجرای اسکریپت">Download and run the script</span></a></li>
-<li class="article-nav-item"><a href="#cli"><span data-en="Useful commands and all available options" data-fa="دستورهای کاربردی و گزینه‌های ابزار">Useful commands and all available options</span></a></li>
-<li class="article-nav-item"><a href="#dashboard"><span data-en="Reading the dashboard" data-fa="خواندن داشبورد">Reading the dashboard</span></a></li>
-<li class="article-nav-item"><a href="#patching"><span data-en="Are updates waiting?" data-fa="آیا آپدیتی در انتظار نصب است؟">Are updates waiting?</span></a></li>
-<li class="article-nav-item"><a href="#users"><span data-en="Old accounts and password settings" data-fa="حساب‌های قدیمی و تنظیمات رمز">Old accounts and password settings</span></a></li>
-<li class="article-nav-item"><a href="#ssh"><span data-en="What SSH actually allows" data-fa="SSH در عمل چه دسترسی‌ای می‌دهد؟">What SSH actually allows</span></a></li>
-<li class="article-nav-item"><a href="#network"><span data-en="Open ports and firewall rules" data-fa="پورت‌های باز و قواعد فایروال">Open ports and firewall rules</span></a></li>
-<li class="article-nav-item"><a href="#persistence"><span data-en="Scheduled jobs and startup commands" data-fa="کارهای زمان‌بندی‌شده و فرمان‌های شروع سیستم">Scheduled jobs and startup commands</span></a></li>
-<li class="article-nav-item"><a href="#filesystem"><span data-en="File access and disk space" data-fa="دسترسی فایل‌ها و فضای دیسک">File access and disk space</span></a></li>
-<li class="article-nav-item"><a href="#kernel"><span data-en="A few checks on the Linux kernel" data-fa="بررسی چند تنظیم امنیتی هسته لینوکس">A few checks on the Linux kernel</span></a></li>
-<li class="article-nav-item"><a href="#logging"><span data-en="Will the logs help when something goes wrong?" data-fa="اگر مشکلی پیش بیاید، لاگ کافی داریم؟">Will the logs help when something goes wrong?</span></a></li>
-<li class="article-nav-item"><a href="#mac"><span data-en="AppArmor and SELinux" data-fa="AppArmor و SELinux">AppArmor and SELinux</span></a></li>
-<li class="article-nav-item"><a href="#containers"><span data-en="Docker and Podman checks" data-fa="بررسی Docker و Podman">Docker and Podman checks</span></a></li>
-<li class="article-nav-item"><a href="#threat"><span data-en="Suspicious signs need a second look" data-fa="نشانه مشکوک را باید دوباره بررسی کرد">Suspicious signs need a second look</span></a></li>
-<li class="article-nav-item"><a href="#read-only"><span data-en="The script reports; you decide what to change" data-fa="ابزار گزارش می‌دهد؛ تصمیم تغییر با شماست">The script reports; you decide what to change</span></a></li>
-<li class="article-nav-item"><a href="#validation"><span data-en="What has been tested?" data-fa="چه چیزهایی آزمایش شده‌اند؟">What has been tested?</span></a></li>
-<li class="article-nav-item"><a href="#limitations"><span data-en="Using the report in daily operations" data-fa="استفاده از گزارش در کار روزمره">Using the report in daily operations</span></a></li>
-<li class="article-nav-item"><a href="#related-reading"><span data-en="Related guides" data-fa="راهنماهای مرتبط">Related guides</span></a></li>
-<li class="article-nav-item"><a href="#faq"><span data-en="Common questions" data-fa="پرسش‌های رایج">Common questions</span></a></li>
-<li class="article-nav-item"><a href="#conclusion"><span data-en="A practical starting point" data-fa="یک نقطه شروع کاربردی">A practical starting point</span></a></li>
-</ul></nav></header><main><section class="article-hero article-header hero"><span class="article-category" data-en="Linux" data-fa="لینوکس">Linux</span><h1 class="article-title hero-title" data-en="Building an Enterprise Linux Security Auditor with Bash" data-fa="ساخت ابزار بررسی امنیت سرور لینوکس با Bash | Linux Security Auditor">Building an Enterprise Linux Security Auditor with Bash</h1><p class="article-excerpt hero-subtitle" data-en="Use Linux Security Auditor to review your server’s users, SSH, updates, firewall and containers. Learn how to run the Bash script and read its report." data-fa="با Linux Security Auditor کاربران، SSH، آپدیت‌ها، فایروال و کانتینرهای سرور را بررسی کنید. راهنمای اجرای اسکریپت Bash و خواندن گزارش آن.">Use Linux Security Auditor to review your server’s users, SSH, updates, firewall and containers. Learn how to run the Bash script and read its report.</p><img class="article-hero-thumbnail" src="/assets/img/portfolio/linux-8.png" alt="Linux Security Auditor dashboard | داشبورد بررسی امنیت لینوکس" /></section><article class="article-body"><section id="introduction" class="article-section"><h2 data-en="A firewall is only part of the picture" data-fa="امنیت سرور فقط به فایروال ختم نمی‌شود">A firewall is only part of the picture</h2><p data-en="You set up SSH keys, enable the firewall and bring a server online. That is a good start. A few months later, though, an old account may still have access, updates may be waiting, or a scheduled job may run a script that anyone can edit. These are easy things to miss when you are busy keeping services running." data-fa="وقتی سرور را راه‌اندازی می‌کنیم، معمولاً اول سراغ SSH و فایروال می‌رویم. شروع خوبی است، اما چند ماه بعد ممکن است یک حساب قدیمی هنوز دسترسی داشته باشد، آپدیت‌ها نصب نشده باشند یا یک کار زمان‌بندی‌شده، فایلی را اجرا کند که دیگران هم می‌توانند تغییرش دهند. وسط کارهای روزمره، این موارد به‌راحتی از چشم می‌افتند.">You set up SSH keys, enable the firewall and bring a server online. That is a good start. A few months later, though, an old account may still have access, updates may be waiting, or a scheduled job may run a script that anyone can edit. These are easy things to miss when you are busy keeping services running.</p><p data-en="Linux Security Auditor puts these checks in one Bash script. It looks at users, passwords, SSH, updates, network ports, file permissions, scheduled jobs, kernel settings, logs and containers. Here is how to run it and, more importantly, how to read what it finds." data-fa="Linux Security Auditor این بررسی‌ها را در یک اسکریپت Bash جمع می‌کند. کاربران، رمزها، SSH، آپدیت‌ها، پورت‌های شبکه، مجوز فایل‌ها، کارهای زمان‌بندی‌شده، تنظیمات هسته، لاگ‌ها و کانتینرها را بررسی می‌کند. در این مقاله سراغ اجرای ابزار و خواندن نتیجه آن می‌رویم.">Linux Security Auditor puts these checks in one Bash script. It looks at users, passwords, SSH, updates, network ports, file permissions, scheduled jobs, kernel settings, logs and containers. Here is how to run it and, more importantly, how to read what it finds.</p></section>
-<section id="architecture" class="article-section"><h2 data-en="What does Linux Security Auditor do?" data-fa="Linux Security Auditor چه کاری انجام می‌دهد؟">What does Linux Security Auditor do?</h2><p data-en="Version 2.0.0 is a single script that runs on GNU/Linux with Bash 4.4 or newer. It reads the settings and information available on the server, then prints a report. Each finding has a name, a risk level, an explanation and a suggested next step." data-fa="نسخه 2.0.0 یک فایل مستقل است که روی GNU/Linux با Bash نسخه 4.4 یا جدیدتر اجرا می‌شود. تنظیمات و اطلاعات در دسترس سرور را می‌خواند و گزارش می‌دهد. هر یافته نام، سطح ریسک، توضیح و یک پیشنهاد برای پیگیری دارد.">Version 2.0.0 is a single script that runs on GNU/Linux with Bash 4.4 or newer. It reads the settings and information available on the server, then prints a report. Each finding has a name, a risk level, an explanation and a suggested next step.</p><p data-en="The script is split into groups of checks. One group reviews accounts, another SSH, another updates, and so on. Commands and file searches have time limits. If a command is missing or a check cannot finish, the report says UNKNOWN. It does not quietly count that check as passed." data-fa="داخل اسکریپت، بررسی‌ها به چند گروه تقسیم شده‌اند؛ یک گروه برای حساب‌ها، یکی برای SSH، یکی برای آپدیت‌ها و به همین ترتیب. اجرای فرمان و جست‌وجوی فایل محدودیت زمانی دارد. اگر فرمانی موجود نباشد یا بررسی کامل نشود، نتیجه UNKNOWN ثبت می‌شود؛ یعنی ابزار نتوانسته درباره آن مورد نظر بدهد.">The script is split into groups of checks. One group reviews accounts, another SSH, another updates, and so on. Commands and file searches have time limits. If a command is missing or a check cannot finish, the report says UNKNOWN. It does not quietly count that check as passed.</p><p data-en="The default run balances detail and scan time. Quick skips some heavier work. Deep searches a wider local scope, but still has limits. --full only makes the terminal report more detailed; it is different from --profile full, which includes more policy checks." data-fa="اجرای پیش‌فرض بین جزئیات و زمان بررسی تعادل برقرار می‌کند. Quick بعضی کارهای سنگین‌تر را رد می‌کند و Deep دامنه بیشتری از فایل‌های محلی را می‌گردد، اما همچنان محدودیت دارد. --full فقط گزارش ترمینال را کامل‌تر می‌کند. این گزینه با --profile full که کنترل‌های بیشتری را انتخاب می‌کند فرق دارد.">The default run balances detail and scan time. Quick skips some heavier work. Deep searches a wider local scope, but still has limits. --full only makes the terminal report more detailed; it is different from --profile full, which includes more policy checks.</p></section>
-<section id="distributions" class="article-section"><h2 data-en="Which Linux distributions can it check?" data-fa="روی چه توزیع‌هایی می‌توان اجرا کرد؟">Which Linux distributions can it check?</h2><p data-en="The script reads /etc/os-release to choose the right family of commands. It has paths for APT on Ubuntu and Debian, DNF/YUM on the RHEL family, and Zypper on SUSE. Recognizing a distribution does not mean every check has been tested on it." data-fa="اسکریپت با خواندن /etc/os-release تشخیص می‌دهد از چه فرمان‌هایی استفاده کند. برای Ubuntu و Debian مسیر APT، برای خانواده RHEL مسیر DNF/YUM و برای SUSE مسیر Zypper دارد. تشخیص نام توزیع به معنی آزمایش کامل همه بررسی‌ها روی آن نیست.">The script reads /etc/os-release to choose the right family of commands. It has paths for APT on Ubuntu and Debian, DNF/YUM on the RHEL family, and Zypper on SUSE. Recognizing a distribution does not mean every check has been tested on it.</p><p data-en="VALIDATION.md lists partial support for Ubuntu 20.04, 22.04, 24.04 and 26.04; Debian 11, 12 and 13; RHEL, Rocky, AlmaLinux and Oracle Linux 8, 9 and 10; CentOS Stream 9 and 10; and openSUSE Leap/SLES 15 and 16 families. No distribution is marked fully supported. The recorded live run was in an Ubuntu 24.04 container, where several host features were unavailable." data-fa="در VALIDATION.md پشتیبانی جزئی برای Ubuntu نسخه‌های 20.04، 22.04، 24.04 و 26.04، Debian نسخه‌های 11، 12 و 13، خانواده RHEL شامل Rocky، AlmaLinux و Oracle Linux نسخه‌های 8، 9 و 10، CentOS Stream نسخه‌های 9 و 10 و خانواده openSUSE Leap/SLES نسخه‌های 15 و 16 ثبت شده است. هیچ‌کدام برچسب پشتیبانی کامل ندارند. اجرای واقعی ثبت‌شده هم داخل کانتینر Ubuntu 24.04 بوده که به بعضی امکانات میزبان دسترسی نداشته است.">VALIDATION.md lists partial support for Ubuntu 20.04, 22.04, 24.04 and 26.04; Debian 11, 12 and 13; RHEL, Rocky, AlmaLinux and Oracle Linux 8, 9 and 10; CentOS Stream 9 and 10; and openSUSE Leap/SLES 15 and 16 families. No distribution is marked fully supported. The recorded live run was in an Ubuntu 24.04 container, where several host features were unavailable.</p><p data-en="For another release, treat the output as a starting point and check the distribution-specific results yourself. Try the script on a test server before using it across a fleet." data-fa="برای نسخه‌ای خارج از این فهرست، خروجی را نقطه شروع بدانید و نتیجه بررسی‌های مخصوص توزیع را جدا تأیید کنید. بهتر است پیش از اجرای ابزار روی چندین سرور، آن را روی یک سرور آزمایشی امتحان کنید.">For another release, treat the output as a starting point and check the distribution-specific results yourself. Try the script on a test server before using it across a fleet.</p></section>
-<section id="scoring" class="article-section"><h2 data-en="What does the security score mean?" data-fa="امتیاز امنیت را چطور بخوانیم؟">What does the security score mean?</h2><p data-en="The score summarizes the checks that could be assessed. More serious issues carry more weight: CRITICAL has weight 10, HIGH 6, MEDIUM 3 and LOW 1. A pass gets full points, a warning gets half, and a failed check gets none. Informational and not-applicable records do not add points." data-fa="امتیاز، خلاصه بررسی‌هایی است که ابزار توانسته ارزیابی کند. موارد مهم‌تر وزن بیشتری دارند: CRITICAL وزن ۱۰، HIGH وزن ۶، MEDIUM وزن ۳ و LOW وزن ۱ دارد. بررسی موفق امتیاز کامل، هشدار نصف امتیاز و بررسی ناموفق صفر می‌گیرد. موارد اطلاعاتی و غیرقابل‌اعمال در امتیاز دخالت ندارند.">The score summarizes the checks that could be assessed. More serious issues carry more weight: CRITICAL has weight 10, HIGH 6, MEDIUM 3 and LOW 1. A pass gets full points, a warning gets half, and a failed check gets none. Informational and not-applicable records do not add points.</p><p data-en="UNKNOWN checks are left out of the score, but they reduce evidence coverage. Coverage tells you how much of the applicable weighted checks had a usable result. Always read the two numbers together. A score of 95 with little coverage says less than the headline number suggests." data-fa="بررسی UNKNOWN از امتیاز کنار گذاشته می‌شود، اما پوشش بررسی را پایین می‌آورد. Coverage نشان می‌دهد چه سهمی از بررسی‌های قابل‌اعمال، با توجه به وزنشان، نتیجه قابل استفاده داشته‌اند. امتیاز و پوشش را با هم بخوانید. امتیاز ۹۵ با پوشش کم، به‌تنهایی نتیجه قابل اتکایی نیست.">UNKNOWN checks are left out of the score, but they reduce evidence coverage. Coverage tells you how much of the applicable weighted checks had a usable result. Always read the two numbers together. A score of 95 with little coverage says less than the headline number suggests.</p><div class="article-code"><div class="article-code-header"><span class="article-code-label">text</span><button type="button" class="article-copy-button">Copy</button></div><pre dir="ltr"><code class="language-text">raw_score = floor(100 * (PASS_weight + 0.5 * WARN_weight) / known_weight)
+<!doctype html>
+<html lang="en" dir="ltr" data-article-language="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Linux Security Auditor with Bash: A Practical Guide | Meet AJ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Use Linux Security Auditor to review your server’s users, SSH, updates, firewall and containers. Learn how to run the Bash script and read its report."
+    />
+    <meta
+      name="keywords"
+      content="Linux Security Audit, Linux Hardening, Bash Security Script, Ubuntu Security, Linux Server Security, SSH Hardening, Linux Firewall Audit, CIS-aligned controls"
+    />
+    <meta name="article:content-language" content="en" />
+    <meta name="author" content="AmirHossein Jalalian" />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://meetaj.ir/articles/linux-security-auditor-bash"
+    />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="Building an Enterprise Linux Security Auditor with Bash"
+    />
+    <meta
+      property="og:description"
+      content="Use Linux Security Auditor to review your server’s users, SSH, updates, firewall and containers. Learn how to run the Bash script and read its report."
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/linux-security-auditor-bash"
+    />
+    <meta
+      property="og:image"
+      content="https://meetaj.ir/assets/img/portfolio/linux-8.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Building an Enterprise Linux Security Auditor with Bash",
+        "description": "Use Linux Security Auditor to review your server’s users, SSH, updates, firewall and containers. Learn how to run the Bash script and read its report.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/linux-security-auditor-bash",
+        "mainEntityOfPage": "https://meetaj.ir/articles/linux-security-auditor-bash",
+        "image": "https://meetaj.ir/assets/img/portfolio/linux-8.png",
+        "datePublished": "2026-10-05T00:00:00+03:30",
+        "dateModified": "2026-10-05",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" }
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "en": {
+          "title": "Building an Enterprise Linux Security Auditor with Bash",
+          "meta_title": "Linux Security Auditor with Bash: A Practical Guide | Meet AJ",
+          "description": "Use Linux Security Auditor to review your server’s users, SSH, updates, firewall and containers. Learn how to run the Bash script and read its report.",
+          "keywords": [
+            "Linux Security Audit",
+            "Linux Hardening",
+            "Bash Security Script",
+            "Ubuntu Security",
+            "Linux Server Security",
+            "SSH Hardening",
+            "Linux Firewall Audit",
+            "CIS-aligned controls"
+          ],
+          "faq": [
+            [
+              "Does the auditor change server configuration?",
+              "It creates private temporary files and requested reports. It does not upgrade packages, change firewall rules or permissions, restart services, or write sysctls."
+            ],
+            [
+              "Does a score of 100 mean the server cannot be compromised?",
+              "No. Points describe observed controls within the selected scope. Unknown evidence reduces coverage, and external exposure, CVEs and recovery need separate validation."
+            ],
+            [
+              "Is this a certified CIS Benchmark assessment?",
+              "No. The profiles select locally implemented CIS-aligned controls. Official benchmark section mappings and certification are not claimed."
+            ]
+          ]
+        },
+        "fa": {
+          "title": "ساخت ابزار بررسی امنیت سرور لینوکس با Bash | Linux Security Auditor",
+          "meta_title": "بررسی امنیت سرور لینوکس با Bash و Linux Security Auditor | Meet AJ",
+          "description": "با Linux Security Auditor کاربران، SSH، آپدیت‌ها، فایروال و کانتینرهای سرور را بررسی کنید. راهنمای اجرای اسکریپت Bash و خواندن گزارش آن.",
+          "keywords": [
+            "بررسی امنیت لینوکس",
+            "امن‌سازی سرور لینوکس",
+            "اسکریپت امنیتی Bash",
+            "امنیت اوبونتو",
+            "امن‌سازی SSH",
+            "ممیزی فایروال لینوکس",
+            "کنترل‌های همسو با CIS"
+          ],
+          "faq": [
+            [
+              "آیا ابزار تنظیمات سرور را تغییر می‌دهد؟",
+              "فقط فایل‌های موقت خصوصی و گزارش‌های درخواستی ساخته می‌شوند. ابزار بسته‌ها را ارتقا نمی‌دهد، فایروال و مجوزها را تغییر نمی‌دهد، سرویس را Restart نمی‌کند و sysctl نمی‌نویسد."
+            ],
+            [
+              "آیا امتیاز ۱۰۰ یعنی سرور قابل نفوذ نیست؟",
+              "خیر. امتیاز وضعیت کنترل‌های مشاهده‌شده در محدوده منتخب را نشان می‌دهد. شواهد نامشخص پوشش را کم می‌کنند و دسترسی بیرونی، CVE و بازیابی بررسی مستقل می‌خواهند."
+            ],
+            [
+              "آیا این گزارش تأییدیه CIS Benchmark است؟",
+              "خیر. Profileها فقط کنترل‌های محلی پیاده‌سازی‌شده و همسو با CIS را انتخاب می‌کنند. نگاشت رسمی شماره بندها و گواهی انطباق ادعا نمی‌شود."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
+  <body class="article-page theme-linux">
+    <header>
+      <nav>
+        <ul>
+          <li class="article-nav-item">
+            <a href="#introduction"
+              ><span
+                data-en="A firewall is only part of the picture"
+                data-fa="امنیت سرور فقط به فایروال ختم نمی‌شود"
+                >A firewall is only part of the picture</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#architecture"
+              ><span
+                data-en="What does Linux Security Auditor do?"
+                data-fa="Linux Security Auditor چه کاری انجام می‌دهد؟"
+                >What does Linux Security Auditor do?</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#distributions"
+              ><span
+                data-en="Which Linux distributions can it check?"
+                data-fa="روی چه توزیع‌هایی می‌توان اجرا کرد؟"
+                >Which Linux distributions can it check?</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#scoring"
+              ><span
+                data-en="What does the security score mean?"
+                data-fa="امتیاز امنیت را چطور بخوانیم؟"
+                >What does the security score mean?</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#statuses"
+              ><span
+                data-en="Pass, warning and unknown"
+                data-fa="معنی وضعیت‌های گزارش"
+                >Pass, warning and unknown</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#installation"
+              ><span
+                data-en="Download and run the script"
+                data-fa="دانلود و اجرای اسکریپت"
+                >Download and run the script</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#cli"
+              ><span
+                data-en="Useful commands and all available options"
+                data-fa="دستورهای کاربردی و گزینه‌های ابزار"
+                >Useful commands and all available options</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#dashboard"
+              ><span data-en="Reading the dashboard" data-fa="خواندن داشبورد"
+                >Reading the dashboard</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#patching"
+              ><span
+                data-en="Are updates waiting?"
+                data-fa="آیا آپدیتی در انتظار نصب است؟"
+                >Are updates waiting?</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#users"
+              ><span
+                data-en="Old accounts and password settings"
+                data-fa="حساب‌های قدیمی و تنظیمات رمز"
+                >Old accounts and password settings</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#ssh"
+              ><span
+                data-en="What SSH actually allows"
+                data-fa="SSH در عمل چه دسترسی‌ای می‌دهد؟"
+                >What SSH actually allows</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#network"
+              ><span
+                data-en="Open ports and firewall rules"
+                data-fa="پورت‌های باز و قواعد فایروال"
+                >Open ports and firewall rules</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#persistence"
+              ><span
+                data-en="Scheduled jobs and startup commands"
+                data-fa="کارهای زمان‌بندی‌شده و فرمان‌های شروع سیستم"
+                >Scheduled jobs and startup commands</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#filesystem"
+              ><span
+                data-en="File access and disk space"
+                data-fa="دسترسی فایل‌ها و فضای دیسک"
+                >File access and disk space</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#kernel"
+              ><span
+                data-en="A few checks on the Linux kernel"
+                data-fa="بررسی چند تنظیم امنیتی هسته لینوکس"
+                >A few checks on the Linux kernel</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#logging"
+              ><span
+                data-en="Will the logs help when something goes wrong?"
+                data-fa="اگر مشکلی پیش بیاید، لاگ کافی داریم؟"
+                >Will the logs help when something goes wrong?</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#mac"
+              ><span data-en="AppArmor and SELinux" data-fa="AppArmor و SELinux"
+                >AppArmor and SELinux</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#containers"
+              ><span
+                data-en="Docker and Podman checks"
+                data-fa="بررسی Docker و Podman"
+                >Docker and Podman checks</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#threat"
+              ><span
+                data-en="Suspicious signs need a second look"
+                data-fa="نشانه مشکوک را باید دوباره بررسی کرد"
+                >Suspicious signs need a second look</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#read-only"
+              ><span
+                data-en="The script reports; you decide what to change"
+                data-fa="ابزار گزارش می‌دهد؛ تصمیم تغییر با شماست"
+                >The script reports; you decide what to change</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#validation"
+              ><span
+                data-en="What has been tested?"
+                data-fa="چه چیزهایی آزمایش شده‌اند؟"
+                >What has been tested?</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#limitations"
+              ><span
+                data-en="Using the report in daily operations"
+                data-fa="استفاده از گزارش در کار روزمره"
+                >Using the report in daily operations</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#related-reading"
+              ><span data-en="Related guides" data-fa="راهنماهای مرتبط"
+                >Related guides</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#faq"
+              ><span data-en="Common questions" data-fa="پرسش‌های رایج"
+                >Common questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#conclusion"
+              ><span
+                data-en="A practical starting point"
+                data-fa="یک نقطه شروع کاربردی"
+                >A practical starting point</span
+              ></a
+            >
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section class="article-hero article-header hero">
+        <span class="article-category" data-en="Linux" data-fa="لینوکس"
+          >Linux</span
+        >
+        <h1
+          class="article-title hero-title"
+          data-en="Building an Enterprise Linux Security Auditor with Bash"
+          data-fa="ساخت ابزار بررسی امنیت سرور لینوکس با Bash | Linux Security Auditor"
+        >
+          Building an Enterprise Linux Security Auditor with Bash
+        </h1>
+        <p
+          class="article-excerpt hero-subtitle"
+          data-en="Use Linux Security Auditor to review your server’s users, SSH, updates, firewall and containers. Learn how to run the Bash script and read its report."
+          data-fa="با Linux Security Auditor کاربران، SSH، آپدیت‌ها، فایروال و کانتینرهای سرور را بررسی کنید. راهنمای اجرای اسکریپت Bash و خواندن گزارش آن."
+        >
+          Use Linux Security Auditor to review your server’s users, SSH,
+          updates, firewall and containers. Learn how to run the Bash script and
+          read its report.
+        </p>
+        <img
+          class="article-hero-thumbnail"
+          src="/assets/img/portfolio/linux-8.png"
+          alt="Linux Security Auditor dashboard | داشبورد بررسی امنیت لینوکس"
+        />
+      </section>
+      <article class="article-body">
+        <section id="introduction" class="article-section">
+          <h2
+            data-en="A firewall is only part of the picture"
+            data-fa="امنیت سرور فقط به فایروال ختم نمی‌شود"
+          >
+            A firewall is only part of the picture
+          </h2>
+          <p
+            data-en="You set up SSH keys, enable the firewall and bring a server online. That is a good start. A few months later, though, an old account may still have access, updates may be waiting, or a scheduled job may run a script that anyone can edit. These are easy things to miss when you are busy keeping services running."
+            data-fa="وقتی سرور را راه‌اندازی می‌کنیم، معمولاً اول سراغ SSH و فایروال می‌رویم. شروع خوبی است، اما چند ماه بعد ممکن است یک حساب قدیمی هنوز دسترسی داشته باشد، آپدیت‌ها نصب نشده باشند یا یک کار زمان‌بندی‌شده، فایلی را اجرا کند که دیگران هم می‌توانند تغییرش دهند. وسط کارهای روزمره، این موارد به‌راحتی از چشم می‌افتند."
+          >
+            You set up SSH keys, enable the firewall and bring a server online.
+            That is a good start. A few months later, though, an old account may
+            still have access, updates may be waiting, or a scheduled job may
+            run a script that anyone can edit. These are easy things to miss
+            when you are busy keeping services running.
+          </p>
+          <p
+            data-en="Linux Security Auditor puts these checks in one Bash script. It looks at users, passwords, SSH, updates, network ports, file permissions, scheduled jobs, kernel settings, logs and containers. Here is how to run it and, more importantly, how to read what it finds."
+            data-fa="Linux Security Auditor این بررسی‌ها را در یک اسکریپت Bash جمع می‌کند. کاربران، رمزها، SSH، آپدیت‌ها، پورت‌های شبکه، مجوز فایل‌ها، کارهای زمان‌بندی‌شده، تنظیمات هسته، لاگ‌ها و کانتینرها را بررسی می‌کند. در این مقاله سراغ اجرای ابزار و خواندن نتیجه آن می‌رویم."
+          >
+            Linux Security Auditor puts these checks in one Bash script. It
+            looks at users, passwords, SSH, updates, network ports, file
+            permissions, scheduled jobs, kernel settings, logs and containers.
+            Here is how to run it and, more importantly, how to read what it
+            finds.
+          </p>
+        </section>
+        <section id="architecture" class="article-section">
+          <h2
+            data-en="What does Linux Security Auditor do?"
+            data-fa="Linux Security Auditor چه کاری انجام می‌دهد؟"
+          >
+            What does Linux Security Auditor do?
+          </h2>
+          <p
+            data-en="Version 2.0.0 is a single script that runs on GNU/Linux with Bash 4.4 or newer. It reads the settings and information available on the server, then prints a report. Each finding has a name, a risk level, an explanation and a suggested next step."
+            data-fa="نسخه 2.0.0 یک فایل مستقل است که روی GNU/Linux با Bash نسخه 4.4 یا جدیدتر اجرا می‌شود. تنظیمات و اطلاعات در دسترس سرور را می‌خواند و گزارش می‌دهد. هر یافته نام، سطح ریسک، توضیح و یک پیشنهاد برای پیگیری دارد."
+          >
+            Version 2.0.0 is a single script that runs on GNU/Linux with Bash
+            4.4 or newer. It reads the settings and information available on the
+            server, then prints a report. Each finding has a name, a risk level,
+            an explanation and a suggested next step.
+          </p>
+          <p
+            data-en="The script is split into groups of checks. One group reviews accounts, another SSH, another updates, and so on. Commands and file searches have time limits. If a command is missing or a check cannot finish, the report says UNKNOWN. It does not quietly count that check as passed."
+            data-fa="داخل اسکریپت، بررسی‌ها به چند گروه تقسیم شده‌اند؛ یک گروه برای حساب‌ها، یکی برای SSH، یکی برای آپدیت‌ها و به همین ترتیب. اجرای فرمان و جست‌وجوی فایل محدودیت زمانی دارد. اگر فرمانی موجود نباشد یا بررسی کامل نشود، نتیجه UNKNOWN ثبت می‌شود؛ یعنی ابزار نتوانسته درباره آن مورد نظر بدهد."
+          >
+            The script is split into groups of checks. One group reviews
+            accounts, another SSH, another updates, and so on. Commands and file
+            searches have time limits. If a command is missing or a check cannot
+            finish, the report says UNKNOWN. It does not quietly count that
+            check as passed.
+          </p>
+          <p
+            data-en="The default run balances detail and scan time. Quick skips some heavier work. Deep searches a wider local scope, but still has limits. --full only makes the terminal report more detailed; it is different from --profile full, which includes more policy checks."
+            data-fa="اجرای پیش‌فرض بین جزئیات و زمان بررسی تعادل برقرار می‌کند. Quick بعضی کارهای سنگین‌تر را رد می‌کند و Deep دامنه بیشتری از فایل‌های محلی را می‌گردد، اما همچنان محدودیت دارد. --full فقط گزارش ترمینال را کامل‌تر می‌کند. این گزینه با --profile full که کنترل‌های بیشتری را انتخاب می‌کند فرق دارد."
+          >
+            The default run balances detail and scan time. Quick skips some
+            heavier work. Deep searches a wider local scope, but still has
+            limits. --full only makes the terminal report more detailed; it is
+            different from --profile full, which includes more policy checks.
+          </p>
+        </section>
+        <section id="distributions" class="article-section">
+          <h2
+            data-en="Which Linux distributions can it check?"
+            data-fa="روی چه توزیع‌هایی می‌توان اجرا کرد؟"
+          >
+            Which Linux distributions can it check?
+          </h2>
+          <p
+            data-en="The script reads /etc/os-release to choose the right family of commands. It has paths for APT on Ubuntu and Debian, DNF/YUM on the RHEL family, and Zypper on SUSE. Recognizing a distribution does not mean every check has been tested on it."
+            data-fa="اسکریپت با خواندن /etc/os-release تشخیص می‌دهد از چه فرمان‌هایی استفاده کند. برای Ubuntu و Debian مسیر APT، برای خانواده RHEL مسیر DNF/YUM و برای SUSE مسیر Zypper دارد. تشخیص نام توزیع به معنی آزمایش کامل همه بررسی‌ها روی آن نیست."
+          >
+            The script reads /etc/os-release to choose the right family of
+            commands. It has paths for APT on Ubuntu and Debian, DNF/YUM on the
+            RHEL family, and Zypper on SUSE. Recognizing a distribution does not
+            mean every check has been tested on it.
+          </p>
+          <p
+            data-en="VALIDATION.md lists partial support for Ubuntu 20.04, 22.04, 24.04 and 26.04; Debian 11, 12 and 13; RHEL, Rocky, AlmaLinux and Oracle Linux 8, 9 and 10; CentOS Stream 9 and 10; and openSUSE Leap/SLES 15 and 16 families. No distribution is marked fully supported. The recorded live run was in an Ubuntu 24.04 container, where several host features were unavailable."
+            data-fa="در VALIDATION.md پشتیبانی جزئی برای Ubuntu نسخه‌های 20.04، 22.04، 24.04 و 26.04، Debian نسخه‌های 11، 12 و 13، خانواده RHEL شامل Rocky، AlmaLinux و Oracle Linux نسخه‌های 8، 9 و 10، CentOS Stream نسخه‌های 9 و 10 و خانواده openSUSE Leap/SLES نسخه‌های 15 و 16 ثبت شده است. هیچ‌کدام برچسب پشتیبانی کامل ندارند. اجرای واقعی ثبت‌شده هم داخل کانتینر Ubuntu 24.04 بوده که به بعضی امکانات میزبان دسترسی نداشته است."
+          >
+            VALIDATION.md lists partial support for Ubuntu 20.04, 22.04, 24.04
+            and 26.04; Debian 11, 12 and 13; RHEL, Rocky, AlmaLinux and Oracle
+            Linux 8, 9 and 10; CentOS Stream 9 and 10; and openSUSE Leap/SLES 15
+            and 16 families. No distribution is marked fully supported. The
+            recorded live run was in an Ubuntu 24.04 container, where several
+            host features were unavailable.
+          </p>
+          <p
+            data-en="For another release, treat the output as a starting point and check the distribution-specific results yourself. Try the script on a test server before using it across a fleet."
+            data-fa="برای نسخه‌ای خارج از این فهرست، خروجی را نقطه شروع بدانید و نتیجه بررسی‌های مخصوص توزیع را جدا تأیید کنید. بهتر است پیش از اجرای ابزار روی چندین سرور، آن را روی یک سرور آزمایشی امتحان کنید."
+          >
+            For another release, treat the output as a starting point and check
+            the distribution-specific results yourself. Try the script on a test
+            server before using it across a fleet.
+          </p>
+        </section>
+        <section id="scoring" class="article-section">
+          <h2
+            data-en="What does the security score mean?"
+            data-fa="امتیاز امنیت را چطور بخوانیم؟"
+          >
+            What does the security score mean?
+          </h2>
+          <p
+            data-en="The score summarizes the checks that could be assessed. More serious issues carry more weight: CRITICAL has weight 10, HIGH 6, MEDIUM 3 and LOW 1. A pass gets full points, a warning gets half, and a failed check gets none. Informational and not-applicable records do not add points."
+            data-fa="امتیاز، خلاصه بررسی‌هایی است که ابزار توانسته ارزیابی کند. موارد مهم‌تر وزن بیشتری دارند: CRITICAL وزن ۱۰، HIGH وزن ۶، MEDIUM وزن ۳ و LOW وزن ۱ دارد. بررسی موفق امتیاز کامل، هشدار نصف امتیاز و بررسی ناموفق صفر می‌گیرد. موارد اطلاعاتی و غیرقابل‌اعمال در امتیاز دخالت ندارند."
+          >
+            The score summarizes the checks that could be assessed. More serious
+            issues carry more weight: CRITICAL has weight 10, HIGH 6, MEDIUM 3
+            and LOW 1. A pass gets full points, a warning gets half, and a
+            failed check gets none. Informational and not-applicable records do
+            not add points.
+          </p>
+          <p
+            data-en="UNKNOWN checks are left out of the score, but they reduce evidence coverage. Coverage tells you how much of the applicable weighted checks had a usable result. Always read the two numbers together. A score of 95 with little coverage says less than the headline number suggests."
+            data-fa="بررسی UNKNOWN از امتیاز کنار گذاشته می‌شود، اما پوشش بررسی را پایین می‌آورد. Coverage نشان می‌دهد چه سهمی از بررسی‌های قابل‌اعمال، با توجه به وزنشان، نتیجه قابل استفاده داشته‌اند. امتیاز و پوشش را با هم بخوانید. امتیاز ۹۵ با پوشش کم، به‌تنهایی نتیجه قابل اتکایی نیست."
+          >
+            UNKNOWN checks are left out of the score, but they reduce evidence
+            coverage. Coverage tells you how much of the applicable weighted
+            checks had a usable result. Always read the two numbers together. A
+            score of 95 with little coverage says less than the headline number
+            suggests.
+          </p>
+          <div class="article-code">
+            <div class="article-code-header">
+              <span class="article-code-label">text</span
+              ><button type="button" class="article-copy-button">Copy</button>
+            </div>
+            <pre
+              dir="ltr"
+            ><code class="language-text">raw_score = floor(100 * (PASS_weight + 0.5 * WARN_weight) / known_weight)
 coverage  = floor(100 * known_weight / applicable_weight)
-score     = min(raw_score, critical_cap)</code></pre></div><p data-en="For example, a HIGH pass, a MEDIUM warning, a LOW failure and a HIGH unknown give 75 raw points and 62% coverage. The overall score uses control weights, not an average of category scores. By default, one critical finding caps the score at 85; two cap it at 75; three or more cap it at 65." data-fa="مثلاً یک PASS با شدت HIGH، یک هشدار MEDIUM، یک مورد ناموفق LOW و یک UNKNOWN با شدت HIGH، امتیاز خام ۷۵ و پوشش ۶۲ درصد می‌دهند. امتیاز کل از وزن بررسی‌ها به دست می‌آید و میانگین امتیاز دسته‌ها نیست. به‌طور پیش‌فرض یک یافته بحرانی سقف امتیاز را ۸۵، دو یافته آن را ۷۵ و سه یا بیشتر آن را ۶۵ می‌کند.">For example, a HIGH pass, a MEDIUM warning, a LOW failure and a HIGH unknown give 75 raw points and 62% coverage. The overall score uses control weights, not an average of category scores. By default, one critical finding caps the score at 85; two cap it at 75; three or more cap it at 65.</p><p data-en="A score of 100 does not mean the server cannot be hacked. It means the assessed checks met their expectations. The dashboard also shows CIS-aligned, attack-surface and threat figures. These cover selected checks only; they are not a CIS certificate or proof that no malware is present." data-fa="امتیاز ۱۰۰ یعنی بررسی‌های ارزیابی‌شده با انتظار ابزار سازگار بوده‌اند؛ نه اینکه سرور قابل نفوذ نیست. Dashboard عددهای مربوط به کنترل‌های همسو با CIS، سطح حمله و نشانه‌های تهدید را هم نشان می‌دهد. این‌ها فقط به بررسی‌های منتخب مربوط‌اند و گواهی CIS یا مدرک نبود بدافزار نیستند.">A score of 100 does not mean the server cannot be hacked. It means the assessed checks met their expectations. The dashboard also shows CIS-aligned, attack-surface and threat figures. These cover selected checks only; they are not a CIS certificate or proof that no malware is present.</p></section>
-<section id="statuses" class="article-section"><h2 data-en="Pass, warning and unknown" data-fa="معنی وضعیت‌های گزارش">Pass, warning and unknown</h2><p data-en="PASS means the observed setting met the check. INFO is background information. WARNING needs review. HIGH and CRITICAL flag failed checks with higher risk. UNKNOWN means there was not enough information. NOT_APPLICABLE means the check does not apply or was left out by the selected profile." data-fa="PASS یعنی تنظیم مشاهده‌شده با شرط بررسی سازگار است. INFO اطلاعات زمینه‌ای می‌دهد. WARNING نیاز به بازبینی دارد. HIGH و CRITICAL بررسی ناموفق با ریسک بالاتر را مشخص می‌کنند. UNKNOWN یعنی اطلاعات کافی در دسترس نبوده است. NOT_APPLICABLE یعنی بررسی در این شرایط کاربرد ندارد یا در پروفایل انتخاب‌شده کنار گذاشته شده است.">PASS means the observed setting met the check. INFO is background information. WARNING needs review. HIGH and CRITICAL flag failed checks with higher risk. UNKNOWN means there was not enough information. NOT_APPLICABLE means the check does not apply or was left out by the selected profile.</p><p data-en="Risk level is a separate field: LOW, MEDIUM, HIGH, CRITICAL or INFO. A WARNING can still have HIGH risk, so read the explanation too. JSON keeps internal state names such as WARN, FAIL and NA alongside the public labels." data-fa="شدت ریسک فیلدی جداست و می‌تواند LOW، MEDIUM، HIGH، CRITICAL یا INFO باشد. حتی یک WARNING ممکن است ریسک HIGH داشته باشد؛ پس توضیحش را هم بخوانید. در JSON، نام‌های داخلی مثل WARN، FAIL و NA هم کنار وضعیت عمومی نگه داشته می‌شوند.">Risk level is a separate field: LOW, MEDIUM, HIGH, CRITICAL or INFO. A WARNING can still have HIGH risk, so read the explanation too. JSON keeps internal state names such as WARN, FAIL and NA alongside the public labels.</p></section>
-<section id="installation" class="article-section"><h2 data-en="Download and run the script" data-fa="دانلود و اجرای اسکریپت">Download and run the script</h2><p data-en="Download the file, review it and copy it to your Linux server. It needs Bash 4.4+ and common command-line tools, including awk, grep, find, stat, df and timeout. It does not install missing tools for you." data-fa="فایل را دانلود کنید، کدش را ببینید و آن را به سرور لینوکس منتقل کنید. ابزار به Bash نسخه 4.4 یا جدیدتر و فرمان‌های معمولی مثل awk، grep، find، stat، df و timeout نیاز دارد. اگر ابزاری نصب نباشد، اسکریپت خودش آن را نصب نمی‌کند.">Download the file, review it and copy it to your Linux server. It needs Bash 4.4+ and common command-line tools, including awk, grep, find, stat, df and timeout. It does not install missing tools for you.</p><p><a href="/docs/linux-security-auditor/security-audit.sh" download="security-audit.sh"><span data-en="Download security-audit.sh (v2.0.0)" data-fa="دانلود security-audit.sh نسخه 2.0.0">Download security-audit.sh (v2.0.0)</span></a></p><div class="article-code"><div class="article-code-header"><span class="article-code-label">bash</span><button type="button" class="article-copy-button">Copy</button></div><pre dir="ltr"><code class="language-bash"><span class="code-token-command">chmod</span> +x security-audit.sh
+score     = min(raw_score, critical_cap)</code></pre>
+          </div>
+          <p
+            data-en="For example, a HIGH pass, a MEDIUM warning, a LOW failure and a HIGH unknown give 75 raw points and 62% coverage. The overall score uses control weights, not an average of category scores. By default, one critical finding caps the score at 85; two cap it at 75; three or more cap it at 65."
+            data-fa="مثلاً یک PASS با شدت HIGH، یک هشدار MEDIUM، یک مورد ناموفق LOW و یک UNKNOWN با شدت HIGH، امتیاز خام ۷۵ و پوشش ۶۲ درصد می‌دهند. امتیاز کل از وزن بررسی‌ها به دست می‌آید و میانگین امتیاز دسته‌ها نیست. به‌طور پیش‌فرض یک یافته بحرانی سقف امتیاز را ۸۵، دو یافته آن را ۷۵ و سه یا بیشتر آن را ۶۵ می‌کند."
+          >
+            For example, a HIGH pass, a MEDIUM warning, a LOW failure and a HIGH
+            unknown give 75 raw points and 62% coverage. The overall score uses
+            control weights, not an average of category scores. By default, one
+            critical finding caps the score at 85; two cap it at 75; three or
+            more cap it at 65.
+          </p>
+          <p
+            data-en="A score of 100 does not mean the server cannot be hacked. It means the assessed checks met their expectations. The dashboard also shows CIS-aligned, attack-surface and threat figures. These cover selected checks only; they are not a CIS certificate or proof that no malware is present."
+            data-fa="امتیاز ۱۰۰ یعنی بررسی‌های ارزیابی‌شده با انتظار ابزار سازگار بوده‌اند؛ نه اینکه سرور قابل نفوذ نیست. Dashboard عددهای مربوط به کنترل‌های همسو با CIS، سطح حمله و نشانه‌های تهدید را هم نشان می‌دهد. این‌ها فقط به بررسی‌های منتخب مربوط‌اند و گواهی CIS یا مدرک نبود بدافزار نیستند."
+          >
+            A score of 100 does not mean the server cannot be hacked. It means
+            the assessed checks met their expectations. The dashboard also shows
+            CIS-aligned, attack-surface and threat figures. These cover selected
+            checks only; they are not a CIS certificate or proof that no malware
+            is present.
+          </p>
+        </section>
+        <section id="statuses" class="article-section">
+          <h2
+            data-en="Pass, warning and unknown"
+            data-fa="معنی وضعیت‌های گزارش"
+          >
+            Pass, warning and unknown
+          </h2>
+          <p
+            data-en="PASS means the observed setting met the check. INFO is background information. WARNING needs review. HIGH and CRITICAL flag failed checks with higher risk. UNKNOWN means there was not enough information. NOT_APPLICABLE means the check does not apply or was left out by the selected profile."
+            data-fa="PASS یعنی تنظیم مشاهده‌شده با شرط بررسی سازگار است. INFO اطلاعات زمینه‌ای می‌دهد. WARNING نیاز به بازبینی دارد. HIGH و CRITICAL بررسی ناموفق با ریسک بالاتر را مشخص می‌کنند. UNKNOWN یعنی اطلاعات کافی در دسترس نبوده است. NOT_APPLICABLE یعنی بررسی در این شرایط کاربرد ندارد یا در پروفایل انتخاب‌شده کنار گذاشته شده است."
+          >
+            PASS means the observed setting met the check. INFO is background
+            information. WARNING needs review. HIGH and CRITICAL flag failed
+            checks with higher risk. UNKNOWN means there was not enough
+            information. NOT_APPLICABLE means the check does not apply or was
+            left out by the selected profile.
+          </p>
+          <p
+            data-en="Risk level is a separate field: LOW, MEDIUM, HIGH, CRITICAL or INFO. A WARNING can still have HIGH risk, so read the explanation too. JSON keeps internal state names such as WARN, FAIL and NA alongside the public labels."
+            data-fa="شدت ریسک فیلدی جداست و می‌تواند LOW، MEDIUM، HIGH، CRITICAL یا INFO باشد. حتی یک WARNING ممکن است ریسک HIGH داشته باشد؛ پس توضیحش را هم بخوانید. در JSON، نام‌های داخلی مثل WARN، FAIL و NA هم کنار وضعیت عمومی نگه داشته می‌شوند."
+          >
+            Risk level is a separate field: LOW, MEDIUM, HIGH, CRITICAL or INFO.
+            A WARNING can still have HIGH risk, so read the explanation too.
+            JSON keeps internal state names such as WARN, FAIL and NA alongside
+            the public labels.
+          </p>
+        </section>
+        <section id="installation" class="article-section">
+          <h2
+            data-en="Download and run the script"
+            data-fa="دانلود و اجرای اسکریپت"
+          >
+            Download and run the script
+          </h2>
+          <p
+            data-en="Download the file, review it and copy it to your Linux server. It needs Bash 4.4+ and common command-line tools, including awk, grep, find, stat, df and timeout. It does not install missing tools for you."
+            data-fa="فایل را دانلود کنید، کدش را ببینید و آن را به سرور لینوکس منتقل کنید. ابزار به Bash نسخه 4.4 یا جدیدتر و فرمان‌های معمولی مثل awk، grep، find، stat، df و timeout نیاز دارد. اگر ابزاری نصب نباشد، اسکریپت خودش آن را نصب نمی‌کند."
+          >
+            Download the file, review it and copy it to your Linux server. It
+            needs Bash 4.4+ and common command-line tools, including awk, grep,
+            find, stat, df and timeout. It does not install missing tools for
+            you.
+          </p>
+          <p>
+            <a
+              href="/docs/linux-security-auditor/security-audit.sh"
+              download="security-audit.sh"
+              ><span
+                data-en="Download security-audit.sh (v2.0.0)"
+                data-fa="دانلود security-audit.sh نسخه 2.0.0"
+                >Download security-audit.sh (v2.0.0)</span
+              ></a
+            >
+          </p>
+          <div class="article-code">
+            <div class="article-code-header">
+              <span class="article-code-label">bash</span
+              ><button type="button" class="article-copy-button">Copy</button>
+            </div>
+            <pre
+              dir="ltr"
+            ><code class="language-bash"><span class="code-token-command">chmod</span> +x security-audit.sh
 <span class="code-token-command">./security-audit.sh</span> <span class="code-token-option">--version</span>
 <span class="code-token-command">./security-audit.sh</span> <span class="code-token-option">--help</span>
 <span class="code-token-command">sudo</span> <span class="code-token-command">./security-audit.sh</span> <span class="code-token-option">--quick</span> <span class="code-token-option">--summary</span>
-<span class="code-token-command">sudo</span> <span class="code-token-command">./security-audit.sh</span></code></pre></div><p data-en="Start with --quick to see what the tool can read. Then run the default standard scan for more detail. You can run without sudo, but protected files and some firewall or audit information may be unreadable. Running as root inside a container does not give the same view as running on the actual host." data-fa="برای شروع، --quick را اجرا کنید تا ببینید ابزار به چه اطلاعاتی دسترسی دارد. بعد اجرای معمولی را برای بررسی بیشتر انجام دهید. بدون sudo هم می‌توان اجرا کرد، اما فایل‌های محافظت‌شده و بعضی اطلاعات فایروال یا Audit ممکن است خواندنی نباشند. اجرای root داخل کانتینر هم همان دید اجرای روی میزبان اصلی را نمی‌دهد.">Start with --quick to see what the tool can read. Then run the default standard scan for more detail. You can run without sudo, but protected files and some firewall or audit information may be unreadable. Running as root inside a container does not give the same view as running on the actual host.</p></section>
-<section id="cli" class="article-section"><h2 data-en="Useful commands and all available options" data-fa="دستورهای کاربردی و گزینه‌های ابزار">Useful commands and all available options</h2><p data-en="For everyday use, the commands below are enough to get started. The table lists every available option when you need to change the scan or report." data-fa="برای استفاده روزمره، دستورهای زیر نقطه شروع مناسبی هستند. اگر خواستید نوع بررسی یا گزارش را تغییر دهید، همه گزینه‌های موجود در جدول آمده‌اند.">For everyday use, the commands below are enough to get started. The table lists every available option when you need to change the scan or report.</p><div class="article-code"><div class="article-code-header"><span class="article-code-label">bash</span><button type="button" class="article-copy-button">Copy</button></div><pre dir="ltr"><code class="language-bash"><span class="code-token-command">sudo</span> <span class="code-token-command">./security-audit.sh</span> <span class="code-token-option">--standard</span> <span class="code-token-option">--full</span> <span class="code-token-option">--no-color</span>
+<span class="code-token-command">sudo</span> <span class="code-token-command">./security-audit.sh</span></code></pre>
+          </div>
+          <p
+            data-en="Start with --quick to see what the tool can read. Then run the default standard scan for more detail. You can run without sudo, but protected files and some firewall or audit information may be unreadable. Running as root inside a container does not give the same view as running on the actual host."
+            data-fa="برای شروع، --quick را اجرا کنید تا ببینید ابزار به چه اطلاعاتی دسترسی دارد. بعد اجرای معمولی را برای بررسی بیشتر انجام دهید. بدون sudo هم می‌توان اجرا کرد، اما فایل‌های محافظت‌شده و بعضی اطلاعات فایروال یا Audit ممکن است خواندنی نباشند. اجرای root داخل کانتینر هم همان دید اجرای روی میزبان اصلی را نمی‌دهد."
+          >
+            Start with --quick to see what the tool can read. Then run the
+            default standard scan for more detail. You can run without sudo, but
+            protected files and some firewall or audit information may be
+            unreadable. Running as root inside a container does not give the
+            same view as running on the actual host.
+          </p>
+        </section>
+        <section id="cli" class="article-section">
+          <h2
+            data-en="Useful commands and all available options"
+            data-fa="دستورهای کاربردی و گزینه‌های ابزار"
+          >
+            Useful commands and all available options
+          </h2>
+          <p
+            data-en="For everyday use, the commands below are enough to get started. The table lists every available option when you need to change the scan or report."
+            data-fa="برای استفاده روزمره، دستورهای زیر نقطه شروع مناسبی هستند. اگر خواستید نوع بررسی یا گزارش را تغییر دهید، همه گزینه‌های موجود در جدول آمده‌اند."
+          >
+            For everyday use, the commands below are enough to get started. The
+            table lists every available option when you need to change the scan
+            or report.
+          </p>
+          <div class="article-code">
+            <div class="article-code-header">
+              <span class="article-code-label">bash</span
+              ><button type="button" class="article-copy-button">Copy</button>
+            </div>
+            <pre
+              dir="ltr"
+            ><code class="language-bash"><span class="code-token-command">sudo</span> <span class="code-token-command">./security-audit.sh</span> <span class="code-token-option">--standard</span> <span class="code-token-option">--full</span> <span class="code-token-option">--no-color</span>
 <span class="code-token-command">sudo</span> <span class="code-token-command">./security-audit.sh</span> <span class="code-token-option">--deep</span> <span class="code-token-option">--profile</span> full <span class="code-token-option">--scan-seconds</span> 60
 <span class="code-token-command">sudo</span> <span class="code-token-command">./security-audit.sh</span> <span class="code-token-option">--quick</span> <span class="code-token-option">--export-json</span> /root/audit-quick.json
 <span class="code-token-command">sudo</span> <span class="code-token-command">./security-audit.sh</span> <span class="code-token-option">--standard</span> <span class="code-token-option">--export-html</span> /root/audit-standard.html
 <span class="code-token-command">sudo</span> <span class="code-token-command">./security-audit.sh</span> <span class="code-token-option">--output-dir</span> /root/audit-2026-10-05
 <span class="code-token-command">sudo</span> <span class="code-token-command">./security-audit.sh</span> <span class="code-token-option">--disk-thresholds</span> 80,90,95 <span class="code-token-option">--critical-caps</span> 85,75,65
 <span class="code-token-command">./security-audit.sh</span> <span class="code-token-option">--self-test</span>
-<span class="code-token-command">./security-audit.sh</span> <span class="code-token-option">--demo</span> <span class="code-token-option">--no-color</span></code></pre></div><div class="table-responsive"><table class="table"><thead><tr><th data-en="Option" data-fa="گزینه">Option</th><th data-en="Behavior" data-fa="رفتار">Behavior</th></tr></thead><tbody><tr><td><code>--quick | --standard | --deep</code></td><td data-en="Cost profile; standard default. Deep is not unlimited." data-fa="حجم بررسی؛ پیش‌فرض Standard است و Deep نامحدود نیست.">Cost profile; standard default. Deep is not unlimited.</td></tr><tr><td><code>--full | --summary</code></td><td data-en="Terminal detail; summary default." data-fa="جزئیات ترمینال؛ پیش‌فرض Summary است.">Terminal detail; summary default.</td></tr><tr><td><code>--profile cis-l1|cis-l2|enterprise|full</code></td><td data-en="Policy selection; enterprise default excludes Level 2 controls. cis-l2 selects Level 1 and Level 2." data-fa="انتخاب سیاست؛ enterprise پیش‌فرض کنترل Level 2 را کنار می‌گذارد. cis-l2 شامل Level 1 و Level 2 است.">Policy selection; enterprise default excludes Level 2 controls. cis-l2 selects Level 1 and Level 2.</td></tr><tr><td><code>--no-color | --color auto|always|never</code></td><td data-en="Color policy; auto default." data-fa="سیاست رنگ؛ پیش‌فرض auto است.">Color policy; auto default.</td></tr><tr><td><code>--export-json FILE</code></td><td data-en="Create a new JSON report; existing targets are refused." data-fa="گزارش JSON جدید؛ مقصد موجود پذیرفته نمی‌شود.">Create a new JSON report; existing targets are refused.</td></tr><tr><td><code>--export-html [FILE]</code></td><td data-en="Create standalone HTML; omitting FILE selects a new report directory if none was specified." data-fa="HTML مستقل؛ بدون FILE در صورت نبود مسیر، پوشه گزارش جدید انتخاب می‌شود.">Create standalone HTML; omitting FILE selects a new report directory if none was specified.</td></tr><tr><td><code>--output-dir ABSOLUTE_PATH</code></td><td data-en="Create a new private directory with report.json, report.html and detailed report.txt." data-fa="ساخت پوشه خصوصی جدید برای report.json، report.html و report.txt کامل.">Create a new private directory with report.json, report.html and detailed report.txt.</td></tr><tr><td><code>--scan-seconds N</code></td><td data-en="Per file scan timeout: 5..300; default 30." data-fa="Timeout هر اسکن فایل: ۵ تا ۳۰۰؛ پیش‌فرض ۳۰ ثانیه.">Per file scan timeout: 5..300; default 30.</td></tr><tr><td><code>--disk-thresholds WARN,HIGH,CRIT</code></td><td data-en="Increasing values 0..100, default 80,90,95; strictly greater comparisons." data-fa="اعداد صعودی بین صفر و ۱۰۰؛ پیش‌فرض 80,90,95؛ مقایسه با بزرگ‌ترِ اکید است.">Increasing values 0..100, default 80,90,95; strictly greater comparisons.</td></tr><tr><td><code>--critical-caps ONE,TWO,THREE</code></td><td data-en="Nonincreasing values 0..100; default 85,75,65 for 1/2/3+ critical findings." data-fa="اعداد غیرصعودی بین صفر و ۱۰۰؛ پیش‌فرض 85,75,65 برای ۱، ۲ و حداقل ۳ یافته Critical.">Nonincreasing values 0..100; default 85,75,65 for 1/2/3+ critical findings.</td></tr><tr><td><code>--ssh-context SPEC</code></td><td data-en="Supply sshd -T -C context." data-fa="ارسال Context به sshd -T -C.">Supply sshd -T -C context.</td></tr><tr><td><code>--sshd-config ABSOLUTE_PATH</code></td><td data-en="Select an existing daemon configuration file." data-fa="انتخاب فایل موجود تنظیمات Daemon با مسیر مطلق.">Select an existing daemon configuration file.</td></tr><tr><td><code>--self-test</code></td><td data-en="Run isolated local fixtures." data-fa="اجرای Fixtureهای محلی جدا از ممیزی میزبان.">Run isolated local fixtures.</td></tr><tr><td><code>--demo</code></td><td data-en="Generate explicitly labeled synthetic findings." data-fa="ساخت یافته‌های مصنوعی با برچسب روشن Demo.">Generate explicitly labeled synthetic findings.</td></tr><tr><td><code>--version</code></td><td data-en="Print version and exit." data-fa="نمایش نسخه و خروج.">Print version and exit.</td></tr><tr><td><code>--help | -h</code></td><td data-en="Print help and exit." data-fa="نمایش راهنما و خروج.">Print help and exit.</td></tr></tbody></table></div><p data-en="Use a new name for each report. The tool refuses to overwrite an existing file or directory. Parent directories must already exist. For sudo runs, a fresh path under /root is a straightforward choice because report parents must be trusted, root-owned and free of symlinks. --export-html without a filename creates a report directory under the current working directory if no output directory was supplied." data-fa="برای هر گزارش نام تازه انتخاب کنید. ابزار فایل یا پوشه موجود را بازنویسی نمی‌کند و پوشه والد باید از قبل وجود داشته باشد. در اجرای sudo، مسیر تازه زیر /root انتخاب ساده‌ای است؛ چون والدهای گزارش باید متعلق به root، قابل اعتماد و بدون لینک نمادین باشند. --export-html بدون نام فایل، اگر پوشه خروجی مشخص نشده باشد، زیر پوشه جاری یک پوشه گزارش می‌سازد.">Use a new name for each report. The tool refuses to overwrite an existing file or directory. Parent directories must already exist. For sudo runs, a fresh path under /root is a straightforward choice because report parents must be trusted, root-owned and free of symlinks. --export-html without a filename creates a report directory under the current working directory if no output directory was supplied.</p><p data-en="If you automate the run, read the exit code: 0 means no HIGH/CRITICAL findings with at least 80% coverage; 1 means high or critical findings; 2 means incomplete coverage; 3 means a usage or runtime error. Codes 130 and 143 mean interruption. Code 1 is a reported risk, not a script crash." data-fa="اگر اجرا را خودکار می‌کنید، کد خروج را بخوانید: صفر یعنی یافته HIGH/CRITICAL وجود ندارد و پوشش حداقل ۸۰ درصد است؛ ۱ یعنی یافته بالا یا بحرانی؛ ۲ یعنی پوشش ناقص؛ ۳ یعنی خطای استفاده یا اجرا. کدهای ۱۳۰ و ۱۴۳ به وقفه مربوط‌اند. خروج ۱ یعنی ریسک گزارش شده، نه اینکه اسکریپت از کار افتاده باشد.">If you automate the run, read the exit code: 0 means no HIGH/CRITICAL findings with at least 80% coverage; 1 means high or critical findings; 2 means incomplete coverage; 3 means a usage or runtime error. Codes 130 and 143 mean interruption. Code 1 is a reported risk, not a script crash.</p></section>
-<section id="dashboard" class="article-section"><h2 data-en="Reading the dashboard" data-fa="خواندن داشبورد">Reading the dashboard</h2><p data-en="The first part identifies the machine: hostname, distribution, kernel, IP, uptime and whether the run has root access. Below it are the score, coverage and risk counts. Each category has its own score and coverage, so you can see where the gaps are." data-fa="ابتدای گزارش مشخصات ماشین را می‌بینید: نام میزبان، توزیع، هسته، IP، مدت روشن‌بودن و اینکه اجرا دسترسی root دارد یا نه. پایین آن امتیاز، پوشش بررسی و تعداد ریسک‌ها آمده است. هر دسته هم امتیاز و پوشش خودش را دارد تا مشخص شود کجا نیاز به بررسی بیشتر است.">The first part identifies the machine: hostname, distribution, kernel, IP, uptime and whether the run has root access. Below it are the score, coverage and risk counts. Each category has its own score and coverage, so you can see where the gaps are.</p><p data-en="Start with the priority findings. Summary mode shows up to eight, ordered from critical down to low, plus up to five unknown checks. Read the evidence and suggested action before making a change. Disk, inode and memory figures help spot capacity problems. --full shows all findings." data-fa="از یافته‌های اولویت‌دار شروع کنید. حالت خلاصه تا هشت یافته را از بحرانی تا کم‌خطر و تا پنج مورد نامشخص نشان می‌دهد. پیش از هر تغییر، شواهد و اقدام پیشنهادی را بخوانید. عددهای دیسک، inode و حافظه هم کمک می‌کنند مشکل ظرفیت را ببینید. با --full همه یافته‌ها نمایش داده می‌شوند.">Start with the priority findings. Summary mode shows up to eight, ordered from critical down to low, plus up to five unknown checks. Read the evidence and suggested action before making a change. Disk, inode and memory figures help spot capacity problems. --full shows all findings.</p><figure><img class="img-fluid" src="/assets/img/portfolio/linux-8.png" loading="lazy" alt="Linux Security Auditor dashboard: scores and priority findings | داشبورد بررسی امنیت لینوکس: امتیازها و یافته‌های اولویت‌دار" /><p data-en="An illustration of the dashboard. Your server findings come from your own run; --demo uses sample data." data-fa="تصویر برای معرفی داشبورد است. نتیجه سرور شما از اجرای خودتان به دست می‌آید؛ --demo داده نمونه می‌سازد.">An illustration of the dashboard. Your server findings come from your own run; --demo uses sample data.</p></figure><p data-en="JSON is useful for processing findings in other tools. HTML is a standalone report you can open in a browser, with no external assets. --output-dir saves JSON, HTML and a full text report together. Reports contain server information, so keep them private." data-fa="JSON برای پردازش یافته‌ها در ابزارهای دیگر مناسب است. HTML یک گزارش مستقل است که بدون فایل خارجی در مرورگر باز می‌شود. --output-dir نسخه JSON، HTML و متن کامل را کنار هم ذخیره می‌کند. این گزارش‌ها اطلاعات سرور دارند؛ آن‌ها را عمومی نکنید.">JSON is useful for processing findings in other tools. HTML is a standalone report you can open in a browser, with no external assets. --output-dir saves JSON, HTML and a full text report together. Reports contain server information, so keep them private.</p></section>
-<section id="patching" class="article-section"><h2 data-en="Are updates waiting?" data-fa="آیا آپدیتی در انتظار نصب است؟">Are updates waiting?</h2><p data-en="On Ubuntu and Debian, the script simulates an APT upgrade using the package information already on disk. It counts pending updates, looks for security-update candidates, checks package holds and incomplete package operations, and reviews some automatic-update settings. It also looks for repository trust bypasses and update-log errors." data-fa="روی Ubuntu و Debian، اسکریپت با اطلاعات بسته‌های موجود روی دیسک، ارتقای APT را شبیه‌سازی می‌کند. آپدیت‌های منتظر و کاندیدهای امنیتی، بسته‌های Hold شده و عملیات ناقص بسته را بررسی می‌کند و بعضی تنظیمات آپدیت خودکار را می‌خواند. دورزدن اعتماد مخزن و خطاهای لاگ آپدیت هم بررسی می‌شوند.">On Ubuntu and Debian, the script simulates an APT upgrade using the package information already on disk. It counts pending updates, looks for security-update candidates, checks package holds and incomplete package operations, and reviews some automatic-update settings. It also looks for repository trust bypasses and update-log errors.</p><p data-en="The important limit is freshness. The auditor does not refresh repository data. An old or incomplete cache can hide available updates. Even a recent APT index does not prove every security repository is up to date. An empty security-update result is not a clean bill of health." data-fa="نکته اصلی، تازگی اطلاعات است. ممیز اطلاعات مخزن را تازه نمی‌کند. Cache قدیمی یا ناقص ممکن است آپدیت موجود را نشان ندهد. حتی Index تازه APT هم ثابت نمی‌کند همه مخازن امنیتی به‌روز هستند. خالی‌بودن نتیجه آپدیت امنیتی را تأیید کامل وضعیت سرور ندانید.">The important limit is freshness. The auditor does not refresh repository data. An old or incomplete cache can hide available updates. Even a recent APT index does not prove every security repository is up to date. An empty security-update result is not a clean bill of health.</p><p data-en="The RHEL path uses cached DNF/YUM queries. SUSE queries run only when a read-only bwrap environment is available; otherwise they remain unknown. Reboot hints are handled differently by distribution. The script records the running kernel, and on Debian can compare it with installed packages of the same kernel flavor. It does not guess across different kernel families or claim a complete CVE scan." data-fa="مسیر RHEL از Queryهای Cache شده DNF/YUM استفاده می‌کند. در SUSE، Query فقط با محیط فقط‌خواندنی bwrap اجرا می‌شود؛ وگرنه نتیجه نامشخص می‌ماند. نشانه نیاز به Reboot هم بر اساس توزیع فرق دارد. ابزار هسته جاری را ثبت می‌کند و در Debian می‌تواند آن را با بسته نصب‌شده از همان نوع هسته مقایسه کند. بین خانواده‌های متفاوت هسته حدس نمی‌زند و بررسی کامل CVE انجام نمی‌دهد.">The RHEL path uses cached DNF/YUM queries. SUSE queries run only when a read-only bwrap environment is available; otherwise they remain unknown. Reboot hints are handled differently by distribution. The script records the running kernel, and on Debian can compare it with installed packages of the same kernel flavor. It does not guess across different kernel families or claim a complete CVE scan.</p></section>
-<section id="users" class="article-section"><h2 data-en="Old accounts and password settings" data-fa="حساب‌های قدیمی و تنظیمات رمز">Old accounts and password settings</h2><p data-en="The account checks look for extra UID 0 users, duplicate IDs, service accounts with interactive shells and empty password fields. They also review password aging and identify older or unrecognized password-hash formats. Hash values are not printed or cracked." data-fa="بررسی حساب‌ها به دنبال کاربر اضافی با UID صفر، شناسه تکراری، حساب سرویس با Shell تعاملی و فیلد رمز خالی می‌گردد. عمر رمز و قالب قدیمی یا ناشناخته Hash هم بررسی می‌شوند. مقدار Hash چاپ یا شکسته نمی‌شود.">The account checks look for extra UID 0 users, duplicate IDs, service accounts with interactive shells and empty password fields. They also review password aging and identify older or unrecognized password-hash formats. Hash values are not printed or cracked.</p><p data-en="Home and .ssh permissions, readable shell history and files such as .netrc or .rhosts can point to access that needs a closer look. Locking a password does not revoke an SSH key. If someone leaves the team, review every way they can log in." data-fa="مجوز Home و .ssh، History قابل‌خواندن و فایل‌هایی مثل .netrc یا .rhosts ممکن است دسترسی نیازمند بازبینی را نشان دهند. قفل‌کردن رمز، کلید SSH را لغو نمی‌کند. وقتی کسی از تیم خارج می‌شود، تمام راه‌های ورود او را بررسی کنید.">Home and .ssh permissions, readable shell history and files such as .netrc or .rhosts can point to access that needs a closer look. Locking a password does not revoke an SSH key. If someone leaves the team, review every way they can log in.</p><p data-en="PAM and sudo checks look at password-quality and lockout settings, sudoers syntax, passwordless rules and broad command permissions. Some results are only clues because includes and defaults can change the effective policy. Confirm what each administrative account can actually do before editing its permissions." data-fa="بررسی PAM و sudo سراغ کیفیت رمز، محدودیت تلاش ورود، صحت sudoers، قواعد بدون رمز و مجوز گسترده فرمان‌ها می‌رود. بعضی نتایج فقط نشانه‌اند، چون Include و تنظیم پیش‌فرض می‌توانند سیاست واقعی را عوض کنند. پیش از تغییر مجوز، ببینید هر حساب مدیریتی در عمل چه کاری می‌تواند انجام دهد.">PAM and sudo checks look at password-quality and lockout settings, sudoers syntax, passwordless rules and broad command permissions. Some results are only clues because includes and defaults can change the effective policy. Confirm what each administrative account can actually do before editing its permissions.</p></section>
-<section id="ssh" class="article-section"><h2 data-en="What SSH actually allows" data-fa="SSH در عمل چه دسترسی‌ای می‌دهد؟">What SSH actually allows</h2><p data-en="Reading one sshd_config file is not always enough. Other files, defaults and Match rules may change the result. The auditor uses sshd -T to ask the daemon for its effective configuration. It checks root login, passwords, empty passwords, public keys, forwarding, authentication attempts and selected cryptographic settings." data-fa="خواندن یک فایل sshd_config همیشه کافی نیست. فایل‌های دیگر، پیش‌فرض‌ها و قواعد Match ممکن است نتیجه را تغییر دهند. ممیز با sshd -T تنظیم مؤثر را از خود Daemon می‌گیرد. ورود root، رمز، رمز خالی، کلید عمومی، Forwarding، تعداد تلاش ورود و بعضی تنظیمات رمزنگاری بررسی می‌شوند.">Reading one sshd_config file is not always enough. Other files, defaults and Match rules may change the result. The auditor uses sshd -T to ask the daemon for its effective configuration. It checks root login, passwords, empty passwords, public keys, forwarding, authentication attempts and selected cryptographic settings.</p><p data-en="If you use Match rules, supply the real user and connection context. Without it, the tool reports a gap in SSH coverage. The addresses below are examples; replace them with your own." data-fa="اگر از قواعد Match استفاده می‌کنید، کاربر و شرایط واقعی اتصال را مشخص کنید. بدون آن، ابزار بخشی از پوشش SSH را نامشخص گزارش می‌کند. آدرس‌های زیر نمونه‌اند و باید با اطلاعات خودتان جایگزین شوند.">If you use Match rules, supply the real user and connection context. Without it, the tool reports a gap in SSH coverage. The addresses below are examples; replace them with your own.</p><div class="article-code"><div class="article-code-header"><span class="article-code-label">bash</span><button type="button" class="article-copy-button">Copy</button></div><pre dir="ltr"><code class="language-bash"><span class="code-token-command">sudo</span> <span class="code-token-command">./security-audit.sh</span> <span class="code-token-option">--ssh-context</span> <span class="code-token-string">&#039;user=admin,host=admin.example,addr=192.0.2.10&#039;</span> \
-  <span class="code-token-option">--sshd-config</span> /etc/ssh/sshd_config <span class="code-token-option">--full</span></code></pre></div><p data-en="Check more than one context when different users have different rules. A warning is a reason to review the policy, not to disable settings blindly. Keyboard-interactive, for example, may be part of MFA. Test a second administrative connection before applying any SSH changes yourself." data-fa="وقتی کاربران قواعد متفاوت دارند، بیش از یک Context را بررسی کنید. هشدار دلیل بازبینی سیاست است، نه غیرفعال‌کردن بی‌دلیل تنظیمات. مثلاً Keyboard Interactive ممکن است بخشی از MFA باشد. اگر خودتان تنظیم SSH را تغییر می‌دهید، پیش از بستن نشست فعلی یک اتصال مدیریتی دیگر را آزمایش کنید.">Check more than one context when different users have different rules. A warning is a reason to review the policy, not to disable settings blindly. Keyboard-interactive, for example, may be part of MFA. Test a second administrative connection before applying any SSH changes yourself.</p></section>
-<section id="network" class="article-section"><h2 data-en="Open ports and firewall rules" data-fa="پورت‌های باز و قواعد فایروال">Open ports and firewall rules</h2><p data-en="The script reads local UFW, nftables and iptables information when it can. It also lists listening TCP/UDP ports, connections, interfaces and routes. It highlights selected legacy-service and database ports for review. Port numbers are clues, though; a service may use a custom port." data-fa="اسکریپت در صورت دسترسی، اطلاعات محلی UFW، nftables و iptables را می‌خواند. پورت‌های TCP/UDP شنونده، اتصال‌ها، رابط‌ها و مسیرهای شبکه را هم ثبت می‌کند. بعضی پورت‌های سرویس قدیمی یا دیتابیس را برای بازبینی مشخص می‌کند. شماره پورت فقط یک نشانه است؛ سرویس ممکن است پورت سفارشی داشته باشد.">The script reads local UFW, nftables and iptables information when it can. It also lists listening TCP/UDP ports, connections, interfaces and routes. It highlights selected legacy-service and database ports for review. Port numbers are clues, though; a service may use a custom port.</p><p data-en="A listener on 0.0.0.0 or :: is not automatically reachable from the internet. NAT, cloud firewalls, upstream firewalls and routing all affect reachability. The auditor does not probe from outside the server, and it cannot prove that IPv4 and IPv6 have equivalent protection. Check the real access path separately." data-fa="سرویسی که روی 0.0.0.0 یا :: گوش می‌دهد، لزوماً از اینترنت قابل دسترسی نیست. NAT، فایروال ابری، فایروال بالادستی و Routing روی دسترسی اثر دارند. ممیز از بیرون سرور Probe نمی‌زند و نمی‌تواند یکسان‌بودن حفاظت IPv4 و IPv6 را ثابت کند. مسیر واقعی دسترسی را جدا آزمایش کنید.">A listener on 0.0.0.0 or :: is not automatically reachable from the internet. NAT, cloud firewalls, upstream firewalls and routing all affect reachability. The auditor does not probe from outside the server, and it cannot prove that IPv4 and IPv6 have equivalent protection. Check the real access path separately.</p><p data-en="Likewise, having firewall rules does not prove they block the intended traffic. Rule order, jumps and container networking matter. Use the report to find what needs review, then verify the complete policy." data-fa="وجود Rule هم به‌تنهایی ثابت نمی‌کند ترافیک موردنظر مسدود است. ترتیب Rule، مسیر Chainها و شبکه کانتینر اهمیت دارد. از گزارش برای پیداکردن موارد نیازمند بازبینی استفاده کنید و بعد کل سیاست را بررسی کنید.">Likewise, having firewall rules does not prove they block the intended traffic. Rule order, jumps and container networking matter. Use the report to find what needs review, then verify the complete policy.</p></section>
-<section id="persistence" class="article-section"><h2 data-en="Scheduled jobs and startup commands" data-fa="کارهای زمان‌بندی‌شده و فرمان‌های شروع سیستم">Scheduled jobs and startup commands</h2><p data-en="Cron jobs, systemd timers and startup files are useful, but they can also keep an unwanted command running after a reboot. The auditor checks permissions on these paths and looks for patterns such as downloading a script and piping it into a shell, running from /tmp, or unusual startup commands." data-fa="Cron، Timerهای systemd و فایل‌های شروع سیستم کاربردی‌اند، اما می‌توانند یک فرمان ناخواسته را بعد از Reboot هم زنده نگه دارند. ممیز مجوز این مسیرها را بررسی می‌کند و به دنبال الگوهایی مثل دانلود Script و فرستادن مستقیم به Shell، اجرا از /tmp یا فرمان غیرعادی شروع سیستم می‌گردد.">Cron jobs, systemd timers and startup files are useful, but they can also keep an unwanted command running after a reboot. The auditor checks permissions on these paths and looks for patterns such as downloading a script and piping it into a shell, running from /tmp, or unusual startup commands.</p><p data-en="It records running services, timers and failed units, and samples up to 30 services for their user and unit-file permissions. It does not run any discovered job or print cron command bodies. A recent file change or a strange-looking job is not proof of an attack. Compare it with deployments and approved changes." data-fa="سرویس‌های Running، Timerها و Unitهای ناموفق ثبت می‌شوند و تا ۳۰ سرویس از نظر کاربر و مجوز فایل Unit نمونه‌برداری می‌شوند. ابزار هیچ Job کشف‌شده‌ای را اجرا نمی‌کند و متن فرمان Cron را در گزارش نمی‌آورد. تغییر تازه فایل یا Job با ظاهر عجیب، مدرک حمله نیست. آن را با Deployment و تغییرات تأییدشده مقایسه کنید.">It records running services, timers and failed units, and samples up to 30 services for their user and unit-file permissions. It does not run any discovered job or print cron command bodies. A recent file change or a strange-looking job is not proof of an attack. Compare it with deployments and approved changes.</p></section>
-<section id="filesystem" class="article-section"><h2 data-en="File access and disk space" data-fa="دسترسی فایل‌ها و فضای دیسک">File access and disk space</h2><p data-en="Some files should only be changed by trusted administrators. The script reviews account files, sudo and SSH settings, cron paths and other sensitive configuration. It also searches a bounded local scope for world-writable files, unknown owners, SUID/SGID files and sensitive filenames with broad permissions." data-fa="بعضی فایل‌ها باید فقط توسط مدیران مورد اعتماد تغییر کنند. اسکریپت فایل حساب‌ها، تنظیم sudo و SSH، مسیر Cron و تنظیمات حساس دیگر را بررسی می‌کند. در دامنه محدود محلی، فایل قابل‌نوشتن توسط همه، مالک ناشناخته، SUID/SGID و نام حساس با مجوز گسترده را هم جست‌وجو می‌کند.">Some files should only be changed by trusted administrators. The script reviews account files, sudo and SSH settings, cron paths and other sensitive configuration. It also searches a bounded local scope for world-writable files, unknown owners, SUID/SGID files and sensitive filenames with broad permissions.</p><p data-en="A SUID file is not automatically a vulnerability, and a file named secrets may not contain a secret. Review the owner, package and purpose before changing permissions. The tool also checks mount options such as nodev, nosuid and noexec. These need to fit the workload; applying them without testing can break a service." data-fa="وجود SUID خودکار به معنی آسیب‌پذیری نیست و فایلی با نام secrets هم لزوماً رمز ندارد. پیش از تغییر مجوز، مالک، بسته و کاربرد فایل را بررسی کنید. گزینه‌های Mount مثل nodev، nosuid و noexec هم بررسی می‌شوند. این تنظیمات باید با کار سرور سازگار باشند؛ اعمال بدون آزمایش ممکن است سرویس را مختل کند.">A SUID file is not automatically a vulnerability, and a file named secrets may not contain a secret. Review the owner, package and purpose before changing permissions. The tool also checks mount options such as nodev, nosuid and noexec. These need to fit the workload; applying them without testing can break a service.</p><p data-en="Disk and inode use are checked separately. A disk can have free space but run out of inodes when it holds too many small files. Default warning/high/critical thresholds are strictly above 80/90/95 percent. An incomplete search stays inconclusive, and network filesystems are excluded from file scans." data-fa="مصرف فضای دیسک و inode جدا بررسی می‌شود. ممکن است دیسک فضای آزاد داشته باشد، اما به خاطر تعداد زیاد فایل کوچک inode تمام شود. آستانه‌های هشدار، بالا و بحرانی به‌طور پیش‌فرض بزرگ‌تر از ۸۰، ۹۰ و ۹۵ درصد هستند. جست‌وجوی ناقص نتیجه قطعی نمی‌دهد و Filesystem شبکه از اسکن فایل کنار گذاشته می‌شود.">Disk and inode use are checked separately. A disk can have free space but run out of inodes when it holds too many small files. Default warning/high/critical thresholds are strictly above 80/90/95 percent. An incomplete search stays inconclusive, and network filesystems are excluded from file scans.</p></section>
-<section id="kernel" class="article-section"><h2 data-en="A few checks on the Linux kernel" data-fa="بررسی چند تنظیم امنیتی هسته لینوکس">A few checks on the Linux kernel</h2><p data-en="Kernel checks read sysctl values for memory randomization, access to kernel addresses and logs, process tracing, protected links, SYN cookies and network redirects. They also review selected BPF, performance-monitoring and namespace settings, along with boot and module indicators." data-fa="بررسی هسته مقدار sysctl مربوط به تصادفی‌سازی حافظه، دسترسی به آدرس و لاگ هسته، ردیابی Process، حفاظت لینک‌ها، SYN Cookies و Redirect شبکه را می‌خواند. بعضی تنظیمات BPF، پایش Performance، Namespace و نشانه‌های Boot و Module هم بررسی می‌شوند.">Kernel checks read sysctl values for memory randomization, access to kernel addresses and logs, process tracing, protected links, SYN cookies and network redirects. They also review selected BPF, performance-monitoring and namespace settings, along with boot and module indicators.</p><p data-en="Examples of its baseline are kernel.randomize_va_space=2, kernel.dmesg_restrict=1, net.ipv4.tcp_syncookies=1 and fs.suid_dumpable=0. More restrictive ptrace_scope values 2 and 3 are accepted too. These are observations, not settings the script applies." data-fa="برای نمونه، در سیاست پایه ابزار kernel.randomize_va_space=2، kernel.dmesg_restrict=1، net.ipv4.tcp_syncookies=1 و fs.suid_dumpable=0 انتظار می‌رود. مقدار محدودتر ۲ و ۳ برای ptrace_scope هم پذیرفته می‌شود. این‌ها فقط بررسی می‌شوند و اسکریپت آن‌ها را اعمال نمی‌کند.">Examples of its baseline are kernel.randomize_va_space=2, kernel.dmesg_restrict=1, net.ipv4.tcp_syncookies=1 and fs.suid_dumpable=0. More restrictive ptrace_scope values 2 and 3 are accepted too. These are observations, not settings the script applies.</p><p data-en="A router, VPN server or container host may need forwarding or namespaces that a simpler server does not. Read a warning in that context. The auditor never changes sysctls or loads or unloads modules." data-fa="Router، سرور VPN یا میزبان کانتینر ممکن است به Forwarding یا Namespace نیاز داشته باشد که یک سرور ساده لازم ندارد. هشدار را با توجه به همین نقش بخوانید. ممیز sysctl را تغییر نمی‌دهد و Module را Load یا Unload نمی‌کند.">A router, VPN server or container host may need forwarding or namespaces that a simpler server does not. Read a warning in that context. The auditor never changes sysctls or loads or unloads modules.</p></section>
-<section id="logging" class="article-section"><h2 data-en="Will the logs help when something goes wrong?" data-fa="اگر مشکلی پیش بیاید، لاگ کافی داریم؟">Will the logs help when something goes wrong?</h2><p data-en="The script reviews journald, rsyslog, log rotation and permissions on log paths. It looks at auditd and available audit rules, including signs of lost audit events. It also checks local time-synchronization information, since an incorrect clock makes events harder to line up." data-fa="اسکریپت journald، rsyslog، چرخش لاگ و مجوز مسیرهای لاگ را بررسی می‌کند. auditd و قواعد Audit در دسترس، از جمله نشانه از دست رفتن رویداد، هم بررسی می‌شوند. اطلاعات محلی همگام‌سازی ساعت نیز خوانده می‌شود؛ چون ساعت اشتباه کنار هم گذاشتن رویدادها را سخت می‌کند.">The script reviews journald, rsyslog, log rotation and permissions on log paths. It looks at auditd and available audit rules, including signs of lost audit events. It also checks local time-synchronization information, since an incorrect clock makes events harder to line up.</p><p data-en="An active logging service does not prove that logs are retained or reaching your monitoring system. An empty file may be normal after rotation. Check actual events in the central log system and verify how long they are kept. The auditor cannot confirm that delivery on its own." data-fa="فعال‌بودن سرویس لاگ ثابت نمی‌کند داده نگهداری می‌شود یا به سیستم پایش شما می‌رسد. فایل خالی هم ممکن است نتیجه عادی چرخش لاگ باشد. رویداد واقعی را در سامانه مرکزی ببینید و مدت نگهداری را بررسی کنید. ممیز به‌تنهایی این ارسال را تأیید نمی‌کند.">An active logging service does not prove that logs are retained or reaching your monitoring system. An empty file may be normal after rotation. Check actual events in the central log system and verify how long they are kept. The auditor cannot confirm that delivery on its own.</p></section>
-<section id="mac" class="article-section"><h2 data-en="AppArmor and SELinux" data-fa="AppArmor و SELinux">AppArmor and SELinux</h2><p data-en="AppArmor and SELinux add restrictions beyond ordinary file permissions. The auditor expects SELinux on the RHEL family and generally AppArmor elsewhere, while also considering the MAC system it can actually observe. It reads enforcement state and available profile or policy information." data-fa="AppArmor و SELinux محدودیت‌هایی فراتر از مجوز معمولی فایل ایجاد می‌کنند. ممیز برای خانواده RHEL معمولاً SELinux و برای خانواده‌های دیگر AppArmor را انتظار دارد و وضعیت قابل مشاهده واقعی را هم در نظر می‌گیرد. حالت اعمال محدودیت و اطلاعات Policy یا Profile در دسترس خوانده می‌شوند.">AppArmor and SELinux add restrictions beyond ordinary file permissions. The auditor expects SELinux on the RHEL family and generally AppArmor elsewhere, while also considering the MAC system it can actually observe. It reads enforcement state and available profile or policy information.</p><p data-en="Missing inspection tools do not prove the protection is disabled. A profile in complain mode records activity without enforcing that profile’s restrictions. Check which services are actually covered, and review exceptions before enabling a stricter policy on production." data-fa="نبود ابزار بررسی ثابت نمی‌کند حفاظت غیرفعال است. Profile در حالت Complain فعالیت را ثبت می‌کند، اما محدودیت همان Profile را اعمال نمی‌کند. ببینید کدام سرویس واقعاً پوشش دارد و پیش از فعال‌کردن سیاست سخت‌گیرانه‌تر در Production، استثناها را بررسی کنید.">Missing inspection tools do not prove the protection is disabled. A profile in complain mode records activity without enforcing that profile’s restrictions. Check which services are actually covered, and review exceptions before enabling a stricter policy on production.</p></section>
-<section id="containers" class="article-section"><h2 data-en="Docker and Podman checks" data-fa="بررسی Docker و Podman">Docker and Podman checks</h2><p data-en="When an existing local Docker or Podman API is readable, the script samples up to 100 running containers. It checks privileged mode, root users, host networking and namespaces, risky capabilities, writable root filesystems and sensitive host mounts. It also reviews runtime socket permissions and some port and registry indicators." data-fa="اگر API محلی موجود Docker یا Podman خواندنی باشد، اسکریپت تا ۱۰۰ کانتینر Running را نمونه‌برداری می‌کند. حالت Privileged، کاربر root، شبکه و Namespace میزبان، Capability پرخطر، Root Filesystem قابل‌نوشتن و Mount حساس میزبان بررسی می‌شوند. مجوز Runtime Socket و بعضی نشانه‌های پورت و Registry هم بررسی می‌شوند.">When an existing local Docker or Podman API is readable, the script samples up to 100 running containers. It checks privileged mode, root users, host networking and namespaces, risky capabilities, writable root filesystems and sensitive host mounts. It also reviews runtime socket permissions and some port and registry indicators.</p><p data-en="It uses local Unix sockets, not a remote daemon, and does not start a missing Podman service. Missing access is reported rather than treated as a passed check. Container names, environment and command arguments are not collected. Image age is not a vulnerability result; use a separate image scanner for that." data-fa="ابزار از Unix Socket محلی استفاده می‌کند، نه Daemon دوردست، و سرویس Podman ناموجود را راه‌اندازی نمی‌کند. نبود دسترسی گزارش می‌شود و PASS محسوب نمی‌شود. نام کانتینر، Environment و آرگومان فرمان جمع‌آوری نمی‌شوند. سن Image نتیجه آسیب‌پذیری نیست؛ برای آن Scanner جدا لازم است.">It uses local Unix sockets, not a remote daemon, and does not start a missing Podman service. Missing access is reported rather than treated as a passed check. Container names, environment and command arguments are not collected. Image age is not a vulnerability result; use a separate image scanner for that.</p></section>
-<section id="threat" class="article-section"><h2 data-en="Suspicious signs need a second look" data-fa="نشانه مشکوک را باید دوباره بررسی کرد">Suspicious signs need a second look</h2><p data-en="The auditor looks for executables running from temporary paths, deleted-but-running files, shell processes under web-service users and selected mining-process names. These can be useful leads, but legitimate deployments and updates can produce some of the same signs. High CPU use alone is not evidence of a miner." data-fa="ممیز به دنبال Executable در حال اجرا از مسیر موقت، فایل حذف‌شده ولی Running، Shell زیر حساب سرویس Web و نام‌های منتخب Process استخراج رمزارز می‌گردد. این‌ها سرنخ مفیدند، اما Deployment و آپدیت عادی هم ممکن است بعضی از همین نشانه‌ها را ایجاد کنند. مصرف بالای CPU به‌تنهایی مدرک Miner نیست.">The auditor looks for executables running from temporary paths, deleted-but-running files, shell processes under web-service users and selected mining-process names. These can be useful leads, but legitimate deployments and updates can produce some of the same signs. High CPU use alone is not evidence of a miner.</p><p data-en="Standard mode checks selected core package files; deep mode checks a broader package scope. File differences need context, and a compromised host may falsify its own tools or package records. For an incident, bring in independent logs and trusted investigation tools." data-fa="حالت Standard فایل بسته‌های اصلی منتخب و Deep دامنه گسترده‌تری از بسته‌ها را بررسی می‌کند. تفاوت فایل نیاز به توضیح دارد و میزبان آلوده ممکن است ابزار یا اطلاعات بسته خودش را جعل کند. برای بررسی رخداد، از لاگ مستقل و ابزار تحقیق قابل اعتماد کمک بگیرید.">Standard mode checks selected core package files; deep mode checks a broader package scope. File differences need context, and a compromised host may falsify its own tools or package records. For an incident, bring in independent logs and trusted investigation tools.</p><p data-en="Other checks flag selected weak TLS settings, expiry of public .crt files and broad permissions on credential-like filenames. A certificate in the trust store is not necessarily one served by your application. No live TLS test, full CVE scan or backup restore test is performed." data-fa="بررسی‌های دیگر بعضی تنظیمات ضعیف TLS، انقضای فایل عمومی .crt و مجوز گسترده نام‌های شبیه Credential را مشخص می‌کنند. Certificate داخل Trust Store لزوماً همان Certificate ارائه‌شده برنامه نیست. آزمون زنده TLS، اسکن کامل CVE یا آزمایش Restore بکاپ انجام نمی‌شود.">Other checks flag selected weak TLS settings, expiry of public .crt files and broad permissions on credential-like filenames. A certificate in the trust store is not necessarily one served by your application. No live TLS test, full CVE scan or backup restore test is performed.</p></section>
-<section id="read-only" class="article-section"><h2 data-en="The script reports; you decide what to change" data-fa="ابزار گزارش می‌دهد؛ تصمیم تغییر با شماست">The script reports; you decide what to change</h2><p data-en="This is an audit script, so it leaves server settings alone. It does not upgrade packages, refresh repositories, change firewall rules or file permissions, restart services or write sysctls. The suggested actions in the report are for you to review and carry out separately." data-fa="این اسکریپت برای ممیزی است و تنظیمات سرور را دست نمی‌زند. بسته را ارتقا نمی‌دهد، مخزن را تازه نمی‌کند، Rule فایروال و مجوز فایل را تغییر نمی‌دهد، سرویس را Restart نمی‌کند و sysctl نمی‌نویسد. اقدام‌های پیشنهادی گزارش را شما باید بررسی کنید و جدا انجام دهید.">This is an audit script, so it leaves server settings alone. It does not upgrade packages, refresh repositories, change firewall rules or file permissions, restart services or write sysctls. The suggested actions in the report are for you to review and carry out separately.</p><p data-en="It does create private temporary files and the reports you request. Temporary files are cleaned up on exit; exported reports remain. Read-only does not mean zero disk activity, and a deep scan can still put load on storage. Choose a quiet time for heavier runs." data-fa="ابزار فایل موقت خصوصی و گزارش درخواستی شما را می‌سازد. فایل موقت هنگام خروج پاک می‌شود و گزارش خروجی باقی می‌ماند. فقط‌خواندنی بودن به معنی صفر فعالیت دیسک نیست و اسکن Deep همچنان می‌تواند به Storage فشار بیاورد. برای اجرای سنگین‌تر زمان کم‌بار را انتخاب کنید.">It does create private temporary files and the reports you request. Temporary files are cleaned up on exit; exported reports remain. Read-only does not mean zero disk activity, and a deep scan can still put load on storage. Choose a quiet time for heavier runs.</p><p data-en="Keep reports in private storage. They may contain account names, paths and network information even though password hashes and many command details are withheld." data-fa="گزارش را در فضای خصوصی نگه دارید. با اینکه Hash رمز و بسیاری از جزئیات فرمان نمایش داده نمی‌شوند، گزارش ممکن است نام حساب، مسیر و اطلاعات شبکه داشته باشد.">Keep reports in private storage. They may contain account names, paths and network information even though password hashes and many command details are withheld.</p></section>
-<section id="validation" class="article-section"><h2 data-en="What has been tested?" data-fa="چه چیزهایی آزمایش شده‌اند؟">What has been tested?</h2><p data-en="VALIDATION.md records a passing Bash syntax check and a self-test with 22 distribution-detection examples, scoring, status labels and report checks. You can run the two commands below yourself before the first audit." data-fa="VALIDATION.md موفقیت بررسی Syntax در Bash و Self-test شامل ۲۲ نمونه تشخیص توزیع، امتیازدهی، وضعیت‌ها و بررسی گزارش را ثبت کرده است. قبل از اولین ممیزی می‌توانید دو دستور زیر را خودتان اجرا کنید.">VALIDATION.md records a passing Bash syntax check and a self-test with 22 distribution-detection examples, scoring, status labels and report checks. You can run the two commands below yourself before the first audit.</p><div class="article-code"><div class="article-code-header"><span class="article-code-label">bash</span><button type="button" class="article-copy-button">Copy</button></div><pre dir="ltr"><code class="language-bash"><span class="code-token-command">bash</span> -n security-audit.sh
-<span class="code-token-command">./security-audit.sh</span> <span class="code-token-option">--self-test</span></code></pre></div><p data-en="The document also describes an earlier Ubuntu 24.04 container run and a historical 67-test suite. The original reports and that suite are not in the supplied package. ShellCheck, native non-root Linux integration and full distribution testing have not all been verified. A self-test passing is useful, but it does not prove every host check will work on your server." data-fa="سند از اجرای قبلی در کانتینر Ubuntu 24.04 و یک مجموعه ۶۷ تست تاریخی هم می‌گوید. گزارش‌های اصلی و آن مجموعه تست در بسته تحویلی نیستند. ShellCheck، آزمون واقعی Linux بدون root و بررسی کامل توزیع‌ها همگی تأیید نشده‌اند. موفقیت Self-test مفید است، اما ثابت نمی‌کند همه بررسی‌ها روی سرور شما کار می‌کنند.">The document also describes an earlier Ubuntu 24.04 container run and a historical 67-test suite. The original reports and that suite are not in the supplied package. ShellCheck, native non-root Linux integration and full distribution testing have not all been verified. A self-test passing is useful, but it does not prove every host check will work on your server.</p></section>
-<section id="limitations" class="article-section"><h2 data-en="Using the report in daily operations" data-fa="استفاده از گزارش در کار روزمره">Using the report in daily operations</h2><p data-en="Start with a quick run on a test server. For the regular review, save a standard report and note the version, profile and access level. Follow up on high-risk findings first, then work through unknown results. Some need sudo, another inspection tool or information from outside the host." data-fa="از یک اجرای Quick روی سرور آزمایشی شروع کنید. برای بازبینی معمول، گزارش Standard بگیرید و نسخه، پروفایل و سطح دسترسی را ثبت کنید. اول یافته‌های پرریسک را پیگیری کنید و بعد سراغ نتایج نامشخص بروید. بعضی از آن‌ها sudo، ابزار بررسی دیگر یا اطلاعات بیرون میزبان می‌خواهند.">Start with a quick run on a test server. For the regular review, save a standard report and note the version, profile and access level. Follow up on high-risk findings first, then work through unknown results. Some need sudo, another inspection tool or information from outside the host.</p><p data-en="After approved changes, rerun with the same settings and compare findings and coverage. Do not chase the score alone. This tool does not replace penetration testing, a current vulnerability scan, external access tests or a real backup restore. It gives you a repeatable local checklist to work from." data-fa="بعد از تغییر تأییدشده، با تنظیم یکسان دوباره اجرا کنید و یافته‌ها و پوشش را مقایسه کنید. فقط دنبال بالابردن امتیاز نباشید. این ابزار جای Penetration Test، اسکن آسیب‌پذیری به‌روز، آزمون دسترسی بیرونی یا Restore واقعی بکاپ را نمی‌گیرد. یک فهرست بررسی محلی و تکرارپذیر به شما می‌دهد تا کار را از آن شروع کنید.">After approved changes, rerun with the same settings and compare findings and coverage. Do not chase the score alone. This tool does not replace penetration testing, a current vulnerability scan, external access tests or a real backup restore. It gives you a repeatable local checklist to work from.</p></section>
-<section id="related-reading" class="article-section"><h2 data-en="Related guides" data-fa="راهنماهای مرتبط">Related guides</h2><ul><li><a href="/articles/enable-ssh-linux-complete-guide"><span data-en="SSH setup and access checks" data-fa="راه‌اندازی SSH و بررسی دسترسی">SSH setup and access checks</span></a></li><li><a href="/articles/linux-security-account-access-management"><span data-en="Linux accounts and sudo access" data-fa="حساب‌های Linux و دسترسی sudo">Linux accounts and sudo access</span></a></li><li><a href="/articles/ubuntu-date-time-settings"><span data-en="Time synchronization on Ubuntu" data-fa="همگام‌سازی ساعت در Ubuntu">Time synchronization on Ubuntu</span></a></li><li><a href="/articles/nginx-installation-configuration-ubuntu"><span data-en="NGINX installation and configuration" data-fa="نصب و تنظیم NGINX">NGINX installation and configuration</span></a></li></ul></section>
-<section id="faq" class="article-section"><h2 data-en="Common questions" data-fa="پرسش‌های رایج">Common questions</h2><div class="article-faq-item"><h3 data-en="Does the auditor change server configuration?" data-fa="آیا ابزار تنظیمات سرور را تغییر می‌دهد؟">Does the auditor change server configuration?</h3><p data-en="It creates private temporary files and requested reports. It does not upgrade packages, change firewall rules or permissions, restart services, or write sysctls." data-fa="فقط فایل‌های موقت خصوصی و گزارش‌های درخواستی ساخته می‌شوند. ابزار بسته‌ها را ارتقا نمی‌دهد، فایروال و مجوزها را تغییر نمی‌دهد، سرویس را Restart نمی‌کند و sysctl نمی‌نویسد.">It creates private temporary files and requested reports. It does not upgrade packages, change firewall rules or permissions, restart services, or write sysctls.</p></div><div class="article-faq-item"><h3 data-en="Does a score of 100 mean the server cannot be compromised?" data-fa="آیا امتیاز ۱۰۰ یعنی سرور قابل نفوذ نیست؟">Does a score of 100 mean the server cannot be compromised?</h3><p data-en="No. Points describe observed controls within the selected scope. Unknown evidence reduces coverage, and external exposure, CVEs and recovery need separate validation." data-fa="خیر. امتیاز وضعیت کنترل‌های مشاهده‌شده در محدوده منتخب را نشان می‌دهد. شواهد نامشخص پوشش را کم می‌کنند و دسترسی بیرونی، CVE و بازیابی بررسی مستقل می‌خواهند.">No. Points describe observed controls within the selected scope. Unknown evidence reduces coverage, and external exposure, CVEs and recovery need separate validation.</p></div><div class="article-faq-item"><h3 data-en="Is this a certified CIS Benchmark assessment?" data-fa="آیا این گزارش تأییدیه CIS Benchmark است؟">Is this a certified CIS Benchmark assessment?</h3><p data-en="No. The profiles select locally implemented CIS-aligned controls. Official benchmark section mappings and certification are not claimed." data-fa="خیر. Profileها فقط کنترل‌های محلی پیاده‌سازی‌شده و همسو با CIS را انتخاب می‌کنند. نگاشت رسمی شماره بندها و گواهی انطباق ادعا نمی‌شود.">No. The profiles select locally implemented CIS-aligned controls. Official benchmark section mappings and certification are not claimed.</p></div></section>
-<section id="conclusion" class="article-section"><h2 data-en="A practical starting point" data-fa="یک نقطه شروع کاربردی">A practical starting point</h2><p data-en="The value of this script is having the common checks in one place. Run it, read the findings and confirm what matters for your server. For administrators, DevOps and security teams, that makes a regular review easier to repeat and easier to discuss. The next step is the same as with any audit: turn the useful findings into work you can verify." data-fa="ارزش این اسکریپت در این است که بررسی‌های معمول را یک‌جا جمع می‌کند. اجرا کنید، یافته‌ها را بخوانید و موارد مهم برای سرور خودتان را تأیید کنید. برای مدیر سرور و تیم DevOps یا امنیت، این کار بازبینی دوره‌ای و گفت‌وگو درباره مشکل‌ها را ساده‌تر می‌کند. قدم بعدی، تبدیل یافته مفید به کاری است که بتوان نتیجه‌اش را بررسی کرد.">The value of this script is having the common checks in one place. Run it, read the findings and confirm what matters for your server. For administrators, DevOps and security teams, that makes a regular review easier to repeat and easier to discuss. The next step is the same as with any audit: turn the useful findings into work you can verify.</p></section>
-</article></main></body></html>
+<span class="code-token-command">./security-audit.sh</span> <span class="code-token-option">--demo</span> <span class="code-token-option">--no-color</span></code></pre>
+          </div>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th data-en="Option" data-fa="گزینه">Option</th>
+                  <th data-en="Behavior" data-fa="رفتار">Behavior</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>--quick | --standard | --deep</code></td>
+                  <td
+                    data-en="Cost profile; standard default. Deep is not unlimited."
+                    data-fa="حجم بررسی؛ پیش‌فرض Standard است و Deep نامحدود نیست."
+                  >
+                    Cost profile; standard default. Deep is not unlimited.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--full | --summary</code></td>
+                  <td
+                    data-en="Terminal detail; summary default."
+                    data-fa="جزئیات ترمینال؛ پیش‌فرض Summary است."
+                  >
+                    Terminal detail; summary default.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--profile cis-l1|cis-l2|enterprise|full</code></td>
+                  <td
+                    data-en="Policy selection; enterprise default excludes Level 2 controls. cis-l2 selects Level 1 and Level 2."
+                    data-fa="انتخاب سیاست؛ enterprise پیش‌فرض کنترل Level 2 را کنار می‌گذارد. cis-l2 شامل Level 1 و Level 2 است."
+                  >
+                    Policy selection; enterprise default excludes Level 2
+                    controls. cis-l2 selects Level 1 and Level 2.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--no-color | --color auto|always|never</code></td>
+                  <td
+                    data-en="Color policy; auto default."
+                    data-fa="سیاست رنگ؛ پیش‌فرض auto است."
+                  >
+                    Color policy; auto default.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--export-json FILE</code></td>
+                  <td
+                    data-en="Create a new JSON report; existing targets are refused."
+                    data-fa="گزارش JSON جدید؛ مقصد موجود پذیرفته نمی‌شود."
+                  >
+                    Create a new JSON report; existing targets are refused.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--export-html [FILE]</code></td>
+                  <td
+                    data-en="Create standalone HTML; omitting FILE selects a new report directory if none was specified."
+                    data-fa="HTML مستقل؛ بدون FILE در صورت نبود مسیر، پوشه گزارش جدید انتخاب می‌شود."
+                  >
+                    Create standalone HTML; omitting FILE selects a new report
+                    directory if none was specified.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--output-dir ABSOLUTE_PATH</code></td>
+                  <td
+                    data-en="Create a new private directory with report.json, report.html and detailed report.txt."
+                    data-fa="ساخت پوشه خصوصی جدید برای report.json، report.html و report.txt کامل."
+                  >
+                    Create a new private directory with report.json, report.html
+                    and detailed report.txt.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--scan-seconds N</code></td>
+                  <td
+                    data-en="Per file scan timeout: 5..300; default 30."
+                    data-fa="Timeout هر اسکن فایل: ۵ تا ۳۰۰؛ پیش‌فرض ۳۰ ثانیه."
+                  >
+                    Per file scan timeout: 5..300; default 30.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--disk-thresholds WARN,HIGH,CRIT</code></td>
+                  <td
+                    data-en="Increasing values 0..100, default 80,90,95; strictly greater comparisons."
+                    data-fa="اعداد صعودی بین صفر و ۱۰۰؛ پیش‌فرض 80,90,95؛ مقایسه با بزرگ‌ترِ اکید است."
+                  >
+                    Increasing values 0..100, default 80,90,95; strictly greater
+                    comparisons.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--critical-caps ONE,TWO,THREE</code></td>
+                  <td
+                    data-en="Nonincreasing values 0..100; default 85,75,65 for 1/2/3+ critical findings."
+                    data-fa="اعداد غیرصعودی بین صفر و ۱۰۰؛ پیش‌فرض 85,75,65 برای ۱، ۲ و حداقل ۳ یافته Critical."
+                  >
+                    Nonincreasing values 0..100; default 85,75,65 for 1/2/3+
+                    critical findings.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--ssh-context SPEC</code></td>
+                  <td
+                    data-en="Supply sshd -T -C context."
+                    data-fa="ارسال Context به sshd -T -C."
+                  >
+                    Supply sshd -T -C context.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--sshd-config ABSOLUTE_PATH</code></td>
+                  <td
+                    data-en="Select an existing daemon configuration file."
+                    data-fa="انتخاب فایل موجود تنظیمات Daemon با مسیر مطلق."
+                  >
+                    Select an existing daemon configuration file.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--self-test</code></td>
+                  <td
+                    data-en="Run isolated local fixtures."
+                    data-fa="اجرای Fixtureهای محلی جدا از ممیزی میزبان."
+                  >
+                    Run isolated local fixtures.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--demo</code></td>
+                  <td
+                    data-en="Generate explicitly labeled synthetic findings."
+                    data-fa="ساخت یافته‌های مصنوعی با برچسب روشن Demo."
+                  >
+                    Generate explicitly labeled synthetic findings.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--version</code></td>
+                  <td
+                    data-en="Print version and exit."
+                    data-fa="نمایش نسخه و خروج."
+                  >
+                    Print version and exit.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--help | -h</code></td>
+                  <td
+                    data-en="Print help and exit."
+                    data-fa="نمایش راهنما و خروج."
+                  >
+                    Print help and exit.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p
+            data-en="Use a new name for each report. The tool refuses to overwrite an existing file or directory. Parent directories must already exist. For sudo runs, a fresh path under /root is a straightforward choice because report parents must be trusted, root-owned and free of symlinks. --export-html without a filename creates a report directory under the current working directory if no output directory was supplied."
+            data-fa="برای هر گزارش نام تازه انتخاب کنید. ابزار فایل یا پوشه موجود را بازنویسی نمی‌کند و پوشه والد باید از قبل وجود داشته باشد. در اجرای sudo، مسیر تازه زیر /root انتخاب ساده‌ای است؛ چون والدهای گزارش باید متعلق به root، قابل اعتماد و بدون لینک نمادین باشند. --export-html بدون نام فایل، اگر پوشه خروجی مشخص نشده باشد، زیر پوشه جاری یک پوشه گزارش می‌سازد."
+          >
+            Use a new name for each report. The tool refuses to overwrite an
+            existing file or directory. Parent directories must already exist.
+            For sudo runs, a fresh path under /root is a straightforward choice
+            because report parents must be trusted, root-owned and free of
+            symlinks. --export-html without a filename creates a report
+            directory under the current working directory if no output directory
+            was supplied.
+          </p>
+          <p
+            data-en="If you automate the run, read the exit code: 0 means no HIGH/CRITICAL findings with at least 80% coverage; 1 means high or critical findings; 2 means incomplete coverage; 3 means a usage or runtime error. Codes 130 and 143 mean interruption. Code 1 is a reported risk, not a script crash."
+            data-fa="اگر اجرا را خودکار می‌کنید، کد خروج را بخوانید: صفر یعنی یافته HIGH/CRITICAL وجود ندارد و پوشش حداقل ۸۰ درصد است؛ ۱ یعنی یافته بالا یا بحرانی؛ ۲ یعنی پوشش ناقص؛ ۳ یعنی خطای استفاده یا اجرا. کدهای ۱۳۰ و ۱۴۳ به وقفه مربوط‌اند. خروج ۱ یعنی ریسک گزارش شده، نه اینکه اسکریپت از کار افتاده باشد."
+          >
+            If you automate the run, read the exit code: 0 means no
+            HIGH/CRITICAL findings with at least 80% coverage; 1 means high or
+            critical findings; 2 means incomplete coverage; 3 means a usage or
+            runtime error. Codes 130 and 143 mean interruption. Code 1 is a
+            reported risk, not a script crash.
+          </p>
+        </section>
+        <section id="dashboard" class="article-section">
+          <h2 data-en="Reading the dashboard" data-fa="خواندن داشبورد">
+            Reading the dashboard
+          </h2>
+          <p
+            data-en="The first part identifies the machine: hostname, distribution, kernel, IP, uptime and whether the run has root access. Below it are the score, coverage and risk counts. Each category has its own score and coverage, so you can see where the gaps are."
+            data-fa="ابتدای گزارش مشخصات ماشین را می‌بینید: نام میزبان، توزیع، هسته، IP، مدت روشن‌بودن و اینکه اجرا دسترسی root دارد یا نه. پایین آن امتیاز، پوشش بررسی و تعداد ریسک‌ها آمده است. هر دسته هم امتیاز و پوشش خودش را دارد تا مشخص شود کجا نیاز به بررسی بیشتر است."
+          >
+            The first part identifies the machine: hostname, distribution,
+            kernel, IP, uptime and whether the run has root access. Below it are
+            the score, coverage and risk counts. Each category has its own score
+            and coverage, so you can see where the gaps are.
+          </p>
+          <p
+            data-en="Start with the priority findings. Summary mode shows up to eight, ordered from critical down to low, plus up to five unknown checks. Read the evidence and suggested action before making a change. Disk, inode and memory figures help spot capacity problems. --full shows all findings."
+            data-fa="از یافته‌های اولویت‌دار شروع کنید. حالت خلاصه تا هشت یافته را از بحرانی تا کم‌خطر و تا پنج مورد نامشخص نشان می‌دهد. پیش از هر تغییر، شواهد و اقدام پیشنهادی را بخوانید. عددهای دیسک، inode و حافظه هم کمک می‌کنند مشکل ظرفیت را ببینید. با --full همه یافته‌ها نمایش داده می‌شوند."
+          >
+            Start with the priority findings. Summary mode shows up to eight,
+            ordered from critical down to low, plus up to five unknown checks.
+            Read the evidence and suggested action before making a change. Disk,
+            inode and memory figures help spot capacity problems. --full shows
+            all findings.
+          </p>
+          <figure>
+            <img
+              class="img-fluid"
+              src="/assets/img/portfolio/linux-8.png"
+              loading="lazy"
+              alt="Linux Security Auditor dashboard: scores and priority findings | داشبورد بررسی امنیت لینوکس: امتیازها و یافته‌های اولویت‌دار"
+            />
+            <p
+              data-en="An illustration of the dashboard. Your server findings come from your own run; --demo uses sample data."
+              data-fa="تصویر برای معرفی داشبورد است. نتیجه سرور شما از اجرای خودتان به دست می‌آید؛ --demo داده نمونه می‌سازد."
+            >
+              An illustration of the dashboard. Your server findings come from
+              your own run; --demo uses sample data.
+            </p>
+          </figure>
+          <p
+            data-en="JSON is useful for processing findings in other tools. HTML is a standalone report you can open in a browser, with no external assets. --output-dir saves JSON, HTML and a full text report together. Reports contain server information, so keep them private."
+            data-fa="JSON برای پردازش یافته‌ها در ابزارهای دیگر مناسب است. HTML یک گزارش مستقل است که بدون فایل خارجی در مرورگر باز می‌شود. --output-dir نسخه JSON، HTML و متن کامل را کنار هم ذخیره می‌کند. این گزارش‌ها اطلاعات سرور دارند؛ آن‌ها را عمومی نکنید."
+          >
+            JSON is useful for processing findings in other tools. HTML is a
+            standalone report you can open in a browser, with no external
+            assets. --output-dir saves JSON, HTML and a full text report
+            together. Reports contain server information, so keep them private.
+          </p>
+        </section>
+        <section id="patching" class="article-section">
+          <h2
+            data-en="Are updates waiting?"
+            data-fa="آیا آپدیتی در انتظار نصب است؟"
+          >
+            Are updates waiting?
+          </h2>
+          <p
+            data-en="On Ubuntu and Debian, the script simulates an APT upgrade using the package information already on disk. It counts pending updates, looks for security-update candidates, checks package holds and incomplete package operations, and reviews some automatic-update settings. It also looks for repository trust bypasses and update-log errors."
+            data-fa="روی Ubuntu و Debian، اسکریپت با اطلاعات بسته‌های موجود روی دیسک، ارتقای APT را شبیه‌سازی می‌کند. آپدیت‌های منتظر و کاندیدهای امنیتی، بسته‌های Hold شده و عملیات ناقص بسته را بررسی می‌کند و بعضی تنظیمات آپدیت خودکار را می‌خواند. دورزدن اعتماد مخزن و خطاهای لاگ آپدیت هم بررسی می‌شوند."
+          >
+            On Ubuntu and Debian, the script simulates an APT upgrade using the
+            package information already on disk. It counts pending updates,
+            looks for security-update candidates, checks package holds and
+            incomplete package operations, and reviews some automatic-update
+            settings. It also looks for repository trust bypasses and update-log
+            errors.
+          </p>
+          <p
+            data-en="The important limit is freshness. The auditor does not refresh repository data. An old or incomplete cache can hide available updates. Even a recent APT index does not prove every security repository is up to date. An empty security-update result is not a clean bill of health."
+            data-fa="نکته اصلی، تازگی اطلاعات است. ممیز اطلاعات مخزن را تازه نمی‌کند. Cache قدیمی یا ناقص ممکن است آپدیت موجود را نشان ندهد. حتی Index تازه APT هم ثابت نمی‌کند همه مخازن امنیتی به‌روز هستند. خالی‌بودن نتیجه آپدیت امنیتی را تأیید کامل وضعیت سرور ندانید."
+          >
+            The important limit is freshness. The auditor does not refresh
+            repository data. An old or incomplete cache can hide available
+            updates. Even a recent APT index does not prove every security
+            repository is up to date. An empty security-update result is not a
+            clean bill of health.
+          </p>
+          <p
+            data-en="The RHEL path uses cached DNF/YUM queries. SUSE queries run only when a read-only bwrap environment is available; otherwise they remain unknown. Reboot hints are handled differently by distribution. The script records the running kernel, and on Debian can compare it with installed packages of the same kernel flavor. It does not guess across different kernel families or claim a complete CVE scan."
+            data-fa="مسیر RHEL از Queryهای Cache شده DNF/YUM استفاده می‌کند. در SUSE، Query فقط با محیط فقط‌خواندنی bwrap اجرا می‌شود؛ وگرنه نتیجه نامشخص می‌ماند. نشانه نیاز به Reboot هم بر اساس توزیع فرق دارد. ابزار هسته جاری را ثبت می‌کند و در Debian می‌تواند آن را با بسته نصب‌شده از همان نوع هسته مقایسه کند. بین خانواده‌های متفاوت هسته حدس نمی‌زند و بررسی کامل CVE انجام نمی‌دهد."
+          >
+            The RHEL path uses cached DNF/YUM queries. SUSE queries run only
+            when a read-only bwrap environment is available; otherwise they
+            remain unknown. Reboot hints are handled differently by
+            distribution. The script records the running kernel, and on Debian
+            can compare it with installed packages of the same kernel flavor. It
+            does not guess across different kernel families or claim a complete
+            CVE scan.
+          </p>
+        </section>
+        <section id="users" class="article-section">
+          <h2
+            data-en="Old accounts and password settings"
+            data-fa="حساب‌های قدیمی و تنظیمات رمز"
+          >
+            Old accounts and password settings
+          </h2>
+          <p
+            data-en="The account checks look for extra UID 0 users, duplicate IDs, service accounts with interactive shells and empty password fields. They also review password aging and identify older or unrecognized password-hash formats. Hash values are not printed or cracked."
+            data-fa="بررسی حساب‌ها به دنبال کاربر اضافی با UID صفر، شناسه تکراری، حساب سرویس با Shell تعاملی و فیلد رمز خالی می‌گردد. عمر رمز و قالب قدیمی یا ناشناخته Hash هم بررسی می‌شوند. مقدار Hash چاپ یا شکسته نمی‌شود."
+          >
+            The account checks look for extra UID 0 users, duplicate IDs,
+            service accounts with interactive shells and empty password fields.
+            They also review password aging and identify older or unrecognized
+            password-hash formats. Hash values are not printed or cracked.
+          </p>
+          <p
+            data-en="Home and .ssh permissions, readable shell history and files such as .netrc or .rhosts can point to access that needs a closer look. Locking a password does not revoke an SSH key. If someone leaves the team, review every way they can log in."
+            data-fa="مجوز Home و .ssh، History قابل‌خواندن و فایل‌هایی مثل .netrc یا .rhosts ممکن است دسترسی نیازمند بازبینی را نشان دهند. قفل‌کردن رمز، کلید SSH را لغو نمی‌کند. وقتی کسی از تیم خارج می‌شود، تمام راه‌های ورود او را بررسی کنید."
+          >
+            Home and .ssh permissions, readable shell history and files such as
+            .netrc or .rhosts can point to access that needs a closer look.
+            Locking a password does not revoke an SSH key. If someone leaves the
+            team, review every way they can log in.
+          </p>
+          <p
+            data-en="PAM and sudo checks look at password-quality and lockout settings, sudoers syntax, passwordless rules and broad command permissions. Some results are only clues because includes and defaults can change the effective policy. Confirm what each administrative account can actually do before editing its permissions."
+            data-fa="بررسی PAM و sudo سراغ کیفیت رمز، محدودیت تلاش ورود، صحت sudoers، قواعد بدون رمز و مجوز گسترده فرمان‌ها می‌رود. بعضی نتایج فقط نشانه‌اند، چون Include و تنظیم پیش‌فرض می‌توانند سیاست واقعی را عوض کنند. پیش از تغییر مجوز، ببینید هر حساب مدیریتی در عمل چه کاری می‌تواند انجام دهد."
+          >
+            PAM and sudo checks look at password-quality and lockout settings,
+            sudoers syntax, passwordless rules and broad command permissions.
+            Some results are only clues because includes and defaults can change
+            the effective policy. Confirm what each administrative account can
+            actually do before editing its permissions.
+          </p>
+        </section>
+        <section id="ssh" class="article-section">
+          <h2
+            data-en="What SSH actually allows"
+            data-fa="SSH در عمل چه دسترسی‌ای می‌دهد؟"
+          >
+            What SSH actually allows
+          </h2>
+          <p
+            data-en="Reading one sshd_config file is not always enough. Other files, defaults and Match rules may change the result. The auditor uses sshd -T to ask the daemon for its effective configuration. It checks root login, passwords, empty passwords, public keys, forwarding, authentication attempts and selected cryptographic settings."
+            data-fa="خواندن یک فایل sshd_config همیشه کافی نیست. فایل‌های دیگر، پیش‌فرض‌ها و قواعد Match ممکن است نتیجه را تغییر دهند. ممیز با sshd -T تنظیم مؤثر را از خود Daemon می‌گیرد. ورود root، رمز، رمز خالی، کلید عمومی، Forwarding، تعداد تلاش ورود و بعضی تنظیمات رمزنگاری بررسی می‌شوند."
+          >
+            Reading one sshd_config file is not always enough. Other files,
+            defaults and Match rules may change the result. The auditor uses
+            sshd -T to ask the daemon for its effective configuration. It checks
+            root login, passwords, empty passwords, public keys, forwarding,
+            authentication attempts and selected cryptographic settings.
+          </p>
+          <p
+            data-en="If you use Match rules, supply the real user and connection context. Without it, the tool reports a gap in SSH coverage. The addresses below are examples; replace them with your own."
+            data-fa="اگر از قواعد Match استفاده می‌کنید، کاربر و شرایط واقعی اتصال را مشخص کنید. بدون آن، ابزار بخشی از پوشش SSH را نامشخص گزارش می‌کند. آدرس‌های زیر نمونه‌اند و باید با اطلاعات خودتان جایگزین شوند."
+          >
+            If you use Match rules, supply the real user and connection context.
+            Without it, the tool reports a gap in SSH coverage. The addresses
+            below are examples; replace them with your own.
+          </p>
+          <div class="article-code">
+            <div class="article-code-header">
+              <span class="article-code-label">bash</span
+              ><button type="button" class="article-copy-button">Copy</button>
+            </div>
+            <pre
+              dir="ltr"
+            ><code class="language-bash"><span class="code-token-command">sudo</span> <span class="code-token-command">./security-audit.sh</span> <span class="code-token-option">--ssh-context</span> <span class="code-token-string">&#039;user=admin,host=admin.example,addr=192.0.2.10&#039;</span> \
+  <span class="code-token-option">--sshd-config</span> /etc/ssh/sshd_config <span class="code-token-option">--full</span></code></pre>
+          </div>
+          <p
+            data-en="Check more than one context when different users have different rules. A warning is a reason to review the policy, not to disable settings blindly. Keyboard-interactive, for example, may be part of MFA. Test a second administrative connection before applying any SSH changes yourself."
+            data-fa="وقتی کاربران قواعد متفاوت دارند، بیش از یک Context را بررسی کنید. هشدار دلیل بازبینی سیاست است، نه غیرفعال‌کردن بی‌دلیل تنظیمات. مثلاً Keyboard Interactive ممکن است بخشی از MFA باشد. اگر خودتان تنظیم SSH را تغییر می‌دهید، پیش از بستن نشست فعلی یک اتصال مدیریتی دیگر را آزمایش کنید."
+          >
+            Check more than one context when different users have different
+            rules. A warning is a reason to review the policy, not to disable
+            settings blindly. Keyboard-interactive, for example, may be part of
+            MFA. Test a second administrative connection before applying any SSH
+            changes yourself.
+          </p>
+        </section>
+        <section id="network" class="article-section">
+          <h2
+            data-en="Open ports and firewall rules"
+            data-fa="پورت‌های باز و قواعد فایروال"
+          >
+            Open ports and firewall rules
+          </h2>
+          <p
+            data-en="The script reads local UFW, nftables and iptables information when it can. It also lists listening TCP/UDP ports, connections, interfaces and routes. It highlights selected legacy-service and database ports for review. Port numbers are clues, though; a service may use a custom port."
+            data-fa="اسکریپت در صورت دسترسی، اطلاعات محلی UFW، nftables و iptables را می‌خواند. پورت‌های TCP/UDP شنونده، اتصال‌ها، رابط‌ها و مسیرهای شبکه را هم ثبت می‌کند. بعضی پورت‌های سرویس قدیمی یا دیتابیس را برای بازبینی مشخص می‌کند. شماره پورت فقط یک نشانه است؛ سرویس ممکن است پورت سفارشی داشته باشد."
+          >
+            The script reads local UFW, nftables and iptables information when
+            it can. It also lists listening TCP/UDP ports, connections,
+            interfaces and routes. It highlights selected legacy-service and
+            database ports for review. Port numbers are clues, though; a service
+            may use a custom port.
+          </p>
+          <p
+            data-en="A listener on 0.0.0.0 or :: is not automatically reachable from the internet. NAT, cloud firewalls, upstream firewalls and routing all affect reachability. The auditor does not probe from outside the server, and it cannot prove that IPv4 and IPv6 have equivalent protection. Check the real access path separately."
+            data-fa="سرویسی که روی 0.0.0.0 یا :: گوش می‌دهد، لزوماً از اینترنت قابل دسترسی نیست. NAT، فایروال ابری، فایروال بالادستی و Routing روی دسترسی اثر دارند. ممیز از بیرون سرور Probe نمی‌زند و نمی‌تواند یکسان‌بودن حفاظت IPv4 و IPv6 را ثابت کند. مسیر واقعی دسترسی را جدا آزمایش کنید."
+          >
+            A listener on 0.0.0.0 or :: is not automatically reachable from the
+            internet. NAT, cloud firewalls, upstream firewalls and routing all
+            affect reachability. The auditor does not probe from outside the
+            server, and it cannot prove that IPv4 and IPv6 have equivalent
+            protection. Check the real access path separately.
+          </p>
+          <p
+            data-en="Likewise, having firewall rules does not prove they block the intended traffic. Rule order, jumps and container networking matter. Use the report to find what needs review, then verify the complete policy."
+            data-fa="وجود Rule هم به‌تنهایی ثابت نمی‌کند ترافیک موردنظر مسدود است. ترتیب Rule، مسیر Chainها و شبکه کانتینر اهمیت دارد. از گزارش برای پیداکردن موارد نیازمند بازبینی استفاده کنید و بعد کل سیاست را بررسی کنید."
+          >
+            Likewise, having firewall rules does not prove they block the
+            intended traffic. Rule order, jumps and container networking matter.
+            Use the report to find what needs review, then verify the complete
+            policy.
+          </p>
+        </section>
+        <section id="persistence" class="article-section">
+          <h2
+            data-en="Scheduled jobs and startup commands"
+            data-fa="کارهای زمان‌بندی‌شده و فرمان‌های شروع سیستم"
+          >
+            Scheduled jobs and startup commands
+          </h2>
+          <p
+            data-en="Cron jobs, systemd timers and startup files are useful, but they can also keep an unwanted command running after a reboot. The auditor checks permissions on these paths and looks for patterns such as downloading a script and piping it into a shell, running from /tmp, or unusual startup commands."
+            data-fa="Cron، Timerهای systemd و فایل‌های شروع سیستم کاربردی‌اند، اما می‌توانند یک فرمان ناخواسته را بعد از Reboot هم زنده نگه دارند. ممیز مجوز این مسیرها را بررسی می‌کند و به دنبال الگوهایی مثل دانلود Script و فرستادن مستقیم به Shell، اجرا از /tmp یا فرمان غیرعادی شروع سیستم می‌گردد."
+          >
+            Cron jobs, systemd timers and startup files are useful, but they can
+            also keep an unwanted command running after a reboot. The auditor
+            checks permissions on these paths and looks for patterns such as
+            downloading a script and piping it into a shell, running from /tmp,
+            or unusual startup commands.
+          </p>
+          <p
+            data-en="It records running services, timers and failed units, and samples up to 30 services for their user and unit-file permissions. It does not run any discovered job or print cron command bodies. A recent file change or a strange-looking job is not proof of an attack. Compare it with deployments and approved changes."
+            data-fa="سرویس‌های Running، Timerها و Unitهای ناموفق ثبت می‌شوند و تا ۳۰ سرویس از نظر کاربر و مجوز فایل Unit نمونه‌برداری می‌شوند. ابزار هیچ Job کشف‌شده‌ای را اجرا نمی‌کند و متن فرمان Cron را در گزارش نمی‌آورد. تغییر تازه فایل یا Job با ظاهر عجیب، مدرک حمله نیست. آن را با Deployment و تغییرات تأییدشده مقایسه کنید."
+          >
+            It records running services, timers and failed units, and samples up
+            to 30 services for their user and unit-file permissions. It does not
+            run any discovered job or print cron command bodies. A recent file
+            change or a strange-looking job is not proof of an attack. Compare
+            it with deployments and approved changes.
+          </p>
+        </section>
+        <section id="filesystem" class="article-section">
+          <h2
+            data-en="File access and disk space"
+            data-fa="دسترسی فایل‌ها و فضای دیسک"
+          >
+            File access and disk space
+          </h2>
+          <p
+            data-en="Some files should only be changed by trusted administrators. The script reviews account files, sudo and SSH settings, cron paths and other sensitive configuration. It also searches a bounded local scope for world-writable files, unknown owners, SUID/SGID files and sensitive filenames with broad permissions."
+            data-fa="بعضی فایل‌ها باید فقط توسط مدیران مورد اعتماد تغییر کنند. اسکریپت فایل حساب‌ها، تنظیم sudo و SSH، مسیر Cron و تنظیمات حساس دیگر را بررسی می‌کند. در دامنه محدود محلی، فایل قابل‌نوشتن توسط همه، مالک ناشناخته، SUID/SGID و نام حساس با مجوز گسترده را هم جست‌وجو می‌کند."
+          >
+            Some files should only be changed by trusted administrators. The
+            script reviews account files, sudo and SSH settings, cron paths and
+            other sensitive configuration. It also searches a bounded local
+            scope for world-writable files, unknown owners, SUID/SGID files and
+            sensitive filenames with broad permissions.
+          </p>
+          <p
+            data-en="A SUID file is not automatically a vulnerability, and a file named secrets may not contain a secret. Review the owner, package and purpose before changing permissions. The tool also checks mount options such as nodev, nosuid and noexec. These need to fit the workload; applying them without testing can break a service."
+            data-fa="وجود SUID خودکار به معنی آسیب‌پذیری نیست و فایلی با نام secrets هم لزوماً رمز ندارد. پیش از تغییر مجوز، مالک، بسته و کاربرد فایل را بررسی کنید. گزینه‌های Mount مثل nodev، nosuid و noexec هم بررسی می‌شوند. این تنظیمات باید با کار سرور سازگار باشند؛ اعمال بدون آزمایش ممکن است سرویس را مختل کند."
+          >
+            A SUID file is not automatically a vulnerability, and a file named
+            secrets may not contain a secret. Review the owner, package and
+            purpose before changing permissions. The tool also checks mount
+            options such as nodev, nosuid and noexec. These need to fit the
+            workload; applying them without testing can break a service.
+          </p>
+          <p
+            data-en="Disk and inode use are checked separately. A disk can have free space but run out of inodes when it holds too many small files. Default warning/high/critical thresholds are strictly above 80/90/95 percent. An incomplete search stays inconclusive, and network filesystems are excluded from file scans."
+            data-fa="مصرف فضای دیسک و inode جدا بررسی می‌شود. ممکن است دیسک فضای آزاد داشته باشد، اما به خاطر تعداد زیاد فایل کوچک inode تمام شود. آستانه‌های هشدار، بالا و بحرانی به‌طور پیش‌فرض بزرگ‌تر از ۸۰، ۹۰ و ۹۵ درصد هستند. جست‌وجوی ناقص نتیجه قطعی نمی‌دهد و Filesystem شبکه از اسکن فایل کنار گذاشته می‌شود."
+          >
+            Disk and inode use are checked separately. A disk can have free
+            space but run out of inodes when it holds too many small files.
+            Default warning/high/critical thresholds are strictly above 80/90/95
+            percent. An incomplete search stays inconclusive, and network
+            filesystems are excluded from file scans.
+          </p>
+        </section>
+        <section id="kernel" class="article-section">
+          <h2
+            data-en="A few checks on the Linux kernel"
+            data-fa="بررسی چند تنظیم امنیتی هسته لینوکس"
+          >
+            A few checks on the Linux kernel
+          </h2>
+          <p
+            data-en="Kernel checks read sysctl values for memory randomization, access to kernel addresses and logs, process tracing, protected links, SYN cookies and network redirects. They also review selected BPF, performance-monitoring and namespace settings, along with boot and module indicators."
+            data-fa="بررسی هسته مقدار sysctl مربوط به تصادفی‌سازی حافظه، دسترسی به آدرس و لاگ هسته، ردیابی Process، حفاظت لینک‌ها، SYN Cookies و Redirect شبکه را می‌خواند. بعضی تنظیمات BPF، پایش Performance، Namespace و نشانه‌های Boot و Module هم بررسی می‌شوند."
+          >
+            Kernel checks read sysctl values for memory randomization, access to
+            kernel addresses and logs, process tracing, protected links, SYN
+            cookies and network redirects. They also review selected BPF,
+            performance-monitoring and namespace settings, along with boot and
+            module indicators.
+          </p>
+          <p
+            data-en="Examples of its baseline are kernel.randomize_va_space=2, kernel.dmesg_restrict=1, net.ipv4.tcp_syncookies=1 and fs.suid_dumpable=0. More restrictive ptrace_scope values 2 and 3 are accepted too. These are observations, not settings the script applies."
+            data-fa="برای نمونه، در سیاست پایه ابزار kernel.randomize_va_space=2، kernel.dmesg_restrict=1، net.ipv4.tcp_syncookies=1 و fs.suid_dumpable=0 انتظار می‌رود. مقدار محدودتر ۲ و ۳ برای ptrace_scope هم پذیرفته می‌شود. این‌ها فقط بررسی می‌شوند و اسکریپت آن‌ها را اعمال نمی‌کند."
+          >
+            Examples of its baseline are kernel.randomize_va_space=2,
+            kernel.dmesg_restrict=1, net.ipv4.tcp_syncookies=1 and
+            fs.suid_dumpable=0. More restrictive ptrace_scope values 2 and 3 are
+            accepted too. These are observations, not settings the script
+            applies.
+          </p>
+          <p
+            data-en="A router, VPN server or container host may need forwarding or namespaces that a simpler server does not. Read a warning in that context. The auditor never changes sysctls or loads or unloads modules."
+            data-fa="Router، سرور VPN یا میزبان کانتینر ممکن است به Forwarding یا Namespace نیاز داشته باشد که یک سرور ساده لازم ندارد. هشدار را با توجه به همین نقش بخوانید. ممیز sysctl را تغییر نمی‌دهد و Module را Load یا Unload نمی‌کند."
+          >
+            A router, VPN server or container host may need forwarding or
+            namespaces that a simpler server does not. Read a warning in that
+            context. The auditor never changes sysctls or loads or unloads
+            modules.
+          </p>
+        </section>
+        <section id="logging" class="article-section">
+          <h2
+            data-en="Will the logs help when something goes wrong?"
+            data-fa="اگر مشکلی پیش بیاید، لاگ کافی داریم؟"
+          >
+            Will the logs help when something goes wrong?
+          </h2>
+          <p
+            data-en="The script reviews journald, rsyslog, log rotation and permissions on log paths. It looks at auditd and available audit rules, including signs of lost audit events. It also checks local time-synchronization information, since an incorrect clock makes events harder to line up."
+            data-fa="اسکریپت journald، rsyslog، چرخش لاگ و مجوز مسیرهای لاگ را بررسی می‌کند. auditd و قواعد Audit در دسترس، از جمله نشانه از دست رفتن رویداد، هم بررسی می‌شوند. اطلاعات محلی همگام‌سازی ساعت نیز خوانده می‌شود؛ چون ساعت اشتباه کنار هم گذاشتن رویدادها را سخت می‌کند."
+          >
+            The script reviews journald, rsyslog, log rotation and permissions
+            on log paths. It looks at auditd and available audit rules,
+            including signs of lost audit events. It also checks local
+            time-synchronization information, since an incorrect clock makes
+            events harder to line up.
+          </p>
+          <p
+            data-en="An active logging service does not prove that logs are retained or reaching your monitoring system. An empty file may be normal after rotation. Check actual events in the central log system and verify how long they are kept. The auditor cannot confirm that delivery on its own."
+            data-fa="فعال‌بودن سرویس لاگ ثابت نمی‌کند داده نگهداری می‌شود یا به سیستم پایش شما می‌رسد. فایل خالی هم ممکن است نتیجه عادی چرخش لاگ باشد. رویداد واقعی را در سامانه مرکزی ببینید و مدت نگهداری را بررسی کنید. ممیز به‌تنهایی این ارسال را تأیید نمی‌کند."
+          >
+            An active logging service does not prove that logs are retained or
+            reaching your monitoring system. An empty file may be normal after
+            rotation. Check actual events in the central log system and verify
+            how long they are kept. The auditor cannot confirm that delivery on
+            its own.
+          </p>
+        </section>
+        <section id="mac" class="article-section">
+          <h2 data-en="AppArmor and SELinux" data-fa="AppArmor و SELinux">
+            AppArmor and SELinux
+          </h2>
+          <p
+            data-en="AppArmor and SELinux add restrictions beyond ordinary file permissions. The auditor expects SELinux on the RHEL family and generally AppArmor elsewhere, while also considering the MAC system it can actually observe. It reads enforcement state and available profile or policy information."
+            data-fa="AppArmor و SELinux محدودیت‌هایی فراتر از مجوز معمولی فایل ایجاد می‌کنند. ممیز برای خانواده RHEL معمولاً SELinux و برای خانواده‌های دیگر AppArmor را انتظار دارد و وضعیت قابل مشاهده واقعی را هم در نظر می‌گیرد. حالت اعمال محدودیت و اطلاعات Policy یا Profile در دسترس خوانده می‌شوند."
+          >
+            AppArmor and SELinux add restrictions beyond ordinary file
+            permissions. The auditor expects SELinux on the RHEL family and
+            generally AppArmor elsewhere, while also considering the MAC system
+            it can actually observe. It reads enforcement state and available
+            profile or policy information.
+          </p>
+          <p
+            data-en="Missing inspection tools do not prove the protection is disabled. A profile in complain mode records activity without enforcing that profile’s restrictions. Check which services are actually covered, and review exceptions before enabling a stricter policy on production."
+            data-fa="نبود ابزار بررسی ثابت نمی‌کند حفاظت غیرفعال است. Profile در حالت Complain فعالیت را ثبت می‌کند، اما محدودیت همان Profile را اعمال نمی‌کند. ببینید کدام سرویس واقعاً پوشش دارد و پیش از فعال‌کردن سیاست سخت‌گیرانه‌تر در Production، استثناها را بررسی کنید."
+          >
+            Missing inspection tools do not prove the protection is disabled. A
+            profile in complain mode records activity without enforcing that
+            profile’s restrictions. Check which services are actually covered,
+            and review exceptions before enabling a stricter policy on
+            production.
+          </p>
+        </section>
+        <section id="containers" class="article-section">
+          <h2
+            data-en="Docker and Podman checks"
+            data-fa="بررسی Docker و Podman"
+          >
+            Docker and Podman checks
+          </h2>
+          <p
+            data-en="When an existing local Docker or Podman API is readable, the script samples up to 100 running containers. It checks privileged mode, root users, host networking and namespaces, risky capabilities, writable root filesystems and sensitive host mounts. It also reviews runtime socket permissions and some port and registry indicators."
+            data-fa="اگر API محلی موجود Docker یا Podman خواندنی باشد، اسکریپت تا ۱۰۰ کانتینر Running را نمونه‌برداری می‌کند. حالت Privileged، کاربر root، شبکه و Namespace میزبان، Capability پرخطر، Root Filesystem قابل‌نوشتن و Mount حساس میزبان بررسی می‌شوند. مجوز Runtime Socket و بعضی نشانه‌های پورت و Registry هم بررسی می‌شوند."
+          >
+            When an existing local Docker or Podman API is readable, the script
+            samples up to 100 running containers. It checks privileged mode,
+            root users, host networking and namespaces, risky capabilities,
+            writable root filesystems and sensitive host mounts. It also reviews
+            runtime socket permissions and some port and registry indicators.
+          </p>
+          <p
+            data-en="It uses local Unix sockets, not a remote daemon, and does not start a missing Podman service. Missing access is reported rather than treated as a passed check. Container names, environment and command arguments are not collected. Image age is not a vulnerability result; use a separate image scanner for that."
+            data-fa="ابزار از Unix Socket محلی استفاده می‌کند، نه Daemon دوردست، و سرویس Podman ناموجود را راه‌اندازی نمی‌کند. نبود دسترسی گزارش می‌شود و PASS محسوب نمی‌شود. نام کانتینر، Environment و آرگومان فرمان جمع‌آوری نمی‌شوند. سن Image نتیجه آسیب‌پذیری نیست؛ برای آن Scanner جدا لازم است."
+          >
+            It uses local Unix sockets, not a remote daemon, and does not start
+            a missing Podman service. Missing access is reported rather than
+            treated as a passed check. Container names, environment and command
+            arguments are not collected. Image age is not a vulnerability
+            result; use a separate image scanner for that.
+          </p>
+        </section>
+        <section id="threat" class="article-section">
+          <h2
+            data-en="Suspicious signs need a second look"
+            data-fa="نشانه مشکوک را باید دوباره بررسی کرد"
+          >
+            Suspicious signs need a second look
+          </h2>
+          <p
+            data-en="The auditor looks for executables running from temporary paths, deleted-but-running files, shell processes under web-service users and selected mining-process names. These can be useful leads, but legitimate deployments and updates can produce some of the same signs. High CPU use alone is not evidence of a miner."
+            data-fa="ممیز به دنبال Executable در حال اجرا از مسیر موقت، فایل حذف‌شده ولی Running، Shell زیر حساب سرویس Web و نام‌های منتخب Process استخراج رمزارز می‌گردد. این‌ها سرنخ مفیدند، اما Deployment و آپدیت عادی هم ممکن است بعضی از همین نشانه‌ها را ایجاد کنند. مصرف بالای CPU به‌تنهایی مدرک Miner نیست."
+          >
+            The auditor looks for executables running from temporary paths,
+            deleted-but-running files, shell processes under web-service users
+            and selected mining-process names. These can be useful leads, but
+            legitimate deployments and updates can produce some of the same
+            signs. High CPU use alone is not evidence of a miner.
+          </p>
+          <p
+            data-en="Standard mode checks selected core package files; deep mode checks a broader package scope. File differences need context, and a compromised host may falsify its own tools or package records. For an incident, bring in independent logs and trusted investigation tools."
+            data-fa="حالت Standard فایل بسته‌های اصلی منتخب و Deep دامنه گسترده‌تری از بسته‌ها را بررسی می‌کند. تفاوت فایل نیاز به توضیح دارد و میزبان آلوده ممکن است ابزار یا اطلاعات بسته خودش را جعل کند. برای بررسی رخداد، از لاگ مستقل و ابزار تحقیق قابل اعتماد کمک بگیرید."
+          >
+            Standard mode checks selected core package files; deep mode checks a
+            broader package scope. File differences need context, and a
+            compromised host may falsify its own tools or package records. For
+            an incident, bring in independent logs and trusted investigation
+            tools.
+          </p>
+          <p
+            data-en="Other checks flag selected weak TLS settings, expiry of public .crt files and broad permissions on credential-like filenames. A certificate in the trust store is not necessarily one served by your application. No live TLS test, full CVE scan or backup restore test is performed."
+            data-fa="بررسی‌های دیگر بعضی تنظیمات ضعیف TLS، انقضای فایل عمومی .crt و مجوز گسترده نام‌های شبیه Credential را مشخص می‌کنند. Certificate داخل Trust Store لزوماً همان Certificate ارائه‌شده برنامه نیست. آزمون زنده TLS، اسکن کامل CVE یا آزمایش Restore بکاپ انجام نمی‌شود."
+          >
+            Other checks flag selected weak TLS settings, expiry of public .crt
+            files and broad permissions on credential-like filenames. A
+            certificate in the trust store is not necessarily one served by your
+            application. No live TLS test, full CVE scan or backup restore test
+            is performed.
+          </p>
+        </section>
+        <section id="read-only" class="article-section">
+          <h2
+            data-en="The script reports; you decide what to change"
+            data-fa="ابزار گزارش می‌دهد؛ تصمیم تغییر با شماست"
+          >
+            The script reports; you decide what to change
+          </h2>
+          <p
+            data-en="This is an audit script, so it leaves server settings alone. It does not upgrade packages, refresh repositories, change firewall rules or file permissions, restart services or write sysctls. The suggested actions in the report are for you to review and carry out separately."
+            data-fa="این اسکریپت برای ممیزی است و تنظیمات سرور را دست نمی‌زند. بسته را ارتقا نمی‌دهد، مخزن را تازه نمی‌کند، Rule فایروال و مجوز فایل را تغییر نمی‌دهد، سرویس را Restart نمی‌کند و sysctl نمی‌نویسد. اقدام‌های پیشنهادی گزارش را شما باید بررسی کنید و جدا انجام دهید."
+          >
+            This is an audit script, so it leaves server settings alone. It does
+            not upgrade packages, refresh repositories, change firewall rules or
+            file permissions, restart services or write sysctls. The suggested
+            actions in the report are for you to review and carry out
+            separately.
+          </p>
+          <p
+            data-en="It does create private temporary files and the reports you request. Temporary files are cleaned up on exit; exported reports remain. Read-only does not mean zero disk activity, and a deep scan can still put load on storage. Choose a quiet time for heavier runs."
+            data-fa="ابزار فایل موقت خصوصی و گزارش درخواستی شما را می‌سازد. فایل موقت هنگام خروج پاک می‌شود و گزارش خروجی باقی می‌ماند. فقط‌خواندنی بودن به معنی صفر فعالیت دیسک نیست و اسکن Deep همچنان می‌تواند به Storage فشار بیاورد. برای اجرای سنگین‌تر زمان کم‌بار را انتخاب کنید."
+          >
+            It does create private temporary files and the reports you request.
+            Temporary files are cleaned up on exit; exported reports remain.
+            Read-only does not mean zero disk activity, and a deep scan can
+            still put load on storage. Choose a quiet time for heavier runs.
+          </p>
+          <p
+            data-en="Keep reports in private storage. They may contain account names, paths and network information even though password hashes and many command details are withheld."
+            data-fa="گزارش را در فضای خصوصی نگه دارید. با اینکه Hash رمز و بسیاری از جزئیات فرمان نمایش داده نمی‌شوند، گزارش ممکن است نام حساب، مسیر و اطلاعات شبکه داشته باشد."
+          >
+            Keep reports in private storage. They may contain account names,
+            paths and network information even though password hashes and many
+            command details are withheld.
+          </p>
+        </section>
+        <section id="validation" class="article-section">
+          <h2
+            data-en="What has been tested?"
+            data-fa="چه چیزهایی آزمایش شده‌اند؟"
+          >
+            What has been tested?
+          </h2>
+          <p
+            data-en="VALIDATION.md records a passing Bash syntax check and a self-test with 22 distribution-detection examples, scoring, status labels and report checks. You can run the two commands below yourself before the first audit."
+            data-fa="VALIDATION.md موفقیت بررسی Syntax در Bash و Self-test شامل ۲۲ نمونه تشخیص توزیع، امتیازدهی، وضعیت‌ها و بررسی گزارش را ثبت کرده است. قبل از اولین ممیزی می‌توانید دو دستور زیر را خودتان اجرا کنید."
+          >
+            VALIDATION.md records a passing Bash syntax check and a self-test
+            with 22 distribution-detection examples, scoring, status labels and
+            report checks. You can run the two commands below yourself before
+            the first audit.
+          </p>
+          <div class="article-code">
+            <div class="article-code-header">
+              <span class="article-code-label">bash</span
+              ><button type="button" class="article-copy-button">Copy</button>
+            </div>
+            <pre
+              dir="ltr"
+            ><code class="language-bash"><span class="code-token-command">bash</span> -n security-audit.sh
+<span class="code-token-command">./security-audit.sh</span> <span class="code-token-option">--self-test</span></code></pre>
+          </div>
+          <p
+            data-en="The document also describes an earlier Ubuntu 24.04 container run and a historical 67-test suite. The original reports and that suite are not in the supplied package. ShellCheck, native non-root Linux integration and full distribution testing have not all been verified. A self-test passing is useful, but it does not prove every host check will work on your server."
+            data-fa="سند از اجرای قبلی در کانتینر Ubuntu 24.04 و یک مجموعه ۶۷ تست تاریخی هم می‌گوید. گزارش‌های اصلی و آن مجموعه تست در بسته تحویلی نیستند. ShellCheck، آزمون واقعی Linux بدون root و بررسی کامل توزیع‌ها همگی تأیید نشده‌اند. موفقیت Self-test مفید است، اما ثابت نمی‌کند همه بررسی‌ها روی سرور شما کار می‌کنند."
+          >
+            The document also describes an earlier Ubuntu 24.04 container run
+            and a historical 67-test suite. The original reports and that suite
+            are not in the supplied package. ShellCheck, native non-root Linux
+            integration and full distribution testing have not all been
+            verified. A self-test passing is useful, but it does not prove every
+            host check will work on your server.
+          </p>
+        </section>
+        <section id="limitations" class="article-section">
+          <h2
+            data-en="Using the report in daily operations"
+            data-fa="استفاده از گزارش در کار روزمره"
+          >
+            Using the report in daily operations
+          </h2>
+          <p
+            data-en="Start with a quick run on a test server. For the regular review, save a standard report and note the version, profile and access level. Follow up on high-risk findings first, then work through unknown results. Some need sudo, another inspection tool or information from outside the host."
+            data-fa="از یک اجرای Quick روی سرور آزمایشی شروع کنید. برای بازبینی معمول، گزارش Standard بگیرید و نسخه، پروفایل و سطح دسترسی را ثبت کنید. اول یافته‌های پرریسک را پیگیری کنید و بعد سراغ نتایج نامشخص بروید. بعضی از آن‌ها sudo، ابزار بررسی دیگر یا اطلاعات بیرون میزبان می‌خواهند."
+          >
+            Start with a quick run on a test server. For the regular review,
+            save a standard report and note the version, profile and access
+            level. Follow up on high-risk findings first, then work through
+            unknown results. Some need sudo, another inspection tool or
+            information from outside the host.
+          </p>
+          <p
+            data-en="After approved changes, rerun with the same settings and compare findings and coverage. Do not chase the score alone. This tool does not replace penetration testing, a current vulnerability scan, external access tests or a real backup restore. It gives you a repeatable local checklist to work from."
+            data-fa="بعد از تغییر تأییدشده، با تنظیم یکسان دوباره اجرا کنید و یافته‌ها و پوشش را مقایسه کنید. فقط دنبال بالابردن امتیاز نباشید. این ابزار جای Penetration Test، اسکن آسیب‌پذیری به‌روز، آزمون دسترسی بیرونی یا Restore واقعی بکاپ را نمی‌گیرد. یک فهرست بررسی محلی و تکرارپذیر به شما می‌دهد تا کار را از آن شروع کنید."
+          >
+            After approved changes, rerun with the same settings and compare
+            findings and coverage. Do not chase the score alone. This tool does
+            not replace penetration testing, a current vulnerability scan,
+            external access tests or a real backup restore. It gives you a
+            repeatable local checklist to work from.
+          </p>
+        </section>
+        <section id="related-reading" class="article-section">
+          <h2 data-en="Related guides" data-fa="راهنماهای مرتبط">
+            Related guides
+          </h2>
+          <ul>
+            <li>
+              <a href="/articles/enable-ssh-linux-complete-guide"
+                ><span
+                  data-en="SSH setup and access checks"
+                  data-fa="راه‌اندازی SSH و بررسی دسترسی"
+                  >SSH setup and access checks</span
+                ></a
+              >
+            </li>
+            <li>
+              <a href="/articles/linux-security-account-access-management"
+                ><span
+                  data-en="Linux accounts and sudo access"
+                  data-fa="حساب‌های Linux و دسترسی sudo"
+                  >Linux accounts and sudo access</span
+                ></a
+              >
+            </li>
+            <li>
+              <a href="/articles/ubuntu-date-time-settings"
+                ><span
+                  data-en="Time synchronization on Ubuntu"
+                  data-fa="همگام‌سازی ساعت در Ubuntu"
+                  >Time synchronization on Ubuntu</span
+                ></a
+              >
+            </li>
+            <li>
+              <a href="/articles/nginx-installation-configuration-ubuntu"
+                ><span
+                  data-en="NGINX installation and configuration"
+                  data-fa="نصب و تنظیم NGINX"
+                  >NGINX installation and configuration</span
+                ></a
+              >
+            </li>
+          </ul>
+        </section>
+        <section id="faq" class="article-section">
+          <h2 data-en="Common questions" data-fa="پرسش‌های رایج">
+            Common questions
+          </h2>
+          <div class="article-faq-item">
+            <h3
+              data-en="Does the auditor change server configuration?"
+              data-fa="آیا ابزار تنظیمات سرور را تغییر می‌دهد؟"
+            >
+              Does the auditor change server configuration?
+            </h3>
+            <p
+              data-en="It creates private temporary files and requested reports. It does not upgrade packages, change firewall rules or permissions, restart services, or write sysctls."
+              data-fa="فقط فایل‌های موقت خصوصی و گزارش‌های درخواستی ساخته می‌شوند. ابزار بسته‌ها را ارتقا نمی‌دهد، فایروال و مجوزها را تغییر نمی‌دهد، سرویس را Restart نمی‌کند و sysctl نمی‌نویسد."
+            >
+              It creates private temporary files and requested reports. It does
+              not upgrade packages, change firewall rules or permissions,
+              restart services, or write sysctls.
+            </p>
+          </div>
+          <div class="article-faq-item">
+            <h3
+              data-en="Does a score of 100 mean the server cannot be compromised?"
+              data-fa="آیا امتیاز ۱۰۰ یعنی سرور قابل نفوذ نیست؟"
+            >
+              Does a score of 100 mean the server cannot be compromised?
+            </h3>
+            <p
+              data-en="No. Points describe observed controls within the selected scope. Unknown evidence reduces coverage, and external exposure, CVEs and recovery need separate validation."
+              data-fa="خیر. امتیاز وضعیت کنترل‌های مشاهده‌شده در محدوده منتخب را نشان می‌دهد. شواهد نامشخص پوشش را کم می‌کنند و دسترسی بیرونی، CVE و بازیابی بررسی مستقل می‌خواهند."
+            >
+              No. Points describe observed controls within the selected scope.
+              Unknown evidence reduces coverage, and external exposure, CVEs and
+              recovery need separate validation.
+            </p>
+          </div>
+          <div class="article-faq-item">
+            <h3
+              data-en="Is this a certified CIS Benchmark assessment?"
+              data-fa="آیا این گزارش تأییدیه CIS Benchmark است؟"
+            >
+              Is this a certified CIS Benchmark assessment?
+            </h3>
+            <p
+              data-en="No. The profiles select locally implemented CIS-aligned controls. Official benchmark section mappings and certification are not claimed."
+              data-fa="خیر. Profileها فقط کنترل‌های محلی پیاده‌سازی‌شده و همسو با CIS را انتخاب می‌کنند. نگاشت رسمی شماره بندها و گواهی انطباق ادعا نمی‌شود."
+            >
+              No. The profiles select locally implemented CIS-aligned controls.
+              Official benchmark section mappings and certification are not
+              claimed.
+            </p>
+          </div>
+        </section>
+        <section id="conclusion" class="article-section">
+          <h2
+            data-en="A practical starting point"
+            data-fa="یک نقطه شروع کاربردی"
+          >
+            A practical starting point
+          </h2>
+          <p
+            data-en="The value of this script is having the common checks in one place. Run it, read the findings and confirm what matters for your server. For administrators, DevOps and security teams, that makes a regular review easier to repeat and easier to discuss. The next step is the same as with any audit: turn the useful findings into work you can verify."
+            data-fa="ارزش این اسکریپت در این است که بررسی‌های معمول را یک‌جا جمع می‌کند. اجرا کنید، یافته‌ها را بخوانید و موارد مهم برای سرور خودتان را تأیید کنید. برای مدیر سرور و تیم DevOps یا امنیت، این کار بازبینی دوره‌ای و گفت‌وگو درباره مشکل‌ها را ساده‌تر می‌کند. قدم بعدی، تبدیل یافته مفید به کاری است که بتوان نتیجه‌اش را بررسی کرد."
+          >
+            The value of this script is having the common checks in one place.
+            Run it, read the findings and confirm what matters for your server.
+            For administrators, DevOps and security teams, that makes a regular
+            review easier to repeat and easier to discuss. The next step is the
+            same as with any audit: turn the useful findings into work you can
+            verify.
+          </p>
+        </section>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,11 +1,19 @@
 <!doctype html>
 <html lang="en" dir="ltr" data-article-language="en">
   <head>
-    <title>Windows Network Commands for DNS, TCP and SMB Diagnostics | Meet AJ</title>
-    <meta charset="UTF-8">
+    <title>
+      Windows Network Commands for DNS, TCP and SMB Diagnostics | Meet AJ
+    </title>
+    <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta name="description" content="Find the failing layer with ipconfig, nslookup and Test-NetConnection, then inspect listeners and SMB permissions." />
-    <meta name="keywords" content="Windows Network Incident Runbook, windows cmd common network commands, infrastructure operations, production operations, troubleshooting" />
+    <meta
+      name="description"
+      content="Find the failing layer with ipconfig, nslookup and Test-NetConnection, then inspect listeners and SMB permissions."
+    />
+    <meta
+      name="keywords"
+      content="Windows Network Incident Runbook, windows cmd common network commands, infrastructure operations, production operations, troubleshooting"
+    />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <meta name="language" content="fa, en" />
@@ -17,7 +25,10 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="application-name" content="Meet AJ" />
-    <meta name="msapplication-tooltip" content="Meet AJ - Windows CMD Network Commands Guide" />
+    <meta
+      name="msapplication-tooltip"
+      content="Meet AJ - Windows CMD Network Commands Guide"
+    />
     <meta name="msapplication-starturl" content="/" />
     <meta name="msapplication-navbutton-color" content="#2c5aa0" />
     <meta
@@ -25,21 +36,39 @@
       content="../assets/img/apple-touch-icon.png"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Windows Network Commands for DNS, TCP and SMB Diagnostics" />
-    <meta property="og:description" content="Find the failing layer with ipconfig, nslookup and Test-NetConnection, then inspect listeners and SMB permissions." />
+    <meta
+      property="og:title"
+      content="Windows Network Commands for DNS, TCP and SMB Diagnostics"
+    />
+    <meta
+      property="og:description"
+      content="Find the failing layer with ipconfig, nslookup and Test-NetConnection, then inspect listeners and SMB permissions."
+    />
     <meta property="og:image" content="../assets/img/portfolio/windows-1.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:alt" content="Windows CMD Network Commands Guide - Professional System Administration" />
-    <meta property="og:url" content="https://meetaj.ir/articles/windows-cmd-common-network-commands" />
+    <meta
+      property="og:image:alt"
+      content="Windows CMD Network Commands Guide - Professional System Administration"
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/windows-cmd-common-network-commands"
+    />
     <meta property="og:site_name" content="Meet AJ" />
     <meta property="og:locale" content="fa_IR" />
     <meta property="og:locale:alternate" content="en_US" />
     <meta property="article:author" content="AmirHossein Jalalian" />
     <meta property="article:section" content="System Administration" />
-    <meta property="article:published_time" content="2024-09-17T00:00:00+03:30" />
-    <meta property="article:modified_time" content="2024-09-17T00:00:00+03:30" />
+    <meta
+      property="article:published_time"
+      content="2024-09-17T00:00:00+03:30"
+    />
+    <meta
+      property="article:modified_time"
+      content="2024-09-17T00:00:00+03:30"
+    />
     <meta property="article:tag" content="Windows CMD" />
     <meta property="article:tag" content="Network Commands" />
     <meta property="article:tag" content="System Administration" />
@@ -54,8 +83,14 @@
       name="twitter:description"
       content="Find the failing layer with ipconfig, nslookup and Test-NetConnection, then inspect listeners and SMB permissions."
     />
-    <meta name="twitter:image" content="../assets/img/portfolio/windows-1.png" />
-    <meta name="twitter:image:alt" content="Windows CMD Network Commands Guide - Professional System Administration" />
+    <meta
+      name="twitter:image"
+      content="../assets/img/portfolio/windows-1.png"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Windows CMD Network Commands Guide - Professional System Administration"
+    />
     <link
       rel="canonical"
       href="https://meetaj.ir/articles/windows-cmd-common-network-commands"
@@ -63,26 +98,135 @@
     <link href="../assets/img/favicon.png" rel="icon" />
     <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
 
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Vazirmatn:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="../assets/vendor/bootstrap/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="../assets/vendor/bootstrap-icons/bootstrap-icons.css"
+      rel="stylesheet"
+    />
     <link href="../assets/vendor/aos/aos.css" rel="stylesheet" />
-    <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
-    <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
+    <link
+      href="../assets/vendor/glightbox/css/glightbox.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="../assets/vendor/swiper/swiper-bundle.min.css"
+      rel="stylesheet"
+    />
     <link href="../assets/css/main.css?v=1000" rel="stylesheet" />
     <link href="../assets/css/articles.css?v=1013" rel="stylesheet" />
     <link href="../assets/css/lang-toggle.css?v=1000" rel="stylesheet" />
-    <link id="rtl-style" href="../assets/css/rtl.css?v=1000" rel="stylesheet" disabled />
-  <meta name="article:content-language" content="en" />
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Windows Network Commands for DNS, TCP and SMB Diagnostics", "description": "Find the failing layer with ipconfig, nslookup and Test-NetConnection, then inspect listeners and SMB permissions.", "inLanguage": "en", "url": "https://meetaj.ir/articles/windows-cmd-common-network-commands", "dateModified": "2026-09-30", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}, "mainEntityOfPage": "https://meetaj.ir/articles/windows-cmd-common-network-commands"}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does successful ping prove SMB is healthy?", "acceptedAnswer": {"@type": "Answer", "text": "No. Test TCP/445, authentication and permissions independently."}}, {"@type": "Question", "name": "Should DNS cache be cleared first?", "acceptedAnswer": {"@type": "Answer", "text": "No. Record and compare cached and resolver responses before clearing it."}}], "inLanguage": "en"}</script>
-<script id="article-localizations" type="application/json">{"fa": {"title": "دستورات شبکه Windows برای تشخیص DNS و TCP و SMB", "meta_title": "دستورات شبکه Windows برای تشخیص DNS و TCP و SMB | Meet AJ", "description": "تشخیص لایه خرابی با ipconfig و nslookup و Test-NetConnection و بررسی Listener و مجوز SMB.", "keywords": ["دستورات شبکه Windows برای تشخیص DNS و TCP و SMB", "عیب‌یابی", "بازیابی", "windows cmd common network commands"], "faq": [["آیا ping موفق یعنی SMB سالم است؟", "خیر. TCP/445، authentication و permission باید جدا بررسی شوند."], ["آیا باید ابتدا DNS cache را پاک کرد؟", "خیر. ابتدا cache و پاسخ resolver را ثبت و مقایسه کنید."]]}, "en": {"title": "Windows Network Commands for DNS, TCP and SMB Diagnostics", "meta_title": "Windows Network Commands for DNS, TCP and SMB Diagnostics | Meet AJ", "description": "Find the failing layer with ipconfig, nslookup and Test-NetConnection, then inspect listeners and SMB permissions.", "keywords": ["Windows Network Commands for DNS, TCP and SMB Diagnostics", "windows cmd common network commands", "troubleshooting"], "faq": [["Does successful ping prove SMB is healthy?", "No. Test TCP/445, authentication and permissions independently."], ["Should DNS cache be cleared first?", "No. Record and compare cached and resolver responses before clearing it."]]}}</script>
-</head>
+    <link
+      id="rtl-style"
+      href="../assets/css/rtl.css?v=1000"
+      rel="stylesheet"
+      disabled
+    />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Windows Network Commands for DNS, TCP and SMB Diagnostics",
+        "description": "Find the failing layer with ipconfig, nslookup and Test-NetConnection, then inspect listeners and SMB permissions.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/windows-cmd-common-network-commands",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/windows-cmd-common-network-commands"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does successful ping prove SMB is healthy?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Test TCP/445, authentication and permissions independently."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Should DNS cache be cleared first?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Record and compare cached and resolver responses before clearing it."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "دستورات شبکه Windows برای تشخیص DNS و TCP و SMB",
+          "meta_title": "دستورات شبکه Windows برای تشخیص DNS و TCP و SMB | Meet AJ",
+          "description": "تشخیص لایه خرابی با ipconfig و nslookup و Test-NetConnection و بررسی Listener و مجوز SMB.",
+          "keywords": [
+            "دستورات شبکه Windows برای تشخیص DNS و TCP و SMB",
+            "عیب‌یابی",
+            "بازیابی",
+            "windows cmd common network commands"
+          ],
+          "faq": [
+            [
+              "آیا ping موفق یعنی SMB سالم است؟",
+              "خیر. TCP/445، authentication و permission باید جدا بررسی شوند."
+            ],
+            [
+              "آیا باید ابتدا DNS cache را پاک کرد؟",
+              "خیر. ابتدا cache و پاسخ resolver را ثبت و مقایسه کنید."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Windows Network Commands for DNS, TCP and SMB Diagnostics",
+          "meta_title": "Windows Network Commands for DNS, TCP and SMB Diagnostics | Meet AJ",
+          "description": "Find the failing layer with ipconfig, nslookup and Test-NetConnection, then inspect listeners and SMB permissions.",
+          "keywords": [
+            "Windows Network Commands for DNS, TCP and SMB Diagnostics",
+            "windows cmd common network commands",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Does successful ping prove SMB is healthy?",
+              "No. Test TCP/445, authentication and permissions independently."
+            ],
+            [
+              "Should DNS cache be cleared first?",
+              "No. Record and compare cached and resolver responses before clearing it."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
   <body class="article-page theme-microsoft">
-    <button id="menu-toggle" class="menu-toggle d-xl-none" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="header" type="button"><i class="bi bi-list" aria-hidden="true"></i><span class="sr-only" data-en="Menu" data-fa="منو">Menu</span></button>
+    <button
+      id="menu-toggle"
+      class="menu-toggle d-xl-none"
+      aria-label="Toggle navigation menu"
+      aria-expanded="false"
+      aria-controls="header"
+      type="button"
+    >
+      <i class="bi bi-list" aria-hidden="true"></i
+      ><span class="sr-only" data-en="Menu" data-fa="منو">Menu</span>
+    </button>
     <header id="header" class="header dark-background d-flex flex-column">
       <!-- ===============================================
       ==================== PROFILE IMAGE =================
@@ -107,7 +251,6 @@
           <img src="../assets/img/logo.png" alt="Aj-Network" loading="lazy" />
           <p class="sitename">Meet AJ</p>
         </a>
-
       </div>
 
       <!-- ===============================================
@@ -199,31 +342,115 @@
         </div>
       </div>
 
-
       <!-- ===============================================
       ==================== NAVIGATION MENU ================
       =============================================== -->
-      <nav id="navmenu" class="navmenu navmenu--article-toc" aria-label="Article navigation">
+      <nav
+        id="navmenu"
+        class="navmenu navmenu--article-toc"
+        aria-label="Article navigation"
+      >
         <ul>
-          <li><a href="../index.html#hero"><i class="bi bi-house navicon" aria-hidden="true"></i><span data-en="Home" data-fa="خانه">Home</span></a></li>
-          <li><a href="../index.html#portfolio"><i class="bi bi-journal-text navicon" aria-hidden="true"></i><span data-en="Articles" data-fa="مقالات">Articles</span></a></li>
-          <li class="article-nav-item"><a href="#enterprise-intro"><span data-fa="Ping، DNS و TCP نتایج جدا دارند" data-en="Ping, DNS and TCP establish different facts">Ping, DNS and TCP establish different facts</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-architecture"><span data-fa="مسیر تشخیص تا مجوز Share" data-en="Investigation through share authorization">Investigation through share authorization</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-prerequisites"><span data-fa="CMD و PowerShell روی میزبان واقعی" data-en="CMD and PowerShell on the affected host">CMD and PowerShell on the affected host</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-installation"><span data-fa="فرمان‌های آدرس، Route و Port" data-en="Address, route and port commands">Address, route and port commands</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-troubleshooting"><span data-fa="DNS Timeout، Port بسته یا Access Denied" data-en="DNS timeout, closed port or access denied">DNS timeout, closed port or access denied</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-monitoring"><span data-fa="قابل دسترس بودن با کارکرد سرویس فرق دارد" data-en="Reachability differs from service function">Reachability differs from service function</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-security"><span data-fa="حفاظت از گزارش تشخیص" data-en="Protect diagnostic reports">Protect diagnostic reports</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-recovery"><span data-fa="تغییر محدود و آزمون دوباره" data-en="Limited corrections and retesting">Limited corrections and retesting</span></a></li>
-<li class="article-nav-item"><a href="#faq"><span data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</span></a></li>
-<li class="article-nav-item"><a href="#enterprise-sources"><span data-fa="منابع رسمی" data-en="Official Sources">Official Sources</span></a></li>
-
-
-
-
-
-
-
+          <li>
+            <a href="../index.html#hero"
+              ><i class="bi bi-house navicon" aria-hidden="true"></i
+              ><span data-en="Home" data-fa="خانه">Home</span></a
+            >
+          </li>
+          <li>
+            <a href="../index.html#portfolio"
+              ><i class="bi bi-journal-text navicon" aria-hidden="true"></i
+              ><span data-en="Articles" data-fa="مقالات">Articles</span></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-intro"
+              ><span
+                data-fa="Ping، DNS و TCP نتایج جدا دارند"
+                data-en="Ping, DNS and TCP establish different facts"
+                >Ping, DNS and TCP establish different facts</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="مسیر تشخیص تا مجوز Share"
+                data-en="Investigation through share authorization"
+                >Investigation through share authorization</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="CMD و PowerShell روی میزبان واقعی"
+                data-en="CMD and PowerShell on the affected host"
+                >CMD and PowerShell on the affected host</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="فرمان‌های آدرس، Route و Port"
+                data-en="Address, route and port commands"
+                >Address, route and port commands</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="DNS Timeout، Port بسته یا Access Denied"
+                data-en="DNS timeout, closed port or access denied"
+                >DNS timeout, closed port or access denied</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="قابل دسترس بودن با کارکرد سرویس فرق دارد"
+                data-en="Reachability differs from service function"
+                >Reachability differs from service function</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-security"
+              ><span
+                data-fa="حفاظت از گزارش تشخیص"
+                data-en="Protect diagnostic reports"
+                >Protect diagnostic reports</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="تغییر محدود و آزمون دوباره"
+                data-en="Limited corrections and retesting"
+                >Limited corrections and retesting</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#faq"
+              ><span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
+              ></a
+            >
+          </li>
         </ul>
       </nav>
       <button
@@ -239,45 +466,262 @@
     </header>
     <main id="main-content" class="main" role="main">
       <section class="article-hero article-header hero" role="banner">
-        <div class="container"><div class="row"><div class="col-lg-10 mx-auto">
-          <div class="article-meta"><span class="article-category">Microsoft</span><span class="meta-date"><span class="article-date" data-en="Article" data-fa="مقاله">Article</span><time datetime="">Microsoft</time></span></div>
-          <h1 class="article-title hero-title" data-fa="دستورات شبکه Windows برای تشخیص DNS و TCP و SMB" data-en="Windows Network Commands for DNS, TCP and SMB Diagnostics">Windows Network Commands for DNS, TCP and SMB Diagnostics</h1>
-          <p class="article-excerpt hero-subtitle" data-fa="تشخیص لایه خرابی با ipconfig و nslookup و Test-NetConnection و بررسی Listener و مجوز SMB." data-en="Find the failing layer with ipconfig, nslookup and Test-NetConnection, then inspect listeners and SMB permissions.">Find the failing layer with ipconfig, nslookup and Test-NetConnection, then inspect listeners and SMB permissions.</p>
-          <div class="article-banner"><div class="banner-card"><img class="article-hero-thumbnail" src="../assets/img/portfolio/windows-1.png" alt="Windows CMD Network Commands" /><div class="banner-content"><h2 class="banner-title">Microsoft</h2><p class="banner-subtitle" data-en="Meet AJ technical article" data-fa="مقاله فنی Meet AJ">Meet AJ technical article</p></div></div></div>
-          <div class="article-actions"><a href="#article-content" class="btn btn-primary btn-lg action-btn"><span class="btn-content"><i class="bi bi-play-circle" aria-hidden="true"></i><span data-en="Start reading" data-fa="شروع مطالعه">Start reading</span></span></a></div>
-        </div></div></div>
-        <div class="hero-background" aria-hidden="true"><div class="bg-shape bg-shape-1"></div><div class="bg-shape bg-shape-2"></div><div class="bg-shape bg-shape-3"></div></div>
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-10 mx-auto">
+              <div class="article-meta">
+                <span class="article-category">Microsoft</span
+                ><span class="meta-date"
+                  ><span class="article-date" data-en="Article" data-fa="مقاله"
+                    >Article</span
+                  ><time datetime="">Microsoft</time></span
+                >
+              </div>
+              <h1
+                class="article-title hero-title"
+                data-fa="دستورات شبکه Windows برای تشخیص DNS و TCP و SMB"
+                data-en="Windows Network Commands for DNS, TCP and SMB Diagnostics"
+              >
+                Windows Network Commands for DNS, TCP and SMB Diagnostics
+              </h1>
+              <p
+                class="article-excerpt hero-subtitle"
+                data-fa="تشخیص لایه خرابی با ipconfig و nslookup و Test-NetConnection و بررسی Listener و مجوز SMB."
+                data-en="Find the failing layer with ipconfig, nslookup and Test-NetConnection, then inspect listeners and SMB permissions."
+              >
+                Find the failing layer with ipconfig, nslookup and
+                Test-NetConnection, then inspect listeners and SMB permissions.
+              </p>
+              <div class="article-banner">
+                <div class="banner-card">
+                  <img
+                    class="article-hero-thumbnail"
+                    src="../assets/img/portfolio/windows-1.png"
+                    alt="Windows CMD Network Commands"
+                  />
+                  <div class="banner-content">
+                    <h2 class="banner-title">Microsoft</h2>
+                    <p
+                      class="banner-subtitle"
+                      data-en="Meet AJ technical article"
+                      data-fa="مقاله فنی Meet AJ"
+                    >
+                      Meet AJ technical article
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="article-actions">
+                <a
+                  href="#article-content"
+                  class="btn btn-primary btn-lg action-btn"
+                  ><span class="btn-content"
+                    ><i class="bi bi-play-circle" aria-hidden="true"></i
+                    ><span data-en="Start reading" data-fa="شروع مطالعه"
+                      >Start reading</span
+                    ></span
+                  ></a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-background" aria-hidden="true">
+          <div class="bg-shape bg-shape-1"></div>
+          <div class="bg-shape bg-shape-2"></div>
+          <div class="bg-shape bg-shape-3"></div>
+        </div>
       </section>
-      <section id="article-content" class="article-content article-container" aria-label="Article content">
-        <div class="container"><div class="row"><div class="col-lg-8 mx-auto">
-
-          <article class="article-body" data-article-bilingual="true"><div class="enterprise-runbook" lang="en" dir="ltr"><section id="enterprise-intro" class="article-section"><h2 data-fa="Ping، DNS و TCP نتایج جدا دارند" data-en="Ping, DNS and TCP establish different facts">Ping, DNS and TCP establish different facts</h2><p data-fa="برای اتصال ناموفق، ابتدا آدرس و DNS را بررسی کنید، سپس Route و Port سرویس را بسنجید. Ping موفق، بازبودن TCP یا مجوز SMB را ثابت نمی‌کند. release/renew یا Reset Stack را پیش از ثبت شواهد روی سرور اجرا نکنید." data-en="For failed connections, inspect addressing/DNS, then routes and the service port. Successful ping proves neither TCP access nor SMB authorization. Avoid release/renew or stack resets before collecting server evidence.">For failed connections, inspect addressing/DNS, then routes and the service port. Successful ping proves neither TCP access nor SMB authorization. Avoid release/renew or stack resets before collecting server evidence.</p><h3 id="enterprise-scenario" data-fa="مثال: Share سرور باز نمی‌شود" data-en="Example: an inaccessible server share">Example: an inaccessible server share</h3><p data-fa="برنامه به files01.corp.example.com دسترسی SMB ندارد. از همان Subnet برنامه، DNS و TCP/445 را آزمایش کنید. نام و IP مقصد را ثبت کنید تا پاسخ DNS اشتباه با Firewall اشتباه نشود." data-en="An application cannot reach files01.corp.example.com over SMB. Test DNS and TCP/445 from its subnet. Record resolved names/addresses to separate wrong DNS from firewall failure.">An application cannot reach files01.corp.example.com over SMB. Test DNS and TCP/445 from its subnet. Record resolved names/addresses to separate wrong DNS from firewall failure.</p></section>
-<section id="enterprise-architecture" class="article-section"><h2 data-fa="مسیر تشخیص تا مجوز Share" data-en="Investigation through share authorization">Investigation through share authorization</h2><p data-fa="Client نام را Resolve می‌کند، Route و Interface را انتخاب می‌کند و به Listener TCP می‌رسد. پس از آن، SMB هویت و مجوز Share و NTFS را بررسی می‌کند. خطای هر مرحله، اقدام متفاوتی می‌خواهد." data-en="The client resolves names, selects route/interface and reaches the TCP listener. SMB then checks identity, share and NTFS permissions. Each failed stage requires a different correction.">The client resolves names, selects route/interface and reaches the TCP listener. SMB then checks identity, share and NTFS permissions. Each failed stage requires a different correction.</p></section>
-<section id="enterprise-prerequisites" class="article-section"><h2 data-fa="CMD و PowerShell روی میزبان واقعی" data-en="CMD and PowerShell on the affected host">CMD and PowerShell on the affected host</h2><p data-fa="مثال‌ها برای Windows 11 و Windows Server 2022/2025 با Windows PowerShell 5.1 x64 هستند. بخش CMD و PowerShell را در Shell مربوط اجرا کنید." data-en="Examples target Windows 11 and Windows Server 2022/2025 with x64 Windows PowerShell 5.1. Run CMD and PowerShell blocks in their respective shells.">Examples target Windows 11 and Windows Server 2022/2025 with x64 Windows PowerShell 5.1. Run CMD and PowerShell blocks in their respective shells.</p>
-<p data-fa="ابزارها روی میزبان موجود اجرا می‌شوند و Capacity اضافی نمی‌خواهند. مهم است آزمون از مسیر واقعی کلاینت خراب انجام شود." data-en="These tools require no extra compute allocation. Run checks through the affected client’s actual path.">These tools require no extra compute allocation. Run checks through the affected client’s actual path.</p>
-<p data-fa="خواندن وضعیت معمولاً دسترسی عادی دارد. اصلاح Route یا Firewall به Elevation نیاز دارد. دامنه و IP نمونه را با مقصد واقعی جایگزین کنید." data-en="Status reads usually need standard privileges. Route/firewall changes require elevation. Replace sample domains/IPs with actual targets.">Status reads usually need standard privileges. Route/firewall changes require elevation. Replace sample domains/IPs with actual targets.</p><h3 id="enterprise-compatibility" data-fa="ماژول Windows و PowerShell دیگر سیستم‌ها" data-en="Windows modules and other PowerShell platforms">Windows modules and other PowerShell platforms</h3><p data-fa="NetTCPIP و SMB Cmdletهای مثال به Windows وابسته‌اند. PowerShell روی Linux همان ماژول‌ها را ندارد. برای تشخیص قدیمی CMD، فرمان‌ها هنوز مفیدند، اما Resetهای تغییر‌دهنده تنظیم بخشی از شروع بررسی نیستند." data-en="The example NetTCPIP/SMB cmdlets are Windows-specific. PowerShell on Linux does not provide the same modules. CMD diagnostics remain useful, while configuration-reset commands do not belong at the start of investigation.">The example NetTCPIP/SMB cmdlets are Windows-specific. PowerShell on Linux does not provide the same modules. CMD diagnostics remain useful, while configuration-reset commands do not belong at the start of investigation.</p></section>
-<section id="enterprise-installation" class="article-section"><h2 data-fa="فرمان‌های آدرس، Route و Port" data-en="Address, route and port commands">Address, route and port commands</h2><p data-fa="ابتدا در CMD شواهد بگیرید. دامنه زیر placeholder داخلی است." data-en="Capture evidence in CMD first. The internal domain below is a placeholder.">Capture evidence in CMD first. The internal domain below is a placeholder.</p>
-<pre dir="ltr"><code class="language-cmd">ipconfig /all
+      <section
+        id="article-content"
+        class="article-content article-container"
+        aria-label="Article content"
+      >
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 mx-auto">
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="Ping، DNS و TCP نتایج جدا دارند"
+                      data-en="Ping, DNS and TCP establish different facts"
+                    >
+                      Ping, DNS and TCP establish different facts
+                    </h2>
+                    <p
+                      data-fa="برای اتصال ناموفق، ابتدا آدرس و DNS را بررسی کنید، سپس Route و Port سرویس را بسنجید. Ping موفق، بازبودن TCP یا مجوز SMB را ثابت نمی‌کند. release/renew یا Reset Stack را پیش از ثبت شواهد روی سرور اجرا نکنید."
+                      data-en="For failed connections, inspect addressing/DNS, then routes and the service port. Successful ping proves neither TCP access nor SMB authorization. Avoid release/renew or stack resets before collecting server evidence."
+                    >
+                      For failed connections, inspect addressing/DNS, then
+                      routes and the service port. Successful ping proves
+                      neither TCP access nor SMB authorization. Avoid
+                      release/renew or stack resets before collecting server
+                      evidence.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: Share سرور باز نمی‌شود"
+                      data-en="Example: an inaccessible server share"
+                    >
+                      Example: an inaccessible server share
+                    </h3>
+                    <p
+                      data-fa="برنامه به files01.corp.example.com دسترسی SMB ندارد. از همان Subnet برنامه، DNS و TCP/445 را آزمایش کنید. نام و IP مقصد را ثبت کنید تا پاسخ DNS اشتباه با Firewall اشتباه نشود."
+                      data-en="An application cannot reach files01.corp.example.com over SMB. Test DNS and TCP/445 from its subnet. Record resolved names/addresses to separate wrong DNS from firewall failure."
+                    >
+                      An application cannot reach files01.corp.example.com over
+                      SMB. Test DNS and TCP/445 from its subnet. Record resolved
+                      names/addresses to separate wrong DNS from firewall
+                      failure.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="مسیر تشخیص تا مجوز Share"
+                      data-en="Investigation through share authorization"
+                    >
+                      Investigation through share authorization
+                    </h2>
+                    <p
+                      data-fa="Client نام را Resolve می‌کند، Route و Interface را انتخاب می‌کند و به Listener TCP می‌رسد. پس از آن، SMB هویت و مجوز Share و NTFS را بررسی می‌کند. خطای هر مرحله، اقدام متفاوتی می‌خواهد."
+                      data-en="The client resolves names, selects route/interface and reaches the TCP listener. SMB then checks identity, share and NTFS permissions. Each failed stage requires a different correction."
+                    >
+                      The client resolves names, selects route/interface and
+                      reaches the TCP listener. SMB then checks identity, share
+                      and NTFS permissions. Each failed stage requires a
+                      different correction.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="CMD و PowerShell روی میزبان واقعی"
+                      data-en="CMD and PowerShell on the affected host"
+                    >
+                      CMD and PowerShell on the affected host
+                    </h2>
+                    <p
+                      data-fa="مثال‌ها برای Windows 11 و Windows Server 2022/2025 با Windows PowerShell 5.1 x64 هستند. بخش CMD و PowerShell را در Shell مربوط اجرا کنید."
+                      data-en="Examples target Windows 11 and Windows Server 2022/2025 with x64 Windows PowerShell 5.1. Run CMD and PowerShell blocks in their respective shells."
+                    >
+                      Examples target Windows 11 and Windows Server 2022/2025
+                      with x64 Windows PowerShell 5.1. Run CMD and PowerShell
+                      blocks in their respective shells.
+                    </p>
+                    <p
+                      data-fa="ابزارها روی میزبان موجود اجرا می‌شوند و Capacity اضافی نمی‌خواهند. مهم است آزمون از مسیر واقعی کلاینت خراب انجام شود."
+                      data-en="These tools require no extra compute allocation. Run checks through the affected client’s actual path."
+                    >
+                      These tools require no extra compute allocation. Run
+                      checks through the affected client’s actual path.
+                    </p>
+                    <p
+                      data-fa="خواندن وضعیت معمولاً دسترسی عادی دارد. اصلاح Route یا Firewall به Elevation نیاز دارد. دامنه و IP نمونه را با مقصد واقعی جایگزین کنید."
+                      data-en="Status reads usually need standard privileges. Route/firewall changes require elevation. Replace sample domains/IPs with actual targets."
+                    >
+                      Status reads usually need standard privileges.
+                      Route/firewall changes require elevation. Replace sample
+                      domains/IPs with actual targets.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="ماژول Windows و PowerShell دیگر سیستم‌ها"
+                      data-en="Windows modules and other PowerShell platforms"
+                    >
+                      Windows modules and other PowerShell platforms
+                    </h3>
+                    <p
+                      data-fa="NetTCPIP و SMB Cmdletهای مثال به Windows وابسته‌اند. PowerShell روی Linux همان ماژول‌ها را ندارد. برای تشخیص قدیمی CMD، فرمان‌ها هنوز مفیدند، اما Resetهای تغییر‌دهنده تنظیم بخشی از شروع بررسی نیستند."
+                      data-en="The example NetTCPIP/SMB cmdlets are Windows-specific. PowerShell on Linux does not provide the same modules. CMD diagnostics remain useful, while configuration-reset commands do not belong at the start of investigation."
+                    >
+                      The example NetTCPIP/SMB cmdlets are Windows-specific.
+                      PowerShell on Linux does not provide the same modules. CMD
+                      diagnostics remain useful, while configuration-reset
+                      commands do not belong at the start of investigation.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="فرمان‌های آدرس، Route و Port"
+                      data-en="Address, route and port commands"
+                    >
+                      Address, route and port commands
+                    </h2>
+                    <p
+                      data-fa="ابتدا در CMD شواهد بگیرید. دامنه زیر placeholder داخلی است."
+                      data-en="Capture evidence in CMD first. The internal domain below is a placeholder."
+                    >
+                      Capture evidence in CMD first. The internal domain below
+                      is a placeholder.
+                    </p>
+                    <pre dir="ltr"><code class="language-cmd">ipconfig /all
 route print
 arp -a
 nslookup files01.corp.example.com
 tracert -d 10.20.30.20
 netstat -ano</code></pre>
-<p data-fa="در PowerShell آزمون TCP و route انجام دهید. انتظار TcpTestSucceeded: True برای ارتباط TCP. این خروجی permission SMB را تأیید نمی‌کند." data-en="Use PowerShell to test TCP and routing. TcpTestSucceeded: True establishes TCP connectivity, not SMB permissions.">Use PowerShell to test TCP and routing. TcpTestSucceeded: True establishes TCP connectivity, not SMB permissions.</p>
-<pre dir="ltr"><code class="language-powershell">$Target = &#x27;files01.corp.example.com&#x27;
+                    <p
+                      data-fa="در PowerShell آزمون TCP و route انجام دهید. انتظار TcpTestSucceeded: True برای ارتباط TCP. این خروجی permission SMB را تأیید نمی‌کند."
+                      data-en="Use PowerShell to test TCP and routing. TcpTestSucceeded: True establishes TCP connectivity, not SMB permissions."
+                    >
+                      Use PowerShell to test TCP and routing. TcpTestSucceeded:
+                      True establishes TCP connectivity, not SMB permissions.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-powershell">$Target = &#x27;files01.corp.example.com&#x27;
 Resolve-DnsName $Target -Type A
 Test-NetConnection $Target -Port 445 -InformationLevel Detailed
 Get-NetIPConfiguration
 Get-SmbConnection</code></pre>
-<p data-fa="برای نگهداری خروجی پوشه یکتا بسازید. commandهای خارجی exit code مستقل دارند." data-en="Create a unique evidence directory. External programs have their own exit codes.">Create a unique evidence directory. External programs have their own exit codes.</p>
-<pre dir="ltr"><code class="language-powershell">$ReportPath = Join-Path $env:TEMP (&#x27;Network-&#x27; + (Get-Date -Format &#x27;yyyyMMdd-HHmmss&#x27;))
+                    <p
+                      data-fa="برای نگهداری خروجی پوشه یکتا بسازید. commandهای خارجی exit code مستقل دارند."
+                      data-en="Create a unique evidence directory. External programs have their own exit codes."
+                    >
+                      Create a unique evidence directory. External programs have
+                      their own exit codes.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-powershell">$ReportPath = Join-Path $env:TEMP (&#x27;Network-&#x27; + (Get-Date -Format &#x27;yyyyMMdd-HHmmss&#x27;))
 New-Item -ItemType Directory -Path $ReportPath -ErrorAction Stop | Out-Null
 ipconfig /all | Out-File (Join-Path $ReportPath &#x27;ipconfig.txt&#x27;) -Encoding utf8
 route print | Out-File (Join-Path $ReportPath &#x27;routes.txt&#x27;) -Encoding utf8
 Test-NetConnection $Target -Port 445 | Export-Clixml (Join-Path $ReportPath &#x27;tcp445.xml&#x27;)</code></pre>
-<p data-fa="Flush DNS فقط وقتی stale cache با پاسخ authoritative مقایسه شده باشد انجام شود. سپس همان query و برنامه دوباره آزمایش شود." data-en="Flush DNS only after comparing suspected stale cache entries with authoritative responses. Repeat the same query and application test afterwards.">Flush DNS only after comparing suspected stale cache entries with authoritative responses. Repeat the same query and application test afterwards.</p></section>
-<section id="enterprise-troubleshooting" class="article-section"><h2 data-fa="DNS Timeout، Port بسته یا Access Denied" data-en="DNS timeout, closed port or access denied">DNS timeout, closed port or access denied</h2><p data-fa="DNS Timeout با IP قابل دسترسی به Resolver و 53 و Suffix نیاز دارد. TCP ناموفق با Ping موفق به Listener یا ACL مربوط است. SMB Access Denied با TCP سالم به هویت و Share/NTFS اشاره دارد." data-en="DNS timeout with IP connectivity requires resolver/53/suffix checks. Failed TCP with working ping suggests listeners or ACLs. SMB access denied with working TCP points to identity and share/NTFS.">DNS timeout with IP connectivity requires resolver/53/suffix checks. Failed TCP with working ping suggests listeners or ACLs. SMB access denied with working TCP points to identity and share/NTFS.</p>
-<pre dir="ltr"><code class="language-powershell">Get-NetTCPConnection -State Listen | Select-Object LocalAddress,LocalPort,OwningProcess
+                    <p
+                      data-fa="Flush DNS فقط وقتی stale cache با پاسخ authoritative مقایسه شده باشد انجام شود. سپس همان query و برنامه دوباره آزمایش شود."
+                      data-en="Flush DNS only after comparing suspected stale cache entries with authoritative responses. Repeat the same query and application test afterwards."
+                    >
+                      Flush DNS only after comparing suspected stale cache
+                      entries with authoritative responses. Repeat the same
+                      query and application test afterwards.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="DNS Timeout، Port بسته یا Access Denied"
+                      data-en="DNS timeout, closed port or access denied"
+                    >
+                      DNS timeout, closed port or access denied
+                    </h2>
+                    <p
+                      data-fa="DNS Timeout با IP قابل دسترسی به Resolver و 53 و Suffix نیاز دارد. TCP ناموفق با Ping موفق به Listener یا ACL مربوط است. SMB Access Denied با TCP سالم به هویت و Share/NTFS اشاره دارد."
+                      data-en="DNS timeout with IP connectivity requires resolver/53/suffix checks. Failed TCP with working ping suggests listeners or ACLs. SMB access denied with working TCP points to identity and share/NTFS."
+                    >
+                      DNS timeout with IP connectivity requires
+                      resolver/53/suffix checks. Failed TCP with working ping
+                      suggests listeners or ACLs. SMB access denied with working
+                      TCP points to identity and share/NTFS.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-powershell">Get-NetTCPConnection -State Listen | Select-Object LocalAddress,LocalPort,OwningProcess
 $Listener = Get-NetTCPConnection -LocalPort 445 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
 if ($null -ne $Listener) {
     Get-Process -Id $Listener.OwningProcess
@@ -285,105 +729,306 @@ if ($null -ne $Listener) {
     Write-Warning &#x27;No TCP/445 listener found on this host&#x27;
 }
 Get-WinEvent -LogName &#x27;Microsoft-Windows-SMBClient/Connectivity&#x27; -MaxEvents 20 -ErrorAction SilentlyContinue</code></pre>
-<p data-fa="Listener را روی File Server بررسی کنید، نه کلاینت. نبود خروجی یعنی روی همان Host Listener پیدا نشده است. Hop بی‌پاسخ در tracert به‌تنهایی Loss برنامه نیست، چون ICMP ممکن است محدود شده باشد." data-en="Inspect listeners on the file server, not the client. Empty output means no matching listener on that host. Unresponsive tracert hops alone do not prove application loss because ICMP might be limited.">Inspect listeners on the file server, not the client. Empty output means no matching listener on that host. Unresponsive tracert hops alone do not prove application loss because ICMP might be limited.</p></section>
-<section id="enterprise-monitoring" class="article-section"><h2 data-fa="قابل دسترس بودن با کارکرد سرویس فرق دارد" data-en="Reachability differs from service function">Reachability differs from service function</h2><p data-fa="TCP Probe و آزمون واقعی SMB را جدا نگه دارید. Latency و Reconnect و Event شبکه را با زمان رخداد مقایسه کنید. مانیتورینگ باید از Subnetی اجرا شود که مسیر کاربر را نمایندگی می‌کند." data-en="Separate TCP probes from functional SMB tests. Correlate latency, reconnects and network events with incident timing. Monitor from a subnet representative of user access.">Separate TCP probes from functional SMB tests. Correlate latency, reconnects and network events with incident timing. Monitor from a subnet representative of user access.</p></section>
-<section id="enterprise-security" class="article-section"><h2 data-fa="حفاظت از گزارش تشخیص" data-en="Protect diagnostic reports">Protect diagnostic reports</h2><p data-fa="Report شامل Hostname و شبکه داخلی است و باید محدود باشد. Wi-Fi Export با key=clear Secret را افشا می‌کند. Password را در net use یا Command Line نگذارید و Firewall را برای تشخیص خاموش نکنید." data-en="Reports disclose hostnames and internal networks. Restrict access. Wi-Fi exports with key=clear expose secrets. Avoid passwords in net use/command lines and do not disable firewalls to investigate.">Reports disclose hostnames and internal networks. Restrict access. Wi-Fi exports with key=clear expose secrets. Avoid passwords in net use/command lines and do not disable firewalls to investigate.</p></section>
-<section id="enterprise-recovery" class="article-section"><h2 data-fa="تغییر محدود و آزمون دوباره" data-en="Limited corrections and retesting">Limited corrections and retesting</h2><p data-fa="پیش از اصلاح Route و Rule، وضعیت قبلی را ثبت کنید و برگشت همان تغییر را آماده داشته باشید. release و netsh int ip reset دسترسی مدیریت را قطع می‌کنند. فقط با Console و برنامه بازیابی اجرا کنید. پس از اصلاح، همان نام و Port و برنامه را دوباره بسنجید." data-en="Record prior routes/rules and prepare change-specific rollback. Release and netsh int ip reset interrupt management. Use console recovery when required. Repeat the same name, port and application tests after correction.">Record prior routes/rules and prepare change-specific rollback. Release and netsh int ip reset interrupt management. Use console recovery when required. Repeat the same name, port and application tests after correction.</p><h3 id="enterprise-practices" data-fa="Hostname و IP در Authentication" data-en="Hostnames and IPs in authentication">Hostnames and IPs in authentication</h3><p data-fa="آزمون با IP برای جداکردن DNS مفید است، اما SMB با IP ممکن است روش Kerberos را تغییر دهد. نتیجه IP را با نتیجه Hostname یکسان نگیرید. netstat و PID فقط Snapshot هستند." data-en="IP tests help isolate DNS, but SMB by IP might change Kerberos behavior. Do not assume IP and hostname tests are equivalent. Netstat/PID output is only a snapshot.">IP tests help isolate DNS, but SMB by IP might change Kerberos behavior. Do not assume IP and hostname tests are equivalent. Netstat/PID output is only a snapshot.</p></section>
-<section id="faq" class="article-section"><h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">Frequently Asked Questions</h2><h3 data-fa="آیا ping موفق یعنی SMB سالم است؟" data-en="Does successful ping prove SMB is healthy?">Does successful ping prove SMB is healthy?</h3><p data-fa="خیر. TCP/445، authentication و permission باید جدا بررسی شوند." data-en="No. Test TCP/445, authentication and permissions independently.">No. Test TCP/445, authentication and permissions independently.</p><h3 data-fa="آیا باید ابتدا DNS cache را پاک کرد؟" data-en="Should DNS cache be cleared first?">Should DNS cache be cleared first?</h3><p data-fa="خیر. ابتدا cache و پاسخ resolver را ثبت و مقایسه کنید." data-en="No. Record and compare cached and resolver responses before clearing it.">No. Record and compare cached and resolver responses before clearing it.</p></section>
-<section id="enterprise-sources"><h2 data-fa="منابع رسمی" data-en="Official Sources">Official Sources</h2><ul><li><a href="https://learn.microsoft.com/en-us/powershell/module/nettcpip/test-netconnection" rel="noopener">Microsoft: Test-NetConnection</a></li><li><a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ipconfig" rel="noopener">Microsoft: ipconfig</a></li></ul></section></div></article>
-        </div></div></div>
-      </section>
-    </main>
-    <footer id="footer" class="footer position-relative">
-    <div class="footer-background">
-      <div class="footer-pattern"></div>
-    </div>
-    <div class="container">
-      <div class="footer-content">
-        <!-- Footer Main Content -->
-        <div class="footer-main">
-          <!-- Brand Section -->
-          <div class="footer-brand">
-            <h3 class="brand-name">
-              <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان">AmirHossein Jalalian</span>
-            </h3>
-            <p class="brand-title" data-en="Infrastructure &amp; DevOps Engineer" data-fa="مهندس زیرساخت و DevOps">Infrastructure &amp; DevOps Engineer</p>
-            <p class="brand-description"
-              data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
-              data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما.">Delivering reliable, secure, and scalable IT solutions for your business success.</p>
-          </div>
-
-          <!-- Contact Info -->
-          <div class="footer-contact">
-            <h4 class="contact-title" data-en="Get In Touch" data-fa="تماس با من">Get In Touch</h4>
-            <div class="contact-info">
-              <div class="contact-item">
-                <i class="bi bi-geo-alt"></i>
-                <span data-en="Tehran, Iran" data-fa="تهران، ایران">Tehran, Iran</span>
-              </div>
-              <div class="contact-item">
-                <i class="bi bi-telephone"></i>
-                <a href="tel:+989197276219" data-en="+98 9197276219" data-fa="09197276219">+98 9197276219</a>
-              </div>
-              <div class="contact-item">
-                <i class="bi bi-envelope"></i>
-                <a href="mailto:jalalian.amirhossein@gmail.com">jalalian.amirhossein@gmail.com</a>
-              </div>
-            </div>
-
-            <!-- Social Links -->
-            <div class="social-links">
-              <h5 class="social-title" data-en="Follow Me" data-fa="دنبال کنید">Follow Me</h5>
-              <div class="social-icons">
-                <a href="https://wa.me/989197276219" target="_blank" rel="noopener" class="social-link whatsapp"
-                  aria-label="WhatsApp">
-                  <i class="bi bi-whatsapp"></i>
-                </a>
-                <a href="https://t.me/Aj_mercury" target="_blank" rel="noopener" class="social-link telegram"
-                  aria-label="Telegram">
-                  <i class="bi bi-telegram"></i>
-                </a>
-                <a href="mailto:jalalian.amirhossein@gmail.com" class="social-link email" aria-label="Email">
-                  <i class="bi bi-envelope"></i>
-                </a>
-              </div>
+                    <p
+                      data-fa="Listener را روی File Server بررسی کنید، نه کلاینت. نبود خروجی یعنی روی همان Host Listener پیدا نشده است. Hop بی‌پاسخ در tracert به‌تنهایی Loss برنامه نیست، چون ICMP ممکن است محدود شده باشد."
+                      data-en="Inspect listeners on the file server, not the client. Empty output means no matching listener on that host. Unresponsive tracert hops alone do not prove application loss because ICMP might be limited."
+                    >
+                      Inspect listeners on the file server, not the client.
+                      Empty output means no matching listener on that host.
+                      Unresponsive tracert hops alone do not prove application
+                      loss because ICMP might be limited.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="قابل دسترس بودن با کارکرد سرویس فرق دارد"
+                      data-en="Reachability differs from service function"
+                    >
+                      Reachability differs from service function
+                    </h2>
+                    <p
+                      data-fa="TCP Probe و آزمون واقعی SMB را جدا نگه دارید. Latency و Reconnect و Event شبکه را با زمان رخداد مقایسه کنید. مانیتورینگ باید از Subnetی اجرا شود که مسیر کاربر را نمایندگی می‌کند."
+                      data-en="Separate TCP probes from functional SMB tests. Correlate latency, reconnects and network events with incident timing. Monitor from a subnet representative of user access."
+                    >
+                      Separate TCP probes from functional SMB tests. Correlate
+                      latency, reconnects and network events with incident
+                      timing. Monitor from a subnet representative of user
+                      access.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="حفاظت از گزارش تشخیص"
+                      data-en="Protect diagnostic reports"
+                    >
+                      Protect diagnostic reports
+                    </h2>
+                    <p
+                      data-fa="Report شامل Hostname و شبکه داخلی است و باید محدود باشد. Wi-Fi Export با key=clear Secret را افشا می‌کند. Password را در net use یا Command Line نگذارید و Firewall را برای تشخیص خاموش نکنید."
+                      data-en="Reports disclose hostnames and internal networks. Restrict access. Wi-Fi exports with key=clear expose secrets. Avoid passwords in net use/command lines and do not disable firewalls to investigate."
+                    >
+                      Reports disclose hostnames and internal networks. Restrict
+                      access. Wi-Fi exports with key=clear expose secrets. Avoid
+                      passwords in net use/command lines and do not disable
+                      firewalls to investigate.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="تغییر محدود و آزمون دوباره"
+                      data-en="Limited corrections and retesting"
+                    >
+                      Limited corrections and retesting
+                    </h2>
+                    <p
+                      data-fa="پیش از اصلاح Route و Rule، وضعیت قبلی را ثبت کنید و برگشت همان تغییر را آماده داشته باشید. release و netsh int ip reset دسترسی مدیریت را قطع می‌کنند. فقط با Console و برنامه بازیابی اجرا کنید. پس از اصلاح، همان نام و Port و برنامه را دوباره بسنجید."
+                      data-en="Record prior routes/rules and prepare change-specific rollback. Release and netsh int ip reset interrupt management. Use console recovery when required. Repeat the same name, port and application tests after correction."
+                    >
+                      Record prior routes/rules and prepare change-specific
+                      rollback. Release and netsh int ip reset interrupt
+                      management. Use console recovery when required. Repeat the
+                      same name, port and application tests after correction.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="Hostname و IP در Authentication"
+                      data-en="Hostnames and IPs in authentication"
+                    >
+                      Hostnames and IPs in authentication
+                    </h3>
+                    <p
+                      data-fa="آزمون با IP برای جداکردن DNS مفید است، اما SMB با IP ممکن است روش Kerberos را تغییر دهد. نتیجه IP را با نتیجه Hostname یکسان نگیرید. netstat و PID فقط Snapshot هستند."
+                      data-en="IP tests help isolate DNS, but SMB by IP might change Kerberos behavior. Do not assume IP and hostname tests are equivalent. Netstat/PID output is only a snapshot."
+                    >
+                      IP tests help isolate DNS, but SMB by IP might change
+                      Kerberos behavior. Do not assume IP and hostname tests are
+                      equivalent. Netstat/PID output is only a snapshot.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا ping موفق یعنی SMB سالم است؟"
+                      data-en="Does successful ping prove SMB is healthy?"
+                    >
+                      Does successful ping prove SMB is healthy?
+                    </h3>
+                    <p
+                      data-fa="خیر. TCP/445، authentication و permission باید جدا بررسی شوند."
+                      data-en="No. Test TCP/445, authentication and permissions independently."
+                    >
+                      No. Test TCP/445, authentication and permissions
+                      independently.
+                    </p>
+                    <h3
+                      data-fa="آیا باید ابتدا DNS cache را پاک کرد؟"
+                      data-en="Should DNS cache be cleared first?"
+                    >
+                      Should DNS cache be cleared first?
+                    </h3>
+                    <p
+                      data-fa="خیر. ابتدا cache و پاسخ resolver را ثبت و مقایسه کنید."
+                      data-en="No. Record and compare cached and resolver responses before clearing it."
+                    >
+                      No. Record and compare cached and resolver responses
+                      before clearing it.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://learn.microsoft.com/en-us/powershell/module/nettcpip/test-netconnection"
+                          rel="noopener"
+                          >Microsoft: Test-NetConnection</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ipconfig"
+                          rel="noopener"
+                          >Microsoft: ipconfig</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
+              </article>
             </div>
           </div>
         </div>
-
-        <!-- Footer Bottom -->
-        <div class="footer-bottom">
-          <div class="footer-bottom-content">
-            <div class="copyright">
-              <p>
-                © <span>2025</span>
-                <strong data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان">AmirHossein Jalalian</strong>
-                <span data-en="All Rights Reserved" data-fa="تمام حقوق محفوظ است">All Rights Reserved</span>
+      </section>
+    </main>
+    <footer id="footer" class="footer position-relative">
+      <div class="footer-background">
+        <div class="footer-pattern"></div>
+      </div>
+      <div class="container">
+        <div class="footer-content">
+          <!-- Footer Main Content -->
+          <div class="footer-main">
+            <!-- Brand Section -->
+            <div class="footer-brand">
+              <h3 class="brand-name">
+                <span data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان"
+                  >AmirHossein Jalalian</span
+                >
+              </h3>
+              <p
+                class="brand-title"
+                data-en="Infrastructure &amp; DevOps Engineer"
+                data-fa="مهندس زیرساخت و DevOps"
+              >
+                Infrastructure &amp; DevOps Engineer
+              </p>
+              <p
+                class="brand-description"
+                data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
+                data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
+              >
+                Delivering reliable, secure, and scalable IT solutions for your
+                business success.
               </p>
             </div>
-            <div class="footer-heart">
-              <span data-en="Made with" data-fa="ساخته شده با">Made with</span>
-              <i class="bi bi-heart-fill"></i>
-              <span data-en="in Iran" data-fa="در ایران">in Iran</span>
+
+            <!-- Contact Info -->
+            <div class="footer-contact">
+              <h4
+                class="contact-title"
+                data-en="Get In Touch"
+                data-fa="تماس با من"
+              >
+                Get In Touch
+              </h4>
+              <div class="contact-info">
+                <div class="contact-item">
+                  <i class="bi bi-geo-alt"></i>
+                  <span data-en="Tehran, Iran" data-fa="تهران، ایران"
+                    >Tehran, Iran</span
+                  >
+                </div>
+                <div class="contact-item">
+                  <i class="bi bi-telephone"></i>
+                  <a
+                    href="tel:+989197276219"
+                    data-en="+98 9197276219"
+                    data-fa="09197276219"
+                    >+98 9197276219</a
+                  >
+                </div>
+                <div class="contact-item">
+                  <i class="bi bi-envelope"></i>
+                  <a href="mailto:jalalian.amirhossein@gmail.com"
+                    >jalalian.amirhossein@gmail.com</a
+                  >
+                </div>
+              </div>
+
+              <!-- Social Links -->
+              <div class="social-links">
+                <h5
+                  class="social-title"
+                  data-en="Follow Me"
+                  data-fa="دنبال کنید"
+                >
+                  Follow Me
+                </h5>
+                <div class="social-icons">
+                  <a
+                    href="https://wa.me/989197276219"
+                    target="_blank"
+                    rel="noopener"
+                    class="social-link whatsapp"
+                    aria-label="WhatsApp"
+                  >
+                    <i class="bi bi-whatsapp"></i>
+                  </a>
+                  <a
+                    href="https://t.me/Aj_mercury"
+                    target="_blank"
+                    rel="noopener"
+                    class="social-link telegram"
+                    aria-label="Telegram"
+                  >
+                    <i class="bi bi-telegram"></i>
+                  </a>
+                  <a
+                    href="mailto:jalalian.amirhossein@gmail.com"
+                    class="social-link email"
+                    aria-label="Email"
+                  >
+                    <i class="bi bi-envelope"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer Bottom -->
+          <div class="footer-bottom">
+            <div class="footer-bottom-content">
+              <div class="copyright">
+                <p>
+                  © <span>2025</span>
+                  <strong
+                    data-en="AmirHossein Jalalian"
+                    data-fa="امیرحسین جلالیان"
+                    >AmirHossein Jalalian</strong
+                  >
+                  <span
+                    data-en="All Rights Reserved"
+                    data-fa="تمام حقوق محفوظ است"
+                    >All Rights Reserved</span
+                  >
+                </p>
+              </div>
+              <div class="footer-heart">
+                <span data-en="Made with" data-fa="ساخته شده با"
+                  >Made with</span
+                >
+                <i class="bi bi-heart-fill"></i>
+                <span data-en="in Iran" data-fa="در ایران">in Iran</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </footer>
+    </footer>
     <div id="preloader"></div>
 
-    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+    <script
+      src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"
+      defer
+    ></script>
     <script src="../assets/vendor/aos/aos.js" defer></script>
     <script src="../assets/vendor/typed.js/typed.umd.js" defer></script>
-    <script src="../assets/vendor/purecounter/purecounter_vanilla.js" defer></script>
-    <script src="../assets/vendor/waypoints/noframework.waypoints.js" defer></script>
+    <script
+      src="../assets/vendor/purecounter/purecounter_vanilla.js"
+      defer
+    ></script>
+    <script
+      src="../assets/vendor/waypoints/noframework.waypoints.js"
+      defer
+    ></script>
     <script src="../assets/vendor/glightbox/js/glightbox.min.js" defer></script>
-    <script src="../assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
-    <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
+    <script
+      src="../assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"
+      defer
+    ></script>
+    <script
+      src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"
+      defer
+    ></script>
     <script src="../assets/vendor/swiper/swiper-bundle.min.js" defer></script>
     <script src="../assets/js/main.js?v=1000" defer></script>
     <script src="../assets/js/i18n.js?v=1000" defer></script>
-
   </body>
 </html>
