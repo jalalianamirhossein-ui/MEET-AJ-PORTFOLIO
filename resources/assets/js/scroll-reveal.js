@@ -15,7 +15,7 @@
         if (!entry.isIntersecting) continue;
         const element = entry.target;
         // Do not interrupt a focused form/control with entry motion.
-        if (!element.contains(document.activeElement)) {
+        if (!window.meetajNavigationScrolling && !element.contains(document.activeElement)) {
           element.classList.add('meetaj-scroll-reveal');
           element.addEventListener('animationend', () => {
             element.classList.remove('meetaj-scroll-reveal');

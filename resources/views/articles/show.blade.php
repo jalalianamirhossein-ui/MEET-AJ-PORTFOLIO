@@ -334,8 +334,8 @@
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1416" defer></script>
-    <script src="/assets/js/scroll-reveal.js?v=1" defer></script>
+    <script src="/assets/js/main.js?v=1417" defer></script>
+    <script src="/assets/js/scroll-reveal.js?v=4" defer></script>
     <script src="/assets/js/i18n.js?v=1407" defer></script>
     <script>
       if ("serviceWorker" in navigator) {

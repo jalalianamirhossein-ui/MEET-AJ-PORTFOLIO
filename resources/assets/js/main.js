@@ -1075,6 +1075,13 @@
     return path === "/" || path === "/index.html";
   };
 
+  let navigationScrollTimer;
+  const finishNavigationScroll = () => {
+    window.clearTimeout(navigationScrollTimer);
+    window.meetajNavigationScrolling = false;
+  };
+  window.addEventListener("scrollend", finishNavigationScroll);
+
   const scrollToHash = (hash, instant) => {
     if (!hash || hash === "#") return false;
     let section = null;
@@ -1091,10 +1098,24 @@
       el.classList.add("aos-init", "aos-animate");
     });
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    section.scrollIntoView({
-      behavior: instant || reduceMotion ? "auto" : "smooth",
-      block: "start",
+    // Use layout coordinates: reveal transforms must not move the destination.
+    let top = 0;
+    for (let element = section; element; element = element.offsetParent) {
+      top += element.offsetTop;
+    }
+    const padding = parseFloat(window.getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    const margin = parseFloat(window.getComputedStyle(section).scrollMarginTop) || 0;
+    window.clearTimeout(navigationScrollTimer);
+    window.meetajNavigationScrolling = !instant && !reduceMotion;
+    document.querySelectorAll(".meetaj-scroll-reveal").forEach((element) => {
+      element.classList.remove("meetaj-scroll-reveal");
     });
+    window.scrollTo({
+      top: Math.max(0, top - padding - margin),
+      behavior: instant || reduceMotion ? "instant" : "smooth",
+    });
+    // Fallback for browsers without scrollend, including no-op navigation.
+    navigationScrollTimer = window.setTimeout(finishNavigationScroll, 2000);
     return true;
   };
 
