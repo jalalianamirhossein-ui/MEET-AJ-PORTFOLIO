@@ -1100,3 +1100,54 @@ body.index-page #hero .hero-content {
     animation: none;
   }
 }
+
+/* Position against the hero itself: its auto-height wrapper cannot anchor a corner. */
+@media (min-width: 992px) {
+  body.index-page #hero {
+    position: relative;
+  }
+  body.index-page #hero .container {
+    position: static;
+  }
+  body.index-page #hero .hero-content-section {
+    position: absolute;
+    inset: auto;
+    inset-inline-start: clamp(1rem, 1.5vw, 1.75rem);
+    inset-block-end: 1.5rem;
+    width: min(34%, 24rem);
+    max-width: 24rem;
+    margin: 0;
+    transform: none !important;
+    z-index: 3;
+  }
+}
+
+body.index-page #hero .hero-content {
+  background: rgba(12, 30, 49, 0.3);
+  border-color: rgba(220, 240, 255, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 8px 28px rgba(0, 12, 30, 0.2);
+}
+
+body.index-page #hero :is(.hero-role, .hero-subtitle) {
+  color: #f1f7ff;
+  text-shadow: 0 1px 3px rgba(0, 12, 30, 0.65);
+}
+
+body.index-page #hero .hero-title {
+  color: #93c5fd;
+  text-shadow: 0 1px 3px rgba(0, 12, 30, 0.2);
+}
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  body.index-page #hero .hero-title {
+    background-image: linear-gradient(110deg, #93c5fd 0%, #60a5fa 30%, #dbeafe 50%, #60a5fa 70%, #93c5fd 100%);
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  body.index-page #hero .hero-content { background: #16324b; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  body.index-page #hero .hero-content { background: #16324b; }
+}
