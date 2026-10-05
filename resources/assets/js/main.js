@@ -1160,29 +1160,20 @@
   });
 
   let navmenulinks = document.querySelectorAll(".navmenu a");
+  const navSections = [...navmenulinks].map((link) => ({
+    link,
+    section: link.hash ? document.querySelector(link.hash) : null,
+  })).filter(({ section }) => section);
   function navmenuScrollspy() {
-    navmenulinks.forEach((navmenulink) => {
-      if (!navmenulink.hash) return;
-      let section = document.querySelector(navmenulink.hash);
-      if (!section) return;
-
-      // Improve mobile performance for scrollspy
-      let offset = 200;
-      if (window.innerWidth <= 768) {
-        offset = 100; // Reduce offset for mobile
-      }
-
-      let position = window.scrollY + offset;
-      if (
-        position >= section.offsetTop &&
-        position <= section.offsetTop + section.offsetHeight
-      ) {
-        document
-          .querySelectorAll(".navmenu a.active")
-          .forEach((link) => link.classList.remove("active"));
-        navmenulink.classList.add("active");
-      } else {
-        navmenulink.classList.remove("active");
+    const position = window.scrollY + (window.innerWidth <= 768 ? 100 : 200);
+    // Finish all layout reads before changing classes to avoid forced reflows.
+    const active = navSections.find(({ section }) =>
+      position >= section.offsetTop && position < section.offsetTop + section.offsetHeight,
+    )?.link;
+    navSections.forEach(({ link }) => {
+      const selected = link === active;
+      if (link.classList.contains("active") !== selected) {
+        link.classList.toggle("active", selected);
       }
     });
   }
@@ -1455,15 +1446,19 @@
 
     const progress = progressBar.querySelector(".scroll-progress");
 
-    window.addEventListener("scroll", () => {
-      const winScroll =
-        document.body.scrollTop || document.documentElement.scrollTop;
-      const height =
-        document.documentElement.scrollHeight -
-        document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      progress.style.width = scrolled + "%";
-    });
+    let progressFrame = null;
+    const updateProgress = () => {
+      if (progressFrame !== null) return;
+      progressFrame = window.requestAnimationFrame(() => {
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = height > 0 ? Math.min(100, Math.max(0, window.scrollY / height * 100)) : 0;
+        progress.style.width = scrolled + "%";
+        progressFrame = null;
+      });
+    };
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress, { passive: true });
+    updateProgress();
   }
 
   window.addEventListener("load", initScrollProgress);
