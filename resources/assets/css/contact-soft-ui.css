@@ -1,0 +1,95 @@
+/* Contact-only Soft UI: shared surfaces, blue/teal accents and soft relief. */
+body.index-page #contact {
+  --contact-surface: #f0f2f6;
+  --contact-light: rgba(255, 255, 255, 0.88);
+  --contact-dark: rgba(173, 183, 200, 0.35);
+  --contact-ink: #243650;
+  --contact-muted: #607087;
+  --contact-accent: #5476a6;
+  --contact-primary: #426da9;
+  --contact-raised: -6px -6px 16px var(--contact-light), 6px 6px 16px var(--contact-dark);
+  --contact-inset: inset -4px -4px 10px var(--contact-light), inset 4px 4px 10px var(--contact-dark);
+  background: var(--contact-surface);
+  color: var(--contact-ink);
+}
+body.index-page #contact .contact-wrapper { padding: 8px 0 16px; }
+body.index-page #contact .contact-header { margin: 0 0 32px; padding: 0; }
+body.index-page #contact .contact-intro { gap: 8px; }
+body.index-page #contact .contact-intro-title { font-size: clamp(1.2rem, 2vw, 1.55rem); color: var(--contact-ink); }
+body.index-page #contact .contact-intro-text { max-width: 75ch; font-size: 0.9rem; color: var(--contact-muted); }
+body.index-page #contact .title-accent { color: var(--contact-accent); }
+body.index-page #contact .contact-main-grid { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: 32px; align-items: start; }
+body.index-page #contact :is(.contact-main-grid, .contact-form-section, .contact-card, .location-info)::before,
+body.index-page #contact :is(.contact-main-grid, .contact-card)::after { content: none; }
+body.index-page #contact .contact-methods { margin: 0; padding: 0; background: var(--contact-surface); }
+body.index-page #contact .contact-cards-grid { gap: 20px; }
+body.index-page #contact .contact-card:nth-child(n) { --contact-accent: #5476a6; }
+/* Raised contact methods; preserve the current icons and content. */
+body.index-page #contact .contact-card,
+body.index-page #contact .contact-card:hover {
+  display: flex; align-items: flex-start; gap: 16px; padding: 24px;
+  /* Replace the previous tree layout's important surface resets. */
+  border: 0 !important; border-radius: 20px !important; background: var(--contact-surface) !important;
+  box-shadow: var(--contact-raised) !important; transform: none; backdrop-filter: none;
+}
+body.index-page #contact .card-icon,
+body.index-page #contact .card-icon:hover {
+  width: auto; height: auto; min-width: 24px; padding: 0; margin: 0;
+  border: 0; border-radius: 0; background: transparent; box-shadow: none;
+  color: var(--contact-accent); font-size: 1.35rem; transform: none;
+}
+body.index-page #contact .card-content { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+body.index-page #contact .card-content h4 { font-size: 0.95rem; color: var(--contact-ink); }
+body.index-page #contact .card-content p { font-size: 0.82rem; color: var(--contact-muted); }
+body.index-page #contact .contact-link,
+body.index-page #contact .contact-link:hover { grid-row: 3; width: fit-content; font-size: 0.86rem; color: var(--contact-primary); }
+body.index-page #contact .contact-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+body.index-page #contact .location-info { margin: 24px 0 0; padding: 24px; border: 0; border-radius: 20px; background: var(--contact-surface); box-shadow: var(--contact-inset); }
+body.index-page #contact .location-card { background: var(--contact-surface); }
+body.index-page #contact .location-header { margin-bottom: 8px; }
+body.index-page #contact .location-header h4 { font-size: 0.95rem; color: var(--contact-ink); }
+body.index-page #contact .location-header i { color: var(--contact-accent); }
+body.index-page #contact .location-content p { font-size: 0.85rem; color: var(--contact-muted); }
+/* The message panel and inputs share the same material. */
+body.index-page #contact .contact-form-section { margin: 0; padding: 0; border: 0; }
+body.index-page #contact .form-container { padding: 32px; border: 0; border-radius: 28px; background: var(--contact-surface); box-shadow: var(--contact-raised); backdrop-filter: none; }
+body.index-page #contact .form-header { padding: 0 0 24px; border: 0; background: var(--contact-surface); }
+body.index-page #contact .form-title { font-size: 1.15rem; margin-bottom: 8px; color: var(--contact-ink); }
+body.index-page #contact .form-subtitle { font-size: 0.83rem; color: var(--contact-muted); }
+body.index-page #contact .php-email-form { padding: 0; gap: 20px; background: var(--contact-surface); }
+body.index-page #contact .form-row { gap: 16px; }
+body.index-page #contact .form-group { gap: 8px; }
+body.index-page #contact .form-label { font-size: 0.83rem; color: var(--contact-ink); }
+body.index-page #contact .form-label i { color: var(--contact-muted); }
+body.index-page #contact :is(.form-input, .form-textarea) {
+  min-height: 48px; padding: 14px 16px; border: 0; border-radius: 14px;
+  background: var(--contact-surface); color: var(--contact-ink); font-size: 0.88rem;
+  box-shadow: var(--contact-inset); transition: box-shadow 180ms ease;
+}
+body.index-page #contact .form-textarea { height: 144px; min-height: 144px; resize: vertical; }
+body.index-page #contact :is(.form-input, .form-textarea)::placeholder { color: var(--contact-muted); }
+body.index-page #contact :is(.form-input, .form-textarea):focus { outline: 2px solid var(--contact-accent); outline-offset: 3px; box-shadow: var(--contact-inset); }
+body.index-page #contact .form-actions { margin: 4px 0 0; gap: 16px; }
+body.index-page #contact .submit-btn,
+body.index-page #contact .submit-btn:hover {
+  min-height: 48px; padding: 14px 24px; border: 0; border-radius: 14px;
+  background: var(--contact-primary); color: #fff; font-size: 0.9rem;
+  box-shadow: var(--contact-raised); transform: none;
+  transition: box-shadow 150ms ease, transform 150ms ease;
+}
+body.index-page #contact .submit-btn::before { content: none; }
+body.index-page #contact .submit-btn:active { transform: scale(0.98); box-shadow: var(--contact-inset); }
+body.index-page #contact :is(a, button):focus-visible { outline: 2px solid var(--contact-accent); outline-offset: 4px; border-radius: 8px; }
+@media (max-width: 991px) {
+  body.index-page #contact .contact-main-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 575px) {
+  body.index-page #contact .contact-main-grid { gap: 24px; }
+  body.index-page #contact :is(.contact-card, .location-info, .form-container) { padding: 20px; }
+  body.index-page #contact .form-container { border-radius: 20px; }
+  body.index-page #contact .form-row { grid-template-columns: minmax(0, 1fr); }
+  body.index-page #contact .submit-btn { width: 100%; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.index-page #contact :is(.submit-btn, .form-input, .form-textarea) { transition: none; }
+}
