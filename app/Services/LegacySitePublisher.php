@@ -38,8 +38,8 @@ class LegacySitePublisher
     {
         $written = [];
         // The homepage is now a first-class Blade view backed by homepage_contents.
-        // Legacy publishing still builds the article listing, but must never
-        // overwrite the CMS-driven homepage with the old static export.
+        // Tracked Blade views are maintained directly. Only bootstrap the
+        // article listing from the legacy export when its view is missing.
         $written[] = resource_path('views/home.blade.php');
         $written[] = $this->writeArticleIndex();
 
@@ -72,6 +72,11 @@ class LegacySitePublisher
 
     private function writeArticleIndex(): string
     {
+        $target = resource_path('views/articles/index.blade.php');
+        if (is_file($target)) {
+            return $target;
+        }
+
         $html = file_get_contents(resource_path('legacy/index.html'));
         if ($html === false) {
             throw new \RuntimeException('Unable to read index.html');
