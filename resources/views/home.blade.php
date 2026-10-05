@@ -251,9 +251,9 @@
       disabled
     />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1854" rel="stylesheet" />
     <link href="/assets/css/glass-system.css?v=27" rel="stylesheet" />
-    <link href="/assets/css/contact-soft-ui.css?v=6" rel="stylesheet" />
+    <link href="/assets/css/contact-soft-ui.css?v=7" rel="stylesheet" />
     <link href="/assets/css/service-colors.css?v=1" rel="stylesheet" />
 
     <!-- ===============================================
@@ -1059,27 +1059,6 @@
         =============================================== -->
         <div class="container" data-aos="fade-up" data-aos-delay="100">
           <div class="contact-wrapper">
-            <!-- Contact Header -->
-            <div class="contact-header" data-aos="fade-up" data-aos-delay="150">
-              <div class="contact-intro">
-                <h3 class="contact-intro-title">
-                  <span
-                    data-en="{{ data_get($contactContent, 'heading_en', "Let's Work Together") }}"
-                    data-fa="{{ data_get($contactContent, 'heading_fa', 'بیایید با هم کار کنیم') }}"
-                    >{{ data_get($contactContent, 'heading_en', "Let's Work Together") }}</span
-                  >
-                      <i class="bi bi-people-fill title-accent" aria-hidden="true"></i>
-                </h3>
-                <p
-                  class="contact-intro-text"
-                  data-en="{{ data_get($contactContent, 'body_en', '') }}"
-                  data-fa="{{ data_get($contactContent, 'body_fa', '') }}"
-                >
-                  {{ data_get($contactContent, 'body_en', '') }}
-                </p>
-              </div>
-            </div>
-
             <!-- Contact Main Grid -->
             <div class="contact-main-grid">
               <!-- Left Column - Contact Methods -->

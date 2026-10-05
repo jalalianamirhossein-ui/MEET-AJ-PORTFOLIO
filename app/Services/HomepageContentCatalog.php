@@ -125,7 +125,7 @@ class HomepageContentCatalog
                 'key' => 'contact', 'label' => 'Contact', 'sort' => 60,
                 'content' => [
                     'title_en' => 'Get in Touch', 'title_fa' => 'راه‌های ارتباطی',
-                    'intro_en' => 'Get in touch for professional IT services, network solutions, or technical consulting.', 'intro_fa' => 'برای خدمات حرفه‌ای IT، راهکارهای شبکه یا مشاوره فنی با من تماس بگیرید.',
+                    'intro_en' => 'Let’s connect for IT consulting or your next project.', 'intro_fa' => 'برای مشاوره یا اجرای پروژه‌های IT، در ارتباط باشیم.',
                     'heading_en' => 'Share Your Needs. Let’s Find a Solution.', 'heading_fa' => 'از نیازتان بگویید، با هم راه‌حل می‌سازیم',
                     'body_en' => "Ready to discuss your IT infrastructure needs? I'm here to help you achieve your goals with professional solutions.", 'body_fa' => 'آماده بحث در مورد نیازهای زیرساخت IT شما هستم؟ من اینجا هستم تا با راهکارهای حرفه‌ای به شما کمک کنم.',
                     'location_en' => 'Tehran, Iran', 'location_fa' => 'تهران، ایران',
