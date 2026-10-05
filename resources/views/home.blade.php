@@ -253,7 +253,7 @@
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
     <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
     <link href="/assets/css/glass-system.css?v=27" rel="stylesheet" />
-    <link href="/assets/css/contact-soft-ui.css?v=2" rel="stylesheet" />
+    <link href="/assets/css/contact-soft-ui.css?v=3" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -1148,7 +1148,12 @@
                       <span data-en="Send a Message" data-fa="ارسال پیام"
                         >Send a Message</span
                       >
-                      <i class="bi bi-chat-dots-fill title-accent" aria-hidden="true"></i>
+                      <svg class="form-infinity" viewBox="0 0 320 160" aria-hidden="true">
+                        <path class="form-infinity-track" d="M160 80 C125 30 105 28 80 28 C12 28 12 132 80 132 C105 132 125 130 160 80 C195 30 215 28 240 28 C308 28 308 132 240 132 C215 132 195 130 160 80Z" />
+                        <path class="form-infinity-flow" pathLength="100" d="M160 80 C125 30 105 28 80 28 C12 28 12 132 80 132 C105 132 125 130 160 80 C195 30 215 28 240 28 C308 28 308 132 240 132 C215 132 195 130 160 80Z" />
+                        <path class="form-infinity-flow" pathLength="100" d="M160 80 C125 30 105 28 80 28 C12 28 12 132 80 132 C105 132 125 130 160 80 C195 30 215 28 240 28 C308 28 308 132 240 132 C215 132 195 130 160 80Z" />
+                        <path class="form-infinity-flow" pathLength="100" d="M160 80 C125 30 105 28 80 28 C12 28 12 132 80 132 C105 132 125 130 160 80 C195 30 215 28 240 28 C308 28 308 132 240 132 C215 132 195 130 160 80Z" />
+                      </svg>
                     </h3>
                     <p
                       class="form-subtitle"

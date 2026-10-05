@@ -1,12 +1,14 @@
 /* Contact-only Soft UI: shared surfaces, blue/teal accents and soft relief. */
 body.index-page #contact {
-  --contact-surface: #f0f2f6;
+  --contact-surface: #f4f6fa;
   --contact-light: rgba(255, 255, 255, 0.88);
   --contact-dark: rgba(173, 183, 200, 0.35);
   --contact-ink: #243650;
   --contact-muted: #607087;
   --contact-accent: #5476a6;
-  --contact-primary: #426da9;
+  --contact-primary: #426de0;
+  --contact-teal: #27b6c7;
+  --contact-violet: #9275df;
   --contact-raised: -6px -6px 16px var(--contact-light), 6px 6px 16px var(--contact-dark);
   --contact-inset: inset -4px -4px 10px var(--contact-light), inset 4px 4px 10px var(--contact-dark);
   background: var(--contact-surface);
@@ -50,11 +52,18 @@ body.index-page #contact .location-header { margin-bottom: 8px; }
 body.index-page #contact .location-header h4 { font-size: 0.95rem; color: var(--contact-ink); }
 body.index-page #contact .location-header i { color: var(--contact-accent); }
 body.index-page #contact .location-content p { font-size: 0.85rem; color: var(--contact-muted); }
-/* The message panel and inputs share the same material. */
+/* Message panel follows the DevOps loader's airy surface and flowing color. */
 body.index-page #contact .contact-form-section { margin: 0; padding: 0; border: 0; }
-body.index-page #contact .form-container { padding: 32px; border: 0; border-radius: 28px; background: var(--contact-surface); box-shadow: var(--contact-raised); backdrop-filter: none; }
+body.index-page #contact .form-container { position: relative; overflow: hidden; padding: 32px; border: 0; border-radius: 28px; background: var(--contact-surface); box-shadow: 0 12px 40px rgba(36, 54, 80, 0.07), inset 0 0 0 1px #e3e8f1; backdrop-filter: none; }
+body.index-page #contact .form-container::before { content: ''; position: absolute; inset: 0 0 auto; width: 100%; height: 3px; background: linear-gradient(90deg, var(--contact-primary), var(--contact-teal), var(--contact-violet), var(--contact-primary)); background-size: 300% 100%; animation: contact-color-flow 8s ease-in-out infinite; }
 body.index-page #contact .form-header { padding: 0 0 24px; border: 0; background: var(--contact-surface); }
 body.index-page #contact .form-title { font-size: 1.15rem; margin-bottom: 8px; color: var(--contact-ink); }
+body.index-page #contact .form-infinity { width: 64px; height: 32px; flex: 0 0 auto; overflow: visible; }
+body.index-page #contact .form-infinity path { fill: none; stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; }
+body.index-page #contact .form-infinity-track { stroke: #dce4f0; }
+body.index-page #contact .form-infinity-flow { stroke: var(--contact-primary); stroke-dasharray: 23 77; animation: contact-infinity-flow 4s linear infinite; }
+body.index-page #contact .form-infinity-flow:nth-child(3) { stroke: var(--contact-teal); animation-delay: -1.333333s; }
+body.index-page #contact .form-infinity-flow:nth-child(4) { stroke: var(--contact-violet); animation-delay: -2.666667s; }
 body.index-page #contact .form-subtitle { font-size: 0.83rem; color: var(--contact-muted); }
 body.index-page #contact .php-email-form { padding: 0; gap: 20px; background: var(--contact-surface); }
 body.index-page #contact .form-row { gap: 16px; }
@@ -63,22 +72,27 @@ body.index-page #contact .form-label { font-size: 0.83rem; color: var(--contact-
 body.index-page #contact .form-label i { color: var(--contact-muted); }
 body.index-page #contact :is(.form-input, .form-textarea) {
   min-height: 48px; padding: 14px 16px; border: 0; border-radius: 14px;
-  background: var(--contact-surface); color: var(--contact-ink); font-size: 0.88rem;
-  box-shadow: var(--contact-inset); transition: box-shadow 180ms ease;
+  background: #fff; color: var(--contact-ink); font-size: 0.88rem;
+  box-shadow: inset 0 0 0 1px #e0e6ef; transition: box-shadow 180ms ease;
 }
 body.index-page #contact .form-textarea { height: 144px; min-height: 144px; resize: vertical; }
 body.index-page #contact :is(.form-input, .form-textarea)::placeholder { color: var(--contact-muted); }
-body.index-page #contact :is(.form-input, .form-textarea):focus { outline: 2px solid var(--contact-accent); outline-offset: 3px; box-shadow: var(--contact-inset); }
+body.index-page #contact :is(.form-input, .form-textarea):focus { outline: 2px solid var(--contact-primary); outline-offset: 3px; box-shadow: 0 0 0 5px rgba(66, 109, 224, 0.08); }
 body.index-page #contact .form-actions { margin: 4px 0 0; gap: 16px; }
 body.index-page #contact .submit-btn,
 body.index-page #contact .submit-btn:hover {
   min-height: 48px; padding: 14px 24px; border: 0; border-radius: 14px;
-  background: var(--contact-primary); color: #fff; font-size: 0.9rem;
-  box-shadow: var(--contact-raised); transform: none;
+  background: linear-gradient(110deg, #3558bc, #246b85, #7054b2, #3558bc); background-size: 300% 100%; color: #fff; font-size: 0.9rem;
+  box-shadow: 0 6px 18px rgba(66, 109, 224, 0.18); transform: none;
+  animation: contact-color-flow 8s ease-in-out infinite;
   transition: box-shadow 150ms ease, transform 150ms ease;
 }
 body.index-page #contact .submit-btn::before { content: none; }
-body.index-page #contact .submit-btn:active { transform: scale(0.98); box-shadow: var(--contact-inset); }
+body.index-page #contact .submit-btn:hover { box-shadow: 0 8px 24px rgba(66, 109, 224, 0.25); }
+body.index-page #contact .submit-btn:active { transform: scale(0.98); }
+body.index-page #contact .submit-btn:disabled { opacity: 0.65; cursor: wait; animation-play-state: paused; }
+@keyframes contact-color-flow { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+@keyframes contact-infinity-flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -100; } }
 body.index-page #contact :is(a, button):focus-visible { outline: 2px solid var(--contact-accent); outline-offset: 4px; border-radius: 8px; }
 @media (max-width: 991px) {
   body.index-page #contact .contact-main-grid { grid-template-columns: minmax(0, 1fr); }
@@ -92,4 +106,7 @@ body.index-page #contact :is(a, button):focus-visible { outline: 2px solid var(-
 }
 @media (prefers-reduced-motion: reduce) {
   body.index-page #contact :is(.submit-btn, .form-input, .form-textarea) { transition: none; }
+  body.index-page #contact :is(.submit-btn, .form-infinity-flow), body.index-page #contact .form-container::before { animation: none; }
+  body.index-page #contact .form-infinity-flow:nth-child(3) { stroke-dashoffset: -33.333; }
+  body.index-page #contact .form-infinity-flow:nth-child(4) { stroke-dashoffset: -66.666; }
 }
