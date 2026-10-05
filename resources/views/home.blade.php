@@ -360,6 +360,7 @@
         }
       }
     </style>
+    <link href="/preloader.css?v=devops-1" rel="stylesheet" />
     <noscript>
       <style>
         #preloader {
@@ -1455,33 +1456,9 @@
     <!-- End Footer Section -->
 
     <!-- ===============================================
-    PAGE PRELOADER - Meet AJ Ambient Reveal
+    PAGE PRELOADER - DevOps Infinity
     =============================================== -->
-    <div id="preloader" class="preloader-overlay visible" role="status" aria-live="polite" aria-busy="true">
-      <div id="preloader-container" class="preloader-container ltr">
-        <div class="preloader-ambient preloader-ambient-a" aria-hidden="true"></div>
-        <div class="preloader-ambient preloader-ambient-b" aria-hidden="true"></div>
-
-        <div class="preloader-brandmark" aria-hidden="true">
-          <div class="preloader-brandmark-core"><span>AJ</span></div>
-          <span class="preloader-orbit-dot preloader-orbit-dot-a"></span>
-          <span class="preloader-orbit-dot preloader-orbit-dot-b"></span>
-        </div>
-
-        <div class="preloader-wordmark">
-          <strong>{{ data_get($siteContent, 'site_name', 'Meet AJ') }}</strong>
-          <span data-en="{{ data_get($heroContent, 'role_en', 'Infrastructure & DevOps') }}" data-fa="{{ data_get($heroContent, 'role_fa', 'Infrastructure و DevOps') }}">{{ data_get($heroContent, 'role_en', 'Infrastructure & DevOps') }}</span>
-        </div>
-
-        <div class="preloader-status-line">
-          <span id="loading-text" class="loading-text" data-en="Preparing your experience" data-fa="در حال آماده‌سازی تجربه شما">Preparing your experience</span>
-          <span class="preloader-status-dot" aria-hidden="true"></span>
-        </div>
-        <div class="preloader-progress" role="progressbar" aria-label="Loading">
-          <span class="progress-line"></span>
-        </div>
-      </div>
-    </div>
+    @include('partials.devops-preloader')
 
     <!-- ===============================================
     JAVASCRIPT LIBRARIES & SCRIPTS
