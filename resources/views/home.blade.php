@@ -253,7 +253,7 @@
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
     <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
     <link href="/assets/css/glass-system.css?v=27" rel="stylesheet" />
-    <link href="/assets/css/contact-soft-ui.css?v=3" rel="stylesheet" />
+    <link href="/assets/css/contact-soft-ui.css?v=4" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -360,7 +360,7 @@
         }
       }
     </style>
-    <link href="/preloader.css?v=devops-1" rel="stylesheet" />
+    <link href="/preloader.css?v=devops-2" rel="stylesheet" />
     <noscript>
       <style>
         #preloader {
@@ -1517,7 +1517,7 @@
 
     <!-- Main Application JavaScript -->
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
-    <script src="/assets/js/main.js?v=1419" defer></script>
+    <script src="/assets/js/main.js?v=1420" defer></script>
     <script src="/assets/js/service-catalog.js?v=1815" defer></script>
     <script src="/assets/js/scroll-reveal.js?v=4" defer></script>
 

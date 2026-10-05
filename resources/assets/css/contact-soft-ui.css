@@ -9,6 +9,9 @@ body.index-page #contact {
   --contact-primary: #426de0;
   --contact-teal: #27b6c7;
   --contact-violet: #9275df;
+  --contact-green: #25946b;
+  --contact-red: #cf5262;
+  --contact-spectrum: linear-gradient(90deg, var(--contact-primary), var(--contact-teal), var(--contact-green), var(--contact-violet), var(--contact-red), var(--contact-primary));
   --contact-raised: -6px -6px 16px var(--contact-light), 6px 6px 16px var(--contact-dark);
   --contact-inset: inset -4px -4px 10px var(--contact-light), inset 4px 4px 10px var(--contact-dark);
   background: var(--contact-surface);
@@ -25,15 +28,20 @@ body.index-page #contact :is(.contact-main-grid, .contact-form-section, .contact
 body.index-page #contact :is(.contact-main-grid, .contact-card)::after { content: none; }
 body.index-page #contact .contact-methods { margin: 0; padding: 0; background: var(--contact-surface); }
 body.index-page #contact .contact-cards-grid { gap: 20px; }
-body.index-page #contact .contact-card:nth-child(n) { --contact-accent: #5476a6; }
+body.index-page #contact .contact-card:nth-child(1) { --contact-accent: var(--contact-primary); }
+body.index-page #contact .contact-card:nth-child(2) { --contact-accent: var(--contact-green); }
+body.index-page #contact .contact-card:nth-child(3) { --contact-accent: var(--contact-red); }
+body.index-page #contact .contact-card:nth-child(4) { --contact-accent: var(--contact-violet); }
 /* Raised contact methods; preserve the current icons and content. */
 body.index-page #contact .contact-card,
 body.index-page #contact .contact-card:hover {
   display: flex; align-items: flex-start; gap: 16px; padding: 24px;
   /* Replace the previous tree layout's important surface resets. */
   border: 0 !important; border-radius: 20px !important; background: var(--contact-surface) !important;
-  box-shadow: var(--contact-raised) !important; transform: none; backdrop-filter: none;
+  box-shadow: 0 8px 28px rgba(36, 54, 80, 0.06), inset 0 0 0 1px #e3e8f1 !important; transform: none; backdrop-filter: none;
 }
+body.index-page #contact .contact-card { position: relative; overflow: hidden; }
+body.index-page #contact .contact-card::after { content: ''; position: absolute; inset: 0 0 auto; height: 3px; background: var(--contact-accent); }
 body.index-page #contact .card-icon,
 body.index-page #contact .card-icon:hover {
   width: auto; height: auto; min-width: 24px; padding: 0; margin: 0;
@@ -45,8 +53,12 @@ body.index-page #contact .card-content h4 { font-size: 0.95rem; color: var(--con
 body.index-page #contact .card-content p { font-size: 0.82rem; color: var(--contact-muted); }
 body.index-page #contact .contact-link,
 body.index-page #contact .contact-link:hover { grid-row: 3; width: fit-content; font-size: 0.86rem; color: var(--contact-primary); }
-body.index-page #contact .contact-link:hover { text-decoration: underline; text-underline-offset: 4px; }
-body.index-page #contact .location-info { margin: 24px 0 0; padding: 24px; border: 0; border-radius: 20px; background: var(--contact-surface); box-shadow: var(--contact-inset); }
+body.index-page #contact .contact-link { color: var(--contact-accent); }
+body.index-page #contact .contact-link:hover { color: var(--contact-accent); text-decoration: underline; text-underline-offset: 4px; }
+body.index-page #contact .location-info { position: relative; overflow: hidden; margin: 24px 0 0; padding: 24px; border: 0; border-radius: 20px; background: var(--contact-surface); box-shadow: 0 8px 28px rgba(36, 54, 80, 0.06), inset 0 0 0 1px #e3e8f1; }
+body.index-page #contact .location-info::after { content: ''; position: absolute; inset: 0 0 auto; height: 3px; background: var(--contact-teal); }
+body.index-page #contact .contact-header { position: relative; padding-bottom: 24px; }
+body.index-page #contact .contact-header::after { content: ''; position: absolute; inset: auto 0 0; height: 2px; opacity: .7; background: var(--contact-spectrum); background-size: 300% 100%; animation: contact-color-flow 8s ease-in-out infinite; }
 body.index-page #contact .location-card { background: var(--contact-surface); }
 body.index-page #contact .location-header { margin-bottom: 8px; }
 body.index-page #contact .location-header h4 { font-size: 0.95rem; color: var(--contact-ink); }
@@ -55,7 +67,7 @@ body.index-page #contact .location-content p { font-size: 0.85rem; color: var(--
 /* Message panel follows the DevOps loader's airy surface and flowing color. */
 body.index-page #contact .contact-form-section { margin: 0; padding: 0; border: 0; }
 body.index-page #contact .form-container { position: relative; overflow: hidden; padding: 32px; border: 0; border-radius: 28px; background: var(--contact-surface); box-shadow: 0 12px 40px rgba(36, 54, 80, 0.07), inset 0 0 0 1px #e3e8f1; backdrop-filter: none; }
-body.index-page #contact .form-container::before { content: ''; position: absolute; inset: 0 0 auto; width: 100%; height: 3px; background: linear-gradient(90deg, var(--contact-primary), var(--contact-teal), var(--contact-violet), var(--contact-primary)); background-size: 300% 100%; animation: contact-color-flow 8s ease-in-out infinite; }
+body.index-page #contact .form-container::before { content: ''; position: absolute; inset: 0 0 auto; width: 100%; height: 3px; background: var(--contact-spectrum); background-size: 300% 100%; animation: contact-color-flow 8s ease-in-out infinite; }
 body.index-page #contact .form-header { padding: 0 0 24px; border: 0; background: var(--contact-surface); }
 body.index-page #contact .form-title { font-size: 1.15rem; margin-bottom: 8px; color: var(--contact-ink); }
 body.index-page #contact .form-infinity { width: 64px; height: 32px; flex: 0 0 auto; overflow: visible; }
@@ -82,7 +94,7 @@ body.index-page #contact .form-actions { margin: 4px 0 0; gap: 16px; }
 body.index-page #contact .submit-btn,
 body.index-page #contact .submit-btn:hover {
   min-height: 48px; padding: 14px 24px; border: 0; border-radius: 14px;
-  background: linear-gradient(110deg, #3558bc, #246b85, #7054b2, #3558bc); background-size: 300% 100%; color: #fff; font-size: 0.9rem;
+  background: linear-gradient(110deg, #3558bc, #246b85, #227454, #7054b2, #a83e4c, #3558bc); background-size: 400% 100%; color: #fff; font-size: 0.9rem;
   box-shadow: 0 6px 18px rgba(66, 109, 224, 0.18); transform: none;
   animation: contact-color-flow 8s ease-in-out infinite;
   transition: box-shadow 150ms ease, transform 150ms ease;
@@ -106,7 +118,7 @@ body.index-page #contact :is(a, button):focus-visible { outline: 2px solid var(-
 }
 @media (prefers-reduced-motion: reduce) {
   body.index-page #contact :is(.submit-btn, .form-input, .form-textarea) { transition: none; }
-  body.index-page #contact :is(.submit-btn, .form-infinity-flow), body.index-page #contact .form-container::before { animation: none; }
+  body.index-page #contact :is(.submit-btn, .form-infinity-flow), body.index-page #contact .form-container::before, body.index-page #contact .contact-header::after { animation: none; }
   body.index-page #contact .form-infinity-flow:nth-child(3) { stroke-dashoffset: -33.333; }
   body.index-page #contact .form-infinity-flow:nth-child(4) { stroke-dashoffset: -66.666; }
 }
