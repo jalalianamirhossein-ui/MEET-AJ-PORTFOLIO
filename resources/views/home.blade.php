@@ -254,7 +254,7 @@
     <link href="/assets/css/site-modules.css?v=1854" rel="stylesheet" />
     <link href="/assets/css/glass-system.css?v=27" rel="stylesheet" />
     <link href="/assets/css/contact-soft-ui.css?v=7" rel="stylesheet" />
-    <link href="/assets/css/service-colors.css?v=1" rel="stylesheet" />
+    <link href="/assets/css/service-colors.css?v=2" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -1498,7 +1498,7 @@
     <!-- Main Application JavaScript -->
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
     <script src="/assets/js/main.js?v=1420" defer></script>
-    <script src="/assets/js/service-catalog.js?v=1815" defer></script>
+    <script src="/assets/js/service-catalog.js?v=1816" defer></script>
     <script src="/assets/js/scroll-reveal.js?v=4" defer></script>
 
     <!-- Internationalization (i18n) Support -->
