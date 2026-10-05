@@ -13,6 +13,7 @@ class LegacySitePublisher
         }
         $this->copyFile(resource_path('static/partials/lang-toggle.html'), public_path('partials/lang-toggle.html'), $copied);
         $this->copyFile(resource_path('downloads/netbox_installation_guide_v2.pdf'), public_path('docs/netbox_installation_guide_v2.pdf'), $copied);
+        $this->copyFile(resource_path('content/articles/linux-security-Bash-Check/security-audit.sh'), public_path('docs/linux-security-auditor/security-audit.sh'), $copied);
         $this->writeServiceWorker();
         $copied[] = 'public/sw.js';
 

@@ -108,7 +108,7 @@ class ProductionAuditTest extends TestCase
 
     public function test_shared_article_identity_remains_english_and_titles_follow_the_requested_locale(): void
     {
-        $this->assertSame(25, Article::query()->count());
+        $this->assertSame(26, Article::query()->count());
         foreach (Article::query()->get() as $article) {
             $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', $article->title, $article->slug);
             $this->withUnencryptedCookie('lang', 'en')->get('/articles/'.$article->slug)
