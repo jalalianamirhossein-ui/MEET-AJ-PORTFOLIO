@@ -163,8 +163,10 @@ class Article extends Model
 
     public function displayContent(): string
     {
-        return app(\App\Services\ArticleContentStandardizer::class)
+        $content = app(\App\Services\ArticleContentStandardizer::class)
             ->standardize($this, (string) $this->content);
+
+        return app(\App\Services\ArticlePresentation::class)->prepare($content);
     }
 
     public function scopePublished(Builder $query): Builder
