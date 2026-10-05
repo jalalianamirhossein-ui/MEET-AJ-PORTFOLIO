@@ -1101,14 +1101,12 @@ body.index-page #hero .hero-content {
   }
 }
 
-/* Position against the hero itself: its auto-height wrapper cannot anchor a corner. */
+/* Both intermediate wrappers must be static so the hero anchors the panel. */
 @media (min-width: 992px) {
   body.index-page #hero {
     position: relative;
   }
-  body.index-page #hero .container {
-    position: static;
-  }
+
   body.index-page #hero .hero-content-section {
     position: absolute;
     inset: auto;
@@ -1150,4 +1148,49 @@ body.index-page #hero .hero-title {
 
 @media (prefers-reduced-transparency: reduce) {
   body.index-page #hero .hero-content { background: #16324b; }
+}
+
+@media (min-width: 992px) {
+  body.index-page #hero .container,
+  body.index-page #hero .hero-wrapper {
+    position: static;
+  }
+}
+
+/* Reserve equal text rows in both languages, including wrapped English copy. */
+html[dir] body.index-page #hero .hero-content {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  align-items: stretch;
+}
+
+html[dir] body.index-page #hero .hero-title {
+  width: 100%;
+  font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+  line-height: 1.25;
+  min-block-size: 2.5em;
+  margin-block: 0.5rem;
+}
+
+html[dir] body.index-page #hero .hero-role {
+  width: 100%;
+  font-size: 1rem;
+  line-height: 1.5;
+  min-block-size: 3em;
+  margin: 0;
+}
+
+html[dir] body.index-page #hero .hero-actions {
+  width: 100%;
+  margin-block-start: 0.5rem;
+}
+
+html[dir] body.index-page #hero .hero-badge {
+  align-self: flex-start;
+  line-height: 1.5;
+}
+
+html[dir] body.index-page #hero .title-line-2:empty {
+  display: none;
 }
