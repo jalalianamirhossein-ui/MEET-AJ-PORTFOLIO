@@ -64,6 +64,11 @@ class Article extends Model
         ]);
     }
 
+    public function scopeInDisplayOrder(Builder $query): Builder
+    {
+        return app(\App\Services\ArticleOrdering::class)->apply($query);
+    }
+
     public function scopeSearch(Builder $query, string $term): Builder
     {
         $term = trim($term);

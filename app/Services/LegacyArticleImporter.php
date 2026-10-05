@@ -64,7 +64,7 @@ class LegacyArticleImporter
                         $translationKey = $existing->translation_key;
                         $attributes = $parsed['attributes'];
                         // Source/SEO updates must not republish drafts or move publication dates.
-                        unset($attributes['status'], $attributes['published_at']);
+                        unset($attributes['status'], $attributes['published_at'], $attributes['sort_order']);
                         $existing->forceFill($attributes);
                         $existing->translation_key = $translationKey;
                         $existing->save();
@@ -110,7 +110,10 @@ class LegacyArticleImporter
         if ($dryRun) {
             $run();
         } else {
-            DB::transaction($run);
+            DB::transaction(function () use ($run): void {
+                $run();
+                app(ArticleOrdering::class)->synchronize();
+            });
             app(\App\Services\ArticleTagAssigner::class)->syncPublishedLibrary();
         }
 
@@ -282,11 +285,7 @@ class LegacyArticleImporter
                 'canonical_url' => null,
                 'seo_data' => $seo,
                 'presentation' => $presentation,
-                'sort_order' => match ($slug) {
-                    'mikrotik-ping-triggered-policy-routing' => 0,
-                    'linux-security-auditor-bash' => 1,
-                    default => $card['sort_order'] ?? $index,
-                },
+                'sort_order' => $card['sort_order'] ?? $index,
                 'status' => 'published',
                 'published_at' => $publishedAt['date'],
             ],

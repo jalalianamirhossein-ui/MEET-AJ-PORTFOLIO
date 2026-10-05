@@ -35,12 +35,11 @@ if (DB::connection()->getDriverName() === 'sqlite') {
 }
 DB::transaction(function () use ($slug): void {
     $result = app(LegacyArticleImporter::class)->import(false, true, [$slug]);
-    Article::where('slug', $slug)->where('language', 'en')->update(['sort_order' => 0]);
-    Article::where('slug', 'linux-security-auditor-bash')->where('language', 'en')->update(['sort_order' => 1]);
-    $first = app(App\Http\Controllers\ArticleController::class)->index(Illuminate\Http\Request::create('/articles'))->getData()['articles']->first();
-    if ($first?->slug !== $slug) {
-        throw new RuntimeException('First article verification failed; import rolled back.');
+    $ordered = Article::where('language', 'en')->inDisplayOrder()->get();
+    $index = $ordered->search(fn (Article $article) => $article->slug === $slug);
+    if ($index === false || (int) $ordered[$index]->sort_order !== $index) {
+        throw new RuntimeException('Editorial ordering verification failed; import rolled back.');
     }
     echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL;
 });
-echo 'Backup: '.$backup.PHP_EOL.'Verified: PBR article is first.'.PHP_EOL;
+echo 'Backup: '.$backup.PHP_EOL.'Verified: article follows configured editorial ordering.'.PHP_EOL;

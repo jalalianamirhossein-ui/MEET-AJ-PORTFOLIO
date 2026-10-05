@@ -12,8 +12,9 @@ php artisan view:clear
 ```
 
 The installer backs up local content before importing only this article. The
-homepage, library and search pin it first; the former featured Linux article
-remains second overall and first within Linux results. The importer preserves
+homepage, library and search follow `config/article-order.php`, which currently
+places it first and the former featured Linux article second overall. Adding new
+articles does not require changing this installer. The importer preserves
 publication date and status on updates. Review CMS edits before re-importing.
 No remote server is changed by these commands.
 
