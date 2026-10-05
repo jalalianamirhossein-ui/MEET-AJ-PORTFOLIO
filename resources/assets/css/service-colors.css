@@ -1,0 +1,36 @@
+/* Stable service accents from the contact palette. */
+body.index-page #services .service-catalog-card { --service-accent: #426de0; --service-ink: #3558bc; }
+body.index-page #services .service-tone-1 { --service-accent: #27b6c7; --service-ink: #246b85; }
+body.index-page #services .service-tone-2 { --service-accent: #25946b; --service-ink: #227454; }
+body.index-page #services .service-tone-3 { --service-accent: #9275df; --service-ink: #7054b2; }
+body.index-page #services .service-tone-4 { --service-accent: #cf5262; --service-ink: #a83e4c; }
+body.index-page #services .service-catalog-card::before,
+body.index-page #services .service-catalog-card:hover::before,
+body.index-page #services .service-catalog-card:focus-within::before {
+  background: var(--service-accent); transform: none;
+}
+body.index-page #services .service-card-mark {
+  color: var(--service-ink); background: color-mix(in srgb, var(--service-accent) 12%, transparent);
+}
+body.index-page #services .service-catalog-card:hover .service-card-mark,
+body.index-page #services .service-catalog-card:focus-within .service-card-mark {
+  color: #fff; background: var(--service-ink);
+}
+body.index-page #services .service-catalog-card:hover,
+body.index-page #services .service-catalog-card:focus-within {
+  border-color: color-mix(in srgb, var(--service-accent) 40%, transparent);
+}
+body.index-page #services .service-catalog-cta.btn-primary {
+  color: #fff; background: var(--service-ink); border-color: var(--service-ink);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--service-accent) 18%, transparent);
+}
+body.index-page #services .service-catalog-cta.btn-outline-primary {
+  color: var(--service-ink); border-color: color-mix(in srgb, var(--service-accent) 35%, transparent);
+  background: color-mix(in srgb, var(--service-accent) 8%, transparent);
+}
+body.index-page #services .service-catalog-cta:hover {
+  filter: brightness(.94);
+}
+body.index-page #services .service-catalog-cta:focus-visible {
+  outline: 2px solid var(--service-ink); outline-offset: 3px;
+}

@@ -12,7 +12,7 @@
   $icon = $service->iconClass();
 @endphp
 <article
-  class="service-catalog-card"
+  class="service-catalog-card service-tone-{{ ($service->id - 1) % 5 }}"
   data-aos="fade-up"
   data-service-slug="{{ $service->slug }}"
   data-service-subject-en="{{ $service->title }} inquiry"
