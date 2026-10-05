@@ -1211,3 +1211,13 @@ html[dir] body.index-page #hero .hero-actions .btn {
   font-size: 0.875rem;
   padding: 0.55rem 0.8rem;
 }
+
+/* Give the 16:9 hero image more vertical room and preserve its top edge. */
+@media (min-width: 992px) {
+  body.index-page #hero.hero {
+    min-height: clamp(38rem, 78vh, 48rem) !important;
+  }
+  body.index-page #hero .hero-bg {
+    object-position: 36% top;
+  }
+}
