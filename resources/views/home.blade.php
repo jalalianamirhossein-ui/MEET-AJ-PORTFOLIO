@@ -143,14 +143,14 @@
           {
             "@@type": "ListItem",
             "position": 4,
-            "name": "Services",
-            "item": "https://meetaj.ir/#services"
+            "name": "Articles",
+            "item": "https://meetaj.ir/#portfolio"
           },
           {
             "@@type": "ListItem",
             "position": 5,
-            "name": "Articles",
-            "item": "https://meetaj.ir/#portfolio"
+            "name": "Services",
+            "item": "https://meetaj.ir/#services"
           },
           {
             "@@type": "ListItem",
@@ -393,6 +393,12 @@
             if (!is_array($navigation) || $navigation === []) {
                 $siteDefaults = collect(app(\App\Services\HomepageContentCatalog::class)->definitions())->firstWhere('key', 'site');
                 $navigation = data_get($siteDefaults, 'content.navigation', []);
+            }
+            $navigation = array_values($navigation);
+            $servicesIndex = array_search('services', array_column($navigation, 'key'), true);
+            $articlesIndex = array_search('articles', array_column($navigation, 'key'), true);
+            if ($servicesIndex !== false && $articlesIndex !== false && $servicesIndex < $articlesIndex) {
+                [$navigation[$servicesIndex], $navigation[$articlesIndex]] = [$navigation[$articlesIndex], $navigation[$servicesIndex]];
             }
           @endphp
           @foreach ($navigation as $item)
@@ -916,44 +922,6 @@
       <!-- /Resume Section -->
 
       <!-- ===============================================
-      ==================== SERVICES SECTION ===============
-      =============================================== -->
-                  <section id="services" class="services section">
-        <!-- Section Title -->
-        <div class="container section-title" data-aos="fade-up">
-          <h2 data-en="Services" data-fa="خدمات">Services</h2>
-          <p
-            data-en="What I actually implement and support: enterprise networks, servers, virtualization, SQL, Jira, monitoring, DevOps, VoIP, CCTV, and security."
-            data-fa="آنچه واقعاً پیاده‌سازی و پشتیبانی می‌کنم: شبکه سازمانی، سرور، مجازی‌سازی، SQL، Jira، مانیتورینگ، DevOps، VoIP، دوربین مداربسته و امنیت."
-          >
-            What I actually implement and support: enterprise networks, servers,
-            virtualization, SQL, Jira, monitoring, DevOps, VoIP, CCTV, and
-            security.
-          </p>
-        </div>
-        <!-- End Section Title -->
-
-        <!-- ===============================================
-        ==================== SERVICES CONTENT ================
-        =============================================== -->
-        <div class="container">
-          
-          <div class="row gy-4" id="service-catalog">
-            @forelse ($services as $service)
-              @include('components.service-card', ['service' => $service])
-            @empty
-            @endforelse
-          </div>
-                    @include('partials.service-drawer')
-          <!-- End Service Catalog -->
-
-          <!-- End Services Row -->
-        </div>
-        <!-- End Services Container -->
-      </section>
-      <!-- /Services Section -->
-
-      <!-- ===============================================
       ==================== ARTICLES SECTION ===============
       =============================================== -->
       <section id="portfolio" class="portfolio section light-background">
@@ -1028,6 +996,44 @@
         <!-- End Main Container -->
       </section>
       <!-- End Articles Section -->
+
+      <!-- ===============================================
+      ==================== SERVICES SECTION ===============
+      =============================================== -->
+                  <section id="services" class="services section">
+        <!-- Section Title -->
+        <div class="container section-title" data-aos="fade-up">
+          <h2 data-en="Services" data-fa="خدمات">Services</h2>
+          <p
+            data-en="What I actually implement and support: enterprise networks, servers, virtualization, SQL, Jira, monitoring, DevOps, VoIP, CCTV, and security."
+            data-fa="آنچه واقعاً پیاده‌سازی و پشتیبانی می‌کنم: شبکه سازمانی، سرور، مجازی‌سازی، SQL، Jira، مانیتورینگ، DevOps، VoIP، دوربین مداربسته و امنیت."
+          >
+            What I actually implement and support: enterprise networks, servers,
+            virtualization, SQL, Jira, monitoring, DevOps, VoIP, CCTV, and
+            security.
+          </p>
+        </div>
+        <!-- End Section Title -->
+
+        <!-- ===============================================
+        ==================== SERVICES CONTENT ================
+        =============================================== -->
+        <div class="container">
+
+          <div class="row gy-4" id="service-catalog">
+            @forelse ($services as $service)
+              @include('components.service-card', ['service' => $service])
+            @empty
+            @endforelse
+          </div>
+                    @include('partials.service-drawer')
+          <!-- End Service Catalog -->
+
+          <!-- End Services Row -->
+        </div>
+        <!-- End Services Container -->
+      </section>
+      <!-- /Services Section -->
 
       
       @include('partials.testimonials')

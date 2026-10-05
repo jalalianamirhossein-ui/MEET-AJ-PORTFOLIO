@@ -56,19 +56,19 @@
             >
           </li>
 
-          <!-- Services Section -->
-          <li>
-            <a href="/#services"
-              ><i class="bi bi-hdd-stack navicon"></i
-              ><span data-en="Services" data-fa="خدمات">Services</span></a
-            >
-          </li>
-
           <!-- Articles Section -->
           <li>
             <a href="/articles" class="active" aria-current="page"
               ><i class="bi bi-images navicon"></i
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
+            >
+          </li>
+
+          <!-- Services Section -->
+          <li>
+            <a href="/#services"
+              ><i class="bi bi-hdd-stack navicon"></i
+              ><span data-en="Services" data-fa="خدمات">Services</span></a
             >
           </li>
 

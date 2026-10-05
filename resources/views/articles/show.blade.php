@@ -77,10 +77,10 @@
             <a href="/#resume"><i class="bi bi-file-earmark-text navicon" aria-hidden="true"></i><span data-en="Resume" data-fa="رزومه">Resume</span></a>
           </li>
           <li>
-            <a href="/#services"><i class="bi bi-hdd-stack navicon" aria-hidden="true"></i><span data-en="Services" data-fa="خدمات">Services</span></a>
+            <a href="/articles"><i class="bi bi-journal-text navicon" aria-hidden="true"></i><span data-en="Articles" data-fa="مقالات">Articles</span></a>
           </li>
           <li>
-            <a href="/articles"><i class="bi bi-journal-text navicon" aria-hidden="true"></i><span data-en="Articles" data-fa="مقالات">Articles</span></a>
+            <a href="/#services"><i class="bi bi-hdd-stack navicon" aria-hidden="true"></i><span data-en="Services" data-fa="خدمات">Services</span></a>
           </li>
           <li>
             <a href="/#testimonials"><i class="bi bi-chat-quote navicon" aria-hidden="true"></i><span data-en="Testimonials" data-fa="نظرات">Testimonials</span></a>
