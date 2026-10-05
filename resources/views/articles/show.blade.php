@@ -48,6 +48,8 @@
     <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
     <link href="/assets/css/glass-system.css?v=18" rel="stylesheet" />
     <link href="/assets/css/article-reading.css?v=1" rel="stylesheet" />
+    <link href="/preloader.css?v=devops-2" rel="stylesheet" />
+    <noscript><style>#preloader { display: none !important; }</style></noscript>
     @if (!empty($languageSeo))
       <script id="article-language-seo" type="application/json">{!! json_encode($languageSeo, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @endif
@@ -324,7 +326,7 @@
         </div>
       </div>
     </footer>
-    <div id="preloader"></div>
+    @include('partials.devops-preloader')
     <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
     <script src="/assets/vendor/aos/aos.js" defer></script>
     <script src="/assets/vendor/typed.js/typed.umd.js" defer></script>
@@ -334,7 +336,7 @@
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1419" defer></script>
+    <script src="/assets/js/main.js?v=1420" defer></script>
     <script src="/assets/js/scroll-reveal.js?v=4" defer></script>
     <script src="/assets/js/i18n.js?v=1407" defer></script>
     <script>

@@ -20,6 +20,8 @@
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
     <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
     <link href="/assets/css/glass-system.css?v=18" rel="stylesheet" />
+    <link href="/preloader.css?v=devops-2" rel="stylesheet" />
+    <noscript><style>#preloader { display: none !important; }</style></noscript>
   </head>
   <body class="index-page articles-index-page">@verbatim
 <header id="header" class="header dark-background d-flex flex-column">
@@ -329,13 +331,15 @@
         </div>
       </div>
     </footer>
-@endverbatim    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+@endverbatim
+    @include('partials.devops-preloader')
+    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
     <script src="/assets/vendor/aos/aos.js" defer></script>
     <script src="/assets/vendor/glightbox/js/glightbox.min.js" defer></script>
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
-    <script src="/assets/js/main.js?v=1419" defer></script>
+    <script src="/assets/js/main.js?v=1420" defer></script>
     <script src="/assets/js/scroll-reveal.js?v=1" defer></script>
     <script src="/assets/js/service-catalog.js?v=1813" defer></script>
     <script src="/assets/js/i18n.js?v=1407" defer></script>
