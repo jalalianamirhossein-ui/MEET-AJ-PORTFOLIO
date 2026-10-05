@@ -4,6 +4,8 @@ The maintained article is `resources/legacy/articles/linux-security-auditor-bash
 
 Both languages use slug `linux-security-auditor-bash` and canonical path `/articles/linux-security-auditor-bash`. The existing `lang` preference cookie and floating switch choose the edition. `?lang=fa` is not a translation URL; the existing router redirects it to the clean shared path. The production URL, after deployment, is `https://meetaj.ir/articles/linux-security-auditor-bash`.
 
+The article imports with `sort_order = 0`, compatible with the MySQL unsigned column. Home, article library and filtered results prioritize its slug before the existing date/order rules. Never assign a negative sort order. The initial -1 approach was corrected after the production MySQL import rejected it; SQLite tests did not enforce this unsigned constraint.
+
 - Category: existing Linux category.
 - Tags: existing Linux, Ubuntu and SSH vocabulary.
 - Main image: `/assets/img/portfolio/linux-8.png`, published from the supplied asset without creating another image source or thumbnail.

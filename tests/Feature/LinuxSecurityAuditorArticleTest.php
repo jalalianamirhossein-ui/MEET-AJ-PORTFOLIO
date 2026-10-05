@@ -18,6 +18,7 @@ class LinuxSecurityAuditorArticleTest extends TestCase
         app(LegacySitePublisher::class)->publishAssets();
         app(LegacyArticleImporter::class)->import(false);
         $article = Article::where('slug', $slug)->firstOrFail();
+        $this->assertSame(0, (int) $article->sort_order);
         $this->assertSame('linux', $article->category->slug);
         $this->assertSame(['linux', 'ssh', 'ubuntu'], $article->tags()->orderBy('slug')->pluck('slug')->all());
         $this->assertSame('/assets/img/portfolio/linux-8.png', $article->thumbnailUrl());
@@ -71,5 +72,19 @@ class LinuxSecurityAuditorArticleTest extends TestCase
         $this->assertSame($codes['en'], $codes['fa']);
         $this->get('/articles/'.$slug.'.html')->assertStatus(301)->assertRedirect('/articles/'.$slug);
         $this->get('/sitemap.xml')->assertOk()->assertSee('/articles/'.$slug);
+    }
+
+    public function test_auditor_is_first_even_when_another_article_has_a_newer_date(): void
+    {
+        app(LegacyArticleImporter::class)->import(false);
+        $auditor = Article::where('slug', 'linux-security-auditor-bash')->firstOrFail();
+        $auditor->update(['published_at' => now()->subDays(10)]);
+        Article::where('slug', 'enable-ssh-linux-complete-guide')->update(['published_at' => now()->subDay(), 'sort_order' => 0]);
+
+        foreach (['/', '/articles', '/articles?tag=linux'] as $path) {
+            $response = $this->get($path)->assertOk();
+            $items = $response->viewData($path === '/articles?tag=linux' ? 'results' : 'articles');
+            $this->assertSame($auditor->slug, $items->first()->slug, $path);
+        }
     }
 }
