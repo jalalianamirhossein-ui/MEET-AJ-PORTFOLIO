@@ -4,9 +4,9 @@
 // Add a new enterprise article here when it should lead the library.
 return [
     'enterprise' => [
+        'deploy-msi-active-directory-group-policy',
         'mikrotik-pbr-client',
         'mikrotik-ping-triggered-policy-routing',
-        'deploy-msi-active-directory-group-policy',
         'linux-security-auditor-bash',
         'netbox-installation-setup-ubuntu',
         'oxidized-network-device-configuration-backup',

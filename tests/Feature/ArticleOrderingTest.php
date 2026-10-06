@@ -34,8 +34,8 @@ class ArticleOrderingTest extends TestCase
         $this->assertCount(count(app(LegacyArticleImporter::class)->articleFiles()) + 3, $result);
         $ordered = Article::where('language', 'en')->inDisplayOrder()->pluck('slug')->all();
         $priorityCount = count(config('article-order.enterprise'));
-        $this->assertSame(config('article-order.enterprise'), array_slice($ordered, 0, $priorityCount));
-        $this->assertSame([$new->slug, $old->slug], array_slice($ordered, $priorityCount, 2));
+        $this->assertSame([$new->slug, $old->slug], array_slice($ordered, 0, 2));
+        $this->assertSame(config('article-order.enterprise'), array_slice($ordered, 2, $priorityCount));
         $this->assertSame(config('article-order.guides'), array_slice($ordered, $priorityCount + 2));
         $this->assertSame(0, $translated->fresh()->sort_order);
 
@@ -68,8 +68,8 @@ class ArticleOrderingTest extends TestCase
         $this->assertSame([$new->slug, $old->slug], Article::inDisplayOrder()->pluck('slug')->all());
         config(['article-order.enterprise' => [$old->slug]]);
         $ordering->synchronize();
-        $this->assertSame([$old->slug, $new->slug], Article::inDisplayOrder()->pluck('slug')->all());
-        $this->assertSame(0, $old->fresh()->sort_order);
-        $this->assertSame(1, $new->fresh()->sort_order);
+        $this->assertSame([$new->slug, $old->slug], Article::inDisplayOrder()->pluck('slug')->all());
+        $this->assertSame(1, $old->fresh()->sort_order);
+        $this->assertSame(0, $new->fresh()->sort_order);
     }
 }

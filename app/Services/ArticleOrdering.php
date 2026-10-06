@@ -18,10 +18,16 @@ class ArticleOrdering
             throw new RuntimeException('Duplicate slug in config/article-order.php.');
         }
 
-        $priorities = array_flip($enterprise);
-        $newArticlePriority = count($enterprise);
+        // Rank explicit editorial priorities after the automatic new-article
+        // bucket. Any slug not yet listed in this file therefore appears first
+        // by publication date, while established articles keep their curated order.
+        $priorities = [];
+        foreach ($enterprise as $index => $slug) {
+            $priorities[$slug] = $index + 1;
+        }
+        $newArticlePriority = count($enterprise) + 1;
         foreach ($guides as $index => $slug) {
-            $priorities[$slug] = $newArticlePriority + 1 + $index;
+            $priorities[$slug] = $newArticlePriority + $index;
         }
 
         return [$priorities, $newArticlePriority];
@@ -37,7 +43,7 @@ class ArticleOrdering
             array_push($bindings, $slug, $rank);
         }
         $sql .= ' ELSE ? END';
-        $bindings[] = $default;
+        $bindings[] = 0;
 
         return $query->orderByRaw($sql, $bindings)
             ->orderByDesc('articles.published_at')
