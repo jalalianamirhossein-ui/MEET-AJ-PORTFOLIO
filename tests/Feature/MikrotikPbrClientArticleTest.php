@@ -41,6 +41,8 @@ class MikrotikPbrClientArticleTest extends TestCase
         $article->update(['content' => '<p>Edited in CMS</p>']);
         $migration = require database_path('migrations/2026_10_06_000021_add_mikrotik_pbr_client_article.php');
         $migration->up();
+        $localizationMigration = require database_path('migrations/2026_10_06_000026_localize_mikrotik_pbr_client_article.php');
+        $localizationMigration->up();
         $this->assertSame('<p>Edited in CMS</p>', $article->fresh()->content);
         $this->assertSame(1, Article::where('slug', 'mikrotik-pbr-client')->count());
     }

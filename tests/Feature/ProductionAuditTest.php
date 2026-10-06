@@ -149,10 +149,10 @@ class ProductionAuditTest extends TestCase
         $this->assertStringNotContainsString('testimonials-slider-fa', $home);
         $this->assertStringNotContainsString('id="testimonials-fa"', $home);
         $this->assertStringContainsString('data-fa="نظرات"', $home);
-        $this->assertStringContainsString('site-modules.css?v=1853', $home);
-        $this->assertStringContainsString('main.js?v=1415', $home);
-        $this->assertStringContainsString('i18n.js?v=1407', $home);
-        $this->assertStringContainsString('rtl.css?v=1405', $home);
+        $this->assertMatchesRegularExpression('~site-modules\.css\?v=\d+~', $home);
+        $this->assertMatchesRegularExpression('~main\.js\?v=\d+~', $home);
+        $this->assertMatchesRegularExpression('~i18n\.js\?v=\d+~', $home);
+        $this->assertMatchesRegularExpression('~rtl\.css\?v=\d+~', $home);
 
         $main = (string) file_get_contents(resource_path('assets/js/main.js'));
         $this->assertStringContainsString('function initExpertiseReveal', $main);

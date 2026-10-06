@@ -48,8 +48,8 @@ This is documentation/syntax validation, not a deployment executed against a rea
 
 ## Final verification results
 
-Full PHPUnit: **103 tests, 7,556 assertions, 3 errors, 8 failures, 1 skipped**. The nine focused integration tests pass. Remaining failures concern older articles with missing localization, obsolete Linux priority assertions, CMS markup/content-rule fixtures, homepage seed behavior and a stylesheet version assertion. The suite is not an all-green release gate.
+Full PHPUnit after repairs: **103 tests, 8,828 assertions, zero errors or failures, 1 skipped**. The skipped test requires the separate MySQL/MariaDB integration configuration. Frontend tests: **4 passed**. The MikroTik PBR Client article now has complete bilingual prose, metadata and FAQ schema. Fixture assertions respect migrated content and editorial configuration; markup assertions include the presentation layer's section class. Migration 000026 updates only recognized original article bodies and preserves CMS edits.
 
-Image inventory: **48 source images, 227 references, 4 errors**. All four concern the existing PWA screenshot sources `screenshots/screenshot-wide.jpg` and `screenshots/screenshot-narrow.jpg` and their manifest references. The new article's two images have maintained sources and matching published files. Temporary copies with the original user filenames were removed after their canonical copies were published.
+Image inventory after restoring maintained PWA screenshot sources and publishing assets: **51 source images, 227 references, zero errors**. The article images and PWA screenshots have matching source and published files.
 
-Final Laravel optimization passed for configuration, events, routes, views, Blade icons and Filament. Migration 000025 is marked Ran. `git diff --check` reports no whitespace defects. Existing unrelated modifications to the MikroTik client article and topology image were not changed by this task.
+Final Laravel optimization passed for configuration, events, routes, views, Blade icons and Filament. Migrations 000025 and 000026 are marked Ran. `git diff --check` reports no whitespace defects. Local test logs are saved in ignored `storage/app/fix-errors-tests-final.log` and `storage/app/fix-errors-tests-final.xml`.

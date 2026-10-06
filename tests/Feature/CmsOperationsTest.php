@@ -171,7 +171,7 @@ class CmsOperationsTest extends TestCase
 
         $this->get('/articles/escaped-markup-qa')
             ->assertOk()
-            ->assertSee('<section id="introduction">', false)
+            ->assertSee('<section id="introduction" class="article-section">', false)
             ->assertSee('Introduction', false)
             ->assertDontSee('&lt;section', false);
     }

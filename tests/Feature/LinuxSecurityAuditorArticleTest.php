@@ -18,7 +18,7 @@ class LinuxSecurityAuditorArticleTest extends TestCase
         app(LegacySitePublisher::class)->publishAssets();
         app(LegacyArticleImporter::class)->import(false);
         $article = Article::where('slug', $slug)->firstOrFail();
-        $this->assertSame(1, (int) $article->sort_order);
+        $this->assertSame(array_search($slug, config('article-order.enterprise'), true), (int) $article->sort_order);
         $this->assertSame('linux', $article->category->slug);
         $this->assertSame(['linux', 'ssh', 'ubuntu'], $article->tags()->orderBy('slug')->pluck('slug')->all());
         $this->assertSame('/assets/img/articles/banners/linux-security-auditor-bash.png', $article->thumbnailUrl());
@@ -74,7 +74,7 @@ class LinuxSecurityAuditorArticleTest extends TestCase
         $this->get('/sitemap.xml')->assertOk()->assertSee('/articles/'.$slug);
     }
 
-    public function test_auditor_stays_first_in_linux_and_second_in_the_full_library(): void
+    public function test_auditor_stays_first_in_linux_and_follows_editorial_priority_in_the_full_library(): void
     {
         app(LegacyArticleImporter::class)->import(false);
         $auditor = Article::where('slug', 'linux-security-auditor-bash')->firstOrFail();
@@ -84,9 +84,10 @@ class LinuxSecurityAuditorArticleTest extends TestCase
         foreach (['/', '/articles', '/articles?tag=linux'] as $path) {
             $response = $this->get($path)->assertOk();
             $items = $response->viewData($path === '/articles?tag=linux' ? 'results' : 'articles');
-            $this->assertSame($path === '/articles?tag=linux' ? $auditor->slug : 'mikrotik-ping-triggered-policy-routing', $items->first()->slug, $path);
+            $priority = config('article-order.enterprise');
+            $this->assertSame($path === '/articles?tag=linux' ? $auditor->slug : $priority[0], $items->first()->slug, $path);
             if ($path !== '/articles?tag=linux') {
-                $this->assertSame($auditor->slug, $items->values()->get(1)->slug);
+                $this->assertSame($auditor->slug, $items->values()->get(array_search($auditor->slug, $priority, true))->slug);
             }
         }
     }

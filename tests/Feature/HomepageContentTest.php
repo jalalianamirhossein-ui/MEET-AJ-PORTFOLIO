@@ -19,7 +19,7 @@ class HomepageContentTest extends TestCase
             ->assertSee('Skills', false)
             ->assertSee('Professional Experience', false)
             ->assertSee('Configured load balancing across 5 Internet connections for stability', false)
-            ->assertSee("Let&#039;s Work Together", false);
+            ->assertSee('Let’s connect for IT consulting or your next project.', false);
 
         $this->assertSame(7, HomepageContent::query()->count());
         $resume = HomepageContent::query()->where('key', 'resume')->firstOrFail();
