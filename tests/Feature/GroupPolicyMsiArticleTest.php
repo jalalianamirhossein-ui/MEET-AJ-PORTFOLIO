@@ -16,11 +16,11 @@ class GroupPolicyMsiArticleTest extends TestCase
     {
         $article = Article::where('slug', self::SLUG)->firstOrFail();
         $this->assertSame('microsoft', $article->category->slug);
-        $this->assertSame('/assets/img/articles/banners/'.self::SLUG.'.png', $article->thumbnailUrl());
+        $this->assertSame('/assets/img/articles/content/'.self::SLUG.'/'.self::SLUG.'.png', $article->thumbnailUrl());
         $this->assertFileExists(public_path(ltrim($article->thumbnailUrl(), '/')));
-        $inline = '/assets/img/articles/content/'.self::SLUG.'/windows-group-policy-msi-deployment-guide.png';
+        $inline = '/assets/img/articles/content/windows-group-policy-msi-deployment-guide.png';
         $this->assertFileExists(public_path(ltrim($inline, '/')));
-        $this->assertSame(hash_file('sha256', resource_path('assets/img/articles/banners/'.self::SLUG.'.png')),
+        $this->assertSame(hash_file('sha256', resource_path('assets/img/articles/content/'.self::SLUG.'/'.self::SLUG.'.png')),
             hash_file('sha256', public_path(ltrim($article->thumbnailUrl(), '/'))));
         $codes = [];
         foreach (['en', 'fa'] as $locale) {
