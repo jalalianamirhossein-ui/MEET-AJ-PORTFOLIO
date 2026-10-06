@@ -37,6 +37,7 @@ Generated from the checkout with `node scripts/check-documentation.cjs --write-i
 | [docs/current/DESIGN-SYSTEM.md](current/DESIGN-SYSTEM.md) | Design system — Meet AJ public site |
 | [docs/current/FEATURES.md](current/FEATURES.md) | Features — Meet AJ |
 | [docs/current/HOMEPAGE-CMS.md](current/HOMEPAGE-CMS.md) | Homepage CMS — Meet AJ |
+| [docs/current/IMAGES.md](current/IMAGES.md) | Image folders and publishing |
 | [docs/current/MULTILINGUAL.md](current/MULTILINGUAL.md) | Multilingual — Meet AJ |
 | [docs/current/PERFORMANCE.md](current/PERFORMANCE.md) | Performance — Meet AJ |
 | [docs/current/PROJECT-STATUS.md](current/PROJECT-STATUS.md) | Project status — Meet AJ |
@@ -98,6 +99,7 @@ Generated from the checkout with `node scripts/check-documentation.cjs --write-i
 | [docs/qa/FINAL-QA-REPORT.md](qa/FINAL-QA-REPORT.md) | Final project QA report — Meet AJ |
 | [docs/qa/FULL-AUDIT-2026-09-21.md](qa/FULL-AUDIT-2026-09-21.md) | Full project audit — 2026-09-21 |
 | [docs/qa/FULL-AUDIT-2026-10-01.md](qa/FULL-AUDIT-2026-10-01.md) | Local project audit — 2026-10-01 |
+| [docs/qa/IMAGE-ORGANIZATION-2026-10-06.md](qa/IMAGE-ORGANIZATION-2026-10-06.md) | Image organization audit — 2026-10-06 |
 | [docs/qa/LOCAL-ENVIRONMENT-REPAIR.md](qa/LOCAL-ENVIRONMENT-REPAIR.md) | Local environment repair — 2026-09-20 |
 | [docs/qa/PROJECT-REORGANIZATION.md](qa/PROJECT-REORGANIZATION.md) | Project reorganization — 2026-09-19 |
 | [docs/qa/QA-MATRIX.md](qa/QA-MATRIX.md) | QA matrix — Meet AJ |

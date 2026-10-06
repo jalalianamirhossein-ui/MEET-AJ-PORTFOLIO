@@ -118,3 +118,5 @@ The originals verifier reads `docs/qa/baseline-files.json`, maps historical path
 `public/css/meet-aj-admin.css` is an intentional retired compatibility stub; active admin CSS is `public/css/app/meet-aj-admin.css`. The tracked MSI is published output of its matching `resources/content/` source. Do not remove either as an accidental duplicate. `resources/assets/scss/` is a reserved template folder; this project edits CSS directly and has no SCSS build.
 
 SQL English prose belongs in `resources/content/articles/sql-server-automatic-backup-job/english-source.txt`; the bilingual builder reads that path. The Linux package directory matches `linux-security-auditor-bash`, while its public download URL stays unchanged. Enterprise bulk generators cover their historical inventory; do not run them over new article packages without extending their inputs.
+
+Image organization (2026-10-06): [banner, article-body and upload folder guide](IMAGES.md). Run `node scripts/check-images.cjs` after publishing images.

@@ -11,3 +11,5 @@ Publish downloads with `php artisan site:publish-assets`. Review existing articl
 The article test checks the published MSI against this source by SHA-256 and rejects a public source ZIP. Website checks do not establish Windows installer behavior or RouterOS compatibility.
 
 See [articles](../../../../docs/current/ARTICLES.md) and [current status](../../../../docs/current/PROJECT-STATUS.md).
+
+Image organization (2026-10-06): [banner, article-body and upload folder guide](../../../../docs/current/IMAGES.md). Run `node scripts/check-images.cjs` after publishing images.

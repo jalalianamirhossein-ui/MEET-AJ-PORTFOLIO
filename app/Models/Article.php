@@ -220,8 +220,8 @@ class Article extends Model
 
         // Older imports store the original PNG in both fields. Resolve the
         // shipped small image at render time, without overwriting CMS records.
-        if (preg_match('~^/assets/img/portfolio/([a-z0-9-]+)\.png$~', $image, $match)) {
-            $optimized = '/assets/img/portfolio/optimized/'.$match[1].'.jpg';
+        if (preg_match('~^/assets/img/banners/articles/([a-z0-9-]+)\.png$~', $image, $match)) {
+            $optimized = '/assets/img/banners/articles/optimized/'.$match[1].'.jpg';
             if (is_file(public_path(ltrim($optimized, '/')))) {
                 return $optimized;
             }
@@ -234,15 +234,17 @@ class Article extends Model
     {
         $featured = (string) $this->featured_image;
         // A new CMS upload replaces the imported thumbnail AND gallery.
-        if ($featured !== '' && ! str_starts_with(ltrim($featured, '/'), 'assets/img/portfolio/')) {
+        $featured = \App\Services\ImagePaths::rewrite($featured);
+        if ($featured !== '' && ! str_starts_with(ltrim($featured, '/'), 'assets/img/banners/articles/')) {
             return $featured;
         }
 
-        return (string) (data_get($this->presentation, $variant) ?: $featured ?: '/assets/img/hero-bg.jpg');
+        return (string) (data_get($this->presentation, $variant) ?: $featured ?: '/assets/img/banners/site/hero-bg.jpg');
     }
 
     private function publicImagePath(string $image): string
     {
+        $image = \App\Services\ImagePaths::rewrite($image);
         if (preg_match('~^(?:https?:)?//~i', $image) || str_starts_with($image, '/')) {
             return $image;
         }

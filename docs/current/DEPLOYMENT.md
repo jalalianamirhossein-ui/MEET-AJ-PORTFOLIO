@@ -226,3 +226,5 @@ Use DirectAdmin Let’s Encrypt / SSL for `meetaj.ir` (and `www` if used). Set `
 ## 13. Secrets
 
 Do not place database passwords, `APP_KEY`, or `.env` in git, tickets, or world-readable directories.
+
+Image organization (2026-10-06): [banner, article-body and upload folder guide](IMAGES.md). Run `node scripts/check-images.cjs` after publishing images.

@@ -30,7 +30,7 @@
     @if (!empty($seo['twitter_image']))
       <meta name="twitter:image" content="{{ $seo['twitter_image'] }}" />
     @endif
-    <link href="/assets/img/favicon.png" rel="icon" />
+    <link href="/assets/img/icons/favicon.png" rel="icon" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

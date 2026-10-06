@@ -8,6 +8,16 @@ class LegacySitePublisher
     {
         $copied = [];
         $this->copyDirectory(resource_path('assets'), public_path('assets'), $copied);
+        // New paths are published first. Remove only byte-identical old output;
+        // legacy URLs then redirect through the allowlisted image route.
+        foreach (config('image-paths.legacy', []) as $old => $new) {
+            $previous = public_path('assets/img/'.$old);
+            $current = public_path('assets/img/'.$new);
+            if (is_file($previous) && is_file($current)
+                && hash_file('sha256', $previous) === hash_file('sha256', $current)) {
+                unlink($previous);
+            }
+        }
         foreach (['manifest.json' => 'manifest.json', 'preloader.html' => 'preloader.html', 'preloader.css' => 'preloader.css'] as $from => $to) {
             $this->copyFile(resource_path('static/'.$from), public_path($to), $copied);
         }
@@ -107,7 +117,7 @@ class LegacySitePublisher
     <link rel="canonical" href="{{ rtrim(config('app.url'), '/') }}/articles" />
     <meta property="og:title" content="Articles | Meet AJ" />
     <meta property="og:url" content="{{ rtrim(config('app.url'), '/') }}/articles" />
-    <link href="/assets/img/favicon.png" rel="icon" />
+    <link href="/assets/img/icons/favicon.png" rel="icon" />
     <link rel="manifest" href="/manifest.json" />
     <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
@@ -593,6 +603,11 @@ HTML;
     private function copyFile(string $from, string $to, array &$copied): void
     {
         if (! is_file($from)) {
+            return;
+        }
+        if (is_file($to) && hash_file('sha256', $from) === hash_file('sha256', $to)) {
+            $copied[] = $to;
+
             return;
         }
         if (! is_dir(dirname($to))) {

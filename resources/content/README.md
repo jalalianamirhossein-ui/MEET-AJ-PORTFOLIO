@@ -12,3 +12,5 @@ Reviewed 2026-10-06. Packages under `articles/{slug}/` keep editorial inputs, ge
 Builders change source HTML; imports change database rows. Review CMS edits before applying replacements. Bulk enterprise generators use historical inventories and need explicit extension for newer packages. Publication copies only the selected Bash script and MSI to their existing public URLs; source archives remain outside `public/`.
 
 See [source ownership](../README.md), [directory map](../../docs/current/PROJECT-STRUCTURE.md) and [current verification](../../docs/current/PROJECT-STATUS.md).
+
+Image organization (2026-10-06): [banner, article-body and upload folder guide](../../docs/current/IMAGES.md). Run `node scripts/check-images.cjs` after publishing images.

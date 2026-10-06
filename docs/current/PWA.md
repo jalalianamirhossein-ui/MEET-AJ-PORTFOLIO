@@ -72,3 +72,5 @@ This excludes:
 | Production service worker on meetaj.ir | NOT TESTED |
 
 Do not claim the PWA is production-verified.
+
+Image organization (2026-10-06): [banner, article-body and upload folder guide](IMAGES.md). Run `node scripts/check-images.cjs` after publishing images.

@@ -22,7 +22,7 @@ class HomepageContentCatalog
                     'title_en' => 'AmirHossein Jalalian', 'title_fa' => 'امیرحسین جلالیان',
                     'role_en' => 'Infrastructure & DevOps Engineer', 'role_fa' => 'مهندس زیرساخت و DevOps',
                     'subtitle_en' => 'Infrastructure & DevOps Engineer', 'subtitle_fa' => 'مهندس زیرساخت و DevOps',
-                    'image' => '/assets/img/hero-bg.jpg',
+                    'image' => '/assets/img/banners/site/hero-bg.jpg',
                     'primary_label_en' => 'Get In Touch', 'primary_label_fa' => 'تماس با من', 'primary_href' => '#contact',
                     'secondary_label_en' => 'Articles', 'secondary_label_fa' => 'مقالات', 'secondary_href' => '#portfolio',
                 ],
@@ -31,8 +31,8 @@ class HomepageContentCatalog
                 'key' => 'site', 'label' => 'Site identity & social links', 'sort' => 5,
                 'content' => [
                     'site_name' => 'Meet AJ',
-                    'profile_image' => '/assets/img/my-profile-img.jpg',
-                    'logo_image' => '/assets/img/logo.png',
+                    'profile_image' => '/assets/img/avatars/profile/my-profile-img.jpg',
+                    'logo_image' => '/assets/img/brand/logo.png',
                     'navigation' => [
                         ['key' => 'hero', 'href' => '#hero', 'icon' => 'bi bi-house', 'label_en' => 'Home', 'label_fa' => 'صفحه اصلی'],
                         ['key' => 'about', 'href' => '#about', 'icon' => 'bi bi-person', 'label_en' => 'About', 'label_fa' => 'درباره من'],
@@ -63,7 +63,7 @@ class HomepageContentCatalog
                     'name_en' => 'Amirhossein Jalalian', 'name_fa' => 'امیرحسین جلالیان',
                     'role_en' => 'Infrastructure & DevOps Engineer', 'role_fa' => 'مهندس زیرساخت و DevOps',
                     'location_en' => 'Tehran, Iran', 'location_fa' => 'تهران، ایران',
-                    'image' => '/assets/img/my-profile-img-2.jpg',
+                    'image' => '/assets/img/avatars/profile/my-profile-img-2.jpg',
                     'lead_1_en' => 'I am Amirhossein Jalalian, an Infrastructure & DevOps Engineer with extensive experience in designing, managing, and optimizing enterprise systems. My goal is to provide reliable, secure, and scalable solutions that help organizations operate more efficiently while reducing risks.',
                     'lead_1_fa' => 'من امیرحسین جلالیان هستم، مهندس زیرساخت و DevOps با تجربه گسترده در طراحی، مدیریت و بهینه‌سازی سیستم‌های سازمانی. هدف من ارائه راهکارهای پایدار، امن و مقیاس‌پذیر است که به سازمان‌ها کمک می‌کند کارآیی بیشتری داشته باشند و در عین حال ریسک‌ها را کاهش دهند.',
                     'lead_2_en' => 'I have extensive experience in Windows Server, Cisco and MikroTik technologies, virtualization, and other IT infrastructure solutions. My approach is always results-driven, carrying out each project with accountability, precision, and strong teamwork.',

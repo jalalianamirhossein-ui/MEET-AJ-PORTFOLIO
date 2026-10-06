@@ -21,7 +21,7 @@
     <meta property="og:title" content="System Administration — Pricing & Scope" />
     <meta property="og:description" content="Windows Server, AD, DNS, Linux administration services. Fixed price AED 3,900." />
     <meta property="og:url" content="https://meetaj.ir/services/system-administration.html" />
-    <meta property="og:image" content="https://meetaj.ir/assets/img/hero-bg.jpg" />
+    <meta property="og:image" content="https://meetaj.ir/assets/img/banners/site/hero-bg.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Modern Service Pages CSS -->

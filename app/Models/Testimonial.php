@@ -28,7 +28,7 @@ class Testimonial extends Model
     {
         $avatar = trim((string) $this->avatar);
         if ($avatar === '') {
-            return '/assets/img/testimonials/testimonials-1.jpg';
+            return '/assets/img/avatars/testimonials/testimonials-1.jpg';
         }
         if (preg_match('~^(?:https?:)?//~i', $avatar)) {
             return $avatar;
@@ -36,18 +36,18 @@ class Testimonial extends Model
         if (str_starts_with($avatar, '/')) {
             return is_file(public_path(ltrim(parse_url($avatar, PHP_URL_PATH) ?: $avatar, '/')))
                 ? $avatar
-                : '/assets/img/testimonials/testimonials-1.jpg';
+                : '/assets/img/avatars/testimonials/testimonials-1.jpg';
         }
         if (str_starts_with($avatar, 'assets/') || str_starts_with($avatar, 'storage/')) {
             $publicPath = '/'.$avatar;
             return is_file(public_path($avatar))
                 ? $publicPath
-                : '/assets/img/testimonials/testimonials-1.jpg';
+                : '/assets/img/avatars/testimonials/testimonials-1.jpg';
         }
 
         $storagePath = '/storage/'.$avatar;
         return is_file(storage_path('app/public/'.$avatar))
             ? $storagePath
-            : '/assets/img/testimonials/testimonials-1.jpg';
+            : '/assets/img/avatars/testimonials/testimonials-1.jpg';
     }
 }

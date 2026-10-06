@@ -24,3 +24,5 @@ node --test tests/Frontend/scroll-reveal.test.cjs
 ```
 
 These checks validate file targets and frontend behavior, not external websites or Markdown heading anchors. For database replacement, preview the import, back up and review CMS edits. Current source/database differences are documented in [project status](../docs/current/PROJECT-STATUS.md).
+
+Image organization (2026-10-06): [banner, article-body and upload folder guide](../docs/current/IMAGES.md). Run `node scripts/check-images.cjs` after publishing images.

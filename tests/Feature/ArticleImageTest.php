@@ -10,18 +10,18 @@ class ArticleImageTest extends TestCase
     public function test_old_imports_use_small_thumbnails_and_preserve_full_gallery_images(): void
     {
         $article = new Article([
-            'featured_image' => '/assets/img/portfolio/other-1.png',
+            'featured_image' => '/assets/img/banners/articles/other-1.png',
             'presentation' => [
-                'thumbnail' => '/assets/img/portfolio/other-1.png',
-                'gallery' => '/assets/img/portfolio/other-1.png',
+                'thumbnail' => '/assets/img/banners/articles/other-1.png',
+                'gallery' => '/assets/img/banners/articles/other-1.png',
             ],
         ]);
 
-        $this->assertSame('/assets/img/portfolio/optimized/other-1.jpg', $article->thumbnailUrl());
-        $this->assertSame('/assets/img/portfolio/other-1.png', $article->galleryUrl());
-        $this->assertSame(rtrim((string) config('app.url'), '/').'/assets/img/portfolio/optimized/other-1.jpg', $article->imageUrl());
+        $this->assertSame('/assets/img/banners/articles/optimized/other-1.jpg', $article->thumbnailUrl());
+        $this->assertSame('/assets/img/banners/articles/other-1.png', $article->galleryUrl());
+        $this->assertSame(rtrim((string) config('app.url'), '/').'/assets/img/banners/articles/optimized/other-1.jpg', $article->imageUrl());
         $this->assertLessThan(
-            filesize(public_path('assets/img/portfolio/other-1.png')) / 10,
+            filesize(public_path('assets/img/banners/articles/other-1.png')) / 10,
             filesize(public_path(ltrim($article->thumbnailUrl(), '/'))),
         );
     }
@@ -31,8 +31,8 @@ class ArticleImageTest extends TestCase
         $article = new Article([
             'featured_image' => 'articles/new-cover.webp',
             'presentation' => [
-                'thumbnail' => '/assets/img/portfolio/optimized/other-1.jpg',
-                'gallery' => '/assets/img/portfolio/other-1.png',
+                'thumbnail' => '/assets/img/banners/articles/optimized/other-1.jpg',
+                'gallery' => '/assets/img/banners/articles/other-1.png',
             ],
         ]);
 
@@ -48,7 +48,7 @@ class ArticleImageTest extends TestCase
             '//cdn.example.com/cover.webp' => '//cdn.example.com/cover.webp',
             'storage/articles/cover.webp' => '/storage/articles/cover.webp',
             '/storage/articles/cover.webp' => '/storage/articles/cover.webp',
-            'assets/img/hero-bg.jpg' => '/assets/img/hero-bg.jpg',
+            'assets/img/banners/site/hero-bg.jpg' => '/assets/img/banners/site/hero-bg.jpg',
         ] as $source => $expected) {
             $article = new Article(['featured_image' => $source]);
             $this->assertSame($expected, $article->thumbnailUrl());
@@ -58,7 +58,7 @@ class ArticleImageTest extends TestCase
 
     public function test_original_is_kept_when_no_optimized_asset_was_published(): void
     {
-        $article = new Article(['featured_image' => '/assets/img/portfolio/windows-3.png']);
-        $this->assertSame('/assets/img/portfolio/windows-3.png', $article->thumbnailUrl());
+        $article = new Article(['featured_image' => '/assets/img/banners/articles/windows-3.png']);
+        $this->assertSame('/assets/img/banners/articles/windows-3.png', $article->thumbnailUrl());
     }
 }

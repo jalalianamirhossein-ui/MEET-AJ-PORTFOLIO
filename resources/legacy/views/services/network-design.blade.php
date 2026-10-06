@@ -21,7 +21,7 @@
     <meta property="og:title" content="Network Design & Implementation — Pricing & Scope" />
     <meta property="og:description" content="Enterprise network architecture, Cisco/MikroTik deployment, security policies, HA, and documentation. Fixed price AED 4,900." />
     <meta property="og:url" content="https://meetaj.ir/services/network-design.html" />
-    <meta property="og:image" content="https://meetaj.ir/assets/img/hero-bg.jpg" />
+    <meta property="og:image" content="https://meetaj.ir/assets/img/banners/site/hero-bg.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Modern Service Pages CSS -->

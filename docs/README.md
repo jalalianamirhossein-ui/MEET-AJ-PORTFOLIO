@@ -131,3 +131,6 @@ See [the directory map](current/PROJECT-STRUCTURE.md) for source ownership and p
 - [Deployment scripts](../deploy/README.md): Ubuntu VPS workflow.
 - [Enterprise editorial evidence](enterprise-articles/README.md): dated inventory and exact originals.
 - [2026-09-19 archive](archive/2026-09-19/README.md): historical debug evidence.
+
+- [Image folder guide](current/IMAGES.md): banners, article-body images, avatars, icons, previews and CMS uploads.
+- [Image audit](qa/IMAGE-ORGANIZATION-2026-10-06.md): migration preservation, checks and rendering evidence.

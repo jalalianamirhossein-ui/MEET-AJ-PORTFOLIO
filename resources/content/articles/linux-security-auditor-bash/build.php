@@ -4,7 +4,8 @@
 $escape = fn (string $s): string => htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 $slug = 'linux-security-auditor-bash';
 $url = 'https://meetaj.ir/articles/'.$slug;
-$image = '/assets/img/portfolio/linux-8.png';
+$image = '/assets/img/banners/articles/linux-8.png';
+$bodyImage = '/assets/img/articles/linux-security-auditor-bash/linux-8.png';
 $localizations = [
     'en' => [
         'title' => 'Building an Enterprise Linux Security Auditor with Bash',
@@ -113,7 +114,7 @@ $section('cli', 'Useful commands and all available options', 'دستورهای �
 $section('dashboard', 'Reading the dashboard', 'خواندن داشبورد',
     $p('The first part identifies the machine: hostname, distribution, kernel, IP, uptime and whether the run has root access. Below it are the score, coverage and risk counts. Each category has its own score and coverage, so you can see where the gaps are.', 'ابتدای گزارش مشخصات ماشین را می‌بینید: نام میزبان، توزیع، هسته، IP، مدت روشن‌بودن و اینکه اجرا دسترسی root دارد یا نه. پایین آن امتیاز، پوشش بررسی و تعداد ریسک‌ها آمده است. هر دسته هم امتیاز و پوشش خودش را دارد تا مشخص شود کجا نیاز به بررسی بیشتر است.')
     .$p('Start with the priority findings. Summary mode shows up to eight, ordered from critical down to low, plus up to five unknown checks. Read the evidence and suggested action before making a change. Disk, inode and memory figures help spot capacity problems. --full shows all findings.', 'از یافته‌های اولویت‌دار شروع کنید. حالت خلاصه تا هشت یافته را از بحرانی تا کم‌خطر و تا پنج مورد نامشخص نشان می‌دهد. پیش از هر تغییر، شواهد و اقدام پیشنهادی را بخوانید. عددهای دیسک، inode و حافظه هم کمک می‌کنند مشکل ظرفیت را ببینید. با --full همه یافته‌ها نمایش داده می‌شوند.')
-    .'<figure><img class="img-fluid" src="'.$image.'" loading="lazy" alt="Linux Security Auditor dashboard: scores and priority findings | داشبورد بررسی امنیت لینوکس: امتیازها و یافته‌های اولویت‌دار" />'.$node('p', 'An illustration of the dashboard. Your server findings come from your own run; --demo uses sample data.', 'تصویر برای معرفی داشبورد است. نتیجه سرور شما از اجرای خودتان به دست می‌آید؛ --demo داده نمونه می‌سازد.').'</figure>'
+    .'<figure><img class="img-fluid" src="'.$bodyImage.'" loading="lazy" alt="Linux Security Auditor dashboard: scores and priority findings | داشبورد بررسی امنیت لینوکس: امتیازها و یافته‌های اولویت‌دار" />'.$node('p', 'An illustration of the dashboard. Your server findings come from your own run; --demo uses sample data.', 'تصویر برای معرفی داشبورد است. نتیجه سرور شما از اجرای خودتان به دست می‌آید؛ --demo داده نمونه می‌سازد.').'</figure>'
     .$p('JSON is useful for processing findings in other tools. HTML is a standalone report you can open in a browser, with no external assets. --output-dir saves JSON, HTML and a full text report together. Reports contain server information, so keep them private.', 'JSON برای پردازش یافته‌ها در ابزارهای دیگر مناسب است. HTML یک گزارش مستقل است که بدون فایل خارجی در مرورگر باز می‌شود. --output-dir نسخه JSON، HTML و متن کامل را کنار هم ذخیره می‌کند. این گزارش‌ها اطلاعات سرور دارند؛ آن‌ها را عمومی نکنید.'));
 
 $section('patching', 'Are updates waiting?', 'آیا آپدیتی در انتظار نصب است؟',

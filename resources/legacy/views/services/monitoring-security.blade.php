@@ -21,7 +21,7 @@
     <meta property="og:title" content="Monitoring & Security — Pricing & Scope" />
     <meta property="og:description" content="Zabbix stack, alerting, backup strategy, security hardening services. Fixed price AED 4,200." />
     <meta property="og:url" content="https://meetaj.ir/services/monitoring-security.html" />
-    <meta property="og:image" content="https://meetaj.ir/assets/img/hero-bg.jpg" />
+    <meta property="og:image" content="https://meetaj.ir/assets/img/banners/site/hero-bg.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Modern Service Pages CSS -->

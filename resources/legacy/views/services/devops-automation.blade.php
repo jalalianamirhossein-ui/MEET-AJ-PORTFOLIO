@@ -21,7 +21,7 @@
     <meta property="og:title" content="DevOps & Automation — Pricing & Scope" />
     <meta property="og:description" content="Docker, CI/CD pipelines, infrastructure automation services. Fixed price AED 6,900." />
     <meta property="og:url" content="https://meetaj.ir/services/devops-automation.html" />
-    <meta property="og:image" content="https://meetaj.ir/assets/img/hero-bg.jpg" />
+    <meta property="og:image" content="https://meetaj.ir/assets/img/banners/site/hero-bg.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Modern Service Pages CSS -->

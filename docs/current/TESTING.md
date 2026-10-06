@@ -49,3 +49,5 @@ node scripts/check-documentation.cjs --write-index
 ```
 
 Node is needed only for these checks, not to build or serve the site. The documentation check validates local Markdown file links and regenerates the complete inventory when requested. On this Windows sandbox, PHPUnit sees `vendor/autoload.php` as unreadable even though PHP can require it; see the audit for the temporary wrapper used to run the suite without changing tracked PHPUnit configuration.
+
+Image organization (2026-10-06): [banner, article-body and upload folder guide](IMAGES.md). Run `node scripts/check-images.cjs` after publishing images.

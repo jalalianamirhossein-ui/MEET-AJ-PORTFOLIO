@@ -135,3 +135,5 @@ The table supports title search, sortable columns, language and status display, 
 - `mikrotik-pbr-client`: installer MSI and private source ZIP in the matching package; migration `2026_10_06_000021` imports it.
 
 The article library also includes `oxidized-network-device-configuration-backup`, omitted from the old inline slug list. All 28 maintained filenames are enumerated in the dated audit. Stored content comparison currently fails for 27 local rows; see [PROJECT-STATUS.md](PROJECT-STATUS.md) before claiming parity.
+
+Image organization (2026-10-06): [banner, article-body and upload folder guide](IMAGES.md). Run `node scripts/check-images.cjs` after publishing images.

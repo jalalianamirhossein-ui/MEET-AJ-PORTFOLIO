@@ -67,7 +67,7 @@
     <meta property="og:url" content="https://meetaj.ir/" />
     <meta
       property="og:image"
-      content="https://meetaj.irassets/img/hero-bg.jpg"
+      content="https://meetaj.ir/assets/img/banners/site/hero-bg.jpg"
     />
     <meta
       property="og:image:alt"
@@ -86,7 +86,7 @@
     />
     <meta
       name="twitter:image"
-      content="https://meetaj.irassets/img/hero-bg.jpg"
+      content="https://meetaj.ir/assets/img/banners/site/hero-bg.jpg"
     />
     <script type="application/ld+json">
       {
@@ -95,7 +95,7 @@
         "name": "AmirHossein Jalalian",
         "url": "https://meetaj.ir/",
         "jobTitle": "Infrastructure & DevOps Engineer",
-        "image": "https://meetaj.irassets/img/my-profile-img-2.jpg",
+        "image": "https://meetaj.ir/assets/img/avatars/profile/my-profile-img-2.jpg",
         "sameAs": [
           "https://www.linkedin.com/in/amirhosseinjalalian",
           "https://github.com/amirhosseinjalalian",
@@ -171,8 +171,8 @@
     <!-- ===============================================
     FAVICONS & APP ICONS
     =============================================== -->
-    <link href="/assets/img/favicon.png" rel="icon" />
-    <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+    <link href="/assets/img/icons/favicon.png" rel="icon" />
+    <link href="/assets/img/icons/apple-touch-icon.png" rel="apple-touch-icon" />
 
     <!-- ===============================================
     PROGRESSIVE WEB APP (PWA) CONFIGURATION
@@ -191,7 +191,7 @@
       content="default-src 'self'; img-src 'self' data: https://meetaj.ir; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'self'; frame-src 'self' https://www.google.com https://maps.gstatic.com;"
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <link rel="preload" as="image" href="/assets/img/hero-bg.jpg" />
+    <link rel="preload" as="image" href="/assets/img/banners/site/hero-bg.jpg" />
 
     <!-- ===============================================
     GOOGLE FONTS & TYPOGRAPHY
@@ -442,7 +442,7 @@
       <section id="hero" class="hero section dark-background">
         <!-- Hero Background Image -->
         <img
-          src="{{ data_get($heroContent, 'image', '/assets/img/hero-bg.jpg') }}"
+          src="{{ data_get($heroContent, 'image', '/assets/img/banners/site/hero-bg.jpg') }}"
           alt="{{ data_get($heroContent, 'title_en', 'Meet AJ') }}"
           class="hero-bg"
           width="1920"
@@ -580,7 +580,7 @@
             <p class="about-headline" data-en="{{ data_get($aboutContent, 'headline_en', 'Designing, managing, and optimizing enterprise systems.') }}" data-fa="{{ data_get($aboutContent, 'headline_fa', 'طراحی، مدیریت و بهینه‌سازی سیستم‌های سازمانی.') }}">{{ data_get($aboutContent, 'headline_en', 'Designing, managing, and optimizing enterprise systems.') }}</p>
             <div class="about-profile">
               <div class="about-photo">
-                <img src="{{ data_get($aboutContent, 'image', '/assets/img/my-profile-img-2.jpg') }}" alt="{{ data_get($aboutContent, 'name_en', 'Amirhossein Jalalian') }}" width="200" height="200" loading="lazy" sizes="120px" />
+                <img src="{{ data_get($aboutContent, 'image', '/assets/img/avatars/profile/my-profile-img-2.jpg') }}" alt="{{ data_get($aboutContent, 'name_en', 'Amirhossein Jalalian') }}" width="200" height="200" loading="lazy" sizes="120px" />
               </div>
               <div class="about-profile-meta">
                 <p class="about-name" data-en="{{ data_get($aboutContent, 'name_en', 'Amirhossein Jalalian') }}" data-fa="{{ data_get($aboutContent, 'name_fa', 'امیرحسین جلالیان') }}">{{ data_get($aboutContent, 'name_en', 'Amirhossein Jalalian') }}</p>

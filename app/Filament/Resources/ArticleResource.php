@@ -70,10 +70,14 @@ class ArticleResource extends Resource
                     ->dehydrated(false)
                     ->helperText('Use HTML source when the content contains <section>, data-en, data-fa or other custom markup.'),
                 RichEditor::make('content')
+                    ->fileAttachmentsDisk('public')
+                    ->fileAttachmentsDirectory(fn (?Article $record): string => 'images/articles/'.($record?->slug ?: 'drafts'))
+                    ->fileAttachmentsAcceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                    ->fileAttachmentsMaxSize(5120)
                     ->formatStateUsing(fn ($state): string => Article::normalizeContentMarkup(is_string($state) ? $state : ''))
                     ->visible(fn (Get $get): bool => $get('content_mode') !== 'html')
                     ->required(fn (Get $get): bool => $get('content_mode') !== 'html')
-                    ->toolbarButtons(['bold', 'italic', 'h2', 'h3', 'blockquote', 'bulletList', 'orderedList', 'link', 'codeBlock', 'undo', 'redo']),
+                    ->toolbarButtons(['bold', 'italic', 'h2', 'h3', 'blockquote', 'bulletList', 'orderedList', 'link', 'attachFiles', 'codeBlock', 'undo', 'redo']),
                 Textarea::make('content')
                     ->label('HTML source')
                     ->rows(26)
@@ -112,7 +116,7 @@ class ArticleResource extends Resource
                     FileUpload::make('featured_image')
                         ->label('Upload / replace featured image')
                         ->disk('public')
-                        ->directory('articles')
+                        ->directory('images/banners/articles')
                         ->visibility('public')
                         ->image()
                         ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])

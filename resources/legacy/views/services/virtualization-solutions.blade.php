@@ -21,7 +21,7 @@
     <meta property="og:title" content="Virtualization Solutions — Pricing & Scope" />
     <meta property="og:description" content="VMware vSphere, KVM, cloud migration, virtualization services. Fixed price AED 5,900." />
     <meta property="og:url" content="https://meetaj.ir/services/virtualization-solutions.html" />
-    <meta property="og:image" content="https://meetaj.ir/assets/img/hero-bg.jpg" />
+    <meta property="og:image" content="https://meetaj.ir/assets/img/banners/site/hero-bg.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Modern Service Pages CSS -->

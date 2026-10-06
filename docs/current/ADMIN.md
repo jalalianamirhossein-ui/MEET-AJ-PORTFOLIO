@@ -173,3 +173,5 @@ Filament `Color::hex('#be123c')` generates a light 400 swatch; `filament-admin.c
 | Admin responsive layout 1024 / 768 / 390 | Cursor browser | PASS |
 
 Evidence: [../qa/ADMIN-QA.md](../qa/ADMIN-QA.md).
+
+Image organization (2026-10-06): [banner, article-body and upload folder guide](IMAGES.md). Run `node scripts/check-images.cjs` after publishing images.

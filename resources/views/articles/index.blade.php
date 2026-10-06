@@ -8,7 +8,7 @@
     <link rel="canonical" href="{{ rtrim(config('app.url'), '/') }}/articles" />
     <meta property="og:title" content="Articles | Meet AJ" />
     <meta property="og:url" content="{{ rtrim(config('app.url'), '/') }}/articles" />
-    <link href="/assets/img/favicon.png" rel="icon" />
+    <link href="/assets/img/icons/favicon.png" rel="icon" />
     <link rel="manifest" href="/manifest.json" />
     <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />

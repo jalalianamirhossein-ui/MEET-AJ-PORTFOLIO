@@ -35,9 +35,9 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->brandName('Meet AJ CMS')
-            ->brandLogo(asset('assets/img/logo.png'))
+            ->brandLogo(asset('assets/img/brand/logo.png'))
             ->brandLogoHeight('1.75rem')
-            ->favicon(asset('assets/img/favicon.png'))
+            ->favicon(asset('assets/img/icons/favicon.png'))
             ->colors([
                 'primary' => Color::hex('#be123c'),
                 'gray' => Color::Slate,

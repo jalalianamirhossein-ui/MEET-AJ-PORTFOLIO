@@ -85,7 +85,7 @@ php artisan migrate            # production: php artisan migrate --force
 php artisan migrate:status
 ```
 
-Twenty-three application migration files create the CMS schema and repair data integrity, including `homepage_contents`, the resume-content repair, `testimonials`, `services`, articles, requests, taxonomy and legacy redirects. Full schema: [docs/current/DATABASE.md](docs/current/DATABASE.md).
+Twenty-four application migration files create the CMS schema and repair data integrity, including `homepage_contents`, the resume-content repair, `testimonials`, `services`, articles, requests, taxonomy and legacy redirects. Full schema: [docs/current/DATABASE.md](docs/current/DATABASE.md).
 
 ### Seeding
 
@@ -233,3 +233,5 @@ Full navigation map: [docs/README.md](docs/README.md).
 10. **Imported article images** still point at `/assets/...` unless an editor uploads a replacement.
 
 Every limitation above is tracked with a status in [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).
+
+Image sources, article-body folders and CMS upload paths: [image guide](docs/current/IMAGES.md).

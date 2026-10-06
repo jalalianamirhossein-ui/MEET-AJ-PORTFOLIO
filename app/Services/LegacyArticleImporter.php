@@ -204,7 +204,7 @@ class LegacyArticleImporter
         $heroTitleFa = $this->attr($html, 'class="article-title hero-title"', 'data-fa');
         $excerpt = $this->attr($html, 'class="article-excerpt hero-subtitle"', 'data-en') ?: $description;
         $excerptFa = $this->attr($html, 'class="article-excerpt hero-subtitle"', 'data-fa');
-        $heroImage = $this->heroImage($html) ?: ($card['gallery'] ?? $card['thumbnail'] ?? '/assets/img/hero-bg.jpg');
+        $heroImage = $this->heroImage($html) ?: ($card['gallery'] ?? $card['thumbnail'] ?? '/assets/img/banners/site/hero-bg.jpg');
         $heroImage = $this->rewritePublicPaths($heroImage);
         $categoryLabelEn = $this->attr($html, 'class="article-category"', 'data-en') ?: Str::headline($categorySlug);
         $categoryLabelFa = $this->attr($html, 'class="article-category"', 'data-fa');
@@ -349,6 +349,7 @@ class LegacyArticleImporter
 
     private function rewritePublicPaths(string $html): string
     {
+        $html = ImagePaths::rewrite($html);
         $html = str_replace('../assets/', '/assets/', $html);
         $html = str_replace('href="../index.html', 'href="/', $html);
         $html = preg_replace('#href="(?:\.\./)?articles/([a-z0-9-]+)\.html#', 'href="/articles/$1', $html) ?? $html;

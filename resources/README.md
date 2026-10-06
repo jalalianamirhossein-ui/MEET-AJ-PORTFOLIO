@@ -17,3 +17,5 @@ Run `php artisan site:publish-assets` after editing public asset sources and `ph
 See [the project directory map](../docs/current/PROJECT-STRUCTURE.md) for placement and deployment rules.
 
 Reviewed 2026-10-06. The Linux package uses the article slug `linux-security-auditor-bash`. SQL English generator input lives with its article package as `english-source.txt`. The MikroTik MSI is published; its source ZIP stays outside `public/`.
+
+Image organization (2026-10-06): [banner, article-body and upload folder guide](../docs/current/IMAGES.md). Run `node scripts/check-images.cjs` after publishing images.
