@@ -31,3 +31,5 @@ There are now 24 migration files and 25 local ledger records. The new image migr
 The focused suite ran through the previously documented sandbox bootstrap wrapper under ignored `storage/app/`; tracked PHPUnit configuration was preserved. Tests cover legacy redirects, imported/optimized covers, custom uploads, inline/banner separation, path migration, preservation and repeatability. Public-page checks use Laravel's HTTP kernel; no new visual browser or interactive upload QA is claimed. The earlier full-suite failures remain documented in [the structure audit](STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
 
 Publishing initially encountered an already-present installer file that could not be overwritten. The publisher now skips a file copy when source and output hashes already match; subsequent publishing completed successfully. This keeps image publishing repeatable without rewriting unrelated unchanged downloads.
+
+Follow-up: the final article image layout supersedes the earlier folder/count snapshot. See [image unification](IMAGE-UNIFICATION-2026-10-06.md) for named banners, removed duplicates and the reserved content folder.

@@ -216,18 +216,7 @@ class Article extends Model
 
     public function thumbnailUrl(): string
     {
-        $image = $this->publicImagePath($this->selectedImage('thumbnail'));
-
-        // Older imports store the original PNG in both fields. Resolve the
-        // shipped small image at render time, without overwriting CMS records.
-        if (preg_match('~^/assets/img/banners/articles/([a-z0-9-]+)\.png$~', $image, $match)) {
-            $optimized = '/assets/img/banners/articles/optimized/'.$match[1].'.jpg';
-            if (is_file(public_path(ltrim($optimized, '/')))) {
-                return $optimized;
-            }
-        }
-
-        return $image;
+        return $this->publicImagePath($this->selectedImage('thumbnail'));
     }
 
     private function selectedImage(string $variant): string
@@ -235,7 +224,7 @@ class Article extends Model
         $featured = (string) $this->featured_image;
         // A new CMS upload replaces the imported thumbnail AND gallery.
         $featured = \App\Services\ImagePaths::rewrite($featured);
-        if ($featured !== '' && ! str_starts_with(ltrim($featured, '/'), 'assets/img/banners/articles/')) {
+        if ($featured !== '' && ! str_starts_with(ltrim($featured, '/'), 'assets/img/articles/banners/')) {
             return $featured;
         }
 

@@ -8,7 +8,7 @@ The article imports with `sort_order = 0`, compatible with the MySQL unsigned co
 
 - Category: existing Linux category.
 - Tags: existing Linux, Ubuntu and SSH vocabulary.
-- Main image: `/assets/img/banners/articles/linux-8.png`, published from the supplied asset. The separate inline copy is `/assets/img/articles/linux-security-auditor-bash/linux-8.png`, so banner and body images can be replaced independently.
+- Main image: `/assets/img/articles/banners/linux-security-auditor-bash.png`, published from the supplied asset. Existing inline illustrations reuse that banner file. Add distinct body images under `/assets/img/articles/content/linux-security-auditor-bash/`.
 - Download: `/docs/linux-security-auditor/security-audit.sh`, published directly from this directory by `LegacySitePublisher`. There is one maintained script source; the public copy is generated and ignored by Git.
 - SEO: localized title, description and keywords; shared canonical; localized Open Graph, Twitter and Article/FAQ schema through the existing services.
 - TOC: 25 bilingual section anchors, imported with the established `article-nav-item` convention.

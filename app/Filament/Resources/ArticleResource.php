@@ -71,7 +71,7 @@ class ArticleResource extends Resource
                     ->helperText('Use HTML source when the content contains <section>, data-en, data-fa or other custom markup.'),
                 RichEditor::make('content')
                     ->fileAttachmentsDisk('public')
-                    ->fileAttachmentsDirectory(fn (?Article $record): string => 'images/articles/'.($record?->slug ?: 'drafts'))
+                    ->fileAttachmentsDirectory(fn (?Article $record): string => 'images/articles/content/'.($record?->slug ?: 'drafts'))
                     ->fileAttachmentsAcceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                     ->fileAttachmentsMaxSize(5120)
                     ->formatStateUsing(fn ($state): string => Article::normalizeContentMarkup(is_string($state) ? $state : ''))
@@ -116,7 +116,7 @@ class ArticleResource extends Resource
                     FileUpload::make('featured_image')
                         ->label('Upload / replace featured image')
                         ->disk('public')
-                        ->directory('images/banners/articles')
+                        ->directory('images/articles/banners')
                         ->visibility('public')
                         ->image()
                         ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])

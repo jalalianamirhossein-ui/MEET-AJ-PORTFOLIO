@@ -7,23 +7,20 @@ use Tests\TestCase;
 
 class ArticleImageTest extends TestCase
 {
-    public function test_old_imports_use_small_thumbnails_and_preserve_full_gallery_images(): void
+    public function test_cards_and_gallery_use_the_same_named_banner(): void
     {
         $article = new Article([
-            'featured_image' => '/assets/img/banners/articles/other-1.png',
+            'featured_image' => '/assets/img/articles/banners/creating-a-bootable-usb.png',
             'presentation' => [
-                'thumbnail' => '/assets/img/banners/articles/other-1.png',
-                'gallery' => '/assets/img/banners/articles/other-1.png',
+                'thumbnail' => '/assets/img/articles/banners/creating-a-bootable-usb.png',
+                'gallery' => '/assets/img/articles/banners/creating-a-bootable-usb.png',
             ],
         ]);
 
-        $this->assertSame('/assets/img/banners/articles/optimized/other-1.jpg', $article->thumbnailUrl());
-        $this->assertSame('/assets/img/banners/articles/other-1.png', $article->galleryUrl());
-        $this->assertSame(rtrim((string) config('app.url'), '/').'/assets/img/banners/articles/optimized/other-1.jpg', $article->imageUrl());
-        $this->assertLessThan(
-            filesize(public_path('assets/img/banners/articles/other-1.png')) / 10,
-            filesize(public_path(ltrim($article->thumbnailUrl(), '/'))),
-        );
+        $this->assertSame('/assets/img/articles/banners/creating-a-bootable-usb.png', $article->thumbnailUrl());
+        $this->assertSame('/assets/img/articles/banners/creating-a-bootable-usb.png', $article->galleryUrl());
+        $this->assertSame(rtrim((string) config('app.url'), '/').'/assets/img/articles/banners/creating-a-bootable-usb.png', $article->imageUrl());
+        $this->assertSame($article->galleryUrl(), $article->thumbnailUrl());
     }
 
     public function test_cms_upload_replaces_imported_images_on_every_surface(): void
@@ -31,8 +28,8 @@ class ArticleImageTest extends TestCase
         $article = new Article([
             'featured_image' => 'articles/new-cover.webp',
             'presentation' => [
-                'thumbnail' => '/assets/img/banners/articles/optimized/other-1.jpg',
-                'gallery' => '/assets/img/banners/articles/other-1.png',
+                'thumbnail' => '/assets/img/articles/banners/creating-a-bootable-usb.png',
+                'gallery' => '/assets/img/articles/banners/creating-a-bootable-usb.png',
             ],
         ]);
 
@@ -56,9 +53,9 @@ class ArticleImageTest extends TestCase
         }
     }
 
-    public function test_original_is_kept_when_no_optimized_asset_was_published(): void
+    public function test_custom_public_image_path_is_preserved(): void
     {
-        $article = new Article(['featured_image' => '/assets/img/banners/articles/windows-3.png']);
-        $this->assertSame('/assets/img/banners/articles/windows-3.png', $article->thumbnailUrl());
+        $article = new Article(['featured_image' => '/assets/img/custom-cover.png']);
+        $this->assertSame('/assets/img/custom-cover.png', $article->thumbnailUrl());
     }
 }

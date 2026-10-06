@@ -78,3 +78,5 @@ The following list is generated from `resources/legacy/articles/` during this re
 - `windows-password-reset-secure-access-recovery.html`
 
 File integrity checks confirm that the moved SQL English input, Linux Bash script and Linux builder are identical to their original Git text after normalizing checkout line endings. PHP syntax checks pass for the publisher, moved builder and updated Linux test. Documentation links: **110 Markdown files, 677 local targets, zero broken file links**. A repository-wide whitespace check identifies a line in the concurrent PBR Client HTML change; that file was preserved.
+
+Follow-up: the final article image layout supersedes the earlier folder/count snapshot. See [image unification](IMAGE-UNIFICATION-2026-10-06.md) for named banners, removed duplicates and the reserved content folder.

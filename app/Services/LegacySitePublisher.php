@@ -8,13 +8,13 @@ class LegacySitePublisher
     {
         $copied = [];
         $this->copyDirectory(resource_path('assets'), public_path('assets'), $copied);
-        // New paths are published first. Remove only byte-identical old output;
-        // legacy URLs then redirect through the allowlisted image route.
+        // New paths are published first; retire known moved outputs whose
+        // source no longer exists. Old URLs use the allowlisted redirect route.
         foreach (config('image-paths.legacy', []) as $old => $new) {
             $previous = public_path('assets/img/'.$old);
             $current = public_path('assets/img/'.$new);
             if (is_file($previous) && is_file($current)
-                && hash_file('sha256', $previous) === hash_file('sha256', $current)) {
+                && ! is_file(resource_path('assets/img/'.$old))) {
                 unlink($previous);
             }
         }

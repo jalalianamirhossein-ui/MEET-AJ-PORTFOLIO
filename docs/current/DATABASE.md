@@ -42,7 +42,7 @@ Column types below are the SQLite types actually reported by the database. The m
 | `2026_09_21_000016_refresh_testimonials_full_set` | 6 | Ran |
 | `2026_09_21_000017_repair_missing_article_redirects` | 7 | Ran |
 
-The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the migration ledger. Twenty-four application migration files exist through `2026_10_06_000023_organize_image_paths`. The migration table above is the 2026-09-21 snapshot. New files update testimonial attribution (`000018`), contact headings (`000019`), contact intro (`000020`) and import PBR Client (`000021`); `000022` moves the PBR Client download to the end; all current files report Ran locally.
+The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the migration ledger. Twenty-five application migration files exist through `2026_10_06_000024_unify_article_images`. The migration table above is the 2026-09-21 snapshot. New files update testimonial attribution (`000018`), contact headings (`000019`), contact intro (`000020`) and import PBR Client (`000021`); `000022` moves the PBR Client download to the end; all current files report Ran locally.
 
 ## Table overview
 
@@ -60,7 +60,7 @@ The users migration also creates `password_reset_tokens`. Laravel's own `migrati
 | `services` | Service catalog and pricing (12 visible) | 13 |
 | `testimonials` | Bilingual homepage testimonials | 9 |
 | `homepage_contents` | Editable homepage sections | 7 |
-| `migrations` | Laravel migration ledger | 25 |
+| `migrations` | Laravel migration ledger | 26 |
 
 There is **no** `pages` table and **no** `contact_requests` table. Homepage copy is stored in `homepage_contents`; articles, services, testimonials and requests remain dedicated relational resources.
 

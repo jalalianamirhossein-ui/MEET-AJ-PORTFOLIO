@@ -152,8 +152,8 @@ class LegacyArticleImporter
                 continue;
             }
             $slug = $slugMatch[1];
-            preg_match('/src="(assets\/img\/portfolio\/optimized\/[^"]+)"/', $block, $thumb);
-            preg_match('/href="(assets\/img\/portfolio\/[^"]+\.png)"/', $block, $gallery);
+            preg_match('/src="(assets\/img\/articles\/banners\/[^"]+)"/', $block, $thumb);
+            preg_match('/href="(assets\/img\/articles\/banners\/[^"]+\.png)"/', $block, $gallery);
             preg_match('/alt="([^"]*)"/', $block, $alt);
             preg_match('/data-en="([^"]*)"[^>]*data-fa="([^"]*)"/', $block, $titles);
             preg_match('/<p[^>]*data-en="([^"]*)"[^>]*data-fa="([^"]*)"/s', $block, $excerpts);

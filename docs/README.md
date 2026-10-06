@@ -134,3 +134,5 @@ See [the directory map](current/PROJECT-STRUCTURE.md) for source ownership and p
 
 - [Image folder guide](current/IMAGES.md): banners, article-body images, avatars, icons, previews and CMS uploads.
 - [Image audit](qa/IMAGE-ORGANIZATION-2026-10-06.md): migration preservation, checks and rendering evidence.
+
+- [Image unification audit](qa/IMAGE-UNIFICATION-2026-10-06.md): 28 named banners, duplicate removal, reserved article-content folder and PWA screenshots dependency.

@@ -35,7 +35,9 @@ let references = 0;
 const inputs = ['app', 'resources', 'scripts', 'docs/current'].flatMap(dir => walk(path.join(root, dir)))
     .filter(file => /\.(php|py|js|css|html|json|md)$/i.test(file));
 for (const file of inputs) {
-    for (const match of fs.readFileSync(file, 'utf8').matchAll(/\bimg\/([a-z0-9_./-]+\.(?:png|jpe?g|svg|gif|webp|ico|avif))\b/gi)) {
+    const raw = fs.readFileSync(file, 'utf8');
+    const text = file.endsWith('.md') ? raw.replace(/```[^\n]*\n[\s\S]*?```/g, '') : raw;
+    for (const match of text.matchAll(/\bimg\/([a-z0-9_./-]+\.(?:png|jpe?g|svg|gif|webp|ico|avif))\b/gi)) {
         references++;
         if (!fs.existsSync(path.join(source, match[1]))) {
             errors.push(`${path.relative(root, file)}: missing image ${match[1]}`);

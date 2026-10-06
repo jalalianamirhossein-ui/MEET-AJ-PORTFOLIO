@@ -18,9 +18,9 @@ Laravel 13.31.0, Filament 5.8.2, Livewire 4.4.5 and PHPUnit 11.5.56 are locked d
 | Services / visible catalog entries | 13 / 12 |
 | Testimonials / homepage content sections | 9 / 7 |
 | Users / requests | 0 / 0 |
-| Migration files / local ledger records | 24 / 25 |
+| Migration files / local ledger records | 25 / 26 |
 
-All 24 current migration files report Ran. The ledger contains a historical record in addition to current files. Counts describe this environment, not every installation. Localization metadata presence does not prove translation completeness.
+All 25 current migration files report Ran. The ledger contains a historical record in addition to current files. Counts describe this environment, not every installation. Localization metadata presence does not prove translation completeness.
 
 ## Current behavior and maintenance
 
@@ -38,4 +38,6 @@ Start with [the documentation index](../README.md), [directory map](PROJECT-STRU
 
 ## Organized images
 
-The 2026-10-06 image follow-up organizes 75 maintained website pictures into separate banner, article-body, avatar, brand, icon and screenshot folders. The path migration preserves CMS edits and publication timestamps. Legacy URLs redirect to the new assets; upload directories are separated by purpose. [Folder guide](IMAGES.md) and [image verification](../qa/IMAGE-ORGANIZATION-2026-10-06.md). Twelve focused tests pass (439 assertions); 30 public pages render with valid image paths. Earlier broad-suite/content drift remains as documented above.
+The 2026-10-06 image follow-up now maintains 47 website pictures after removing 28 redundant/unused files into a single article banner folder with slug filenames, a neighboring article-content folder, and avatar, brand, icon and PWA preview folders. The path migration preserves CMS edits and publication timestamps. Legacy URLs redirect to the new assets; upload directories are separated by purpose. [Folder guide](IMAGES.md) and [image verification](../qa/IMAGE-ORGANIZATION-2026-10-06.md). Thirteen focused tests pass (444 assertions); 30 public pages render with valid image paths. Earlier broad-suite/content drift remains as documented above.
+
+The latest image layout and deletion evidence are in [the unification audit](../qa/IMAGE-UNIFICATION-2026-10-06.md). PWA screenshots remain referenced by the manifest.

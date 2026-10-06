@@ -1,50 +1,50 @@
 # Image folders and publishing
 
-Reviewed 2026-10-06. Image sources belong in `resources/assets/img/`; generated website copies belong in `public/assets/img/`. Edit the source and run `php artisan site:publish-assets`.
+Reviewed 2026-10-06 after the image unification follow-up. Edit sources in `resources/assets/img/`, then run `php artisan site:publish-assets`.
 
 ```text
 resources/assets/img/
-├── banners/
-│   ├── site/                  Homepage hero and other site banners
-│   └── articles/              Article cover and gallery banners
-│       └── optimized/         Existing small cover thumbnails
 ├── articles/
-│   └── {article-slug}/        Images embedded inside that article's body
-├── avatars/
-│   ├── profile/               Author/profile photographs
-│   └── testimonials/          Testimonial portraits
-├── brand/                     Brand logo
-├── icons/                     Favicon and app icons
-└── screenshots/               PWA desktop/mobile previews
+│   ├── banners/       One original banner per article: {article-slug}.png
+│   └── content/       Future images embedded in article text
+├── banners/site/      Homepage banner
+├── avatars/profile/   Profile photographs
+├── avatars/testimonials/
+├── brand/             Logo
+├── icons/             App icons and favicon
+└── screenshots/       PWA installation previews
 ```
 
-## Adding images
+## Article images
 
-| Role | Source placement | Website URL |
-|---|---|---|
-| Homepage banner | `resources/assets/img/banners/site/hero-bg.jpg` | `/assets/img/banners/site/hero-bg.jpg` |
-| Article banner | `resources/assets/img/banners/articles/{name}.png` | `/assets/img/banners/articles/{name}.png` |
-| Image inside article | `resources/assets/img/articles/{article-slug}/{name}.png` | `/assets/img/articles/{article-slug}/{name}.png` |
+There are exactly 28 article banners. Names match the article URL slug, for example `linux-security-auditor-bash.png` and `mikrotik-pbr-client.png`. Cards, hero images, gallery links and SEO use the same full-quality file. The `optimized` folder has been removed.
 
-Use descriptive filenames. Keep article body images in the article's slug folder, including future screenshots and diagrams. Banner metadata, cards and galleries refer to `banners/articles/`; body `<img>` elements refer to `articles/{slug}/`.
+For future images inside an article, place files in `articles/content/{article-slug}/`, for example:
 
-The Linux Auditor and PBR Client previously reused their banner file inside the article body. Each body now has its own identical initial copy in the article folder, so replacing a body screenshot does not replace the banner. The Linux builder uses separate `$image` and `$bodyImage` variables.
+```html
+<img src="/assets/img/articles/content/mikrotik-pbr-client/settings.png"
+     alt="Client settings" loading="lazy">
+```
+
+The empty `content/` folder is tracked with `.gitkeep`. Create an article slug subfolder when adding a real screenshot or diagram. The two previously duplicated banner copies inside article folders have been removed; existing inline banner illustrations reference the single banner file until replaced by distinct content images.
 
 ## CMS uploads
 
-The public storage disk keeps uploads separate from versioned assets:
-
-- Featured-image uploads: `storage/app/public/images/banners/articles/`, served at `/storage/images/banners/articles/`.
-- New-article visual editor attachments: `storage/app/public/images/articles/{slug}/`; unsaved articles use `images/articles/drafts/`. Only JPEG/PNG/WebP up to 5 MB are accepted. The attachment button is available in the visual editor.
+- Featured-image uploads: `storage/app/public/images/articles/banners/`.
+- New-article visual editor images: `storage/app/public/images/articles/content/{slug}/`; unsaved articles use `content/drafts/`. JPEG/PNG/WebP, maximum 5 MB.
 - Testimonial uploads: `storage/app/public/images/avatars/testimonials/`.
 
-Existing uploaded files retain their paths. Imported bilingual articles use the HTML editor; add body image URLs using the table above and preserve language attributes and markup. This reorganization does not move third-party package assets, screenshots in historical QA folders, or ignored runtime previews into the live website.
+Uploads are served under `/storage/`. Existing uploads retain their paths. Imported bilingual articles use the HTML editor, where you can insert the image URL shown above without replacing translation attributes.
+
+## Screenshots dependency
+
+`resources/static/manifest.json` references `screenshots/screenshot-wide.jpg` and `screenshots/screenshot-narrow.jpg` as desktop/mobile installation previews. They are live PWA metadata, separate from article content screenshots. Removing them requires removing the manifest's `screenshots` entries too. Both images are retained.
 
 ## Migration and compatibility
 
-`config/image-paths.php` records moved image URLs. `2026_10_06_000023_organize_image_paths` updates article image fields/body/metadata, homepage JSON and testimonial avatars, preserving CMS prose, IDs, publication dates and timestamps. Provenance hashes advance only when the stored hash matched the exact pre-move source; earlier content drift is preserved.
+`config/image-paths.php` maps historical image URLs directly to current files. Migration `2026_10_06_000024_unify_article_images` updates existing installations that already ran the first organization migration. Image fields, body references, JSON metadata, homepage data and testimonial paths are updated without replacing editorial content or publication timestamps. Provenance hashes advance only for matching prior sources; unrelated content drift remains.
 
-For existing installations, deploy sources and code, clear stale configuration, publish images, then migrate:
+Back up the database, deploy code and sources, then run:
 
 ```bash
 php artisan optimize:clear
@@ -53,9 +53,9 @@ php artisan migrate --force
 php artisan optimize
 ```
 
-Use the normal database backup procedure before migrating. Do not run `articles:import-legacy --refresh` for a path change. Legacy image URLs redirect with HTTP 301 using an explicit allowlist; unknown paths return 404. Publication removes old generated copies only when their SHA-256 matches the new copy. Article rendering also resolves old imported banner paths to their organized locations.
+Do not reimport article bodies for a path-only change. The publisher removes known retired generated files once their new target exists and their old source is absent. Cached old image URLs redirect with 301 to current assets. Unknown or removed unused image paths return 404.
 
-The PWA manifest now points to maintained icons and screenshots. Four previously public-only pictures were recovered as versioned sources. Editorial preview JPGs live in `docs/enterprise-articles/images/`, outside the web root.
+Twenty-eight redundant/unused source files were deleted: 24 optimized copies, 2 duplicate body images, 1 unused Windows banner and 1 unused testimonial image. The 28 retained article banners preserve their original bytes. Other testimonial images required by existing migration seeds are retained. There are 47 maintained website image files in total. Historical QA screenshots and third-party package assets keep their own folders outside this article layout.
 
 ## Checks
 
@@ -65,4 +65,4 @@ node scripts/check-documentation.cjs
 php artisan test --filter 'ImageOrganizationTest|ArticleImageTest'
 ```
 
-The image checker verifies source/output hashes, categorized placement and literal image references in maintained inputs. It does not inspect external image hosts or interactive upload behavior. Verification evidence: [image organization audit](../qa/IMAGE-ORGANIZATION-2026-10-06.md).
+Evidence: [unification audit](../qa/IMAGE-UNIFICATION-2026-10-06.md).
