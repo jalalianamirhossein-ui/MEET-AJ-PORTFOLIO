@@ -1,5 +1,7 @@
 # Design System Audit — 2026-09-21
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 ## Result
 
 **PASS — documentation and implementation are now aligned for the current scope.**

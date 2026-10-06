@@ -1,7 +1,9 @@
 # Responsive QA — Meet AJ
 
-**Date verified:** 2026-09-18  
-**Method:** Chrome DevTools `Emulation.setDeviceMetricsOverride` on the live Homepage, then `document.documentElement.scrollWidth` vs `innerWidth`.  
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
+**Date verified:** 2026-09-18
+**Method:** Chrome DevTools `Emulation.setDeviceMetricsOverride` on the live Homepage, then `document.documentElement.scrollWidth` vs `innerWidth`.
 **Superseded:** [../archive/2026-09-18/RESPONSIVE-QA.md](../archive/2026-09-18/RESPONSIVE-QA.md)
 
 | Viewport | Overflow-x | Testimonials / Contact | Language switcher |

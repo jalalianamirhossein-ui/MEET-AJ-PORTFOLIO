@@ -2,7 +2,7 @@
 
 # ADR-002 — Framework version selection
 
-Status: **Accepted**  
+Status: **Accepted**
 Date: 2026-09-15 (before dependencies were installed)
 
 Canonical architecture after installation: [ADR-001](ADR-001-laravel-13-filament-5-stack.md). This file remains the pre-install version evidence.

@@ -1,6 +1,8 @@
 # Project structure — Meet AJ
 
-**Verified:** 2026-09-21. This is the current directory map. Earlier layouts in `docs/historical/`, `docs/archive/`, and `docs/phases/` describe their original point in time.
+> Maintenance review: 2026-10-06. Source/package moves preserve public download URLs; generated assets and retired compatibility files are documented explicitly. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
+**Verified:** 2026-10-06. This is the current directory map. Earlier layouts in `docs/historical/`, `docs/archive/`, and `docs/phases/` describe their original point in time.
 
 ## Repository layout
 
@@ -26,24 +28,25 @@ MEET AJ PORTFOLIO/
 │   ├── phases/                Implementation history
 │   ├── historical/            Superseded documents
 │   └── archive/               Dated snapshots and debugging evidence
+├── deploy/                    Ubuntu VPS install, clone, environment and update scripts
 ├── public/                    The only web document root
 ├── resources/                 Versioned frontend and content sources
 │   ├── assets/                Site CSS, JS, images, SCSS, third-party assets
 │   ├── css/                   Filament admin CSS source
-│   ├── downloads/             Public downloadable documents
+│   ├── content/articles/      Article builders, editorial data, runbooks and download sources
 │   ├── legacy/                Static content used by importers and article view generation
 │   │   ├── index.html         Homepage and article-library generation source
-│   │   ├── articles/          25 original article sources
-│   │   ├── services/          Legacy service sources
+│   │   ├── articles/          28 maintained article sources
+│   │   ├── services/          Optional old HTML source location (currently empty)
 │   │   ├── forms/             Former PHP endpoints, reference only
 │   │   ├── views/services/    Six retired Blade templates, reference only
 │   │   └── robots.txt, sitemap.xml, sw.js  Former static versions
 │   ├── static/                Manifest, preloaders, language-toggle fragment
 │   └── views/                 Active Blade views and reusable partials
 ├── routes/                    Web and console routes
-├── scripts/                   Standalone PHP maintenance and diagnostics
+├── scripts/                   PHP/Python maintenance, generators and documentation verification
 ├── storage/                   Ignored uploads, runtime files, logs, caches
-├── tests/                     PHPUnit feature suite and TestCase
+├── tests/                     PHPUnit feature suite, TestCase and Node frontend tests
 ├── vendor/                    Ignored Composer dependencies
 ├── .runtime/                  Ignored local PHP/Composer tools
 ├── artisan                    Laravel CLI entry point
@@ -59,7 +62,9 @@ MEET AJ PORTFOLIO/
 |-----------|---------------------------|---------|
 | `resources/assets/` | `public/assets/` | `php artisan site:publish-assets` |
 | `resources/static/` | `public/manifest.json`, `public/preloader.*`, `public/partials/lang-toggle.html` | `php artisan site:publish-assets` |
-| `resources/downloads/netbox_installation_guide_v2.pdf` | `public/docs/netbox_installation_guide_v2.pdf` | `php artisan site:publish-assets` |
+| Optional `resources/downloads/netbox_installation_guide_v2.pdf` (absent) | `public/docs/netbox_installation_guide_v2.pdf` | Publisher skips missing source; restore PDF before advertising it |
+| `resources/content/articles/linux-security-auditor-bash/security-audit.sh` | `public/docs/linux-security-auditor/security-audit.sh` | `php artisan site:publish-assets` |
+| `resources/content/articles/mikrotik-pbr-client/*.msi` | `public/downloads/mikrotik-pbr-client/*.msi` | `php artisan site:publish-assets`; source ZIP remains private |
 | `resources/css/filament-admin.css` | `public/css/app/meet-aj-admin.css` | `php artisan filament:assets` |
 | `resources/legacy/index.html` and `LegacySitePublisher` | `resources/views/articles/index.blade.php` | `php artisan site:publish-assets --views` |
 | `resources/legacy/articles/` | Article and redirect records | `php artisan articles:import-legacy` |
@@ -99,6 +104,7 @@ The originals verifier reads `docs/qa/baseline-files.json`, maps historical path
 
 | Directory | Ownership |
 |---|---|
+| `docs/enterprise-articles/` | Dated editorial inventories, bilingual reports, original archive and previews |
 | `docs/current/` | Maintained current-state guides; `PROJECT-STATUS.md` is authoritative |
 | `docs/qa/` | Dated or living verification evidence |
 | `docs/decisions/ADR/` | Decisions that remain in force |
@@ -106,3 +112,9 @@ The originals verifier reads `docs/qa/baseline-files.json`, maps historical path
 | `docs/phases/` | Chronological implementation log |
 | `docs/historical/` | Superseded analysis and migration records |
 | `docs/archive/` | Frozen dated snapshots; never treat as current |
+
+## Compatibility and editorial packages
+
+`public/css/meet-aj-admin.css` is an intentional retired compatibility stub; active admin CSS is `public/css/app/meet-aj-admin.css`. The tracked MSI is published output of its matching `resources/content/` source. Do not remove either as an accidental duplicate. `resources/assets/scss/` is a reserved template folder; this project edits CSS directly and has no SCSS build.
+
+SQL English prose belongs in `resources/content/articles/sql-server-automatic-backup-job/english-source.txt`; the bilingual builder reads that path. The Linux package directory matches `linux-security-auditor-bash`, while its public download URL stays unchanged. Enterprise bulk generators cover their historical inventory; do not run them over new article packages without extending their inputs.

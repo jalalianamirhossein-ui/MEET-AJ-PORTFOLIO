@@ -1,4 +1,6 @@
 # گزارش ارتقای فارسی و اولویت بازنویسی
+
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
 گزارش نهایی دو زبان در bilingual-report.md و bilingual-report.json ثبت شده است.
 
 ## downgrade-mikrotik-routeros-firmware-safely.html

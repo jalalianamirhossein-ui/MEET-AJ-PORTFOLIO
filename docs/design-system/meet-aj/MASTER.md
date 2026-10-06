@@ -1,8 +1,8 @@
 # Meet AJ — Design System MASTER
 
-**Status:** SOURCE OF TRUTH for public site + Filament branding.  
-**Date:** 2026-09-21  
-**Stack:** Laravel 13 + Blade + Livewire 4 + Filament 5. **Not** React, Vue, Next, Inertia, or Tailwind on the public site.  
+**Status:** SOURCE OF TRUTH for public site + Filament branding.
+**Date:** 2026-09-21
+**Stack:** Laravel 13 + Blade + Livewire 4 + Filament 5. **Not** React, Vue, Next, Inertia, or Tailwind on the public site.
 **Visual reference:** live Article detail pages (`assets/css/articles.css`). Do not restyle article HTML bodies.
 
 `search.py` could not be executed: Python is not installed on this workstation. Catalog files were read directly:
@@ -146,3 +146,7 @@ Safe-area padding on mobile menu. Language control must not cover back links.
 ## Anti-patterns (do not introduce)
 
 Random gradients, neon, glass cards, SaaS pricing tables, Tailwind, extra icon packs, GSAP, emoji, fake German, invented prices.
+
+## Maintenance alignment — 2026-10-06
+
+The current public cascade ends with `resources/assets/css/glass-system.css` (version 18 in page links). The admin source `resources/css/filament-admin.css` includes a glass overlay while retaining white/red branding. Earlier visual measurements remain dated evidence. See [the maintained design guide](../../current/DESIGN-SYSTEM.md).

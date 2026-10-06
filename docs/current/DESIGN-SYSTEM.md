@@ -1,8 +1,10 @@
 # Design system — Meet AJ public site
 
-**Authority:** [docs/design-system/meet-aj/MASTER.md](../design-system/meet-aj/MASTER.md). Live cascade last overlay `assets/css/site-modules.css?v=1853` after `visual-upgrade.css?v=1713`.
-**Visual DNA:** [ARTICLE-VISUAL-DNA.md](ARTICLE-VISUAL-DNA.md) (Article detail pages are the reference; they are not restyled from this file).  
-**Date:** 2026-09-21  
+> Maintenance review: 2026-10-06. The current cascade includes `glass-system.css?v=18`; public layouts use glass styling with blue accents, and the Filament white/red theme has a glass overlay. Earlier design measurements retain their evidence dates. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
+**Authority:** [docs/design-system/meet-aj/MASTER.md](../design-system/meet-aj/MASTER.md). Live cascade ends with `assets/css/glass-system.css?v=18` after `site-modules.css?v=1853`.
+**Visual DNA:** [ARTICLE-VISUAL-DNA.md](ARTICLE-VISUAL-DNA.md) (Article detail pages are the reference; they are not restyled from this file).
+**Date:** 2026-09-21
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md)
 
 ui-ux-pro-max catalogs were read directly (Python is not installed, so `search.py` was not executed): Portfolio/Personal + B2B Service; Swiss Modernism 2.0 + Editorial Grid; primary `#2563EB`; Poppins + Vazirmatn; 150–200ms micro-interaction and 400–560ms reveal. frontend-design: Article DNA is the distinctive language — not a SaaS card kit, not cream/terracotta, not glass everywhere.

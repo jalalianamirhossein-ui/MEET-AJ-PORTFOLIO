@@ -1,5 +1,7 @@
 # Local project audit — 2026-10-01
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 The final local suite passes: **85 tests, 5,453 assertions, no failures or errors, one skipped MySQL-only test**. This report covers the project review and the follow-up that makes article language selection match the homepage. Production was not accessed or changed.
 
 ## Language behavior

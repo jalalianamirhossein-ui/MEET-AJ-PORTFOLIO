@@ -11,7 +11,7 @@ class PingTriggeredPolicyRoutingArticleTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_pbr_article_is_first_on_home_library_and_matching_search_regardless_of_date(): void
+    public function test_router_guide_follows_client_on_home_library_and_matching_search_regardless_of_date(): void
     {
         app(LegacyArticleImporter::class)->import(false);
         $pbr = Article::where('slug', 'mikrotik-ping-triggered-policy-routing')->firstOrFail();
@@ -22,7 +22,8 @@ class PingTriggeredPolicyRoutingArticleTest extends TestCase
         foreach (['/', '/articles', '/articles?q=mikrotik', '/articles?tag=mikrotik'] as $path) {
             $response = $this->get($path)->assertOk();
             $items = $response->viewData(str_contains($path, '?') ? 'results' : 'articles');
-            $this->assertSame($pbr->slug, $items->first()->slug, $path);
+            $this->assertSame('mikrotik-pbr-client', $items->first()->slug, $path);
+            $this->assertSame($pbr->slug, $items->values()->get(1)->slug, $path);
         }
 
         $this->assertSame('mikrotik', $pbr->category->slug);

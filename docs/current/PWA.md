@@ -1,6 +1,8 @@
 # PWA — Meet AJ
 
-**Authority:** AUTHORITATIVE PWA document.  
+> Maintenance review: 2026-10-06. The service-worker generator is `LegacySitePublisher::writeServiceWorker()`; `resources/legacy/sw.js` is historical. Browser install/offline evidence was not refreshed. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
+**Authority:** AUTHORITATIVE PWA document.
 **Verified:** 2026-09-16 against `public/sw.js`, `public/manifest.json`, `public/offline.html`.
 
 ## Files

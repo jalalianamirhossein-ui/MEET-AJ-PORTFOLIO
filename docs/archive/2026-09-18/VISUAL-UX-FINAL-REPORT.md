@@ -1,9 +1,11 @@
 # Visual UX + functional QA — final report
 
-**Status:** CURRENT  
-**Date:** 2026-09-17  
-**Overlay:** `visual-upgrade.css?v=1405` · `main.js?v=1201` · `i18n.js?v=1201` · `lang-toggle.css?v=1202`  
-**Baseline before this pass:** [pre-visual-upgrade-baseline.md](pre-visual-upgrade-baseline.md)  
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
+**Status:** CURRENT
+**Date:** 2026-09-17
+**Overlay:** `visual-upgrade.css?v=1405` · `main.js?v=1201` · `i18n.js?v=1201` · `lang-toggle.css?v=1202`
+**Baseline before this pass:** [pre-visual-upgrade-baseline.md](pre-visual-upgrade-baseline.md)
 **Tests this pass:** 40 tests, 708 assertions, 1 skipped. `site:compare-content` Failures: 0.
 
 This is not a from-scratch redesign. The existing identity (Poppins + Vazirmatn, `#2563eb`, iPortfolio sidebar, article DNA) is preserved. Changes restore regressions and make listing, search, skills, language and article images match the current product.

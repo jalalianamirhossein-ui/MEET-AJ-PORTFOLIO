@@ -1,5 +1,7 @@
 # مقاله‌های فنی فارسی و انگلیسی
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 آخرین بازبینی: **2026-10-01**؛ تعداد: **۲۵ مقاله** در `resources/legacy/articles`.
 
 فهرست فایل‌ها، عنوان فارسی و انگلیسی، وضعیت ترجمه، بخش‌های لازم و SEO هر مقاله در [bilingual-report.md](bilingual-report.md) و [bilingual-report.json](bilingual-report.json) ثبت شده است. تحلیل اولیه و اولویت‌ها در [report.md](report.md)، [report.json](report.json) و [inventory.json](inventory.json) موجود است.

@@ -2,7 +2,7 @@
 
 Personal portfolio and technical article site for **AmirHossein Jalalian** (infrastructure, networking, virtualization and DevOps), running as a Laravel application with a Filament admin panel.
 
-Application overview and directory layout verified on **2026-10-01**. Single source of truth for project state: [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).
+Application overview and directory layout verified on **2026-10-06**. Single source of truth for project state: [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).
 
 ## Overview
 
@@ -11,7 +11,7 @@ The site was originally a static English/Persian progressive web app: one homepa
 - the public site renders from Blade views rebuilt from the original HTML, so URLs, CSS hooks and JavaScript contracts are unchanged;
 - homepage sections, articles, services and testimonials live in the database and are editable in the admin panel;
 - contact and quote submissions are stored as requests with a light workflow;
-- all 25 articles have complete English and Persian editions at one clean URL, using the same saved language preference as the homepage, with instant switching and RTL support.
+- 28 maintained article sources support the article library; 27 local rows have paired FA/EN localization metadata at one clean URL, using the same saved language preference as the homepage, with instant switching and RTL support.
 
 The maintained HTML in `resources/legacy/` remains the import and view-generation source. Exact pre-upgrade articles are archived in `docs/enterprise-articles/originals.zip`. It is deliberately **outside** the web document root.
 
@@ -43,7 +43,7 @@ No SPA, no Node build step, no queue worker, no Redis, no scheduler. Detail: [do
 - MySQL/MariaDB for production, or SQLite for local work
 - A web server whose document root is the `public/` directory
 
-There is no Node.js requirement.
+Node.js is optional for frontend and documentation checks; serving the site has no Node.js requirement.
 
 ## Installation
 
@@ -85,7 +85,7 @@ php artisan migrate            # production: php artisan migrate --force
 php artisan migrate:status
 ```
 
-Eighteen application migration files create the CMS schema and repair data integrity, including `homepage_contents`, the resume-content repair, `testimonials`, `services`, articles, requests, taxonomy and legacy redirects. Full schema: [docs/current/DATABASE.md](docs/current/DATABASE.md).
+Twenty-three application migration files create the CMS schema and repair data integrity, including `homepage_contents`, the resume-content repair, `testimonials`, `services`, articles, requests, taxonomy and legacy redirects. Full schema: [docs/current/DATABASE.md](docs/current/DATABASE.md).
 
 ### Seeding
 
@@ -135,7 +135,7 @@ Detail: [docs/current/ADMIN.md](docs/current/ADMIN.md).
 
 ## Articles
 
-Published English articles with legacy `.html` → clean-URL redirects, bilingual categories, tags and related content. The library at `/articles` supports `?q=` search and `?tag=` filtering, and each article page has breadcrumbs, tags, share links and related articles. Content integrity against maintained HTML sources is verified by `php artisan site:compare-content` (currently **Failures: 0**). Detail: [docs/current/ARTICLES.md](docs/current/ARTICLES.md).
+Published English articles with legacy `.html` → clean-URL redirects, bilingual categories, tags and related content. The library at `/articles` supports `?q=` search and `?tag=` filtering, and each article page has breadcrumbs, tags, share links and related articles. Content integrity against maintained HTML sources is verified by `php artisan site:compare-content` (2026-10-06 local comparison: **27 failures**, requiring review of source/database differences). Detail: [docs/current/ARTICLES.md](docs/current/ARTICLES.md).
 
 ## Services
 
@@ -151,7 +151,7 @@ The homepage, library and articles share a saved language preference. `/articles
 
 ## SEO
 
-Canonical URLs, Open Graph, Twitter cards, JSON-LD on the homepage and articles, a dynamic `/sitemap.xml` listing the homepage plus 25 clean article URLs with modification dates, `/robots.txt` disallowing `/admin`, `/livewire` and `/forms`, and 301s for `/index.html`, legacy article `.html` paths and retired language queries. Removed service detail paths return 404. Detail: [docs/current/SEO.md](docs/current/SEO.md).
+Canonical URLs, Open Graph, Twitter cards, JSON-LD on the homepage and articles, a dynamic `/sitemap.xml` listing the homepage plus published clean article URLs (28 published local article rows) with modification dates, `/robots.txt` disallowing `/admin`, `/livewire` and `/forms`, and 301s for `/index.html`, legacy article `.html` paths and retired language queries. Removed service detail paths return 404. Detail: [docs/current/SEO.md](docs/current/SEO.md).
 
 ## PWA
 
@@ -162,10 +162,10 @@ Canonical URLs, Open Graph, Twitter cards, JSON-LD on the homepage and articles,
 ```bash
 php vendor/phpunit/phpunit/phpunit                                  # full feature suite
 php vendor/phpunit/phpunit/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest     # MySQL schema check
-php artisan site:compare-content                                     # Failures: 0
+php artisan site:compare-content                                     # inspect source/database differences
 ```
 
-Latest review (2026-10-01): **85 tests, 0 failures, 1 skipped**. Assertion counts and live-browser evidence are recorded in [the audit](docs/qa/FULL-AUDIT-2026-10-01.md). The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Homepage CMS details: [docs/current/HOMEPAGE-CMS.md](docs/current/HOMEPAGE-CMS.md). Testing detail: [docs/current/TESTING.md](docs/current/TESTING.md).
+Current verification is recorded in [the structure and documentation audit](docs/qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md). The 2026-10-01 suite result is historical. The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Homepage CMS details: [docs/current/HOMEPAGE-CMS.md](docs/current/HOMEPAGE-CMS.md). Testing detail: [docs/current/TESTING.md](docs/current/TESTING.md).
 
 ## Deployment
 
@@ -181,7 +181,7 @@ Laravel's scheduler is **not used** and no cron entry is required. If a future f
 
 ## Security
 
-CSRF (including the legacy field contract), a honeypot, two layers of rate limiting, centralised validation in `StoreContactRequest`, hashed passwords with a 12-character minimum, Filament session auth, six policies, and a `SecurityHeaders` middleware (`nosniff`, `Referrer-Policy`, `SAMEORIGIN`, HSTS on HTTPS, `no-store` on admin/Livewire/forms). `APP_DEBUG` must be `false` in production. No penetration test has been performed. Detail: [docs/current/SECURITY.md](docs/current/SECURITY.md).
+CSRF (including the legacy field contract), a honeypot, two layers of rate limiting, centralised validation in `StoreContactRequest`, hashed passwords with a 12-character minimum, Filament session auth, eight policies, and a `SecurityHeaders` middleware (`nosniff`, `Referrer-Policy`, `SAMEORIGIN`, HSTS on HTTPS, `no-store` on admin/Livewire/forms). `APP_DEBUG` must be `false` in production. No penetration test has been performed. Detail: [docs/current/SECURITY.md](docs/current/SECURITY.md).
 
 ## Project structure
 
@@ -192,11 +192,12 @@ config/       Laravel and CMS configuration
 database/     Migrations, seeders, ignored local SQLite database
 docs/         Documentation, design system, QA and historical references
 public/       Web document root and published assets
-resources/    Asset sources, downloads, static files, legacy content and Blade views
+resources/    Asset sources, article packages, static files, legacy content and Blade views
 routes/       Web and console routes
-scripts/      PHP maintenance tools and Python article generators
+scripts/      PHP/Python maintenance tools, article generators and documentation checks
+deploy/       Ubuntu VPS installation and update scripts
 storage/      Uploads, caches, logs and temporary output
-tests/        PHPUnit feature tests
+tests/        PHPUnit feature tests and Node frontend tests
 ```
 
 Detail: [docs/current/PROJECT-STRUCTURE.md](docs/current/PROJECT-STRUCTURE.md).

@@ -23,8 +23,8 @@ class LinuxSecurityAuditorArticleTest extends TestCase
         $this->assertSame(['linux', 'ssh', 'ubuntu'], $article->tags()->orderBy('slug')->pluck('slug')->all());
         $this->assertSame('/assets/img/portfolio/linux-8.png', $article->thumbnailUrl());
         $this->assertFileExists(public_path('assets/img/portfolio/linux-8.png'));
-        $this->assertSame(hash_file('sha256', resource_path('content/articles/linux-security-Bash-Check/security-audit.sh')), hash_file('sha256', public_path('docs/linux-security-auditor/security-audit.sh')));
-        $source = file_get_contents(resource_path('content/articles/linux-security-Bash-Check/security-audit.sh'));
+        $this->assertSame(hash_file('sha256', resource_path('content/articles/linux-security-auditor-bash/security-audit.sh')), hash_file('sha256', public_path('docs/linux-security-auditor/security-audit.sh')));
+        $source = file_get_contents(resource_path('content/articles/linux-security-auditor-bash/security-audit.sh'));
         preg_match("~usage\\(\\).*?cat <<'HELP'\\r?\\n(.*?)\\r?\\nHELP~s", $source, $help);
         preg_match_all('/--[a-z]+(?:-[a-z]+)*/', $help[1], $flags);
         foreach (array_unique($flags[0]) as $flag) {

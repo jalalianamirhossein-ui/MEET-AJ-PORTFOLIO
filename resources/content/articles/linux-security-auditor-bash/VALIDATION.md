@@ -106,3 +106,5 @@ Exit 0 means no HIGH/CRITICAL findings and at least 80% coverage; it does not im
 The historical Linux integration evidence above is distinct from the current Windows workspace checks. Git for Windows Bash passed syntax validation and the isolated self-test (22 OS fixtures, scoring/statuses, color/ASCII, private temp and optional-command handling). The self-test used its limited JSON escaping fallback because no JSON parser was available to that Bash environment. This is not native GNU/Linux host integration, and no new distribution support is claimed. WSL enumeration was denied; no Linux live audit was run in this workspace.
 
 ShellCheck remains unverified. If available on staging, run `shellcheck security-audit.sh`; this is a suggested check, not a passing result. Native non-root Linux integration, syscall tracing and full distribution integration still require independent execution.
+
+Documentation reviewed 2026-10-06. Current structure and verification: [project status](../../../../docs/current/PROJECT-STATUS.md).

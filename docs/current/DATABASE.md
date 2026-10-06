@@ -1,5 +1,7 @@
 # Database — Meet AJ
 
+> Maintenance review: 2026-10-06. Current row counts and migration totals below are from 2026-10-06; the detailed schema and migration batch table retain their stated earlier observation date. No database schema or editorial data was changed by this review. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
 **Authority:** AUTHORITATIVE schema document.
 **Verified:** 2026-09-21 by reading the live SQLite schema (`Schema::getTables()`, `getColumns()`, `getIndexes()`, `getForeignKeys()`) plus the migration files in `database/migrations/`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
@@ -40,25 +42,25 @@ Column types below are the SQLite types actually reported by the database. The m
 | `2026_09_21_000016_refresh_testimonials_full_set` | 6 | Ran |
 | `2026_09_21_000017_repair_missing_article_redirects` | 7 | Ran |
 
-The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the migration ledger. Eighteen application migration files exist through `2026_09_21_000017_repair_missing_article_redirects`.
+The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the migration ledger. Twenty-three application migration files exist through `2026_10_06_000022_move_pbr_client_download_to_bottom`. The migration table above is the 2026-09-21 snapshot. New files update testimonial attribution (`000018`), contact headings (`000019`), contact intro (`000020`) and import PBR Client (`000021`); `000022` moves the PBR Client download to the end; all current files report Ran locally.
 
 ## Table overview
 
-| Table | Purpose | Rows (2026-09-21) |
+| Table | Purpose | Rows (2026-10-06) |
 |-------|---------|-------------------|
 | `users` | Filament login accounts | 0 |
 | `password_reset_tokens` | Laravel password reset store | 0 |
 | `sessions` | Session rows when the database session driver is selected | 0 |
-| `categories` | Article taxonomy, one row per language | 10 |
-| `articles` | Article content and SEO (25 imported) | 25 |
-| `article_redirects` | 301 map from old paths to articles | 25 |
-| `tags` | Flat public tag vocabulary | 8 |
-| `article_tag` | Article ↔ tag pivot | 39 |
+| `categories` | Article taxonomy, one row per language | 19 |
+| `articles` | Article content and SEO (28 local rows) | 28 |
+| `article_redirects` | 301 map from old paths to articles | 28 |
+| `tags` | Flat public tag vocabulary | 24 |
+| `article_tag` | Article ↔ tag pivot | 50 |
 | `requests` | Inbound contact submissions | 0 |
 | `services` | Service catalog and pricing (12 visible) | 13 |
 | `testimonials` | Bilingual homepage testimonials | 9 |
 | `homepage_contents` | Editable homepage sections | 7 |
-| `migrations` | Laravel migration ledger | 17 |
+| `migrations` | Laravel migration ledger | 24 |
 
 There is **no** `pages` table and **no** `contact_requests` table. Homepage copy is stored in `homepage_contents`; articles, services, testimonials and requests remain dedicated relational resources.
 
@@ -194,7 +196,7 @@ Deleting an article cascades to `article_redirects` and `article_tag`.
 | `article_id` | integer | FK → `articles.id`, **cascade** on delete |
 | `created_at`, `updated_at` | datetime, nullable | |
 
-25 rows, one per imported article. Renaming a slug adds a new row rather than replacing the old one.
+28 local rows on 2026-10-06; slug history can add more than one redirect per article. Renaming a slug adds a new row rather than replacing the old one.
 
 ## `tags`
 
@@ -215,7 +217,7 @@ Current vocabulary (8): Linux, Microsoft, MikroTik, VMware, Windows Server, Netw
 | `tag_id` | integer | FK → `tags.id`, **cascade** on delete, indexed |
 | `created_at`, `updated_at` | datetime, nullable | |
 
-Composite primary key `(article_id, tag_id)` (unique). 39 links across 25 articles.
+Composite primary key `(article_id, tag_id)` (unique). 50 local links across 28 article rows on 2026-10-06.
 
 ## `requests`
 

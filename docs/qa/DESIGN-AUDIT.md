@@ -1,7 +1,9 @@
 # Full-site design audit — Meet AJ
 
-**Date:** 2026-09-17  
-**Source of truth:** live overlay `visual-upgrade.css?v=1314`, Article DNA, Filament branding.  
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
+**Date:** 2026-09-17
+**Source of truth:** live overlay `visual-upgrade.css?v=1314`, Article DNA, Filament branding.
 **Skills used:** ui-ux-pro-max catalogs (read directly), frontend-design (Article DNA as the distinctive language; avoid SaaS-card kit / glass everywhere / emoji CTAs).
 
 ## Verdict of the current visual system

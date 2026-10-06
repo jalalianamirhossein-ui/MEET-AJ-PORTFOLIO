@@ -1,8 +1,10 @@
 # QA matrix — Meet AJ
 
-**Authority:** AUTHORITATIVE per-URL QA evidence.  
-**Date:** 2026-09-21  
-**Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md)  
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
+**Authority:** AUTHORITATIVE per-URL QA evidence.
+**Date:** 2026-09-21
+**Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md)
 **Superseded 2026-09-17 matrix:** [../archive/2026-09-18/QA-MATRIX.md](../archive/2026-09-18/QA-MATRIX.md)
 
 Legend:
@@ -12,9 +14,9 @@ Legend:
 - **PRODUCTION TESTED** — meetaj.ir / DirectAdmin (none in this matrix)
 - Status: **PASS** | **FAIL** | **NOT TESTED** | **BLOCKED**
 
-Latest default suite: **67 tests, 1127 assertions**, 1 skipped, 0 failures.  
-`site:compare-content`: **Failures: 0**.  
-Live contact POST: HTTP 200 `OK`, SQLite `requests.id = 5`.  
+Latest default suite: **67 tests, 1127 assertions**, 1 skipped, 0 failures.
+`site:compare-content`: **Failures: 0**.
+Live contact POST: HTTP 200 `OK`, SQLite `requests.id = 5`.
 Browser: first-load Testimonials + Contact, FA RTL, Contact hash from Home and Articles, viewports 1920/1440/1024/768/390 with no horizontal overflow, **authenticated Admin White/Red + Editor 403**, `/admin/categories` Accent color ColorPicker, Homepage Expertise EN + FA.
 
 Skipped in default sqlite suite: `MysqlSchemaTest` (runs only when MySQL is bound).

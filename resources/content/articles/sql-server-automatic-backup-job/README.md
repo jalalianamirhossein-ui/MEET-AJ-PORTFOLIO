@@ -1,6 +1,6 @@
 # SQL Server Automatic Backup Job — editorial package
 
-Persian enterprise article for the existing `/articles/sql-server-automatic-backup-job` URL.
+Bilingual FA/EN enterprise article for the existing `/articles/sql-server-automatic-backup-job` URL.
 The complete article is stored in the original `resources/legacy/articles/sql-server-automatic-backup-job.html`.
 Category, tags, images, publication date and URL are preserved.
 
@@ -61,3 +61,5 @@ PHP tests verify rendering, schema/FAQ consistency, anchors and exact code prese
 PowerShell is parsed without executing it. An actual SQL Server instance is required for
 execution, permissions, scheduling, backup/restore and cleanup validation; website tests do
 not certify those behaviors on a production instance.
+
+`english-source.txt` is the English prose input read by `scripts/build-bilingual-articles.py`. Keep it with this package. Bulk enterprise regeneration uses historical inventories; review inputs before rebuilding newer articles.

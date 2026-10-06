@@ -4,8 +4,8 @@
 // Add a new enterprise article here when it should lead the library.
 return [
     'enterprise' => [
-        'mikrotik-ping-triggered-policy-routing',
         'mikrotik-pbr-client',
+        'mikrotik-ping-triggered-policy-routing',
         'linux-security-auditor-bash',
         'netbox-installation-setup-ubuntu',
         'oxidized-network-device-configuration-backup',

@@ -1,5 +1,7 @@
 # Services — Meet AJ
 
+> Maintenance review: 2026-10-06. Local counts are 13 service rows and 12 visible catalog entries. `HomepageServiceCatalog` is the maintained catalog; `resources/legacy/services/` is empty in this checkout. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
 **Authority:** AUTHORITATIVE service catalog document.
 **Verified:** 2026-09-21 against the live `services` table, `app/Models/Service.php`, `app/Filament/Resources/ServiceResource.php`, `app/Policies/ServicePolicy.php`, and `resources/views/components/service-card.blade.php`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).

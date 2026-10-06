@@ -1,5 +1,7 @@
 > **HISTORICAL phase log.** Full contemporaneous report: [../historical/SERVICE-CMS-IMPLEMENTATION.md](../historical/SERVICE-CMS-IMPLEMENTATION.md). Current service documentation: [../current/SERVICES.md](../current/SERVICES.md).
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 # Phase 07 — Service CMS
 
 **Phase:** 07

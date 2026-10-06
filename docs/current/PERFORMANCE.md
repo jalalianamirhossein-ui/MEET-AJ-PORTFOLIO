@@ -1,5 +1,7 @@
 # Performance — Meet AJ
 
+> Maintenance review: 2026-10-06. Earlier size/browser measurements remain dated evidence. This maintenance review adds no new performance measurements; listing queries and optional frontend tests remain documented separately. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
 **Authority:** AUTHORITATIVE statement of what is known about performance.
 **Verified:** 2026-09-21 by reading query scopes, view code, the service worker, and measuring published asset sizes on disk after `site:publish-assets`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).

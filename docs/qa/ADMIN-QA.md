@@ -1,9 +1,11 @@
 # Admin UI QA — Meet AJ Filament 5
 
-**Date verified:** 2026-09-18 (contrast regression re-test)  
-**Panel:** `/admin` (Filament 5.8.2, Livewire 4.4.5)  
-**Brand:** White surfaces, slate type, Meet AJ crimson `#be123c` accent, danger `#7f1d1d`.  
-**Superseded (pre-contrast-fix White/Red):** [../archive/2026-09-18/ADMIN-QA-white-red-pre-contrast-fix.md](../archive/2026-09-18/ADMIN-QA-white-red-pre-contrast-fix.md)  
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
+**Date verified:** 2026-09-18 (contrast regression re-test)
+**Panel:** `/admin` (Filament 5.8.2, Livewire 4.4.5)
+**Brand:** White surfaces, slate type, Meet AJ crimson `#be123c` accent, danger `#7f1d1d`.
+**Superseded (pre-contrast-fix White/Red):** [../archive/2026-09-18/ADMIN-QA-white-red-pre-contrast-fix.md](../archive/2026-09-18/ADMIN-QA-white-red-pre-contrast-fix.md)
 **Superseded (blue admin):** [../archive/2026-09-18/ADMIN-QA-blue-theme.md](../archive/2026-09-18/ADMIN-QA-blue-theme.md)
 
 Local QA accounts exist. Passwords are not recorded here.

@@ -1,10 +1,12 @@
 # Multilingual — Meet AJ
 
+> Maintenance review: 2026-10-06. The current local snapshot has 27 of 28 rows with paired localization metadata. This review did not certify full translation completeness. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
 Verified locally on **2026-10-01**. Current state: [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
 ## Article editions
 
-All 25 imported articles have complete FA and EN prose, matching headings, shared executable examples, and language-specific metadata/FAQs. Each article has one English database identity. `presentation.localizations` stores the two SEO editions, and `data-fa` / `data-en` carry paired prose in the stored HTML. Code blocks are protected from translation.
+The historical 25-article upgrade added FA/EN prose and metadata. On 2026-10-06, 27 of 28 local article rows contain paired localization metadata. Full translation completeness was not established by this structural review. Each article has one English database identity. `presentation.localizations` stores the two SEO editions, and `data-fa` / `data-en` carry paired prose in the stored HTML. Code blocks are protected from translation.
 
 | Request | Server-rendered edition | Canonical |
 |---------|-------------------------|-----------|

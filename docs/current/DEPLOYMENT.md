@@ -1,5 +1,7 @@
 # Deployment — Meet AJ
 
+> Maintenance review: 2026-10-06. Include `resources/content/articles/` and the maintained script paths in releases. The Linux package path now matches its slug; selected downloads retain their public URLs. No remote release was inspected. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
 **Authority:** AUTHORITATIVE deployment procedure.
 **Verified:** 2026-10-01 against `.env.example`, `.env.production.example`, `composer.json`, `config/`, and the console commands that exist.
 **Deployment status:** the owner reports a deployed server. This local audit did not inspect or modify that server; remote configuration remains unverified.

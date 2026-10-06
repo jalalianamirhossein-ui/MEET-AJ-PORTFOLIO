@@ -1,5 +1,7 @@
 # Archived reports — 2026-09-18
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 These files are the **2026-09-17** (and earlier visual-upgrade) snapshots that were superseded by the 2026-09-18 production audit, plus the **blue Filament admin** snapshots superseded later the same day by the White/Red admin pass.
 
 They are kept for history. They do **not** describe the application as it exists after this audit.

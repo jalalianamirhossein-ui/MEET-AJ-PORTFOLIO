@@ -1,5 +1,7 @@
 > **HISTORICAL phase log.** A record of what happened, not the current state. Current status: [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md). Setup instructions: [../../README.md](../../README.md).
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 # Phase 01 — Environment
 
 **Phase:** 01

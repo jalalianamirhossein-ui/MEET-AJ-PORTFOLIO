@@ -1,10 +1,12 @@
 # Article ordering
 
+> Maintenance review: 2026-10-06. Current leading Enterprise slugs are MikroTik PBR Client, ping-triggered PBR and Linux Auditor, in that order. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
 The homepage, article library and matching search/tag results share
 `Article::inDisplayOrder()` and `config/article-order.php`.
 
 1. Reviewed Enterprise articles follow the `enterprise` list in its exact order:
-   MikroTik PBR, Linux Auditor, NetBox, Oxidized, NGINX, Linux security, MikroTik
+   MikroTik PBR Client, ping-triggered MikroTik PBR, Linux Auditor, NetBox, Oxidized, NGINX, Linux security, MikroTik
    ECMP, SQL Server backup, vSphere switching and MikroTik OpenVPN.
 2. New articles absent from either configured list appear next, newest first.
 3. Existing basic guides follow the `guides` list in its original order.

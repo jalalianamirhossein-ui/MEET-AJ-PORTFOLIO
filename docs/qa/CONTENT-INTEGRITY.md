@@ -1,5 +1,7 @@
 # Content integrity — Meet AJ
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 **Date:** 2026-09-21 (re-run; still Failures: 0)
 **Command:** `php artisan site:compare-content` (`App\Console\Commands\CompareLegacyContent`)
 **Result:** **Failures: 0**

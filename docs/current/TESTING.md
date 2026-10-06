@@ -1,6 +1,8 @@
 # Testing — Meet AJ
 
-Verified **2026-10-01**. Latest full suite: **85 tests, 5,453 assertions, 0 failures, 1 skipped**. Browser findings are in [FULL-AUDIT-2026-10-01.md](../qa/FULL-AUDIT-2026-10-01.md).
+> Maintenance review: 2026-10-06. Current suite outcome: 96 tests, 1,369 assertions, 2 errors, 16 failures, 1 skipped using the sandbox bootstrap workaround. This is not a passing release gate. Four frontend tests pass. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
+Documentation reviewed **2026-10-06**. The 2026-10-01 result (85 tests, 5,453 assertions, 1 skipped) is historical. Current evidence: [structure/documentation audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
 
 ## Commands
 
@@ -28,12 +30,22 @@ Source-update regression coverage also verifies that importing changed HTML pres
 
 ## Local operational checks
 
-All 25 local article rows were synchronized after a consistent SQLite backup. `site:compare-content` reports **Failures: 0**. The command checks maintained source hashes, stored localization, body markers and rendered SEO. It skips public CMS articles with no corresponding legacy source. It is not a substitute for editorial review or browser testing.
+All 25 local article rows were synchronized after a consistent SQLite backup. That dated run reported **Failures: 0**. The 2026-10-06 comparison reports **27 failures**, so source/database parity is currently unresolved. The command checks maintained source hashes, stored localization, body markers and rendered SEO. It skips public CMS articles with no corresponding legacy source. It is not a substitute for editorial review or browser testing.
 
-The article validator checks 25 maintained HTML files, section IDs, FAQ/schema consistency, archive hashes and embedded Python syntax. Bash and PowerShell examples receive syntax-only checks; infrastructure commands are not executed.
+The historical enterprise validator covers its 25-file inventory; the checkout now has 28 maintained HTML files, section IDs, FAQ/schema consistency, archive hashes and embedded Python syntax. Bash and PowerShell examples receive syntax-only checks; infrastructure commands are not executed.
 
 Live browser checks cover the English menu name, local homepage/library navigation, English defaults, Persian article rendering, shared language preference, refresh and instant toggling at a clean URL. Evidence is in the dated audit. No real contact messages are sent by the browser checks.
 
 ## Limits
 
 This pass does not validate remote deployment, SMTP delivery, real MySQL/MariaDB, authenticated admin interactions in a browser, PWA installation/offline behavior, Core Web Vitals, load capacity or infrastructure runbooks on their target equipment. Admin authorization and workflows are covered by isolated feature tests. Earlier dated QA files remain historical evidence.
+
+## Optional frontend and documentation checks
+
+```bash
+node --test tests/Frontend/scroll-reveal.test.cjs
+node scripts/check-documentation.cjs
+node scripts/check-documentation.cjs --write-index
+```
+
+Node is needed only for these checks, not to build or serve the site. The documentation check validates local Markdown file links and regenerates the complete inventory when requested. On this Windows sandbox, PHPUnit sees `vendor/autoload.php` as unreadable even though PHP can require it; see the audit for the temporary wrapper used to run the suite without changing tracked PHPUnit configuration.

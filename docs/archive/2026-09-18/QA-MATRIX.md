@@ -1,8 +1,10 @@
 # QA matrix — Meet AJ
 
-**Authority:** AUTHORITATIVE per-URL QA evidence.  
-**Date:** 2026-09-17  
-**Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md)  
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
+**Authority:** AUTHORITATIVE per-URL QA evidence.
+**Date:** 2026-09-17
+**Current status:** [../current/PROJECT-STATUS.md](../../current/PROJECT-STATUS.md)
 **Do not treat older phase reports as current PASS/FAIL.**
 
 Legend:
@@ -12,8 +14,8 @@ Legend:
 - **PRODUCTION TESTED** — meetaj.ir / DirectAdmin (none in this matrix)
 - Status: **PASS** | **FAIL** | **NOT TESTED** | **BLOCKED**
 
-Latest default suite: **39 tests, 647 assertions, 1 skipped, 0 failures**.  
-`site:compare-content`: **Failures: 0**.  
+Latest default suite: **39 tests, 647 assertions, 1 skipped, 0 failures**.
+`site:compare-content`: **Failures: 0**.
 HTTP (curl against `127.0.0.1:8000`): `/` 200, `/index.html` 301, 23 articles 200, 23 legacy 301, 6 services 200, search/tag 200, sitemap/robots/manifest/sw.js 200.
 
 Skipped in default sqlite suite: `MysqlSchemaTest` (runs only when MySQL is bound).
@@ -100,8 +102,8 @@ Slugs: `creating-a-bootable-usb`, `downgrade-mikrotik-routeros-firmware-safely`,
 
 ## UI / a11y (browser, 2026-09-16)
 
-Current evidence: [VISUAL-QA.md](VISUAL-QA.md), [RESPONSIVE-QA.md](RESPONSIVE-QA.md), [ACCESSIBILITY-QA.md](ACCESSIBILITY-QA.md).
-Historical snapshot from 2026-09-16 (filters 44 px, persistent cards, EN/FA fonts, the older 10-viewport matrix): [../historical/final-ui-qa.md](../historical/final-ui-qa.md). Lighthouse: **NOT TESTED**.
+Current evidence: [VISUAL-QA.md](VISUAL-QA.md), [RESPONSIVE-QA.md](RESPONSIVE-QA.md), [ACCESSIBILITY-QA.md](../../qa/ACCESSIBILITY-QA.md).
+Historical snapshot from 2026-09-16 (filters 44 px, persistent cards, EN/FA fonts, the older 10-viewport matrix): [../historical/final-ui-qa.md](../../historical/final-ui-qa.md). Lighthouse: **NOT TESTED**.
 
 ## Production / DirectAdmin
 

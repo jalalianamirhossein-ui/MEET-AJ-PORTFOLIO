@@ -1,52 +1,37 @@
 # Project status — Meet AJ
 
-**Current local verification: 2026-10-01.** This is the current status reference. Dated reports under `docs/qa/` and historical folders describe their own review dates. Evidence: [FULL-AUDIT-2026-10-01.md](../qa/FULL-AUDIT-2026-10-01.md).
+**Current local verification: 2026-10-06.** Evidence: [structure and documentation audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md). Historical reports describe their own dates.
 
 ## Application
 
-Laravel 13.31.0, Filament 5.8.2, Livewire 4.4.5 and PHPUnit 11.5.56 are locked dependencies. Local verification uses PHP 8.4.25. Blade and maintained CSS/JavaScript serve the public portfolio; Filament serves `/admin`. No frontend build, Redis, worker or scheduler is required. Local database: SQLite; deployment documentation targets MySQL/MariaDB with PHP 8.4.
+Laravel 13.31.0, Filament 5.8.2, Livewire 4.4.5 and PHPUnit 11.5.56 are locked dependencies. PHP 8.4.25 runs locally. Blade and CSS/JavaScript serve the public site; Filament serves `/admin`. No frontend build, Redis, worker or scheduler is required. Node is optional for frontend and documentation checks. SQLite is local; deployment targets MySQL/MariaDB. Production was not inspected.
 
-The owner reports a deployed server. This review did not connect to that server, alter its environment, or validate its database/SMTP/TLS settings.
-
-## Local data
+## Local snapshot
 
 | Item | Count |
-|------|-------|
-| Published articles | 25 |
-| Articles with complete FA/EN localization | 25 |
-| Legacy article redirects | 25 |
+|---|---|
+| Maintained article HTML sources / local article rows | 28 / 28 |
+| Rows with paired FA/EN localization metadata | 27 |
+| Article redirects | 28 |
 | Categories | 19 |
-| Tags / article-tag links | 24 / 44 |
-| Published services / visible catalog services | 13 / 12 |
-| Testimonials | 9 |
-| Homepage content sections | 7 |
-| Users / contact requests | 0 / 0 |
+| Tags / article-tag links | 24 / 50 |
+| Services / visible catalog entries | 13 / 12 |
+| Testimonials / homepage content sections | 9 / 7 |
+| Users / requests | 0 / 0 |
+| Migration files / local ledger records | 23 / 24 |
 
-All 18 migration files report Ran. The local migration ledger includes 19 historical records; the number of rows is not the number of migration files in the current checkout. No migration reset was used.
+All 23 current migration files report Ran. The ledger contains a historical record in addition to current files. Counts describe this environment, not every installation. Localization metadata presence does not prove translation completeness.
 
-Before synchronizing articles, a consistent local SQLite backup was saved under ignored `storage/app/full-review/local-before-article-sync-20261001.sqlite`. `articles:import-legacy --update-existing` updated 25 rows, preserving IDs and translation keys. Normal import skips existing article bodies. `site:compare-content` now reports zero failures.
+## Current behavior and maintenance
 
-## Public behavior
+Homepage copy, service catalog, testimonials and articles are CMS-backed. Search/tag filtering, related articles, shared FA/EN preference, clean canonicals, contact CSRF/honeypot/throttling and admin policies remain implemented. German is draft-only; retired service detail routes return 404. Editorial ordering comes from `config/article-order.php`: MikroTik PBR Client, ping-triggered PBR, then Linux Auditor lead the Enterprise list.
 
-- Homepage sections, service catalog, testimonials and article data are CMS-backed.
-- The library supports search, tag filters, pagination and related articles. Cards keep English titles.
-- English and Persian articles share the clean URL and canonical. The saved homepage language preference selects the content and localized schemas; English is the server default. Old language-query URLs redirect to the clean path and the sitemap lists each article once.
-- The floating language toggle updates the current DOM and metadata without changing the URL or reloading the document. Code is identical in both editions.
-- The extra inline FA/EN row and historical-edition panels are removed. Exact original articles remain in the documentation archive.
-- vSS/vDS and the other comparison topics retain their comparison tables and selection criteria. DFS initial synchronization now gates activation of the second namespace target.
-- The English sidebar name stays on one line. Glass CSS is `?v=11`; main JavaScript is `?v=1415`; shared i18n is `?v=1407` on the homepage, library and articles.
-- Contact endpoints retain CSRF, honeypot, validation, throttling and request storage. Services appear in the homepage catalog; removed detail routes return 404. German content remains draft-only.
+Recent content migrations update testimonial attribution, contact headings and intro, add the MikroTik PBR Client article and move its download to the article end. Article packages contain builders and runbooks outside the document root; selected Bash/MSI downloads are published explicitly. The NetBox PDF source is absent from this checkout.
 
-## Verification
+## Verification and limitations
 
-Full isolated feature suite: **85 tests, 5,453 assertions, 0 failures, 1 skipped** (MySQL-only schema test). Article structural validation: **25 files, zero errors**. Live local content comparison: **Failures: 0**. Browser and syntax-check details are recorded in the dated audit.
+`site:compare-content` reported **27 failures** on 2026-10-06, primarily source/database drift; the earlier zero-failure result is historical. Updating stored article bodies is a separate editorial operation: preview `articles:import-legacy --update-existing --dry-run`, back up and review CMS edits before applying. This documentation task did not replace database content.
 
-Deployment setup now refuses an existing `.env`, safely quotes new values and validates them with the installed dotenv parser. The local `.env` and existing `APP_KEY` were preserved.
+Frontend scroll-reveal tests passed (4/4). Current PHPUnit evidence and local filesystem bootstrap limitations are recorded in the dated audit. Remote deployment, SMTP, real MySQL, infrastructure examples, Lighthouse/load tests and browser PWA installation/offline behavior were not checked in this review. No local CMS user exists for interactive login.
 
-## Boundaries
-
-Remote production, SMTP delivery and real MySQL were not tested here. No operational infrastructure examples were executed on RouterOS, ESXi, SQL Server or Windows Server. No Lighthouse, load test or PWA install/offline test was run. There are no local CMS users, so admin browser login was not exercised; authorization/workflow tests use isolated fixtures.
-
-## Documentation
-
-Start with the [root README](../../README.md), [architecture](ARCHITECTURE.md), [articles](ARTICLES.md), [language behavior](MULTILINGUAL.md), [SEO](SEO.md), [testing](TESTING.md) and [deployment/recovery](DEPLOYMENT.md). The [FA/EN article report](../enterprise-articles/bilingual-report.md) lists every filename, both titles, translation status, missing sections and SEO status.
+Start with [the documentation index](../README.md), [directory map](PROJECT-STRUCTURE.md), [articles](ARTICLES.md), [testing](TESTING.md) and [deployment](DEPLOYMENT.md).

@@ -1,9 +1,11 @@
 # Pre visual-upgrade baseline
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 **Status:** CURRENT (baseline snapshot)
 **Date:** 2026-09-17
 **Purpose:** Record the verified state of the application immediately **before** the visual UX / responsive / accessibility upgrade, so every later claim can be compared against it.
-**Current state document:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md)
+**Current state document:** [../current/PROJECT-STATUS.md](../../current/PROJECT-STATUS.md)
 **Result of the upgrade:** [VISUAL-UX-FINAL-REPORT.md](VISUAL-UX-FINAL-REPORT.md)
 
 No application behaviour was changed before this snapshot was taken.

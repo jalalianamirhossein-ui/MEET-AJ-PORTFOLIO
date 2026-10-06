@@ -1,5 +1,7 @@
 # Shared article reading design — 2026-10-05
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 Reviewed all 27 imported articles in Persian and English. Layout changes apply
 at render time through `ArticlePresentation` and `article-reading.css`, rather
 than rewriting the authored HTML or requiring a content re-import.

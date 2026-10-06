@@ -17,6 +17,9 @@ class MikrotikPbrClientArticleTest extends TestCase
         $article = Article::where('slug', 'mikrotik-pbr-client')->firstOrFail();
         $this->assertSame('mikrotik', $article->category->slug);
         $this->assertSame('fa', data_get($article->presentation, 'content_language'));
+        $this->assertSame('mikrotik-pbr-client', Article::published()->inDisplayOrder()->first()->slug);
+        $this->assertSame(1, substr_count($article->content, 'href="/downloads/mikrotik-pbr-client/'));
+        $this->assertGreaterThan(strpos($article->content, 'id="faq"'), strpos($article->content, 'href="/downloads/mikrotik-pbr-client/'));
         $this->get('/')->assertOk()->assertSee('/articles/mikrotik-pbr-client', false);
         $this->get('/articles/mikrotik-pbr-client')->assertOk()
             ->assertSee('EnableTriggerIp')->assertSee('Send disconnect')

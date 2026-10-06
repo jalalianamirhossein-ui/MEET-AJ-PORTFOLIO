@@ -1,20 +1,22 @@
 # Final project QA report — Meet AJ
 
-**Date verified:** 2026-09-18 (evening sync)  
-**Overlay:** `visual-upgrade.css?v=1711` · `site-modules.css?v=1840` · `lang-toggle.css?v=1403` · `rtl.css?v=1405` · `main.css?v=1002`  
-**Scripts:** `i18n.js?v=1403`, `main.js?v=1412`, `contact-form.js?v=1403`, `service-catalog.js?v=1813`  
-**Admin CSS:** `resources/css/filament-admin.css` → `public/css/app/meet-aj-admin.css` (White + Red; contrast lock)  
-**Git:** no add, no commit, no push.  
-**Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md)  
-**Superseded 2026-09-17 snapshot:** [../archive/2026-09-18/FINAL-QA-REPORT.md](../archive/2026-09-18/FINAL-QA-REPORT.md)  
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
+**Date verified:** 2026-09-18 (evening sync)
+**Overlay:** `visual-upgrade.css?v=1711` · `site-modules.css?v=1840` · `lang-toggle.css?v=1403` · `rtl.css?v=1405` · `main.css?v=1002`
+**Scripts:** `i18n.js?v=1403`, `main.js?v=1412`, `contact-form.js?v=1403`, `service-catalog.js?v=1813`
+**Admin CSS:** `resources/css/filament-admin.css` → `public/css/app/meet-aj-admin.css` (White + Red; contrast lock)
+**Git:** no add, no commit, no push.
+**Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md)
+**Superseded 2026-09-17 snapshot:** [../archive/2026-09-18/FINAL-QA-REPORT.md](../archive/2026-09-18/FINAL-QA-REPORT.md)
 **Superseded blue-admin QA:** [../archive/2026-09-18/FINAL-QA-REPORT-blue-admin.md](../archive/2026-09-18/FINAL-QA-REPORT-blue-admin.md)
 
 ## Executive summary
 
 Meet AJ is Laravel 13.31 + PHP 8.4.25 + Filament 5.8.2 + Livewire 4.4.5 + Blade. Same-day work covered: Contact → Requests inbox, Homepage first-load / FA encoding / language switcher, English article titles, Filament White/Red + contrast lock, shared sidebar + icy-blue mobile menu, Testimonials RTL Previous/Next, editable category `accent_color`, and Homepage Expertise / تخصص‌ها visual redesign.
 
-`php artisan site:compare-content` → **Failures: 0**.  
-`php artisan test` → **58 tests, 1124 assertions, 1 skipped (`MysqlSchemaTest`), 0 failures**.  
+`php artisan site:compare-content` → **Failures: 0**.
+`php artisan test` → **58 tests, 1124 assertions, 1 skipped (`MysqlSchemaTest`), 0 failures**.
 Live contact POST → SQLite `requests.id = 5`, HTTP 200 `OK`.
 
 ## Acceptance matrix

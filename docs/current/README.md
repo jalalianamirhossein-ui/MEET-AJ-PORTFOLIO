@@ -1,5 +1,7 @@
 # Current documentation — Meet AJ
 
+> Maintenance review: 2026-10-06. This folder contains maintained operational guides. Use the complete documentation inventory for all current and historical files. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
 This directory contains the maintained operating documentation for the current Laravel application. When a current document conflicts with an archive, phase log or historical report, the current document wins. The top-level authority is [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
 ## Start here

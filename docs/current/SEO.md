@@ -1,5 +1,7 @@
 # SEO — Meet AJ
 
+> Maintenance review: 2026-10-06. The current library contains 28 local article rows. Sitemap entries depend on publication scopes, not a hardcoded article count. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
 Verified locally on **2026-10-01** against routes, `ArticleLocalization`, `ArticleSeo`, Blade output and the feature suite. This does not establish search indexing or remote deployment state.
 
 ## Article identity and languages
@@ -18,7 +20,7 @@ The homepage retains its existing person/site structured data. Imported images u
 
 ## Sitemap and redirects
 
-`GET /sitemap.xml` is generated from published English article identities. With the current library it contains the homepage plus 25 clean article URLs. Article `lastmod` uses the stored modification date. Draft/future/German articles and removed service detail pages are excluded. The article library itself is not currently a separate sitemap entry.
+`GET /sitemap.xml` is generated from published English article identities. With the current library it contains the homepage plus published clean article URLs (28 published local rows on 2026-10-06). Article `lastmod` uses the stored modification date. Draft/future/German articles and removed service detail pages are excluded. The article library itself is not currently a separate sitemap entry.
 
 Legacy `/articles/{slug}.html` URLs redirect once to the clean path, removing `lang` while preserving unrelated query parameters. `/index.html` redirects to `/`. Slug-history redirects work through `article_redirects`; unknown or unpublished destinations return 404. Removed `/services/...` routes return 404.
 

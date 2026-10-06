@@ -19,7 +19,7 @@ The article imports with `sort_order = 0`, compatible with the MySQL unsigned co
 Run from the project root with its PHP 8.4 runtime. On this Windows workspace the interpreter is `.runtime/php84/php.exe`; use the deployment host's normal PHP interpreter there.
 
 ```bash
-php resources/content/articles/linux-security-Bash-Check/build.php
+php resources/content/articles/linux-security-auditor-bash/build.php
 php artisan articles:import-legacy --dry-run --slug=linux-security-auditor-bash
 php artisan site:publish-assets --views
 php artisan articles:import-legacy --slug=linux-security-auditor-bash
@@ -48,3 +48,5 @@ After subsequent article edits, review the existing CMS row, take a database bac
 `VALIDATION.md`: clarified missing historical report/catalogue/regression artifacts, documented active scoring/status behavior, supplied actual CLI examples, and separated the current Windows checks from historical Linux integration claims.
 
 Application changes are limited to publishing the actual download, assigning existing tags and styling the authored Bash tokens. Existing count-based tests now expect 26 published imported articles. `LinuxSecurityAuditorArticleTest` adds source-backed integration checks.
+
+Documentation reviewed 2026-10-06. Current structure and verification: [project status](../../../../docs/current/PROJECT-STATUS.md).

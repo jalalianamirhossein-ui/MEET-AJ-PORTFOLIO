@@ -1,4 +1,6 @@
 # گزارش استانداردسازی FA / EN
+
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
 تعداد: ۲۵ مقاله؛ تاریخ: 2026-10-01
 نسخه تاریخی فقط در originals.zip محفوظ است و در صفحه مقاله نمایش داده نمی‌شود.
 

@@ -11,7 +11,7 @@ DOC=ROOT/'docs/enterprise-articles'
 SRC=ROOT/'resources/legacy/articles'
 FA=json.loads((DOC/'runbooks.json').read_text(encoding='utf-8'))
 EN=json.loads((DOC/'english-runbooks.json').read_text(encoding='utf-8'))
-SQL_EN=(ROOT/'scripts/sql-backup-english.txt').read_text(encoding='utf-8').splitlines()
+SQL_EN=(ROOT/'resources/content/articles/sql-server-automatic-backup-job/english-source.txt').read_text(encoding='utf-8').splitlines()
 HEADINGS=dict(intro='Introduction',scenario='Practical Example',prerequisites='Prerequisites',architecture='Architecture / Design',installation='Installation / Configuration',security='Security Hardening',monitoring='Monitoring',troubleshooting='Troubleshooting',recovery='Backup / Recovery',practices='Best Practices',compatibility='Legacy Versions and Compatibility',sources='Official Sources')
 
 def plain(s):

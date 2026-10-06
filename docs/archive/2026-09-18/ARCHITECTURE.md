@@ -1,8 +1,10 @@
 # Architecture — Meet AJ
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 **Authority:** AUTHORITATIVE description of the running application.
 **Verified:** 2026-09-17 against `app/`, `routes/web.php`, `config/`, `resources/views/`, `public/`, and `php artisan route:list` after `optimize:clear`.
-**Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md). Decision record: [../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md](../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md).
+**Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md). Decision record: [../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md](../../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md).
 
 ## Request flow
 
