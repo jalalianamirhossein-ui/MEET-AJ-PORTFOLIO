@@ -5,6 +5,7 @@
 return [
     'enterprise' => [
         'mikrotik-ping-triggered-policy-routing',
+        'mikrotik-pbr-client',
         'linux-security-auditor-bash',
         'netbox-installation-setup-ubuntu',
         'oxidized-network-device-configuration-backup',
