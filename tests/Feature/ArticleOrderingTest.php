@@ -31,11 +31,12 @@ class ArticleOrderingTest extends TestCase
         $before = DB::table('articles')->orderBy('id')->get()->map(fn ($row) => (array) $row)->all();
         $ordering = app(ArticleOrdering::class);
         $result = $ordering->synchronize();
-        $this->assertCount(30, $result);
+        $this->assertCount(count(app(LegacyArticleImporter::class)->articleFiles()) + 3, $result);
         $ordered = Article::where('language', 'en')->inDisplayOrder()->pluck('slug')->all();
-        $this->assertSame(config('article-order.enterprise'), array_slice($ordered, 0, 10));
-        $this->assertSame([$new->slug, $old->slug], array_slice($ordered, 10, 2));
-        $this->assertSame(config('article-order.guides'), array_slice($ordered, 12));
+        $priorityCount = count(config('article-order.enterprise'));
+        $this->assertSame(config('article-order.enterprise'), array_slice($ordered, 0, $priorityCount));
+        $this->assertSame([$new->slug, $old->slug], array_slice($ordered, $priorityCount, 2));
+        $this->assertSame(config('article-order.guides'), array_slice($ordered, $priorityCount + 2));
         $this->assertSame(0, $translated->fresh()->sort_order);
 
         $after = DB::table('articles')->orderBy('id')->get()->map(fn ($row) => (array) $row)->all();
@@ -58,6 +59,8 @@ class ArticleOrderingTest extends TestCase
 
     public function test_missing_curated_articles_are_harmless_and_new_enterprise_articles_can_be_promoted(): void
     {
+        // Content migrations may seed articles; this scenario needs an empty library.
+        Article::query()->delete();
         $old = $this->newArticle('sparse-old', 4);
         $new = $this->newArticle('sparse-new');
         $ordering = app(ArticleOrdering::class);

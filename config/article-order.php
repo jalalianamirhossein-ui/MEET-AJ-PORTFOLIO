@@ -6,6 +6,7 @@ return [
     'enterprise' => [
         'mikrotik-pbr-client',
         'mikrotik-ping-triggered-policy-routing',
+        'deploy-msi-active-directory-group-policy',
         'linux-security-auditor-bash',
         'netbox-installation-setup-ubuntu',
         'oxidized-network-device-configuration-backup',

@@ -232,7 +232,7 @@ class CmsOperationsTest extends TestCase
         $this->assertStringNotContainsString('/services/network-design', $xml);
         $this->assertStringNotContainsString('/admin', $xml);
         $this->assertStringNotContainsString('/de/', $xml);
-        $this->assertSame(27, Article::query()->count());
+        $this->assertSame(count(app(LegacyArticleImporter::class)->articleFiles()), Article::query()->count());
         foreach (Article::query()->pluck('slug') as $slug) {
             $this->assertStringContainsString('/articles/'.$slug, $xml);
         }

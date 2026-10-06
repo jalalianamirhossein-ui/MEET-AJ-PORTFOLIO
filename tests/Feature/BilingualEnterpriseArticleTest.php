@@ -27,7 +27,7 @@ class BilingualEnterpriseArticleTest extends TestCase
         }
         app(LegacyArticleImporter::class)->import(false);
         $articles = Article::published()->get();
-        $this->assertCount(27, $articles);
+        $this->assertCount(count(app(LegacyArticleImporter::class)->articleFiles()), $articles);
         foreach ($articles as $article) {
             $localeCodes = [];
             $localeIds = [];
@@ -105,7 +105,7 @@ class BilingualEnterpriseArticleTest extends TestCase
             $this->assertSame($localeIds['fa'], $localeIds['en'], $article->slug.' section drift');
             $this->assertSame($original, $article->fresh()->content, 'GET must not persist locale');
         }
-        $this->assertSame(27, Article::count());
+        $this->assertSame(count(app(LegacyArticleImporter::class)->articleFiles()), Article::count());
     }
 
     public function test_saved_language_is_shared_on_clean_urls_and_old_language_parameters_are_removed(): void
@@ -134,7 +134,7 @@ class BilingualEnterpriseArticleTest extends TestCase
         $xp = new \DOMXPath($dom);
         $xp->registerNamespace('s', 'http://www.sitemaps.org/schemas/sitemap/0.9');
         $xp->registerNamespace('x', 'http://www.w3.org/1999/xhtml');
-        $this->assertSame(27, $xp->query('//s:url[contains(s:loc,"/articles/")]')->length);
+        $this->assertSame(count(app(LegacyArticleImporter::class)->articleFiles()), $xp->query('//s:url[contains(s:loc,"/articles/")]')->length);
         $this->assertSame(0, $xp->query('//s:url/x:link')->length);
         $this->assertStringNotContainsString('lang=', $xml);
         $this->assertSame(now()->subDay()->toDateString(), $xp->evaluate('string(//s:url[s:loc="'.url($path).'"]/s:lastmod)'));
@@ -176,7 +176,7 @@ class BilingualEnterpriseArticleTest extends TestCase
         $article->refresh();
         $this->assertSame($id, $article->id);
         $this->assertSame($translationKey, $article->translation_key);
-        $this->assertCount(27, Article::all());
+        $this->assertCount(count(app(LegacyArticleImporter::class)->articleFiles()), Article::all());
         $this->get($article->path())->assertOk()
             ->assertSee('data-article-language="en"', false)
             ->assertSee($article->presentation['localizations']['en']['title'])
