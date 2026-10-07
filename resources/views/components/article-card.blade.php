@@ -88,11 +88,8 @@
                         data-fa="{{ $categoryFa }}"
                       >{{ $categoryEn }}</p>
                     @endif
-                    <h3 class="article-teaser-title" data-i18n-lock>
-                      <a
-                        href="{{ $article->path() }}"
-                        data-en="{{ $titleEn }}"
-                      >{{ $titleEn }}</a>
+                    <h3 class="article-teaser-title">
+                      <a href="{{ $article->path() }}" data-en="{{ $titleEn }}" data-fa="{{ $titleFa }}">{{ ($pageLocale ?? null) === 'fa' ? $titleFa : $titleEn }}</a>
                     </h3>
                     @if ($excerptEn)
                       <p class="article-teaser-excerpt"

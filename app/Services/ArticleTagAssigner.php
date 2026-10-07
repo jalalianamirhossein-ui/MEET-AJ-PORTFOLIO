@@ -92,6 +92,7 @@ class ArticleTagAssigner
             'sql-server-automatic-backup-job' => ['sql-server', 'microsoft'],
             'vsphere-standard-switch-vs-distributed-switch' => ['vsphere', 'vmware'],
             'mikrotik-openvpn-setup-v7' => ['mikrotik', 'openvpn'],
+            'truenas-zfs-enterprise' => ['qnap'],
             'enable-ssh-linux-complete-guide' => ['ssh', 'linux'],
             'set-static-ip-ubuntu-server-netplan' => ['ubuntu', 'linux'],
             'linux-cli-common-commands' => ['linux'],
