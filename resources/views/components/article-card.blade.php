@@ -1,12 +1,5 @@
 @php
-    $topics = [
-        'filter-linux' => 'linux',
-        'filter-microsoft' => 'microsoft',
-        'filter-mikrotik' => 'mikrotik',
-        'filter-vmware' => 'vmware',
-        'filter-others' => 'other',
-    ];
-    $topic = $article->category?->topicKey() ?? ($topics[$article->filterClass()] ?? 'other');
+    $topic = $article->primaryFilterSlug();
     $accent = $article->accentColor();
     $accentStyle = '--topic: '.$accent.'; --article-primary: '.$accent.';';
     $categoryEn = $article->categoryLabelEn();
@@ -55,7 +48,7 @@
                 </article>
               @else
               <div
-                class="col-lg-4 col-md-6 portfolio-item isotope-item article-grid-item {{ $article->filterClass() }} {{ $article->brandFilterClasses() }}"
+                class="col-lg-4 col-md-6 portfolio-item isotope-item article-grid-item {{ $article->filterClass() }} filter-{{ $topic }} {{ $article->brandFilterClasses() }}"
                 data-topic="{{ $topic }}"
                 style="{{ $accentStyle }}"
                 >

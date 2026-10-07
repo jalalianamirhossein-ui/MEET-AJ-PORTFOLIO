@@ -47,7 +47,7 @@
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
     <link href="/assets/css/site-modules.css?v=1855" rel="stylesheet" />
     <link href="/assets/css/glass-system.css?v=18" rel="stylesheet" />
-    <link href="/assets/css/article-reading.css?v=6" rel="stylesheet" />
+    <link href="/assets/css/article-reading.css?v=7" rel="stylesheet" />
     <link href="/preloader.css?v=devops-2" rel="stylesheet" />
     <noscript><style>#preloader { display: none !important; }</style></noscript>
     @if (!empty($languageSeo))
@@ -172,7 +172,7 @@
           <div class="article-shell{{ $tocHtml ? ' article-shell--with-toc' : '' }}">
             @if ($tocHtml)
               <aside class="article-toc" aria-label="Table of contents" data-en-aria-label="Table of contents" data-fa-aria-label="فهرست مطالب">
-                <details class="article-toc-disclosure">
+                <details class="article-toc-disclosure" open>
                   <summary class="article-toc-title"><span id="article-toc-heading" data-en="On this page" data-fa="در این مقاله">On this page</span></summary>
                   <nav class="article-toc-nav" aria-labelledby="article-toc-heading" @if(data_get($article->presentation, 'content_language') === 'fa') lang="fa" dir="rtl" @endif>
                     <ul class="article-toc-list">
@@ -347,6 +347,7 @@
     <script src="/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
     <script src="/assets/js/main.js?v=1420" defer></script>
     <script src="/assets/js/scroll-reveal.js?v=4" defer></script>
+    <script src="/assets/js/article-navigation.js?v=1" defer></script>
     <script src="/assets/js/i18n.js?v=1407" defer></script>
     <script>
       if ("serviceWorker" in navigator) {

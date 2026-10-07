@@ -50,7 +50,9 @@ class Tag extends Model
 
     public function accentColor(): string
     {
-        return self::BRAND_COLORS[$this->slug] ?? '#64748b';
+        return $this->isBrandFilter()
+            ? Category::accentColorForSlug($this->slug)
+            : strtolower(self::BRAND_COLORS[$this->slug] ?? '#64748b');
     }
 
     public function isBrandFilter(): bool

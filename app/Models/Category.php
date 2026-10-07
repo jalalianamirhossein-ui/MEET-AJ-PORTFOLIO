@@ -21,6 +21,9 @@ class Category extends Model
      */
     public function topicKey(): string
     {
+        if (in_array($this->slug, Tag::BRAND_FILTERS, true)) {
+            return $this->slug === 'other' ? 'others' : $this->slug;
+        }
         return match ($this->slug) {
             'microsoft', 'windows-server' => 'microsoft',
             'linux' => 'linux',
@@ -28,6 +31,7 @@ class Category extends Model
             'vmware' => 'vmware',
             'security' => 'security',
             'devops' => 'devops',
+            'qnap' => 'qnap',
             default => 'others',
         };
     }
@@ -42,7 +46,8 @@ class Category extends Model
 
     public function fallbackAccentColor(): string
     {
-        return self::fallbackAccentColorForTopic($this->topicKey());
+        return self::normalizeAccentColor(Tag::BRAND_COLORS[$this->slug] ?? null)
+            ?? self::fallbackAccentColorForTopic($this->topicKey());
     }
 
     public static function fallbackAccentColorForTopic(string $topic): string
@@ -54,6 +59,7 @@ class Category extends Model
             'vmware' => '#6d28d9',
             'security' => '#be123c',
             'devops' => '#0e7490',
+            'qnap' => '#6f2da8',
             default => '#a16207',
         };
     }
@@ -94,9 +100,12 @@ class Category extends Model
 
     public function accentCustomProperties(): string
     {
-        $color = $this->accentColor();
+        return self::accentCustomPropertiesForColor($this->accentColor());
+    }
 
-        return '--topic: '.$color.'; --meetaj-topic: '.$color.'; --article-primary: '.$color.'; --article-primary-strong: color-mix(in srgb, '.$color.' 78%, #0f172a); --article-bg-accent: color-mix(in srgb, '.$color.' 14%, transparent);';
+    public static function accentCustomPropertiesForColor(string $color): string
+    {
+        return '--topic: '.$color.'; --meetaj-topic: '.$color.'; --article-primary: '.$color.'; --article-primary-strong: color-mix(in srgb, '.$color.' 78%, #0f172a); --article-secondary: color-mix(in srgb, '.$color.' 85%, #fff); --article-accent: color-mix(in srgb, '.$color.' 65%, #fff); --article-bg-accent: color-mix(in srgb, '.$color.' 14%, transparent); --article-bg-accent-soft: color-mix(in srgb, '.$color.' 8%, transparent); --article-surface-muted: color-mix(in srgb, '.$color.' 6%, #fff);';
     }
 
     public function accentChipHtml(?string $label = null): string

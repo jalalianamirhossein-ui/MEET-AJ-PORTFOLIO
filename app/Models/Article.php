@@ -270,26 +270,44 @@ class Article extends Model
             : '';
     }
 
-    public function accentColor(): string
+    public function primaryFilterSlug(): string
     {
-        if ($this->category) {
-            return $this->category->accentColor();
+        $categorySlug = strtolower((string) $this->category?->slug);
+        $brands = array_diff(Tag::BRAND_FILTERS, ['other']);
+        if (in_array($categorySlug, $brands, true)) {
+            return $categorySlug;
         }
 
-        $slug = strtolower(str_replace('filter-', '', $this->filterClass()));
+        // A generic legacy category must not override an assigned brand filter.
+        $storedFilters = preg_split('/\s+/', strtolower(trim((string) data_get($this->presentation, 'filter_class')))) ?: [];
+        foreach ($storedFilters as $filter) {
+            $slug = str_replace('filter-', '', $filter);
+            if (in_array($slug, $brands, true)) { return $slug; }
+        }
+
+        $assigned = $this->tags->pluck('slug')->all();
+        foreach ($brands as $slug) {
+            if (in_array($slug, $assigned, true)) { return $slug; }
+        }
+
+        return $categorySlug !== '' && $categorySlug !== 'others' ? $categorySlug : 'other';
+    }
+
+    public function accentColor(): string
+    {
+        $slug = $this->primaryFilterSlug();
+        $categorySlug = $slug === 'other' ? 'others' : $slug;
+        // English categories are the shared source used by the filter bar.
+        if ($this->category?->language === 'en' && $this->category->slug === $categorySlug) {
+            return $this->category->accentColor();
+        }
 
         return Category::accentColorForSlug($slug);
     }
 
     public function accentCustomProperties(): string
     {
-        if ($this->category) {
-            return $this->category->accentCustomProperties();
-        }
-
-        $color = $this->accentColor();
-
-        return '--topic: '.$color.'; --meetaj-topic: '.$color.'; --article-primary: '.$color.'; --article-primary-strong: color-mix(in srgb, '.$color.' 78%, #0f172a); --article-bg-accent: color-mix(in srgb, '.$color.' 14%, transparent);';
+        return Category::accentCustomPropertiesForColor($this->accentColor());
     }
 
     public function categoryLabelEn(): string

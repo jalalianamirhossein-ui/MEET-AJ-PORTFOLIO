@@ -48,17 +48,17 @@ class AdminThemeTest extends TestCase
         $this->assertStringNotContainsString("Color::hex('#0ea5e9')", $provider);
     }
 
-    public function test_category_accents_reuse_public_topic_palette(): void
+    public function test_category_accents_reuse_public_filter_palette(): void
     {
-        $this->assertSame('#2563eb', Category::query()->where('slug', 'microsoft')->first()?->accentColor());
-        $this->assertSame('#15803d', Category::query()->where('slug', 'linux')->first()?->accentColor());
-        $this->assertSame('#c2410c', Category::query()->where('slug', 'mikrotik')->first()?->accentColor());
-        $this->assertSame('#6d28d9', Category::query()->where('slug', 'vmware')->first()?->accentColor());
+        $this->assertSame('#0078d4', Category::query()->where('slug', 'microsoft')->first()?->accentColor());
+        $this->assertSame('#fcc624', Category::query()->where('slug', 'linux')->first()?->accentColor());
+        $this->assertSame('#293239', Category::query()->where('slug', 'mikrotik')->first()?->accentColor());
+        $this->assertSame('#607078', Category::query()->where('slug', 'vmware')->first()?->accentColor());
         $this->assertSame('#a16207', Category::query()->where('slug', 'others')->first()?->accentColor());
         $this->assertStringContainsString('meetaj-category-chip', Category::query()->where('slug', 'linux')->first()?->accentChipHtml());
-        $this->assertStringContainsString('#15803d', Category::query()->where('slug', 'linux')->first()?->accentChipHtml());
+        $this->assertStringContainsString('#fcc624', Category::query()->where('slug', 'linux')->first()?->accentChipHtml());
         $this->assertTrue(\Illuminate\Support\Facades\Schema::hasColumn('categories', 'accent_color'));
-        $this->assertNull(Category::query()->where('slug', 'linux')->first()?->accent_color);
+        $this->assertSame('#fcc624', Category::query()->where('slug', 'linux')->first()?->accent_color);
     }
 
     public function test_stored_category_accent_overrides_slug_fallback_and_rejects_invalid_hex(): void
@@ -73,7 +73,7 @@ class AdminThemeTest extends TestCase
         $linux->forceFill(['accent_color' => null])->save();
         $linux->refresh();
         $this->assertNull($linux->accent_color);
-        $this->assertSame('#15803d', $linux->accentColor());
+        $this->assertSame('#fcc624', $linux->accentColor());
 
         $this->expectException(\Illuminate\Validation\ValidationException::class);
         $linux->forceFill(['accent_color' => 'burgundy'])->save();
@@ -104,12 +104,12 @@ class AdminThemeTest extends TestCase
 
         $articles = $this->actingAs($admin)->get(ArticleResource::getUrl())->assertOk()->getContent();
         $this->assertStringContainsString('meetaj-category-chip', $articles);
-        $this->assertStringContainsString('--meetaj-topic: #15803d', $articles);
-        $this->assertStringContainsString('--meetaj-topic: #2563eb', $articles);
+        $this->assertStringContainsString('--meetaj-topic: #fcc624', $articles);
+        $this->assertStringContainsString('--meetaj-topic: #0078d4', $articles);
 
         $categories = $this->actingAs($admin)->get(CategoryResource::getUrl())->assertOk()->getContent();
         $this->assertStringContainsString('meetaj-category-chip', $categories);
-        $this->assertStringContainsString('#c2410c', $categories);
+        $this->assertStringContainsString('#293239', $categories);
 
         $this->actingAs($admin)->get(RequestResource::getUrl())->assertOk();
         $this->assertNotSame(200, $this->actingAs($editor)->get(RequestResource::getUrl())->getStatusCode());

@@ -241,7 +241,8 @@ html[dir="rtl"] .article-page .article-body .article-section h2:hover { transfor
   outline: 3px solid var(--article-primary);
   outline-offset: -3px;
 }
-/* Let readers expand the full TOC without a narrow, nested scroll panel. */
+/* Keep the complete TOC beside the reading column without nested scrolling.
+   Smaller screens use a compact disclosure above the article. */
 .article-page .article-shell--with-toc {
   grid-template-columns: minmax(0, 1fr);
   grid-template-areas: "toc" "reading";
@@ -322,6 +323,26 @@ html[dir="rtl"] .article-page .article-body .article-section h2:hover { transfor
 }
 @media (min-width: 768px) {
   .article-page aside.article-toc .article-toc-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .article-page .article-shell--with-toc {
+    grid-template-columns: minmax(0, 1fr) clamp(14rem, 22%, 17rem);
+    grid-template-areas: "reading toc";
+    gap: 1.5rem;
+  }
+  .article-page aside.article-toc .article-toc-title {
+    padding: .6rem .65rem;
+    font-size: .9rem;
+  }
+  .article-page aside.article-toc .article-toc-list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: .2rem;
+  }
+  .article-page aside.article-toc .article-nav-item a {
+    padding: .45rem .65rem;
+    font-size: .85rem;
+    line-height: 1.65;
+  }
 }
 .article-page .article-faq-disclosure summary h3.article-faq-question {
   margin: 0 !important;
