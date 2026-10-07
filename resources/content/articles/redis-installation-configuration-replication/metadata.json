@@ -1,0 +1,111 @@
+{
+  "slug": "redis-installation-configuration-replication",
+  "reviewed_at": "2026-10-07",
+  "redis_version": "8.10.2",
+  "example_os": "Ubuntu Server 24.04 LTS",
+  "latest_ubuntu_lts": "26.04",
+  "localizations": {
+    "en": {
+      "title": "Redis Installation, Configuration and Replication – Production Deployment Guide",
+      "meta_title": "Redis Installation, Configuration and Replication – Production Deployment Guide",
+      "description": "Deploy Redis on Ubuntu with ACL and TLS hardening, RDB/AOF persistence, replication, Sentinel, memory policies, monitoring, backups and troubleshooting.",
+      "keywords": [
+        "Redis Installation",
+        "Redis Configuration",
+        "Redis Replication",
+        "Redis Ubuntu",
+        "Redis ACL",
+        "Redis Persistence",
+        "Redis Sentinel",
+        "Redis Cluster",
+        "Redis Production",
+        "Redis Monitoring"
+      ],
+      "faq": [
+        [
+          "Does apt install redis-server install the newest Redis?",
+          "Not necessarily. The distribution repository may lag upstream. Use the official Redis repository, inspect apt-cache policy and verify redis-server --version."
+        ],
+        [
+          "Is requirepass removed?",
+          "No. It remains a compatibility setting for the default ACL user. Named ACL users with least privilege are preferred for this production design."
+        ],
+        [
+          "Does replication provide automatic failover?",
+          "Standalone replication does not. Use Sentinel or Redis Cluster with an appropriate topology and compatible client."
+        ],
+        [
+          "Can a replica serve stale reads?",
+          "Yes. Replication is asynchronous. Read critical freshness-sensitive data from the primary and monitor offsets and link health."
+        ],
+        [
+          "Does WAIT guarantee that a write is on disk?",
+          "No. WAIT checks replication acknowledgments for earlier writes on the same client connection. WAITAOF addresses configured AOF flush acknowledgments."
+        ],
+        [
+          "Which policy is a good starting point for a cache?",
+          "allkeys-lru with an explicit maxmemory and application TTLs. Separate critical session, queue and lock workloads from an evicting cache."
+        ],
+        [
+          "Is a replica a backup?",
+          "No. Deletions and bad writes replicate too. Keep dated remote backups and regularly prove recovery on an isolated host."
+        ],
+        [
+          "How many Sentinels are required for a resilient deployment?",
+          "At least three in independent failure domains. With three Sentinels, quorum 2 is typical, and failover also requires an election majority."
+        ]
+      ]
+    },
+    "fa": {
+      "title": "راه‌اندازی Redis در محیط Production؛ نصب، Hardening، Persistence و Replication",
+      "meta_title": "راه‌اندازی Redis در محیط Production؛ نصب، Hardening، Persistence و Replication",
+      "description": "آموزش نصب Redis روی Ubuntu، تنظیم ACL و TLS، مدیریت RDB و AOF، راه‌اندازی Replica، Sentinel، مانیتورینگ و Backup با چک‌لیست Production.",
+      "keywords": [
+        "Redis Installation",
+        "Redis Configuration",
+        "Redis Replication",
+        "Redis Ubuntu",
+        "Redis ACL",
+        "Redis Persistence",
+        "Redis Sentinel",
+        "Redis Cluster",
+        "Redis Production",
+        "Redis Monitoring"
+      ],
+      "faq": [
+        [
+          "آیا apt install redis-server آخرین Redis را نصب می‌کند؟",
+          "الزاماً خیر؛ مخزن Distribution ممکن است قدیمی‌تر باشد. مخزن رسمی Redis، apt-cache policy و redis-server --version را بررسی کنید."
+        ],
+        [
+          "آیا requirepass حذف شده است؟",
+          "خیر؛ برای سازگاری User پیش‌فرض ACL باقی است. این طراحی Production از Named User با Least Privilege استفاده می‌کند."
+        ],
+        [
+          "آیا Replication خودکار Failover انجام می‌دهد؟",
+          "Replication مستقل خیر. از Sentinel یا Redis Cluster با Topology مناسب و Client سازگار استفاده کنید."
+        ],
+        [
+          "آیا Replica داده قدیمی برمی‌گرداند؟",
+          "بله؛ Replication ناهمزمان است. داده حساس به تازگی را از Primary بخوانید و Offset و سلامت Link را پایش کنید."
+        ],
+        [
+          "آیا WAIT ثبت Write روی دیسک را تضمین می‌کند؟",
+          "خیر؛ WAIT تأیید Replication برای Write قبلی همان Connection را بررسی می‌کند. WAITAOF به تأیید Flush تنظیم‌شده AOF مربوط است."
+        ],
+        [
+          "کدام Policy برای شروع Cache مناسب است؟",
+          "allkeys-lru با maxmemory صریح و TTL برنامه. Session، Queue و Lock حیاتی را از Cache دارای Eviction جدا کنید."
+        ],
+        [
+          "آیا Replica همان Backup است؟",
+          "خیر؛ Delete و Write خراب نیز Replicate می‌شوند. Backup Remote تاریخ‌دار و تست منظم Recovery روی Host ایزوله لازم است."
+        ],
+        [
+          "برای Deployment مقاوم چند Sentinel لازم است؟",
+          "حداقل سه در Failure Domain مستقل. با سه Sentinel، Quorum معمولاً 2 است و Failover به Majority انتخاب نیز نیاز دارد."
+        ]
+      ]
+    }
+  }
+}

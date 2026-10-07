@@ -1,0 +1,3336 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-article-language="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>
+      MongoDB Installation, Configuration &amp; Production Deployment Guide
+    </title>
+    <meta name="article:content-language" content="en" />
+    <meta
+      name="description"
+      content="Deploy MongoDB Community on Linux with official repositories, authentication, TLS, replica sets, backups, monitoring and production troubleshooting."
+    />
+    <meta
+      name="keywords"
+      content="MongoDB Community, MongoDB Installation, MongoDB Production, Ubuntu, Debian 12, RHEL, Replica Set, MongoDB TLS, MongoDB Backup, DevOps"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta
+      property="og:title"
+      content="MongoDB Installation, Configuration &amp; Production Deployment Guide"
+    />
+    <meta
+      property="og:description"
+      content="Deploy MongoDB Community on Linux with official repositories, authentication, TLS, replica sets, backups, monitoring and production troubleshooting."
+    />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:image"
+      content="/assets/img/articles/banners/mongodb-installation-production-banner.png"
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/mongodb-installation-configuration-production-deployment"
+    />
+    <link
+      rel="canonical"
+      href="https://meetaj.ir/articles/mongodb-installation-configuration-production-deployment"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "MongoDB Installation, Configuration & Production Deployment Guide",
+        "description": "Deploy MongoDB Community on Linux with official repositories, authentication, TLS, replica sets, backups, monitoring and production troubleshooting.",
+        "inLanguage": "en",
+        "datePublished": "2026-10-07T00:00:00+03:30",
+        "dateModified": "2026-10-07",
+        "image": "/assets/img/articles/banners/mongodb-installation-production-banner.png",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" }
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "en": {
+          "title": "MongoDB Installation, Configuration & Production Deployment Guide",
+          "meta_title": "MongoDB Installation, Configuration & Production Deployment Guide",
+          "description": "Deploy MongoDB Community on Linux with official repositories, authentication, TLS, replica sets, backups, monitoring and production troubleshooting.",
+          "keywords": [
+            "MongoDB Community",
+            "MongoDB Installation",
+            "MongoDB Production",
+            "Ubuntu",
+            "Debian 12",
+            "RHEL",
+            "Replica Set",
+            "MongoDB TLS",
+            "MongoDB Backup",
+            "DevOps"
+          ],
+          "faq": [
+            [
+              "Can I install MongoDB 9.0 on Debian 12 with these commands?",
+              "No. The official matrix lists Debian 12 for 8.x and Debian 13 for 9.x. Use the 8.0 Bookworm repository in this guide or plan a supported OS upgrade."
+            ],
+            [
+              "Does bindIp restrict which clients can connect?",
+              "No. It selects local listening interfaces. Firewall source rules restrict client addresses."
+            ],
+            [
+              "Is a replica set a backup?",
+              "No. It replicates writes, including accidental deletion. Keep independent backups and validate restores."
+            ],
+            [
+              "Do I need a load balancer in front of a replica set?",
+              "Normally no. A replica-aware driver discovers members and selects the appropriate server."
+            ],
+            [
+              "Does a keyfile encrypt replication traffic?",
+              "No. It authenticates members. TLS encrypts traffic; current official guidance recommends X.509 membership authentication for production."
+            ],
+            [
+              "Can mongoAdmin perform every operational task with the three example roles?",
+              "No. Those roles are broad but do not include all cluster, backup and restore operations. Use dedicated operational roles."
+            ],
+            [
+              "Should I disable THP for MongoDB 8.0 and 9.0?",
+              "For supported x86_64/ARM64, follow the newer TCMalloc guidance to enable THP with its documented settings. Older-version recommendations differ."
+            ],
+            [
+              "Is a successful ping enough to approve production?",
+              "No. Verify authorization, network restrictions, TLS, replica health, application behavior, alerts and an isolated restore drill."
+            ]
+          ]
+        },
+        "fa": {
+          "title": "آموزش نصب، راه‌اندازی و پیکربندی MongoDB در محیط Production",
+          "meta_title": "آموزش نصب، راه‌اندازی و پیکربندی MongoDB در محیط Production",
+          "description": "راهنمای فنی استقرار MongoDB Community روی Linux با مخزن رسمی، احراز هویت، TLS، Replica Set، Backup، مانیتورینگ و عیب‌یابی Production.",
+          "keywords": [
+            "MongoDB Community",
+            "MongoDB Installation",
+            "MongoDB Production",
+            "Ubuntu",
+            "Debian 12",
+            "RHEL",
+            "Replica Set",
+            "MongoDB TLS",
+            "MongoDB Backup",
+            "DevOps"
+          ],
+          "faq": [
+            [
+              "آیا با این فرمان‌ها MongoDB 9.0 روی Debian 12 نصب می‌شود؟",
+              "خیر. ماتریس رسمی Debian 12 را برای 8.x و Debian 13 را برای 9.x فهرست می‌کند. از مخزن 8.0 Bookworm این راهنما یا ارتقای برنامه‌ریزی‌شده OS استفاده کنید."
+            ],
+            [
+              "آیا bindIp تعیین می‌کند کدام Client وصل شود؟",
+              "خیر. Interface محلی شنود را انتخاب می‌کند. محدودیت آدرس Client با Source Rule در Firewall اعمال می‌شود."
+            ],
+            [
+              "آیا Replica Set همان Backup است؟",
+              "خیر. Write از جمله حذف اشتباه را Replicate می‌کند. Backup مستقل نگه دارید و Restore را تست کنید."
+            ],
+            [
+              "آیا Replica Set به Load Balancer نیاز دارد؟",
+              "معمولاً خیر. Driver آگاه از Replica، Memberها را کشف و Server مناسب را انتخاب می‌کند."
+            ],
+            [
+              "آیا KeyFile ترافیک Replication را رمز می‌کند؟",
+              "خیر. Memberها را احراز هویت می‌کند. TLS ترافیک را رمز می‌کند؛ راهنمای فعلی رسمی برای عضویت Production، X.509 را توصیه می‌کند."
+            ],
+            [
+              "آیا mongoAdmin با سه Role مثال همه عملیات را انجام می‌دهد؟",
+              "خیر. Roleها گسترده‌اند اما همه عملیات Cluster، Backup و Restore را ندارند. Role عملیاتی مجزا بدهید."
+            ],
+            [
+              "آیا برای MongoDB 8.0 و 9.0 باید THP را خاموش کنم؟",
+              "روی x86_64/ARM64 پشتیبانی‌شده، راهنمای جدید TCMalloc برای فعال‌کردن THP با تنظیمات مستند را دنبال کنید. توصیه نسخه‌های قدیمی متفاوت است."
+            ],
+            [
+              "آیا ping موفق برای تأیید Production کافی است؟",
+              "خیر. Authorization، محدودیت شبکه، TLS، سلامت Replica، رفتار برنامه، Alert و Restore Drill ایزوله را بررسی کنید."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
+  <body class="article-page theme-linux">
+    <header>
+      <nav>
+        <ul>
+          <li class="article-nav-item">
+            <a
+              href="#introduction"
+              data-en="1. What Is MongoDB?"
+              data-fa="۱. MongoDB چیست؟"
+              >1. What Is MongoDB?</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#architecture"
+              data-en="2. Architecture Overview"
+              data-fa="۲. نمای معماری"
+              >2. Architecture Overview</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#prerequisites"
+              data-en="3. Server Requirements"
+              data-fa="۳. پیش‌نیاز سرور"
+              >3. Server Requirements</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#pre-installation"
+              data-en="4. Pre-Installation Checks"
+              data-fa="۴. بررسی پیش از نصب"
+              >4. Pre-Installation Checks</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#ubuntu-install"
+              data-en="5. Install MongoDB on Ubuntu 22.04 / 24.04"
+              data-fa="۵. نصب MongoDB روی Ubuntu 22.04 / 24.04"
+              >5. Install MongoDB on Ubuntu 22.04 / 24.04</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#debian-install"
+              data-en="6. Install MongoDB on Debian 12"
+              data-fa="۶. نصب MongoDB روی Debian 12"
+              >6. Install MongoDB on Debian 12</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#rhel-install"
+              data-en="7. Install on RHEL / Rocky / AlmaLinux"
+              data-fa="۷. نصب روی RHEL / Rocky / AlmaLinux"
+              >7. Install on RHEL / Rocky / AlmaLinux</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#configuration"
+              data-en="8. MongoDB Configuration"
+              data-fa="۸. پیکربندی MongoDB"
+              >8. MongoDB Configuration</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#remote-access"
+              data-en="9. Secure Remote Access"
+              data-fa="۹. دسترسی Remote امن"
+              >9. Secure Remote Access</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#authentication"
+              data-en="10. MongoDB Authentication"
+              data-fa="۱۰. احراز هویت MongoDB"
+              >10. MongoDB Authentication</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#application-user"
+              data-en="11. Dedicated Application User"
+              data-fa="۱۱. حساب اختصاصی Application"
+              >11. Dedicated Application User</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#firewall"
+              data-en="12. Firewall Hardening"
+              data-fa="۱۲. ایمن‌سازی Firewall"
+              >12. Firewall Hardening</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#security"
+              data-en="13. MongoDB Security Hardening"
+              data-fa="۱۳. ایمن‌سازی MongoDB"
+              >13. MongoDB Security Hardening</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#tls"
+              data-en="14. TLS Encryption"
+              data-fa="۱۴. رمزنگاری TLS"
+              >14. TLS Encryption</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#replica-set"
+              data-en="15. Production Replica Set"
+              data-fa="۱۵. Replica Set در Production"
+              >15. Production Replica Set</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#replica-security"
+              data-en="16. Replica Set Internal Authentication"
+              data-fa="۱۶. احراز هویت داخلی Replica Set"
+              >16. Replica Set Internal Authentication</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#connection-string"
+              data-en="17. MongoDB Connection Strings and Secrets"
+              data-fa="۱۷. Connection String و Secretها"
+              >17. MongoDB Connection Strings and Secrets</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#backup"
+              data-en="18. Backup and Tested Recovery"
+              data-fa="۱۸. Backup و بازیابی آزموده‌شده"
+              >18. Backup and Tested Recovery</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#performance"
+              data-en="19. Performance Checks"
+              data-fa="۱۹. بررسی Performance"
+              >19. Performance Checks</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#indexing"
+              data-en="20. Indexing and Query Plans"
+              data-fa="۲۰. Index و Query Plan"
+              >20. Indexing and Query Plans</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#logging"
+              data-en="21. Logging and Slow Queries"
+              data-fa="۲۱. Log و Slow Query"
+              >21. Logging and Slow Queries</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#monitoring"
+              data-en="22. Monitoring and Alerting"
+              data-fa="۲۲. مانیتورینگ و Alert"
+              >22. Monitoring and Alerting</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#troubleshooting"
+              data-en="23. Troubleshooting"
+              data-fa="۲۳. عیب‌یابی"
+              >23. Troubleshooting</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#verification"
+              data-en="24. Verification Checklist"
+              data-fa="۲۴. چک‌لیست اعتبارسنجی"
+              >24. Verification Checklist</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#best-practices"
+              data-en="25. Production Checklist"
+              data-fa="۲۵. چک‌لیست Production"
+              >25. Production Checklist</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#conclusion"
+              data-en="Operational Handover"
+              data-fa="تحویل عملیاتی"
+              >Operational Handover</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#faq"
+              data-en="Frequently Asked Questions"
+              data-fa="پرسش‌های متداول"
+              >Frequently Asked Questions</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#official-references"
+              data-en="Official References"
+              data-fa="منابع رسمی"
+              >Official References</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section class="article-hero article-header hero">
+        <span class="article-category" data-en="Linux" data-fa="لینوکس"
+          >Linux</span
+        >
+        <h1
+          class="article-title hero-title"
+          data-en="MongoDB Installation, Configuration &amp; Production Deployment Guide"
+          data-fa="آموزش نصب، راه‌اندازی و پیکربندی MongoDB در محیط Production"
+        >
+          MongoDB Installation, Configuration &amp; Production Deployment Guide
+        </h1>
+        <p
+          class="article-excerpt hero-subtitle"
+          data-en="Deploy MongoDB Community on Linux with official repositories, authentication, TLS, replica sets, backups, monitoring and production troubleshooting."
+          data-fa="راهنمای فنی استقرار MongoDB Community روی Linux با مخزن رسمی، احراز هویت، TLS، Replica Set، Backup، مانیتورینگ و عیب‌یابی Production."
+        >
+          Deploy MongoDB Community on Linux with official repositories,
+          authentication, TLS, replica sets, backups, monitoring and production
+          troubleshooting.
+        </p>
+        <img
+          class="article-hero-thumbnail"
+          src="/assets/img/articles/banners/mongodb-installation-production-banner.png"
+          width="1000"
+          height="1000"
+          alt="MongoDB Community Linux production deployment with TLS security, replication and monitoring"
+        />
+      </section>
+      <article class="article-body" lang="en" dir="ltr">
+        <p
+          data-en="A deployment runbook for SysAdmins, DevOps, Backend and Infrastructure Engineers. Reviewed on 7 October 2026. The official current stable branch is 9.0; its release notes list 9.0.2 as released and 9.0.3 as upcoming. Install the latest signed patch actually available in your selected official repository; an upcoming release is not an installation target."
+          data-fa="راهنمای عملیاتی برای SysAdmin، DevOps، Backend و Infrastructure Engineer؛ بررسی منابع در ۷ اکتبر ۲۰۲۶. شاخه Stable رسمی فعلی 9.0 است؛ Release Notes نسخه 9.0.2 را منتشرشده و 9.0.3 را Upcoming معرفی می‌کند. جدیدترین Patch امضاشده موجود در مخزن رسمی انتخابی را نصب کنید؛ نسخه Upcoming هدف نصب نیست."
+        >
+          A deployment runbook for SysAdmins, DevOps, Backend and Infrastructure
+          Engineers. Reviewed on 7 October 2026. The official current stable
+          branch is 9.0; its release notes list 9.0.2 as released and 9.0.3 as
+          upcoming. Install the latest signed patch actually available in your
+          selected official repository; an upcoming release is not an
+          installation target.
+        </p>
+        <p>
+          <a
+            href="https://www.mongodb.com/docs/manual/release-notes/"
+            rel="noopener"
+            data-en="Official stable release index"
+            data-fa="فهرست رسمی نسخه‌های Stable"
+            >Official stable release index</a
+          >
+        </p>
+        <p>
+          <a
+            href="https://www.mongodb.com/docs/manual/release-notes/9.0/"
+            rel="noopener"
+            data-en="MongoDB 9.0 patch release notes"
+            data-fa="Release Notes و Patchهای MongoDB 9.0"
+            >MongoDB 9.0 patch release notes</a
+          >
+        </p>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th data-en="Target platform" data-fa="سیستم‌عامل مقصد">
+                  Target platform
+                </th>
+                <th
+                  data-en="Community branch in this guide"
+                  data-fa="شاخه Community در این راهنما"
+                >
+                  Community branch in this guide
+                </th>
+                <th data-en="Package defaults" data-fa="پیش‌فرض بسته">
+                  Package defaults
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td
+                  data-en="Ubuntu 22.04 / 24.04 x86_64"
+                  data-fa="Ubuntu 22.04 / 24.04 x86_64"
+                >
+                  Ubuntu 22.04 / 24.04 x86_64
+                </td>
+                <td data-en="9.0" data-fa="9.0">9.0</td>
+                <td
+                  data-en="mongodb; /var/lib/mongodb"
+                  data-fa="mongodb؛ /var/lib/mongodb"
+                >
+                  mongodb; /var/lib/mongodb
+                </td>
+              </tr>
+              <tr>
+                <td data-en="Debian 12 x86_64" data-fa="Debian 12 x86_64">
+                  Debian 12 x86_64
+                </td>
+                <td
+                  data-en="8.0: 9.x is not supported on Debian 12"
+                  data-fa="8.0؛ شاخه 9.x روی Debian 12 پشتیبانی نمی‌شود"
+                >
+                  8.0: 9.x is not supported on Debian 12
+                </td>
+                <td
+                  data-en="mongodb; /var/lib/mongodb"
+                  data-fa="mongodb؛ /var/lib/mongodb"
+                >
+                  mongodb; /var/lib/mongodb
+                </td>
+              </tr>
+              <tr>
+                <td
+                  data-en="RHEL / Rocky / AlmaLinux 8 or 9 x86_64"
+                  data-fa="RHEL / Rocky / AlmaLinux 8 یا 9 x86_64"
+                >
+                  RHEL / Rocky / AlmaLinux 8 or 9 x86_64
+                </td>
+                <td data-en="9.0" data-fa="9.0">9.0</td>
+                <td
+                  data-en="mongod; /var/lib/mongo"
+                  data-fa="mongod؛ /var/lib/mongo"
+                >
+                  mongod; /var/lib/mongo
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <a
+            href="https://www.mongodb.com/docs/community-platform-support/"
+            rel="noopener"
+            data-en="Official Community platform support matrix"
+            data-fa="ماتریس رسمی پشتیبانی پلتفرم‌های Community"
+            >Official Community platform support matrix</a
+          >
+        </p>
+        <p
+          data-en="Use a fresh supported server, sudo privileges and Bash. Bash blocks run on Linux; JavaScript blocks run inside mongosh. Values in angle brackets are placeholders, never literal credentials: &lt;HOSTNAME&gt;, &lt;MONGODB-IP&gt;, &lt;ADMIN-USER&gt;, &lt;APP-USER&gt;, &lt;STRONG-PASSWORD&gt;, &lt;REPLICA-NAME&gt;. The concrete names mongoAdmin, appuser, appdb and rs0 below are replaceable examples. All sample IPs are private network addresses and must match your own network."
+          data-fa="از سرور تازه و پشتیبانی‌شده، دسترسی sudo و Bash استفاده کنید. بلوک Bash روی Linux و بلوک JavaScript داخل mongosh اجرا می‌شود. مقادیر داخل &lt;&gt; جایگزین‌شونده‌اند و Credential واقعی نیستند: &lt;HOSTNAME&gt;، &lt;MONGODB-IP&gt;، &lt;ADMIN-USER&gt;، &lt;APP-USER&gt;، &lt;STRONG-PASSWORD&gt;، &lt;REPLICA-NAME&gt;. نام‌های mongoAdmin، appuser، appdb و rs0 مثال قابل جایگزینی هستند. IPهای نمونه خصوصی‌اند و باید با شبکه شما تطبیق داده شوند."
+        >
+          Use a fresh supported server, sudo privileges and Bash. Bash blocks
+          run on Linux; JavaScript blocks run inside mongosh. Values in angle
+          brackets are placeholders, never literal credentials:
+          &lt;HOSTNAME&gt;, &lt;MONGODB-IP&gt;, &lt;ADMIN-USER&gt;,
+          &lt;APP-USER&gt;, &lt;STRONG-PASSWORD&gt;, &lt;REPLICA-NAME&gt;. The
+          concrete names mongoAdmin, appuser, appdb and rs0 below are
+          replaceable examples. All sample IPs are private network addresses and
+          must match your own network.
+        </p>
+        <p
+          data-en="Choose one path: sections 5–14 build and secure a standalone instance; sections 15–16 provision a fresh three-node replica set. Do not blindly apply the fresh-cluster procedure to existing data. A production design also needs measured capacity, recovery objectives, change control and a successful restore drill."
+          data-fa="یک مسیر انتخاب کنید: بخش‌های ۵ تا ۱۴ برای نصب و ایمن‌سازی Standalone و بخش‌های ۱۵ و ۱۶ برای Replica Set تازه با سه Node هستند. روی دیتابیس موجود مسیر Fresh Cluster را بدون برنامه اجرا نکنید. طراحی Production به ظرفیت‌سنجی، هدف بازیابی، کنترل تغییر و آزمون موفق Restore نیز نیاز دارد."
+        >
+          Choose one path: sections 5–14 build and secure a standalone instance;
+          sections 15–16 provision a fresh three-node replica set. Do not
+          blindly apply the fresh-cluster procedure to existing data. A
+          production design also needs measured capacity, recovery objectives,
+          change control and a successful restore drill.
+        </p>
+        <section id="introduction">
+          <h2 data-en="1. What Is MongoDB?" data-fa="۱. MongoDB چیست؟">
+            1. What Is MongoDB?
+          </h2>
+          <p
+            data-en="MongoDB is a document-oriented NoSQL database. A database groups collections; each collection stores documents encoded as BSON, a binary format with richer types than JSON. A replica set maintains copies for availability; sharding partitions data across shards for horizontal scale. This guide deploys a replica set, not a sharded cluster."
+            data-fa="MongoDB یک Document Database از خانواده NoSQL است. Database مجموعه‌ای از Collectionها و هر Collection شامل Documentهای BSON است؛ BSON فرمت باینری با Typeهای گسترده‌تر از JSON است. Replica Set نسخه‌های داده را برای دسترس‌پذیری نگه می‌دارد و Sharding داده را برای مقیاس افقی میان Shardها تقسیم می‌کند. این راهنما Replica Set مستقر می‌کند، نه Sharded Cluster."
+          >
+            MongoDB is a document-oriented NoSQL database. A database groups
+            collections; each collection stores documents encoded as BSON, a
+            binary format with richer types than JSON. A replica set maintains
+            copies for availability; sharding partitions data across shards for
+            horizontal scale. This guide deploys a replica set, not a sharded
+            cluster.
+          </p>
+          <p
+            data-en="SQL systems commonly use tables, rows and joins; MongoDB encourages document models shaped around application access patterns. Flexible documents still need validation and indexes. MongoDB supports transactions, but multi-document transactions do not replace sound modeling and are not available on a standalone deployment."
+            data-fa="در SQL معمولاً Table، Row و Join محور طراحی‌اند؛ در MongoDB مدل Document بر اساس الگوی دسترسی برنامه طراحی می‌شود. انعطاف Document نیاز به Validation و Index را حذف نمی‌کند. MongoDB از Transaction پشتیبانی می‌کند، اما Transaction چندسندی جای مدل‌سازی درست را نمی‌گیرد و در Standalone در دسترس نیست."
+          >
+            SQL systems commonly use tables, rows and joins; MongoDB encourages
+            document models shaped around application access patterns. Flexible
+            documents still need validation and indexes. MongoDB supports
+            transactions, but multi-document transactions do not replace sound
+            modeling and are not available on a standalone deployment.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/core/databases-and-collections/"
+              rel="noopener"
+              data-en="Databases and collections"
+              data-fa="Database و Collection در مستندات رسمی"
+              >Databases and collections</a
+            >
+          </p>
+        </section>
+        <section id="architecture">
+          <h2 data-en="2. Architecture Overview" data-fa="۲. نمای معماری">
+            2. Architecture Overview
+          </h2>
+          <figure>
+            <img
+              src="/assets/img/articles/content/mongodb-architecture.png"
+              width="1920"
+              height="1080"
+              loading="lazy"
+              decoding="async"
+              alt="MongoDB application, driver, TCP 27017 authentication and BSON document architecture"
+              data-en-alt="MongoDB application, driver, TCP 27017 authentication and BSON document architecture"
+              data-fa-alt="معماری اتصال برنامه و Driver با احراز هویت روی TCP 27017 و ساختار Documentهای BSON در MongoDB"
+            />
+            <figcaption
+              data-en="MongoDB application, driver, TCP 27017 authentication and BSON document architecture"
+              data-fa="معماری اتصال برنامه و Driver با احراز هویت روی TCP 27017 و ساختار Documentهای BSON در MongoDB"
+            >
+              MongoDB application, driver, TCP 27017 authentication and BSON
+              document architecture
+            </figcaption>
+          </figure>
+          <pre dir="ltr"><code class="language-text">Application
+     |
+MongoDB Client / Driver
+     |
+MongoDB Server :27017
+     |
+Database
+ +-- Collections
+     +-- Documents
+
+Production:
+Application
+     |
+Replica-aware MongoDB Driver / Connection Pool
+     |
+Replica Set: rs0
+ +-----------+-----------+-----------+
+ | Primary   | Secondary | Secondary |
+ +-----------+-----------+-----------+</code></pre>
+          <p
+            data-en="The driver discovers all members and routes operations according to read preference and topology. A generic HTTP or round-robin load balancer is not needed in front of a replica set and can hide its topology. Writes normally go to the primary; secondaries replicate and can serve explicitly selected reads, with consistency tradeoffs."
+            data-fa="Driver همه Memberها را کشف می‌کند و عملیات را با توجه به Read Preference و Topology هدایت می‌کند. Replica Set به Load Balancer عمومی HTTP یا Round-Robin نیاز ندارد و چنین واسطه‌ای می‌تواند Topology را پنهان کند. Write معمولاً به Primary می‌رود؛ Secondaryها Replication انجام می‌دهند و با انتخاب صریح می‌توانند Read را با ملاحظات Consistency پاسخ دهند."
+          >
+            The driver discovers all members and routes operations according to
+            read preference and topology. A generic HTTP or round-robin load
+            balancer is not needed in front of a replica set and can hide its
+            topology. Writes normally go to the primary; secondaries replicate
+            and can serve explicitly selected reads, with consistency tradeoffs.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/replication/"
+              rel="noopener"
+              data-en="MongoDB replication architecture"
+              data-fa="معماری رسمی Replication"
+              >MongoDB replication architecture</a
+            >
+          </p>
+        </section>
+        <section id="prerequisites">
+          <h2 data-en="3. Server Requirements" data-fa="۳. پیش‌نیاز سرور">
+            3. Server Requirements
+          </h2>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th data-en="Resource" data-fa="منبع">Resource</th>
+                  <th data-en="Planning baseline" data-fa="مبنای برنامه‌ریزی">
+                    Planning baseline
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-en="CPU" data-fa="CPU">CPU</td>
+                  <td
+                    data-en="64-bit supported microarchitecture; AVX on x86_64. A starting budget of 4–8 vCPU per node is a sizing example, not an official minimum."
+                    data-fa="معماری ۶۴ بیتی پشتیبانی‌شده و AVX روی x86_64. بودجه اولیه ۴ تا ۸ vCPU برای هر Node مثال ظرفیت‌سنجی است، نه حداقل رسمی."
+                  >
+                    64-bit supported microarchitecture; AVX on x86_64. A
+                    starting budget of 4–8 vCPU per node is a sizing example,
+                    not an official minimum.
+                  </td>
+                </tr>
+                <tr>
+                  <td data-en="RAM" data-fa="RAM">RAM</td>
+                  <td
+                    data-en="Start capacity testing around 16–32 GiB per node for a modest dedicated service; size for the working set, indexes and filesystem cache."
+                    data-fa="برای سرویس اختصاصی متوسط، ظرفیت‌سنجی را حدود ۱۶ تا ۳۲ GiB در هر Node شروع کنید؛ Working Set، Indexها و File Cache تعیین‌کننده‌اند."
+                  >
+                    Start capacity testing around 16–32 GiB per node for a
+                    modest dedicated service; size for the working set, indexes
+                    and filesystem cache.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Disk and filesystem"
+                    data-fa="Disk و File System"
+                  >
+                    Disk and filesystem
+                  </td>
+                  <td
+                    data-en="Enterprise SSD/NVMe; XFS is recommended for WiredTiger. Reserve space for indexes, journal, oplog, growth and restore staging."
+                    data-fa="SSD/NVMe سازمانی؛ XFS برای WiredTiger توصیه می‌شود. فضای Index، Journal، Oplog، رشد و Restore را لحاظ کنید."
+                  >
+                    Enterprise SSD/NVMe; XFS is recommended for WiredTiger.
+                    Reserve space for indexes, journal, oplog, growth and
+                    restore staging.
+                  </td>
+                </tr>
+                <tr>
+                  <td data-en="Network and DNS" data-fa="شبکه و DNS">
+                    Network and DNS
+                  </td>
+                  <td
+                    data-en="Private low-latency network; stable resolvable node names; all advertised members reachable by drivers."
+                    data-fa="شبکه خصوصی کم‌تأخیر، نام Node پایدار و Resolveشدنی، دسترسی Driver به همه Memberهای معرفی‌شده."
+                  >
+                    Private low-latency network; stable resolvable node names;
+                    all advertised members reachable by drivers.
+                  </td>
+                </tr>
+                <tr>
+                  <td data-en="Time" data-fa="زمان">Time</td>
+                  <td
+                    data-en="Use chrony or the distribution time service; verify actual synchronization, not only service enablement."
+                    data-fa="از chrony یا سرویس زمان توزیع استفاده کنید؛ Synchronization واقعی را بررسی کنید، نه صرفاً Enabled بودن سرویس."
+                  >
+                    Use chrony or the distribution time service; verify actual
+                    synchronization, not only service enablement.
+                  </td>
+                </tr>
+                <tr>
+                  <td data-en="Swap" data-fa="Swap">Swap</td>
+                  <td
+                    data-en="Avoid sustained swapping. Evaluate swappiness and OOM behavior with the platform and workload; do not switch swap off on a pressured live host."
+                    data-fa="از Swap مستمر جلوگیری کنید. swappiness و رفتار OOM را با پلتفرم و Workload ارزیابی کنید؛ Swap سرور زنده تحت فشار را ناگهانی خاموش نکنید."
+                  >
+                    Avoid sustained swapping. Evaluate swappiness and OOM
+                    behavior with the platform and workload; do not switch swap
+                    off on a pressured live host.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p
+            data-en="Keep data on reliable dedicated block storage: /var/lib/mongodb on Ubuntu/Debian, /var/lib/mongo on RPM installations. Logs normally use /var/log/mongodb. A separate mount at the existing dbPath avoids accidental path changes. Mount it before initial startup and add a systemd RequiresMountsFor dependency so a missing volume cannot silently create a new database on the root disk. Never format a disk containing data."
+            data-fa="Data را روی Block Storage اختصاصی و قابل اعتماد قرار دهید: /var/lib/mongodb در Ubuntu/Debian و /var/lib/mongo در نصب RPM. مسیر معمول Log برابر /var/log/mongodb است. Mount جداگانه در همان dbPath از تغییر ناخواسته مسیر جلوگیری می‌کند. پیش از اولین Start آن را Mount و وابستگی RequiresMountsFor در systemd تعریف کنید تا فقدان Volume باعث ساخت دیتابیس جدید روی Root Disk نشود. دیسک دارای داده را Format نکنید."
+          >
+            Keep data on reliable dedicated block storage: /var/lib/mongodb on
+            Ubuntu/Debian, /var/lib/mongo on RPM installations. Logs normally
+            use /var/log/mongodb. A separate mount at the existing dbPath avoids
+            accidental path changes. Mount it before initial startup and add a
+            systemd RequiresMountsFor dependency so a missing volume cannot
+            silently create a new database on the root disk. Never format a disk
+            containing data.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/administration/production-notes/"
+              rel="noopener"
+              data-en="Official production hardware, storage and platform notes"
+              data-fa="نکات رسمی سخت‌افزار، Storage و پلتفرم Production"
+              >Official production hardware, storage and platform notes</a
+            >
+          </p>
+          <h3
+            data-en="Service limits and mount dependency"
+            data-fa="محدودیت سرویس و وابستگی Mount"
+          >
+            Service limits and mount dependency
+          </h3>
+          <pre dir="ltr"><code class="language-bash">sudo systemctl edit mongod
+# Add the following drop-in; use /var/lib/mongo on RPM systems.</code></pre>
+          <pre dir="ltr"><code class="language-ini">[Unit]
+RequiresMountsFor=/var/lib/mongodb
+
+[Service]
+LimitNOFILE=64000
+LimitNPROC=64000</code></pre>
+          <pre
+            dir="ltr"
+          ><code class="language-bash">sudo systemctl daemon-reload
+sudo systemctl show mongod -p LimitNOFILE -p LimitNPROC
+ulimit -n</code></pre>
+          <p
+            data-en="A shell ulimit affects that shell, not an already running systemd service. Confirm the effective limits after restart. For 8.0+ x86_64/ARM64, follow the current TCMalloc guidance: enable THP with the documented defrag settings; the old blanket advice to disable THP is version-dependent. Check the official kernel compatibility notes before changing kernels."
+            data-fa="ulimit در Shell فقط همان Shell را تغییر می‌دهد و سرویس systemd در حال اجرا را تغییر نمی‌دهد. پس از Restart محدودیت مؤثر را بررسی کنید. در نسخه 8.0 به بعد روی x86_64/ARM64 راهنمای جدید TCMalloc را دنبال کنید: THP را با تنظیمات defrag مستند فعال کنید؛ توصیه قدیمی خاموش‌کردن THP وابسته به نسخه است. پیش از تغییر Kernel نکات رسمی سازگاری را بررسی کنید."
+          >
+            A shell ulimit affects that shell, not an already running systemd
+            service. Confirm the effective limits after restart. For 8.0+
+            x86_64/ARM64, follow the current TCMalloc guidance: enable THP with
+            the documented defrag settings; the old blanket advice to disable
+            THP is version-dependent. Check the official kernel compatibility
+            notes before changing kernels.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/reference/ulimit/"
+              rel="noopener"
+              data-en="Official UNIX resource limits"
+              data-fa="محدودیت منابع UNIX"
+              >Official UNIX resource limits</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/administration/tcmalloc-performance/"
+              rel="noopener"
+              data-en="TCMalloc and THP settings for MongoDB 8.0 and later"
+              data-fa="تنظیم TCMalloc و THP برای MongoDB 8.0 و جدیدتر"
+              >TCMalloc and THP settings for MongoDB 8.0 and later</a
+            >
+          </p>
+        </section>
+        <section id="pre-installation">
+          <h2
+            data-en="4. Pre-Installation Checks"
+            data-fa="۴. بررسی پیش از نصب"
+          >
+            4. Pre-Installation Checks
+          </h2>
+          <pre dir="ltr"><code class="language-bash">hostnamectl
+cat /etc/os-release
+uname -r
+free -h
+df -h
+lsblk
+ip addr
+timedatectl
+lscpu
+findmnt -T /var/lib
+swapon --show
+getent hosts mongo01 mongo02 mongo03</code></pre>
+          <p
+            data-en="Check the OS ID/version and architecture against the matrix; verify CPU features and the distribution kernel. Inspect available RAM and swap activity, disk capacity, filesystem and persistent mounts. Confirm the private interface and route, unique hostnames, consistent DNS resolution on clients and nodes, and synchronized clocks. These checks establish capacity and reachability; they do not prove database health."
+            data-fa="ID و Version سیستم‌عامل و معماری را با ماتریس تطبیق دهید؛ ویژگی CPU و Kernel توزیع را بررسی کنید. RAM آزاد، فعالیت Swap، ظرفیت Disk، File System و Mount پایدار را کنترل کنید. Interface و Route خصوصی، Hostname یکتا، DNS یکسان در Client و Node و ساعت هماهنگ را تأیید کنید. این بررسی‌ها ظرفیت و ارتباط را مشخص می‌کنند، نه سلامت دیتابیس را."
+          >
+            Check the OS ID/version and architecture against the matrix; verify
+            CPU features and the distribution kernel. Inspect available RAM and
+            swap activity, disk capacity, filesystem and persistent mounts.
+            Confirm the private interface and route, unique hostnames,
+            consistent DNS resolution on clients and nodes, and synchronized
+            clocks. These checks establish capacity and reachability; they do
+            not prove database health.
+          </p>
+        </section>
+        <section id="ubuntu-install">
+          <h2
+            data-en="5. Install MongoDB on Ubuntu 22.04 / 24.04"
+            data-fa="۵. نصب MongoDB روی Ubuntu 22.04 / 24.04"
+          >
+            5. Install MongoDB on Ubuntu 22.04 / 24.04
+          </h2>
+          <p
+            data-en="This fresh-install path uses Community 9.0 and the official repo.mongodb.org repository. Inspect existing MongoDB packages and sources first; do not mix Ubuntu mongodb, Community mongodb-org and Enterprise packages. If GPG verification or repository access fails, fix the cause rather than disabling signature checks."
+            data-fa="این مسیر نصب تازه از Community 9.0 و مخزن رسمی repo.mongodb.org استفاده می‌کند. ابتدا بسته‌ها و Sourceهای MongoDB موجود را بررسی کنید؛ بسته mongodb توزیع، mongodb-org و Enterprise را مخلوط نکنید. در خطای GPG یا دسترسی مخزن، علت را رفع کنید و بررسی امضا را خاموش نکنید."
+          >
+            This fresh-install path uses Community 9.0 and the official
+            repo.mongodb.org repository. Inspect existing MongoDB packages and
+            sources first; do not mix Ubuntu mongodb, Community mongodb-org and
+            Enterprise packages. If GPG verification or repository access fails,
+            fix the cause rather than disabling signature checks.
+          </p>
+          <pre dir="ltr"><code class="language-bash">sudo apt update
+sudo apt install -y gnupg curl ca-certificates
+curl -fsSL https://pgp.mongodb.com/server-9.asc -o /tmp/mongodb-server-9.asc
+sudo gpg --batch --yes --dearmor \
+  -o /usr/share/keyrings/mongodb-server-9.gpg /tmp/mongodb-server-9.asc
+sudo chmod 644 /usr/share/keyrings/mongodb-server-9.gpg</code></pre>
+          <h3
+            data-en="Ubuntu 24.04: select Noble"
+            data-fa="Ubuntu 24.04: انتخاب Noble"
+          >
+            Ubuntu 24.04: select Noble
+          </h3>
+          <pre
+            dir="ltr"
+          ><code class="language-bash">echo &#x27;deb [arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-9.gpg] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/9.0 multiverse&#x27; \
+  | sudo tee /etc/apt/sources.list.d/mongodb-org-9.0.list</code></pre>
+          <h3
+            data-en="Ubuntu 22.04: select Jammy instead"
+            data-fa="Ubuntu 22.04: انتخاب Jammy به جای Noble"
+          >
+            Ubuntu 22.04: select Jammy instead
+          </h3>
+          <pre
+            dir="ltr"
+          ><code class="language-bash">echo &#x27;deb [arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-9.gpg] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/9.0 multiverse&#x27; \
+  | sudo tee /etc/apt/sources.list.d/mongodb-org-9.0.list</code></pre>
+          <p
+            data-en="Run only the repository block matching your OS. The local keyring filename is chosen consistently here as server-9.gpg; both signed-by and the imported file must agree."
+            data-fa="فقط بلوک Repository متناظر با سیستم‌عامل را اجرا کنید. نام Keyring محلی در این راهنما server-9.gpg انتخاب شده است؛ signed-by و فایل Importشده باید دقیقاً یکسان باشند."
+          >
+            Run only the repository block matching your OS. The local keyring
+            filename is chosen consistently here as server-9.gpg; both signed-by
+            and the imported file must agree.
+          </p>
+          <pre dir="ltr"><code class="language-bash">sudo apt update
+apt-cache policy mongodb-org mongodb-org-server
+sudo apt install -y mongodb-org
+sudo systemctl enable --now mongod
+sudo systemctl status mongod --no-pager
+mongod --version
+mongosh --version
+mongosh --host 127.0.0.1 --port 27017</code></pre>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/administration/install-community-linux/?linux-distro=ubuntu&amp;linux-method=pkg"
+              rel="noopener"
+              data-en="Official Community Ubuntu installation"
+              data-fa="راهنمای رسمی نصب Community روی Ubuntu"
+              >Official Community Ubuntu installation</a
+            >
+          </p>
+        </section>
+        <section id="debian-install">
+          <h2
+            data-en="6. Install MongoDB on Debian 12"
+            data-fa="۶. نصب MongoDB روی Debian 12"
+          >
+            6. Install MongoDB on Debian 12
+          </h2>
+          <p
+            data-en="Debian 12 Bookworm uses the supported Community 8.0 branch. Do not point Bookworm at a Trixie/9.0 repository: 9.x lists Debian 13, not Debian 12. An OS upgrade and a database upgrade are separate controlled changes. This installs the latest available 8.0 patch, not the globally newest major version."
+            data-fa="Debian 12 Bookworm از شاخه پشتیبانی‌شده Community 8.0 استفاده می‌کند. Bookworm را به مخزن Trixie/9.0 وصل نکنید؛ شاخه 9.x فقط Debian 13 را فهرست کرده است. ارتقای OS و دیتابیس دو تغییر کنترل‌شده جدا هستند. این فرمان جدیدترین Patch موجود 8.0 را نصب می‌کند، نه جدیدترین Major در همه پلتفرم‌ها."
+          >
+            Debian 12 Bookworm uses the supported Community 8.0 branch. Do not
+            point Bookworm at a Trixie/9.0 repository: 9.x lists Debian 13, not
+            Debian 12. An OS upgrade and a database upgrade are separate
+            controlled changes. This installs the latest available 8.0 patch,
+            not the globally newest major version.
+          </p>
+          <pre dir="ltr"><code class="language-bash">sudo apt update
+sudo apt install -y gnupg curl ca-certificates
+curl -fsSL https://pgp.mongodb.com/server-8.0.asc -o /tmp/mongodb-server-8.0.asc
+sudo gpg --batch --yes --dearmor \
+  -o /usr/share/keyrings/mongodb-server-8.0.gpg /tmp/mongodb-server-8.0.asc
+sudo chmod 644 /usr/share/keyrings/mongodb-server-8.0.gpg
+echo &#x27;deb [arch=amd64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg] https://repo.mongodb.org/apt/debian bookworm/mongodb-org/8.0 main&#x27; \
+  | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+sudo apt update
+apt-cache policy mongodb-org mongodb-org-server
+sudo apt install -y mongodb-org
+sudo systemctl enable --now mongod
+sudo systemctl status mongod --no-pager
+mongod --version
+mongosh</code></pre>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/v8.0/tutorial/install-mongodb-on-debian/"
+              rel="noopener"
+              data-en="Official Debian 12 installation for Community 8.0"
+              data-fa="راهنمای رسمی Debian 12 برای Community 8.0"
+              >Official Debian 12 installation for Community 8.0</a
+            >
+          </p>
+        </section>
+        <section id="rhel-install">
+          <h2
+            data-en="7. Install on RHEL / Rocky / AlmaLinux"
+            data-fa="۷. نصب روی RHEL / Rocky / AlmaLinux"
+          >
+            7. Install on RHEL / Rocky / AlmaLinux
+          </h2>
+          <p
+            data-en="The following is for x86_64 RHEL-compatible major version 9 and Community 9.0. For major version 8, change only redhat/9 to redhat/8 in baseurl. Use the exact supported OS major and architecture; do not paste an RPM repository into an APT host. Keep gpgcheck=1."
+            data-fa="فرمان زیر برای خانواده سازگار با RHEL نسخه اصلی 9 با معماری x86_64 و Community 9.0 است. برای نسخه اصلی 8 فقط redhat/9 را در baseurl به redhat/8 تغییر دهید. Major و معماری پشتیبانی‌شده دقیق را انتخاب کنید؛ مخزن RPM را در Host مبتنی بر APT قرار ندهید. gpgcheck=1 را حفظ کنید."
+          >
+            The following is for x86_64 RHEL-compatible major version 9 and
+            Community 9.0. For major version 8, change only redhat/9 to redhat/8
+            in baseurl. Use the exact supported OS major and architecture; do
+            not paste an RPM repository into an APT host. Keep gpgcheck=1.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-bash">sudo tee /etc/yum.repos.d/mongodb-org.repo &gt;/dev/null &lt;&lt;&#x27;EOF&#x27;
+[mongodb-org-9.0]
+name=MongoDB Community Repository
+baseurl=https://repo.mongodb.org/yum/redhat/9/mongodb-org/9.0/x86_64/
+gpgcheck=1
+enabled=1
+gpgkey=https://pgp.mongodb.com/server-9.asc
+EOF
+sudo dnf makecache
+sudo dnf --showduplicates list mongodb-org
+sudo dnf install -y mongodb-org
+sudo systemctl enable --now mongod
+sudo systemctl status mongod --no-pager
+mongod --version
+mongosh</code></pre>
+          <p
+            data-en="RPM packages run as mongod and default to /var/lib/mongo. Keep SELinux enforcing and use MongoDB’s documented SELinux policy; changed data/log paths or ports can require updated labels and policy rules. Diagnose denials before changing permissions. Do not use setenforce 0 as a production fix."
+            data-fa="بسته RPM با حساب mongod و مسیر Data پیش‌فرض /var/lib/mongo اجرا می‌شود. SELinux را Enforcing نگه دارید و Policy مستند MongoDB را به کار ببرید؛ تغییر مسیر Data/Log یا Port ممکن است Label و Rule جدید نیاز داشته باشد. پیش از تغییر Permission، Denial را تشخیص دهید. setenforce 0 راه‌حل Production نیست."
+          >
+            RPM packages run as mongod and default to /var/lib/mongo. Keep
+            SELinux enforcing and use MongoDB’s documented SELinux policy;
+            changed data/log paths or ports can require updated labels and
+            policy rules. Diagnose denials before changing permissions. Do not
+            use setenforce 0 as a production fix.
+          </p>
+          <pre dir="ltr"><code class="language-bash">getenforce
+sudo ausearch -m AVC -ts recent
+sudo ls -Zd /var/lib/mongo /var/log/mongodb</code></pre>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/administration/install-community-linux/?linux-distro=rhel&amp;linux-method=pkg"
+              rel="noopener"
+              data-en="Official Community RHEL installation and SELinux policy"
+              data-fa="نصب رسمی Community روی RHEL و Policy مربوط به SELinux"
+              >Official Community RHEL installation and SELinux policy</a
+            >
+          </p>
+        </section>
+        <section id="configuration">
+          <h2 data-en="8. MongoDB Configuration" data-fa="۸. پیکربندی MongoDB">
+            8. MongoDB Configuration
+          </h2>
+          <p
+            data-en="Edit /etc/mongod.conf using YAML spaces, never tabs. Back up the current file and merge each later fragment into its existing top-level block; duplicate net or security keys are invalid practice. This is a localhost-only bootstrap configuration for Ubuntu/Debian. On RPM systems keep dbPath: /var/lib/mongo and preserve package-required process settings."
+            data-fa="فایل /etc/mongod.conf را با Space در YAML و بدون Tab ویرایش کنید. ابتدا Backup بگیرید و Fragmentهای بعدی را در بلوک Top-Level موجود ادغام کنید؛ تکرار کلید net یا security روش درستی نیست. نمونه زیر Bootstrap محدود به Localhost برای Ubuntu/Debian است. در RPM مسیر dbPath: /var/lib/mongo و تنظیم Process موردنیاز بسته را حفظ کنید."
+          >
+            Edit /etc/mongod.conf using YAML spaces, never tabs. Back up the
+            current file and merge each later fragment into its existing
+            top-level block; duplicate net or security keys are invalid
+            practice. This is a localhost-only bootstrap configuration for
+            Ubuntu/Debian. On RPM systems keep dbPath: /var/lib/mongo and
+            preserve package-required process settings.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-bash">sudo cp -a /etc/mongod.conf /etc/mongod.conf.before-hardening
+sudoedit /etc/mongod.conf</code></pre>
+          <pre dir="ltr"><code class="language-yaml">storage:
+  dbPath: /var/lib/mongodb
+
+systemLog:
+  destination: file
+  logAppend: true
+  path: /var/log/mongodb/mongod.log
+
+net:
+  port: 27017
+  bindIp: 127.0.0.1
+
+processManagement:
+  timeZoneInfo: /usr/share/zoneinfo</code></pre>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th data-en="Parameter" data-fa="پارامتر">Parameter</th>
+                  <th data-en="Purpose" data-fa="کاربرد">Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-en="storage.dbPath" data-fa="storage.dbPath">
+                    storage.dbPath
+                  </td>
+                  <td
+                    data-en="Location of database files; changing it does not migrate data."
+                    data-fa="مسیر فایل‌های دیتابیس؛ تغییر آن داده را مهاجرت نمی‌دهد."
+                  >
+                    Location of database files; changing it does not migrate
+                    data.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="systemLog.destination / path"
+                    data-fa="systemLog.destination / path"
+                  >
+                    systemLog.destination / path
+                  </td>
+                  <td
+                    data-en="Write logs to the named file."
+                    data-fa="ثبت Log در فایل مشخص‌شده."
+                  >
+                    Write logs to the named file.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="systemLog.logAppend"
+                    data-fa="systemLog.logAppend"
+                  >
+                    systemLog.logAppend
+                  </td>
+                  <td
+                    data-en="Append after restart instead of replacing the existing log."
+                    data-fa="پس از Restart به Log قبلی اضافه می‌کند."
+                  >
+                    Append after restart instead of replacing the existing log.
+                  </td>
+                </tr>
+                <tr>
+                  <td data-en="net.port / bindIp" data-fa="net.port / bindIp">
+                    net.port / bindIp
+                  </td>
+                  <td
+                    data-en="TCP listener and local server interfaces, not allowed client addresses."
+                    data-fa="Port Listener و Interfaceهای محلی سرور؛ نه فهرست IP مجاز Client."
+                  >
+                    TCP listener and local server interfaces, not allowed client
+                    addresses.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="processManagement.timeZoneInfo"
+                    data-fa="processManagement.timeZoneInfo"
+                  >
+                    processManagement.timeZoneInfo
+                  </td>
+                  <td
+                    data-en="Timezone database used by timezone-aware operations."
+                    data-fa="دیتابیس Timezone مورد استفاده عملیات مرتبط با منطقه زمانی."
+                  >
+                    Timezone database used by timezone-aware operations.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="security / replication / net.tls"
+                    data-fa="security / replication / net.tls"
+                  >
+                    security / replication / net.tls
+                  </td>
+                  <td
+                    data-en="Access control, cluster membership and transport encryption added below."
+                    data-fa="کنترل دسترسی، عضویت Cluster و رمزنگاری ارتباط که در ادامه اضافه می‌شوند."
+                  >
+                    Access control, cluster membership and transport encryption
+                    added below.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p
+            data-en="WiredTiger is the default storage engine. Avoid obsolete journal.enabled tuning and arbitrary cacheSizeGB values. Keep memory available for the OS and filesystem cache; inspect effective configuration with getCmdLineOpts using an authorized administrative session. Restart for startup-file changes, then inspect logs immediately."
+            data-fa="WiredTiger موتور Storage پیش‌فرض است. از تنظیم قدیمی journal.enabled و مقدار دلخواه cacheSizeGB اجتناب کنید. برای OS و File Cache حافظه باقی بگذارید؛ تنظیم مؤثر را با getCmdLineOpts در Session مدیریتی مجاز بررسی کنید. پس از تغییر فایل Startup، Restart و بلافاصله Log را بررسی کنید."
+          >
+            WiredTiger is the default storage engine. Avoid obsolete
+            journal.enabled tuning and arbitrary cacheSizeGB values. Keep memory
+            available for the OS and filesystem cache; inspect effective
+            configuration with getCmdLineOpts using an authorized administrative
+            session. Restart for startup-file changes, then inspect logs
+            immediately.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/reference/configuration-options/"
+              rel="noopener"
+              data-en="Official mongod configuration options"
+              data-fa="پارامترهای رسمی پیکربندی mongod"
+              >Official mongod configuration options</a
+            >
+          </p>
+        </section>
+        <section id="remote-access">
+          <h2 data-en="9. Secure Remote Access" data-fa="۹. دسترسی Remote امن">
+            9. Secure Remote Access
+          </h2>
+          <pre dir="ltr"><code class="language-yaml">net:
+  port: 27017
+  bindIp: 127.0.0.1,10.10.10.20</code></pre>
+          <p
+            data-en="10.10.10.20 must be an address assigned to this server. bindIp chooses listening interfaces; the firewall restricts client sources. Prepare authentication, TLS and firewall rules before enabling the private listener in sections 10–14. Use a VPN or management network for administration and remove public NAT/port-forwarding rules."
+            data-fa="آدرس 10.10.10.20 باید روی همین سرور وجود داشته باشد. bindIp انتخاب Interface شنود است؛ محدودیت Source Client با Firewall اعمال می‌شود. پیش از فعال‌کردن Listener خصوصی، احراز هویت، TLS و Ruleهای Firewall بخش‌های ۱۰ تا ۱۴ را آماده کنید. مدیریت را از VPN یا Management Network انجام دهید و NAT یا Port Forward عمومی را حذف کنید."
+          >
+            10.10.10.20 must be an address assigned to this server. bindIp
+            chooses listening interfaces; the firewall restricts client sources.
+            Prepare authentication, TLS and firewall rules before enabling the
+            private listener in sections 10–14. Use a VPN or management network
+            for administration and remove public NAT/port-forwarding rules.
+          </p>
+          <p
+            data-en="Security warning: 0.0.0.0 listens on every IPv4 interface, potentially including a public NIC. It is not the default in this guide. An exceptional use requires explicit network isolation, authenticated TLS and verified deny-by-default rules for IPv4 and IPv6; binding alone never authorizes a client."
+            data-fa="هشدار امنیتی: 0.0.0.0 روی همه Interfaceهای IPv4، از جمله NIC احتمالی Public، شنود می‌کند. در این راهنما پیش‌فرض نیست. استفاده استثنایی به Network Isolation، TLS و احراز هویت و بررسی Ruleهای Deny-by-Default در IPv4 و IPv6 نیاز دارد؛ bindIp به‌تنهایی Client را مجاز نمی‌کند."
+          >
+            Security warning: 0.0.0.0 listens on every IPv4 interface,
+            potentially including a public NIC. It is not the default in this
+            guide. An exceptional use requires explicit network isolation,
+            authenticated TLS and verified deny-by-default rules for IPv4 and
+            IPv6; binding alone never authorizes a client.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/core/security-mongodb-configuration/"
+              rel="noopener"
+              data-en="IP binding and network configuration"
+              data-fa="تنظیم شبکه و IP Binding"
+              >IP binding and network configuration</a
+            >
+          </p>
+        </section>
+        <section id="authentication">
+          <h2
+            data-en="10. MongoDB Authentication"
+            data-fa="۱۰. احراز هویت MongoDB"
+          >
+            10. MongoDB Authentication
+          </h2>
+          <p
+            data-en='For the standalone bootstrap only, keep bindIp at 127.0.0.1 while authorization is still off. Connect locally and create the first administrator. passwordPrompt() asks for &lt;STRONG-PASSWORD&gt; without putting it in command history; a literal pwd: "&lt;STRONG-PASSWORD&gt;" illustrates a placeholder but is not suitable for secret handling.'
+            data-fa='فقط در Bootstrap مسیر Standalone، وقتی Authorization هنوز خاموش است bindIp را 127.0.0.1 نگه دارید. به‌صورت محلی وصل شوید و اولین مدیر را بسازید. passwordPrompt() مقدار &lt;STRONG-PASSWORD&gt; را بدون درج در Command History می‌گیرد؛ pwd: "&lt;STRONG-PASSWORD&gt;" فقط نمایش Placeholder است و برای مدیریت Secret مناسب نیست.'
+          >
+            For the standalone bootstrap only, keep bindIp at 127.0.0.1 while
+            authorization is still off. Connect locally and create the first
+            administrator. passwordPrompt() asks for &lt;STRONG-PASSWORD&gt;
+            without putting it in command history; a literal pwd:
+            &quot;&lt;STRONG-PASSWORD&gt;&quot; illustrates a placeholder but is
+            not suitable for secret handling.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-bash">mongosh --host 127.0.0.1 --port 27017</code></pre>
+          <pre dir="ltr"><code class="language-javascript">use admin
+db.createUser({
+  user: &quot;mongoAdmin&quot;,
+  pwd: passwordPrompt(),
+  roles: [
+    { role: &quot;userAdminAnyDatabase&quot;, db: &quot;admin&quot; },
+    { role: &quot;dbAdminAnyDatabase&quot;, db: &quot;admin&quot; },
+    { role: &quot;readWriteAnyDatabase&quot;, db: &quot;admin&quot; }
+  ]
+})</code></pre>
+          <p
+            data-en="These broad roles are for trusted administration only. userAdminAnyDatabase can grant powerful roles and is effectively an escalation capability; this combination is not identical to root and does not include every cluster operation or backup/restore privilege. Never use this account in applications. Create a separate operational user with clusterAdmin for replica management; clusterMonitor for monitoring; backup and restore for their respective tasks."
+            data-fa="این Roleهای گسترده فقط برای مدیریت مورداعتماد هستند. userAdminAnyDatabase امکان اعطای Role قدرتمند و عملاً قابلیت افزایش سطح دسترسی دارد؛ ترکیب بالا معادل دقیق root نیست و همه عملیات Cluster یا Backup/Restore را شامل نمی‌شود. در برنامه از آن استفاده نکنید. برای مدیریت Replica حساب عملیاتی با clusterAdmin، برای مانیتورینگ clusterMonitor و برای وظایف Backup و Restore حساب‌های جدا با Role متناظر بسازید."
+          >
+            These broad roles are for trusted administration only.
+            userAdminAnyDatabase can grant powerful roles and is effectively an
+            escalation capability; this combination is not identical to root and
+            does not include every cluster operation or backup/restore
+            privilege. Never use this account in applications. Create a separate
+            operational user with clusterAdmin for replica management;
+            clusterMonitor for monitoring; backup and restore for their
+            respective tasks.
+          </p>
+          <pre dir="ltr"><code class="language-yaml">security:
+  authorization: enabled</code></pre>
+          <pre
+            dir="ltr"
+          ><code class="language-bash">sudo systemctl restart mongod
+sudo systemctl status mongod --no-pager
+mongosh --host 127.0.0.1 -u mongoAdmin -p --authenticationDatabase admin</code></pre>
+          <pre dir="ltr"><code class="language-javascript">use admin
+db.runCommand({ connectionStatus: 1 })
+db.getSiblingDB(&quot;appdb&quot;).getCollectionNames()</code></pre>
+          <p
+            data-en="Verify that a new unauthenticated session cannot list appdb collections. ping is only a liveness check and can succeed without database authorization. After TLS is enabled use the TLS connection commands in section 14."
+            data-fa="بررسی کنید Session تازه بدون احراز هویت نتواند Collectionهای appdb را فهرست کند. ping صرفاً Liveness است و ممکن است بدون مجوز دیتابیس موفق شود. پس از فعال‌سازی TLS از فرمان اتصال بخش ۱۴ استفاده کنید."
+          >
+            Verify that a new unauthenticated session cannot list appdb
+            collections. ping is only a liveness check and can succeed without
+            database authorization. After TLS is enabled use the TLS connection
+            commands in section 14.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/tutorial/enable-authentication/"
+              rel="noopener"
+              data-en="Official access-control bootstrap"
+              data-fa="راهنمای رسمی راه‌اندازی Access Control"
+              >Official access-control bootstrap</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/reference/built-in-roles/"
+              rel="noopener"
+              data-en="Built-in roles and administrative privileges"
+              data-fa="Roleهای داخلی و دسترسی مدیریتی"
+              >Built-in roles and administrative privileges</a
+            >
+          </p>
+        </section>
+        <section id="application-user">
+          <h2
+            data-en="11. Dedicated Application User"
+            data-fa="۱۱. حساب اختصاصی Application"
+          >
+            11. Dedicated Application User
+          </h2>
+          <p
+            data-en="In the authenticated administrator shell, create a user in appdb. This user authenticates against appdb and only reads/writes that database. Use separate identities for applications, environments and scheduled jobs. A read-only service should receive read, not readWrite."
+            data-fa="در Shell مدیر احراز هویت‌شده، User را در appdb بسازید. این حساب در appdb احراز هویت می‌شود و فقط همان Database را می‌خواند و می‌نویسد. برای هر Application، Environment و Job هویت جدا ایجاد کنید. سرویس Read-Only باید read بگیرد، نه readWrite."
+          >
+            In the authenticated administrator shell, create a user in appdb.
+            This user authenticates against appdb and only reads/writes that
+            database. Use separate identities for applications, environments and
+            scheduled jobs. A read-only service should receive read, not
+            readWrite.
+          </p>
+          <pre dir="ltr"><code class="language-javascript">use appdb
+db.createUser({
+  user: &quot;appuser&quot;,
+  pwd: passwordPrompt(),
+  roles: [{ role: &quot;readWrite&quot;, db: &quot;appdb&quot; }]
+})</code></pre>
+          <pre
+            dir="ltr"
+          ><code class="language-bash">mongosh --host 127.0.0.1 --username appuser --password \
+  --authenticationDatabase appdb appdb</code></pre>
+          <p
+            data-en="Test the application’s required operations and confirm privileged administration is denied. Least privilege includes database roles, network access and OS access. Rotate credentials through the secret store and update applications without recording passwords in source code."
+            data-fa="عملیات لازم برنامه را تست و ردشدن عملیات مدیریتی را تأیید کنید. Least Privilege شامل Role دیتابیس، دسترسی شبکه و OS است. Credential را از طریق Secret Store Rotate کنید و بدون ثبت گذرواژه در Source برنامه را به‌روزرسانی کنید."
+          >
+            Test the application’s required operations and confirm privileged
+            administration is denied. Least privilege includes database roles,
+            network access and OS access. Rotate credentials through the secret
+            store and update applications without recording passwords in source
+            code.
+          </p>
+        </section>
+        <section id="firewall">
+          <h2 data-en="12. Firewall Hardening" data-fa="۱۲. ایمن‌سازی Firewall">
+            12. Firewall Hardening
+          </h2>
+          <p
+            data-en="Allow 27017/TCP only from approved application/management hosts and the replica members. A CIDR is an example; /32 source rules are preferable when host addresses are fixed. An allow rule does not cancel an existing public allow-all rule: audit the complete ruleset and the cloud security group. Keep SSH access and console recovery available before enabling a firewall."
+            data-fa="27017/TCP را فقط برای Hostهای مجاز Application/Management و Memberهای Replica باز کنید. CIDR مثال است؛ برای IP ثابت Ruleهای /32 مناسب‌ترند. Rule محدود، Allow عمومی قبلی را لغو نمی‌کند؛ تمام Ruleها و Cloud Security Group را بررسی کنید. پیش از فعال‌کردن Firewall دسترسی SSH و بازیابی از Console را آماده نگه دارید."
+          >
+            Allow 27017/TCP only from approved application/management hosts and
+            the replica members. A CIDR is an example; /32 source rules are
+            preferable when host addresses are fixed. An allow rule does not
+            cancel an existing public allow-all rule: audit the complete ruleset
+            and the cloud security group. Keep SSH access and console recovery
+            available before enabling a firewall.
+          </p>
+          <h3 data-en="Ubuntu UFW" data-fa="UFW در Ubuntu">Ubuntu UFW</h3>
+          <pre dir="ltr"><code class="language-bash">sudo ufw allow OpenSSH
+sudo ufw default deny incoming
+sudo ufw allow from 10.10.10.0/24 to any port 27017 proto tcp
+# On replica nodes, also allow ONLY the three peer addresses:
+sudo ufw allow from 10.10.20.11 to any port 27017 proto tcp
+sudo ufw allow from 10.10.20.12 to any port 27017 proto tcp
+sudo ufw allow from 10.10.20.13 to any port 27017 proto tcp
+sudo ufw enable
+sudo ufw status verbose</code></pre>
+          <h3
+            data-en="RHEL family firewalld"
+            data-fa="firewalld در خانواده RHEL"
+          >
+            RHEL family firewalld
+          </h3>
+          <pre
+            dir="ltr"
+          ><code class="language-bash">sudo systemctl enable --now firewalld
+sudo firewall-cmd --get-active-zones
+# Example assumes the interface is in public; select its actual zone.
+sudo firewall-cmd --permanent --zone=public --add-service=ssh
+sudo firewall-cmd --permanent --zone=public \
+  --add-rich-rule=&#x27;rule family=&quot;ipv4&quot; source address=&quot;10.10.10.0/24&quot; port protocol=&quot;tcp&quot; port=&quot;27017&quot; accept&#x27;
+for peer in 10.10.20.11 10.10.20.12 10.10.20.13; do
+  sudo firewall-cmd --permanent --zone=public \
+    --add-rich-rule=&quot;rule family=\&quot;ipv4\&quot; source address=\&quot;$peer/32\&quot; port protocol=\&quot;tcp\&quot; port=\&quot;27017\&quot; accept&quot;
+done
+sudo firewall-cmd --reload
+sudo firewall-cmd --zone=public --list-all</code></pre>
+          <p
+            data-en="Confirm the zone target is not ACCEPT and that no broad mongodb service/27017 port rule, trusted-zone assignment, external NAT or IPv6 rule bypasses the restriction. Debian may use nftables instead; implement the equivalent source allowlist in the firewall already managed on that host, rather than mixing firewall managers."
+            data-fa="تأیید کنید Target Zone برابر ACCEPT نباشد و سرویس عمومی mongodb، Rule عمومی 27017، عضویت در Trusted Zone، NAT خارجی یا Rule IPv6 محدودیت را دور نزند. Debian ممکن است nftables داشته باشد؛ Source Allowlist معادل را در Firewall مدیریت‌شده همان Host اعمال کنید و Managerهای Firewall را مخلوط نکنید."
+          >
+            Confirm the zone target is not ACCEPT and that no broad mongodb
+            service/27017 port rule, trusted-zone assignment, external NAT or
+            IPv6 rule bypasses the restriction. Debian may use nftables instead;
+            implement the equivalent source allowlist in the firewall already
+            managed on that host, rather than mixing firewall managers.
+          </p>
+          <p>
+            <a
+              href="https://ubuntu.com/server/docs/how-to/security/firewalls/"
+              rel="noopener"
+              data-en="Ubuntu official firewall documentation"
+              data-fa="مستندات رسمی Firewall در Ubuntu"
+              >Ubuntu official firewall documentation</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_firewalls_and_packet_filters/using-and-configuring-firewalld_firewall-packet-filters"
+              rel="noopener"
+              data-en="Red Hat official firewalld documentation"
+              data-fa="مستندات رسمی firewalld در Red Hat"
+              >Red Hat official firewalld documentation</a
+            >
+          </p>
+        </section>
+        <section id="security">
+          <h2
+            data-en="13. MongoDB Security Hardening"
+            data-fa="۱۳. ایمن‌سازی MongoDB"
+          >
+            13. MongoDB Security Hardening
+          </h2>
+          <figure>
+            <img
+              src="/assets/img/articles/content/mongodb-security-architecture.png"
+              width="1920"
+              height="1080"
+              loading="lazy"
+              decoding="async"
+              alt="MongoDB defense in depth with TLS, authentication, firewall, least privilege and blocked public access"
+              data-en-alt="MongoDB defense in depth with TLS, authentication, firewall, least privilege and blocked public access"
+              data-fa-alt="لایه‌های امنیت MongoDB شامل TLS، احراز هویت، Firewall، Least Privilege و مسدودسازی دسترسی Public"
+            />
+            <figcaption
+              data-en="MongoDB defense in depth with TLS, authentication, firewall, least privilege and blocked public access"
+              data-fa="لایه‌های امنیت MongoDB شامل TLS، احراز هویت، Firewall، Least Privilege و مسدودسازی دسترسی Public"
+            >
+              MongoDB defense in depth with TLS, authentication, firewall, least
+              privilege and blocked public access
+            </figcaption>
+          </figure>
+          <p
+            data-en="Enforce authentication and least privilege, private network isolation, source-restricted firewall rules, restricted bindIp and TLS. Remove public DNS/NAT exposure. Use long unique secrets and dedicated application users. Patch the OS and signed database packages under change control. Keep administrative access on the management network and restrict host login permissions."
+            data-fa="احراز هویت و Least Privilege، Network Isolation خصوصی، Firewall محدود به Source، bindIp محدود و TLS را اعمال کنید. دسترسی Public از DNS/NAT را حذف کنید. Secret طولانی یکتا و حساب مجزای Application داشته باشید. وصله OS و بسته امضاشده دیتابیس را با کنترل تغییر نصب کنید. مدیریت را روی Management Network و Login Host را محدود نگه دارید."
+          >
+            Enforce authentication and least privilege, private network
+            isolation, source-restricted firewall rules, restricted bindIp and
+            TLS. Remove public DNS/NAT exposure. Use long unique secrets and
+            dedicated application users. Patch the OS and signed database
+            packages under change control. Keep administrative access on the
+            management network and restrict host login permissions.
+          </p>
+          <pre dir="ltr"><code class="language-bash">ls -ld /var/lib/mongodb
+ls -ld /var/log/mongodb
+ps aux | grep &#x27;[m]ongod&#x27;
+sudo systemctl show mongod -p User -p Group
+# RPM installations:
+ls -ld /var/lib/mongo
+sudo stat -c &#x27;%U:%G %a %n&#x27; /etc/mongod.conf /etc/mongodb/*.pem</code></pre>
+          <p
+            data-en="mongod must run as its package service user, not root. Data/log directories must be writable by that user and inaccessible to unrelated accounts; private keys and keyfiles must be owner-readable only. Do not repair errors with chmod 777 or an indiscriminate recursive chown. Validate each path, its parent traversal permissions, AppArmor/SELinux policy and the service user."
+            data-fa="mongod باید با Service User بسته اجرا شود، نه root. Data/Log برای همان User قابل نوشتن و برای حساب نامرتبط غیرقابل دسترسی باشند؛ Private Key و KeyFile فقط توسط مالک قابل خواندن باشند. خطا را با chmod 777 یا chown بازگشتی بی‌هدف رفع نکنید. مسیر دقیق، مجوز Traverse والدها، Policy در AppArmor/SELinux و Service User را بررسی کنید."
+          >
+            mongod must run as its package service user, not root. Data/log
+            directories must be writable by that user and inaccessible to
+            unrelated accounts; private keys and keyfiles must be owner-readable
+            only. Do not repair errors with chmod 777 or an indiscriminate
+            recursive chown. Validate each path, its parent traversal
+            permissions, AppArmor/SELinux policy and the service user.
+          </p>
+          <p
+            data-en="MongoDB Community does not provide the Enterprise native database audit facility; enabling an Enterprise-only auditLog setting is not a Community solution. Design OS audit, controlled administrative access, application audit events and protected centralized logs around your requirements. Ordinary mongod logs are not a complete compliance audit trail. Redact and restrict logs because queries can contain sensitive values."
+            data-fa="MongoDB Community امکانات Native Database Audit نسخه Enterprise را ندارد؛ افزودن auditLog اختصاصی Enterprise راهکار Community نیست. OS Audit، دسترسی کنترل‌شده مدیر، Audit Event برنامه و Log متمرکز محافظت‌شده را با نیاز سازمان طراحی کنید. Log معمول mongod به‌تنهایی Audit Trail کامل Compliance نیست. Log را محدود و Redact کنید چون Query ممکن است مقدار حساس داشته باشد."
+          >
+            MongoDB Community does not provide the Enterprise native database
+            audit facility; enabling an Enterprise-only auditLog setting is not
+            a Community solution. Design OS audit, controlled administrative
+            access, application audit events and protected centralized logs
+            around your requirements. Ordinary mongod logs are not a complete
+            compliance audit trail. Redact and restrict logs because queries can
+            contain sensitive values.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/administration/security-checklist/"
+              rel="noopener"
+              data-en="Official self-managed security checklist"
+              data-fa="چک‌لیست رسمی امنیت Self-Managed"
+              >Official self-managed security checklist</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/core/auditing/"
+              rel="noopener"
+              data-en="MongoDB auditing availability"
+              data-fa="دامنه دسترسی امکانات Audit در MongoDB"
+              >MongoDB auditing availability</a
+            >
+          </p>
+        </section>
+        <section id="tls">
+          <h2 data-en="14. TLS Encryption" data-fa="۱۴. رمزنگاری TLS">
+            14. TLS Encryption
+          </h2>
+          <p
+            data-en="Issue a certificate from an internal or trusted CA for each server. mongodb.pem contains that server’s certificate chain and private key; ca.pem contains CA certificates only. SANs must match the DNS names or IPs used by clients and peers; include localhost/127.0.0.1 only if you will use those names for verified local bootstrap. Never reuse the same private key across nodes."
+            data-fa="برای هر سرور از Internal CA یا Trusted CA گواهی تهیه کنید. mongodb.pem شامل Certificate Chain و Private Key همان سرور و ca.pem فقط شامل CA Certificate است. SAN باید با DNS/IP استفاده‌شده در Client و Peer تطبیق داشته باشد؛ localhost/127.0.0.1 را فقط در صورت نیاز به Bootstrap محلی معتبر اضافه کنید. Private Key یکسان را بین Nodeها استفاده نکنید."
+          >
+            Issue a certificate from an internal or trusted CA for each server.
+            mongodb.pem contains that server’s certificate chain and private
+            key; ca.pem contains CA certificates only. SANs must match the DNS
+            names or IPs used by clients and peers; include localhost/127.0.0.1
+            only if you will use those names for verified local bootstrap. Never
+            reuse the same private key across nodes.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-bash"># Set mongodb on Ubuntu/Debian; set mongod on RPM systems.
+MONGO_SERVICE_USER=mongodb
+sudo install -d -m 750 -o &quot;$MONGO_SERVICE_USER&quot; -g &quot;$MONGO_SERVICE_USER&quot; /etc/mongodb
+# Provision the CA-issued files securely before running these commands.
+sudo chown &quot;$MONGO_SERVICE_USER:$MONGO_SERVICE_USER&quot; /etc/mongodb/mongodb.pem
+sudo chmod 400 /etc/mongodb/mongodb.pem
+sudo chown root:&quot;$MONGO_SERVICE_USER&quot; /etc/mongodb/ca.pem
+sudo chmod 640 /etc/mongodb/ca.pem</code></pre>
+          <pre dir="ltr"><code class="language-yaml">net:
+  port: 27017
+  bindIp: 127.0.0.1,10.10.10.20
+  tls:
+    mode: requireTLS
+    certificateKeyFile: /etc/mongodb/mongodb.pem
+    CAFile: /etc/mongodb/ca.pem
+    allowConnectionsWithoutCertificates: true
+
+security:
+  authorization: enabled</code></pre>
+          <p
+            data-en="This TLS+SCRAM profile allows clients without a client certificate while still requiring encrypted transport, a valid server certificate and database credentials. With CAFile, client certificates are otherwise required by default; omit allowConnectionsWithoutCertificates or set false when you deliberately require mutual TLS, and provision a client PEM. A presented invalid certificate is still rejected. Do not enable allowInvalidCertificates or allowInvalidHostnames."
+            data-fa="این Profile با TLS+SCRAM به Client بدون Client Certificate اجازه اتصال رمزنگاری‌شده می‌دهد، اما Certificate معتبر سرور و Credential دیتابیس همچنان لازم‌اند. با CAFile، به‌صورت پیش‌فرض Client Certificate نیز لازم است؛ برای mTLS عمدی گزینه allowConnectionsWithoutCertificates را حذف یا false و Client PEM را Provision کنید. Certificate ارائه‌شده نامعتبر همچنان رد می‌شود. allowInvalidCertificates یا allowInvalidHostnames را فعال نکنید."
+          >
+            This TLS+SCRAM profile allows clients without a client certificate
+            while still requiring encrypted transport, a valid server
+            certificate and database credentials. With CAFile, client
+            certificates are otherwise required by default; omit
+            allowConnectionsWithoutCertificates or set false when you
+            deliberately require mutual TLS, and provision a client PEM. A
+            presented invalid certificate is still rejected. Do not enable
+            allowInvalidCertificates or allowInvalidHostnames.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-bash">sudo systemctl restart mongod
+sudo journalctl -u mongod -n 50 --no-pager
+mongosh --host &#x27;&lt;HOSTNAME&gt;&#x27; --port 27017 --tls \
+  --tlsCAFile /etc/mongodb/ca.pem \
+  -u mongoAdmin -p --authenticationDatabase admin</code></pre>
+          <p
+            data-en="Confirm trusted CA, hostname matching, expiry and that plaintext connections are rejected. Coordinate certificate renewal before expiry. Internal replica TLS must also work in both directions; when a member certificate serves as both server and client, its extended key usage must support serverAuth and clientAuth."
+            data-fa="CA مورداعتماد، تطبیق Hostname، Expiry و رد اتصال Plaintext را تأیید کنید. Renewal را پیش از انقضا هماهنگ کنید. TLS داخلی Replica نیز باید دوطرفه کار کند؛ وقتی Certificate عضو هم نقش Server و هم Client دارد، EKU باید serverAuth و clientAuth را پشتیبانی کند."
+          >
+            Confirm trusted CA, hostname matching, expiry and that plaintext
+            connections are rejected. Coordinate certificate renewal before
+            expiry. Internal replica TLS must also work in both directions; when
+            a member certificate serves as both server and client, its extended
+            key usage must support serverAuth and clientAuth.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/tutorial/configure-ssl/"
+              rel="noopener"
+              data-en="Official TLS configuration"
+              data-fa="راهنمای رسمی پیکربندی TLS"
+              >Official TLS configuration</a
+            >
+          </p>
+        </section>
+        <section id="replica-set">
+          <h2
+            data-en="15. Production Replica Set"
+            data-fa="۱۵. Replica Set در Production"
+          >
+            15. Production Replica Set
+          </h2>
+          <figure>
+            <img
+              src="/assets/img/articles/content/mongodb-replica-set.png"
+              width="1920"
+              height="1080"
+              loading="lazy"
+              decoding="async"
+              alt="Three-member MongoDB rs0 replica set with primary, secondaries, majority election and automatic failover"
+              data-en-alt="Three-member MongoDB rs0 replica set with primary, secondaries, majority election and automatic failover"
+              data-fa-alt="Replica Set سه‌عضوی rs0 با Primary، Secondaryها، Election اکثریت و Failover خودکار"
+            />
+            <figcaption
+              data-en="Three-member MongoDB rs0 replica set with primary, secondaries, majority election and automatic failover"
+              data-fa="Replica Set سه‌عضوی rs0 با Primary، Secondaryها، Election اکثریت و Failover خودکار"
+            >
+              Three-member MongoDB rs0 replica set with primary, secondaries,
+              majority election and automatic failover
+            </figcaption>
+          </figure>
+          <pre dir="ltr"><code class="language-text">mongo01 - 10.10.20.11
+mongo02 - 10.10.20.12
+mongo03 - 10.10.20.13
+Replica Set: rs0</code></pre>
+          <p
+            data-en="Use three data-bearing voting members in independent failure domains with matching server versions. Use stable DNS names; mongo01/mongo02/mongo03 are short-name examples, and FQDNs are preferable in a real PKI. DNS must resolve from every member and application host and match certificate SANs. Do not configure member host fields as bare IP addresses."
+            data-fa="سه Member رأی‌دهنده دارای Data را در Failure Domain مستقل و با Version یکسان قرار دهید. از DNS پایدار استفاده کنید؛ mongo01/mongo02/mongo03 نام کوتاه نمونه‌اند و FQDN در PKI واقعی بهتر است. DNS باید از هر Member و Application Host Resolve و با SAN گواهی مطابق باشد. host اعضا را به‌صورت IP خالی تنظیم نکنید."
+          >
+            Use three data-bearing voting members in independent failure domains
+            with matching server versions. Use stable DNS names;
+            mongo01/mongo02/mongo03 are short-name examples, and FQDNs are
+            preferable in a real PKI. DNS must resolve from every member and
+            application host and match certificate SANs. Do not configure member
+            host fields as bare IP addresses.
+          </p>
+          <p
+            data-en="Fresh-cluster order: install on all nodes, stop mongod, prepare mounts and TLS certificates, configure the peer/application firewall rules, distribute the single shared keyfile from section 16, then configure and start every member. Never temporarily expose an unauthenticated replica listener. Existing standalone conversion requires backup, a separate migration plan and authenticating with existing users; the localhost exception is unavailable if users already exist."
+            data-fa="ترتیب Cluster تازه: روی همه Nodeها نصب کنید، mongod را Stop کنید، Mount و Certificateهای TLS را آماده کنید، Ruleهای Firewall برای Peer/Application را اعمال کنید، KeyFile مشترک بخش ۱۶ را توزیع کنید، سپس همه Memberها را Configure و Start کنید. Listener Replica بدون احراز هویت را موقتاً باز نکنید. تبدیل Standalone موجود به Backup، برنامه مهاجرت جدا و اتصال با User موجود نیاز دارد؛ با وجود User قبلی، Localhost Exception فعال نیست."
+          >
+            Fresh-cluster order: install on all nodes, stop mongod, prepare
+            mounts and TLS certificates, configure the peer/application firewall
+            rules, distribute the single shared keyfile from section 16, then
+            configure and start every member. Never temporarily expose an
+            unauthenticated replica listener. Existing standalone conversion
+            requires backup, a separate migration plan and authenticating with
+            existing users; the localhost exception is unavailable if users
+            already exist.
+          </p>
+          <pre dir="ltr"><code class="language-bash">sudo systemctl stop mongod
+getent hosts mongo01 mongo02 mongo03</code></pre>
+          <p
+            data-en="After preparing section 16, merge the following on every node. Substitute that node’s private IP: .11, .12 or .13. Use /var/lib/mongo on RPM installations. This is the complete TLS+SCRAM/keyfile teaching profile, with access control enabled from first cluster startup."
+            data-fa="پس از آماده‌سازی بخش ۱۶، تنظیم زیر را روی هر Node ادغام کنید. IP خصوصی همان Node یعنی .11، .12 یا .13 را قرار دهید. در RPM از /var/lib/mongo استفاده کنید. این Profile کامل آموزشی TLS+SCRAM/KeyFile است و Access Control از اولین Start Cluster فعال است."
+          >
+            After preparing section 16, merge the following on every node.
+            Substitute that node’s private IP: .11, .12 or .13. Use
+            /var/lib/mongo on RPM installations. This is the complete
+            TLS+SCRAM/keyfile teaching profile, with access control enabled from
+            first cluster startup.
+          </p>
+          <pre dir="ltr"><code class="language-yaml">storage:
+  dbPath: /var/lib/mongodb
+systemLog:
+  destination: file
+  logAppend: true
+  path: /var/log/mongodb/mongod.log
+net:
+  port: 27017
+  bindIp: 127.0.0.1,10.10.20.11
+  tls:
+    mode: requireTLS
+    certificateKeyFile: /etc/mongodb/mongodb.pem
+    CAFile: /etc/mongodb/ca.pem
+    allowConnectionsWithoutCertificates: true
+security:
+  keyFile: /etc/mongodb/keyfile
+  authorization: enabled
+replication:
+  replSetName: rs0
+processManagement:
+  timeZoneInfo: /usr/share/zoneinfo</code></pre>
+          <pre
+            dir="ltr"
+          ><code class="language-bash"># Run on each node after certificates and shared keyfile exist.
+sudo systemctl restart mongod
+sudo systemctl enable mongod
+sudo systemctl status mongod --no-pager
+# Run locally on mongo01; the certificate must cover 127.0.0.1.
+mongosh &#x27;mongodb://127.0.0.1:27017/?directConnection=true&#x27; \
+  --tls --tlsCAFile /etc/mongodb/ca.pem</code></pre>
+          <p
+            data-en="For a fresh cluster with no users, the localhost exception allows initial configuration over loopback. Run rs.initiate once, on mongo01 only. Authentication being enabled does not require disabling it for bootstrap."
+            data-fa="در Cluster تازه بدون User، Localhost Exception اجازه تنظیم اولیه از Loopback را می‌دهد. rs.initiate را فقط یک بار روی mongo01 اجرا کنید. فعال‌بودن Authentication نیازمند خاموش‌کردن آن برای Bootstrap نیست."
+          >
+            For a fresh cluster with no users, the localhost exception allows
+            initial configuration over loopback. Run rs.initiate once, on
+            mongo01 only. Authentication being enabled does not require
+            disabling it for bootstrap.
+          </p>
+          <pre dir="ltr"><code class="language-javascript">rs.initiate({
+  _id: &quot;rs0&quot;,
+  members: [
+    { _id: 0, host: &quot;mongo01:27017&quot; },
+    { _id: 1, host: &quot;mongo02:27017&quot; },
+    { _id: 2, host: &quot;mongo03:27017&quot; }
+  ]
+})
+rs.status()
+db.hello().isWritablePrimary</code></pre>
+          <p
+            data-en="Wait for election. If mongo01 is not primary, connect locally on the elected primary using the same loopback TLS method. Create mongoAdmin there with the userAdminAnyDatabase role and the administrator example from section 10, then reconnect with credentials. The exception closes after the first user. Create appuser on the primary once; users replicate, so do not create them separately on every secondary."
+            data-fa="منتظر Election بمانید. اگر mongo01 Primary نیست، روی Primary منتخب با همان روش TLS محلی متصل شوید. mongoAdmin را با Role مدیریت User و مثال مدیر بخش ۱۰ همان‌جا بسازید و سپس با Credential دوباره وصل شوید. Exception با اولین User بسته می‌شود. appuser را یک بار روی Primary بسازید؛ Userها Replicate می‌شوند و نباید روی هر Secondary جدا ساخته شوند."
+          >
+            Wait for election. If mongo01 is not primary, connect locally on the
+            elected primary using the same loopback TLS method. Create
+            mongoAdmin there with the userAdminAnyDatabase role and the
+            administrator example from section 10, then reconnect with
+            credentials. The exception closes after the first user. Create
+            appuser on the primary once; users replicate, so do not create them
+            separately on every secondary.
+          </p>
+          <h3
+            data-en="Dedicated cluster operations account"
+            data-fa="حساب جداگانه عملیات Cluster"
+          >
+            Dedicated cluster operations account
+          </h3>
+          <pre dir="ltr"><code class="language-javascript">use admin
+db.createUser({
+  user: &quot;mongoOps&quot;,
+  pwd: passwordPrompt(),
+  roles: [{ role: &quot;clusterAdmin&quot;, db: &quot;admin&quot; }]
+})</code></pre>
+          <pre
+            dir="ltr"
+          ><code class="language-bash">mongosh &#x27;mongodb://mongo01:27017,mongo02:27017,mongo03:27017/admin?replicaSet=rs0&#x27; \
+  --tls --tlsCAFile /etc/mongodb/ca.pem \
+  --username mongoOps --password --authenticationDatabase admin</code></pre>
+          <pre dir="ltr"><code class="language-javascript">rs.status()
+rs.conf()
+db.hello()
+rs.printSecondaryReplicationInfo()</code></pre>
+          <p
+            data-en="The primary accepts writes; secondaries asynchronously apply its oplog. A three-voter set needs two votes to elect a primary, and an eligible up-to-date secondary can take over. Losing two members normally removes write availability. Failover includes an election interval and connection recovery: test application retry behavior rather than assuming zero downtime. mongo01 is the illustrated primary, not permanently fixed as primary."
+            data-fa="Primary عملیات Write را می‌پذیرد و Secondaryها Oplog را به‌صورت Async اعمال می‌کنند. Set با سه رأی‌دهنده برای انتخاب Primary به دو رأی نیاز دارد و Secondary واجدشرایط و به‌روز می‌تواند جایگزین شود. فقدان دو Member معمولاً Write Availability را از بین می‌برد. Failover شامل زمان Election و بازیابی اتصال است؛ Retry برنامه را تست کنید و Downtime صفر فرض نکنید. mongo01 در شکل Primary نمونه است، نه Primary دائمی."
+          >
+            The primary accepts writes; secondaries asynchronously apply its
+            oplog. A three-voter set needs two votes to elect a primary, and an
+            eligible up-to-date secondary can take over. Losing two members
+            normally removes write availability. Failover includes an election
+            interval and connection recovery: test application retry behavior
+            rather than assuming zero downtime. mongo01 is the illustrated
+            primary, not permanently fixed as primary.
+          </p>
+          <p
+            data-en="Use explicit majority write concern for writes that require majority acknowledgment and appropriate read concern for consistent reads. Retryable writes help selected operations; application idempotency and transaction handling remain necessary. Size the oplog retention window longer than planned outages and peak lag. Replication copies accidental deletes too; it is not backup."
+            data-fa="برای Write نیازمند تأیید اکثریت از Write Concern صریح majority و برای Read سازگار از Read Concern متناسب استفاده کنید. Retryable Write به عملیات منتخب کمک می‌کند؛ Idempotency و مدیریت Transaction برنامه همچنان لازم است. پنجره نگهداری Oplog را از Outage برنامه‌ریزی‌شده و Lag اوج بزرگ‌تر بگیرید. Replication حذف اشتباه را نیز کپی می‌کند و Backup نیست."
+          >
+            Use explicit majority write concern for writes that require majority
+            acknowledgment and appropriate read concern for consistent reads.
+            Retryable writes help selected operations; application idempotency
+            and transaction handling remain necessary. Size the oplog retention
+            window longer than planned outages and peak lag. Replication copies
+            accidental deletes too; it is not backup.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/tutorial/deploy-replica-set-with-keyfile-access-control/"
+              rel="noopener"
+              data-en="Official secure replica-set bootstrap and localhost exception"
+              data-fa="Bootstrap امن Replica Set و Localhost Exception در مستندات رسمی"
+              >Official secure replica-set bootstrap and localhost exception</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/core/replica-set-elections/"
+              rel="noopener"
+              data-en="Official replica elections and quorum behavior"
+              data-fa="رفتار رسمی Election و Quorum"
+              >Official replica elections and quorum behavior</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/reference/write-concern/"
+              rel="noopener"
+              data-en="Write concern and majority acknowledgment"
+              data-fa="Write Concern و تأیید اکثریت"
+              >Write concern and majority acknowledgment</a
+            >
+          </p>
+        </section>
+        <section id="replica-security">
+          <h2
+            data-en="16. Replica Set Internal Authentication"
+            data-fa="۱۶. احراز هویت داخلی Replica Set"
+          >
+            16. Replica Set Internal Authentication
+          </h2>
+          <p
+            data-en="Internal authentication verifies member identity; client authorization is a separate layer. Prepare this section before starting the cluster in section 15. The requested keyfile example is supported, but current MongoDB guidance recommends X.509 membership authentication for production and keyfiles for development/testing. Treat keyfile+TLS as a constrained baseline requiring a documented security decision, not the strongest production profile."
+            data-fa="Internal Authentication هویت Member را تأیید می‌کند و Client Authorization لایه‌ای جداست. این بخش را پیش از Start Cluster بخش ۱۵ انجام دهید. مثال KeyFile درخواستی پشتیبانی می‌شود، اما راهنمای فعلی MongoDB برای Production، احراز هویت عضویت با X.509 و برای Development/Testing، KeyFile را توصیه می‌کند. KeyFile+TLS را مبنایی با محدودیت و نیازمند تصمیم امنیتی مستند بدانید، نه قوی‌ترین Profile تولید."
+          >
+            Internal authentication verifies member identity; client
+            authorization is a separate layer. Prepare this section before
+            starting the cluster in section 15. The requested keyfile example is
+            supported, but current MongoDB guidance recommends X.509 membership
+            authentication for production and keyfiles for development/testing.
+            Treat keyfile+TLS as a constrained baseline requiring a documented
+            security decision, not the strongest production profile.
+          </p>
+          <h3
+            data-en="Keyfile example: generate once"
+            data-fa="مثال KeyFile: تولید فقط یک بار"
+          >
+            Keyfile example: generate once
+          </h3>
+          <pre
+            dir="ltr"
+          ><code class="language-bash"># Generate ONCE on mongo01. Use mongod for RPM installations.
+MONGO_SERVICE_USER=mongodb
+sudo install -d -m 750 -o &quot;$MONGO_SERVICE_USER&quot; -g &quot;$MONGO_SERVICE_USER&quot; /etc/mongodb
+sudo sh -c &#x27;umask 077; openssl rand -base64 756 &gt; /etc/mongodb/keyfile&#x27;
+sudo chmod 400 /etc/mongodb/keyfile
+sudo chown &quot;$MONGO_SERVICE_USER:$MONGO_SERVICE_USER&quot; /etc/mongodb/keyfile</code></pre>
+          <p
+            data-en="Deliver exactly this file to /etc/mongodb/keyfile on mongo02 and mongo03 through your authenticated encrypted configuration/secret distribution channel. Apply owner mongodb:mongodb on Debian/Ubuntu or mongod:mongod on RPM, mode 400, on every member. Do not generate a new random key independently on each node and do not publish key bytes or hashes. Ensure the parent directory is traversable by the service user and SELinux permits reads."
+            data-fa="همین فایل را دقیقاً با کانال توزیع Config/Secret رمزنگاری‌شده و احراز هویت‌شده در /etc/mongodb/keyfile روی mongo02 و mongo03 قرار دهید. مالک را در Debian/Ubuntu برابر mongodb:mongodb و در RPM برابر mongod:mongod و Mode را 400 روی همه Memberها تنظیم کنید. روی هر Node کلید تصادفی مستقل تولید نکنید و Byte یا Hash کلید را منتشر نکنید. Traverse والد و اجازه خواندن SELinux را بررسی کنید."
+          >
+            Deliver exactly this file to /etc/mongodb/keyfile on mongo02 and
+            mongo03 through your authenticated encrypted configuration/secret
+            distribution channel. Apply owner mongodb:mongodb on Debian/Ubuntu
+            or mongod:mongod on RPM, mode 400, on every member. Do not generate
+            a new random key independently on each node and do not publish key
+            bytes or hashes. Ensure the parent directory is traversable by the
+            service user and SELinux permits reads.
+          </p>
+          <pre dir="ltr"><code class="language-yaml">security:
+  keyFile: /etc/mongodb/keyfile
+  authorization: enabled
+replication:
+  replSetName: rs0</code></pre>
+          <p
+            data-en="A keyfile enables membership authentication and access control but does not encrypt the wire: retain requireTLS. Plan key rotation with overlapping accepted keys and the official rolling procedure so peers continue to share a key. Store the keyfile outside Git and database backups in an access-controlled secret system."
+            data-fa="KeyFile احراز هویت عضویت و Access Control را فعال می‌کند اما Wire را رمز نمی‌کند؛ requireTLS را حفظ کنید. Rotation را با کلیدهای پذیرفته‌شده همپوشان و مسیر Rolling رسمی انجام دهید تا Peerها همیشه کلید مشترک داشته باشند. KeyFile را خارج از Git و Backup داده در Secret System با کنترل دسترسی نگه دارید."
+          >
+            A keyfile enables membership authentication and access control but
+            does not encrypt the wire: retain requireTLS. Plan key rotation with
+            overlapping accepted keys and the official rolling procedure so
+            peers continue to share a key. Store the keyfile outside Git and
+            database backups in an access-controlled secret system.
+          </p>
+          <h3
+            data-en="Recommended production alternative: X.509 members"
+            data-fa="گزینه توصیه‌شده Production: اعضا با X.509"
+          >
+            Recommended production alternative: X.509 members
+          </h3>
+          <pre dir="ltr"><code class="language-yaml">security:
+  authorization: enabled
+  clusterAuthMode: x509
+net:
+  port: 27017
+  bindIp: 127.0.0.1,10.10.20.11
+  tls:
+    mode: requireTLS
+    certificateKeyFile: /etc/mongodb/mongodb.pem
+    clusterFile: /etc/mongodb/member.pem
+    CAFile: /etc/mongodb/ca.pem
+    allowConnectionsWithoutCertificates: true
+replication:
+  replSetName: rs0</code></pre>
+          <p
+            data-en="For a new cluster, choose this alternative instead of keyFile on every member and use the same first-user bootstrap sequence. member.pem is a unique CA-issued member certificate plus key with clientAuth usage; the server certificate needs serverAuth. Membership O/OU/DC attributes must match across member certificates and differ from client identities. SANs must match advertised names. This still permits SCRAM application users over TLS; use dedicated X.509 client identities and mutual TLS if required by policy. Provision and validate the PKI before deployment."
+            data-fa="در Cluster تازه این گزینه را به جای keyFile روی همه Memberها انتخاب و همان ترتیب Bootstrap اولین User را دنبال کنید. member.pem گواهی و کلید یکتای عضو از CA با کاربرد clientAuth است؛ گواهی سرور serverAuth می‌خواهد. Attributeهای عضویت O/OU/DC باید میان اعضا مطابق و از هویت Client جدا باشند. SAN با نام معرفی‌شده تطبیق کند. این Profile هنوز User برنامه با SCRAM روی TLS را می‌پذیرد؛ در صورت نیاز Policy از هویت Client مجزای X.509 و mTLS استفاده کنید. PKI را پیش از استقرار Provision و اعتبارسنجی کنید."
+          >
+            For a new cluster, choose this alternative instead of keyFile on
+            every member and use the same first-user bootstrap sequence.
+            member.pem is a unique CA-issued member certificate plus key with
+            clientAuth usage; the server certificate needs serverAuth.
+            Membership O/OU/DC attributes must match across member certificates
+            and differ from client identities. SANs must match advertised names.
+            This still permits SCRAM application users over TLS; use dedicated
+            X.509 client identities and mutual TLS if required by policy.
+            Provision and validate the PKI before deployment.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/tutorial/configure-x509-member-authentication/"
+              rel="noopener"
+              data-en="Official production X.509 membership authentication"
+              data-fa="احراز هویت عضویت Production با X.509"
+              >Official production X.509 membership authentication</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/tutorial/rotate-key-replica-set/"
+              rel="noopener"
+              data-en="Replica-set key rotation"
+              data-fa="Rotation کلید Replica Set"
+              >Replica-set key rotation</a
+            >
+          </p>
+        </section>
+        <section id="connection-string">
+          <h2
+            data-en="17. MongoDB Connection Strings and Secrets"
+            data-fa="۱۷. Connection String و Secretها"
+          >
+            17. MongoDB Connection Strings and Secrets
+          </h2>
+          <h3 data-en="Standalone URI" data-fa="URI برای Standalone">
+            Standalone URI
+          </h3>
+          <pre
+            dir="ltr"
+          ><code class="language-text">mongodb://appuser:&lt;STRONG-PASSWORD&gt;@10.10.10.20:27017/appdb?authSource=appdb&amp;tls=true</code></pre>
+          <h3 data-en="Replica-set URI" data-fa="URI برای Replica Set">
+            Replica-set URI
+          </h3>
+          <pre
+            dir="ltr"
+          ><code class="language-text">mongodb://appuser:&lt;STRONG-PASSWORD&gt;@mongo01:27017,mongo02:27017,mongo03:27017/appdb?replicaSet=rs0&amp;authSource=appdb&amp;tls=true&amp;retryWrites=true&amp;w=majority</code></pre>
+          <p
+            data-en="These URI templates are not literal executable passwords. Percent-encode reserved characters in username/password components, or provide credentials separately through driver options. appuser was created in appdb, so authSource=appdb; administrators created in admin use authSource=admin. Configure the driver’s trusted CA file separately and verify server names; tls=true does not install your internal CA."
+            data-fa="این URIها Template هستند و Password قابل اجرای واقعی ندارند. کاراکترهای رزروشده Username/Password را Percent-Encode یا Credential را جدا در Driver Option ارائه کنید. appuser در appdb ساخته شده، پس authSource=appdb است؛ مدیر ساخته‌شده در admin از authSource=admin استفاده می‌کند. فایل CA مورداعتماد را جدا در Driver Configure و نام سرور را اعتبارسنجی کنید؛ tls=true، Internal CA شما را نصب نمی‌کند."
+          >
+            These URI templates are not literal executable passwords.
+            Percent-encode reserved characters in username/password components,
+            or provide credentials separately through driver options. appuser
+            was created in appdb, so authSource=appdb; administrators created in
+            admin use authSource=admin. Configure the driver’s trusted CA file
+            separately and verify server names; tls=true does not install your
+            internal CA.
+          </p>
+          <p
+            data-en="Keep real credentials out of Git, logs, shell history and process arguments. Use a vault or CI/CD secret store; environment variables are convenient but visible to privileged processes and can leak in diagnostics. Kubernetes Secrets need RBAC and encryption at rest: base64 encoding is not encryption. Set bounded connection pools, timeouts and retry policies, then test topology discovery and failover from the application network."
+            data-fa="Credential واقعی را در Git، Log، Shell History و Process Argument قرار ندهید. از Vault یا CI/CD Secret Store استفاده کنید؛ Environment Variable ساده است اما برای Process دارای دسترسی بالا قابل مشاهده و در Diagnostic قابل نشت است. Kubernetes Secret به RBAC و Encryption at Rest نیاز دارد؛ Base64 رمزنگاری نیست. Connection Pool محدود، Timeout و Retry Policy را تنظیم و Topology Discovery و Failover را از شبکه برنامه تست کنید."
+          >
+            Keep real credentials out of Git, logs, shell history and process
+            arguments. Use a vault or CI/CD secret store; environment variables
+            are convenient but visible to privileged processes and can leak in
+            diagnostics. Kubernetes Secrets need RBAC and encryption at rest:
+            base64 encoding is not encryption. Set bounded connection pools,
+            timeouts and retry policies, then test topology discovery and
+            failover from the application network.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/reference/connection-string/"
+              rel="noopener"
+              data-en="Official MongoDB URI format"
+              data-fa="فرمت رسمی URI اتصال MongoDB"
+              >Official MongoDB URI format</a
+            >
+          </p>
+        </section>
+        <section id="backup">
+          <h2
+            data-en="18. Backup and Tested Recovery"
+            data-fa="۱۸. Backup و بازیابی آزموده‌شده"
+          >
+            18. Backup and Tested Recovery
+          </h2>
+          <figure>
+            <img
+              src="/assets/img/articles/content/mongodb-backup-monitoring.png"
+              width="1920"
+              height="1080"
+              loading="lazy"
+              decoding="async"
+              alt="MongoDB backup server and parallel Prometheus Grafana Zabbix and syslog monitoring architecture"
+              data-en-alt="MongoDB backup server and parallel Prometheus Grafana Zabbix and syslog monitoring architecture"
+              data-fa-alt="معماری Backup Server و مسیرهای موازی مانیتورینگ Prometheus، Grafana، Zabbix و Syslog برای MongoDB"
+            />
+            <figcaption
+              data-en="MongoDB backup server and parallel Prometheus Grafana Zabbix and syslog monitoring architecture"
+              data-fa="معماری Backup Server و مسیرهای موازی مانیتورینگ Prometheus، Grafana، Zabbix و Syslog برای MongoDB"
+            >
+              MongoDB backup server and parallel Prometheus Grafana Zabbix and
+              syslog monitoring architecture
+            </figcaption>
+          </figure>
+          <p
+            data-en="Define RPO (acceptable data loss), RTO (recovery time), retention and off-site/immutable copies. Encrypt backup data, restrict access and keep an independent copy outside the MongoDB server’s failure domain. Record tool/server versions and test restores regularly. mongodump and mongorestore belong to MongoDB Database Tools, which have their own version numbering; check their compatibility with your server before scheduling jobs."
+            data-fa="RPO یعنی داده قابل ازدست‌رفتن، RTO یعنی زمان بازیابی، Retention و نسخه Off-site/Immutable را تعیین کنید. Backup را رمز، دسترسی را محدود و نسخه مستقل را خارج از Failure Domain سرور MongoDB نگه دارید. Version ابزار/سرور را ثبت و Restore را دوره‌ای تست کنید. mongodump و mongorestore از MongoDB Database Tools با Version مستقل هستند؛ سازگاری با سرور را پیش از زمان‌بندی Job بررسی کنید."
+          >
+            Define RPO (acceptable data loss), RTO (recovery time), retention
+            and off-site/immutable copies. Encrypt backup data, restrict access
+            and keep an independent copy outside the MongoDB server’s failure
+            domain. Record tool/server versions and test restores regularly.
+            mongodump and mongorestore belong to MongoDB Database Tools, which
+            have their own version numbering; check their compatibility with
+            your server before scheduling jobs.
+          </p>
+          <pre dir="ltr"><code class="language-bash">mongodump --version
+mongorestore --version</code></pre>
+          <h3
+            data-en="Dedicated backup and restore identities"
+            data-fa="هویت مجزای Backup و Restore"
+          >
+            Dedicated backup and restore identities
+          </h3>
+          <pre dir="ltr"><code class="language-javascript">use admin
+db.createUser({
+  user: &quot;mongoBackup&quot;,
+  pwd: passwordPrompt(),
+  roles: [{ role: &quot;backup&quot;, db: &quot;admin&quot; }]
+})
+db.createUser({
+  user: &quot;mongoRestore&quot;,
+  pwd: passwordPrompt(),
+  roles: [{ role: &quot;restore&quot;, db: &quot;admin&quot; }]
+})</code></pre>
+          <p
+            data-en="Create the restore identity on the isolated restore target, not automatically on every production cluster. The broad mongoAdmin roles shown earlier do not substitute for the backup/restore roles. Omitting password flags below prompts interactively; scheduled jobs must read a mode-600 Tools --config file provisioned by the secret system, never a password embedded in --uri."
+            data-fa="حساب Restore را در مقصد بازیابی ایزوله بسازید، نه به‌صورت خودکار در همه Clusterهای Production. Roleهای گسترده mongoAdmin در بخش قبل جای backup/restore را نمی‌گیرند. حذف Password Flag در فرمان زیر Prompt ایجاد می‌کند؛ Job زمان‌بندی‌شده باید از فایل Tools --config با Mode برابر 600 که Secret System ایجاد کرده بخواند، نه Password داخل --uri."
+          >
+            Create the restore identity on the isolated restore target, not
+            automatically on every production cluster. The broad mongoAdmin
+            roles shown earlier do not substitute for the backup/restore roles.
+            Omitting password flags below prompts interactively; scheduled jobs
+            must read a mode-600 Tools --config file provisioned by the secret
+            system, never a password embedded in --uri.
+          </p>
+          <h3
+            data-en="Small database logical backup"
+            data-fa="Backup منطقی برای دیتابیس کوچک"
+          >
+            Small database logical backup
+          </h3>
+          <pre dir="ltr"><code class="language-bash">umask 077
+BACKUP_DIR=&quot;/backup/mongodb/$(date +%F)/$(date +%H%M%S)&quot;
+mkdir -p &quot;$BACKUP_DIR&quot;
+mongodump \
+  --host &#x27;&lt;HOSTNAME&gt;&#x27; --port 27017 \
+  --username mongoBackup --authenticationDatabase admin \
+  --tls --tlsCAFile /etc/mongodb/ca.pem \
+  --db appdb --out &quot;$BACKUP_DIR&quot;</code></pre>
+          <p
+            data-en="The backup job OS account must own /backup/mongodb or have explicit write permission. This per-database dump is not an atomic point-in-time image while writes continue: quiesce application writes if cross-collection consistency is required. A successful process exit is necessary but not sufficient: check output, free capacity, restore results and business invariants."
+            data-fa="حساب OS اجرای Backup باید مالک /backup/mongodb یا دارای مجوز نوشتن صریح باشد. Dump یک Database هنگام ادامه Write، تصویر Atomic از یک لحظه نیست؛ برای Consistency میان Collectionها Write برنامه را متوقف کنید. Exit موفق لازم است اما کافی نیست: خروجی، ظرفیت آزاد، نتیجه Restore و Business Invariantها را بررسی کنید."
+          >
+            The backup job OS account must own /backup/mongodb or have explicit
+            write permission. This per-database dump is not an atomic
+            point-in-time image while writes continue: quiesce application
+            writes if cross-collection consistency is required. A successful
+            process exit is necessary but not sufficient: check output, free
+            capacity, restore results and business invariants.
+          </p>
+          <h3
+            data-en="Restore appdb into an isolated target"
+            data-fa="Restore دیتابیس appdb در مقصد ایزوله"
+          >
+            Restore appdb into an isolated target
+          </h3>
+          <pre dir="ltr"><code class="language-bash">mongorestore \
+  --host &#x27;&lt;HOSTNAME&gt;&#x27; --port 27017 \
+  --username mongoRestore --authenticationDatabase admin \
+  --tls --tlsCAFile /etc/mongodb/ca.pem \
+  --nsInclude=&#x27;appdb.*&#x27; \
+  &#x27;/backup/mongodb/&lt;DATE&gt;/&lt;TIME&gt;&#x27;</code></pre>
+          <p
+            data-en="Here &lt;HOSTNAME&gt; is the isolated restore host. The example does not drop existing collections: restoring over live data can produce duplicate keys or merge unintended records. Use a clean target and validate indexes, counts and application reads. --drop is destructive and belongs only in an explicitly planned replacement restore."
+            data-fa="در این مثال &lt;HOSTNAME&gt; مقصد Restore ایزوله است. فرمان Collection موجود را Drop نمی‌کند؛ Restore روی داده زنده می‌تواند Duplicate Key یا ادغام ناخواسته ایجاد کند. از مقصد تمیز استفاده و Index، Count و Read برنامه را کنترل کنید. --drop مخرب است و فقط در برنامه جایگزینی صریح باید استفاده شود."
+          >
+            Here &lt;HOSTNAME&gt; is the isolated restore host. The example does
+            not drop existing collections: restoring over live data can produce
+            duplicate keys or merge unintended records. Use a clean target and
+            validate indexes, counts and application reads. --drop is
+            destructive and belongs only in an explicitly planned replacement
+            restore.
+          </p>
+          <h3
+            data-en="Replica-set full dump with oplog capture"
+            data-fa="Dump کامل Replica Set با ثبت Oplog"
+          >
+            Replica-set full dump with oplog capture
+          </h3>
+          <pre dir="ltr"><code class="language-bash">umask 077
+mongodump \
+  --host &#x27;rs0/mongo01:27017,mongo02:27017,mongo03:27017&#x27; \
+  --username mongoBackup --authenticationDatabase admin \
+  --tls --tlsCAFile /etc/mongodb/ca.pem \
+  --oplog --gzip --archive=&quot;/backup/mongodb/rs0-$(date +%F-%H%M%S).archive.gz&quot;</code></pre>
+          <p
+            data-en="Use --oplog with a full replica-set dump, not --db or filtered collection dumps. Ensure the oplog window covers the entire dump and avoid schema changes/renames during capture. --oplogReplay on restore replays captured operations; it cannot be combined with namespace filtering and requires privileges beyond the built-in restore role. Provision the documented custom replay privileges on the isolated recovery system only."
+            data-fa="از --oplog برای Dump کامل Replica Set استفاده کنید، نه همراه --db یا Collection Filter. پنجره Oplog باید کل Dump را پوشش دهد و هنگام Capture از Schema Change/Rename اجتناب کنید. --oplogReplay در Restore عملیات ثبت‌شده را Replay می‌کند؛ با Namespace Filter ترکیب نمی‌شود و دسترسی بیشتر از Role داخلی restore نیاز دارد. دسترسی سفارشی مستند Replay را فقط در سیستم بازیابی ایزوله Provision کنید."
+          >
+            Use --oplog with a full replica-set dump, not --db or filtered
+            collection dumps. Ensure the oplog window covers the entire dump and
+            avoid schema changes/renames during capture. --oplogReplay on
+            restore replays captured operations; it cannot be combined with
+            namespace filtering and requires privileges beyond the built-in
+            restore role. Provision the documented custom replay privileges on
+            the isolated recovery system only.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-bash"># Run only on an isolated clean recovery target with approved replay privileges.
+mongorestore \
+  --host &#x27;&lt;HOSTNAME&gt;&#x27; --port 27017 \
+  --username &#x27;&lt;ADMIN-USER&gt;&#x27; --authenticationDatabase admin \
+  --tls --tlsCAFile /etc/mongodb/ca.pem \
+  --gzip --archive=&#x27;/backup/mongodb/&lt;ARCHIVE&gt;.archive.gz&#x27; --oplogReplay</code></pre>
+          <p
+            data-en="Large databases need a measured replica/snapshot strategy with atomic data+journal snapshots, consistent topology and an oplog/PITR plan when required. A raw copy of a live dbPath is not a consistent backup. Replicas, snapshots on the same failing storage and backup files without a tested recovery procedure do not meet a recovery objective."
+            data-fa="برای دیتابیس بزرگ، استراتژی Replica/Snapshot اندازه‌گیری‌شده با Snapshot اتمیک Data و Journal، Topology سازگار و در صورت نیاز برنامه Oplog/PITR لازم است. کپی خام dbPath زنده Backup سازگار نیست. Replica، Snapshot روی همان Storage خراب‌شونده و فایل Backup بدون مسیر بازیابی تست‌شده هدف Recovery را برآورده نمی‌کنند."
+          >
+            Large databases need a measured replica/snapshot strategy with
+            atomic data+journal snapshots, consistent topology and an oplog/PITR
+            plan when required. A raw copy of a live dbPath is not a consistent
+            backup. Replicas, snapshots on the same failing storage and backup
+            files without a tested recovery procedure do not meet a recovery
+            objective.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/database-tools/mongodump/"
+              rel="noopener"
+              data-en="Official mongodump options and consistency limitations"
+              data-fa="گزینه‌ها و محدودیت Consistency در mongodump"
+              >Official mongodump options and consistency limitations</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/database-tools/mongorestore/"
+              rel="noopener"
+              data-en="Official mongorestore and oplog replay requirements"
+              data-fa="الزامات رسمی mongorestore و Oplog Replay"
+              >Official mongorestore and oplog replay requirements</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/core/backups/"
+              rel="noopener"
+              data-en="Official backup methods"
+              data-fa="روش‌های رسمی Backup"
+              >Official backup methods</a
+            >
+          </p>
+        </section>
+        <section id="performance">
+          <h2 data-en="19. Performance Checks" data-fa="۱۹. بررسی Performance">
+            19. Performance Checks
+          </h2>
+          <pre
+            dir="ltr"
+          ><code class="language-bash"># Install the distribution sysstat package for iostat.
+# Ubuntu/Debian: sudo apt install -y sysstat
+# RHEL family: sudo dnf install -y sysstat
+iostat -xz 1
+vmstat 1
+free -h
+df -h
+df -i</code></pre>
+          <pre
+            dir="ltr"
+          ><code class="language-javascript">// Run with a monitoring identity; replace users with your collection.
+db.serverStatus()
+use appdb
+db.stats()
+db.users.stats()
+// Preferred collection statistics for new automation:
+db.users.aggregate([{ $collStats: { storageStats: {} } }])</code></pre>
+          <p
+            data-en="Use real collection names: db.collection.stats() is a template, not a scan of all collections. The collStats command behind that helper is deprecated; prefer $collStats for new integrations. serverStatus requires suitable privileges such as clusterMonitor, so application credentials are not appropriate for full-server diagnostics."
+            data-fa="نام Collection واقعی را استفاده کنید: db.collection.stats() Template است، نه بررسی همه Collectionها. فرمان collStats پشت این Helper Deprecated است؛ برای Integration جدید $collStats مناسب‌تر است. serverStatus دسترسی مناسب مانند clusterMonitor می‌خواهد؛ Credential برنامه برای Diagnostic کامل سرور مناسب نیست."
+          >
+            Use real collection names: db.collection.stats() is a template, not
+            a scan of all collections. The collStats command behind that helper
+            is deprecated; prefer $collStats for new integrations. serverStatus
+            requires suitable privileges such as clusterMonitor, so application
+            credentials are not appropriate for full-server diagnostics.
+          </p>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th data-en="Signal" data-fa="شاخص">Signal</th>
+                  <th
+                    data-en="Interpretation and action"
+                    data-fa="تفسیر و اقدام"
+                  >
+                    Interpretation and action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-en="Working set / RAM" data-fa="Working Set / RAM">
+                    Working set / RAM
+                  </td>
+                  <td
+                    data-en="Frequent data and indexes should fit the usable cache budget; correlate eviction, disk reads and latency before enlarging cache."
+                    data-fa="Data و Index پرتکرار باید در بودجه Cache قابل استفاده قرار گیرد؛ پیش از افزایش Cache، Eviction، Read Disk و Latency را مرتبط بررسی کنید."
+                  >
+                    Frequent data and indexes should fit the usable cache
+                    budget; correlate eviction, disk reads and latency before
+                    enlarging cache.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Disk IOPS / latency"
+                    data-fa="IOPS و Latency دیسک"
+                  >
+                    Disk IOPS / latency
+                  </td>
+                  <td
+                    data-en="Read await, queue depth and throughput under peak load; %util alone is insufficient for NVMe/RAID."
+                    data-fa="await، عمق صف و Throughput را در Peak Load ببینید؛ %util به‌تنهایی برای NVMe/RAID کافی نیست."
+                  >
+                    Read await, queue depth and throughput under peak load;
+                    %util alone is insufficient for NVMe/RAID.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Indexes / slow queries"
+                    data-fa="Index و Slow Query"
+                  >
+                    Indexes / slow queries
+                  </td>
+                  <td
+                    data-en="Inspect execution plans, scanned/returned ratio and p95/p99 latency; avoid adding indexes blindly."
+                    data-fa="Plan، نسبت Scanned/Returned و Latency p95/p99 را بررسی کنید؛ کورکورانه Index اضافه نکنید."
+                  >
+                    Inspect execution plans, scanned/returned ratio and p95/p99
+                    latency; avoid adding indexes blindly.
+                  </td>
+                </tr>
+                <tr>
+                  <td data-en="Connections" data-fa="Connection">
+                    Connections
+                  </td>
+                  <td
+                    data-en="Track current, available and churn; reuse bounded driver pools rather than opening a connection per request."
+                    data-fa="current، available و نرخ ایجاد را رصد کنید؛ Driver Pool محدود را بازاستفاده کنید، نه یک اتصال در هر Request."
+                  >
+                    Track current, available and churn; reuse bounded driver
+                    pools rather than opening a connection per request.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Replication capacity"
+                    data-fa="ظرفیت Replication"
+                  >
+                    Replication capacity
+                  </td>
+                  <td
+                    data-en="Check lag and oplog window during peak writes and backups; secondaries need comparable CPU and storage."
+                    data-fa="Lag و Oplog Window را هنگام Peak Write و Backup کنترل کنید؛ Secondary به CPU/Storage هم‌سطح نیاز دارد."
+                  >
+                    Check lag and oplog window during peak writes and backups;
+                    secondaries need comparable CPU and storage.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/reference/method/db.stats/"
+              rel="noopener"
+              data-en="Database statistics"
+              data-fa="آمار Database"
+              >Database statistics</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/reference/method/db.collection.stats/"
+              rel="noopener"
+              data-en="Collection statistics and deprecation notes"
+              data-fa="آمار Collection و نکات Deprecation"
+              >Collection statistics and deprecation notes</a
+            >
+          </p>
+        </section>
+        <section id="indexing">
+          <h2
+            data-en="20. Indexing and Query Plans"
+            data-fa="۲۰. Index و Query Plan"
+          >
+            20. Indexing and Query Plans
+          </h2>
+          <pre dir="ltr"><code class="language-javascript">use appdb
+db.users.createIndex({ email: 1 })
+db.users.getIndexes()
+db.users.find({ email: &quot;user@example.com&quot; }).explain(&quot;executionStats&quot;)</code></pre>
+          <p
+            data-en="Inspect nReturned, totalDocsExamined, totalKeysExamined and winningPlan. A selective email lookup should examine a small number of keys/documents. IXSCAN indicates index use; COLLSCAN means a collection scan. A broad query on a tiny collection may legitimately scan, but repeated selective scans on a large production collection can exhaust I/O and CPU."
+            data-fa="nReturned، totalDocsExamined، totalKeysExamined و winningPlan را بررسی کنید. Lookup انتخاب‌گر email باید تعداد کمی Key/Document بررسی کند. IXSCAN استفاده از Index و COLLSCAN اسکن Collection است. Query گسترده روی Collection کوچک ممکن است به‌درستی Scan شود، اما Scan مکرر انتخاب‌گر روی Collection بزرگ Production می‌تواند I/O و CPU را اشباع کند."
+          >
+            Inspect nReturned, totalDocsExamined, totalKeysExamined and
+            winningPlan. A selective email lookup should examine a small number
+            of keys/documents. IXSCAN indicates index use; COLLSCAN means a
+            collection scan. A broad query on a tiny collection may legitimately
+            scan, but repeated selective scans on a large production collection
+            can exhaust I/O and CPU.
+          </p>
+          <p
+            data-en="Design compound indexes around filters and sort order; validate with representative data. If email must be unique, clean existing duplicates before creating a unique index. Each index consumes RAM/disk and adds write cost. Build indexes under change control and watch capacity and replication lag; do not describe every scan as an incident."
+            data-fa="Compound Index را با Filter و Sort طراحی و با داده نماینده تست کنید. اگر email باید Unique باشد، پیش از Unique Index Duplicateهای موجود را پاک‌سازی کنید. هر Index حافظه/دیسک می‌گیرد و هزینه Write دارد. Index را با کنترل تغییر بسازید و ظرفیت و Lag را رصد کنید؛ هر Scan الزاماً Incident نیست."
+          >
+            Design compound indexes around filters and sort order; validate with
+            representative data. If email must be unique, clean existing
+            duplicates before creating a unique index. Each index consumes
+            RAM/disk and adds write cost. Build indexes under change control and
+            watch capacity and replication lag; do not describe every scan as an
+            incident.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/indexes/"
+              rel="noopener"
+              data-en="Official indexing concepts"
+              data-fa="مفاهیم رسمی Indexing"
+              >Official indexing concepts</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/reference/method/db.collection.explain/"
+              rel="noopener"
+              data-en="Official explain execution statistics"
+              data-fa="Execution Statistics رسمی در explain"
+              >Official explain execution statistics</a
+            >
+          </p>
+        </section>
+        <section id="logging">
+          <h2
+            data-en="21. Logging and Slow Queries"
+            data-fa="۲۱. Log و Slow Query"
+          >
+            21. Logging and Slow Queries
+          </h2>
+          <pre
+            dir="ltr"
+          ><code class="language-bash">sudo tail -f /var/log/mongodb/mongod.log
+sudo journalctl -u mongod --no-pager
+sudo journalctl -u mongod -n 100 --no-pager</code></pre>
+          <p
+            data-en="MongoDB writes structured diagnostic logs. Look for YAML parse failures, missing dbPath, permission denied, Address already in use, bad keyfile ownership, TLS handshake/certificate failures, WiredTiger errors and authentication failures. The first startup error usually explains subsequent service restarts; preserve logs before remediation."
+            data-fa="MongoDB Diagnostic Log ساختاریافته می‌نویسد. خطای Parse YAML، فقدان dbPath، Permission Denied، Address Already in Use، مالکیت KeyFile، خطای Handshake/Certificate TLS، خطای WiredTiger و Authentication Failure را جست‌وجو کنید. اولین خطای Startup معمولاً Restartهای بعدی را توضیح می‌دهد؛ پیش از اقدام Log را حفظ کنید."
+          >
+            MongoDB writes structured diagnostic logs. Look for YAML parse
+            failures, missing dbPath, permission denied, Address already in use,
+            bad keyfile ownership, TLS handshake/certificate failures,
+            WiredTiger errors and authentication failures. The first startup
+            error usually explains subsequent service restarts; preserve logs
+            before remediation.
+          </p>
+          <pre dir="ltr"><code class="language-yaml">operationProfiling:
+  mode: off
+  slowOpThresholdMs: 100
+  slowOpSampleRate: 0.1</code></pre>
+          <p
+            data-en="This example keeps the database profiler off and configures sampled slow diagnostic logging. Treat 100 ms and 10% as starting points tied to your SLO, not universal values. Profiling all operations can increase load and capture sensitive query data. Centralize logs with bounded retention and alerts for failed authentication, storage errors and elections."
+            data-fa="این نمونه Profiler دیتابیس را خاموش نگه می‌دارد و Sample از Slow Diagnostic Log می‌گیرد. ۱۰۰ میلی‌ثانیه و ۱۰ درصد نقطه آغاز متناسب با SLO هستند، نه عدد جهانی. Profile همه عملیات بار را افزایش می‌دهد و می‌تواند Query حساس ثبت کند. Log را با Retention محدود و Alert احراز هویت ناموفق، خطای Storage و Election متمرکز کنید."
+          >
+            This example keeps the database profiler off and configures sampled
+            slow diagnostic logging. Treat 100 ms and 10% as starting points
+            tied to your SLO, not universal values. Profiling all operations can
+            increase load and capture sensitive query data. Centralize logs with
+            bounded retention and alerts for failed authentication, storage
+            errors and elections.
+          </p>
+          <p
+            data-en="Configure rotation before disk exhaustion. With systemLog.logRotate: reopen, use an external rename/create policy that preserves the service owner, then request logRotate (or the documented SIGUSR1). Do not combine incompatible rename/reopen policies or assume copytruncate is safe. Test rotation and retention on a staging node."
+            data-fa="Rotation را پیش از پرشدن Disk تنظیم کنید. با systemLog.logRotate: reopen، Policy خارجی Rename/Create با مالک Service User اعمال و سپس logRotate یا SIGUSR1 مستند اجرا کنید. Policyهای ناسازگار rename/reopen را ترکیب نکنید و copytruncate را بی‌خطر فرض نکنید. Rotation و Retention را در Staging تست کنید."
+          >
+            Configure rotation before disk exhaustion. With systemLog.logRotate:
+            reopen, use an external rename/create policy that preserves the
+            service owner, then request logRotate (or the documented SIGUSR1).
+            Do not combine incompatible rename/reopen policies or assume
+            copytruncate is safe. Test rotation and retention on a staging node.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/tutorial/rotate-log-files/"
+              rel="noopener"
+              data-en="Official MongoDB log rotation"
+              data-fa="Rotation رسمی Log در MongoDB"
+              >Official MongoDB log rotation</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/tutorial/manage-the-database-profiler/"
+              rel="noopener"
+              data-en="Official database profiler and slow-operation settings"
+              data-fa="Profiler و تنظیم Slow Operation در مستندات رسمی"
+              >Official database profiler and slow-operation settings</a
+            >
+          </p>
+        </section>
+        <section id="monitoring">
+          <h2
+            data-en="22. Monitoring and Alerting"
+            data-fa="۲۲. مانیتورینگ و Alert"
+          >
+            22. Monitoring and Alerting
+          </h2>
+          <pre dir="ltr"><code class="language-javascript">use admin
+db.createUser({
+  user: &quot;mongoMonitor&quot;,
+  pwd: passwordPrompt(),
+  roles: [{ role: &quot;clusterMonitor&quot;, db: &quot;admin&quot; }]
+})</code></pre>
+          <p
+            data-en="Use a MongoDB Exporter compatible with your server, Prometheus for collection and Grafana for dashboards; Zabbix can independently monitor MongoDB and host health. These are external monitoring integrations, not bundled MongoDB Community components. Some exporter collectors need extra read privileges: enable only required collectors and grant narrowly scoped roles after reviewing the exact exporter documentation. Keep exporter endpoints and their secrets private."
+            data-fa="از MongoDB Exporter سازگار با Server، Prometheus برای جمع‌آوری و Grafana برای Dashboard استفاده کنید؛ Zabbix نیز می‌تواند MongoDB و Host Health را مستقل رصد کند. این‌ها Integration خارجی‌اند، نه Component همراه Community. بعضی Collectorها Read Permission بیشتری می‌خواهند؛ فقط Collector لازم را فعال و پس از بررسی مستندات همان Exporter، Role محدود بدهید. Endpoint و Secret مربوط به Exporter خصوصی بماند."
+          >
+            Use a MongoDB Exporter compatible with your server, Prometheus for
+            collection and Grafana for dashboards; Zabbix can independently
+            monitor MongoDB and host health. These are external monitoring
+            integrations, not bundled MongoDB Community components. Some
+            exporter collectors need extra read privileges: enable only required
+            collectors and grant narrowly scoped roles after reviewing the exact
+            exporter documentation. Keep exporter endpoints and their secrets
+            private.
+          </p>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th data-en="Metric / event" data-fa="Metric / Event">
+                    Metric / event
+                  </th>
+                  <th data-en="Alert intent" data-fa="هدف Alert">
+                    Alert intent
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    data-en="Connections / operations"
+                    data-fa="Connection / Operation"
+                  >
+                    Connections / operations
+                  </td>
+                  <td
+                    data-en="Pool saturation, connection churn and abnormal throughput versus baseline."
+                    data-fa="اشباع Pool، Connection Churn و Throughput غیرعادی نسبت به مبنا."
+                  >
+                    Pool saturation, connection churn and abnormal throughput
+                    versus baseline.
+                  </td>
+                </tr>
+                <tr>
+                  <td data-en="Query latency" data-fa="Query Latency">
+                    Query latency
+                  </td>
+                  <td
+                    data-en="Sustained p95/p99 SLO breaches; separate reads/writes and timeouts."
+                    data-fa="نقض مستمر SLO در p95/p99؛ تفکیک Read/Write و Timeout."
+                  >
+                    Sustained p95/p99 SLO breaches; separate reads/writes and
+                    timeouts.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Replication lag / oplog window"
+                    data-fa="Replication Lag / Oplog Window"
+                  >
+                    Replication lag / oplog window
+                  </td>
+                  <td
+                    data-en="Lag approaching recovery budget or oplog retention; failed sync."
+                    data-fa="نزدیک‌شدن Lag به بودجه Recovery یا Retention Oplog؛ Sync ناموفق."
+                  >
+                    Lag approaching recovery budget or oplog retention; failed
+                    sync.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Disk / inodes / I/O latency"
+                    data-fa="Disk / Inode / I/O Latency"
+                  >
+                    Disk / inodes / I/O latency
+                  </td>
+                  <td
+                    data-en="Capacity and growth forecasts, queue delays and full-volume risk."
+                    data-fa="ظرفیت و پیش‌بینی رشد، تأخیر صف و خطر Volume پر."
+                  >
+                    Capacity and growth forecasts, queue delays and full-volume
+                    risk.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Memory / page faults / swap"
+                    data-fa="Memory / Page Fault / Swap"
+                  >
+                    Memory / page faults / swap
+                  </td>
+                  <td
+                    data-en="Correlate OS major faults and swap with cache eviction and disk reads; minor faults alone are not an incident."
+                    data-fa="Major Fault و Swap در OS را با Eviction و Read Disk مرتبط ببینید؛ Minor Fault به‌تنهایی Incident نیست."
+                  >
+                    Correlate OS major faults and swap with cache eviction and
+                    disk reads; minor faults alone are not an incident.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Replica status / primary elections"
+                    data-fa="Replica Status / Primary Election"
+                  >
+                    Replica status / primary elections
+                  </td>
+                  <td
+                    data-en="No primary, unavailable member, repeated elections or unexpected topology changes."
+                    data-fa="نبود Primary، Member خارج از دسترس، Election مکرر یا تغییر غیرمنتظره Topology."
+                  >
+                    No primary, unavailable member, repeated elections or
+                    unexpected topology changes.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Backup / certificates / logs"
+                    data-fa="Backup / Certificate / Log"
+                  >
+                    Backup / certificates / logs
+                  </td>
+                  <td
+                    data-en="Stale backup, failed restore drill, expiry approaching and security/storage log events."
+                    data-fa="Backup قدیمی، Restore Drill ناموفق، نزدیک‌شدن Expiry و Event امنیت/Storage در Log."
+                  >
+                    Stale backup, failed restore drill, expiry approaching and
+                    security/storage log events.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p
+            data-en="Collect per-member metrics and OS telemetry; monitoring only the primary hides a failed secondary. Define actionable thresholds, owners and runbooks. Test an alert and notification path, then test loss of a node in staging and verify the application recovers and the new primary is detected."
+            data-fa="Metric هر Member و Telemetry سیستم‌عامل را جمع کنید؛ مانیتور فقط Primary، Secondary خراب را پنهان می‌کند. Threshold عملی، Owner و Runbook تعیین کنید. Alert و مسیر Notification را تست و سپس از دسترس خارج‌شدن یک Node را در Staging و بازیابی برنامه و تشخیص Primary جدید را بررسی کنید."
+          >
+            Collect per-member metrics and OS telemetry; monitoring only the
+            primary hides a failed secondary. Define actionable thresholds,
+            owners and runbooks. Test an alert and notification path, then test
+            loss of a node in staging and verify the application recovers and
+            the new primary is detected.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/administration/monitoring/"
+              rel="noopener"
+              data-en="Official self-managed monitoring metrics"
+              data-fa="Metricهای رسمی مانیتورینگ Self-Managed"
+              >Official self-managed monitoring metrics</a
+            >
+          </p>
+        </section>
+        <section id="troubleshooting">
+          <h2 data-en="23. Troubleshooting" data-fa="۲۳. عیب‌یابی">
+            23. Troubleshooting
+          </h2>
+          <pre
+            dir="ltr"
+          ><code class="language-bash">sudo systemctl status mongod --no-pager
+sudo journalctl -u mongod -n 100 --no-pager
+sudo ss -lntp | grep 27017
+ps aux | grep &#x27;[m]ongod&#x27;
+df -h
+df -i
+free -h</code></pre>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th data-en="Problem" data-fa="مشکل">Problem</th>
+                  <th data-en="Cause" data-fa="علت محتمل">Cause</th>
+                  <th data-en="Diagnostic" data-fa="تشخیص">Diagnostic</th>
+                  <th data-en="Fix" data-fa="راهکار">Fix</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    data-en="mongod does not start"
+                    data-fa="mongod Start نمی‌شود"
+                  >
+                    mongod does not start
+                  </td>
+                  <td
+                    data-en="YAML error, unsupported CPU/kernel, missing dbPath"
+                    data-fa="خطای YAML، CPU/Kernel ناسازگار، فقدان dbPath"
+                  >
+                    YAML error, unsupported CPU/kernel, missing dbPath
+                  </td>
+                  <td
+                    data-en="journalctl; mongod --version; lscpu"
+                    data-fa="journalctl؛ mongod --version؛ lscpu"
+                  >
+                    journalctl; mongod --version; lscpu
+                  </td>
+                  <td
+                    data-en="Fix the first logged error; use supported packages/kernel and mounted storage."
+                    data-fa="اولین خطا را رفع؛ بسته/Kernel پشتیبانی‌شده و Storage Mountشده استفاده کنید."
+                  >
+                    Fix the first logged error; use supported packages/kernel
+                    and mounted storage.
+                  </td>
+                </tr>
+                <tr>
+                  <td data-en="Permission denied" data-fa="Permission Denied">
+                    Permission denied
+                  </td>
+                  <td
+                    data-en="Wrong service owner, PEM/key mode, SELinux/AppArmor denial"
+                    data-fa="مالک سرویس یا Mode کلید/PEM اشتباه، Denial در SELinux/AppArmor"
+                  >
+                    Wrong service owner, PEM/key mode, SELinux/AppArmor denial
+                  </td>
+                  <td
+                    data-en="stat; namei -l; ausearch -m AVC"
+                    data-fa="stat؛ namei -l؛ ausearch -m AVC"
+                  >
+                    stat; namei -l; ausearch -m AVC
+                  </td>
+                  <td
+                    data-en="Repair exact owner/path/label and parent traversal permissions."
+                    data-fa="مالک، مسیر و Label دقیق و Traverse والد را اصلاح کنید."
+                  >
+                    Repair exact owner/path/label and parent traversal
+                    permissions.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Port 27017 unavailable"
+                    data-fa="Port 27017 اشغال یا بسته است"
+                  >
+                    Port 27017 unavailable
+                  </td>
+                  <td
+                    data-en="Another listener or source/zone mismatch"
+                    data-fa="Listener دیگر یا Source/Zone نادرست"
+                  >
+                    Another listener or source/zone mismatch
+                  </td>
+                  <td
+                    data-en="ss -lntp; firewall rules; private route"
+                    data-fa="ss -lntp؛ Rule Firewall؛ Route خصوصی"
+                  >
+                    ss -lntp; firewall rules; private route
+                  </td>
+                  <td
+                    data-en="Resolve the listener conflict or fix the restricted allowlist."
+                    data-fa="تعارض Listener یا Allowlist محدود را اصلاح کنید."
+                  >
+                    Resolve the listener conflict or fix the restricted
+                    allowlist.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Authentication failed"
+                    data-fa="Authentication Failed"
+                  >
+                    Authentication failed
+                  </td>
+                  <td
+                    data-en="Wrong secret, user database or authSource"
+                    data-fa="Secret، Database کاربر یا authSource اشتباه"
+                  >
+                    Wrong secret, user database or authSource
+                  </td>
+                  <td
+                    data-en="connectionStatus after valid login; userAdmin usersInfo"
+                    data-fa="connectionStatus پس از Login معتبر؛ usersInfo توسط مدیر"
+                  >
+                    connectionStatus after valid login; userAdmin usersInfo
+                  </td>
+                  <td
+                    data-en="Use appdb for appuser, admin for admins; rotate through authorized admin."
+                    data-fa="برای appuser از appdb و برای مدیر از admin استفاده؛ Rotation با مدیر مجاز انجام دهید."
+                  >
+                    Use appdb for appuser, admin for admins; rotate through
+                    authorized admin.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Connection refused / TLS failure"
+                    data-fa="Connection Refused / خطای TLS"
+                  >
+                    Connection refused / TLS failure
+                  </td>
+                  <td
+                    data-en="Stopped service, wrong bindIp, hostname/CA mismatch"
+                    data-fa="سرویس Stop، bindIp اشتباه، عدم تطبیق Hostname/CA"
+                  >
+                    Stopped service, wrong bindIp, hostname/CA mismatch
+                  </td>
+                  <td
+                    data-en="systemctl; ss; getent hosts; TLS client logs"
+                    data-fa="systemctl؛ ss؛ getent hosts؛ Log Client TLS"
+                  >
+                    systemctl; ss; getent hosts; TLS client logs
+                  </td>
+                  <td
+                    data-en="Restore listener and DNS; install trusted CA and matching certificate."
+                    data-fa="Listener و DNS را اصلاح؛ CA مورداعتماد و گواهی مطابق نصب کنید."
+                  >
+                    Restore listener and DNS; install trusted CA and matching
+                    certificate.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Secondary not syncing"
+                    data-fa="Secondary Sync نمی‌شود"
+                  >
+                    Secondary not syncing
+                  </td>
+                  <td
+                    data-en="Peer unreachable, key/certificate mismatch, lag past oplog"
+                    data-fa="Peer غیرقابل دسترسی، عدم تطبیق کلید/گواهی، Lag بیشتر از Oplog"
+                  >
+                    Peer unreachable, key/certificate mismatch, lag past oplog
+                  </td>
+                  <td
+                    data-en="rs.status(); peer logs; disk/lag metrics"
+                    data-fa="rs.status()؛ Log Peer؛ Metric Disk/Lag"
+                  >
+                    rs.status(); peer logs; disk/lag metrics
+                  </td>
+                  <td
+                    data-en="Fix connectivity/identity/capacity; perform planned initial resync if history is lost."
+                    data-fa="ارتباط/هویت/ظرفیت را رفع؛ در فقدان History، Initial Resync برنامه‌ریزی‌شده انجام دهید."
+                  >
+                    Fix connectivity/identity/capacity; perform planned initial
+                    resync if history is lost.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Replica set has no primary"
+                    data-fa="Replica Set بدون Primary"
+                  >
+                    Replica set has no primary
+                  </td>
+                  <td
+                    data-en="Lost voting majority, partition or ineligible members"
+                    data-fa="فقدان اکثریت رأی، Partition یا Member فاقدشرایط"
+                  >
+                    Lost voting majority, partition or ineligible members
+                  </td>
+                  <td
+                    data-en="rs.status(); rs.conf(); peer DNS/firewall"
+                    data-fa="rs.status()؛ rs.conf()؛ DNS/Firewall Peer"
+                  >
+                    rs.status(); rs.conf(); peer DNS/firewall
+                  </td>
+                  <td
+                    data-en="Recover majority and eligible members; avoid forced reconfig as a routine fix."
+                    data-fa="اکثریت و Member واجدشرایط را بازیابی؛ Forced Reconfig را راهکار معمول نکنید."
+                  >
+                    Recover majority and eligible members; avoid forced reconfig
+                    as a routine fix.
+                  </td>
+                </tr>
+                <tr>
+                  <td data-en="Disk full" data-fa="Disk پر">Disk full</td>
+                  <td
+                    data-en="Data/oplog/log growth, dump on data disk, inode exhaustion"
+                    data-fa="رشد Data/Oplog/Log، Dump روی Disk داده، Inode پر"
+                  >
+                    Data/oplog/log growth, dump on data disk, inode exhaustion
+                  </td>
+                  <td
+                    data-en="df -h; df -i; log/backup sizes"
+                    data-fa="df -h؛ df -i؛ اندازه Log/Backup"
+                  >
+                    df -h; df -i; log/backup sizes
+                  </td>
+                  <td
+                    data-en="Expand storage or safely expire approved old backups/logs; never delete WiredTiger files."
+                    data-fa="Storage را توسعه یا Backup/Log قدیمی مجاز را حذف؛ فایل WiredTiger را حذف نکنید."
+                  >
+                    Expand storage or safely expire approved old backups/logs;
+                    never delete WiredTiger files.
+                  </td>
+                </tr>
+                <tr>
+                  <td data-en="High CPU" data-fa="CPU بالا">High CPU</td>
+                  <td
+                    data-en="Scans, costly aggregation, connection churn or index build"
+                    data-fa="Scan، Aggregation پرهزینه، Connection Churn یا Index Build"
+                  >
+                    Scans, costly aggregation, connection churn or index build
+                  </td>
+                  <td
+                    data-en="top; explain; slow logs; connections"
+                    data-fa="top؛ explain؛ Slow Log؛ Connection"
+                  >
+                    top; explain; slow logs; connections
+                  </td>
+                  <td
+                    data-en="Tune the query/index/pool and validate under representative load."
+                    data-fa="Query/Index/Pool را بهینه و با Load نماینده اعتبارسنجی کنید."
+                  >
+                    Tune the query/index/pool and validate under representative
+                    load.
+                  </td>
+                </tr>
+                <tr>
+                  <td data-en="High disk I/O" data-fa="Disk I/O بالا">
+                    High disk I/O
+                  </td>
+                  <td
+                    data-en="Working set exceeds cache, slow storage, backup/resync contention"
+                    data-fa="Working Set بزرگ‌تر از Cache، Storage کند، تداخل Backup/Resync"
+                  >
+                    Working set exceeds cache, slow storage, backup/resync
+                    contention
+                  </td>
+                  <td
+                    data-en="iostat -xz; vmstat; cache/lag/latency metrics"
+                    data-fa="iostat -xz؛ vmstat؛ Metric Cache/Lag/Latency"
+                  >
+                    iostat -xz; vmstat; cache/lag/latency metrics
+                  </td>
+                  <td
+                    data-en="Reduce unnecessary scans, isolate backup load and provision measured RAM/IOPS."
+                    data-fa="Scan غیرضروری را کم، بار Backup را جدا و RAM/IOPS اندازه‌گیری‌شده تأمین کنید."
+                  >
+                    Reduce unnecessary scans, isolate backup load and provision
+                    measured RAM/IOPS.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p
+            data-en="Do not use mongod --repair, forced replica reconfiguration, deletion of data files or turning off authorization as generic repairs. Preserve evidence and the latest recoverable backup. A member that fell behind the oplog may need a planned resync; verify a healthy source and capacity first."
+            data-fa="mongod --repair، Forced Reconfiguration، حذف فایل Data یا خاموش‌کردن Authorization را Repair عمومی ندانید. Evidence و آخرین Backup قابل بازیابی را حفظ کنید. Member عقب‌مانده از Oplog ممکن است Resync برنامه‌ریزی‌شده بخواهد؛ ابتدا Source سالم و ظرفیت را تأیید کنید."
+          >
+            Do not use mongod --repair, forced replica reconfiguration, deletion
+            of data files or turning off authorization as generic repairs.
+            Preserve evidence and the latest recoverable backup. A member that
+            fell behind the oplog may need a planned resync; verify a healthy
+            source and capacity first.
+          </p>
+        </section>
+        <section id="verification">
+          <h2
+            data-en="24. Verification Checklist"
+            data-fa="۲۴. چک‌لیست اعتبارسنجی"
+          >
+            24. Verification Checklist
+          </h2>
+          <pre dir="ltr"><code class="language-bash">systemctl is-active mongod
+sudo ss -lntp | grep 27017
+# Bare mongosh is only for the initial non-TLS localhost bootstrap.
+# For the secured deployment use:
+mongosh --host &#x27;&lt;HOSTNAME&gt;&#x27; --port 27017 --tls \
+  --tlsCAFile /etc/mongodb/ca.pem \
+  --username appuser --password --authenticationDatabase appdb appdb</code></pre>
+          <pre
+            dir="ltr"
+          ><code class="language-javascript">db.runCommand({ ping: 1 })
+db.runCommand({ connectionStatus: 1 })
+db.getCollectionNames()</code></pre>
+          <p
+            data-en="Expect active, listeners only on approved interfaces, ping ok:1 and authenticatedUsers containing appuser in appdb. Test from an allowed application host and confirm a disallowed host cannot connect. Verify unauthenticated collection access and plaintext connections fail. For replicas connect as mongoOps and inspect rs.status(): one primary, two healthy secondaries and acceptable lag."
+            data-fa="انتظار active، Listener فقط روی Interface مجاز، ping با ok:1 و authenticatedUsers شامل appuser در appdb داشته باشید. از Host برنامه مجاز تست و عدم اتصال Host غیرمجاز را تأیید کنید. دسترسی Collection بدون احراز هویت و اتصال Plaintext باید رد شود. در Replica با mongoOps وصل و rs.status() را بررسی کنید: یک Primary، دو Secondary سالم و Lag قابل‌قبول."
+          >
+            Expect active, listeners only on approved interfaces, ping ok:1 and
+            authenticatedUsers containing appuser in appdb. Test from an allowed
+            application host and confirm a disallowed host cannot connect.
+            Verify unauthenticated collection access and plaintext connections
+            fail. For replicas connect as mongoOps and inspect rs.status(): one
+            primary, two healthy secondaries and acceptable lag.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-javascript">// Authenticated mongoOps replica session:
+rs.status()
+rs.printSecondaryReplicationInfo()</code></pre>
+          <p
+            data-en="Run a controlled failover drill in staging, exercise real application reads/writes with majority acknowledgment, verify alert delivery and restore a backup into a clean isolated target. These tests establish behavior beyond process liveness. Installation/configuration syntax was reviewed against documentation; the Linux deployment commands must still be executed and validated on your target servers."
+            data-fa="در Staging آزمون Failover کنترل‌شده، Read/Write واقعی برنامه با تأیید اکثریت، دریافت Alert و Restore Backup در مقصد ایزوله تمیز را انجام دهید. این تست‌ها رفتاری فراتر از Process Liveness را مشخص می‌کنند. سینتکس نصب و پیکربندی با مستندات بررسی شده است؛ فرمان‌های استقرار Linux باید روی سرور مقصد شما اجرا و اعتبارسنجی شوند."
+          >
+            Run a controlled failover drill in staging, exercise real
+            application reads/writes with majority acknowledgment, verify alert
+            delivery and restore a backup into a clean isolated target. These
+            tests establish behavior beyond process liveness.
+            Installation/configuration syntax was reviewed against
+            documentation; the Linux deployment commands must still be executed
+            and validated on your target servers.
+          </p>
+        </section>
+        <section id="best-practices">
+          <h2
+            data-en="25. Production Checklist"
+            data-fa="۲۵. چک‌لیست Production"
+          >
+            25. Production Checklist
+          </h2>
+          <p
+            data-en="Record evidence, an owner and a review date for each item before go-live. The empty status cells are intentional: reading this article does not make a deployment pass its checks."
+            data-fa="پیش از Go-Live برای هر مورد Evidence، Owner و تاریخ Review ثبت کنید. سلول Status عمداً خالی است؛ مطالعه مقاله به معنی Passشدن استقرار نیست."
+          >
+            Record evidence, an owner and a review date for each item before
+            go-live. The empty status cells are intentional: reading this
+            article does not make a deployment pass its checks.
+          </p>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th data-en="Item" data-fa="مورد">Item</th>
+                  <th data-en="Status" data-fa="وضعیت">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    data-en="Authentication Enabled"
+                    data-fa="احراز هویت فعال"
+                  >
+                    Authentication Enabled
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Dedicated App User"
+                    data-fa="حساب اختصاصی Application"
+                  >
+                    Dedicated App User
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Port 27017 Restricted"
+                    data-fa="محدودبودن Port 27017"
+                  >
+                    Port 27017 Restricted
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+                <tr>
+                  <td data-en="bindIp Restricted" data-fa="محدودبودن bindIp">
+                    bindIp Restricted
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+                <tr>
+                  <td data-en="TLS Enabled" data-fa="فعال‌بودن TLS">
+                    TLS Enabled
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Replica Set Enabled"
+                    data-fa="فعال‌بودن Replica Set"
+                  >
+                    Replica Set Enabled
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+                <tr>
+                  <td data-en="Backup Configured" data-fa="پیکربندی Backup">
+                    Backup Configured
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Monitoring Enabled"
+                    data-fa="فعال‌بودن Monitoring"
+                  >
+                    Monitoring Enabled
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Log Monitoring Enabled"
+                    data-fa="فعال‌بودن Log Monitoring"
+                  >
+                    Log Monitoring Enabled
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Disk Capacity Checked"
+                    data-fa="بررسی ظرفیت Disk"
+                  >
+                    Disk Capacity Checked
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+                <tr>
+                  <td data-en="NTP Enabled" data-fa="فعال و هماهنگ‌بودن NTP">
+                    NTP Enabled
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+                <tr>
+                  <td data-en="Firewall Enabled" data-fa="فعال‌بودن Firewall">
+                    Firewall Enabled
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+                <tr>
+                  <td data-en="Strong Passwords" data-fa="گذرواژه‌های قوی">
+                    Strong Passwords
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Secrets Outside Source Code"
+                    data-fa="Secret خارج از Source Code"
+                  >
+                    Secrets Outside Source Code
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Restore Drill Passed / RPO / RTO Defined"
+                    data-fa="Restore Drill موفق و RPO/RTO مشخص"
+                  >
+                    Restore Drill Passed / RPO / RTO Defined
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Internal Authentication / Certificate Renewal"
+                    data-fa="احراز هویت داخلی و Renewal گواهی"
+                  >
+                    Internal Authentication / Certificate Renewal
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Failure Domains / Majority / Oplog Window"
+                    data-fa="Failure Domain، اکثریت و Oplog Window"
+                  >
+                    Failure Domains / Majority / Oplog Window
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="Service Limits / SELinux / Storage Mounts"
+                    data-fa="Service Limit، SELinux و Mountهای Storage"
+                  >
+                    Service Limits / SELinux / Storage Mounts
+                  </td>
+                  <td data-en="" data-fa=""></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <section id="conclusion">
+          <h2 data-en="Operational Handover" data-fa="تحویل عملیاتی">
+            Operational Handover
+          </h2>
+          <p
+            data-en="Hand over the node inventory, effective configuration, DNS/PKI dependencies, secret owners, alert runbooks, backup retention and tested restore/failover procedures. Freeze the selected repository branch, review release notes before upgrades and maintain a rollback/recovery plan. A secure deployment is an ongoing operational responsibility."
+            data-fa="Inventory Node، Config مؤثر، وابستگی DNS/PKI، Owner Secret، Runbook Alert، Retention Backup و مسیرهای Restore/Failover تست‌شده را تحویل دهید. شاخه مخزن منتخب را کنترل، پیش از Upgrade، Release Notes را مرور و برنامه Rollback/Recovery نگه دارید. استقرار امن مسئولیت عملیاتی مستمر است."
+          >
+            Hand over the node inventory, effective configuration, DNS/PKI
+            dependencies, secret owners, alert runbooks, backup retention and
+            tested restore/failover procedures. Freeze the selected repository
+            branch, review release notes before upgrades and maintain a
+            rollback/recovery plan. A secure deployment is an ongoing
+            operational responsibility.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/release-notes/9.0-upgrade-from-8.0/"
+              rel="noopener"
+              data-en="Official supported upgrade path from 8.0 to 9.0"
+              data-fa="مسیر رسمی ارتقا از 8.0 به 9.0"
+              >Official supported upgrade path from 8.0 to 9.0</a
+            >
+          </p>
+        </section>
+        <section id="faq">
+          <h2 data-en="Frequently Asked Questions" data-fa="پرسش‌های متداول">
+            Frequently Asked Questions
+          </h2>
+          <h3
+            data-en="Can I install MongoDB 9.0 on Debian 12 with these commands?"
+            data-fa="آیا با این فرمان‌ها MongoDB 9.0 روی Debian 12 نصب می‌شود؟"
+          >
+            Can I install MongoDB 9.0 on Debian 12 with these commands?
+          </h3>
+          <p
+            data-en="No. The official matrix lists Debian 12 for 8.x and Debian 13 for 9.x. Use the 8.0 Bookworm repository in this guide or plan a supported OS upgrade."
+            data-fa="خیر. ماتریس رسمی Debian 12 را برای 8.x و Debian 13 را برای 9.x فهرست می‌کند. از مخزن 8.0 Bookworm این راهنما یا ارتقای برنامه‌ریزی‌شده OS استفاده کنید."
+          >
+            No. The official matrix lists Debian 12 for 8.x and Debian 13 for
+            9.x. Use the 8.0 Bookworm repository in this guide or plan a
+            supported OS upgrade.
+          </p>
+          <h3
+            data-en="Does bindIp restrict which clients can connect?"
+            data-fa="آیا bindIp تعیین می‌کند کدام Client وصل شود؟"
+          >
+            Does bindIp restrict which clients can connect?
+          </h3>
+          <p
+            data-en="No. It selects local listening interfaces. Firewall source rules restrict client addresses."
+            data-fa="خیر. Interface محلی شنود را انتخاب می‌کند. محدودیت آدرس Client با Source Rule در Firewall اعمال می‌شود."
+          >
+            No. It selects local listening interfaces. Firewall source rules
+            restrict client addresses.
+          </p>
+          <h3
+            data-en="Is a replica set a backup?"
+            data-fa="آیا Replica Set همان Backup است؟"
+          >
+            Is a replica set a backup?
+          </h3>
+          <p
+            data-en="No. It replicates writes, including accidental deletion. Keep independent backups and validate restores."
+            data-fa="خیر. Write از جمله حذف اشتباه را Replicate می‌کند. Backup مستقل نگه دارید و Restore را تست کنید."
+          >
+            No. It replicates writes, including accidental deletion. Keep
+            independent backups and validate restores.
+          </p>
+          <h3
+            data-en="Do I need a load balancer in front of a replica set?"
+            data-fa="آیا Replica Set به Load Balancer نیاز دارد؟"
+          >
+            Do I need a load balancer in front of a replica set?
+          </h3>
+          <p
+            data-en="Normally no. A replica-aware driver discovers members and selects the appropriate server."
+            data-fa="معمولاً خیر. Driver آگاه از Replica، Memberها را کشف و Server مناسب را انتخاب می‌کند."
+          >
+            Normally no. A replica-aware driver discovers members and selects
+            the appropriate server.
+          </p>
+          <h3
+            data-en="Does a keyfile encrypt replication traffic?"
+            data-fa="آیا KeyFile ترافیک Replication را رمز می‌کند؟"
+          >
+            Does a keyfile encrypt replication traffic?
+          </h3>
+          <p
+            data-en="No. It authenticates members. TLS encrypts traffic; current official guidance recommends X.509 membership authentication for production."
+            data-fa="خیر. Memberها را احراز هویت می‌کند. TLS ترافیک را رمز می‌کند؛ راهنمای فعلی رسمی برای عضویت Production، X.509 را توصیه می‌کند."
+          >
+            No. It authenticates members. TLS encrypts traffic; current official
+            guidance recommends X.509 membership authentication for production.
+          </p>
+          <h3
+            data-en="Can mongoAdmin perform every operational task with the three example roles?"
+            data-fa="آیا mongoAdmin با سه Role مثال همه عملیات را انجام می‌دهد؟"
+          >
+            Can mongoAdmin perform every operational task with the three example
+            roles?
+          </h3>
+          <p
+            data-en="No. Those roles are broad but do not include all cluster, backup and restore operations. Use dedicated operational roles."
+            data-fa="خیر. Roleها گسترده‌اند اما همه عملیات Cluster، Backup و Restore را ندارند. Role عملیاتی مجزا بدهید."
+          >
+            No. Those roles are broad but do not include all cluster, backup and
+            restore operations. Use dedicated operational roles.
+          </p>
+          <h3
+            data-en="Should I disable THP for MongoDB 8.0 and 9.0?"
+            data-fa="آیا برای MongoDB 8.0 و 9.0 باید THP را خاموش کنم؟"
+          >
+            Should I disable THP for MongoDB 8.0 and 9.0?
+          </h3>
+          <p
+            data-en="For supported x86_64/ARM64, follow the newer TCMalloc guidance to enable THP with its documented settings. Older-version recommendations differ."
+            data-fa="روی x86_64/ARM64 پشتیبانی‌شده، راهنمای جدید TCMalloc برای فعال‌کردن THP با تنظیمات مستند را دنبال کنید. توصیه نسخه‌های قدیمی متفاوت است."
+          >
+            For supported x86_64/ARM64, follow the newer TCMalloc guidance to
+            enable THP with its documented settings. Older-version
+            recommendations differ.
+          </p>
+          <h3
+            data-en="Is a successful ping enough to approve production?"
+            data-fa="آیا ping موفق برای تأیید Production کافی است؟"
+          >
+            Is a successful ping enough to approve production?
+          </h3>
+          <p
+            data-en="No. Verify authorization, network restrictions, TLS, replica health, application behavior, alerts and an isolated restore drill."
+            data-fa="خیر. Authorization، محدودیت شبکه، TLS، سلامت Replica، رفتار برنامه، Alert و Restore Drill ایزوله را بررسی کنید."
+          >
+            No. Verify authorization, network restrictions, TLS, replica health,
+            application behavior, alerts and an isolated restore drill.
+          </p>
+        </section>
+        <section id="official-references">
+          <h2 data-en="Official References" data-fa="منابع رسمی">
+            Official References
+          </h2>
+          <p
+            data-en="Reviewed on 7 October 2026 using MongoDB documentation and the distribution manuals below. Current Linux installation instructions use a distribution selector; select the matching distribution and package method. The 9.0 Community repository definitions were additionally checked in MongoDB’s official documentation source. The signing-key URL responded successfully; repository metadata requests from this authoring network returned HTTP 403, so live package availability must be verified with apt-cache policy or dnf on the deployment network."
+            data-fa="بررسی در ۷ اکتبر ۲۰۲۶ با مستندات MongoDB و راهنماهای رسمی توزیع‌های زیر انجام شده است. راهنمای Linux فعلی Selector توزیع دارد؛ توزیع و روش Package متناظر را انتخاب کنید. تعریف مخزن Community 9.0 علاوه بر آن در Source رسمی مستندات MongoDB تطبیق داده شد. URL کلید امضا موفق پاسخ داد؛ درخواست Metadata مخزن از شبکه نگارش HTTP 403 گرفت، بنابراین موجودبودن زنده Package باید با apt-cache policy یا dnf در شبکه استقرار تأیید شود."
+          >
+            Reviewed on 7 October 2026 using MongoDB documentation and the
+            distribution manuals below. Current Linux installation instructions
+            use a distribution selector; select the matching distribution and
+            package method. The 9.0 Community repository definitions were
+            additionally checked in MongoDB’s official documentation source. The
+            signing-key URL responded successfully; repository metadata requests
+            from this authoring network returned HTTP 403, so live package
+            availability must be verified with apt-cache policy or dnf on the
+            deployment network.
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/release-notes/"
+              rel="noopener"
+              data-en="Stable release index"
+              data-fa="فهرست نسخه Stable"
+              >Stable release index</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/release-notes/9.0/"
+              rel="noopener"
+              data-en="9.0 release notes and known issues"
+              data-fa="Release Notes و Known Issueهای 9.0"
+              >9.0 release notes and known issues</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/community-platform-support/"
+              rel="noopener"
+              data-en="Community supported platforms"
+              data-fa="پلتفرم‌های پشتیبانی‌شده Community"
+              >Community supported platforms</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/administration/install-community-linux/?linux-distro=ubuntu&amp;linux-method=pkg"
+              rel="noopener"
+              data-en="Community Ubuntu installation"
+              data-fa="نصب Community در Ubuntu"
+              >Community Ubuntu installation</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/v8.0/tutorial/install-mongodb-on-debian/"
+              rel="noopener"
+              data-en="Community 8.0 Debian 12 installation"
+              data-fa="نصب Community 8.0 در Debian 12"
+              >Community 8.0 Debian 12 installation</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/administration/install-community-linux/?linux-distro=rhel&amp;linux-method=pkg"
+              rel="noopener"
+              data-en="Community RHEL installation and SELinux"
+              data-fa="نصب Community در RHEL و SELinux"
+              >Community RHEL installation and SELinux</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/reference/configuration-options/"
+              rel="noopener"
+              data-en="Configuration file options"
+              data-fa="پارامترهای فایل Config"
+              >Configuration file options</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/tutorial/configure-ssl/"
+              rel="noopener"
+              data-en="TLS configuration"
+              data-fa="پیکربندی TLS"
+              >TLS configuration</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/tutorial/deploy-replica-set-with-keyfile-access-control/"
+              rel="noopener"
+              data-en="Keyfile replica-set bootstrap"
+              data-fa="Bootstrap Replica Set با KeyFile"
+              >Keyfile replica-set bootstrap</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/tutorial/configure-x509-member-authentication/"
+              rel="noopener"
+              data-en="X.509 member authentication"
+              data-fa="احراز هویت عضو با X.509"
+              >X.509 member authentication</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/database-tools/mongodump/"
+              rel="noopener"
+              data-en="Database Tools: mongodump"
+              data-fa="Database Tools: mongodump"
+              >Database Tools: mongodump</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/database-tools/mongorestore/"
+              rel="noopener"
+              data-en="Database Tools: mongorestore"
+              data-fa="Database Tools: mongorestore"
+              >Database Tools: mongorestore</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.mongodb.com/docs/manual/administration/monitoring/"
+              rel="noopener"
+              data-en="Self-managed monitoring"
+              data-fa="مانیتورینگ Self-Managed"
+              >Self-managed monitoring</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://ubuntu.com/server/docs/how-to/security/firewalls/"
+              rel="noopener"
+              data-en="Ubuntu firewall"
+              data-fa="Firewall رسمی Ubuntu"
+              >Ubuntu firewall</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://www.debian.org/doc/manuals/debian-reference/ch05.en.html"
+              rel="noopener"
+              data-en="Debian network administration"
+              data-fa="مدیریت شبکه Debian"
+              >Debian network administration</a
+            >
+          </p>
+          <p>
+            <a
+              href="https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_firewalls_and_packet_filters/using-and-configuring-firewalld_firewall-packet-filters"
+              rel="noopener"
+              data-en="RHEL firewalld"
+              data-fa="firewalld رسمی RHEL"
+              >RHEL firewalld</a
+            >
+          </p>
+        </section>
+      </article>
+    </main>
+  </body>
+</html>

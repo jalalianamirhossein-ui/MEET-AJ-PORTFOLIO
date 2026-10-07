@@ -21,6 +21,7 @@ class Tag extends Model
         'fortinet' => '#EE3124', 'supermicro' => '#2B579A', 'hpe' => '#01A982', 'ubiquiti' => '#0559C9',
         'juniper' => '#0096A6', 'avaya' => '#DA291C', 'qnap' => '#6F2DA8', 'dell' => '#007DB8', 'other' => '#A16207',
         'nginx' => '#009639', 'oxidized' => '#CC342D', 'sql-server' => '#CC2927',
+        'mongodb' => '#00ED64',
         'openvpn' => '#EA7E20', 'ssh' => '#222222',
     ];
     protected $fillable = ['name', 'slug'];

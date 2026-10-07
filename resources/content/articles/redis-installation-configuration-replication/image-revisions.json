@@ -1,0 +1,15 @@
+{
+  "tool": "built-in image_gen",
+  "prompts": [
+    {
+      "asset": "redis-production-architecture.png",
+      "revision": "technical QA correction",
+      "prompt": "Edit only the bottom-left explanatory sentence in this otherwise excellent infographic. Replace \"Primary with asynchronous replica for high availability\" with exactly \"Asynchronous replication; Sentinel adds failover\". Preserve all other text, all IPs, every connector, every server, the English-only style and full composition. This correction is important: replication alone is not HA. Landscape 1920x1080."
+    },
+    {
+      "asset": "redis-sentinel-high-availability.png",
+      "revision": "technical QA correction",
+      "prompt": "Correct this Redis Sentinel infographic with ONLY these technical changes, keeping the professional dark datacenter artwork and all other layout and text: (1) Both replicas must have label \"Port 6379\", replacing the incorrect Port 6380 and Port 6381. Primary remains Port 6379. (2) Replace the CHAIN replication connectors in the main lower group with a clear ONE-TO-MANY branch: one connector originates at Primary, then branches to two arrowheads, one terminating at Replica 01 and the other terminating at Replica 02. NO connector may originate from Replica 01 to Replica 02. Both arrows labelled \"Replication\". (3) Shorten the lower failure-domain examples to \"Primary / Sentinel 1\", \"Replica 01 / Sentinel 2\", \"Replica 02 / Sentinel 3\", under Failure Domain 1, 2, 3 respectively. Preserve exactly 3 sentinels, main primary plus 2 replicas, the failover inset, title and legend. English only, 1920x1080 landscape."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "tool": "built-in image_gen",
+  "export_dimensions": {
+    "banner": [
+      1000,
+      1000
+    ],
+    "content": [
+      1920,
+      1080
+    ]
+  },
+  "prompts": [
+    {
+      "asset": "redis-production-banner.png",
+      "prompt": "Use case: ads-marketing. Create an extremely polished Redis enterprise infrastructure article cover, EXACT 1000x1000 pixels square. Dark navy / black datacenter with discreet server racks, red Redis accent lights, premium 3D technical editorial artwork, crisp white English typography, no people, no Persian, no watermark. Title top: \"Redis\". Subtitle: \"Installation, Configuration & Replication\". Center feature a large Redis Primary server rack with a red stacked Redis logo; a second rack labelled \"Redis Replica\", application servers above, a clear directional red data flow from PRIMARY through \"Replication\" to REPLICA. Bottom has clearly legible elegant labels \"High Performance\", \"Replication\", \"Caching\", \"Persistence\", \"High Availability\". Five tasteful small icon tiles \"RDB\", \"AOF\", \"ACL\", \"Monitoring\", \"Sentinel\". Important: High Availability is represented with Sentinel, not replication alone. Leave breathing room and generous margins, perfectly spelled English, sophisticated enterprise technical site banner quality, avoid excessive tiny text."
+    },
+    {
+      "asset": "redis-production-architecture.png",
+      "prompt": "Use case: infographic-diagram. A premium professional enterprise DevOps editorial infographic, landscape EXACT 1920x1080, English ONLY. Dark navy black datacenter background, restrained luminous red Redis accents, white legible modern typography, sophisticated 3D server racks with orderly graphical connectors. No people, no Persian, no watermark. Generous margins. Precise labeled topology, no unrelated lines, readable at article width. Title \"Redis Production Architecture\". Clients at top left flow to Application Servers through a Load Balancer. Application Servers have TWO SEPARATE connections: Redis Primary (10.10.20.10) for Cache / Sessions, and Database for durable data. Redis Primary flows one way to Redis Replica (10.10.20.11) labelled \"Asynchronous Replication\". Show private network enclosure around Redis servers, \"ACL + Firewall\" badge and clear distinction that database access is directly from Application Servers, never through Redis. Elegant Redis logo on servers."
+    },
+    {
+      "asset": "redis-replication-architecture.png",
+      "prompt": "Use case: infographic-diagram. A premium professional enterprise DevOps editorial infographic, landscape EXACT 1920x1080, English ONLY. Dark navy black datacenter background, restrained luminous red Redis accents, white legible modern typography, sophisticated 3D server racks with orderly graphical connectors. No people, no Persian, no watermark. Generous margins. Precise labeled topology, no unrelated lines, readable at article width. Title \"Redis Replication Architecture\". Top centered Applications, arrow \"Writes\" to central Redis Primary server (10.10.20.10). Two independent one-way arrows labelled \"Asynchronous Replication\" branch down to Redis Replica 01 (10.10.20.11) and Redis Replica 02 (10.10.20.12). Small labels \"Read-only\" under both replicas, \"Optional stale reads\" for reads from replicas. Bottom concise note \"Replication alone does not provide automatic failover\". Three rack servers only, technically accurate one-to-many flow."
+    },
+    {
+      "asset": "redis-sentinel-high-availability.png",
+      "prompt": "Use case: infographic-diagram. A premium professional enterprise DevOps editorial infographic, landscape EXACT 1920x1080, English ONLY. Dark navy black datacenter background, restrained luminous red Redis accents, white legible modern typography, sophisticated 3D server racks with orderly graphical connectors. No people, no Persian, no watermark. Generous margins. Precise labeled topology, no unrelated lines, readable at article width. Title \"Redis Sentinel High Availability\". Top row exactly three Sentinel nodes labelled \"Sentinel 1\", \"Sentinel 2\", \"Sentinel 3\", enclosing badge \"Quorum 2 / Majority 2\". Below exactly three Redis servers labelled \"Primary\", \"Replica 01\", \"Replica 02\". Solid red arrows show primary replicating to both replicas. Dotted blue lines clearly labelled \"Monitoring\" connect Sentinel group to Redis group. Side small inset \"Automatic Failover\": Primary marked unavailable, Replica 01 marked \"Promoted Primary\". Applications discover Primary via Sentinel. Footer \"Three independent failure domains\". Clean elegant hierarchy with exactly 3 sentinels and primary plus 2 replicas in main diagram."
+    },
+    {
+      "asset": "redis-monitoring-architecture.png",
+      "prompt": "Use case: infographic-diagram. A premium professional enterprise DevOps editorial infographic, landscape EXACT 1920x1080, English ONLY. Dark navy black datacenter background, restrained luminous red Redis accents, white legible modern typography, sophisticated 3D server racks with orderly graphical connectors. No people, no Persian, no watermark. Generous margins. Precise labeled topology, no unrelated lines, readable at article width. Title \"Redis Monitoring Architecture\". Five labeled nodes: Redis, Redis Exporter, Prometheus, Grafana, Alerting. Data availability shown Redis -> Redis Exporter -> Prometheus -> Grafana, each connector labelled \"Metrics\", show Prometheus -> Alerting / Alertmanager separately. Clarifying small labels: Exporter \"Reads INFO\"; Prometheus \"Scrapes /metrics\"; Grafana \"Queries Prometheus\". Include discreet dashboard cards \"Memory\", \"Hit Rate\", \"Latency\", \"Replication Lag\". Red Redis node, recognizable restrained Prometheus orange and Grafana orange icons; security badge \"Private Network\". Modern enterprise infographic."
+    }
+  ]
+}

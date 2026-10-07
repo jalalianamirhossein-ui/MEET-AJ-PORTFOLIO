@@ -8,6 +8,7 @@ return [
         'mikrotik-pbr-client',
         'mikrotik-ping-triggered-policy-routing',
         'linux-security-auditor-bash',
+        'mongodb-installation-configuration-production-deployment',
         'netbox-installation-setup-ubuntu',
         'oxidized-network-device-configuration-backup',
         'nginx-installation-configuration-ubuntu',

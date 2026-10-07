@@ -1,0 +1,195 @@
+{
+  "slug": "mongodb-installation-configuration-production-deployment",
+  "reviewed_at": "2026-10-07",
+  "server_branches": {
+    "ubuntu": "9.0",
+    "debian12": "8.0",
+    "rhel": "9.0"
+  },
+  "localizations": {
+    "en": {
+      "title": "MongoDB Installation, Configuration & Production Deployment Guide",
+      "meta_title": "MongoDB Installation, Configuration & Production Deployment Guide",
+      "description": "Deploy MongoDB Community on Linux with official repositories, authentication, TLS, replica sets, backups, monitoring and production troubleshooting.",
+      "keywords": [
+        "MongoDB Community",
+        "MongoDB Installation",
+        "MongoDB Production",
+        "Ubuntu",
+        "Debian 12",
+        "RHEL",
+        "Replica Set",
+        "MongoDB TLS",
+        "MongoDB Backup",
+        "DevOps"
+      ],
+      "faq": [
+        [
+          "Can I install MongoDB 9.0 on Debian 12 with these commands?",
+          "No. The official matrix lists Debian 12 for 8.x and Debian 13 for 9.x. Use the 8.0 Bookworm repository in this guide or plan a supported OS upgrade."
+        ],
+        [
+          "Does bindIp restrict which clients can connect?",
+          "No. It selects local listening interfaces. Firewall source rules restrict client addresses."
+        ],
+        [
+          "Is a replica set a backup?",
+          "No. It replicates writes, including accidental deletion. Keep independent backups and validate restores."
+        ],
+        [
+          "Do I need a load balancer in front of a replica set?",
+          "Normally no. A replica-aware driver discovers members and selects the appropriate server."
+        ],
+        [
+          "Does a keyfile encrypt replication traffic?",
+          "No. It authenticates members. TLS encrypts traffic; current official guidance recommends X.509 membership authentication for production."
+        ],
+        [
+          "Can mongoAdmin perform every operational task with the three example roles?",
+          "No. Those roles are broad but do not include all cluster, backup and restore operations. Use dedicated operational roles."
+        ],
+        [
+          "Should I disable THP for MongoDB 8.0 and 9.0?",
+          "For supported x86_64/ARM64, follow the newer TCMalloc guidance to enable THP with its documented settings. Older-version recommendations differ."
+        ],
+        [
+          "Is a successful ping enough to approve production?",
+          "No. Verify authorization, network restrictions, TLS, replica health, application behavior, alerts and an isolated restore drill."
+        ]
+      ]
+    },
+    "fa": {
+      "title": "آموزش نصب، راه‌اندازی و پیکربندی MongoDB در محیط Production",
+      "meta_title": "آموزش نصب، راه‌اندازی و پیکربندی MongoDB در محیط Production",
+      "description": "راهنمای فنی استقرار MongoDB Community روی Linux با مخزن رسمی، احراز هویت، TLS، Replica Set، Backup، مانیتورینگ و عیب‌یابی Production.",
+      "keywords": [
+        "MongoDB Community",
+        "MongoDB Installation",
+        "MongoDB Production",
+        "Ubuntu",
+        "Debian 12",
+        "RHEL",
+        "Replica Set",
+        "MongoDB TLS",
+        "MongoDB Backup",
+        "DevOps"
+      ],
+      "faq": [
+        [
+          "آیا با این فرمان‌ها MongoDB 9.0 روی Debian 12 نصب می‌شود؟",
+          "خیر. ماتریس رسمی Debian 12 را برای 8.x و Debian 13 را برای 9.x فهرست می‌کند. از مخزن 8.0 Bookworm این راهنما یا ارتقای برنامه‌ریزی‌شده OS استفاده کنید."
+        ],
+        [
+          "آیا bindIp تعیین می‌کند کدام Client وصل شود؟",
+          "خیر. Interface محلی شنود را انتخاب می‌کند. محدودیت آدرس Client با Source Rule در Firewall اعمال می‌شود."
+        ],
+        [
+          "آیا Replica Set همان Backup است؟",
+          "خیر. Write از جمله حذف اشتباه را Replicate می‌کند. Backup مستقل نگه دارید و Restore را تست کنید."
+        ],
+        [
+          "آیا Replica Set به Load Balancer نیاز دارد؟",
+          "معمولاً خیر. Driver آگاه از Replica، Memberها را کشف و Server مناسب را انتخاب می‌کند."
+        ],
+        [
+          "آیا KeyFile ترافیک Replication را رمز می‌کند؟",
+          "خیر. Memberها را احراز هویت می‌کند. TLS ترافیک را رمز می‌کند؛ راهنمای فعلی رسمی برای عضویت Production، X.509 را توصیه می‌کند."
+        ],
+        [
+          "آیا mongoAdmin با سه Role مثال همه عملیات را انجام می‌دهد؟",
+          "خیر. Roleها گسترده‌اند اما همه عملیات Cluster، Backup و Restore را ندارند. Role عملیاتی مجزا بدهید."
+        ],
+        [
+          "آیا برای MongoDB 8.0 و 9.0 باید THP را خاموش کنم؟",
+          "روی x86_64/ARM64 پشتیبانی‌شده، راهنمای جدید TCMalloc برای فعال‌کردن THP با تنظیمات مستند را دنبال کنید. توصیه نسخه‌های قدیمی متفاوت است."
+        ],
+        [
+          "آیا ping موفق برای تأیید Production کافی است؟",
+          "خیر. Authorization، محدودیت شبکه، TLS، سلامت Replica، رفتار برنامه، Alert و Restore Drill ایزوله را بررسی کنید."
+        ]
+      ]
+    }
+  },
+  "references": [
+    [
+      "https://www.mongodb.com/docs/manual/release-notes/",
+      "Stable release index",
+      "فهرست نسخه Stable"
+    ],
+    [
+      "https://www.mongodb.com/docs/manual/release-notes/9.0/",
+      "9.0 release notes and known issues",
+      "Release Notes و Known Issueهای 9.0"
+    ],
+    [
+      "https://www.mongodb.com/docs/community-platform-support/",
+      "Community supported platforms",
+      "پلتفرم‌های پشتیبانی‌شده Community"
+    ],
+    [
+      "https://www.mongodb.com/docs/manual/administration/install-community-linux/?linux-distro=ubuntu&linux-method=pkg",
+      "Community Ubuntu installation",
+      "نصب Community در Ubuntu"
+    ],
+    [
+      "https://www.mongodb.com/docs/v8.0/tutorial/install-mongodb-on-debian/",
+      "Community 8.0 Debian 12 installation",
+      "نصب Community 8.0 در Debian 12"
+    ],
+    [
+      "https://www.mongodb.com/docs/manual/administration/install-community-linux/?linux-distro=rhel&linux-method=pkg",
+      "Community RHEL installation and SELinux",
+      "نصب Community در RHEL و SELinux"
+    ],
+    [
+      "https://www.mongodb.com/docs/manual/reference/configuration-options/",
+      "Configuration file options",
+      "پارامترهای فایل Config"
+    ],
+    [
+      "https://www.mongodb.com/docs/manual/tutorial/configure-ssl/",
+      "TLS configuration",
+      "پیکربندی TLS"
+    ],
+    [
+      "https://www.mongodb.com/docs/manual/tutorial/deploy-replica-set-with-keyfile-access-control/",
+      "Keyfile replica-set bootstrap",
+      "Bootstrap Replica Set با KeyFile"
+    ],
+    [
+      "https://www.mongodb.com/docs/manual/tutorial/configure-x509-member-authentication/",
+      "X.509 member authentication",
+      "احراز هویت عضو با X.509"
+    ],
+    [
+      "https://www.mongodb.com/docs/database-tools/mongodump/",
+      "Database Tools: mongodump",
+      "Database Tools: mongodump"
+    ],
+    [
+      "https://www.mongodb.com/docs/database-tools/mongorestore/",
+      "Database Tools: mongorestore",
+      "Database Tools: mongorestore"
+    ],
+    [
+      "https://www.mongodb.com/docs/manual/administration/monitoring/",
+      "Self-managed monitoring",
+      "مانیتورینگ Self-Managed"
+    ],
+    [
+      "https://ubuntu.com/server/docs/how-to/security/firewalls/",
+      "Ubuntu firewall",
+      "Firewall رسمی Ubuntu"
+    ],
+    [
+      "https://www.debian.org/doc/manuals/debian-reference/ch05.en.html",
+      "Debian network administration",
+      "مدیریت شبکه Debian"
+    ],
+    [
+      "https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_firewalls_and_packet_filters/using-and-configuring-firewalld_firewall-packet-filters",
+      "RHEL firewalld",
+      "firewalld رسمی RHEL"
+    ]
+  ]
+}

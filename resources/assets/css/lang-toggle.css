@@ -23,7 +23,11 @@
 .lang-switcher.is-floating {
   position: fixed;
   top: max(0.85rem, env(safe-area-inset-top, 0px));
-  inset-inline-end: max(0.85rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+  inset-inline-end: max(
+    0.85rem,
+    env(safe-area-inset-left, 0px),
+    env(safe-area-inset-right, 0px)
+  );
   inset-inline-start: auto;
   width: auto;
 }
@@ -62,7 +66,12 @@
   -webkit-tap-highlight-color: transparent;
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
-  transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .lang-switcher-current {

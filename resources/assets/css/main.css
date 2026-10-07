@@ -158,7 +158,6 @@
   color: var(--surface);
   position: relative;
   overflow: hidden;
-  
 }
 
 .hero::after {
@@ -9474,7 +9473,6 @@ html[dir="rtl"] .hero-actions .btn-modern:hover .btn-text {
     justify-content: center;
   }
 
-
   /* دکمه‌های کوچک‌تر و کنار هم در موبایل */
   .hero-actions {
     flex-direction: row !important;
@@ -9661,13 +9659,17 @@ body.menu-open {
   font: inherit;
   font-weight: 700;
   line-height: 1.2;
-  transition: background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .swiper-autoplay-toggle:hover {
   background: var(--primary);
   color: #ffffff;
-  box-shadow: 0 0.5rem 1.25rem color-mix(in srgb, var(--primary), transparent 75%);
+  box-shadow: 0 0.5rem 1.25rem
+    color-mix(in srgb, var(--primary), transparent 75%);
 }
 
 .swiper-autoplay-toggle[aria-pressed="true"] {
@@ -9700,7 +9702,11 @@ body.menu-open {
     min-inline-size: 48px;
     min-block-size: 48px;
     inset-block-start: max(1rem, env(safe-area-inset-top));
-    inset-inline-start: max(1rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+    inset-inline-start: max(
+      1rem,
+      env(safe-area-inset-left, 0px),
+      env(safe-area-inset-right, 0px)
+    );
     inset-inline-end: auto;
   }
 }

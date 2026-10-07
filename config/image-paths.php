@@ -3,6 +3,11 @@
 // Historical image URLs resolve directly to the current organized asset.
 return [
     'legacy' => [
+        'articles/mongodb/mongodb-installation-production-banner.png' => 'articles/banners/mongodb-installation-production-banner.png',
+        'articles/mongodb/mongodb-architecture.png' => 'articles/content/mongodb-architecture.png',
+        'articles/mongodb/mongodb-security-architecture.png' => 'articles/content/mongodb-security-architecture.png',
+        'articles/mongodb/mongodb-replica-set.png' => 'articles/content/mongodb-replica-set.png',
+        'articles/mongodb/mongodb-backup-monitoring.png' => 'articles/content/mongodb-backup-monitoring.png',
         'screenshot-wide.jpg' => 'screenshots/screenshot-wide.jpg',
         'screenshot-narrow.jpg' => 'screenshots/screenshot-narrow.jpg',
         'testimonials/testimonials-2.jpg' => 'avatars/testimonials/testimonials-2.jpg',
@@ -134,6 +139,9 @@ return [
         'articles/mikrotik-pbr-client/mikrotik-8.png' => 'articles/banners/mikrotik-pbr-client.png',
     ],
     'source_hashes' => [
+        'articles/mongodb-installation-configuration-production-deployment.html' => [
+            '3fbbc7310376e91d322a65a29e01e63c11ec5ab0bda6359b583424b03063d162' => '4bdf6d37ba43429975391ebad13844b339139f8db99a245f23e00a454222ec6d',
+        ],
         'articles/creating-a-bootable-usb.html' => [
             '21c929b141d561099f0ac0b787aa1808764369af3d0e39ff8a7c3157b19fe866' => '0675552f0179bda8188bb0d4742e4b0ee9bcaec4ab12cb4a0f6223399f7a80f5',
             '6d67cdebd340a2ff46be711d45f3da7ae24d1db082b9e2e2a669316dfcd44331' => '0675552f0179bda8188bb0d4742e4b0ee9bcaec4ab12cb4a0f6223399f7a80f5',
