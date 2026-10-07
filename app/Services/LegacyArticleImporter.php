@@ -478,7 +478,9 @@ class LegacyArticleImporter
             return $m[1];
         }
 
-        return null;
+        // Newer article sources declare their banner in metadata without
+        // duplicating the hero markup rendered by the shared Blade view.
+        return $this->meta($html, 'og:image');
     }
 
     /**
