@@ -30,7 +30,8 @@ class ArticlePresentationTest extends TestCase
                 $xp = new \DOMXPath($dom);
                 $faq = $xp->query('//section[@id="faq"]//details[contains(@class,"article-faq-disclosure")]');
                 $authoredFaq = data_get($article->presentation, 'localizations.'.$locale.'.faq', []);
-                $this->assertCount($authoredFaq ? count($authoredFaq) : 8, $faq, $article->slug);
+                $expectedCount = $article->slug === 'fortigate-sd-wan-load-balancing-failover' ? 12 : 8;
+                $this->assertCount($authoredFaq ? count($authoredFaq) : $expectedCount, $faq, $article->slug);
                 foreach ($faq as $item) {
                     $this->assertFalse($item->hasAttribute('open'));
                     $this->assertSame(1, $xp->query('./summary/h3', $item)->length);

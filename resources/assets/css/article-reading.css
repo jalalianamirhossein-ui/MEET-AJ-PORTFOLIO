@@ -241,8 +241,8 @@ html[dir="rtl"] .article-page .article-body .article-section h2:hover { transfor
   outline: 3px solid var(--article-primary);
   outline-offset: -3px;
 }
-/* Keep the complete TOC beside the reading column without nested scrolling.
-   Smaller screens use a compact disclosure above the article. */
+/* Keep the framed TOC available while reading. Only long desktop lists scroll;
+   smaller screens use a compact disclosure above the article. */
 .article-page .article-shell--with-toc {
   grid-template-columns: minmax(0, 1fr);
   grid-template-areas: "toc" "reading";
@@ -254,11 +254,11 @@ html[dir="rtl"] .article-page .article-body .article-section h2:hover { transfor
   width: 100%;
   max-height: none;
   overflow: visible;
-  border: 0 !important;
-  border-radius: 0;
-  background: transparent !important;
-  box-shadow: none !important;
-  padding: 0;
+  border: 1px solid var(--article-primary) !important;
+  border-radius: .85rem;
+  background: color-mix(in srgb, var(--article-primary) 3%, #fff) !important;
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--article-primary) 8%, transparent) !important;
+  padding: .5rem;
 }
 .article-page aside.article-toc .article-toc-title {
   display: flex;
@@ -329,6 +329,24 @@ html[dir="rtl"] .article-page .article-body .article-section h2:hover { transfor
     grid-template-columns: minmax(0, 1fr) clamp(14rem, 22%, 17rem);
     grid-template-areas: "reading toc";
     gap: 1.5rem;
+  }
+  .article-page aside.article-toc {
+    --article-toc-offset: 4.5rem;
+    position: sticky;
+    top: var(--article-toc-offset);
+    align-self: start;
+    max-height: calc(100vh - var(--article-toc-offset) - 1rem);
+    max-height: calc(100dvh - var(--article-toc-offset) - 1rem);
+    overflow: hidden;
+  }
+  .article-page aside.article-toc .article-toc-nav {
+    max-height: calc(100vh - var(--article-toc-offset) - 5rem);
+    max-height: calc(100dvh - var(--article-toc-offset) - 5rem);
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: var(--article-primary) transparent;
   }
   .article-page aside.article-toc .article-toc-title {
     padding: .6rem .65rem;

@@ -11,6 +11,7 @@ Reviewed 2026-10-06. Run scripts from the repository root. PHP tools require PHP
 | `update-article-order.php` | Synchronize editorial order; preserves content and publication dates |
 | `install-pbr-article.php` | Preview ping-triggered PBR import; `--apply` backs up and updates local content |
 | `update-sql-backup-article.php` | Preview SQL article update; `--apply` saves a revision before changing the row |
+| `audit-article-content.php` | Review every stored article in both locales for duplicate headings/IDs/references, broken contents links, empty sections and unanswered FAQs; writes a JSON report in `storage/app` and exits nonzero for structural problems |
 | `prepare-enterprise-runbooks.py`, `prepare-english-runbooks.py`, `upgrade-enterprise-articles.py`, `build-bilingual-articles.py`, `article_comparisons.py` | Historical enterprise editorial pipeline; read inventories before rebuilding |
 | `verify-enterprise-articles.py` | Enterprise source validation against its archived inputs |
 | `check-documentation.cjs` | Check local Markdown file targets; `--write-index` refreshes the complete inventory |

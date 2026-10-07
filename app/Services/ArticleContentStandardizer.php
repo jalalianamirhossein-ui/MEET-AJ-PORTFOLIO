@@ -5,9 +5,8 @@ namespace App\Services;
 use App\Models\Article;
 
 /**
- * Adds the shared long-form article sections without rewriting the author's
- * original HTML. Legacy articles remain the source of truth; this layer only
- * fills structural gaps so old and new articles render consistently.
+ * Recognizes authored sections, repairs duplicate structure, and fills gaps
+ * while preserving the author's prose, executable blocks and citations.
  */
 class ArticleContentStandardizer
 {
@@ -15,9 +14,23 @@ class ArticleContentStandardizer
     {
         $content = Article::normalizeContentMarkup($content);
         $content = $this->removeArticleBackButton($content);
+        $content = $this->wrapFlatSections($content);
         $content = $this->removeSeoSections($content);
+        // An empty legacy anchor is a navigation target, not an authored section.
+        foreach (array_merge(array_keys($this->sections($article)), ['faq', 'official-references']) as $id) {
+            if (! preg_match('~<section\b[^>]*\bid=["\']'.preg_quote($id, '~').'["\']~i', $content)) {
+                $content = preg_replace('~<span\b[^>]*\bid=["\']'.preg_quote($id, '~').'["\'][^>]*>\s*</span>~is', '', $content) ?? $content;
+            }
+        }
         $content = $this->reuseAuthoredSections($article, $content);
+        $content = $this->mergeRepeatedSections($article, $content);
+        $content = $this->deduplicateReferenceLinks($content);
         $content = $this->addKnownSectionIds($content);
+        $content = preg_replace('~<h2\b([^>]*)>\s*FAQ\s*</h2>~i', '<h2$1 data-en="Frequently Asked Questions" data-fa="پرسش‌های متداول">Frequently Asked Questions</h2>', $content) ?? $content;
+        if (preg_match('/href=["\']#references["\']/', $content.(string) data_get($article->presentation, 'toc_html'))
+            && ! preg_match('/\bid=["\']references["\']/', $content)) {
+            $content = preg_replace('~(<section\b[^>]*\bid=["\']official-references["\'][^>]*>)~i', '$1<span id="references" class="article-section-anchor" aria-hidden="true"></span>', $content, 1) ?? $content;
+        }
         $content = str_ireplace('Official references', 'Official References', $content);
         // Existing FAQ accordions are extended in place so the original
         // questions remain visible and the shared minimum of eight is met.
@@ -58,14 +71,16 @@ class ArticleContentStandardizer
             'introduction' => '/^(?:introduction|overview|مقدمه|معرفی)\b/iu',
             'architecture' => '/architecture|معماری|مفاهیم\s+(?:اصلی|کلیدی)|برنامه چگونه کار/iu',
             'prerequisites' => '/prerequisites|pre[- ]?(?:checks|hardening checks)|hardware|پیش[‌ -]?نیاز|سخت[‌ -]?افزار/iu',
-            'configuration' => '/^(?:installation|configuration|(?:safe\s+)?deployment|نصب|راه[‌ -]?اندازی|تنظیم)/iu',
+            'configuration' => '/^(?:installation|configuration|(?:safe\s+)?deployment|نصب|راه[‌ -]?اندازی|تنظیم|پیاده[‌ -]?سازی)/iu',
             'best-practices' => '/best\s+practices|checklist|recommendations|اشتباهات رایج|توصیه|چک[‌ -]?لیست/iu',
             'security' => '/security|hardening|امنیت|ایمن[‌ -]?سازی/iu',
             'troubleshooting' => '/troubleshoot|عیب[‌ -]?یابی/iu',
             'conclusion' => '/^(?:conclusion|summary\b|جمع[‌ -]?بندی|نتیجه[‌ -]?گیری|چه زمانی TrueNAS)/iu',
+            'faq' => '/^(?:FAQ\b|frequently\s+asked\s+questions|(?:پرسش|سؤال|سوال)[‌\s]*(?:های|ات)?\s*متداول)/iu',
             'official-references' => '/^(?:official\s+(?:references|sources)|references|sources|منابع|مراجع)/iu',
         ];
         $templates = $this->sections($article);
+        $templates['faq'] = $this->faqSection($article);
         $references = $this->referencesSection($article, '');
         if ($references !== null) { $templates['official-references'] = $references; }
         $sectionPattern = '~<section\b([^>]*)>(.*?)</section>~is';
@@ -117,6 +132,94 @@ class ArticleContentStandardizer
         return $content;
     }
 
+    /** Older exports use sibling h2 blocks instead of section containers. */
+    private function wrapFlatSections(string $content): string
+    {
+        $blocks = [];
+        $content = preg_replace_callback('~<pre\b[^>]*>.*?</pre>~is', function (array $match) use (&$blocks): string {
+            $key = '__ARTICLE_SECTION_CODE_'.count($blocks).'__';
+            $blocks[$key] = $match[0];
+            return $key;
+        }, $content) ?? $content;
+        preg_match_all('~</?section\b[^>]*>|</?footer\b[^>]*>|<h2\b[^>]*>.*?</h2>~is', $content, $matches, PREG_OFFSET_CAPTURE);
+        $sectionDepth = 0;
+        $footerDepth = 0;
+        $start = null;
+        $ranges = [];
+        foreach ($matches[0] as [$tag, $offset]) {
+            if ($start !== null && preg_match('~^<(?:h2|section|footer)\b~i', $tag)) {
+                $ranges[] = [$start, $offset - $start];
+                $start = null;
+            }
+            if (preg_match('~^</section\b~i', $tag)) { $sectionDepth = max(0, $sectionDepth - 1); }
+            elseif (preg_match('~^<section\b~i', $tag)) { $sectionDepth++; }
+            elseif (preg_match('~^</footer\b~i', $tag)) { $footerDepth = max(0, $footerDepth - 1); }
+            elseif (preg_match('~^<footer\b~i', $tag)) { $footerDepth++; }
+            elseif ($sectionDepth === 0 && $footerDepth === 0) { $start = $offset; }
+        }
+        if ($start !== null) { $ranges[] = [$start, strlen($content) - $start]; }
+        foreach (array_reverse($ranges) as [$offset, $length]) {
+            $body = substr($content, $offset, $length);
+            $id = '';
+            if (preg_match('~^<h2\b[^>]*\bid=["\']([^"\']+)["\']~i', $body, $heading)) {
+                $id = ' id="'.e($heading[1]).'"';
+                $body = preg_replace('~^(<h2\b[^>]*?)\s+id=["\'][^"\']+["\']~i', '$1', $body, 1) ?? $body;
+            }
+            $content = substr_replace($content, '<section'.$id.' class="article-section">'.$body.'</section>', $offset, $length);
+        }
+        return strtr($content, $blocks);
+    }
+
+    /** Fold older parallel runbook sections into their matching current sections. */
+    private function mergeRepeatedSections(Article $article, string $content): string
+    {
+        $aliases = [
+            'enterprise-intro' => ['introduction', 'Introduction'],
+            'enterprise-architecture' => ['architecture', 'Architecture / Design'],
+            'enterprise-prerequisites' => ['prerequisites', 'Prerequisites'],
+            'enterprise-installation' => ['configuration', 'Installation / Configuration'],
+            'enterprise-security' => ['security', 'Security Hardening'],
+            'enterprise-troubleshooting' => ['troubleshooting', 'Troubleshooting'],
+            'enterprise-practices' => ['best-practices', 'Best Practices'],
+            'enterprise-sources' => ['official-references', 'Official Sources'],
+        ];
+        $templates = $this->sections($article);
+        foreach ($aliases as $alias => [$id, $label]) {
+            $pattern = '~<section\b[^>]*\bid=["\']%s["\'][^>]*>(.*?)</section>~is';
+            if (! preg_match(sprintf($pattern, $alias), $content, $old)
+                || ! preg_match(sprintf($pattern, $id), $content, $current)) { continue; }
+            if (isset($templates[$id]) && $current[0] === $templates[$id]) { continue; }
+            if (! preg_match('~<h2\b([^>]*)>(.*?)</h2>~is', $old[1], $heading)) { continue; }
+            preg_match('/\bdata-en="([^"]*)"/i', $heading[1], $english);
+            $oldLabel = trim(html_entity_decode($english[1] ?? strip_tags($heading[2]), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+            if ($oldLabel !== $label) { continue; }
+            $body = preg_replace('~<h2\b[^>]*>.*?</h2>~is', '', $old[1], 1) ?? $old[1];
+            $anchor = '<span id="'.$alias.'" class="article-section-anchor" aria-hidden="true"></span>';
+            // Preserve all unique authored prose, examples, citations and code.
+            $merged = substr($current[0], 0, -strlen('</section>')).$anchor.$body.'</section>';
+            $content = str_replace($old[0], '', $content);
+            $content = str_replace($current[0], $merged, $content);
+        }
+        return $content;
+    }
+
+    /** Remove repeated bibliography entries while retaining explanatory citations. */
+    private function deduplicateReferenceLinks(string $content): string
+    {
+        return preg_replace_callback('~<section\b[^>]*\bid=["\']official-references["\'][^>]*>.*?</section>~is', function (array $section): string {
+            $seen = [];
+            return preg_replace_callback('~<li\b[^>]*>.*?</li>~is', function (array $item) use (&$seen): string {
+                if (! preg_match('~^<li\b[^>]*>\s*<a\b[^>]*\bhref=["\']([^"\']+)["\'][^>]*>[^<]*</a\s*>\s*</li>~is', $item[0], $link)) {
+                    return $item[0];
+                }
+                $url = html_entity_decode($link[1], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                if (isset($seen[$url])) { return ''; }
+                $seen[$url] = true;
+                return $item[0];
+            }, $section[0]) ?? $section[0];
+        }, $content) ?? $content;
+    }
+
     /**
      * Keep the article footer sections predictable for readers and crawlers.
      * Existing authored sections used to remain wherever they were found,
@@ -144,7 +247,7 @@ class ArticleContentStandardizer
             return rtrim($content).$addition;
         }
 
-        return substr($content, 0, $footerPosition).$addition.substr($content, $footerPosition);
+        return rtrim(substr($content, 0, $footerPosition)).$addition.substr($content, $footerPosition);
     }
 
     private function removeArticleBackButton(string $content): string
@@ -303,7 +406,8 @@ class ArticleContentStandardizer
 
             return substr($tag[0], 0, -1).' data-fa="'.e($translations[$english]).'">';
         }, $section) ?? $section;
-        $count = substr_count($section, 'article-faq-item');
+        preg_match_all('~<h[34]\b|<summary\b(?![^>]*>\s*<h[34]\b)~i', $section, $questions);
+        $count = max(substr_count($section, 'article-faq-item'), count($questions[0]));
         if ($count >= 8 || ! $pad) {
             return substr_replace($content, $section, $match[0][1], strlen($match[0][0]));
         }
