@@ -298,6 +298,7 @@ class LegacyArticleImporter
     private function ensureCategories(): array
     {
         $names = [
+            'cisco' => ['en' => 'Cisco', 'fa' => 'سیسکو'],
             'microsoft' => ['en' => 'Microsoft', 'fa' => 'مایکروسافت'],
             'linux' => ['en' => 'Linux', 'fa' => 'لینوکس'],
             'mikrotik' => ['en' => 'MikroTik', 'fa' => 'میکروتیک'],
@@ -325,6 +326,7 @@ class LegacyArticleImporter
     {
         if ($filterClass) {
             return match (true) {
+                str_contains($filterClass, 'cisco') => 'cisco',
                 str_contains($filterClass, 'linux') => 'linux',
                 str_contains($filterClass, 'microsoft') => 'microsoft',
                 str_contains($filterClass, 'mikrotik') => 'mikrotik',
@@ -334,6 +336,7 @@ class LegacyArticleImporter
         }
 
         return match (true) {
+            str_contains($bodyClass, 'theme-cisco') => 'cisco',
             str_contains($bodyClass, 'theme-linux') => 'linux',
             str_contains($bodyClass, 'theme-microsoft') => 'microsoft',
             str_contains($bodyClass, 'theme-mikrotik') => 'mikrotik',

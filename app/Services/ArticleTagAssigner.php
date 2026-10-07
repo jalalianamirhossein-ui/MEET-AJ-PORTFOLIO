@@ -78,6 +78,7 @@ class ArticleTagAssigner
     public function slugsFor(Article $article): array
     {
         $specific = [
+            'cisco-catalyst-layer-2-layer-3-switch-hardening' => ['cisco'],
             'netbox-installation-setup-ubuntu' => ['netbox', 'ubuntu', 'linux'],
             'oxidized-network-device-configuration-backup' => ['oxidized', 'ubuntu', 'linux'],
             'nginx-installation-configuration-ubuntu' => ['nginx', 'ubuntu', 'linux'],
