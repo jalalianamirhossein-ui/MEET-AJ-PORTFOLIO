@@ -1,6 +1,7 @@
 # FortiGate SD-WAN article package
 
 - `article.fa.md`: complete Persian editorial source, SEO, captions and official references.
+- `resources/legacy/articles/fortigate-sd-wan-load-balancing-failover.html` (workspace-relative): maintained site HTML with the importer-compatible article body, hero, TOC, SEO and FAQ schema.
 - `article.fa.html`: standalone RTL reading preview with embedded styles.
 - `article-body.fa.html`: HTML body for a site's article editor; adjust relative image URLs to the final asset locations.
 - `base-config.fortios.conf`: the six ordered CLI blocks of the main static IPv4 scenario. Replace documentation WAN addressing with ISP assignments before use.
@@ -11,6 +12,6 @@ Reference baseline: FortiOS 7.6.3, core SD-WAN syntax cross-checked against 7.4.
 
 Syntax and documented behavior were checked using official Fortinet documentation. No physical FortiGate or FortiOS VM was available, so device execution and live failover are not claimed. Acceptance tests in the article are required on the actual model and patch.
 
-This package does not change the website database or publish to production. The existing CMS uses additional bilingual/localization metadata; this Persian editorial deliverable is ready to adapt or paste into that publishing workflow.
+The builder writes the maintained site HTML under `resources/legacy/articles/`, image sources under `resources/assets/img/articles/` and their local public copies under `public/assets/img/articles/`. The user's supplied banner is the hero in `banners/`; the other four supplied pictures and five generated diagrams live side by side directly in `content/`. Generated names start with `fortigate-generated-`. The site article includes both sets (ten images total). `site-images.cjs` updates just these image references and figures without rewriting the article prose. It does not change the website database or publish to production. This article is Persian with an English identity title; no full English translation is claimed.
 
 To rebuild HTML and PNGs, set `CODEX_ARTICLE_NODE_MODULES` to the bundled Node package directory returned by the workspace dependency tool, then run `node build.cjs`.

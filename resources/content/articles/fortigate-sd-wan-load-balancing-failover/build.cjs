@@ -75,18 +75,79 @@ images.push(['05-troubleshooting-flow',shell('FortiGate SD-WAN troubleshooting',
 
 async function main() {
  for (const [name,svg] of images) {
-  fs.writeFileSync(path.join(imgDir,name+'.svg'),svg);
-  await sharp(Buffer.from(svg)).png().toFile(path.join(imgDir,name+'.png'));
+  const svgPath = path.join(imgDir,name+'.svg');
+  const pngPath = path.join(imgDir,name+'.png');
+  const changed = !fs.existsSync(svgPath) || fs.readFileSync(svgPath,'utf8') !== svg;
+  fs.writeFileSync(svgPath,svg);
+  if (changed || !fs.existsSync(pngPath)) fs.writeFileSync(pngPath, await sharp(Buffer.from(svg)).png().toBuffer());
  }
  const {marked} = await import(pathToFileURL(require.resolve(path.join(runtime,'marked'))).href);
- const markdown = fs.readFileSync(path.join(root,'article.fa.md'),'utf8');
+ const markdown = fs.readFileSync(path.join(root,'article.fa.md'),'utf8').replace(/\r\n/g, '\n');
  const body = marked.parse(markdown.replace(/images\/([\w-]+)\.svg/g,'images/$1.png'));
  fs.writeFileSync(path.join(root,'article-body.fa.html'),body);
  const css = `*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f4f7fa;color:#162536;font:18px/2.05 Tahoma,"Segoe UI",sans-serif}main{max-width:1060px;margin:40px auto;background:white;padding:44px;border-radius:18px;box-shadow:0 10px 40px #102b4310}h1{font-size:32px;line-height:1.65}h2{margin-top:54px;padding-bottom:12px;border-bottom:2px solid #e2eaf0;font-size:27px}h3{margin-top:32px;font-size:22px}a{color:#075d9c;overflow-wrap:anywhere}img{width:100%;height:auto;border-radius:12px}pre{direction:ltr;text-align:left;unicode-bidi:isolate;overflow:auto;background:#0b1a2b;color:#e2edf8;padding:24px;border-radius:10px;font:15px/1.7 Consolas,monospace}code{direction:ltr;unicode-bidi:isolate;font-family:Consolas,monospace}p code,li code,td code{display:inline-block;color:#075d9c;background:#eef5fa;padding:0 5px;border-radius:4px}table{width:100%;border-collapse:collapse;font-size:15px;display:block;overflow:auto}th{background:#e8f2f7}td,th{border:1px solid #d8e3ec;padding:10px;min-width:115px;text-align:right}blockquote{border-right:4px solid #168e9c;padding:12px 24px;background:#eff9fa}@media(max-width:640px){main{margin:0;padding:24px 18px;border-radius:0}body{font-size:16px}h1{font-size:26px}h2{font-size:23px}pre{padding:16px;font-size:13px}}`;
  fs.writeFileSync(path.join(root,'article.fa.html'),`<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>لود بالانس و Failover در FortiGate با SD-WAN و SLA</title><meta name="description" content="آموزش عملی Load Balancing و Failover اینترنت در FortiGate با SD-WAN، Performance SLA، تنظیمات CLI و GUI، توزیع Source-Destination و عیب‌یابی Dual WAN."><meta name="keywords" content="FortiGate Load Balancing, FortiGate SD-WAN, FortiGate Failover, FortiGate Performance SLA, FortiGate Dual WAN, FortiGate WAN Load Balancing, SD-WAN Load Balancing, FortiOS SD-WAN"><style>${css}</style></head><body><main>${body}</main></body></html>`);
+ const slug = 'fortigate-sd-wan-load-balancing-failover';
+ const workspace = path.resolve(root, '../../../..');
+ const legacyDir = path.join(workspace, 'resources/legacy/articles');
+ const assetDir = path.join(workspace, 'resources/assets/img/articles');
+ const bannerUrl = `/assets/img/articles/banners/${slug}.png`;
+ const contentUrl = `/assets/img/articles/content/${slug}`;
+ const titleFa = markdown.match(/^# (.+)/)[1];
+ const titleEn = 'FortiGate Internet Load Balancing and Failover with SD-WAN and Performance SLA';
+ const description = 'آموزش عملی Load Balancing و Failover اینترنت در FortiGate با SD-WAN، Performance SLA، تنظیمات CLI و GUI، توزیع Source-Destination و عیب‌یابی Dual WAN.';
+ const keywords = 'FortiGate Load Balancing, FortiGate SD-WAN, FortiGate Failover, FortiGate Performance SLA, FortiGate Dual WAN, FortiGate WAN Load Balancing, SD-WAN Load Balancing, FortiOS SD-WAN';
+ const canonical = `https://meetaj.ir/articles/${slug}`;
+ const headings = [];
+ let legacyBody = body.replace(/^<h1>[\s\S]*?<\/h1>\s*/, '')
+  .replace(/<p><img src="images\/01-banner.png"[^>]*><\/p>\s*/, '')
+  .replace(/<p><em>تصویر ۱[\s\S]*?<\/em><\/p>\s*/, '')
+  .replace(/src="images\/([\w-]+)\.png"/g, `src="${contentUrl}/$1.png" loading="lazy"`)
+  .replace(/<pre>/g, '<pre dir="ltr">')
+  .replace(/<h2>([\s\S]*?)<\/h2>/g, (_, label) => {
+   const id = `section-${headings.length + 1}`;
+   headings.push({id, label});
+   return `<h2 id="${id}">${label}</h2>`;
+  });
+ const toc = headings.map(({id,label})=>`<li class="article-nav-item"><a href="#${id}">${label}</a></li>`).join('\n');
+ const faqSource = markdown.split('## FAQ')[1].split('## SEO')[0];
+ const faq = [...faqSource.matchAll(/### (.+)\n+([\s\S]*?)(?=\n### |$)/g)].map(m=>({
+  '@type':'Question', name:m[1], acceptedAnswer:{'@type':'Answer',text:m[2].trim()}
+ }));
+ const schema = {'@context':'https://schema.org','@type':'Article',headline:titleFa,description,inLanguage:'fa',url:canonical,image:bannerUrl};
+ const faqSchema = {'@context':'https://schema.org','@type':'FAQPage',inLanguage:'fa',mainEntity:faq};
+ fs.mkdirSync(legacyDir,{recursive:true});
+ fs.writeFileSync(path.join(legacyDir,slug+'.html'),`<!doctype html>
+<html lang="fa" dir="rtl" data-article-language="fa"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لود بالانس و Failover در FortiGate با SD-WAN و SLA</title>
+<meta name="article:content-language" content="fa">
+<meta name="description" content="${esc(description)}"><meta name="keywords" content="${esc(keywords)}">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="${esc(titleFa)}"><meta property="og:description" content="${esc(description)}">
+<meta property="og:type" content="article"><meta property="og:image" content="${bannerUrl}">
+<meta property="og:url" content="${canonical}"><link rel="canonical" href="${canonical}">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(titleFa)}">
+<meta name="twitter:description" content="${esc(description)}"><meta name="twitter:image" content="${bannerUrl}">
+<script type="application/ld+json">${JSON.stringify(schema)}</script>
+<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>
+<style>${css}</style></head><body class="article-page theme-other">
+<header><nav aria-label="فهرست مقاله"><ul>${toc}</ul></nav></header><main>
+<section class="article-hero article-header hero">
+<span class="article-category" data-en="Networking" data-fa="شبکه">شبکه</span>
+<h1 class="article-title hero-title" data-en="${esc(titleEn)}" data-fa="${esc(titleFa)}">${esc(titleFa)}</h1>
+<p class="article-excerpt hero-subtitle" data-en="A technical guide to dual-WAN load balancing, SLA monitoring, failover and troubleshooting in FortiGate." data-fa="${esc(description)}">${esc(description)}</p>
+<figure><img class="article-hero-thumbnail" src="${bannerUrl}" alt="FortiGate SD-WAN Load Balancing" width="1600" height="900">
+<figcaption>تصویر ۱ — استفاده همزمان از دو ISP همراه با پایش کیفیت و Failover برای اتصال اینترنت سازمان.</figcaption></figure>
+</section><article class="article-body" dir="rtl">${legacyBody}</article></main></body></html>`);
+ fs.mkdirSync(path.join(assetDir,'content'),{recursive:true});
+ fs.copyFileSync(path.join(imgDir,'01-banner.png'),path.join(assetDir,'content','fortigate-generated-banner.png'));
+ const siteImages = require('./site-images.cjs');
+ for (const [oldName,generatedName] of siteImages.mappings) fs.copyFileSync(path.join(imgDir,oldName),path.join(assetDir,'content',generatedName));
+ siteImages.publish();
  const cliBlocks = [...markdown.matchAll(/```fortios\n([\s\S]*?)```/g)].map(m=>m[1]);
  fs.writeFileSync(path.join(root,'base-config.fortios.conf'),cliBlocks.slice(0,6).join('\n'));
  for (const [name] of images) console.log(name+'.svg + .png');
- console.log('HTML and base configuration generated. Total CLI blocks:',cliBlocks.length);
+ console.log('Legacy HTML, image assets and base configuration generated. Total CLI blocks:',cliBlocks.length);
 }
 main().catch(e=>{console.error(e);process.exitCode=1});
