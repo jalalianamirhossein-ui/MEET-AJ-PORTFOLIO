@@ -39,7 +39,7 @@ $html = '<!doctype html><html lang="fa" dir="rtl" data-article-language="fa"><he
         'description' => $description, 'inLanguage' => 'fa', 'mainEntityOfPage' => $canonical,
         'image' => $banner, 'author' => ['@type' => 'Organization', 'name' => 'Meet AJ'],
     ], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES).'</script>'
-    .'</head><body class="article-page theme-other"><main class="article-body" lang="fa">'.$body.'</main></body></html>';
+    .'</head><body class="article-page theme-other"><article class="article-body" lang="fa">'.$body.'</article></body></html>';
 
 $destination = dirname(__DIR__, 3).'/legacy/articles/truenas-zfs-enterprise.html';
 file_put_contents($destination, $html);
