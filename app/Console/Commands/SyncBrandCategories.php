@@ -41,6 +41,7 @@ class SyncBrandCategories extends Command
         }
 
         $primary = [
+            'ubiquiti' => 'ubiquiti',
             'netbox' => 'linux', 'oxidized' => 'linux', 'nginx' => 'linux', 'linux' => 'linux',
             'mikrotik' => 'mikrotik', 'sql-server' => 'microsoft', 'vsphere' => 'vmware',
             'vmware' => 'vmware', 'esxi' => 'vmware', 'openvpn' => 'mikrotik', 'ssh' => 'linux',

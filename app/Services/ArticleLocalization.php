@@ -96,6 +96,16 @@ class ArticleLocalization
             return '<'.$match[1].$match[2].'>'.htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
                 .($links[0] ? ' '.implode(' ', $links[0]) : '').implode('', $icons[0]).'</'.$match[1].'>';
         }, $html) ?? $html;
+        $html = preg_replace_callback('~<img\b[^>]*>~i', function ($match) use ($locale) {
+            $tag = $match[0];
+            foreach (['alt', 'title'] as $attribute) {
+                if (preg_match('~\bdata-'.($locale === 'fa' ? 'fa' : 'en').'-'.$attribute.'="([^"]*)"~i', $tag, $translation)) {
+                    $tag = preg_replace_callback('~(?<![\w-])'.$attribute.'="[^"]*"~i', fn () => $attribute.'="'.$translation[1].'"', $tag, 1) ?? $tag;
+                }
+            }
+
+            return $tag;
+        }, $html) ?? $html;
         $html = preg_replace('~lang="(?:fa|en)" dir="(?:rtl|ltr)"~', 'lang="'.$locale.'" dir="'.($locale === 'fa' ? 'rtl' : 'ltr').'"', $html) ?? $html;
 
         return strtr($html, $protected);

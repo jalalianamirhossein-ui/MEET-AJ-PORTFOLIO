@@ -195,6 +195,13 @@
       }
     });
 
+    ["alt", "title"].forEach((attribute) => {
+      document.querySelectorAll(`[data-en-${attribute}]`).forEach((el) => {
+        const value = el.getAttribute(`data-${next}-${attribute}`) || el.getAttribute(`data-en-${attribute}`);
+        if (value) el.setAttribute(attribute, value);
+      });
+    });
+
     document.querySelectorAll("[data-en-placeholder]").forEach((el) => {
       const attr =
         next === "fa"

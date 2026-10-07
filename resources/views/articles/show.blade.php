@@ -128,7 +128,16 @@
               @endif
             </div>
             <figure class="article-hero-media">
-              <img class="article-hero-thumbnail" src="{{ $article->thumbnailUrl() }}" decoding="async" fetchpriority="high" alt="{{ data_get($article->presentation, 'image_alt') ?: $article->title }}" />
+              @php $heroLocale = data_get($article->presentation, 'content_language', 'en'); @endphp
+              <img class="article-hero-thumbnail" src="{{ $article->thumbnailUrl() }}" decoding="async" fetchpriority="high" alt="{{ data_get($article->presentation, 'localizations.'.$heroLocale.'.image_alt') ?: (data_get($article->presentation, 'image_alt') ?: $article->title) }}"
+                @if (data_get($article->presentation, 'localizations.en.image_alt'))
+                  data-en-alt="{{ data_get($article->presentation, 'localizations.en.image_alt') }}" data-fa-alt="{{ data_get($article->presentation, 'localizations.fa.image_alt') }}"
+                  title="{{ data_get($article->presentation, 'localizations.'.$heroLocale.'.image_title') }}" data-en-title="{{ data_get($article->presentation, 'localizations.en.image_title') }}" data-fa-title="{{ data_get($article->presentation, 'localizations.fa.image_title') }}"
+                @endif
+              />
+              @if (data_get($article->presentation, 'localizations.en.image_caption'))
+                <figcaption><span data-en="{{ data_get($article->presentation, 'localizations.en.image_caption') }}" data-fa="{{ data_get($article->presentation, 'localizations.fa.image_caption') }}">{{ data_get($article->presentation, 'localizations.'.$heroLocale.'.image_caption') }}</span></figcaption>
+              @endif
             </figure>
           </div>
         </div>

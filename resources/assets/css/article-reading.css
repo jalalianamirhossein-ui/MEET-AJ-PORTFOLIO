@@ -1,5 +1,16 @@
 /* Shared editorial layer: loaded after site/glass styles in both languages. */
 /* Desktop hero: image occupies the empty right column; mobile stays stacked. */
+.article-page figure.article-hero-media:has(figcaption) {
+  flex-direction: column;
+  gap: .65rem;
+}
+.article-page figure.article-hero-media > figcaption {
+  width: 100%;
+  max-width: 380px;
+  margin: 0;
+  text-align: center;
+  line-height: 1.7;
+}
 @media (min-width: 1200px) {
   html[dir] .article-page .article-hero-layout {
     display: grid;
