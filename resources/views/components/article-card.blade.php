@@ -59,7 +59,7 @@
                 data-topic="{{ $topic }}"
                 style="{{ $accentStyle }}"
                 >
-                <article class="article-teaser" data-topic="{{ $topic }}" style="{{ $accentStyle }}">
+                <article class="article-teaser{{ $article->slug === 'truenas-zfs-enterprise' ? ' article-teaser--banner' : '' }}" data-topic="{{ $topic }}" style="{{ $accentStyle }}">
                   <div class="portfolio-content article-teaser-media">
                     <img
                       src="{{ $article->thumbnailUrl() }}"
