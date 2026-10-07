@@ -233,12 +233,15 @@ html[dir="rtl"] .article-page .article-body .article-section h2:hover { transfor
 /* Keep the article TOC integrated with the page instead of rendering a
    second white card around the navigation. */
 .article-page aside.article-toc {
-  border: 0;
-  border-inline-start: 3px solid var(--article-primary);
+  width: min(100%, 12rem);
+  border: 0 !important;
+  border-inline-start: 2px solid var(--article-primary) !important;
   border-radius: 0;
-  background: transparent;
-  box-shadow: none;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: .25rem 0 .25rem .35rem;
 }
+.article-page aside.article-toc .article-toc-list { max-height: 14rem; }
 .article-page .article-body .table-responsive { margin-block: .9rem; border: 1px solid var(--reading-topic-line); border-radius: .7rem; }
 .article-page .article-body table { margin: 0; }
 .article-page .article-body th { background: var(--reading-topic-fill); color: var(--reading-topic-ink); }
