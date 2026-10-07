@@ -35,7 +35,7 @@ class ArticleLocalization
         $article->seo_data = array_replace($article->seo_data ?? [], [
             'og_title' => $text['title'], 'og_description' => $text['description'],
             'twitter_title' => $text['title'], 'twitter_description' => $text['description'],
-            'keywords' => implode(', ', $text['keywords']),
+            'keywords' => implode(', ', $text['keywords'] ?? []),
             // Both languages use the same URL and a saved preference, not separate pages.
             'alternates' => [],
             'schema' => array_replace(data_get($article->seo_data, 'schema', []) ?? [], [
@@ -48,7 +48,7 @@ class ArticleLocalization
                 'mainEntity' => array_map(fn ($pair) => [
                     '@type' => 'Question', 'name' => $pair[0],
                     'acceptedAnswer' => ['@type' => 'Answer', 'text' => $pair[1]],
-                ], $text['faq']),
+                ], $text['faq'] ?? []),
             ],
         ]);
 
