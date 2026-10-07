@@ -1,10 +1,12 @@
 # Admin panel — Meet AJ
 
+> Maintenance review: 2026-10-06. The current local database has no CMS accounts. Admin branding includes the glass overlay; primary colors remain configured in `AdminPanelProvider`. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
 **Authority:** AUTHORITATIVE Filament description.
-**Verified:** 2026-09-20 against `app/Filament/**`, `app/Policies/**`, `app/Providers/Filament/AdminPanelProvider.php`, `resources/css/filament-admin.css`, `public/css/app/meet-aj-admin.css`, `php artisan route:list` (after `optimize:clear`), PHPUnit (`HomepageContentTest` plus the full feature suite), and the current resource definitions.
+**Verified:** 2026-09-21 against `app/Filament/**`, `app/Policies/**`, `app/Providers/Filament/AdminPanelProvider.php`, `resources/css/filament-admin.css`, `public/css/app/meet-aj-admin.css`, `php artisan route:list` (after `optimize:clear`), PHPUnit (`HomepageContentTest` plus the full feature suite), and the current resource definitions.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
-Panel: **Filament v5.8.2** on **Livewire v4.4.5**, mounted at `/admin`, brand name “Meet AJ CMS”, **White + Red** identity (canvas `#ffffff`, primary `#be123c`, gray palette Slate, danger `#7f1d1d`), collapsible sidebar, collapsible navigation groups, unsaved-changes alerts, and global search enabled.
+Panel: **Filament v5.8.2** on **Livewire v4.4.5**, mounted at `/admin`, brand name “Meet AJ CMS”, **White + Red** identity with a glass overlay (canvas `#ffffff`, primary `#be123c`, gray palette Slate, danger `#7f1d1d`), collapsible sidebar, collapsible navigation groups, unsaved-changes alerts, and global search enabled.
 
 A guest hitting `/admin` is redirected to `/admin/login`; the login page itself returns HTTP 200.
 
@@ -16,7 +18,7 @@ Filament session authentication on the `web` guard against the `users` table. Ro
 php artisan cms:create-user
 ```
 
-**The local `users` table currently has 3 rows** (admin / editor QA accounts plus a throwaway contrast-QA admin created 2026-09-18). Passwords are not stored in documentation.
+**The local `users` table has 0 rows on 2026-10-06.** Create an authorized account with `cms:create-user` for interactive admin checks.
 
 ## Navigation
 
@@ -63,7 +65,7 @@ Active item: light crimson `#fff1f2` fill, 3px `#be123c` inset bar, crimson labe
 
 CRUD on `articles` for admins and editors (`ArticlePolicy` → `User::canManageContent()`).
 
-Simple create flow: enter the title, language, category/tags, optional image and body. Slug, excerpt, meta title and meta description are generated automatically when left empty; SEO and Publishing are collapsed for advanced edits. Use **HTML source** mode when pasting content that includes `<section>`, `data-en` or `data-fa`; use the visual editor for ordinary article text. Imported articles with legacy presentation still open in the raw HTML editor so their existing structure is preserved. Pasted escaped article markup is normalized before saving and rendering, so `&lt;section&gt;` does not appear as visible text. Publishing uses `sort_order` (lower numbers displayed first), `status`, and `published_at` in `config('cms.display_timezone')`; German rows must stay draft. The article table defaults to this same `sort_order`.
+Simple create flow: enter the title, language, category/tags, optional image and body. Slug, excerpt, meta title and meta description are generated automatically when left empty; SEO and Publishing are collapsed for advanced edits. Use **HTML source** mode when pasting content that includes `<section>`, `data-en` or `data-fa`; use the visual editor for ordinary article text. Imported articles with legacy presentation still open in the raw HTML editor so their existing structure is preserved. Pasted escaped article markup is normalized before saving and rendering, so `&lt;section&gt;` does not appear as visible text. Public placement follows the editorial groups in `config/article-order.php`, with new unclassified articles sorted newest first between Enterprise articles and basic guides. See [Article ordering](ARTICLE-ORDERING.md). `status` and `published_at` in `config('cms.display_timezone')` control visibility; German rows must stay draft. The admin article table uses the synchronized numeric `sort_order`.
 
 Table: searchable and sortable title, gray language badge, **category colour chip** (dot + tinted pill + readable name from the public topic palette), gray tag badges, status, `published_at`, toggleable `updated_at`, plus filters and a default sort. Preview/Edit are gray; Delete stays danger. Changing a slug writes a new `article_redirects` row.
 
@@ -171,3 +173,5 @@ Filament `Color::hex('#be123c')` generates a light 400 swatch; `filament-admin.c
 | Admin responsive layout 1024 / 768 / 390 | Cursor browser | PASS |
 
 Evidence: [../qa/ADMIN-QA.md](../qa/ADMIN-QA.md).
+
+Image organization (2026-10-06): [banner, article-body and upload folder guide](IMAGES.md). Run `node scripts/check-images.cjs` after publishing images.

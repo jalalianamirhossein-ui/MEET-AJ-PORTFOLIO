@@ -1,5 +1,7 @@
 # Historical documentation
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 **Nothing in this folder describes the current state of the project.**
 
 These files are preserved records: earlier audits, superseded plans, point-in-time implementation reports, QA snapshots, bug and content-integrity logs, and screenshot evidence. They are kept because they contain measurements, decisions and failure history that the current documents summarise but do not reproduce.

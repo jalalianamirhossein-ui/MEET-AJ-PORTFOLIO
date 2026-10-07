@@ -4,9 +4,10 @@
 |-----------|---------|
 | `assets/` | Editable site assets, copied to `public/assets/` |
 | `css/` | Filament admin stylesheet, published with `filament:assets` |
-| `downloads/` | Visitor downloads; the NetBox guide retains its `/docs/` URL |
+| `content/articles/` | Article generators, editorial input, SQL/PowerShell/RouterOS/Bash examples and selected download sources |
+| `downloads/` (currently absent) | Optional legacy NetBox PDF source; restore the actual guide before publishing its `/docs/` URL |
 | `static/` | Manifest, preloaders, and static language-toggle fragment |
-| `legacy/` | Original HTML used for content import, comparison, and view generation; former endpoints and templates are retained as references |
+| `legacy/` | Maintained HTML used for content import, comparison, and view generation; original articles are archived in `docs/enterprise-articles/originals.zip`; former endpoints and templates are retained as references |
 | `views/` | Active Blade views and partials; `home.blade.php` is CMS-backed |
 
 Run `php artisan site:publish-assets` after editing public asset sources and `php artisan filament:assets` after editing the admin CSS. The optional `--views` flag rebuilds the article listing view from `legacy/index.html` through `App\Services\LegacySitePublisher`. The homepage `views/home.blade.php` is maintained directly and reads its copy from the `homepage_contents` table; the publisher intentionally does not overwrite it. Other Blade views are maintained directly.
@@ -14,3 +15,7 @@ Run `php artisan site:publish-assets` after editing public asset sources and `ph
 `legacy/views/` is outside Laravel's configured view path. The old `legacy/forms/` PHP files are not live endpoints. `/forms/*` routes use Laravel controllers. The old `legacy/sw.js`, `legacy/robots.txt`, and `legacy/sitemap.xml` are reference files; the application generates their current public equivalents.
 
 See [the project directory map](../docs/current/PROJECT-STRUCTURE.md) for placement and deployment rules.
+
+Reviewed 2026-10-06. The Linux package uses the article slug `linux-security-auditor-bash`. SQL English generator input lives with its article package as `english-source.txt`. The MikroTik MSI is published; its source ZIP stays outside `public/`.
+
+Image organization (2026-10-06): [banner, article-body and upload folder guide](../docs/current/IMAGES.md). Run `node scripts/check-images.cjs` after publishing images.

@@ -1,6 +1,8 @@
 # Multilingual — Meet AJ
 
-**Authority:** AUTHORITATIVE language document.  
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
+**Authority:** AUTHORITATIVE language document.
 **Verified:** 2026-09-16 against `config/cms.php`, `Article` model, views, `assets/js/i18n.js`, and `PublicSiteTest::test_german_routes_are_not_public`.
 
 ## Languages

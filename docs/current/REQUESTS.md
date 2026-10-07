@@ -1,5 +1,7 @@
 # Requests (contact and quotes) — Meet AJ
 
+> Maintenance review: 2026-10-06. The maintained Filament tree includes shared `RequestResource` and separate Contact/Service request resources. The contact schema and submission contract were not changed by this reorganization. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
 **Authority:** AUTHORITATIVE description of the inbound request pipeline.
 **Verified:** 2026-09-18 against `app/Http/Controllers/ContactController.php`, `app/Http/Requests/StoreContactRequest.php`, `app/Http/Middleware/AcceptLegacyCsrfToken.php`, `app/Models/Request.php`, `app/Filament/Resources/RequestResource.php`, `routes/web.php`, PHPUnit (`PublicSiteTest`, `RequestWorkflowTest`, `ProductionAuditTest`, `FormCsrfAndAdminRequestsTest`), and a live `POST /forms/contact.php` that stored SQLite row id 5.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).

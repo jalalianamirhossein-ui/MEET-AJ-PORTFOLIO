@@ -1,8 +1,10 @@
 # QA matrix — Meet AJ
 
-**Authority:** AUTHORITATIVE per-URL QA evidence.  
-**Date:** 2026-09-18  
-**Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md)  
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
+**Authority:** AUTHORITATIVE per-URL QA evidence.
+**Date:** 2026-09-21
+**Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md)
 **Superseded 2026-09-17 matrix:** [../archive/2026-09-18/QA-MATRIX.md](../archive/2026-09-18/QA-MATRIX.md)
 
 Legend:
@@ -12,9 +14,9 @@ Legend:
 - **PRODUCTION TESTED** — meetaj.ir / DirectAdmin (none in this matrix)
 - Status: **PASS** | **FAIL** | **NOT TESTED** | **BLOCKED**
 
-Latest default suite: **58 tests, 1124 assertions**, 1 skipped, 0 failures.  
-`site:compare-content`: **Failures: 0**.  
-Live contact POST: HTTP 200 `OK`, SQLite `requests.id = 5`.  
+Latest default suite: **67 tests, 1127 assertions**, 1 skipped, 0 failures.
+`site:compare-content`: **Failures: 0**.
+Live contact POST: HTTP 200 `OK`, SQLite `requests.id = 5`.
 Browser: first-load Testimonials + Contact, FA RTL, Contact hash from Home and Articles, viewports 1920/1440/1024/768/390 with no horizontal overflow, **authenticated Admin White/Red + Editor 403**, `/admin/categories` Accent color ColorPicker, Homepage Expertise EN + FA.
 
 Skipped in default sqlite suite: `MysqlSchemaTest` (runs only when MySQL is bound).
@@ -25,11 +27,11 @@ Skipped in default sqlite suite: `MysqlSchemaTest` (runs only when MySQL is boun
 
 | URL / Feature | Expected | Actual | Test method | Status | Notes |
 |---------------|----------|--------|-------------|--------|-------|
-| `GET /` | 200, section IDs, EN default | 200, IDs present | PHPUnit `test_homepage_and_index_redirect`; `site:compare-content`; browser QA | PASS · LOCAL TESTED | Overlay `site-modules.css?v=1840`; Expertise 5 columns |
+| `GET /` | 200, section IDs, EN default | 200, IDs present | PHPUnit `test_homepage_and_index_redirect`; `site:compare-content`; browser QA | PASS · LOCAL TESTED | Overlay `site-modules.css?v=1853`; Expertise 5 columns |
 | `GET /index.html` | 301 → `/` | 301 | PHPUnit | PASS · LOCAL TESTED | Master prompt listed 200; implementation and tests use 301 |
-| `GET /articles` | 200, 23 cards, filters | 200 | PHPUnit + browser | PASS · LOCAL TESTED | Filter controls are `<button type="button">` |
-| `GET /services/{slug}` | 200, landing + hidden quote form | 200 | PHPUnit `ServiceCatalogTest` / `PublicSiteTest`; browser | PASS · LOCAL TESTED | Form revealed by CTA |
-| `GET /services/{slug}.html` | 301 → clean slug | 301 | PHPUnit | PASS · LOCAL TESTED | Query string preserved |
+| `GET /articles` | 200, 25 published cards, filters | 200 | PHPUnit + browser | PASS · LOCAL TESTED | Filter controls are `<button type="button">` |
+| `GET /services/{slug}` | 404 by design | 404 | PHPUnit `ServiceCatalogTest` / `PublicSiteTest` | PASS · LOCAL TESTED | Services remain homepage catalog records |
+| `GET /services/{slug}.html` | 404 by design | 404 | PHPUnit | PASS · LOCAL TESTED | Standalone service pages were removed |
 
 ## Article pages (23)
 
@@ -84,7 +86,7 @@ Slugs: `creating-a-bootable-usb`, `downgrade-mikrotik-routeros-firmware-safely`,
 | Users resource in sidebar | admin only | `shouldRegisterNavigation` true for admins | code + browser | PASS · LOCAL TESTED | Hidden from editor nav |
 | Browser login + White/Red chrome | usable + WCAG 4.5:1 type | Admin contrast re-test 2026-09-18 | Cursor browser | PASS · LOCAL TESTED | Login labels `#1e293b`; sidebar inactive slate / active crimson; see [ADMIN-QA.md](ADMIN-QA.md) |
 | `/admin/categories` Accent color | ColorPicker + fallback | ColorPicker, Preview, Reset; empty Linux `#15803d` | PHPUnit `AdminThemeTest` + browser | PASS · LOCAL TESTED | `categories.accent_color` nullable; public `--topic` |
-| Homepage Expertise EN/FA | 5 pastel columns; RTL right accent | verified | browser + `ProductionAuditTest` markup | PASS · LOCAL TESTED | `site-modules.css?v=1840`, `initExpertiseReveal` |
+| Homepage Expertise EN/FA | 5 pastel columns; RTL right accent | verified | browser + `ProductionAuditTest` markup | PASS · LOCAL TESTED | `site-modules.css?v=1853`, `initExpertiseReveal` |
 
 ## German
 

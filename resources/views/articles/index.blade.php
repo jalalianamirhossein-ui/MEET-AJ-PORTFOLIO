@@ -8,7 +8,7 @@
     <link rel="canonical" href="{{ rtrim(config('app.url'), '/') }}/articles" />
     <meta property="og:title" content="Articles | Meet AJ" />
     <meta property="og:url" content="{{ rtrim(config('app.url'), '/') }}/articles" />
-    <link href="/assets/img/favicon.png" rel="icon" />
+    <link href="/assets/img/icons/favicon.png" rel="icon" />
     <link rel="manifest" href="/manifest.json" />
     <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
@@ -19,13 +19,12 @@
     <link id="rtl-style" href="/assets/css/rtl.css?v=1405" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
     <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
+    <link href="/assets/css/glass-system.css?v=18" rel="stylesheet" />
+    <link href="/preloader.css?v=devops-2" rel="stylesheet" />
+    <noscript><style>#preloader { display: none !important; }</style></noscript>
   </head>
   <body class="index-page articles-index-page">@verbatim
-<a class="skip-link" href="#portfolio" data-en="Skip to main content" data-fa="رفتن به محتوای اصلی">Skip to main content</a>
-    <!-- ===============================================
-    ==================== HEADER SECTION ================
-    =============================================== -->
-    <header id="header" class="header dark-background d-flex flex-column">
+<header id="header" class="header dark-background d-flex flex-column">
       @endverbatim
       @include('partials.site-sidebar-chrome', ['logoHref' => '/#hero'])
 @verbatim
@@ -59,19 +58,19 @@
             >
           </li>
 
-          <!-- Services Section -->
-          <li>
-            <a href="/#services"
-              ><i class="bi bi-hdd-stack navicon"></i
-              ><span data-en="Services" data-fa="خدمات">Services</span></a
-            >
-          </li>
-
           <!-- Articles Section -->
           <li>
             <a href="/articles" class="active" aria-current="page"
               ><i class="bi bi-images navicon"></i
               ><span data-en="Articles" data-fa="مقالات">Articles</span></a
+            >
+          </li>
+
+          <!-- Services Section -->
+          <li>
+            <a href="/#services"
+              ><i class="bi bi-hdd-stack navicon"></i
+              ><span data-en="Services" data-fa="خدمات">Services</span></a
             >
           </li>
 
@@ -305,7 +304,9 @@
             <div class="footer-bottom-content">
               <div class="copyright">
                 <p>
-                  © <span data-current-year>2026</span>
+                  © @endverbatim
+<x-localized-year />
+@verbatim
                   <strong
                     data-en="AmirHossein Jalalian"
                     data-fa="امیرحسین جلالیان"
@@ -330,15 +331,18 @@
         </div>
       </div>
     </footer>
-@endverbatim    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+@endverbatim
+    @include('partials.devops-preloader')
+    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
     <script src="/assets/vendor/aos/aos.js" defer></script>
     <script src="/assets/vendor/glightbox/js/glightbox.min.js" defer></script>
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
-    <script src="/assets/js/main.js?v=1414" defer></script>
+    <script src="/assets/js/main.js?v=1420" defer></script>
+    <script src="/assets/js/scroll-reveal.js?v=1" defer></script>
     <script src="/assets/js/service-catalog.js?v=1813" defer></script>
-    <script src="/assets/js/i18n.js?v=1403" defer></script>
+    <script src="/assets/js/i18n.js?v=1407" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {

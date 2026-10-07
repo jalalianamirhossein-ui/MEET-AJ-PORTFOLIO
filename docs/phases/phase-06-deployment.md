@@ -1,5 +1,7 @@
 > **HISTORICAL phase log.** Authoritative procedure: [../current/DEPLOYMENT.md](../current/DEPLOYMENT.md) (moved from the repository root during the 2026-09-17 documentation reorganisation). Cutover is still not executed.
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 # Phase 06 — DirectAdmin deployment
 
 **Phase:** 06

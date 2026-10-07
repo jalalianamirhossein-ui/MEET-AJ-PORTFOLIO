@@ -1,0 +1,147 @@
+/* Contact-only Soft UI: shared surfaces, blue/teal accents and soft relief. */
+body.index-page #contact {
+  --contact-surface: #f4f6fa;
+  --contact-light: rgba(255, 255, 255, 0.88);
+  --contact-dark: rgba(173, 183, 200, 0.35);
+  --contact-ink: #243650;
+  --contact-muted: #607087;
+  --contact-accent: #5476a6;
+  --contact-primary: #426de0;
+  --contact-teal: #27b6c7;
+  --contact-violet: #9275df;
+  --contact-green: #25946b;
+  --contact-red: #cf5262;
+  --contact-spectrum: linear-gradient(90deg, var(--contact-primary), var(--contact-teal), var(--contact-green), var(--contact-violet), var(--contact-red), var(--contact-primary));
+  --contact-raised: -6px -6px 16px var(--contact-light), 6px 6px 16px var(--contact-dark);
+  --contact-inset: inset -4px -4px 10px var(--contact-light), inset 4px 4px 10px var(--contact-dark);
+  background: var(--contact-surface);
+  color: var(--contact-ink);
+}
+body.index-page #contact .contact-wrapper { padding: 8px 0 16px; }
+body.index-page #contact .contact-header { margin: 0 0 32px; padding: 0; }
+body.index-page #contact .contact-intro { gap: 8px; }
+body.index-page #contact .contact-intro-title { font-size: clamp(1.2rem, 2vw, 1.55rem); color: var(--contact-ink); }
+body.index-page #contact .contact-intro-text { max-width: 75ch; font-size: 0.9rem; color: var(--contact-muted); }
+body.index-page #contact .title-accent { color: var(--contact-accent); }
+body.index-page #contact .contact-main-grid { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: 32px; align-items: start; }
+body.index-page #contact :is(.contact-main-grid, .contact-form-section, .contact-card, .location-info)::before,
+body.index-page #contact :is(.contact-main-grid, .contact-card)::after { content: none; }
+body.index-page #contact .contact-methods { margin: 0; padding: 0; background: var(--contact-surface); }
+body.index-page #contact .contact-cards-grid { gap: 20px; }
+body.index-page #contact .contact-card:nth-child(1) { --contact-accent: var(--contact-primary); }
+body.index-page #contact .contact-card:nth-child(2) { --contact-accent: var(--contact-green); }
+body.index-page #contact .contact-card:nth-child(3) { --contact-accent: var(--contact-red); }
+body.index-page #contact .contact-card:nth-child(4) { --contact-accent: var(--contact-violet); }
+/* Raised contact methods; preserve the current icons and content. */
+body.index-page #contact .contact-card,
+body.index-page #contact .contact-card:hover {
+  display: flex; align-items: flex-start; gap: 16px; padding: 24px;
+  /* Replace the previous tree layout's important surface resets. */
+  border: 0 !important; border-radius: 20px !important; background: var(--contact-surface) !important;
+  box-shadow: 0 8px 28px rgba(36, 54, 80, 0.06), inset 0 0 0 1px #e3e8f1 !important; transform: none; backdrop-filter: none;
+}
+body.index-page #contact .contact-card,
+body.index-page #contact .contact-card:hover { position: relative; overflow: hidden !important; }
+body.index-page #contact .contact-card::after,
+body.index-page #contact .contact-card:hover::after { content: ''; position: absolute; inset: 0 0 auto; width: 100%; height: 3px; transform: none; background: linear-gradient(90deg, var(--contact-accent), color-mix(in srgb, var(--contact-accent) 55%, white), var(--contact-accent)); background-size: 300% 100%; animation: contact-color-flow 8s ease-in-out infinite; transition: none; }
+body.index-page #contact .card-icon,
+body.index-page #contact .card-icon:hover {
+  width: auto; height: auto; min-width: 24px; padding: 0; margin: 0;
+  border: 0; border-radius: 0; background: transparent; box-shadow: none;
+  color: var(--contact-accent); font-size: 1.35rem; transform: none;
+}
+body.index-page #contact .card-content { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+body.index-page #contact .card-content h4 { font-size: 0.95rem; color: var(--contact-ink); }
+body.index-page #contact .card-content p { font-size: 0.82rem; color: var(--contact-muted); }
+body.index-page #contact .contact-link,
+body.index-page #contact .contact-link:hover { grid-row: 3; width: fit-content; font-size: 0.86rem; color: var(--contact-primary); }
+body.index-page #contact .contact-link { color: var(--contact-accent); }
+body.index-page #contact .contact-link:hover { color: var(--contact-accent); text-decoration: underline; text-underline-offset: 4px; }
+body.index-page #contact .location-info { --contact-accent: var(--contact-teal); position: relative; overflow: hidden; margin: 24px 0 0; padding: 24px; border: 0; border-radius: 20px; background: var(--contact-surface); box-shadow: 0 8px 28px rgba(36, 54, 80, 0.06), inset 0 0 0 1px #e3e8f1; }
+body.index-page #contact .location-info::after,
+body.index-page #contact .location-info:hover::after { content: ''; position: absolute; inset: 0 0 auto; width: 100%; height: 3px; transform: none; background: linear-gradient(90deg, var(--contact-accent), color-mix(in srgb, var(--contact-accent) 55%, white), var(--contact-accent)); background-size: 300% 100%; animation: contact-color-flow 8s ease-in-out infinite; transition: none; }
+body.index-page #contact .contact-header { position: relative; padding-bottom: 24px; }
+body.index-page #contact .contact-header::after { content: ''; position: absolute; inset: auto 0 0; height: 2px; opacity: .7; background: var(--contact-spectrum); background-size: 300% 100%; animation: contact-color-flow 8s ease-in-out infinite; }
+body.index-page #contact .location-card { background: var(--contact-surface); }
+body.index-page #contact .location-header { margin-bottom: 8px; }
+body.index-page #contact .location-header h4 { font-size: 0.95rem; color: var(--contact-ink); }
+body.index-page #contact .location-header i { color: var(--contact-accent); }
+body.index-page #contact .location-content p { font-size: 0.85rem; color: var(--contact-muted); }
+/* Message panel follows the DevOps loader's airy surface and flowing color. */
+body.index-page #contact .contact-form-section { margin: 0; padding: 0; border: 0; }
+body.index-page #contact .form-container { position: relative; overflow: hidden; padding: 32px; border: 0; border-radius: 28px; background: var(--contact-surface); box-shadow: 0 12px 40px rgba(36, 54, 80, 0.07), inset 0 0 0 1px #e3e8f1; backdrop-filter: none; }
+body.index-page #contact .form-container::before,
+body.index-page #contact .form-container:hover::before { content: ''; position: absolute; inset: 0 0 auto; width: 100%; height: 3px; transform: none; background: var(--contact-spectrum); background-size: 300% 100%; animation: contact-color-flow 8s ease-in-out infinite; transition: none; }
+/* Keep the stripe inside the rounded corners, including legacy hover states. */
+body.index-page #contact .contact-card::after,
+body.index-page #contact .contact-card:hover::after,
+body.index-page #contact .location-info::after,
+body.index-page #contact .location-info:hover::after,
+body.index-page #contact .form-container::before,
+body.index-page #contact .form-container:hover::before {
+  inset: 0 20px auto; width: auto; height: 3px; max-height: 3px;
+  border-radius: 0 0 3px 3px; transform: none; pointer-events: none;
+}
+body.index-page #contact .form-header { padding: 0 0 24px; border: 0; background: var(--contact-surface); }
+body.index-page #contact .form-title { font-size: 1.15rem; margin-bottom: 8px; color: var(--contact-ink); }
+body.index-page #contact .form-infinity { width: 64px; height: 32px; flex: 0 0 auto; overflow: visible; }
+body.index-page #contact .form-infinity path { fill: none; stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; }
+body.index-page #contact .form-infinity-track { stroke: #dce4f0; }
+body.index-page #contact .form-infinity-flow { stroke: var(--contact-primary); stroke-dasharray: 23 77; animation: contact-infinity-flow 4s linear infinite; }
+body.index-page #contact .form-infinity-flow:nth-child(3) { stroke: var(--contact-teal); animation-delay: -1.333333s; }
+body.index-page #contact .form-infinity-flow:nth-child(4) { stroke: var(--contact-violet); animation-delay: -2.666667s; }
+body.index-page #contact .form-subtitle { font-size: 0.83rem; color: var(--contact-muted); }
+body.index-page #contact .php-email-form { padding: 0; gap: 20px; background: var(--contact-surface); }
+body.index-page #contact .form-row { gap: 16px; }
+body.index-page #contact .form-group { gap: 8px; }
+body.index-page #contact .form-label { font-size: 0.83rem; color: var(--contact-ink); }
+body.index-page #contact .form-label i { color: var(--contact-muted); }
+body.index-page #contact :is(.form-input, .form-textarea) {
+  min-height: 48px; padding: 14px 16px; border: 0; border-radius: 14px;
+  background: #fff; color: var(--contact-ink); font-size: 0.88rem;
+  box-shadow: inset 0 0 0 1px #e0e6ef; transition: box-shadow 180ms ease;
+}
+body.index-page #contact .form-textarea { height: 144px; min-height: 144px; resize: vertical; }
+body.index-page #contact :is(.form-input, .form-textarea)::placeholder { color: var(--contact-muted); }
+body.index-page #contact :is(.form-input, .form-textarea):focus { outline: none; outline-offset: 0; box-shadow: inset 0 0 0 2px var(--contact-primary); }
+body.index-page #contact .form-actions { margin: 4px 0 0; gap: 16px; }
+body.index-page #contact .submit-btn,
+body.index-page #contact .submit-btn:hover {
+  min-height: 48px; padding: 14px 24px; border: 0; border-radius: 14px;
+  background: linear-gradient(110deg, #3558bc, #246b85, #227454, #7054b2, #a83e4c, #3558bc); background-size: 400% 100%; color: #fff; font-size: 0.9rem;
+  box-shadow: 0 6px 18px rgba(66, 109, 224, 0.18); transform: none;
+  animation: contact-color-flow 8s ease-in-out infinite;
+  transition: box-shadow 150ms ease, transform 150ms ease;
+}
+body.index-page #contact .submit-btn::before { content: none; }
+/* RTL's legacy auto width must not change the translated button's geometry. */
+html[dir] body.index-page #contact .submit-btn {
+  display: flex !important; width: 100% !important; margin: 0 !important;
+  box-sizing: border-box; align-items: center; justify-content: center;
+  line-height: 1.5; min-height: 48px;
+}
+body.index-page #contact .submit-btn:hover { box-shadow: 0 8px 24px rgba(66, 109, 224, 0.25); }
+body.index-page #contact .submit-btn:active { transform: scale(0.98); }
+body.index-page #contact .submit-btn:disabled { opacity: 0.65; cursor: wait; animation-play-state: paused; }
+@keyframes contact-color-flow { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+@keyframes contact-infinity-flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -100; } }
+body.index-page #contact :is(a, button):focus-visible { outline: 2px solid var(--contact-accent); outline-offset: 4px; border-radius: 8px; }
+@media (max-width: 991px) {
+  body.index-page #contact .contact-main-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 575px) {
+  body.index-page #contact .contact-main-grid { gap: 24px; }
+  body.index-page #contact :is(.contact-card, .location-info, .form-container) { padding: 20px; }
+  body.index-page #contact .form-container { border-radius: 20px; }
+  body.index-page #contact .form-row { grid-template-columns: minmax(0, 1fr); }
+  body.index-page #contact .submit-btn { width: 100%; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.index-page #contact :is(.submit-btn, .form-input, .form-textarea) { transition: none; }
+  body.index-page #contact :is(.submit-btn, .form-infinity-flow), body.index-page #contact .form-container::before, body.index-page #contact .contact-header::after { animation: none; }
+  body.index-page #contact :is(.contact-card, .location-info)::after,
+  body.index-page #contact :is(.contact-card, .location-info):hover::after,
+  body.index-page #contact .form-container:hover::before { animation: none; }
+  body.index-page #contact .form-infinity-flow:nth-child(3) { stroke-dashoffset: -33.333; }
+  body.index-page #contact .form-infinity-flow:nth-child(4) { stroke-dashoffset: -66.666; }
+}

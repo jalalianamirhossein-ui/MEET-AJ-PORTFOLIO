@@ -27,6 +27,9 @@
 
   const fillDrawer = (card) => {
     activeCard = card;
+    const cardStyle = window.getComputedStyle(card);
+    drawer.style.setProperty("--service-accent", cardStyle.getPropertyValue("--service-accent").trim() || "#426de0");
+    drawer.style.setProperty("--service-ink", cardStyle.getPropertyValue("--service-ink").trim() || "#3558bc");
     const lang = currentLang();
     const source = card.querySelector(".service-details-source");
     const mark = card.querySelector(".service-card-mark");

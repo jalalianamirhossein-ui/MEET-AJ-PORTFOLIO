@@ -1,5 +1,7 @@
 > **HISTORICAL phase log.** The overlay cache version recorded here has moved on several times (now `v=1314`). Current public, SEO and PWA status: [../current/SEO.md](../current/SEO.md), [../current/PWA.md](../current/PWA.md), [../qa/QA-MATRIX.md](../qa/QA-MATRIX.md).
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 # Phase 05 — Frontend, SEO, PWA, contact
 
 **Phase:** 05

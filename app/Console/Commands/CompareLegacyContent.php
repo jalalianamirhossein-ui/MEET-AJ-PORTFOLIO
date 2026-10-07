@@ -12,7 +12,7 @@ class CompareLegacyContent extends Command
 {
     protected $signature = 'site:compare-content';
 
-    protected $description = 'Compare Laravel pages against original HTML sources';
+    protected $description = 'Compare published imported articles and Laravel pages against maintained HTML sources';
 
     public function handle(LegacyArticleImporter $importer): int
     {
@@ -40,10 +40,26 @@ class CompareLegacyContent extends Command
         $rows[] = $index;
         $fails += $index[1] === 'FAIL' ? 1 : 0;
 
-        foreach (Article::query()->orderBy('slug')->get() as $article) {
-            $source = File::get(resource_path('legacy/articles/'.$article->slug.'.html'));
+        foreach (Article::published()->where('language', 'en')->orderBy('slug')->get() as $article) {
+            $sourcePath = resource_path('legacy/articles/'.$article->slug.'.html');
+            if (! File::exists($sourcePath)) {
+                $rows[] = [$article->slug, 'SKIP', 'CMS article without a legacy source'];
+
+                continue;
+            }
+            $source = File::get($sourcePath);
             $sourceBody = $importer->articleBody($source);
             $missing = [];
+            if (data_get($article->presentation, 'source_hash') !== hash('sha256', $source)) {
+                $missing[] = 'source changed; run articles:import-legacy --update-existing after reviewing CMS edits';
+            }
+            if (str_contains($source, 'id="article-localizations"')) {
+                foreach (['fa', 'en'] as $locale) {
+                    if (! data_get($article->presentation, 'localizations.'.$locale.'.title')) {
+                        $missing[] = 'missing '.$locale.' localization';
+                    }
+                }
+            }
             foreach (['<h2', 'data-fa=', 'data-en=', 'article-section'] as $token) {
                 $original = substr_count($sourceBody, $token);
                 $imported = substr_count((string) $article->content, $token);

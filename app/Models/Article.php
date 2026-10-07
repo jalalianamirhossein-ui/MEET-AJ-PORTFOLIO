@@ -64,6 +64,11 @@ class Article extends Model
         ]);
     }
 
+    public function scopeInDisplayOrder(Builder $query): Builder
+    {
+        return app(\App\Services\ArticleOrdering::class)->apply($query);
+    }
+
     public function scopeSearch(Builder $query, string $term): Builder
     {
         $term = trim($term);
@@ -158,8 +163,10 @@ class Article extends Model
 
     public function displayContent(): string
     {
-        return app(\App\Services\ArticleContentStandardizer::class)
+        $content = app(\App\Services\ArticleContentStandardizer::class)
             ->standardize($this, (string) $this->content);
+
+        return app(\App\Services\ArticlePresentation::class)->prepare($content);
     }
 
     public function scopePublished(Builder $query): Builder
@@ -209,33 +216,24 @@ class Article extends Model
 
     public function thumbnailUrl(): string
     {
-        $image = $this->publicImagePath($this->selectedImage('thumbnail'));
-
-        // Older imports store the original PNG in both fields. Resolve the
-        // shipped small image at render time, without overwriting CMS records.
-        if (preg_match('~^/assets/img/portfolio/([a-z0-9-]+)\.png$~', $image, $match)) {
-            $optimized = '/assets/img/portfolio/optimized/'.$match[1].'.jpg';
-            if (is_file(public_path(ltrim($optimized, '/')))) {
-                return $optimized;
-            }
-        }
-
-        return $image;
+        return $this->publicImagePath($this->selectedImage('thumbnail'));
     }
 
     private function selectedImage(string $variant): string
     {
         $featured = (string) $this->featured_image;
         // A new CMS upload replaces the imported thumbnail AND gallery.
-        if ($featured !== '' && ! str_starts_with(ltrim($featured, '/'), 'assets/img/portfolio/')) {
+        $featured = \App\Services\ImagePaths::rewrite($featured);
+        if ($featured !== '' && ! str_starts_with(ltrim($featured, '/'), 'assets/img/articles/banners/')) {
             return $featured;
         }
 
-        return (string) (data_get($this->presentation, $variant) ?: $featured ?: '/assets/img/hero-bg.jpg');
+        return (string) (data_get($this->presentation, $variant) ?: $featured ?: '/assets/img/banners/site/hero-bg.jpg');
     }
 
     private function publicImagePath(string $image): string
     {
+        $image = \App\Services\ImagePaths::rewrite($image);
         if (preg_match('~^(?:https?:)?//~i', $image) || str_starts_with($image, '/')) {
             return $image;
         }

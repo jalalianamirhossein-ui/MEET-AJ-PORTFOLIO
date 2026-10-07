@@ -1,5 +1,7 @@
 # ADMIN-QA (superseded) — White/Red pass before the contrast regression fix
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 **Status:** ARCHIVED. Do not treat this as current.
 
 This 2026-09-18 report recorded White/Red chrome as **PASS / Failures: None**. A later Filament 5.8 contrast regression made login labels and several sidebar items invisible (white/near-white type on forced white surfaces). Current evidence: [../../qa/ADMIN-QA.md](../../qa/ADMIN-QA.md).
@@ -8,9 +10,9 @@ This 2026-09-18 report recorded White/Red chrome as **PASS / Failures: None**. A
 
 # Admin UI QA — Meet AJ Filament 5
 
-**Date verified:** 2026-09-18  
-**Panel:** `/admin` (Filament 5.8.2, Livewire 4.4.5)  
-**Brand:** White surfaces, slate type, Meet AJ crimson `#be123c` accent, danger `#7f1d1d`.  
+**Date verified:** 2026-09-18
+**Panel:** `/admin` (Filament 5.8.2, Livewire 4.4.5)
+**Brand:** White surfaces, slate type, Meet AJ crimson `#be123c` accent, danger `#7f1d1d`.
 **Superseded (blue admin):** [ADMIN-QA-blue-theme.md](ADMIN-QA-blue-theme.md)
 
 Local QA accounts exist (`qa-admin@meetaj.local` admin, `qa-editor@meetaj.local` editor). Passwords are not recorded here.

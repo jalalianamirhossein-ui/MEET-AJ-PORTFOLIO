@@ -1,4 +1,6 @@
 > **HISTORICAL / SUPERSEDED.**
+
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
 > **Original date:** 2026-09-16.
 > **Original purpose:** record which project files were deleted or kept during the file-structure cleanup.
 > **Superseded by:** [../current/PROJECT-STRUCTURE.md](../current/PROJECT-STRUCTURE.md) for the current tree.
@@ -6,7 +8,7 @@
 
 # Project structure cleanup
 
-Date: 2026-09-16  
+Date: 2026-09-16
 Rule used: delete only when references were verified. If uncertain, keep.
 
 Application logic was not redesigned. Git was not initialized, committed, or pushed.

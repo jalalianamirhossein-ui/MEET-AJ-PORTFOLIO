@@ -1,5 +1,7 @@
 # Hero visual verification — 2026-09-19
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 Verified in Chromium against the local Laravel site. English and Persian were switched using the actual language control, with the same Hero markup and photo.
 
 | Viewport | EN | FA | Horizontal overflow | Minimum face-to-copy clearance |

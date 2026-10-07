@@ -1,4 +1,6 @@
 ﻿> **HISTORICAL / SUPERSEDED.**
+
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
 > **Original date:** 2026-09-16.
 > **Original purpose:** catalog and classify every Markdown file after the first documentation rebuild, when all documents lived flat in `docs/`.
 > **Superseded by:** [README.md](../README.md) — the current documentation index for the `current/ qa/ decisions/ phases/ historical/` structure.
@@ -6,7 +8,7 @@
 
 # Documentation index — Meet AJ
 
-**Authority:** superseded catalog of Markdown in this repository after the 2026-09-16 documentation rebuild.  
+**Authority:** superseded catalog of Markdown in this repository after the 2026-09-16 documentation rebuild.
 **Source of truth for current state:** [README.md](../../README.md), [DEPLOYMENT.md](../current/DEPLOYMENT.md), [PROJECT-STATUS.md](../current/PROJECT-STATUS.md), [QA-MATRIX.md](../qa/QA-MATRIX.md).
 
 Classifications: **AUTHORITATIVE** | **REFERENCE** | **HISTORICAL** | **DEPLOYMENT** | **VENDOR** (not project docs).

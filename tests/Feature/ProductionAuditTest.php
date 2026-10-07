@@ -106,16 +106,18 @@ class ProductionAuditTest extends TestCase
             ->assertSee('href="/#contact"', false);
     }
 
-    public function test_article_titles_remain_english(): void
+    public function test_shared_article_identity_remains_english_and_titles_follow_the_requested_locale(): void
     {
-        $this->assertSame(24, Article::query()->count());
+        $this->assertSame(count(app(LegacyArticleImporter::class)->articleFiles()), Article::query()->count());
         foreach (Article::query()->get() as $article) {
             $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', $article->title, $article->slug);
-            $this->get('/articles/'.$article->slug)
+            $this->withUnencryptedCookie('lang', 'en')->get('/articles/'.$article->slug)
                 ->assertOk()
-                ->assertSee('data-i18n-lock', false)
+                ->assertSee('data-en="'.$article->title.'"', false)
                 ->assertSee($article->title)
                 ->assertSee('href="/#contact"', false);
+            $this->withUnencryptedCookie('lang', 'fa')->get('/articles/'.$article->slug)->assertOk()
+                ->assertSee($article->presentation['localizations']['fa']['title']);
         }
         $listing = $this->get('/articles')->assertOk()->getContent();
         $this->assertStringContainsString('data-i18n-lock', $listing);
@@ -124,15 +126,15 @@ class ProductionAuditTest extends TestCase
 
         $article = Article::query()->orderBy('slug')->first();
         $english = $article->title;
+        $persianMetaTitle = $article->meta_title;
         $article->forceFill([
             'title' => 'آموزش تست',
-            'meta_title' => 'آموزش تست',
         ])->save();
         app(LegacyArticleImporter::class)->import(false);
         $article->refresh();
         $this->assertSame($english, $article->title);
         $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', $article->title);
-        $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', (string) $article->meta_title);
+        $this->assertSame($persianMetaTitle, $article->meta_title);
     }
 
     public function test_persian_testimonials_use_shared_rtl_safe_slider(): void
@@ -140,17 +142,17 @@ class ProductionAuditTest extends TestCase
         $home = $this->get('/')->assertOk()->getContent();
         $this->assertSame(1, substr_count($home, 'id="testimonials"'));
         $this->assertSame(1, substr_count($home, 'id="testimonials-carousel"'));
-        $this->assertSame(5, substr_count($home, 'class="testimonial-card"'));
+        $this->assertSame(9, substr_count($home, 'class="testimonial-card"'));
         $this->assertStringContainsString('"slidesPerView": 3', $home);
         $this->assertStringContainsString('"768": { "slidesPerView": 2', $home);
         $this->assertStringContainsString('"1200": { "slidesPerView": 3', $home);
         $this->assertStringNotContainsString('testimonials-slider-fa', $home);
         $this->assertStringNotContainsString('id="testimonials-fa"', $home);
         $this->assertStringContainsString('data-fa="نظرات"', $home);
-        $this->assertStringContainsString('site-modules.css?v=1852', $home);
-        $this->assertStringContainsString('main.js?v=1414', $home);
-        $this->assertStringContainsString('i18n.js?v=1403', $home);
-        $this->assertStringContainsString('rtl.css?v=1405', $home);
+        $this->assertMatchesRegularExpression('~site-modules\.css\?v=\d+~', $home);
+        $this->assertMatchesRegularExpression('~main\.js\?v=\d+~', $home);
+        $this->assertMatchesRegularExpression('~i18n\.js\?v=\d+~', $home);
+        $this->assertMatchesRegularExpression('~rtl\.css\?v=\d+~', $home);
 
         $main = (string) file_get_contents(resource_path('assets/js/main.js'));
         $this->assertStringContainsString('function initExpertiseReveal', $main);

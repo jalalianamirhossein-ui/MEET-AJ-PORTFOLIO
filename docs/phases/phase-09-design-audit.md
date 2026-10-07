@@ -1,5 +1,7 @@
 > **HISTORICAL phase log.** Full evidence: [../qa/FINAL-QA-REPORT.md](../qa/FINAL-QA-REPORT.md), [../qa/DESIGN-AUDIT.md](../qa/DESIGN-AUDIT.md), [../qa/VISUAL-QA.md](../qa/VISUAL-QA.md), [../qa/ACCESSIBILITY-QA.md](../qa/ACCESSIBILITY-QA.md).
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 # Phase 09 — Master design audit and accessibility fixes
 
 **Phase:** 09

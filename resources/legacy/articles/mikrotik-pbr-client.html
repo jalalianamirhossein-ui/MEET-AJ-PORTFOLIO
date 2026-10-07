@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <title>
+      دانلود MikroTik PBR Client؛ کنترل مسیر اینترنت در میکروتیک با یک کلیک
+    </title>
+    <meta name="article:content-language" content="fa" />
+    <meta
+      name="description"
+      content="دانلود نصب‌کننده ویندوز MikroTik PBR Client نسخه 1.0.2؛ ارسال درخواست تغییر مسیر به میکروتیک با یک کلیک و آموزش تغییر IP از فایل تنظیمات."
+    />
+    <meta
+      property="og:title"
+      content="دانلود MikroTik PBR Client؛ کنترل مسیر اینترنت در میکروتیک با یک کلیک"
+    />
+    <meta
+      property="og:description"
+      content="معرفی و دانلود نسخه 1.0.2 برای ویندوز ۶۴بیتی، روش ارسال درخواست و تغییر آدرس‌های تریگر."
+    />
+    <meta
+      property="og:image"
+      content="/assets/img/articles/banners/mikrotik-pbr-client.png"
+    />
+    <meta property="og:type" content="article" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "دانلود MikroTik PBR Client؛ کنترل مسیر اینترنت در میکروتیک با یک کلیک",
+        "inLanguage": "fa",
+        "image": "/assets/img/articles/banners/mikrotik-pbr-client.png"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+{
+  "en": {
+    "title": "MikroTik PBR Client",
+    "meta_title": "MikroTik PBR Client: Download, Setup and Trigger IP Settings | Meet AJ",
+    "description": "Download MikroTik PBR Client 1.0.2 for 64-bit Windows. Learn how Ping trigger requests work, change trigger IP settings, and verify route changes.",
+    "keywords": [
+      "MikroTik PBR Client",
+      "Policy-Based Routing",
+      "MikroTik ping trigger"
+    ],
+    "faq": [
+      [
+        "Is this application a VPN?",
+        "No. It only sends Ping requests to trigger addresses. Tunnels, routes, and policies must already be configured in the network."
+      ],
+      [
+        "Does a Ping reply prove the route changed?",
+        "No. It only confirms a reply from the trigger destination. Verify routing and Internet access separately. A timeout does not rule out the request reaching the router."
+      ],
+      [
+        "Do I need to rebuild the application to change IP addresses?",
+        "No. Change the two trigger values in the settings file, preserve the other settings, and restart the application. Coordinate the router addresses too."
+      ],
+      [
+        "Does closing the window disable the route?",
+        "No. Exiting does not send an off request. Use the relevant control and Send disconnect to send or repeat the disable request."
+      ]
+    ]
+  },
+  "fa": {
+    "title": "دانلود MikroTik PBR Client؛ کنترل مسیر اینترنت در میکروتیک با یک کلیک",
+    "meta_title": "دانلود و تنظیم MikroTik PBR Client | Meet AJ",
+    "description": "دانلود MikroTik PBR Client نسخه ۱.۰.۲ برای ویندوز ۶۴بیتی، آموزش درخواست تغییر مسیر با Ping و تنظیم IPهای تریگر با هماهنگی مدیر شبکه.",
+    "keywords": [
+      "دانلود MikroTik PBR Client",
+      "مسیریابی مبتنی بر سیاست",
+      "تنظیم IP تریگر میکروتیک"
+    ],
+    "faq": [
+      [
+        "آیا این برنامه VPN است؟",
+        "خیر. برنامه فقط درخواست Ping به آدرس‌های تریگر می‌فرستد. تونل، مسیر و سیاست‌های لازم باید از قبل در شبکه آماده باشند."
+      ],
+      [
+        "آیا پاسخ Ping یعنی مسیر تغییر کرده است؟",
+        "خیر. پاسخ صرفاً دریافت پاسخ از مقصد تریگر را نشان می‌دهد. بررسی مسیر و اتصال اینترنت مرحله‌ای جداگانه است و Timeout نیز رسیدن درخواست به روتر را رد نمی‌کند."
+      ],
+      [
+        "برای تغییر IP باید برنامه را دوباره بسازم؟",
+        "خیر. دو مقدار مربوط به تریگرها را در فایل تنظیمات تغییر دهید، سایر تنظیمات را حفظ کنید و برنامه را دوباره اجرا کنید. آدرس‌های سمت روتر نیز باید هماهنگ شوند."
+      ],
+      [
+        "با بستن پنجره، مسیر خاموش می‌شود؟",
+        "خیر. خروج از برنامه درخواست خاموش کردن نمی‌فرستد. برای ارسال یا تکرار درخواست غیرفعال‌سازی از کنترل مربوط و گزینه Send disconnect استفاده کنید."
+      ]
+    ]
+  }
+}
+    </script>
+  </head>
+  <body class="article-page theme-mikrotik">
+    <h1
+      class="article-title hero-title"
+      data-en="MikroTik PBR Client"
+      data-fa="دانلود MikroTik PBR Client؛ کنترل مسیر اینترنت در میکروتیک با یک کلیک"
+    >
+      دانلود MikroTik PBR Client؛ کنترل مسیر اینترنت در میکروتیک با یک کلیک
+    </h1>
+    <p
+      class="article-excerpt hero-subtitle"
+      data-en="Windows client for MikroTik ping-triggered policy routing."
+      data-fa="ابزار سبک ویندوزی برای ارسال درخواست روشن یا خاموش کردن مسیر از پیش تنظیم‌شده در میکروتیک؛ همراه آموزش نصب و تغییر IP."
+    >
+      ابزار سبک ویندوزی برای ارسال درخواست روشن یا خاموش کردن مسیر از پیش
+      تنظیم‌شده در میکروتیک؛ همراه آموزش نصب و تغییر IP.
+    </p>
+    <span class="article-category" data-en="MikroTik" data-fa="میکروتیک"
+      >میکروتیک</span
+    >
+    <img
+      class="article-hero-thumbnail"
+      src="/assets/img/articles/banners/mikrotik-pbr-client.png"
+      alt="بنر MikroTik PBR Client با دکمه روشن و خاموش و آدرس‌های کنترل مسیر"
+    />
+    <nav>
+      <ul>
+        <li class="article-nav-item">
+          <a href="#introduction"><span data-en="Introduction and use cases" data-fa="معرفی و کاربرد برنامه">معرفی و کاربرد برنامه</span></a>
+        </li>
+        <li class="article-nav-item">
+          <a href="#router"><span data-en="Router prerequisites" data-fa="پیش‌نیازهای سمت روتر">پیش‌نیازهای سمت روتر</span></a>
+        </li>
+        <li class="article-nav-item">
+          <a href="#operation"><span data-en="How the application works" data-fa="برنامه چگونه کار می‌کند؟">برنامه چگونه کار می‌کند؟</span></a>
+        </li>
+
+        <li class="article-nav-item">
+          <a href="#installation"><span data-en="Installation and everyday use" data-fa="نصب و استفاده روزمره">نصب و استفاده روزمره</span></a>
+        </li>
+        <li class="article-nav-item">
+          <a href="#settings"><span data-en="Changing trigger IP addresses" data-fa="آموزش تغییر IP از تنظیمات">آموزش تغییر IP از تنظیمات</span></a>
+        </li>
+        <li class="article-nav-item">
+          <a href="#release"><span data-en="Release notes and trigger addresses" data-fa="نکات نسخه و آدرس‌های تریگر">نکات نسخه و آدرس‌های تریگر</span></a>
+        </li>
+        <li class="article-nav-item"><a href="#faq"><span data-en="Frequently asked questions" data-fa="پرسش‌های متداول">پرسش‌های متداول</span></a></li>
+        <li class="article-nav-item">
+          <a href="#download"><span data-en="Download version 1.0.2" data-fa="دانلود نسخه ۱.۰.۲">دانلود نسخه ۱.۰.۲</span></a>
+        </li>
+      </ul>
+    </nav>
+    <article class="article-body">
+      <div lang="fa" dir="rtl">
+        <p data-en="MikroTik PBR Client is a lightweight Windows tool that sends a request to enable or disable a network route with one button. When the administrator has prepared the required MikroTik rules, users can send the request without opening the router panel. This guide covers version 1.0.2, everyday use, and changing trigger addresses." data-fa="MikroTik PBR Client یک ابزار سبک برای ویندوز است که درخواست فعال یا غیرفعال کردن مسیر را با یک دکمه به شبکه می‌فرستد. اگر مدیر شبکه قواعد لازم را روی میکروتیک آماده کرده باشد، کاربر می‌تواند بدون ورود به پنل روتر درخواست خود را ارسال کند. این مقاله نسخه ۱.۰.۲، روش استفاده و تغییر آدرس‌های تریگر را معرفی می‌کند.">
+          MikroTik PBR Client یک ابزار سبک برای ویندوز است که درخواست فعال یا
+          غیرفعال کردن مسیر را با یک دکمه به شبکه می‌فرستد. اگر مدیر شبکه قواعد
+          لازم را روی میکروتیک آماده کرده باشد، کاربر می‌تواند بدون ورود به پنل
+          روتر درخواست خود را ارسال کند. این مقاله نسخه ۱.۰.۲، روش استفاده و
+          تغییر آدرس‌های تریگر را معرفی می‌کند.
+        </p>
+        <figure>
+          <img
+            src="/assets/img/articles/content/MikroTikPBRClient-Topology-1920x1080.png"
+            width="1000"
+            height="1000"
+            style="
+              display: block;
+              width: 100%;
+              max-width: 560px;
+              height: auto;
+              margin-inline: auto;
+            "
+            alt="بنر MikroTik PBR Client با دکمه روشن و خاموش و آدرس‌های کنترل مسیر"
+          />
+          <figcaption><span data-en="A simple interface for sending route control requests to MikroTik" data-fa="رابط ساده برای ارسال درخواست کنترل مسیر به میکروتیک">رابط ساده برای ارسال درخواست کنترل مسیر به میکروتیک</span></figcaption>
+        </figure>
+        <section id="introduction">
+          <h2 data-en="Introduction and use cases" data-fa="معرفی و کاربرد برنامه">معرفی و کاربرد برنامه</h2>
+          <p data-en="PBR stands for Policy-Based Routing. The router selects a route according to configured rules. This application only sends a specific request to the router; MikroTik decides which route to use and applies the policy." data-fa="PBR مخفف Policy-Based Routing و به معنی مسیریابی مبتنی بر سیاست است. در این روش، انتخاب مسیر می‌تواند تابع قواعد تعریف‌شده در روتر باشد. نقش این برنامه فقط ارسال یک درخواست مشخص به همان روتر است؛ تصمیم درباره مسیر و اجرای آن در سمت میکروتیک انجام می‌شود.">
+            PBR مخفف Policy-Based Routing و به معنی مسیریابی مبتنی بر سیاست است.
+            در این روش، انتخاب مسیر می‌تواند تابع قواعد تعریف‌شده در روتر باشد.
+            نقش این برنامه فقط ارسال یک درخواست مشخص به همان روتر است؛ تصمیم
+            درباره مسیر و اجرای آن در سمت میکروتیک انجام می‌شود.
+          </p>
+          <p data-en="Use the application when an alternative route is already configured and authorized users need to request it. The interface offers an on/off button instead of repeated manual Ping commands. It makes no promise of improved speed or security: results depend on network design, route availability, and router rules." data-fa="کاربرد برنامه زمانی روشن می‌شود که در یک شبکه، مسیر جایگزین از قبل آماده باشد و کاربران مجاز بخواهند درخواست استفاده از آن را ارسال کنند. رابط اصلی یک دکمه روشن و خاموش دارد و کاربر را از تکرار دستی فرمان Ping بی‌نیاز می‌کند. این ابزار وعده افزایش سرعت یا امنیت نمی‌دهد؛ نتیجه به طراحی شبکه، وضعیت مسیرها و قواعد روتر بستگی دارد.">
+            کاربرد برنامه زمانی روشن می‌شود که در یک شبکه، مسیر جایگزین از قبل
+            آماده باشد و کاربران مجاز بخواهند درخواست استفاده از آن را ارسال
+            کنند. رابط اصلی یک دکمه روشن و خاموش دارد و کاربر را از تکرار دستی
+            فرمان Ping بی‌نیاز می‌کند. این ابزار وعده افزایش سرعت یا امنیت
+            نمی‌دهد؛ نتیجه به طراحی شبکه، وضعیت مسیرها و قواعد روتر بستگی دارد.
+          </p>
+        </section>
+        <section id="router">
+          <h2 data-en="Router prerequisites" data-fa="پیش‌نیازهای سمت روتر">پیش‌نیازهای سمت روتر</h2>
+          <p data-en="Before running the application, the administrator must configure trigger handling and the corresponding route changes on MikroTik. Installing the Windows application does not create those rules or configure router routes. Sending requests does not require a RouterOS username or password." data-fa="پیش از اجرای برنامه، مدیر شبکه باید دریافت درخواست‌های تریگر و تغییر مسیر متناسب با آن‌ها را روی میکروتیک آماده کند. نصب برنامه روی ویندوز، این قواعد را ایجاد نمی‌کند و مسیرهای روتر را خودکار تنظیم نمی‌کند. برنامه نیز برای ارسال درخواست به نام کاربری یا رمز RouterOS نیاز ندارد.">
+            پیش از اجرای برنامه، مدیر شبکه باید دریافت درخواست‌های تریگر و تغییر
+            مسیر متناسب با آن‌ها را روی میکروتیک آماده کند. نصب برنامه روی
+            ویندوز، این قواعد را ایجاد نمی‌کند و مسیرهای روتر را خودکار تنظیم
+            نمی‌کند. برنامه نیز برای ارسال درخواست به نام کاربری یا رمز RouterOS
+            نیاز ندارد.
+          </p>
+          <p data-en="A universal router script is not provided because your router configuration is unknown. Coordinate trigger addresses, client access, and policy handling with the network administrator. If the rules are missing, pressing the button will not configure routing." data-fa="از آنجا که تنظیمات دقیق روتر شما مشخص نیست، دستور یا اسکریپت عمومی برای تغییر آن ارائه نمی‌شود. هماهنگی با مدیر شبکه ضروری است: آدرس‌های تریگر، دسترسی دستگاه کاربر به آن‌ها و نحوه اعمال سیاست باید با یکدیگر سازگار باشند. اگر قواعد آماده نباشند، فشردن دکمه به‌تنهایی مسیریابی را راه‌اندازی نخواهد کرد.">
+            از آنجا که تنظیمات دقیق روتر شما مشخص نیست، دستور یا اسکریپت عمومی
+            برای تغییر آن ارائه نمی‌شود. هماهنگی با مدیر شبکه ضروری است:
+            آدرس‌های تریگر، دسترسی دستگاه کاربر به آن‌ها و نحوه اعمال سیاست باید
+            با یکدیگر سازگار باشند. اگر قواعد آماده نباشند، فشردن دکمه به‌تنهایی
+            مسیریابی را راه‌اندازی نخواهد کرد.
+          </p>
+        </section>
+        <section id="operation">
+          <h2 data-en="How the application works" data-fa="برنامه چگونه کار می‌کند؟">برنامه چگونه کار می‌کند؟</h2>
+          <p data-en="The application sends ICMP Echo requests, or Ping, to trigger addresses handled by router rules. The default enable address is 10.10.10.10 and the default disable address is 11.11.11.11. These are trigger addresses, not VPN server addresses." data-fa="برنامه با ارسال ICMP Echo یا Ping به آدرس مشخص، درخواست را به قواعد سمت روتر منتقل می‌کند. آدرس پیش‌فرض فعال‌سازی 10.10.10.10 و آدرس پیش‌فرض غیرفعال‌سازی 11.11.11.11 است. این دو IP آدرس تریگر هستند؛ آدرس یک سرور VPN محسوب نمی‌شوند.">
+            برنامه با ارسال ICMP Echo یا Ping به آدرس مشخص، درخواست را به قواعد
+            سمت روتر منتقل می‌کند. آدرس پیش‌فرض فعال‌سازی
+            <bdi dir="ltr">10.10.10.10</bdi> و آدرس پیش‌فرض غیرفعال‌سازی
+            <bdi dir="ltr">11.11.11.11</bdi> است. این دو IP آدرس تریگر هستند؛
+            آدرس یک سرور VPN محسوب نمی‌شوند.
+          </p>
+          <p data-en="The application does not create a VPN or tunnel. It does not read router state at startup and initially displays an unknown status. The initial display therefore cannot confirm whether the route is enabled. The interface reports request status; verify the actual routing result separately." data-fa="خود برنامه VPN یا تونل نمی‌سازد. در آغاز نیز وضعیت روتر را نمی‌خواند و وضعیت را نامشخص نمایش می‌دهد. بنابراین نمایش اولیه برنامه نباید به‌عنوان روشن یا خاموش بودن قطعی مسیر تفسیر شود. رابط کاربری وضعیت درخواست را نشان می‌دهد و برای بررسی نتیجه واقعی باید وضعیت مسیریابی در شبکه ارزیابی شود.">
+            خود برنامه VPN یا تونل نمی‌سازد. در آغاز نیز وضعیت روتر را نمی‌خواند
+            و وضعیت را نامشخص نمایش می‌دهد. بنابراین نمایش اولیه برنامه نباید
+            به‌عنوان روشن یا خاموش بودن قطعی مسیر تفسیر شود. رابط کاربری وضعیت
+            درخواست را نشان می‌دهد و برای بررسی نتیجه واقعی باید وضعیت مسیریابی
+            در شبکه ارزیابی شود.
+          </p>
+          <p data-en="A successful Ping confirms only that the trigger destination responded. It does not prove a route change or Internet access. A timeout also does not prove the request failed to reach the router. Ask the administrator how to verify the result and distinguish sending a request from applying a policy." data-fa="پاسخ موفق Ping فقط نشان می‌دهد که از آدرس تریگر پاسخ دریافت شده است؛ این پاسخ اثبات تغییر مسیر یا اتصال اینترنت نیست. در صورت Timeout هم ممکن است درخواست به روتر رسیده باشد. بهتر است مدیر شبکه روش بررسی نتیجه را مشخص کند تا کاربر میان «ارسال درخواست» و «اعمال سیاست» تفاوت قائل شود.">
+            پاسخ موفق Ping فقط نشان می‌دهد که از آدرس تریگر پاسخ دریافت شده است؛
+            این پاسخ اثبات تغییر مسیر یا اتصال اینترنت نیست. در صورت Timeout هم
+            ممکن است درخواست به روتر رسیده باشد. بهتر است مدیر شبکه روش بررسی
+            نتیجه را مشخص کند تا کاربر میان «ارسال درخواست» و «اعمال سیاست»
+            تفاوت قائل شود.
+          </p>
+        </section>
+
+        <section id="installation">
+          <h2 data-en="Installation and everyday use" data-fa="نصب و استفاده روزمره">نصب و استفاده روزمره</h2>
+          <ol>
+            <li data-en="Download the installer and run it on a 64-bit Windows device." data-fa="نصب‌کننده را دانلود و روی دستگاه ویندوز ۶۴بیتی اجرا کنید.">نصب‌کننده را دانلود و روی دستگاه ویندوز ۶۴بیتی اجرا کنید.</li>
+            <li data-en="Open the installed application and remember that the initial route status is unknown." data-fa="پس از نصب، برنامه را باز کنید و نامشخص بودن وضعیت اولیه را در نظر بگیرید.">
+              پس از نصب، برنامه را باز کنید و نامشخص بودن وضعیت اولیه را در نظر
+              بگیرید.
+            </li>
+            <li data-en="Use the main button to request the prepared alternative route and check the request status." data-fa="برای درخواست فعال‌سازی مسیر آماده‌شده، از دکمه اصلی استفاده کنید و وضعیت درخواست را ببینید.">
+              برای درخواست فعال‌سازی مسیر آماده‌شده، از دکمه اصلی استفاده کنید و
+              وضعیت درخواست را ببینید.
+            </li>
+            <li data-en="Send the off request to disable the route. Use Send disconnect when you need to repeat the disconnect request." data-fa="برای غیرفعال‌سازی، درخواست خاموش کردن را ارسال کنید؛ در صورت نیاز به ارسال مجدد از گزینه Send disconnect استفاده کنید.">
+              برای غیرفعال‌سازی، درخواست خاموش کردن را ارسال کنید؛ در صورت نیاز
+              به ارسال مجدد از گزینه
+              <bdi dir="ltr">Send disconnect</bdi> استفاده کنید.
+            </li>
+          </ol>
+          <p data-en="The application does not send continuous Ping requests. Closing its window does not automatically send a disable request. Send the off request before leaving and verify the result using the method approved by your administrator." data-fa="برنامه Ping پیوسته نمی‌فرستد. همچنین بستن پنجره، به‌طور خودکار درخواست غیرفعال‌سازی مسیر را ارسال نمی‌کند. اگر قصد پایان استفاده از مسیر را دارید، درخواست خاموش کردن را پیش از خروج ارسال کنید و نتیجه را با روش مورد تأیید مدیر شبکه بررسی کنید.">
+            برنامه Ping پیوسته نمی‌فرستد. همچنین بستن پنجره، به‌طور خودکار
+            درخواست غیرفعال‌سازی مسیر را ارسال نمی‌کند. اگر قصد پایان استفاده از
+            مسیر را دارید، درخواست خاموش کردن را پیش از خروج ارسال کنید و نتیجه
+            را با روش مورد تأیید مدیر شبکه بررسی کنید.
+          </p>
+        </section>
+        <section id="settings">
+          <h2 data-en="Changing trigger IP addresses" data-fa="آموزش تغییر IP از تنظیمات">آموزش تغییر IP از تنظیمات</h2>
+          <p data-en="Change trigger addresses in the installed settings file without editing code or rebuilding the application. Obtain the correct addresses from your administrator first. Changing only the Windows settings without coordinating router rules will not send the request to the intended destination." data-fa="برای تغییر آدرس‌های تریگر، نیازی به تغییر کد یا ساخت دوباره برنامه نیست. این کار از فایل تنظیمات نصب‌شده انجام می‌شود. ابتدا آدرس‌های مناسب را از مدیر شبکه بگیرید؛ تغییر یک‌طرفه آدرس در ویندوز، بدون هماهنگی قواعد روتر، درخواست را به مقصد مورد انتظار نمی‌رساند.">
+            برای تغییر آدرس‌های تریگر، نیازی به تغییر کد یا ساخت دوباره برنامه
+            نیست. این کار از فایل تنظیمات نصب‌شده انجام می‌شود. ابتدا آدرس‌های
+            مناسب را از مدیر شبکه بگیرید؛ تغییر یک‌طرفه آدرس در ویندوز، بدون
+            هماهنگی قواعد روتر، درخواست را به مقصد مورد انتظار نمی‌رساند.
+          </p>
+          <ol>
+            <li data-en="Open PBR Client Settings from the Start menu." data-fa="از منوی Start گزینه PBR Client Settings را باز کنید.">
+              از منوی Start گزینه <bdi dir="ltr">PBR Client Settings</bdi> را
+              باز کنید.
+            </li>
+            <li data-en="Edit EnableTriggerIp and DisableTriggerIp." data-fa="مقادیر EnableTriggerIp و DisableTriggerIp را تغییر دهید.">
+              مقادیر <bdi dir="ltr">EnableTriggerIp</bdi> و
+              <bdi dir="ltr">DisableTriggerIp</bdi> را تغییر دهید.
+            </li>
+            <li data-en="Save the file, close the application, and start it again." data-fa="فایل را ذخیره کنید، برنامه را ببندید و دوباره اجرا کنید.">فایل را ذخیره کنید، برنامه را ببندید و دوباره اجرا کنید.</li>
+            <li data-en="Update the router trigger rules to match the new addresses." data-fa="قواعد تریگر سمت روتر نیز باید با آدرس‌های جدید هماهنگ باشند.">
+              قواعد تریگر سمت روتر نیز باید با آدرس‌های جدید هماهنگ باشند.
+            </li>
+          </ol>
+          <p data-en="Installed settings file path:" data-fa="مسیر فایل تنظیمات نصب‌شده:">مسیر فایل تنظیمات نصب‌شده:</p>
+          <pre
+            dir="ltr"
+            style="text-align: left"
+          ><code>%LOCALAPPDATA%\Programs\MikroTikPBRClient\appsettings.json</code></pre>
+          <p data-en="The example below shows only the two trigger address keys. Edit those values in the existing file and preserve all other settings. Do not replace the whole file with this example." data-fa="نمونه زیر فقط دو کلید مربوط به آدرس‌ها را نشان می‌دهد. در فایل موجود، فقط همین دو مقدار را ویرایش کنید و سایر تنظیمات را نگه دارید؛ کل فایل را با این نمونه جایگزین نکنید.">
+            نمونه زیر فقط دو کلید مربوط به آدرس‌ها را نشان می‌دهد. در فایل
+            موجود، فقط همین دو مقدار را ویرایش کنید و سایر تنظیمات را نگه دارید؛
+            کل فایل را با این نمونه جایگزین نکنید.
+          </p>
+          <pre dir="ltr" style="text-align: left"><code>{
+  "EnableTriggerIp": "10.10.10.10",
+  "DisableTriggerIp": "11.11.11.11"
+}</code></pre>
+          <p data-en="After saving, verify the IP addresses and JSON structure. Restarting the application is part of applying these changes; an already open window may still use the previous values." data-fa="پس از ذخیره، صحت نوشتن آدرس‌ها و حفظ ساختار JSON را بررسی کنید. راه‌اندازی دوباره برنامه بخشی از روند اعمال تنظیمات است؛ باز ماندن پنجره قبلی را به معنی استفاده از مقادیر جدید در نظر نگیرید.">
+            پس از ذخیره، صحت نوشتن آدرس‌ها و حفظ ساختار JSON را بررسی کنید.
+            راه‌اندازی دوباره برنامه بخشی از روند اعمال تنظیمات است؛ باز ماندن
+            پنجره قبلی را به معنی استفاده از مقادیر جدید در نظر نگیرید.
+          </p>
+        </section>
+        <section id="release">
+          <h2 data-en="Release notes and trigger addresses" data-fa="نکات نسخه و آدرس‌های تریگر">نکات نسخه و آدرس‌های تریگر</h2>
+          <p data-en="The portable application has been run and confirmed by the user on Windows. Installation, repair, and removal of this MSI have not yet been tested on Windows. The portable test does not fully validate the installer." data-fa="نسخه پوشه‌ای برنامه توسط کاربر روی ویندوز اجرا و تأیید شده است؛ اما نصب، Repair و حذف همین MSI هنوز روی ویندوز آزمایش نشده‌اند. این وضعیت به معنی تأیید کامل نصب‌کننده نیست.">
+            نسخه پوشه‌ای برنامه توسط کاربر روی ویندوز اجرا و تأیید شده است؛ اما
+            نصب، Repair و حذف همین MSI هنوز روی ویندوز آزمایش نشده‌اند. این
+            وضعیت به معنی تأیید کامل نصب‌کننده نیست.
+          </p>
+          <p data-en="Control trigger addresses through network design and router rules. In particular, 11.11.11.11 is a public address: do not use it as an ordinary Internet destination without the required router configuration. Coordinate new addresses with the administrator so trigger requests are not confused with normal traffic." data-fa="آدرس‌های تریگر باید در طراحی شبکه و قواعد روتر کنترل شوند. به‌ویژه 11.11.11.11 یک آدرس عمومی است؛ آن را بدون تنظیم لازم روی روتر به‌عنوان مقصد عادی اینترنت استفاده نکنید. انتخاب آدرس جدید هم باید با مدیر شبکه هماهنگ باشد تا درخواست با ترافیک عادی اشتباه نشود.">
+            آدرس‌های تریگر باید در طراحی شبکه و قواعد روتر کنترل شوند. به‌ویژه
+            <bdi dir="ltr">11.11.11.11</bdi> یک آدرس عمومی است؛ آن را بدون تنظیم
+            لازم روی روتر به‌عنوان مقصد عادی اینترنت استفاده نکنید. انتخاب آدرس
+            جدید هم باید با مدیر شبکه هماهنگ باشد تا درخواست با ترافیک عادی
+            اشتباه نشود.
+          </p>
+        </section>
+        <section id="faq">
+          <h2 data-en="Frequently asked questions" data-fa="پرسش‌های متداول">پرسش‌های متداول</h2>
+          <h3 data-en="Is this application a VPN?" data-fa="آیا این برنامه VPN است؟">آیا این برنامه VPN است؟</h3>
+          <p data-en="No. It only sends Ping requests to trigger addresses. Tunnels, routes, and policies must already be configured in the network." data-fa="خیر. برنامه فقط درخواست Ping به آدرس‌های تریگر می‌فرستد. تونل، مسیر و سیاست‌های لازم باید از قبل در شبکه آماده باشند.">
+            خیر. برنامه فقط درخواست Ping به آدرس‌های تریگر می‌فرستد. تونل، مسیر
+            و سیاست‌های لازم باید از قبل در شبکه آماده باشند.
+          </p>
+          <h3 data-en="Does a Ping reply prove the route changed?" data-fa="آیا پاسخ Ping یعنی مسیر تغییر کرده است؟">آیا پاسخ Ping یعنی مسیر تغییر کرده است؟</h3>
+          <p data-en="No. It only confirms a reply from the trigger destination. Verify routing and Internet access separately. A timeout does not rule out the request reaching the router." data-fa="خیر. پاسخ صرفاً دریافت پاسخ از مقصد تریگر را نشان می‌دهد. بررسی مسیر و اتصال اینترنت مرحله‌ای جداگانه است و Timeout نیز رسیدن درخواست به روتر را رد نمی‌کند.">
+            خیر. پاسخ صرفاً دریافت پاسخ از مقصد تریگر را نشان می‌دهد. بررسی مسیر
+            و اتصال اینترنت مرحله‌ای جداگانه است و Timeout نیز رسیدن درخواست به
+            روتر را رد نمی‌کند.
+          </p>
+          <h3 data-en="Do I need to rebuild the application to change IP addresses?" data-fa="برای تغییر IP باید برنامه را دوباره بسازم؟">برای تغییر IP باید برنامه را دوباره بسازم؟</h3>
+          <p data-en="No. Change the two trigger values in the settings file, preserve the other settings, and restart the application. Coordinate the router addresses too." data-fa="خیر. دو مقدار مربوط به تریگرها را در فایل تنظیمات تغییر دهید، سایر تنظیمات را حفظ کنید و برنامه را دوباره اجرا کنید. آدرس‌های سمت روتر نیز باید هماهنگ شوند.">
+            خیر. دو مقدار مربوط به تریگرها را در فایل تنظیمات تغییر دهید، سایر
+            تنظیمات را حفظ کنید و برنامه را دوباره اجرا کنید. آدرس‌های سمت روتر
+            نیز باید هماهنگ شوند.
+          </p>
+          <h3 data-en="Does closing the window disable the route?" data-fa="با بستن پنجره، مسیر خاموش می‌شود؟">با بستن پنجره، مسیر خاموش می‌شود؟</h3>
+          <p data-en="No. Exiting does not send an off request. Use the relevant control and Send disconnect to send or repeat the disable request." data-fa="خیر. خروج از برنامه درخواست خاموش کردن نمی‌فرستد. برای ارسال یا تکرار درخواست غیرفعال‌سازی از کنترل مربوط و گزینه Send disconnect استفاده کنید.">
+            خیر. خروج از برنامه درخواست خاموش کردن نمی‌فرستد. برای ارسال یا
+            تکرار درخواست غیرفعال‌سازی از کنترل مربوط و گزینه
+            <bdi dir="ltr">Send disconnect</bdi> استفاده کنید.
+          </p>
+        </section>
+        <section id="download">
+          <p>
+            <a
+              class="btn btn-primary"
+              href="/downloads/mikrotik-pbr-client/MikroTikPBRClient-Setup-1.0.2-x64.msi"
+              download
+              ><span data-en="Download the 64-bit Windows installer, version 1.0.2" data-fa="دانلود نصب‌کننده ویندوز ۶۴بیتی ، نسخه ۱.۰.۲">دانلود نصب‌کننده ویندوز ۶۴بیتی ، نسخه ۱.۰.۲</span></a
+            >
+          </p>
+          <h2 data-en="Download version 1.0.2" data-fa="دانلود نسخه ۱.۰.۲">دانلود نسخه ۱.۰.۲</h2>
+          <p data-en="The download is a 64-bit Windows MSI installer with the required .NET files included. Check the version and system architecture before installing. No claim is made about compatibility with every Windows release or official MikroTik approval." data-fa="فایل ارائه‌شده نصب‌کننده MSI برای ویندوز ۶۴بیتی است و فایل‌های موردنیاز .NET را همراه خود دارد. هنگام انتخاب فایل، نسخه و معماری سیستم خود را بررسی کنید. درباره سازگاری با تمام نسخه‌های ویندوز یا تأیید رسمی MikroTik ادعایی مطرح نمی‌شود.">
+            فایل ارائه‌شده نصب‌کننده MSI برای ویندوز ۶۴بیتی است و فایل‌های
+            موردنیاز .NET را همراه خود دارد. هنگام انتخاب فایل، نسخه و معماری
+            سیستم خود را بررسی کنید. درباره سازگاری با تمام نسخه‌های ویندوز یا
+            تأیید رسمی MikroTik ادعایی مطرح نمی‌شود.
+          </p>
+          <p data-en="Version: 1.0.2 · Architecture: x64 · File format: MSI" data-fa="نسخه: 1.0.2 · معماری: x64 · قالب فایل: MSI">
+            نسخه: <bdi dir="ltr">1.0.2</bdi> · معماری:
+            <bdi dir="ltr">x64</bdi> · قالب فایل: <bdi dir="ltr">MSI</bdi>
+          </p>
+        </section>
+      </div>
+    </article>
+  </body>
+</html>

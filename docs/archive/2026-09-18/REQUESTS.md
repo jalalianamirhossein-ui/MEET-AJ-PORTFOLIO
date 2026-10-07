@@ -1,5 +1,7 @@
 # Requests (contact and quotes) — Meet AJ
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 **Authority:** AUTHORITATIVE description of the inbound request pipeline.
 **Verified:** 2026-09-17 against `app/Http/Controllers/ContactController.php`, `app/Http/Requests/StoreContactRequest.php`, `app/Http/Middleware/AcceptLegacyCsrfToken.php`, `app/Models/Request.php`, `app/Filament/Resources/RequestResource.php`, `routes/web.php`, and PHPUnit (`PublicSiteTest`, `RequestWorkflowTest`).
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
@@ -42,7 +44,7 @@ The original static site's PHP endpoint paths are preserved so the existing fron
 
 ## Stored data
 
-`requests` columns: `name`, `email`, `phone`, `subject`, `message`, `status`, `service_id`, `internal_notes`, timestamps. CSRF tokens, passwords and the honeypot value are never stored. Schema detail: [DATABASE.md](DATABASE.md).
+`requests` columns: `name`, `email`, `phone`, `subject`, `message`, `status`, `service_id`, `internal_notes`, timestamps. CSRF tokens, passwords and the honeypot value are never stored. Schema detail: [DATABASE.md](../../current/DATABASE.md).
 
 ## Status workflow
 

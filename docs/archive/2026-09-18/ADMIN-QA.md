@@ -1,7 +1,9 @@
 # Admin UI QA — Meet AJ Filament 5
 
-**Date:** 2026-09-17  
-**Panel:** `/admin` (Filament 5.8.2, Livewire 4.4.5)  
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
+**Date:** 2026-09-17
+**Panel:** `/admin` (Filament 5.8.2, Livewire 4.4.5)
 **Brand:** `#2563eb`, existing logo, groups Content / Communications / Administration.
 
 ## Browser this pass

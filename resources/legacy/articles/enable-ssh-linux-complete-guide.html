@@ -1,19 +1,18 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-article-language="en">
   <head>
     <title>
-      Complete Guide to Enabling and Configuring SSH in Linux | Server Security
-      Tutorial
+      Enable SSH on Ubuntu Linux and Set Up Key Authentication | Meet AJ
     </title>
     <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      content="آموزش کامل نصب، فعال‌سازی، پیکربندی و ایمن‌سازی SSH در لینوکس. شامل احراز هویت با کلید، تنظیمات امنیتی، Fail2ban، مدیریت Root Login و Best Practices برای سازمان‌ها."
       name="description"
+      content="Install OpenSSH, configure keys, inspect effective sshd settings and diagnose login failures while preserving server access."
     />
     <meta
-      content="SSH Linux Configuration, SSH Security Setup, Linux SSH Server, SSH Key Authentication, SSH Fail2ban, SSH Root Login, SSH Best Practices, Ubuntu SSH, CentOS SSH, SSH Troubleshooting, آموزش SSH لینوکس, پیکربندی SSH امن, نصب SSH سرور"
       name="keywords"
+      content="Production SSH, enable ssh linux complete guide, infrastructure operations, production operations, troubleshooting"
     />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
@@ -31,18 +30,18 @@
     <meta name="msapplication-navbutton-color" content="#007aff" />
     <meta
       name="msapplication-TileImage"
-      content="../assets/img/apple-touch-icon.png"
+      content="../assets/img/icons/apple-touch-icon.png"
     />
     <meta property="og:type" content="article" />
     <meta
       property="og:title"
-      content="راهنمای جامع فعال‌سازی و پیکربندی SSH در لینوکس | آموزش کامل امنیت سرور"
+      content="Enable SSH on Ubuntu Linux and Set Up Key Authentication"
     />
     <meta
       property="og:description"
-      content="آموزش کامل نصب، فعال‌سازی، پیکربندی و ایمن‌سازی SSH در لینوکس. شامل احراز هویت با کلید، تنظیمات امنیتی، Fail2ban، مدیریت Root Login و Best Practices برای سازمان‌ها."
+      content="Install OpenSSH, configure keys, inspect effective sshd settings and diagnose login failures while preserving server access."
     />
-    <meta property="og:image" content="../assets/img/my-profile-img.jpg" />
+    <meta property="og:image" content="../assets/img/avatars/profile/my-profile-img.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta
@@ -51,20 +50,20 @@
     />
     <meta
       property="og:url"
-      content="https://meetaj.ir/articles/enable-ssh-linux-complete-guide.html"
+      content="https://meetaj.ir/articles/enable-ssh-linux-complete-guide"
     />
     <meta property="og:site_name" content="Meet AJ - Technical Articles" />
     <meta property="og:locale" content="fa_IR" />
     <meta property="twitter:card" content="summary_large_image" />
     <meta
       property="twitter:title"
-      content="راهنمای جامع فعال‌سازی و پیکربندی SSH در لینوکس | آموزش کامل امنیت سرور"
+      content="Enable SSH on Ubuntu Linux and Set Up Key Authentication"
     />
     <meta
       property="twitter:description"
-      content="آموزش کامل نصب، فعال‌سازی، پیکربندی و ایمن‌سازی SSH در لینوکس. شامل احراز هویت با کلید، تنظیمات امنیتی، Fail2ban، مدیریت Root Login و Best Practices برای سازمان‌ها."
+      content="Install OpenSSH, configure keys, inspect effective sshd settings and diagnose login failures while preserving server access."
     />
-    <meta property="twitter:image" content="../assets/img/my-profile-img.jpg" />
+    <meta property="twitter:image" content="../assets/img/avatars/profile/my-profile-img.jpg" />
     <meta
       property="twitter:image:alt"
       content="آموزش پیکربندی SSH در لینوکس - AmirHossein Jalalian"
@@ -98,127 +97,10 @@
     <meta name="apple-mobile-web-app-title" content="Meet AJ" />
     <link
       rel="canonical"
-      href="https://meetaj.ir/articles/enable-ssh-linux-complete-guide.html"
+      href="https://meetaj.ir/articles/enable-ssh-linux-complete-guide"
     />
-    <link
-      rel="alternate"
-      hreflang="fa"
-      href="https://meetaj.ir/articles/enable-ssh-linux-complete-guide.html"
-    />
-    <link
-      rel="alternate"
-      hreflang="en"
-      href="https://meetaj.ir/articles/enable-ssh-linux-complete-guide.html"
-    />
-    <link
-      rel="alternate"
-      hreflang="x-default"
-      href="https://meetaj.ir/articles/enable-ssh-linux-complete-guide.html"
-    />
-    <link href="../assets/img/favicon.png" rel="icon" />
-    <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "راهنمای جامع فعال‌سازی و پیکربندی SSH در لینوکس | آموزش کامل امنیت سرور",
-        "description": "آموزش کامل نصب، فعال‌سازی، پیکربندی و ایمن‌سازی SSH در لینوکس. شامل احراز هویت با کلید، تنظیمات امنیتی، Fail2ban، مدیریت Root Login و Best Practices برای سازمان‌ها.",
-        "image": {
-          "@type": "ImageObject",
-          "url": "../assets/img/my-profile-img.jpg",
-          "width": 1200,
-          "height": 630,
-          "caption": "آموزش پیکربندی SSH در لینوکس - AmirHossein Jalalian"
-        },
-        "author": {
-          "@type": "Person",
-          "name": "AmirHossein Jalalian",
-          "url": "https://meetaj.ir",
-          "jobTitle": "Infrastructure & DevOps Engineer",
-          "worksFor": {
-            "@type": "Organization",
-            "name": "Meet AJ"
-          },
-          "sameAs": [
-            "https://www.linkedin.com/in/amirhussein-jalalian-050702188/",
-            "https://github.com/jalalianamirhossein-ui",
-            "https://twitter.com/RealAjMercury"
-          ]
-        },
-        "publisher": {
-          "@type": "Organization",
-          "name": "Meet AJ",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "../assets/img/logo.png",
-            "width": 200,
-            "height": 200
-          },
-          "url": "https://meetaj.ir"
-        },
-        "datePublished": "2024-01-15T00:00:00+03:30",
-        "dateModified": "2024-01-15T00:00:00+03:30",
-        "mainEntityOfPage": {
-          "@type": "WebPage",
-          "@id": "https://meetaj.ir/articles/enable-ssh-linux-complete-guide.html"
-        },
-        "articleSection": "Linux Security Configuration",
-        "keywords": [
-          "SSH Linux Configuration",
-          "SSH Security Setup",
-          "Linux SSH Server",
-          "SSH Key Authentication",
-          "SSH Fail2ban",
-          "SSH Root Login",
-          "SSH Best Practices",
-          "Ubuntu SSH",
-          "CentOS SSH",
-          "SSH Troubleshooting",
-          "آموزش SSH لینوکس",
-          "پیکربندی SSH امن",
-          "نصب SSH سرور",
-          "امنیت SSH",
-          "مدیریت SSH"
-        ],
-        "inLanguage": ["fa", "en"],
-        "wordCount": "4000",
-        "timeRequired": "PT20M",
-        "educationalLevel": "Intermediate",
-        "learningResourceType": "Tutorial",
-        "about": {
-          "@type": "Thing",
-          "name": "SSH Linux Configuration Guide",
-          "description": "Complete guide to enabling and configuring SSH in Linux with security best practices",
-          "category": "Linux Security"
-        },
-        "mentions": [
-          {
-            "@type": "Thing",
-            "name": "SSH Protocol"
-          },
-          {
-            "@type": "Thing",
-            "name": "Linux Server Security"
-          },
-          {
-            "@type": "Thing",
-            "name": "Key-based Authentication"
-          },
-          {
-            "@type": "Thing",
-            "name": "Fail2ban Security"
-          },
-          {
-            "@type": "Thing",
-            "name": "Ubuntu Linux"
-          },
-          {
-            "@type": "Thing",
-            "name": "CentOS Linux"
-          }
-        ]
-      }
-    </script>
+    <link href="../assets/img/icons/favicon.png" rel="icon" />
+    <link href="../assets/img/icons/apple-touch-icon.png" rel="apple-touch-icon" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -252,13 +134,92 @@
       rel="stylesheet"
       disabled
     />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Enable SSH on Ubuntu Linux and Set Up Key Authentication",
+        "description": "Install OpenSSH, configure keys, inspect effective sshd settings and diagnose login failures while preserving server access.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/enable-ssh-linux-complete-guide",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/enable-ssh-linux-complete-guide"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is changing the SSH port enough?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Source restrictions, keys, account lifecycle controls and audit records are still required."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What must pass before password login is disabled?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Key login and sudo in an independent session, with console recovery available."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "فعال‌سازی SSH در Ubuntu Linux و ورود امن با کلید",
+          "meta_title": "فعال‌سازی SSH در Ubuntu Linux و ورود امن با کلید | Meet AJ",
+          "description": "نصب OpenSSH، ساخت کلید، بررسی تنظیم مؤثر sshd و عیب‌یابی ورود بدون از دست دادن دسترسی سرور.",
+          "keywords": [
+            "فعال‌سازی SSH در Ubuntu Linux و ورود امن با کلید",
+            "عیب‌یابی",
+            "بازیابی",
+            "enable ssh linux complete guide"
+          ],
+          "faq": [
+            [
+              "آیا تغییر پورت SSH کافی است؟",
+              "خیر. کنترل مبدا، کلید، مدیریت حساب و ثبت رویداد لازم است."
+            ],
+            [
+              "قبل از غیرفعال‌کردن Password چه چیزی باید تست شود؟",
+              "ورود با کلید و sudo در نشست مستقل همراه با دسترسی console."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Enable SSH on Ubuntu Linux and Set Up Key Authentication",
+          "meta_title": "Enable SSH on Ubuntu Linux and Set Up Key Authentication | Meet AJ",
+          "description": "Install OpenSSH, configure keys, inspect effective sshd settings and diagnose login failures while preserving server access.",
+          "keywords": [
+            "Enable SSH on Ubuntu Linux and Set Up Key Authentication",
+            "enable ssh linux complete guide",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Is changing the SSH port enough?",
+              "No. Source restrictions, keys, account lifecycle controls and audit records are still required."
+            ],
+            [
+              "What must pass before password login is disabled?",
+              "Key login and sudo in an independent session, with console recovery available."
+            ]
+          ]
+        }
+      }
+    </script>
   </head>
   <body class="article-page theme-linux">
-    <a href="#main-content" class="skip-link sr-only sr-only-focusable"
-      ><span data-en="Skip to main content" data-fa="رفتن به محتوای اصلی"
-        >Skip to main content</span
-      ></a
-    >
     <button
       id="menu-toggle"
       class="menu-toggle d-xl-none"
@@ -276,7 +237,7 @@
       =============================================== -->
       <div class="profile-img">
         <img
-          src="../assets/img/my-profile-img.jpg"
+          src="../assets/img/avatars/profile/my-profile-img.jpg"
           loading="lazy"
           alt="AmirHossein Jalalian Profile Picture"
           class="img-fluid rounded-circle"
@@ -291,7 +252,7 @@
       >
         <!-- Site Logo & Name -->
         <a href="../index.html#hero" class="logo d-flex align-items-center">
-          <img src="../assets/img/logo.png" alt="Aj-Network" loading="lazy" />
+          <img src="../assets/img/brand/logo.png" alt="Aj-Network" loading="lazy" />
           <p class="sitename">Meet AJ</p>
         </a>
       </div>
@@ -407,99 +368,90 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#introduction"
-              ><i class="bi bi-info-circle navicon" aria-hidden="true"></i
-              ><span data-en="Introduction" data-fa="مقدمه"
-                >Introduction</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#installation"
-              ><i class="bi bi-download navicon" aria-hidden="true"></i
+            <a href="#enterprise-intro"
               ><span
-                data-en="Installation and Activation"
-                data-fa="نصب و فعال‌سازی SSH"
-                >Installation and Activation</span
+                data-fa="SSH و مسیر دسترسی به سرور"
+                data-en="SSH and the server access path"
+                >SSH and the server access path</span
               ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#service-management"
-              ><i class="bi bi-gear navicon" aria-hidden="true"></i
-              ><span data-en="Service Management" data-fa="مدیریت سرویس SSH"
-                >Service Management</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#password-connection"
-              ><i
-                class="bi bi-box-arrow-in-right navicon"
-                aria-hidden="true"
-              ></i
+            <a href="#enterprise-architecture"
               ><span
-                data-en="Initial Password Connection"
-                data-fa="اتصال اولیه با رمز عبور"
-                >Initial Password Connection</span
+                data-fa="کلید کاربر و Fingerprint سرور"
+                data-en="User keys and server fingerprints"
+                >User keys and server fingerprints</span
               ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#key-authentication"
-              ><i class="bi bi-key navicon" aria-hidden="true"></i
+            <a href="#enterprise-prerequisites"
               ><span
-                data-en="Key-based Authentication"
-                data-fa="احراز هویت با کلید عمومی و خصوصی"
-                >Key-based Authentication</span
+                data-fa="حساب کاربری، Console و بسته‌های لازم"
+                data-en="Account, console and package requirements"
+                >Account, console and package requirements</span
               ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#security-settings"
-              ><i class="bi bi-shield-check navicon" aria-hidden="true"></i
+            <a href="#enterprise-installation"
               ><span
-                data-en="Important Security Settings"
-                data-fa="تنظیمات امنیتی مهم در SSH"
-                >Important Security Settings</span
+                data-fa="نصب سرویس و آزمون ورود با کلید"
+                data-en="Install the service and test key login"
+                >Install the service and test key login</span
               ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#testing"
-              ><i class="bi bi-bug navicon" aria-hidden="true"></i
+            <a href="#enterprise-security"
               ><span
-                data-en="Testing and Troubleshooting"
-                data-fa="تست و عیب‌یابی اتصال SSH"
-                >Testing and Troubleshooting</span
+                data-fa="محدودیت مبدا و سازگاری با MFA"
+                data-en="Source restrictions and MFA compatibility"
+                >Source restrictions and MFA compatibility</span
               ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#best-practices"
-              ><i class="bi bi-check2-square navicon" aria-hidden="true"></i
+            <a href="#enterprise-monitoring"
               ><span
-                data-en="Best Practices"
-                data-fa="بهترین روش‌ها در سازمان‌ها"
-                >Best Practices</span
+                data-fa="ثبت ورود و آزمون دسترسی"
+                data-en="Login records and access probes"
+                >Login records and access probes</span
               ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#conclusion"
-              ><i class="bi bi-flag navicon" aria-hidden="true"></i
-              ><span data-en="Conclusion" data-fa="نتیجه‌گیری"
-                >Conclusion</span
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="از خطای اتصال تا رد کلید"
+                data-en="From connection failure to rejected keys"
+                >From connection failure to rejected keys</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="برگشت تنظیمات بدون بستن آخرین نشست"
+                data-en="Roll back while a session remains open"
+                >Roll back while a session remains open</span
               ></a
             >
           </li>
           <li class="article-nav-item">
             <a href="#faq"
-              ><i class="bi bi-question-circle navicon" aria-hidden="true"></i
               ><span
-                data-en="Frequently Asked Questions"
                 data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
                 >Frequently Asked Questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
               ></a
             >
           </li>
@@ -531,24 +483,24 @@
               </div>
               <h1
                 class="article-title hero-title"
-                data-en="Complete Guide to Enabling and Configuring SSH in Linux"
-                data-fa="راهنمای کامل فعال‌سازی و پیکربندی SSH در Linux"
+                data-fa="فعال‌سازی SSH در Ubuntu Linux و ورود امن با کلید"
+                data-en="Enable SSH on Ubuntu Linux and Set Up Key Authentication"
               >
-                Complete Guide to Enabling and Configuring SSH in Linux
+                Enable SSH on Ubuntu Linux and Set Up Key Authentication
               </h1>
               <p
                 class="article-excerpt hero-subtitle"
-                data-en="Complete guide to installing, activating, configuring and securing SSH in Linux"
-                data-fa="راهنمای کامل نصب، فعال‌سازی، پیکربندی و ایمن‌سازی SSH در Linux"
+                data-fa="نصب OpenSSH، ساخت کلید، بررسی تنظیم مؤثر sshd و عیب‌یابی ورود بدون از دست دادن دسترسی سرور."
+                data-en="Install OpenSSH, configure keys, inspect effective sshd settings and diagnose login failures while preserving server access."
               >
-                Complete guide to installing, activating, configuring and
-                securing SSH in Linux
+                Install OpenSSH, configure keys, inspect effective sshd settings
+                and diagnose login failures while preserving server access.
               </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
                     class="article-hero-thumbnail"
-                    src="../assets/img/portfolio/linux-2.png"
+                    src="../assets/img/articles/banners/enable-ssh-linux-complete-guide.png"
                     alt="Complete Guide to Enabling and Configuring SSH in Linux"
                   />
                   <div class="banner-content">
@@ -592,1757 +544,379 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body">
-                <!-- Introduction -->
-                <section id="introduction" class="article-section">
-                  <h2 data-en="Introduction" data-fa="مقدمه">مقدمه</h2>
-                  <div class="intro-content">
-                    <p
-                      data-en="SSH (Secure Shell) is one of the main tools for secure server management. With SSH, you can connect to Linux servers encrypted, transfer files and execute administrative commands. This article step-by-step explains how to install, activate, configure and secure SSH in Linux with examples and best practices."
-                      data-fa="پروتکل SSH (Secure Shell) یکی از ابزارهای اصلی برای مدیریت ایمن سرورهاست. با استفاده از SSH می‌توان به‌صورت رمزنگاری‌شده به سرورهای لینوکس متصل شد، فایل‌ها را منتقل کرد و دستورات مدیریتی اجرا کرد. این مقاله گام‌به‌گام نحوه نصب، فعال‌سازی، پیکربندی و ایمن‌سازی SSH در لینوکس را همراه با مثال‌ها و بهترین روش‌ها توضیح می‌دهد."
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="SSH و مسیر دسترسی به سرور"
+                      data-en="SSH and the server access path"
                     >
-                      پروتکل SSH (Secure Shell) یکی از ابزارهای اصلی برای مدیریت
-                      ایمن سرورهاست. با استفاده از SSH می‌توان به‌صورت
-                      رمزنگاری‌شده به سرورهای لینوکس متصل شد، فایل‌ها را منتقل
-                      کرد و دستورات مدیریتی اجرا کرد. این مقاله گام‌به‌گام نحوه
-                      نصب، فعال‌سازی، پیکربندی و ایمن‌سازی SSH در لینوکس را
-                      همراه با مثال‌ها و Best Practices توضیح می‌دهد.
-                    </p>
-                  </div>
-                </section>
-
-                <!-- Installation -->
-                <section id="installation" class="article-section">
-                  <h2
-                    data-en="Installation and Activation"
-                    data-fa="نصب و فعال‌سازی SSH"
-                  >
-                    نصب و فعال‌سازی SSH
-                  </h2>
-
-                  <!-- Ubuntu/Debian Installation -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">1</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-ubuntu"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="در Ubuntu/Debian"
-                          data-en="In Ubuntu/Debian"
-                        >
-                          در Ubuntu/Debian
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="نصب SSH Server در سیستم‌های مبتنی بر Debian"
-                          data-en="Install SSH Server on Debian-based systems"
-                        >
-                          نصب SSH Server در سیستم‌های مبتنی بر Debian
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="پکیج openssh-server نصب می‌شود"
-                            data-en="openssh-server package will be installed"
-                          >
-                            پکیج openssh-server نصب می‌شود
-                          </li>
-                          <li
-                            data-fa="سرویس به صورت خودکار شروع می‌شود"
-                            data-en="Service will start automatically"
-                          >
-                            سرویس به صورت خودکار شروع می‌شود
-                          </li>
-                        </ul>
-                      </div>
-
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="ترمینال"
-                            data-en="Terminal"
-                            >Terminal</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code class="language-bash">sudo apt update
-sudo apt install openssh-server -y</code></pre>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <!-- Service Management -->
-                <section id="service-management" class="article-section">
-                  <h2 data-en="Service Management" data-fa="مدیریت سرویس SSH">
-                    مدیریت سرویس SSH
-                  </h2>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">1</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-gear"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="بررسی وضعیت"
-                          data-en="Check Status"
-                        >
-                          بررسی وضعیت
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="بررسی وضعیت سرویس SSH"
-                          data-en="Check SSH service status"
-                        >
-                          بررسی وضعیت سرویس SSH
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="سرویس باید فعال باشد"
-                            data-en="Service should be active"
-                          >
-                            سرویس باید فعال باشد
-                          </li>
-                          <li
-                            data-fa="پورت 22 باید باز باشد"
-                            data-en="Port 22 should be open"
-                          >
-                            پورت 22 باید باز باشد
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!-- Code Block -->
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="ترمینال"
-                            data-en="Terminal"
-                            >Terminal</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code class="language-bash">systemctl status ssh</code></pre>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">2</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-arrow-clockwise"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="راه‌اندازی مجدد"
-                          data-en="Restart Service"
-                        >
-                          راه‌اندازی مجدد
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="راه‌اندازی مجدد سرویس SSH"
-                          data-en="Restart SSH service"
-                        >
-                          راه‌اندازی مجدد سرویس SSH
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="اتصالات فعال قطع می‌شوند"
-                            data-en="Active connections will be dropped"
-                          >
-                            اتصالات فعال قطع می‌شوند
-                          </li>
-                          <li
-                            data-fa="تغییرات تنظیمات اعمال می‌شود"
-                            data-en="Configuration changes will be applied"
-                          >
-                            تغییرات تنظیمات اعمال می‌شود
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!-- Code Block -->
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="ترمینال"
-                            data-en="Terminal"
-                            >Terminal</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code class="language-bash">sudo systemctl restart ssh</code></pre>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">3</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-play-circle"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="فعال‌سازی در بوت"
-                          data-en="Enable on Boot"
-                        >
-                          فعال‌سازی در بوت
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="فعال‌سازی سرویس SSH در بوت سیستم"
-                          data-en="Enable SSH service on system boot"
-                        >
-                          فعال‌سازی سرویس SSH در بوت سیستم
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="سرویس به صورت خودکار شروع می‌شود"
-                            data-en="Service will start automatically"
-                          >
-                            سرویس به صورت خودکار شروع می‌شود
-                          </li>
-                          <li
-                            data-fا="در صورت ریبوت سیستم سرویس فعال می‌ماند"
-                            data-en="Service remains active after system reboot"
-                          >
-                            در صورت ریبوت سیستم سرویس فعال می‌ماند
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!-- Code Block -->
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="ترمینال"
-                            data-en="Terminal"
-                            >Terminal</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code class="language-bash">sudo systemctl enable ssh</code></pre>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <!-- Initial Password Connection -->
-                <section id="password-connection" class="article-section">
-                  <h2
-                    data-en="Initial Password Connection"
-                    data-fa="اتصال اولیه با رمز عبور"
-                  >
-                    اتصال اولیه با رمز عبور
-                  </h2>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">1</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-terminal"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="اتصال در لینوکس/macOS"
-                          data-en="Connection in Linux/macOS"
-                        >
-                          اتصال در لینوکس/macOS
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="اتصال SSH با رمز عبور در سیستم‌های لینوکس و macOS"
-                          data-en="SSH connection with password in Linux and macOS systems"
-                        >
-                          اتصال SSH با رمز عبور در سیستم‌های لینوکس و macOS
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="نام کاربری و رمز عبور مورد نیاز است"
-                            data-en="Username and password required"
-                          >
-                            نام کاربری و رمز عبور مورد نیاز است
-                          </li>
-                          <li
-                            data-fa="IP آدرس سرور را وارد کنید"
-                            data-en="Enter server IP address"
-                          >
-                            IP آدرس سرور را وارد کنید
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!-- Code Block -->
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="ترمینال"
-                            data-en="Terminal"
-                            >Terminal</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code class="language-bash">ssh user@192.168.1.100</code></pre>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">2</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-windows"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="اتصال در ویندوز"
-                          data-en="Connection in Windows"
-                        >
-                          اتصال در ویندوز
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="اتصال SSH با رمز عبور در ویندوز PowerShell"
-                          data-en="SSH connection with password in Windows PowerShell"
-                        >
-                          اتصال SSH با رمز عبور در ویندوز PowerShell
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="PowerShell یا Command Prompt استفاده کنید"
-                            data-en="Use PowerShell or Command Prompt"
-                          >
-                            PowerShell یا Command Prompt استفاده کنید
-                          </li>
-                          <li
-                            data-fa="SSH Client باید نصب باشد"
-                            data-en="SSH Client must be installed"
-                          >
-                            SSH Client باید نصب باشد
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!-- Code Block -->
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="PowerShell"
-                            data-en="PowerShell"
-                            >PowerShell</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code class="language-bash">ssh user@server-ip</code></pre>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <!-- Key-based Authentication -->
-                <section id="key-authentication" class="article-section">
-                  <h2
-                    data-en="Key-based Authentication"
-                    data-fa="احراز هویت با کلید عمومی و خصوصی"
-                  >
-                    احراز هویت با کلید عمومی و خصوصی
-                  </h2>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">1</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-key"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="ایجاد کلید در ویندوز"
-                          data-en="Generate Key in Windows"
-                        >
-                          ایجاد کلید در ویندوز
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="ایجاد کلید SSH RSA در سیستم ویندوز"
-                          data-en="Generate SSH RSA key in Windows system"
-                        >
-                          ایجاد کلید SSH RSA در سیستم ویندوز
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="کلید RSA با طول 4096 بیت ایجاد می‌شود"
-                            data-en="RSA key with 4096 bit length will be generated"
-                          >
-                            کلید RSA با طول 4096 بیت ایجاد می‌شود
-                          </li>
-                          <li
-                            data-fa="مسیر پیش‌فرض: C:\Users\&lt;username&gt;\.ssh\"
-                            data-en="Default path: C:\Users\&lt;username&gt;\.ssh\"
-                          >
-                            مسیر پیش‌فرض: C:\Users\&lt;username&gt;\.ssh\
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!-- Code Block -->
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="ترمینال"
-                            data-en="Terminal"
-                            >Terminal</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code class="language-bash">ssh-keygen -t rsa -b 4096</code></pre>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">2</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-terminal"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="ایجاد کلید در لینوکس"
-                          data-en="Generate Key in Linux"
-                        >
-                          ایجاد کلید در لینوکس
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="ایجاد کلید SSH ED25519 در سیستم لینوکس"
-                          data-en="Generate SSH ED25519 key in Linux system"
-                        >
-                          ایجاد کلید SSH ED25519 در سیستم لینوکس
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="ED25519 سریع‌تر و امن‌تر از RSA است"
-                            data-en="ED25519 is faster and more secure than RSA"
-                          >
-                            ED25519 سریع‌تر و امن‌تر از RSA است
-                          </li>
-                          <li
-                            data-fa="کلید در ~/.ssh/ ذخیره می‌شود"
-                            data-en="Key will be saved in ~/.ssh/"
-                          >
-                            کلید در ~/.ssh/ ذخیره می‌شود
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!-- Code Block -->
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="ترمینال"
-                            data-en="Terminal"
-                            >Terminal</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code class="language-bash">ssh-keygen -t ed25519</code></pre>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="article-card article-card--method">
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h3
-                          class="article-card-title"
-                          data-fa="نکات مهم"
-                          data-en="Important Tips"
-                        >
-                          نکات مهم
-                        </h3>
-                        <ul>
-                          <li
-                            data-fa="کلید عمومی به authorized_keys اضافه می‌شود"
-                            data-en="Public key will be added to authorized_keys"
-                          >
-                            کلید عمومی به authorized_keys اضافه می‌شود
-                          </li>
-                          <li
-                            data-fa="در لینوکس از ssh-copy-id استفاده کنید"
-                            data-en="Use ssh-copy-id in Linux"
-                          >
-                            در لینوکس از ssh-copy-id استفاده کنید
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!-- Code Block -->
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="ترمینال"
-                            data-en="Terminal"
-                            >Terminal</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code class="language-bash">ssh-copy-id user@server-ip</code></pre>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">4</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-shield-check"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="تنظیم مجوز فایل‌ها"
-                          data-en="Set File Permissions"
-                        >
-                          تنظیم مجوز فایل‌ها
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="تنظیم مجوزهای امنیتی برای فایل‌های SSH"
-                          data-en="Set security permissions for SSH files"
-                        >
-                          تنظیم مجوزهای امنیتی برای فایل‌های SSH
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="پوشه .ssh باید مجوز 700 داشته باشد"
-                            data-en="Directory .ssh should have 700 permission"
-                          >
-                            پوشه .ssh باید مجوز 700 داشته باشد
-                          </li>
-                          <li
-                            data-fa="فایل authorized_keys باید مجوز 600 داشته باشد"
-                            data-en="File authorized_keys should have 600 permission"
-                          >
-                            فایل authorized_keys باید مجوز 600 داشته باشد
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!-- Code Block -->
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="ترمینال"
-                            data-en="Terminal"
-                            >Terminal</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code>chmod 700 ~/.ssh
-chmod 600 ~/.ssh/authorized_keys</code></pre>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <!-- Security Settings -->
-                <section id="security-settings" class="article-section">
-                  <h2
-                    data-en="Important Security Settings"
-                    data-fa="تنظیمات امنیتی مهم در SSH"
-                  >
-                    تنظیمات امنیتی مهم در SSH
-                  </h2>
-
-                  <p>
-                    <strong>فایل اصلی:</strong>
-                    <code>/etc/ssh/sshd_config</code>
-                  </p>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">1</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-shield-lock"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="تغییر پورت پیش‌فرض"
-                          data-en="Change Default Port"
-                        >
-                          تغییر پورت پیش‌فرض
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="تغییر پورت SSH از 22 به پورت امن‌تر"
-                          data-en="Change SSH port from 22 to a more secure port"
-                        >
-                          تغییر پورت SSH از 22 به پورت امن‌تر
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="پورت 22 هدف حملات اسکریپتی است"
-                            data-en="Port 22 is target of script attacks"
-                          >
-                            پورت 22 هدف حملات اسکریپتی است
-                          </li>
-                          <li
-                            data-fa="پورت‌های 2222، 2200، 2022 پیشنهاد می‌شود"
-                            data-en="Ports 2222, 2200, 2022 are recommended"
-                          >
-                            پورت‌های 2222، 2200، 2022 پیشنهاد می‌شود
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!-- Code Block -->
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="پیکربندی"
-                            data-en="Config"
-                            >Config</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code>Port 2222</code></pre>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">2</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-person-x"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="غیرفعال‌کردن Root Login"
-                          data-en="Disable Root Login"
-                        >
-                          غیرفعال‌کردن Root Login
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="غیرفعال‌سازی ورود مستقیم Root از طریق SSH"
-                          data-en="Disable direct Root login through SSH"
-                        >
-                          غیرفعال‌سازی ورود مستقیم Root از طریق SSH
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="امنیت سیستم را افزایش می‌دهد"
-                            data-en="Increases system security"
-                          >
-                            امنیت سیستم را افزایش می‌دهد
-                          </li>
-                          <li
-                            data-fa="از sudo برای دسترسی Root استفاده کنید"
-                            data-en="Use sudo for Root access"
-                          >
-                            از sudo برای دسترسی Root استفاده کنید
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!-- Code Block -->
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="پیکربندی"
-                            data-en="Config"
-                            >Config</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code>PermitRootLogin no</code></pre>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">3</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-exclamation-triangle"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="فعال‌سازی Root Login (غیرتوصیه‌شده)"
-                          data-en="Enable Root Login (Not Recommended)"
-                        >
-                          فعال‌سازی Root Login (غیرتوصیه‌شده)
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="فعال‌سازی ورود Root فقط برای تست"
-                          data-en="Enable Root login only for testing"
-                        >
-                          فعال‌سازی ورود Root فقط برای تست
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="⚠️ ریسک امنیتی بالا دارد"
-                            data-en="⚠️ High security risk"
-                          >
-                            ⚠️ ریسک امنیتی بالا دارد
-                          </li>
-                          <li
-                            data-fa="فقط در محیط تست استفاده کنید"
-                            data-en="Use only in testing environment"
-                          >
-                            فقط در محیط تست استفاده کنید
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!-- Code Block -->
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="ترمینال"
-                            data-en="Terminal"
-                            >Terminal</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code>sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && sudo systemctl restart ssh && sudo passwd</code></pre>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">4</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-people"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="محدود کردن کاربران مجاز"
-                          data-en="Limit Allowed Users"
-                        >
-                          محدود کردن کاربران مجاز
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="محدودسازی دسترسی SSH به کاربران خاص"
-                          data-en="Limit SSH access to specific users"
-                        >
-                          محدودسازی دسترسی SSH به کاربران خاص
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="فقط کاربران مشخص شده دسترسی دارند"
-                            data-en="Only specified users have access"
-                          >
-                            فقط کاربران مشخص شده دسترسی دارند
-                          </li>
-                          <li
-                            data-fa="امنیت سیستم را افزایش می‌دهد"
-                            data-en="Increases system security"
-                          >
-                            امنیت سیستم را افزایش می‌دهد
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!-- Code Block -->
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="پیکربندی"
-                            data-en="Config"
-                            >Config</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code>AllowUsers admin devops</code></pre>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">5</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-shield-exclamation"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="نصب Fail2ban"
-                          data-en="Install Fail2ban"
-                        >
-                          نصب Fail2ban
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="نصب Fail2ban برای جلوگیری از حملات Brute Force"
-                          data-en="Install Fail2ban to prevent Brute Force attacks"
-                        >
-                          نصب Fail2ban برای جلوگیری از حملات Brute Force
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="حملات Brute Force را مسدود می‌کند"
-                            data-en="Blocks Brute Force attacks"
-                          >
-                            حملات Brute Force را مسدود می‌کند
-                          </li>
-                          <li
-                            data-fa="IP های مشکوک را بلاک می‌کند"
-                            data-en="Blocks suspicious IPs"
-                          >
-                            IP های مشکوک را بلاک می‌کند
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!-- Code Block -->
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="ترمینال"
-                            data-en="Terminal"
-                            >Terminal</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code>sudo apt install fail2ban -y</code></pre>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <!-- Testing and Troubleshooting -->
-                <section id="testing" class="article-section">
-                  <h2
-                    data-en="Testing and Troubleshooting"
-                    data-fa="تست و عیب‌یابی اتصال SSH"
-                  >
-                    تست و عیب‌یابی اتصال SSH
-                  </h2>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">1</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-file-text"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="مشاهده لاگ‌ها"
-                          data-en="View Logs"
-                        >
-                          مشاهده لاگ‌ها
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="مشاهده لاگ‌های سرویس SSH برای عیب‌یابی"
-                          data-en="View SSH service logs for troubleshooting"
-                        >
-                          مشاهده لاگ‌های سرویس SSH برای عیب‌یابی
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="لاگ‌ها را به صورت Real-time مشاهده کنید"
-                            data-en="View logs in real-time"
-                          >
-                            لاگ‌ها را به صورت Real-time مشاهده کنید
-                          </li>
-                          <li
-                            data-fa="خطاهای اتصال را بررسی کنید"
-                            data-en="Check connection errors"
-                          >
-                            خطاهای اتصال را بررسی کنید
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!-- Code Block -->
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="ترمینال"
-                            data-en="Terminal"
-                            >Terminal</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code>sudo journalctl -u ssh -f</code></pre>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">2</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-wifi"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="تست باز بودن پورت"
-                          data-en="Test Port Open"
-                        >
-                          تست باز بودن پورت
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="بررسی باز بودن پورت SSH از راه دور"
-                          data-en="Check SSH port accessibility remotely"
-                        >
-                          بررسی باز بودن پورت SSH از راه دور
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="پورت 22 یا پورت تغییر یافته را تست کنید"
-                            data-en="Test port 22 or changed port"
-                          >
-                            پورت 22 یا پورت تغییر یافته را تست کنید
-                          </li>
-                          <li
-                            data-fa="از netcat برای تست استفاده کنید"
-                            data-en="Use netcat for testing"
-                          >
-                            از netcat برای تست استفاده کنید
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!-- Code Block -->
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="ترمینال"
-                            data-en="Terminal"
-                            >Terminal</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code>nc -zv server-ip 22</code></pre>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">3</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-bug"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="اتصال با حالت Debug"
-                          data-en="Connection with Debug Mode"
-                        >
-                          اتصال با حالت Debug
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="اتصال SSH با حالت Debug برای عیب‌یابی"
-                          data-en="SSH connection with debug mode for troubleshooting"
-                        >
-                          اتصال SSH با حالت Debug برای عیب‌یابی
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="جزئیات کامل اتصال نمایش داده می‌شود"
-                            data-en="Full connection details will be shown"
-                          >
-                            جزئیات کامل اتصال نمایش داده می‌شود
-                          </li>
-                          <li
-                            data-fa="خطاهای دقیق را شناسایی کنید"
-                            data-en="Identify specific errors"
-                          >
-                            خطاهای دقیق را شناسایی کنید
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!-- Code Block -->
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span
-                            class="article-code-label"
-                            data-fa="ترمینال"
-                            data-en="Terminal"
-                            >Terminal</span
-                          >
-                          <button
-                            type="button"
-                            class="article-copy-button"
-                            data-fa="کپی"
-                            data-en="Copy"
-                          >
-                            کپی
-                          </button>
-                        </div>
-                        <pre><code>ssh -v user@server-ip</code></pre>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <!-- Best Practices -->
-                <section id="best-practices" class="article-section">
-                  <h2
-                    data-en="Best Practices"
-                    data-fa="بهترین روش‌ها در سازمان‌ها"
-                  >
-                    Best Practices در سازمان‌ها
-                  </h2>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">1</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-key"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="استفاده از کلید ED25519"
-                          data-en="Use ED25519 Keys"
-                        >
-                          استفاده از کلید ED25519
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="استفاده از کلیدهای ED25519 به‌جای RSA"
-                          data-en="Use ED25519 keys instead of RSA"
-                        >
-                          استفاده از کلیدهای ED25519 به‌جای RSA
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="ED25519 سریع‌تر و امن‌تر است"
-                            data-en="ED25519 is faster and more secure"
-                          >
-                            ED25519 سریع‌تر و امن‌تر است
-                          </li>
-                          <li
-                            data-fa="حجم کلید کمتر است"
-                            data-en="Smaller key size"
-                          >
-                            حجم کلید کمتر است
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">2</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-shield-check"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="الزام استفاده از SSH Key"
-                          data-en="Mandatory SSH Key Usage"
-                        >
-                          الزام استفاده از SSH Key
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="الزام کاربران به استفاده از SSH Key و غیرفعال کردن پسورد"
-                          data-en="Require users to use SSH Key and disable password"
-                        >
-                          الزام کاربران به استفاده از SSH Key و غیرفعال کردن
-                          پسورد
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="امنیت بالاتر از رمز عبور"
-                            data-en="Higher security than password"
-                          >
-                            امنیت بالاتر از رمز عبور
-                          </li>
-                          <li
-                            data-fa="جلوگیری از حملات Brute Force"
-                            data-en="Prevent Brute Force attacks"
-                          >
-                            جلوگیری از حملات Brute Force
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">3</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-shield-lock"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="تغییر پورت پیش‌فرض"
-                          data-en="Change Default Port"
-                        >
-                          تغییر پورت پیش‌فرض
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="تغییر پورت پیش‌فرض برای کاهش حملات اسکریپتی"
-                          data-en="Change default port to reduce script attacks"
-                        >
-                          تغییر پورت پیش‌فرض برای کاهش حملات اسکریپتی
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="کاهش حملات خودکار"
-                            data-en="Reduce automated attacks"
-                          >
-                            کاهش حملات خودکار
-                          </li>
-                          <li
-                            data-fa="پورت‌های غیراستاندارد استفاده کنید"
-                            data-en="Use non-standard ports"
-                          >
-                            پورت‌های غیراستاندارد استفاده کنید
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">4</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-phone"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="استفاده از MFA/2FA"
-                          data-en="Use MFA/2FA"
-                        >
-                          استفاده از MFA/2FA
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="استفاده از احراز هویت چندعاملی برای امنیت بیشتر"
-                          data-en="Use multi-factor authentication for enhanced security"
-                        >
-                          استفاده از احراز هویت چندعاملی برای امنیت بیشتر
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="امنیت اضافی برای دسترسی"
-                            data-en="Additional security for access"
-                          >
-                            امنیت اضافی برای دسترسی
-                          </li>
-                          <li
-                            data-fa="حتی در صورت نفوذ کلید"
-                            data-en="Even if key is compromised"
-                          >
-                            حتی در صورت نفوذ کلید
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Method Card Example -->
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">5</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-graph-up"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-fa="مانیتورینگ لاگین"
-                          data-en="Login Monitoring"
-                        >
-                          مانیتورینگ لاگین
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-fa="مانیتورینگ تلاش‌های لاگین با ابزارهای پیشرفته"
-                          data-en="Monitor login attempts with advanced tools"
-                        >
-                          مانیتورینگ تلاش‌های لاگین با ابزارهای پیشرفته
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="article-card-content">
-                      <div class="article-card-note">
-                        <h4 data-fa="نکات مهم" data-en="Important Tips">
-                          نکات مهم
-                        </h4>
-                        <ul>
-                          <li
-                            data-fa="استفاده از Splunk یا SIEM"
-                            data-en="Use Splunk or SIEM"
-                          >
-                            استفاده از Splunk یا SIEM
-                          </li>
-                          <li
-                            data-fa="تشخیص حملات در زمان واقعی"
-                            data-en="Real-time attack detection"
-                          >
-                            تشخیص حملات در زمان واقعی
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <!-- Conclusion -->
-                <section id="conclusion" class="article-section">
-                  <h2 data-en="Conclusion" data-fa="نتیجه‌گیری">نتیجه‌گیری</h2>
-                  <div class="intro-content">
+                      SSH and the server access path
+                    </h2>
                     <p
-                      data-en="SSH is the backbone of secure management in Linux. Installation and activation is simple, but security configuration (keys, user restrictions, and Fail2ban) is critical. Root Login should be disabled in most cases except for special conditions. Following Best Practices will increase security and reduce the risk of intrusion."
-                      data-fa="SSH ستون فقرات مدیریت امن در لینوکس است. نصب و فعال‌سازی آن ساده است، اما پیکربندی امنیتی (کلیدها، محدودسازی کاربران و Fail2ban) حیاتی است. Root Login باید در اکثر موارد غیرفعال باشد مگر برای شرایط خاص. رعایت بهترین روش‌ها باعث افزایش امنیت و کاهش ریسک نفوذ خواهد شد."
+                      data-fa="SSH ارتباط مدیریت از راه دور را رمزنگاری می‌کند و ورود با کلید را فراهم می‌سازد. در Ubuntu، بسته openssh-server سرویس سمت سرور را نصب می‌کند. ابتدا اتصال و ورود با کلید را تأیید کنید، سپس محدودیت‌های ورود را اعمال کنید تا دسترسی خودتان قطع نشود."
+                      data-en="SSH encrypts remote administration and supports key authentication. Ubuntu’s openssh-server package provides the server. Establish connectivity and key login before tightening admission rules so the change preserves your access."
                     >
-                      SSH ستون فقرات مدیریت امن در لینوکس است. نصب و فعال‌سازی
-                      آن ساده است، اما پیکربندی امنیتی (کلیدها، محدودسازی
-                      کاربران و Fail2ban) حیاتی است. Root Login باید در اکثر
-                      موارد غیرفعال باشد مگر برای شرایط خاص. رعایت Best
-                      Practices باعث افزایش امنیت و کاهش ریسک نفوذ خواهد شد.
+                      SSH encrypts remote administration and supports key
+                      authentication. Ubuntu’s openssh-server package provides
+                      the server. Establish connectivity and key login before
+                      tightening admission rules so the change preserves your
+                      access.
                     </p>
-                  </div>
-                </section>
-
-                <!-- FAQ Section -->
-                <section id="faq" class="article-section">
-                  <h2
-                    data-en="Frequently Asked Questions"
-                    data-fa="پرسش‌های متداول"
-                  >
-                    پرسش‌های متداول
-                  </h2>
-                  <div class="article-faq">
-                    <div class="article-faq-item">
-                      <h3 class="article-faq-question">
-                        <span
-                          data-en="Does changing SSH port increase security?"
-                          data-fa="آیا تغییر پورت SSH امنیت را بالا می‌برد؟"
-                          >آیا تغییر پورت SSH امنیت را بالا می‌برد؟</span
-                        >
-                        <i class="bi bi-chevron-down"></i>
-                      </h3>
-                      <div class="article-faq-answer">
-                        <p
-                          data-en="Yes, it blocks many automated scans but it's not enough."
-                          data-fa="بله، جلوی بسیاری از اسکن‌های خودکار را می‌گیرد اما کافی نیست."
-                        >
-                          بله، جلوی بسیاری از اسکن‌های خودکار را می‌گیرد اما
-                          کافی نیست.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="article-faq-item">
-                      <h3 class="article-faq-question">
-                        <span
-                          data-en="What is the best key algorithm to use?"
-                          data-fa="بهترین الگوریتم کلید برای استفاده چیست؟"
-                          >بهترین الگوریتم کلید برای استفاده چیست؟</span
-                        >
-                        <i class="bi bi-chevron-down"></i>
-                      </h3>
-                      <div class="article-faq-answer">
-                        <p
-                          data-en="ED25519 is recommended due to its speed and high security."
-                          data-fa="ED25519 به دلیل سرعت و امنیت بالا توصیه می‌شود."
-                        >
-                          ED25519 به دلیل سرعت و امنیت بالا توصیه می‌شود.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="article-faq-item">
-                      <h3 class="article-faq-question">
-                        <span
-                          data-en="What if Root access is needed?"
-                          data-fa="اگر دسترسی Root لازم باشد چه کنم؟"
-                          >اگر دسترسی Root لازم باشد چه کنم؟</span
-                        >
-                        <i class="bi bi-chevron-down"></i>
-                      </h3>
-                      <div class="article-faq-answer">
-                        <p
-                          data-en="You can temporarily enable Root Login or use sudo."
-                          data-fa="می‌توانید موقتاً Root Login را فعال کنید یا از sudo استفاده کنید."
-                        >
-                          می‌توانید موقتاً Root Login را فعال کنید یا از sudo
-                          استفاده کنید.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="article-faq-item">
-                      <h3 class="article-faq-question">
-                        <span
-                          data-en="How can Brute Force attacks be limited?"
-                          data-fa="چگونه می‌توان حملات Brute Force را محدود کرد؟"
-                          >چگونه می‌توان حملات Brute Force را محدود کرد؟</span
-                        >
-                        <i class="bi bi-chevron-down"></i>
-                      </h3>
-                      <div class="article-faq-answer">
-                        <p
-                          data-en="By installing Fail2ban or setting login restrictions."
-                          data-fa="با نصب Fail2ban یا تنظیم محدودیت‌های لاگین."
-                        >
-                          با نصب Fail2ban یا تنظیم محدودیت‌های لاگین.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <!-- Author Bio -->
-
-                <footer class="article-footer" aria-label="Article footer">
-                  <section
-                    id="author"
-                    class="article-author"
-                    role="complementary"
-                    aria-labelledby="author-title"
-                  >
-                    <div class="article-author-card">
-                      <img
-                        class="article-author-avatar"
-                        src="../assets/img/my-profile-img.jpg"
-                        alt="AmirHossein Jalalian"
-                        loading="lazy"
-                        width="120"
-                        height="120"
-                        decoding="async"
-                      />
-                      <div class="article-author-content">
-                        <p
-                          class="article-author-kicker"
-                          id="author-title"
-                          data-en="About the author"
-                          data-fa="درباره نویسنده"
-                        >
-                          About the author
-                        </p>
-                        <h2
-                          data-en="AmirHossein Jalalian"
-                          data-fa="امیرحسین جلالیان"
-                        >
-                          AmirHossein Jalalian
-                        </h2>
-                        <p
-                          class="article-author-role"
-                          data-en="Infrastructure & DevOps Engineer"
-                          data-fa="مهندس زیرساخت و DevOps"
-                        >
-                          Infrastructure & DevOps Engineer
-                        </p>
-                        <p
-                          class="article-author-description"
-                          data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
-                          data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-                        >
-                          Delivering reliable, secure, and scalable IT solutions
-                          for your business success.
-                        </p>
-                        <div
-                          class="article-author-social"
-                          role="group"
-                          aria-label="Author links"
-                        >
-                          <a
-                            href="https://linkedin.com/in/amirhossein-jalalian"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="LinkedIn Profile"
-                            ><i class="bi bi-linkedin" aria-hidden="true"></i
-                          ></a>
-                          <a
-                            href="https://github.com/amirhossein-jalalian"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="GitHub Profile"
-                            ><i class="bi bi-github" aria-hidden="true"></i
-                          ></a>
-                          <a
-                            href="https://twitter.com/amirhossein_j"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Twitter Profile"
-                            ><i class="bi bi-twitter-x" aria-hidden="true"></i
-                          ></a>
-                        </div>
-                      </div>
-                    </div>
                   </section>
-                  <nav
-                    class="article-footer-nav"
-                    aria-label="Article footer navigation"
-                  >
-                    <a class="article-back" href="../index.html#portfolio"
-                      ><i class="bi bi-arrow-left" aria-hidden="true"></i
-                      ><span
-                        data-en="Back to portfolio"
-                        data-fa="بازگشت به مقالات"
-                        >Back to portfolio</span
-                      ></a
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="کلید کاربر و Fingerprint سرور"
+                      data-en="User keys and server fingerprints"
                     >
-                  </nav>
-                </footer>
+                      User keys and server fingerprints
+                    </h2>
+                    <p
+                      data-fa="کلید خصوصی روی کلاینت می‌ماند و کلید عمومی در authorized_keys حساب سرور قرار می‌گیرد. Host Key سرور موضوع دیگری است. Fingerprint آن را از Console یا مسیر مورد اعتماد بگیرید و پیش از پذیرش اولین اتصال مقایسه کنید. در شبکه سازمانی، Bastion و Firewall مسیر ورود را محدود می‌کنند."
+                      data-en="The private key stays on the client, while its public key goes in the server account’s authorized_keys. The server host key is separate. Obtain its fingerprint through a console or trusted channel before accepting the first connection. Bastion and firewall rules restrict the organizational access path."
+                    >
+                      The private key stays on the client, while its public key
+                      goes in the server account’s authorized_keys. The server
+                      host key is separate. Obtain its fingerprint through a
+                      console or trusted channel before accepting the first
+                      connection. Bastion and firewall rules restrict the
+                      organizational access path.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: دسترسی از Bastion"
+                      data-en="Example: access through a bastion"
+                    >
+                      Example: access through a bastion
+                    </h3>
+                    <p
+                      data-fa="در این مثال، حساب opsadmin از شبکه مدیریت 10.20.30.0/24 به سرور 10.20.30.10 وصل می‌شود. نام حساب و آدرس‌ها را با محیط خود جایگزین کنید. برای چند سرور، تغییر را ابتدا روی یک ماشین آزمایشی اجرا کنید."
+                      data-en="The example uses opsadmin to reach 10.20.30.10 from management subnet 10.20.30.0/24. Replace these values for your environment. For a fleet, validate one test host before rollout."
+                    >
+                      The example uses opsadmin to reach 10.20.30.10 from
+                      management subnet 10.20.30.0/24. Replace these values for
+                      your environment. For a fleet, validate one test host
+                      before rollout.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="حساب کاربری، Console و بسته‌های لازم"
+                      data-en="Account, console and package requirements"
+                    >
+                      Account, console and package requirements
+                    </h2>
+                    <p
+                      data-fa="دستورات نصب و نام سرویس برای Ubuntu Server 24.04 LTS هستند. نسخه OpenSSH نصب‌شده را ثبت کنید. در سیستم‌های دیگر، Package Manager و نام سرویس را با توزیع تطبیق دهید."
+                      data-en="Installation commands and service names target Ubuntu Server 24.04 LTS. Record the installed OpenSSH version. Other distributions require their own package manager and service names."
+                    >
+                      Installation commands and service names target Ubuntu
+                      Server 24.04 LTS. Record the installed OpenSSH version.
+                      Other distributions require their own package manager and
+                      service names.
+                    </p>
+                    <p
+                      data-fa="برای فعال‌سازی SSH به VM با ظرفیت خاص نیاز ندارید. Console مستقل از شبکه و یک نشست مدیریتی باز برای برگشت تنظیمات مهم‌ترند. دسترسی TCP/22 را از مسیر واقعی مدیریت بررسی کنید."
+                      data-en="Enabling SSH requires no particular VM sizing. An independent console and an open administrator session provide recovery access. Check TCP/22 through the actual management path."
+                    >
+                      Enabling SSH requires no particular VM sizing. An
+                      independent console and an open administrator session
+                      provide recovery access. Check TCP/22 through the actual
+                      management path.
+                    </p>
+                    <p
+                      data-fa="روی سرور sudo و openssh-server و روی کلاینت openssh-client لازم است. حساب opsadmin باید از قبل وجود داشته باشد و مجوز sudo آن جدا آزموده شود. AllowUsers را با تمام حساب‌های انسانی و Automation لازم تطبیق دهید."
+                      data-en="The server needs sudo and openssh-server, and the client needs openssh-client. Create opsadmin beforehand and test its sudo privileges separately. Include every required human and automation account in AllowUsers."
+                    >
+                      The server needs sudo and openssh-server, and the client
+                      needs openssh-client. Create opsadmin beforehand and test
+                      its sudo privileges separately. Include every required
+                      human and automation account in AllowUsers.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="تفاوت سرویس و تنظیم مؤثر"
+                      data-en="Service names and effective settings"
+                    >
+                      Service names and effective settings
+                    </h3>
+                    <p
+                      data-fa="در RHEL نام سرویس معمولاً sshd است و دستورات apt کاربرد ندارند. OpenSSH برای بسیاری از گزینه‌ها نخستین مقدار خوانده‌شده را می‌پذیرد. ترتیب Include و فایل‌های Cloud را با sshd -T بررسی کنید. نتیجه را از روی نام فایل جدید حدس نزنید."
+                      data-en="On RHEL the service is usually sshd and apt commands do not apply. For many OpenSSH options, the first obtained value wins. Check include order and cloud snippets with sshd -T rather than inferring precedence from the new filename."
+                    >
+                      On RHEL the service is usually sshd and apt commands do
+                      not apply. For many OpenSSH options, the first obtained
+                      value wins. Check include order and cloud snippets with
+                      sshd -T rather than inferring precedence from the new
+                      filename.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="نصب سرویس و آزمون ورود با کلید"
+                      data-en="Install the service and test key login"
+                    >
+                      Install the service and test key login
+                    </h2>
+                    <p
+                      data-fa="بسته سرور را نصب و نسخه و Service و Listener را بررسی کنید. این نصب را با Full Upgrade سیستم ترکیب نکنید. کپی تنظیمات را فقط یک بار در مسیر Backup تازه بگیرید."
+                      data-en="Install the server package and inspect its version, services and listener. Keep this separate from a full OS upgrade. Copy configuration once into a fresh backup destination."
+                    >
+                      Install the server package and inspect its version,
+                      services and listener. Keep this separate from a full OS
+                      upgrade. Copy configuration once into a fresh backup
+                      destination.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">sudo apt-get update
+sudo apt-get install -y openssh-server
+dpkg-query -W openssh-server
+systemctl status ssh.service ssh.socket --no-pager
+sudo ss -lntp &#x27;( sport = :22 )&#x27;
+sudo cp -a /etc/ssh /root/ssh-before-change</code></pre>
+                    <p
+                      data-fa="روی کلاینت، کلید با Passphrase بسازید و Public Key را برای حساب موجود نصب کنید. پیش از پذیرش Host Key، Fingerprint را مقایسه کنید. فرمان سوم ورود بدون Password را می‌سنجد."
+                      data-en="Generate a passphrase-protected client key and install its public key for the existing account. Compare the host fingerprint before acceptance. The third command tests password-free login."
+                    >
+                      Generate a passphrase-protected client key and install its
+                      public key for the existing account. Compare the host
+                      fingerprint before acceptance. The third command tests
+                      password-free login.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">ssh-keygen -t ed25519 -f &quot;$HOME/.ssh/ops_ed25519&quot;
+ssh-copy-id -i &quot;$HOME/.ssh/ops_ed25519.pub&quot; opsadmin@10.20.30.10
+ssh -i &quot;$HOME/.ssh/ops_ed25519&quot; -o PasswordAuthentication=no opsadmin@10.20.30.10</code></pre>
+                    <p
+                      data-fa="در حساب هدف روی سرور، Permission مربوط به .ssh را بررسی کنید. پس از موفقیت نشست مستقل و sudo، Snippet را از نشست مدیر بنویسید. AllowUsers را پیش از اجرا با حساب‌های واقعی تطبیق دهید."
+                      data-en="Check .ssh permissions as the target account. After independent login and sudo succeed, write the snippet from an administrator session. Adapt AllowUsers to actual accounts first."
+                    >
+                      Check .ssh permissions as the target account. After
+                      independent login and sudo succeed, write the snippet from
+                      an administrator session. Adapt AllowUsers to actual
+                      accounts first.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">chmod 700 &quot;$HOME/.ssh&quot;
+chmod 600 &quot;$HOME/.ssh/authorized_keys&quot;
+sudo tee /etc/ssh/sshd_config.d/00-enterprise.conf &gt;/dev/null &lt;&lt;&#x27;EOF&#x27;
+PermitRootLogin no
+PubkeyAuthentication yes
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+AllowUsers opsadmin
+X11Forwarding no
+MaxAuthTries 3
+EOF
+sudo /usr/sbin/sshd -t
+sudo /usr/sbin/sshd -T | grep -E &#x27;permitrootlogin|passwordauthentication|allowusers&#x27;
+sudo systemctl reload ssh.service</code></pre>
+                    <p
+                      data-fa="sshd -t در موفقیت خروجی ندارد. sshd -T باید PasswordAuthentication را no نشان دهد. نشست قبلی را باز نگه دارید و ورود با کلید و sudo را در یک نشست تازه تأیید کنید. خروجی مؤثر، از نام فایل مهم‌تر است."
+                      data-en="Successful sshd -t is silent. Sshd -T must report passwordauthentication no. Keep the old session open while testing fresh key login and sudo. Effective output matters more than the filename."
+                    >
+                      Successful sshd -t is silent. Sshd -T must report
+                      passwordauthentication no. Keep the old session open while
+                      testing fresh key login and sudo. Effective output matters
+                      more than the filename.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="محدودیت مبدا و سازگاری با MFA"
+                      data-en="Source restrictions and MFA compatibility"
+                    >
+                      Source restrictions and MFA compatibility
+                    </h2>
+                    <p
+                      data-fa="TCP/22 را در Firewall به مبداهای مدیریت محدود کنید. اگر UFW از قبل فعال است، Rule متناسب با همان مسیر اضافه کنید. فعال‌کردن Firewall خاموش از طریق SSH بدون بررسی Ruleها احتمال قطع دسترسی دارد. تغییر Port جای کلید و کنترل حساب را نمی‌گیرد. KbdInteractiveAuthentication no را روی طراحی PAM MFA بدون بازبینی اجرا نکنید. در محیط FIPS، سازگاری Ed25519 را بررسی کنید و در صورت لزوم از RSA با امضای SHA-2 استفاده کنید."
+                      data-en="Restrict TCP/22 to management sources. Add a suitable rule when UFW is already deployed. Enabling an unconfigured firewall over SSH risks lockout. A port change does not replace keys or account controls. Review KbdInteractiveAuthentication no against PAM MFA before applying it. For FIPS environments, check Ed25519 support and use RSA with SHA-2 signatures where required."
+                    >
+                      Restrict TCP/22 to management sources. Add a suitable rule
+                      when UFW is already deployed. Enabling an unconfigured
+                      firewall over SSH risks lockout. A port change does not
+                      replace keys or account controls. Review
+                      KbdInteractiveAuthentication no against PAM MFA before
+                      applying it. For FIPS environments, check Ed25519 support
+                      and use RSA with SHA-2 signatures where required.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="ثبت ورود و آزمون دسترسی"
+                      data-en="Login records and access probes"
+                    >
+                      Login records and access probes
+                    </h2>
+                    <p
+                      data-fa="لاگ ssh.service را برای ورود و رد احراز هویت بررسی کنید. آزمون TCP و ورود مجاز دو بررسی جدا هستند. هشدار باید نام سرور، مبدا و زمان رخداد را داشته باشد. آستانه تعداد ورود ناموفق را با الگوی واقعی شبکه تنظیم کنید و کلید یا Token را در Log نگذارید."
+                      data-en="Inspect ssh.service logs for successful and rejected authentication. A TCP probe and an authorized login test measure different things. Include host, source and timestamp in alerts. Set failure thresholds from observed traffic and keep keys and tokens out of logs."
+                    >
+                      Inspect ssh.service logs for successful and rejected
+                      authentication. A TCP probe and an authorized login test
+                      measure different things. Include host, source and
+                      timestamp in alerts. Set failure thresholds from observed
+                      traffic and keep keys and tokens out of logs.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="از خطای اتصال تا رد کلید"
+                      data-en="From connection failure to rejected keys"
+                    >
+                      From connection failure to rejected keys
+                    </h2>
+                    <p
+                      data-fa="برای Connection refused، Listener و Ruleهای Reject را بررسی کنید. برای Timeout، مسیر و Dropهای Firewall را کنترل کنید. اگر اتصال برقرار می‌شود اما ورود رد می‌شود، بررسی را به حساب، کلید و تنظیمات sshd محدود کنید."
+                      data-en="For Connection refused, inspect listeners and reject rules. For a timeout, check routing and firewall drops. Once transport works but login fails, focus on the account, key and sshd policy."
+                    >
+                      For Connection refused, inspect listeners and reject
+                      rules. For a timeout, check routing and firewall drops.
+                      Once transport works but login fails, focus on the
+                      account, key and sshd policy.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">sudo journalctl -u ssh.service -n 100 --no-pager
+sudo /usr/sbin/sshd -T
+ssh -vvv -i &quot;$HOME/.ssh/ops_ed25519&quot; opsadmin@10.20.30.10</code></pre>
+                    <p
+                      data-fa="خطای مالکیت در Log به HOME یا .ssh اشاره دارد. Permission و مالک واقعی حساب را بررسی کنید. برای کلید معتبرِ ردشده، AllowUsers و Match و خروجی sshd -T -C را کنترل کنید. در Ubuntu دارای ssh.socket، Listener تحت مدیریت Systemd است. تغییر Port به بررسی Socket نیز نیاز دارد."
+                      data-en="Ownership errors point to HOME or .ssh. Check permissions and the account owner. For a valid key rejected by policy, inspect AllowUsers, Match and sshd -T -C output. On Ubuntu with ssh.socket, systemd manages the listener, so port changes also require socket checks."
+                    >
+                      Ownership errors point to HOME or .ssh. Check permissions
+                      and the account owner. For a valid key rejected by policy,
+                      inspect AllowUsers, Match and sshd -T -C output. On Ubuntu
+                      with ssh.socket, systemd manages the listener, so port
+                      changes also require socket checks.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="برگشت تنظیمات بدون بستن آخرین نشست"
+                      data-en="Roll back while a session remains open"
+                    >
+                      Roll back while a session remains open
+                    </h2>
+                    <p
+                      data-fa="کپی /etc/ssh شامل Host Key است و باید محدود و رمزنگاری‌شده نگهداری شود. برای برگشت این تغییر، فقط فایل جدید را از پوشه Include خارج کنید، Syntax را بررسی و سرویس را Reload کنید. این کار را از Console یا نشست باز انجام دهید."
+                      data-en="The /etc/ssh copy contains host keys and needs restricted, encrypted storage. To undo this change, move only the new include file out, validate syntax and reload. Use the console or an existing session."
+                    >
+                      The /etc/ssh copy contains host keys and needs restricted,
+                      encrypted storage. To undo this change, move only the new
+                      include file out, validate syntax and reload. Use the
+                      console or an existing session.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">sudo mv /etc/ssh/sshd_config.d/00-enterprise.conf /root/00-enterprise.conf.failed
+sudo /usr/sbin/sshd -t
+sudo systemctl reload ssh.service</code></pre>
+                    <p
+                      data-fa="اگر فایل قبلی را هم تغییر داده‌اید، آن را از نسخه ثبت‌شده برگردانید. پیش از بستن نشست قدیمی، ورود با کلید و sudo را در نشست تازه امتحان کنید. Clone سرورها نباید Host Key مشترک ایجاد کند."
+                      data-en="Restore any pre-existing files you also changed from their recorded copies. Before closing the old session, test key login and sudo in a fresh session. Avoid duplicate host keys when cloning servers."
+                    >
+                      Restore any pre-existing files you also changed from their
+                      recorded copies. Before closing the old session, test key
+                      login and sudo in a fresh session. Avoid duplicate host
+                      keys when cloning servers.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="مدیریت کلید در طول عمر حساب"
+                      data-en="Keys throughout the account lifecycle"
+                    >
+                      Keys throughout the account lifecycle
+                    </h3>
+                    <p
+                      data-fa="برای هر فرد حساب و کلید مشخص داشته باشید. کلید را با Passphrase محافظت کنید، کلید فرد جداشده را حذف کنید و مجوز sudo را دوره‌ای بازبینی کنید. موفقیت یک ورود به معنی مناسب‌بودن مجوزهای آن حساب نیست."
+                      data-en="Assign identifiable accounts and keys to people. Protect keys with passphrases, revoke departed staff keys and review sudo regularly. Successful authentication does not establish that an account’s privileges are appropriate."
+                    >
+                      Assign identifiable accounts and keys to people. Protect
+                      keys with passphrases, revoke departed staff keys and
+                      review sudo regularly. Successful authentication does not
+                      establish that an account’s privileges are appropriate.
+                    </p>
+                    <p>
+                      <span
+                        data-fa="مجوز sudo و لغو دسترسی کاربر در راهنمای مدیریت حساب آمده است."
+                        data-en="The account-management guide covers sudo permissions and access revocation."
+                        >The account-management guide covers sudo permissions
+                        and access revocation.</span
+                      >
+                      <a
+                        href="/articles/linux-security-account-access-management"
+                        ><span data-fa="راهنمای مرتبط" data-en="Related guide"
+                          >Related guide</span
+                        ></a
+                      >
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا تغییر پورت SSH کافی است؟"
+                      data-en="Is changing the SSH port enough?"
+                    >
+                      Is changing the SSH port enough?
+                    </h3>
+                    <p
+                      data-fa="خیر. کنترل مبدا، کلید، مدیریت حساب و ثبت رویداد لازم است."
+                      data-en="No. Source restrictions, keys, account lifecycle controls and audit records are still required."
+                    >
+                      No. Source restrictions, keys, account lifecycle controls
+                      and audit records are still required.
+                    </p>
+                    <h3
+                      data-fa="قبل از غیرفعال‌کردن Password چه چیزی باید تست شود؟"
+                      data-en="What must pass before password login is disabled?"
+                    >
+                      What must pass before password login is disabled?
+                    </h3>
+                    <p
+                      data-fa="ورود با کلید و sudo در نشست مستقل همراه با دسترسی console."
+                      data-en="Key login and sudo in an independent session, with console recovery available."
+                    >
+                      Key login and sudo in an independent session, with console
+                      recovery available.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://documentation.ubuntu.com/server/how-to/security/openssh-server/"
+                          rel="noopener"
+                          >Canonical: OpenSSH</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://man.openbsd.org/sshd_config"
+                          rel="noopener"
+                          >OpenBSD: sshd_config</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
               </article>
             </div>
           </div>
@@ -2366,10 +940,10 @@ chmod 600 ~/.ssh/authorized_keys</code></pre>
               </h3>
               <p
                 class="brand-title"
-                data-en="Infrastructure & DevOps Engineer"
+                data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
               >
-                Infrastructure & DevOps Engineer
+                Infrastructure &amp; DevOps Engineer
               </p>
               <p
                 class="brand-description"

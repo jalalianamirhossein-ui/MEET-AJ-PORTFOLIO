@@ -53,7 +53,7 @@ class TestimonialResource extends Resource
             Section::make('Presentation')
                 ->columns(2)
                 ->schema([
-                    FileUpload::make('avatar')->label('Avatar')->disk('public')->directory('testimonials')->visibility('public')->image()->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])->maxSize(2048)->formatStateUsing(fn ($state) => str_starts_with((string) $state, '/assets/') ? null : $state)->dehydrated(fn ($state) => filled($state))->helperText('Optional. Existing assets under /assets/ stay in place unless replaced.'),
+                    FileUpload::make('avatar')->label('Avatar')->disk('public')->directory('images/avatars/testimonials')->visibility('public')->image()->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])->maxSize(2048)->formatStateUsing(fn ($state) => str_starts_with((string) $state, '/assets/') ? null : $state)->dehydrated(fn ($state) => filled($state))->helperText('Optional. Existing assets under /assets/ stay in place unless replaced.'),
                     Toggle::make('is_published')->label('Show publicly')->default(true),
                 ]),
         ]);

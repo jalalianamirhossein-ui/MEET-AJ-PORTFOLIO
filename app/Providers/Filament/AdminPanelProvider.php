@@ -6,6 +6,7 @@ use App\Filament\Pages\Dashboard;
 use App\Filament\Widgets\CmsStatsOverview;
 use App\Filament\Widgets\RecentArticles;
 use App\Filament\Widgets\RecentRequests;
+use App\Filament\Widgets\WorkspaceActions;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -34,9 +35,9 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->brandName('Meet AJ CMS')
-            ->brandLogo(asset('assets/img/logo.png'))
+            ->brandLogo(asset('assets/img/brand/logo.png'))
             ->brandLogoHeight('1.75rem')
-            ->favicon(asset('assets/img/favicon.png'))
+            ->favicon(asset('assets/img/icons/favicon.png'))
             ->colors([
                 'primary' => Color::hex('#be123c'),
                 'gray' => Color::Slate,
@@ -59,6 +60,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->pages([Dashboard::class])
             ->widgets([
+                WorkspaceActions::class,
                 CmsStatsOverview::class,
                 RecentArticles::class,
                 RecentRequests::class,
@@ -68,8 +70,10 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->renderHook(
                 PanelsRenderHook::STYLES_AFTER,
-                fn (): string => '<link rel="stylesheet" href="'.e(asset('css/app/meet-aj-admin.css')).'" data-meetaj="admin-contrast-late">',
+                fn (): string => '<link rel="stylesheet" href="'.e(asset('css/app/meet-aj-admin.css')).'?v=glass-3" data-meetaj="admin-contrast-late">',
             )
+            ->renderHook(PanelsRenderHook::SIMPLE_PAGE_START, fn () => view('filament.partials.login-intro'))
+            ->renderHook(PanelsRenderHook::SCRIPTS_AFTER, fn (): string => '<script src="'.e(asset('assets/js/scroll-reveal.js')).'?v=1" defer></script>')
             ->authGuard('web')
             ->middleware([
                 EncryptCookies::class,

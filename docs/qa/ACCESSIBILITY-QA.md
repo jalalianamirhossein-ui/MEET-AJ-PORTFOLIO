@@ -1,5 +1,7 @@
 # Accessibility QA — Meet AJ
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 **Date:** 2026-09-17
 **Method:** Cursor browser accessibility tree snapshots, CDP computed styles and tabbable-element counts, plus keyboard interaction on the mobile menu.
 **Related:** [VISUAL-QA.md](VISUAL-QA.md) · [RESPONSIVE-QA.md](RESPONSIVE-QA.md) · [FINAL-QA-REPORT.md](FINAL-QA-REPORT.md)

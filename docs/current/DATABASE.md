@@ -1,7 +1,9 @@
 # Database — Meet AJ
 
+> Maintenance review: 2026-10-06. Current row counts and migration totals below are from 2026-10-06; the detailed schema and migration batch table retain their stated earlier observation date. No database schema or editorial data was changed by this review. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
 **Authority:** AUTHORITATIVE schema document.
-**Verified:** 2026-09-20 by reading the live SQLite schema (`Schema::getTables()`, `getColumns()`, `getIndexes()`, `getForeignKeys()`) plus the migration files in `database/migrations/`.
+**Verified:** 2026-09-21 by reading the live SQLite schema (`Schema::getTables()`, `getColumns()`, `getIndexes()`, `getForeignKeys()`) plus the migration files in `database/migrations/`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
 Column types below are the SQLite types actually reported by the database. The migrations declare portable Laravel types (`string`, `text`, `decimal`, `json`), so MySQL/MariaDB will report `varchar`, `longtext`, `decimal(12,2)` and `json` for the same columns.
@@ -13,7 +15,7 @@ Column types below are the SQLite types actually reported by the database. The m
 | Local `php artisan serve` / artisan commands | SQLite `.runtime/cms.sqlite` (local `DB_DATABASE`) | PASS |
 | Default PHPUnit suite (`phpunit.xml`) | SQLite `:memory:` | PASS |
 | `phpunit.mysql.xml` | MySQL / MariaDB `127.0.0.1:3307`, database `meetaj_test` | PASS (`MysqlSchemaTest`, last run 2026-09-16) |
-| DirectAdmin production | intended MySQL / MariaDB | BLOCKED · NOT TESTED |
+| DirectAdmin production | MySQL / MariaDB expected; remote state unverified | NOT TESTED in the 2026-10-01 local review |
 
 `tests/TestCase.php` explicitly forces the default suite onto SQLite `:memory:` before boot; it does not require `.env.testing`. Bind MySQL explicitly with `phpunit.mysql.xml`.
 
@@ -36,26 +38,29 @@ Column types below are the SQLite types actually reported by the database. The m
 | `2026_09_20_000012_create_testimonials_table` | 2 | Ran |
 | `2026_09_20_000013_create_homepage_contents_table` | 3 | Ran |
 | `2026_09_20_000014_restore_resume_content` | 4 | Ran |
+| `2026_09_21_000015_refresh_testimonial_copy` | 5 | Ran |
+| `2026_09_21_000016_refresh_testimonials_full_set` | 6 | Ran |
+| `2026_09_21_000017_repair_missing_article_redirects` | 7 | Ran |
 
-The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the migration ledger. Fifteen application migrations exist through `2026_09_20_000014_restore_resume_content`.
+The users migration also creates `password_reset_tokens`. Laravel's own `migrations` table makes the migration ledger. Twenty-five application migration files exist through `2026_10_06_000024_unify_article_images`. The migration table above is the 2026-09-21 snapshot. New files update testimonial attribution (`000018`), contact headings (`000019`), contact intro (`000020`) and import PBR Client (`000021`); `000022` moves the PBR Client download to the end; all current files report Ran locally.
 
 ## Table overview
 
-| Table | Purpose | Rows (2026-09-20) |
+| Table | Purpose | Rows (2026-10-06) |
 |-------|---------|-------------------|
 | `users` | Filament login accounts | 0 |
 | `password_reset_tokens` | Laravel password reset store | 0 |
 | `sessions` | Session rows when the database session driver is selected | 0 |
-| `categories` | Article taxonomy, one row per language | 10 |
-| `articles` | Article content and SEO (24 imported, one additional) | 25 |
-| `article_redirects` | 301 map from old paths to articles | 24 |
-| `tags` | Flat public tag vocabulary | 8 |
-| `article_tag` | Article ↔ tag pivot | 39 |
+| `categories` | Article taxonomy, one row per language | 19 |
+| `articles` | Article content and SEO (28 local rows) | 28 |
+| `article_redirects` | 301 map from old paths to articles | 28 |
+| `tags` | Flat public tag vocabulary | 24 |
+| `article_tag` | Article ↔ tag pivot | 50 |
 | `requests` | Inbound contact submissions | 0 |
 | `services` | Service catalog and pricing (12 visible) | 13 |
-| `testimonials` | Bilingual homepage testimonials | 5 |
+| `testimonials` | Bilingual homepage testimonials | 9 |
 | `homepage_contents` | Editable homepage sections | 7 |
-| `migrations` | Laravel migration ledger | 15 |
+| `migrations` | Laravel migration ledger | 26 |
 
 There is **no** `pages` table and **no** `contact_requests` table. Homepage copy is stored in `homepage_contents`; articles, services, testimonials and requests remain dedicated relational resources.
 
@@ -191,7 +196,7 @@ Deleting an article cascades to `article_redirects` and `article_tag`.
 | `article_id` | integer | FK → `articles.id`, **cascade** on delete |
 | `created_at`, `updated_at` | datetime, nullable | |
 
-24 rows, one per imported article. Renaming a slug adds a new row rather than replacing the old one.
+28 local rows on 2026-10-06; slug history can add more than one redirect per article. Renaming a slug adds a new row rather than replacing the old one.
 
 ## `tags`
 
@@ -212,7 +217,7 @@ Current vocabulary (8): Linux, Microsoft, MikroTik, VMware, Windows Server, Netw
 | `tag_id` | integer | FK → `tags.id`, **cascade** on delete, indexed |
 | `created_at`, `updated_at` | datetime, nullable | |
 
-Composite primary key `(article_id, tag_id)` (unique). 39 links across 24 articles.
+Composite primary key `(article_id, tag_id)` (unique). 50 local links across 28 article rows on 2026-10-06.
 
 ## `requests`
 
@@ -282,3 +287,5 @@ users      1 ──< sessions              (user_id, set null)
 ## Production database
 
 Not created, not migrated, not validated on DirectAdmin from this environment: **BLOCKED / NOT TESTED**.
+
+Image-path migration `2026_10_06_000023` updates image references only and eligible source hashes, preserving editorial data and timestamps. See [image migration details](IMAGES.md).

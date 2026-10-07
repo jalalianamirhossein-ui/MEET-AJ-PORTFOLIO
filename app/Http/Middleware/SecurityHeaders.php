@@ -25,7 +25,8 @@ class SecurityHeaders
             $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
             $response->headers->set('Pragma', 'no-cache');
         } elseif ($request->isMethod('GET') && str_contains((string) $response->headers->get('Content-Type'), 'text/html')) {
-            $response->headers->set('Cache-Control', 'public, max-age=0, must-revalidate');
+            // Article HTML follows a cookie preference; shared caches must not mix locales.
+            $response->headers->set('Cache-Control', ($request->routeIs('articles.show') ? 'private' : 'public').', max-age=0, must-revalidate');
         }
 
         $contentType = (string) $response->headers->get('Content-Type');

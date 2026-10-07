@@ -1,26 +1,35 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-article-language="en">
   <head>
-    <title>Ubuntu Date &amp; Time Settings | Meet AJ</title>
+    <title>Configure Ubuntu Time Synchronization with Chrony | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Configure timezone, NTP sync, and clock troubleshooting on Ubuntu"
+      content="Configure internal NTP, inspect offset and reach, select Asia/Tehran and investigate VM clock jumps."
     />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <link
       rel="canonical"
-      href="https://meetaj.ir/articles/ubuntu-date-time-settings.html"
+      href="https://meetaj.ir/articles/ubuntu-date-time-settings"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Ubuntu Date &amp; Time Settings | Meet AJ" />
-    <meta property="og:description" content="Configure timezone, NTP sync, and clock troubleshooting on Ubuntu" />
-    <meta property="og:url" content="https://meetaj.ir/articles/ubuntu-date-time-settings.html" />
+    <meta
+      property="og:title"
+      content="Configure Ubuntu Time Synchronization with Chrony"
+    />
+    <meta
+      property="og:description"
+      content="Configure internal NTP, inspect offset and reach, select Asia/Tehran and investigate VM clock jumps."
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/ubuntu-date-time-settings"
+    />
     <meta property="og:site_name" content="Meet AJ" />
     <meta name="twitter:card" content="summary" />
-    <link href="../assets/img/favicon.png" rel="icon" />
+    <link href="../assets/img/icons/favicon.png" rel="icon" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -54,13 +63,96 @@
       rel="stylesheet"
       disabled
     />
+    <meta
+      name="keywords"
+      content="Ubuntu Production Time, ubuntu date time settings, infrastructure operations, production operations, troubleshooting"
+    />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Configure Ubuntu Time Synchronization with Chrony",
+        "description": "Configure internal NTP, inspect offset and reach, select Asia/Tehran and investigate VM clock jumps.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/ubuntu-date-time-settings",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/ubuntu-date-time-settings"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does a wrong timezone cause TLS failure?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "TLS relies on the actual clock. Timezone settings change only its display."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does an active chrony service mean it is synchronized?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Check selected sources, offset and Leap status."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "تنظیم زمان Ubuntu با Chrony و منطقه زمانی",
+          "meta_title": "تنظیم زمان Ubuntu با Chrony و منطقه زمانی | Meet AJ",
+          "description": "تنظیم NTP داخلی، بررسی Offset و Reach، انتخاب Asia/Tehran و تشخیص جهش ساعت VM.",
+          "keywords": [
+            "تنظیم زمان Ubuntu با Chrony و منطقه زمانی",
+            "عیب‌یابی",
+            "بازیابی",
+            "ubuntu date time settings"
+          ],
+          "faq": [
+            [
+              "آیا timezone اشتباه باعث TLS failure است؟",
+              "TLS بر زمان واقعی تکیه دارد. timezone فقط نمایش را تغییر می‌دهد."
+            ],
+            [
+              "آیا active بودن chrony یعنی sync برقرار است؟",
+              "خیر. source selection، offset و Leap status باید بررسی شوند."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Configure Ubuntu Time Synchronization with Chrony",
+          "meta_title": "Configure Ubuntu Time Synchronization with Chrony | Meet AJ",
+          "description": "Configure internal NTP, inspect offset and reach, select Asia/Tehran and investigate VM clock jumps.",
+          "keywords": [
+            "Configure Ubuntu Time Synchronization with Chrony",
+            "ubuntu date time settings",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Does a wrong timezone cause TLS failure?",
+              "TLS relies on the actual clock. Timezone settings change only its display."
+            ],
+            [
+              "Does an active chrony service mean it is synchronized?",
+              "No. Check selected sources, offset and Leap status."
+            ]
+          ]
+        }
+      }
+    </script>
   </head>
   <body class="article-page theme-linux">
-    <a href="#main-content" class="skip-link sr-only sr-only-focusable"
-      ><span data-en="Skip to main content" data-fa="رفتن به محتوای اصلی"
-        >Skip to main content</span
-      ></a
-    >
     <button
       id="menu-toggle"
       class="menu-toggle d-xl-none"
@@ -78,7 +170,7 @@
       =============================================== -->
       <div class="profile-img">
         <img
-          src="../assets/img/my-profile-img.jpg"
+          src="../assets/img/avatars/profile/my-profile-img.jpg"
           loading="lazy"
           alt="AmirHossein Jalalian Profile Picture"
           class="img-fluid rounded-circle"
@@ -93,7 +185,7 @@
       >
         <!-- Site Logo & Name -->
         <a href="../index.html#hero" class="logo d-flex align-items-center">
-          <img src="../assets/img/logo.png" alt="Aj-Network" loading="lazy" />
+          <img src="../assets/img/brand/logo.png" alt="Aj-Network" loading="lazy" />
           <p class="sitename">Meet AJ</p>
         </a>
       </div>
@@ -209,81 +301,91 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#overview"
-              ><i class="bi bi-info-circle navicon" aria-hidden="true"></i
-              ><span data-en="Introduction" data-fa="مقدمه">Introduction</span></a
+            <a href="#enterprise-intro"
+              ><span
+                data-fa="ساعت واقعی با Timezone فرق دارد"
+                data-en="Clock time and timezone are different"
+                >Clock time and timezone are different</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#article-status"
-              ><i class="bi bi-clipboard-check navicon" aria-hidden="true"></i
-              ><span data-en="Prerequisites" data-fa="پیش‌نیازها">Prerequisites</span></a
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="Source، Kernel Clock و برنامه"
+                data-en="Sources, kernel clock and applications"
+                >Sources, kernel clock and applications</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#planned-sections"
-              ><i class="bi bi-clock-history navicon" aria-hidden="true"></i
-              ><span data-en="Current status" data-fa="۰۱ — مشاهده وضعیت فعلی">Current status</span></a
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="Daemon زمان و مسیر NTP"
+                data-en="Time daemon and NTP reachability"
+                >Time daemon and NTP reachability</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#set-timezone"
-              ><i class="bi bi-globe navicon" aria-hidden="true"></i
-              ><span data-en="Set Time Zone" data-fa="۰۳ — تنظیم Time Zone">Set Time Zone</span></a
+            <a href="#enterprise-security"
+              ><span
+                data-fa="NTP محدود و سیاست Step"
+                data-en="Restrict NTP and review clock steps"
+                >Restrict NTP and review clock steps</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#set-manual-time"
-              ><i class="bi bi-clock navicon" aria-hidden="true"></i
-              ><span data-en="Set manual time" data-fa="۰۴ — تنظیم دستی تاریخ و ساعت">Set manual time</span></a
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="تنظیم Source و بررسی Sync"
+                data-en="Configure sources and verify synchronization"
+                >Configure sources and verify synchronization</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enable-ntp"
-              ><i class="bi bi-arrow-repeat navicon" aria-hidden="true"></i
-              ><span data-en="Enable NTP" data-fa="۰۵ — فعال‌سازی NTP">Enable NTP</span></a
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="Offset و Source منتخب"
+                data-en="Offsets and the selected source"
+                >Offsets and the selected source</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#time-synchronization"
-              ><i class="bi bi-activity navicon" aria-hidden="true"></i
-              ><span data-en="Time synchronization" data-fa="۰۶ — بررسی Time Synchronization">Time synchronization</span></a
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="Reach صفر یا جهش ساعت"
+                data-en="Zero reach or clock jumps"
+                >Zero reach or clock jumps</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#check-rtc"
-              ><i class="bi bi-device-hdd navicon" aria-hidden="true"></i
-              ><span data-en="Check RTC" data-fa="۰۷ — بررسی RTC">Check RTC</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#troubleshooting"
-              ><i class="bi bi-wrench-adjustable navicon" aria-hidden="true"></i
-              ><span data-en="Troubleshooting" data-fa="رفع اشکال">Troubleshooting</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#best-practices"
-              ><i class="bi bi-check2-square navicon" aria-hidden="true"></i
-              ><span data-en="Best Practices" data-fa="بهترین روش‌ها">Best Practices</span></a
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="بازگشت Source و شروع Workload"
+                data-en="Restore sources before sensitive workloads"
+                >Restore sources before sensitive workloads</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
             <a href="#faq"
-              ><i class="bi bi-question-circle navicon" aria-hidden="true"></i
-              ><span data-en="Frequently Asked Questions" data-fa="سوالات متداول">Frequently Asked Questions</span></a
+              ><span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#conclusion"
-              ><i class="bi bi-flag navicon" aria-hidden="true"></i
-              ><span data-en="Conclusion" data-fa="جمع‌بندی">Conclusion</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#references"
-              ><i class="bi bi-book navicon" aria-hidden="true"></i
-              ><span data-en="Official references" data-fa="منابع رسمی">Official references</span></a
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
+              ></a
             >
           </li>
         </ul>
@@ -314,23 +416,24 @@
               </div>
               <h1
                 class="article-title hero-title"
-                data-en="Configure Date, Time, and Time Zone on Ubuntu Server"
-                data-fa="تنظیم تاریخ، ساعت و Time Zone در Ubuntu Server"
+                data-fa="تنظیم زمان Ubuntu با Chrony و منطقه زمانی"
+                data-en="Configure Ubuntu Time Synchronization with Chrony"
               >
-                Configure Date, Time, and Time Zone on Ubuntu Server
+                Configure Ubuntu Time Synchronization with Chrony
               </h1>
               <p
                 class="article-excerpt hero-subtitle"
-                data-en="Manage system time, time zone, and NTP synchronization on Ubuntu"
-                data-fa="مدیریت زمان سیستم، منطقه زمانی و همگام‌سازی NTP در Ubuntu"
+                data-fa="تنظیم NTP داخلی، بررسی Offset و Reach، انتخاب Asia/Tehran و تشخیص جهش ساعت VM."
+                data-en="Configure internal NTP, inspect offset and reach, select Asia/Tehran and investigate VM clock jumps."
               >
-                Manage system time, time zone, and NTP synchronization on Ubuntu
+                Configure internal NTP, inspect offset and reach, select
+                Asia/Tehran and investigate VM clock jumps.
               </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
                     class="article-hero-thumbnail"
-                    src="../assets/img/portfolio/linux-4.png"
+                    src="../assets/img/articles/banners/ubuntu-date-time-settings.png"
                     alt="Ubuntu Date &amp; Time Settings"
                   />
                   <div class="banner-content">
@@ -374,689 +477,327 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body">
-                <section id="overview" class="article-section">
-                  <h2 data-en="Introduction" data-fa="مقدمه">Introduction</h2>
-                  <p
-                    data-en="Correct date and time settings are essential for logs, certificates, network services, databases, and authentication processes. On Ubuntu, you can manage the system clock with timedatectl and use NTP for automatic synchronization."
-                    data-fa="تنظیم صحیح تاریخ و ساعت برای Logها، Certificateها، سرویس‌های شبکه، دیتابیس‌ها و فرآیندهای Authentication اهمیت زیادی دارد. در Ubuntu می‌توان زمان سیستم را با timedatectl مدیریت و از NTP برای همگام‌سازی خودکار استفاده کرد."
-                  >
-                    Correct date and time settings are essential for logs,
-                    certificates, network services, databases, and
-                    authentication processes. On Ubuntu, you can manage the
-                    system clock with timedatectl and use NTP for automatic
-                    synchronization.
-                  </p>
-                </section>
-
-                <section id="article-status" class="article-section">
-                  <h2
-                    data-en="01 — View the Current Status"
-                    data-fa="۰۱ — مشاهده وضعیت فعلی"
-                  >
-                    01 — View the Current Status
-                  </h2>
-                  <p
-                    data-en="Start by viewing the current system time and synchronization status."
-                    data-fa="ابتدا زمان فعلی سیستم و وضعیت همگام‌سازی را بررسی کنید."
-                  >
-                    Start by viewing the current system time and synchronization
-                    status.
-                  </p>
-                  <div class="article-code">
-                    <div class="article-code-header">
-                      <span
-                        class="article-code-label"
-                        data-en="Terminal"
-                        data-fa="ترمینال"
-                        >Terminal</span
-                      ><button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        Copy
-                      </button>
-                    </div>
-                    <pre><code class="language-bash">timedatectl&#10;date</code></pre>
-                  </div>
-                  <div class="article-callout article-callout--tip">
-                    <h3
-                      data-en="Understanding the output"
-                      data-fa="معنی اطلاعات خروجی"
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="ساعت واقعی با Timezone فرق دارد"
+                      data-en="Clock time and timezone are different"
                     >
-                      Understanding the output
-                    </h3>
-                    <ul>
-                      <li
-                        data-en="Local time is the current time calculated for the configured local time zone."
-                        data-fa="Local time زمان فعلی سیستم بر اساس منطقه زمانی انتخاب‌شده است."
-                      >
-                        Local time is the current time calculated for the
-                        configured local time zone.
-                      </li>
-                      <li
-                        data-en="Universal time is the current time in UTC."
-                        data-fa="Universal time زمان فعلی بر پایه UTC است."
-                      >
-                        Universal time is the current time in UTC.
-                      </li>
-                      <li
-                        data-en="RTC time is the value stored in the hardware real-time clock."
-                        data-fa="RTC time مقدار ذخیره‌شده در ساعت سخت‌افزاری سیستم است."
-                      >
-                        RTC time is the value stored in the hardware real-time
-                        clock.
-                      </li>
-                      <li
-                        data-en="Time zone shows the selected zone and its UTC offset."
-                        data-fa="Time zone منطقه زمانی انتخاب‌شده و اختلاف آن با UTC را نشان می‌دهد."
-                      >
-                        Time zone shows the selected zone and its UTC offset.
-                      </li>
-                      <li
-                        data-en="System clock synchronized indicates whether the system clock has successfully synchronized with a time source."
-                        data-fa="System clock synchronized مشخص می‌کند که ساعت سیستم با یک منبع زمان با موفقیت همگام شده است یا خیر."
-                      >
-                        System clock synchronized indicates whether the system
-                        clock has successfully synchronized with a time source.
-                      </li>
-                    </ul>
-                  </div>
-                </section>
-
-                <section id="planned-sections" class="article-section">
-                  <h2
-                    data-en="02 — View Available Time Zones"
-                    data-fa="۰۲ — مشاهده Time Zoneها"
-                  >
-                    02 — View Available Time Zones
-                  </h2>
-                  <p
-                    data-en="List the available time zones, then search for the zone you need."
-                    data-fa="ابتدا فهرست Time Zoneهای موجود را ببینید و سپس منطقه موردنیاز را جستجو کنید."
-                  >
-                    List the available time zones, then search for the zone you
-                    need.
-                  </p>
-                  <div class="article-code">
-                    <div class="article-code-header">
-                      <span
-                        class="article-code-label"
-                        data-en="Terminal"
-                        data-fa="ترمینال"
-                        >Terminal</span
-                      ><button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        Copy
-                      </button>
-                    </div>
-                    <pre><code class="language-bash">timedatectl list-timezones&#10;&#10;timedatectl list-timezones | grep Tehran</code></pre>
-                  </div>
-                </section>
-
-                <section id="set-timezone" class="article-section">
-                  <h2
-                    data-en="03 — Set the Time Zone"
-                    data-fa="۰۳ — تنظیم Time Zone"
-                  >
-                    03 — Set the Time Zone
-                  </h2>
-                  <p
-                    data-en="Set the server time zone to Asia/Tehran, then review the result."
-                    data-fa="برای تنظیم منطقه زمانی سرور روی Asia/Tehran، دستور زیر را اجرا و سپس نتیجه را بررسی کنید."
-                  >
-                    Set the server time zone to Asia/Tehran, then review the
-                    result.
-                  </p>
-                  <div class="article-code">
-                    <div class="article-code-header">
-                      <span
-                        class="article-code-label"
-                        data-en="Terminal"
-                        data-fa="ترمینال"
-                        >Terminal</span
-                      ><button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        Copy
-                      </button>
-                    </div>
-                    <pre><code class="language-bash">sudo timedatectl set-timezone Asia/Tehran</code></pre>
-                  </div>
-                  <div class="article-code">
-                    <div class="article-code-header">
-                      <span
-                        class="article-code-label"
-                        data-en="Terminal"
-                        data-fa="ترمینال"
-                        >Terminal</span
-                      ><button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        Copy
-                      </button>
-                    </div>
-                    <pre><code class="language-bash">timedatectl</code></pre>
-                  </div>
-                </section>
-
-                <section id="set-manual-time" class="article-section">
-                  <h2
-                    data-en="04 — Set Date and Time Manually"
-                    data-fa="۰۴ — تنظیم دستی تاریخ و ساعت"
-                  >
-                    04 — Set Date and Time Manually
-                  </h2>
-                  <p
-                    data-en="Before setting the clock manually, temporarily disable NTP so automatic synchronization does not immediately replace the value you set."
-                    data-fa="پیش از تنظیم دستی ساعت، NTP را موقتاً غیرفعال کنید تا همگام‌سازی خودکار مقدار واردشده را بلافاصله تغییر ندهد."
-                  >
-                    Before setting the clock manually, temporarily disable NTP
-                    so automatic synchronization does not immediately replace
-                    the value you set.
-                  </p>
-                  <div class="article-code">
-                    <div class="article-code-header">
-                      <span
-                        class="article-code-label"
-                        data-en="Terminal"
-                        data-fa="ترمینال"
-                        >Terminal</span
-                      ><button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        Copy
-                      </button>
-                    </div>
-                    <pre><code class="language-bash">sudo timedatectl set-ntp false</code></pre>
-                  </div>
-                  <p
-                    data-en="Then set the date and time in the required format."
-                    data-fa="سپس تاریخ و ساعت را با قالب موردنیاز تنظیم کنید."
-                  >
-                    Then set the date and time in the required format.
-                  </p>
-                  <div class="article-code">
-                    <div class="article-code-header">
-                      <span
-                        class="article-code-label"
-                        data-en="Terminal"
-                        data-fa="ترمینال"
-                        >Terminal</span
-                      ><button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        Copy
-                      </button>
-                    </div>
-                    <pre><code class="language-bash">sudo timedatectl set-time "2026-09-02 16:30:00"</code></pre>
-                  </div>
-                </section>
-
-                <section id="enable-ntp" class="article-section">
-                  <h2 data-en="05 — Enable NTP" data-fa="۰۵ — فعال‌سازی NTP">
-                    05 — Enable NTP
-                  </h2>
-                  <p
-                    data-en="After a manual change, enable NTP again to keep the clock synchronized automatically."
-                    data-fa="پس از اعمال تغییر دستی، NTP را دوباره فعال کنید تا ساعت به‌صورت خودکار همگام بماند."
-                  >
-                    After a manual change, enable NTP again to keep the clock
-                    synchronized automatically.
-                  </p>
-                  <div class="article-code">
-                    <div class="article-code-header">
-                      <span
-                        class="article-code-label"
-                        data-en="Terminal"
-                        data-fa="ترمینال"
-                        >Terminal</span
-                      ><button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        Copy
-                      </button>
-                    </div>
-                    <pre><code class="language-bash">sudo timedatectl set-ntp true&#10;timedatectl status</code></pre>
-                  </div>
-                </section>
-
-                <section id="time-synchronization" class="article-section">
-                  <h2
-                    data-en="06 — Check Time Synchronization"
-                    data-fa="۰۶ — بررسی همگام‌سازی زمان"
-                  >
-                    06 — Check Time Synchronization
-                  </h2>
-                  <p
-                    data-en="Check the systemd-timesyncd service and view synchronization details."
-                    data-fa="سرویس systemd-timesyncd و جزئیات وضعیت همگام‌سازی را بررسی کنید."
-                  >
-                    Check the systemd-timesyncd service and view synchronization
-                    details.
-                  </p>
-                  <div class="article-code">
-                    <div class="article-code-header">
-                      <span
-                        class="article-code-label"
-                        data-en="Terminal"
-                        data-fa="ترمینال"
-                        >Terminal</span
-                      ><button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        Copy
-                      </button>
-                    </div>
-                    <pre><code class="language-bash">systemctl status systemd-timesyncd&#10;timedatectl timesync-status</code></pre>
-                  </div>
-                </section>
-
-                <section id="check-rtc" class="article-section">
-                  <h2 data-en="07 — Check the RTC" data-fa="۰۷ — بررسی RTC">
-                    07 — Check the RTC
-                  </h2>
-                  <p
-                    data-en="View the hardware real-time clock with the following command."
-                    data-fa="برای مشاهده ساعت سخت‌افزاری سیستم، دستور زیر را اجرا کنید."
-                  >
-                    View the hardware real-time clock with the following
-                    command.
-                  </p>
-                  <div class="article-code">
-                    <div class="article-code-header">
-                      <span
-                        class="article-code-label"
-                        data-en="Terminal"
-                        data-fa="ترمینال"
-                        >Terminal</span
-                      ><button
-                        type="button"
-                        class="article-copy-button"
-                        data-en="Copy"
-                        data-fa="کپی"
-                      >
-                        Copy
-                      </button>
-                    </div>
-                    <pre><code class="language-bash">sudo hwclock --show</code></pre>
-                  </div>
-                  <div class="article-callout article-callout--tip">
+                      Clock time and timezone are different
+                    </h2>
                     <p
-                      data-en="For Linux servers, keep the RTC set to UTC. This avoids issues when daylight-saving rules or the configured time zone change."
-                      data-fa="برای سرورهای Linux بهتر است RTC روی UTC باشد. این کار از مشکل هنگام تغییر قوانین ساعت تابستانی یا Time Zone تنظیم‌شده جلوگیری می‌کند."
+                      data-fa="Timezone شیوه نمایش زمان را تغییر می‌دهد. Chrony ساعت واقعی را با NTP همگام می‌کند. برای خطای TLS یا Kerberos، ساعت و Source و Offset را بررسی کنید. تغییر Asia/Tehran به UTC به‌تنهایی Clock Skew را اصلاح نمی‌کند."
+                      data-en="Timezone changes display. Chrony synchronizes the underlying clock through NTP. For TLS or Kerberos failures, inspect clock, sources and offset. Switching Asia/Tehran to UTC does not itself correct clock skew."
                     >
-                      For Linux servers, keep the RTC set to UTC. This avoids
-                      issues when daylight-saving rules or the configured time
-                      zone change.
+                      Timezone changes display. Chrony synchronizes the
+                      underlying clock through NTP. For TLS or Kerberos
+                      failures, inspect clock, sources and offset. Switching
+                      Asia/Tehran to UTC does not itself correct clock skew.
                     </p>
-                  </div>
-                </section>
-
-                <section id="troubleshooting" class="article-section">
-                  <h2 data-en="Troubleshooting" data-fa="رفع اشکال">
-                    Troubleshooting
-                  </h2>
-                  <div class="article-grid">
-                    <article class="article-card article-card--method">
-                      <div class="article-card-content">
-                        <h3 data-en="NTP is inactive" data-fa="NTP غیرفعال است">
-                          NTP is inactive
-                        </h3>
-                        <p
-                          data-en="Confirm that NTP is enabled and check the status of systemd-timesyncd."
-                          data-fa="فعال بودن NTP را بررسی کنید و وضعیت systemd-timesyncd را ببینید."
-                        >
-                          Confirm that NTP is enabled and check the status of
-                          systemd-timesyncd.
-                        </p>
-                      </div>
-                    </article>
-                    <article class="article-card article-card--method">
-                      <div class="article-card-content">
-                        <h3
-                          data-en="The clock has drifted"
-                          data-fa="اختلاف ساعت وجود دارد"
-                        >
-                          The clock has drifted
-                        </h3>
-                        <p
-                          data-en="Check the synchronization state and allow the system time to synchronize with its configured time source."
-                          data-fa="وضعیت همگام‌سازی را بررسی کنید و اجازه دهید ساعت سیستم با منبع زمان پیکربندی‌شده همگام شود."
-                        >
-                          Check the synchronization state and allow the system
-                          time to synchronize with its configured time source.
-                        </p>
-                      </div>
-                    </article>
-                    <article class="article-card article-card--method">
-                      <div class="article-card-content">
-                        <h3
-                          data-en="Incorrect time zone"
-                          data-fa="Time Zone نادرست است"
-                        >
-                          Incorrect time zone
-                        </h3>
-                        <p
-                          data-en="Use the time-zone list to select the correct identifier, then verify the setting with timedatectl."
-                          data-fa="از فهرست Time Zoneها شناسه درست را انتخاب کنید و سپس تنظیم را با timedatectl بررسی کنید."
-                        >
-                          Use the time-zone list to select the correct
-                          identifier, then verify the setting with timedatectl.
-                        </p>
-                      </div>
-                    </article>
-                    <article class="article-card article-card--method">
-                      <div class="article-card-content">
-                        <h3
-                          data-en="VM time synchronization"
-                          data-fa="همگام‌سازی زمان در VM"
-                        >
-                          VM time synchronization
-                        </h3>
-                        <p
-                          data-en="Review the virtual machine time-sync settings when the guest clock is being changed by the hypervisor."
-                          data-fa="اگر ساعت Guest توسط Hypervisor تغییر می‌کند، تنظیمات همگام‌سازی زمان ماشین مجازی را بررسی کنید."
-                        >
-                          Review the virtual machine time-sync settings when the
-                          guest clock is being changed by the hypervisor.
-                        </p>
-                      </div>
-                    </article>
-                    <article class="article-card article-card--method">
-                      <div class="article-card-content">
-                        <h3
-                          data-en="The NTP server is unreachable"
-                          data-fa="NTP Server در دسترس نیست"
-                        >
-                          The NTP server is unreachable
-                        </h3>
-                        <p
-                          data-en="Check network connectivity, DNS resolution, and any firewall rules that prevent access to the configured time server."
-                          data-fa="اتصال شبکه، DNS و Ruleهای Firewall که ممکن است دسترسی به Time Server پیکربندی‌شده را مسدود کنند بررسی کنید."
-                        >
-                          Check network connectivity, DNS resolution, and any
-                          firewall rules that prevent access to the configured
-                          time server.
-                        </p>
-                      </div>
-                    </article>
-                  </div>
-                </section>
-
-                <section id="best-practices" class="article-section">
-                  <h2 data-en="Best Practices" data-fa="بهترین روش‌ها">
-                    Best Practices
-                  </h2>
-                  <div class="article-callout article-callout--tip">
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="Source، Kernel Clock و برنامه"
+                      data-en="Sources, kernel clock and applications"
+                    >
+                      Sources, kernel clock and applications
+                    </h2>
+                    <p
+                      data-fa="Chronyd با اندازه‌گیری پاسخ Sourceها، خطای ساعت Kernel را اصلاح می‌کند. برنامه زمان را از سیستم می‌گیرد و Timezone فقط نمایش آن را تعیین می‌کند. جهش ناگهانی Clock روی Scheduling و Database اثر دارد."
+                      data-en="Chronyd uses source measurements to correct kernel-clock error. Applications read system time, while timezone controls display. Abrupt clock steps affect scheduling and databases."
+                    >
+                      Chronyd uses source measurements to correct kernel-clock
+                      error. Applications read system time, while timezone
+                      controls display. Abrupt clock steps affect scheduling and
+                      databases.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: دو Source داخلی"
+                      data-en="Example: two internal sources"
+                    >
+                      Example: two internal sources
+                    </h3>
+                    <p
+                      data-fa="سرورها از 10.20.30.53 و 10.20.30.54 زمان می‌گیرند و Log مرکزی UTC است. دو Source باید وابستگی مستقل داشته باشند. با دو منبع مخالف، تشخیص منبع درست قطعی نیست. برای تحمل خطای منبع، تعداد و تنوع بیشتر را طراحی کنید."
+                      data-en="Servers use 10.20.30.53 and 10.20.30.54, with central logs in UTC. Sources need independent dependencies. Two disagreeing sources do not establish which is correct. Design additional source diversity for fault tolerance."
+                    >
+                      Servers use 10.20.30.53 and 10.20.30.54, with central logs
+                      in UTC. Sources need independent dependencies. Two
+                      disagreeing sources do not establish which is correct.
+                      Design additional source diversity for fault tolerance.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="Daemon زمان و مسیر NTP"
+                      data-en="Time daemon and NTP reachability"
+                    >
+                      Time daemon and NTP reachability
+                    </h2>
+                    <p
+                      data-fa="مثال از Ubuntu 24.04 LTS و Chrony استفاده می‌کند. نسخه نصب‌شده و Daemon فعال را ثبت کنید."
+                      data-en="The example uses Ubuntu 24.04 LTS and Chrony. Record the installed version and active time daemon."
+                    >
+                      The example uses Ubuntu 24.04 LTS and Chrony. Record the
+                      installed version and active time daemon.
+                    </p>
+                    <p
+                      data-fa="به Capacity مخصوص نیاز ندارید. در VM، تنظیم Sync Hypervisor را بررسی کنید تا دو روش مستقل مرتب ساعت را تغییر ندهند."
+                      data-en="No special compute capacity is needed. In VMs, inspect hypervisor synchronization so competing mechanisms do not repeatedly change the clock."
+                    >
+                      No special compute capacity is needed. In VMs, inspect
+                      hypervisor synchronization so competing mechanisms do not
+                      repeatedly change the clock.
+                    </p>
+                    <p
+                      data-fa="sudo و دسترسی UDP/123 به Sourceهای واقعی لازم است. آدرس‌ها نمونه‌اند. برای NTS، پشتیبانی Source و مسیر TLS لازم را جدا آماده کنید."
+                      data-en="Prepare sudo and UDP/123 access to real sources, replacing sample addresses. NTS also requires supported sources and its separate TLS path."
+                    >
+                      Prepare sudo and UDP/123 access to real sources, replacing
+                      sample addresses. NTS also requires supported sources and
+                      its separate TLS path.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="Chrony در برابر timesyncd"
+                      data-en="Chrony and timesyncd"
+                    >
+                      Chrony and timesyncd
+                    </h3>
+                    <p
+                      data-fa="timesyncd برای Client ساده گزینه دیگری است. در این مسیر Chrony مالک Sync است. timedatectl timesync-status وضعیت timesyncd را می‌دهد. برای Chrony از sources و tracking استفاده کنید."
+                      data-en="timesyncd is another option for simple clients. Chrony owns synchronization here. Timedatectl timesync-status reports timesyncd. Use sources and tracking for Chrony."
+                    >
+                      timesyncd is another option for simple clients. Chrony
+                      owns synchronization here. Timedatectl timesync-status
+                      reports timesyncd. Use sources and tracking for Chrony.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="NTP محدود و سیاست Step"
+                      data-en="Restrict NTP and review clock steps"
+                    >
+                      Restrict NTP and review clock steps
+                    </h2>
+                    <p
+                      data-fa="Sourceها را به مقصد مجاز محدود کنید و Client را بی‌دلیل NTP Server عمومی نکنید. پیش از Restart، makestep موجود را بررسی کنید. Restart شمارنده Update را از نو شروع می‌کند و Policy آغازین ممکن است ساعت را Step کند، حتی اگر فرمان دستی makestep اجرا نکنید."
+                      data-en="Restrict sources to approved destinations and avoid unintentionally exposing a public NTP server. Inspect existing makestep before restart. Restart resets the update count, so startup policy might step time without a manual makestep command."
+                    >
+                      Restrict sources to approved destinations and avoid
+                      unintentionally exposing a public NTP server. Inspect
+                      existing makestep before restart. Restart resets the
+                      update count, so startup policy might step time without a
+                      manual makestep command.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="تنظیم Source و بررسی Sync"
+                      data-en="Configure sources and verify synchronization"
+                    >
+                      Configure sources and verify synchronization
+                    </h2>
+                    <p
+                      data-fa="ابتدا وضعیت موجود را ثبت کنید. فقط یک daemon مالک همگام‌سازی باشد. نصب chrony معمولاً timesyncd را جایگزین می‌کند اما وضعیت را verify کنید."
+                      data-en="Record the current state. Only one daemon should own synchronization. Installing chrony normally replaces timesyncd, but verify the resulting service states."
+                    >
+                      Record the current state. Only one daemon should own
+                      synchronization. Installing chrony normally replaces
+                      timesyncd, but verify the resulting service states.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">timedatectl status
+date -u --iso-8601=seconds
+sudo apt-get update
+sudo apt-get install -y chrony
+systemctl is-active chrony systemd-timesyncd
+sudo cp -a /etc/chrony /root/chrony-before-change</code></pre>
+                    <p
+                      data-fa="در فایل /etc/chrony/chrony.conf خطوط pool/server فعلی و sourcedirهای تولیدشده را بازبینی کنید. sourceهای متداخل را فقط پس از تعیین مالکیت حذف کنید. دو خط زیر نمونه source سازمان‌اند و باید جایگزین sourceهای public شوند."
+                      data-en="Review existing pool/server lines and generated sourcedir entries in /etc/chrony/chrony.conf. Remove conflicting sources only after identifying their ownership. These complete source lines replace public sources with approved internal ones."
+                    >
+                      Review existing pool/server lines and generated sourcedir
+                      entries in /etc/chrony/chrony.conf. Remove conflicting
+                      sources only after identifying their ownership. These
+                      complete source lines replace public sources with approved
+                      internal ones.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-text">server 10.20.30.53 iburst
+server 10.20.30.54 iburst</code></pre>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">sudo chronyd -p -f /etc/chrony/chrony.conf
+sudo systemctl restart chrony
+chronyc sources -v
+chronyc tracking
+sudo timedatectl set-timezone Asia/Tehran
+date -u --iso-8601=seconds</code></pre>
+                    <p
+                      data-fa="انتظار: یک source با ^*، Reach پس از چند poll رو به 377 و Leap status: Normal. hostname source ممکن است reverse DNS نمایش داده شود. اگر offset بزرگ است روی Production makestep اجرا نکنید. ابتدا اثر آن بر database و scheduling را ارزیابی کنید."
+                      data-en="Expect a source marked ^*, Reach approaching 377 over multiple polls and Leap status: Normal. Reverse DNS may change the displayed source name. Do not run makestep on production with a large offset until its effects on databases and scheduling have been assessed."
+                    >
+                      Expect a source marked ^*, Reach approaching 377 over
+                      multiple polls and Leap status: Normal. Reverse DNS may
+                      change the displayed source name. Do not run makestep on
+                      production with a large offset until its effects on
+                      databases and scheduling have been assessed.
+                    </p>
+                    <p
+                      data-fa="پیش از Restart، خروجی Config چاپ‌شده را برای makestep و Sourceهای DHCP بررسی کنید. اگر اصلاح ناگهانی مجاز نیست، Policy را با نیاز برنامه هماهنگ کنید و تغییر را در پنجره مناسب انجام دهید."
+                      data-en="Before restart, inspect the printed configuration for makestep and DHCP-supplied sources. If abrupt correction is unacceptable, align policy with the workload and use an appropriate maintenance window."
+                    >
+                      Before restart, inspect the printed configuration for
+                      makestep and DHCP-supplied sources. If abrupt correction
+                      is unacceptable, align policy with the workload and use an
+                      appropriate maintenance window.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="Offset و Source منتخب"
+                      data-en="Offsets and the selected source"
+                    >
+                      Offsets and the selected source
+                    </h2>
+                    <p
+                      data-fa="Offset و Stratum و Reach و تغییر Source را پایش کنید. ۱۰۰ ms برای پنج دقیقه آستانه نمونه است و باید با نیاز برنامه تطبیق یابد. Active بودن Chrony، Sync را ثابت نمی‌کند."
+                      data-en="Monitor offset, stratum, reach and source changes. A 100 ms offset for five minutes is an example threshold to align with application needs. Active Chrony does not establish synchronization."
+                    >
+                      Monitor offset, stratum, reach and source changes. A 100
+                      ms offset for five minutes is an example threshold to
+                      align with application needs. Active Chrony does not
+                      establish synchronization.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="Reach صفر یا جهش ساعت"
+                      data-en="Zero reach or clock jumps"
+                    >
+                      Zero reach or clock jumps
+                    </h2>
+                    <p
+                      data-fa="^? یعنی Source فعلاً قابل استفاده نیست. UDP و DNS و ساعت Source را بررسی کنید. ^x یعنی Source ناسازگار تشخیص داده شده است."
+                      data-en="^? marks a currently unusable source. Check UDP, DNS and its clock. ^x marks a source identified as a falseticker."
+                    >
+                      ^? marks a currently unusable source. Check UDP, DNS and
+                      its clock. ^x marks a source identified as a falseticker.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">chronyc sources -v
+chronyc sourcestats -v
+chronyc tracking
+sudo journalctl -u chrony -n 80 --no-pager</code></pre>
+                    <p
+                      data-fa="Reach صفر یعنی Poll موفق ثبت نشده است. برای جهش تکراری VM، Sync میزبان و Daemon Guest و Policy Step را مقایسه کنید. Expiry گواهی را با ساعت واقعی و notAfter بررسی کنید، نه Timezone."
+                      data-en="Zero reach means no successful polls were recorded. Repeated VM jumps require comparing host sync, guest daemon and step policy. Diagnose certificate expiry from clock time and notAfter, not timezone."
+                    >
+                      Zero reach means no successful polls were recorded.
+                      Repeated VM jumps require comparing host sync, guest
+                      daemon and step policy. Diagnose certificate expiry from
+                      clock time and notAfter, not timezone.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="بازگشت Source و شروع Workload"
+                      data-en="Restore sources before sensitive workloads"
+                    >
+                      Restore sources before sensitive workloads
+                    </h2>
+                    <p
+                      data-fa="Config و فهرست Source و Timezone را نسخه‌بندی کنید. برای برگشت، تنظیم قبلی را با بررسی Step Policy اعمال کنید و Tracking را بسنجید. پس از خاموشی طولانی، Sync را پیش از شروع Workload حساس تأیید کنید."
+                      data-en="Version configuration, source inventory and timezone. Restore prior settings after reviewing step policy and inspect tracking. Confirm synchronization after long downtime before starting sensitive workloads."
+                    >
+                      Version configuration, source inventory and timezone.
+                      Restore prior settings after reviewing step policy and
+                      inspect tracking. Confirm synchronization after long
+                      downtime before starting sensitive workloads.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="ثبت UTC و نمایش محلی"
+                      data-en="UTC records and local display"
+                    >
+                      UTC records and local display
+                    </h3>
+                    <p
+                      data-fa="Log را با زمان UTC و نمایش کاربر را با منطقه مناسب نگه دارید. تغییر ساعت دستی و تغییر Source را با اثر بر Workload ارزیابی کنید. Offset بزرگ را بدون برنامه روی Production Step نکنید."
+                      data-en="Use UTC for logs and suitable local display for users. Assess workload effects of manual clock or source changes. Avoid unplanned production steps for large offsets."
+                    >
+                      Use UTC for logs and suitable local display for users.
+                      Assess workload effects of manual clock or source changes.
+                      Avoid unplanned production steps for large offsets.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا timezone اشتباه باعث TLS failure است؟"
+                      data-en="Does a wrong timezone cause TLS failure?"
+                    >
+                      Does a wrong timezone cause TLS failure?
+                    </h3>
+                    <p
+                      data-fa="TLS بر زمان واقعی تکیه دارد. timezone فقط نمایش را تغییر می‌دهد."
+                      data-en="TLS relies on the actual clock. Timezone settings change only its display."
+                    >
+                      TLS relies on the actual clock. Timezone settings change
+                      only its display.
+                    </p>
+                    <h3
+                      data-fa="آیا active بودن chrony یعنی sync برقرار است؟"
+                      data-en="Does an active chrony service mean it is synchronized?"
+                    >
+                      Does an active chrony service mean it is synchronized?
+                    </h3>
+                    <p
+                      data-fa="خیر. source selection، offset و Leap status باید بررسی شوند."
+                      data-en="No. Check selected sources, offset and Leap status."
+                    >
+                      No. Check selected sources, offset and Leap status.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
                     <ul>
-                      <li
-                        data-en="Use NTP on production servers so the clock remains synchronized automatically."
-                        data-fa="در سرورهای Production از NTP استفاده کنید تا ساعت به‌صورت خودکار همگام بماند."
-                      >
-                        Use NTP on production servers so the clock remains
-                        synchronized automatically.
+                      <li>
+                        <a
+                          href="https://documentation.ubuntu.com/server/how-to/networking/chrony-client/"
+                          rel="noopener"
+                          >Canonical: Chrony</a
+                        >
                       </li>
-                      <li
-                        data-en="Keep the RTC in UTC on Linux servers."
-                        data-fa="در سرورهای Linux، RTC را روی UTC نگه دارید."
-                      >
-                        Keep the RTC in UTC on Linux servers.
-                      </li>
-                      <li
-                        data-en="Verify the result with timedatectl after changing a time zone or synchronization setting."
-                        data-fa="پس از تغییر Time Zone یا تنظیم همگام‌سازی، نتیجه را با timedatectl بررسی کنید."
-                      >
-                        Verify the result with timedatectl after changing a time
-                        zone or synchronization setting.
-                      </li>
-                      <li
-                        data-en="When Chrony is used on the system, let it manage time synchronization instead of running competing synchronization services."
-                        data-fa="اگر Chrony در سیستم استفاده می‌شود، مدیریت همگام‌سازی زمان را به آن بسپارید و سرویس‌های همگام‌سازی هم‌زمان و متداخل اجرا نکنید."
-                      >
-                        When Chrony is used on the system, let it manage time
-                        synchronization instead of running competing
-                        synchronization services.
+                      <li>
+                        <a
+                          href="https://chrony-project.org/doc/4.5/chronyc.html"
+                          rel="noopener"
+                          >Chrony: chronyc</a
+                        >
                       </li>
                     </ul>
-                  </div>
-                </section>
-
-                <section id="faq" class="article-section">
-                  <h2
-                    data-en="Frequently Asked Questions"
-                    data-fa="سوالات متداول"
-                  >
-                    Frequently Asked Questions
-                  </h2>
-                  <div class="article-faq">
-                    <div class="article-faq-item">
-                      <h3 class="article-faq-question">
-                        <span
-                          data-en="Why should NTP be disabled before setting the clock manually?"
-                          data-fa="چرا قبل از تنظیم دستی ساعت باید NTP غیرفعال شود؟"
-                          >Why should NTP be disabled before setting the clock
-                          manually?</span
-                        ><i class="bi bi-chevron-down" aria-hidden="true"></i>
-                      </h3>
-                      <div class="article-faq-answer">
-                        <p
-                          data-en="It prevents automatic synchronization from immediately replacing the manually entered value."
-                          data-fa="این کار مانع می‌شود همگام‌سازی خودکار مقدار واردشده به‌صورت دستی را بلافاصله جایگزین کند."
-                        >
-                          It prevents automatic synchronization from immediately
-                          replacing the manually entered value.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="article-faq-item">
-                      <h3 class="article-faq-question">
-                        <span
-                          data-en="Why does the system report that the clock is not synchronized?"
-                          data-fa="چرا سیستم گزارش می‌دهد ساعت همگام نشده است؟"
-                          >Why does the system report that the clock is not
-                          synchronized?</span
-                        ><i class="bi bi-chevron-down" aria-hidden="true"></i>
-                      </h3>
-                      <div class="article-faq-answer">
-                        <p
-                          data-en="Check that NTP is active, systemd-timesyncd can run, and the server can reach its configured time source."
-                          data-fa="بررسی کنید NTP فعال است، systemd-timesyncd می‌تواند اجرا شود و سرور به منبع زمان پیکربندی‌شده دسترسی دارد."
-                        >
-                          Check that NTP is active, systemd-timesyncd can run,
-                          and the server can reach its configured time source.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="article-faq-item">
-                      <h3 class="article-faq-question">
-                        <span
-                          data-en="Should the RTC use local time on a Linux server?"
-                          data-fa="آیا RTC در سرور Linux باید از زمان محلی استفاده کند؟"
-                          >Should the RTC use local time on a Linux
-                          server?</span
-                        ><i class="bi bi-chevron-down" aria-hidden="true"></i>
-                      </h3>
-                      <div class="article-faq-answer">
-                        <p
-                          data-en="No. Keeping the RTC in UTC is the recommended approach for Linux servers."
-                          data-fa="خیر. نگه‌داشتن RTC روی UTC روش پیشنهادی برای سرورهای Linux است."
-                        >
-                          No. Keeping the RTC in UTC is the recommended approach
-                          for Linux servers.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <section id="conclusion" class="article-section">
-                  <h2 data-en="Conclusion" data-fa="جمع‌بندی">Conclusion</h2>
-                  <p
-                    data-en="With timedatectl, you can review and set the Ubuntu system clock, choose the correct time zone, and enable NTP synchronization. Verifying the synchronization status and keeping the RTC in UTC helps maintain reliable timekeeping on servers."
-                    data-fa="با timedatectl می‌توانید ساعت سیستم Ubuntu را بررسی و تنظیم کنید، Time Zone درست را انتخاب کنید و همگام‌سازی NTP را فعال نگه دارید. بررسی وضعیت همگام‌سازی و نگه‌داشتن RTC روی UTC به حفظ زمان دقیق و قابل‌اعتماد در سرورها کمک می‌کند."
-                  >
-                    With timedatectl, you can review and set the Ubuntu system
-                    clock, choose the correct time zone, and enable NTP
-                    synchronization. Verifying the synchronization status and
-                    keeping the RTC in UTC helps maintain reliable timekeeping
-                    on servers.
-                  </p>
-                </section>
-
-                <section id="references" class="article-section">
-                  <h2 data-en="Official References" data-fa="منابع رسمی">
-                    Official References
-                  </h2>
-                  <ul>
-                    <li>
-                      <a
-                        href="https://documentation.ubuntu.com/server/how-to/networking/timedatectl-and-timesyncd/index.html"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        data-en="Ubuntu Server documentation: Timedatectl and timesyncd"
-                        data-fa="مستندات Ubuntu Server: Timedatectl و timesyncd"
-                        >Ubuntu Server documentation: Timedatectl and
-                        timesyncd</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="https://manpages.ubuntu.com/manpages/jammy/man1/timedatectl.1.html"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        data-en="Ubuntu manual page: timedatectl"
-                        data-fa="صفحه راهنمای Ubuntu: timedatectl"
-                        >Ubuntu manual page: timedatectl</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="https://www.freedesktop.org/software/systemd/man/latest/timedatectl.html"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        data-en="systemd documentation: timedatectl"
-                        data-fa="مستندات systemd: timedatectl"
-                        >systemd documentation: timedatectl</a
-                      >
-                    </li>
-                  </ul>
-                </section>
-                <footer class="article-footer" aria-label="Article footer">
-                  <section
-                    id="author"
-                    class="article-author"
-                    role="complementary"
-                    aria-labelledby="author-title"
-                  >
-                    <div class="article-author-card">
-                      <img
-                        class="article-author-avatar"
-                        src="../assets/img/my-profile-img.jpg"
-                        alt="AmirHossein Jalalian"
-                        loading="lazy"
-                        width="120"
-                        height="120"
-                        decoding="async"
-                      />
-                      <div class="article-author-content">
-                        <p
-                          class="article-author-kicker"
-                          id="author-title"
-                          data-en="About the author"
-                          data-fa="درباره نویسنده"
-                        >
-                          About the author
-                        </p>
-                        <h2
-                          data-en="AmirHossein Jalalian"
-                          data-fa="امیرحسین جلالیان"
-                        >
-                          AmirHossein Jalalian
-                        </h2>
-                        <p
-                          class="article-author-role"
-                          data-en="Infrastructure & DevOps Engineer"
-                          data-fa="مهندس زیرساخت و DevOps"
-                        >
-                          Infrastructure & DevOps Engineer
-                        </p>
-                        <p
-                          class="article-author-description"
-                          data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
-                          data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-                        >
-                          Delivering reliable, secure, and scalable IT solutions
-                          for your business success.
-                        </p>
-                        <div
-                          class="article-author-social"
-                          role="group"
-                          aria-label="Author links"
-                        >
-                          <a
-                            href="https://linkedin.com/in/amirhossein-jalalian"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="LinkedIn Profile"
-                            ><i class="bi bi-linkedin" aria-hidden="true"></i
-                          ></a>
-                          <a
-                            href="https://github.com/amirhossein-jalalian"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="GitHub Profile"
-                            ><i class="bi bi-github" aria-hidden="true"></i
-                          ></a>
-                          <a
-                            href="https://twitter.com/amirhossein_j"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Twitter Profile"
-                            ><i class="bi bi-twitter-x" aria-hidden="true"></i
-                          ></a>
-                        </div>
-                      </div>
-                    </div>
                   </section>
-                  <nav
-                    class="article-footer-nav"
-                    aria-label="Article footer navigation"
-                  >
-                    <a class="article-back" href="../index.html#portfolio"
-                      ><i class="bi bi-arrow-left" aria-hidden="true"></i
-                      ><span
-                        data-en="Back to portfolio"
-                        data-fa="بازگشت به مقالات"
-                        >Back to portfolio</span
-                      ></a
-                    >
-                  </nav>
-                </footer>
+                </div>
               </article>
             </div>
           </div>
@@ -1080,10 +821,10 @@
               </h3>
               <p
                 class="brand-title"
-                data-en="Infrastructure & DevOps Engineer"
+                data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
               >
-                Infrastructure & DevOps Engineer
+                Infrastructure &amp; DevOps Engineer
               </p>
               <p
                 class="brand-description"

@@ -1,5 +1,7 @@
 # Meet AJ content migration analysis
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 > **HISTORICAL.** Content inventory from the static site. Architecture details that conflict with the running CMS yield to [PROJECT-STATUS.md](../current/PROJECT-STATUS.md) (stack versions, `/de`, `contact_requests`).
 
 Date: 2026-09-14. Planning-only review of the completed audit, not a new implementation. Read with `laravel-implementation-plan.md`, which contains proposed schema, scope choices, migration risks, SEO policy and the approval gate.

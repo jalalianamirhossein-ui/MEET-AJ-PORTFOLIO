@@ -11,10 +11,10 @@ class ContentRulesTest extends TestCase
     use RefreshDatabase;
     private function article(array $fields = []): Article { return Article::create(array_merge(['title' => 'Test article', 'slug' => 'test-article', 'content' => '<p>متن فارسی / English</p>'], $fields)); }
     public function test_publication_dates_and_german_drafts_are_enforced(): void {
-        $this->article(['status' => 'published', 'published_at' => now()->subDay()]);
+        $published = $this->article(['status' => 'published', 'published_at' => now()->subDay()]);
         $this->article(['slug' => 'future', 'status' => 'published', 'published_at' => now()->addDay()]);
         $this->article(['slug' => 'draft']); $this->article(['language' => 'de']);
-        $this->assertSame(1, Article::published()->count());
+        $this->assertSame([$published->id], Article::published()->whereIn('slug', ['test-article', 'future', 'draft'])->pluck('id')->all());
         $this->expectException(ValidationException::class);
         $this->article(['language' => 'de', 'slug' => 'german', 'status' => 'published', 'published_at' => now()]);
     }
@@ -24,11 +24,11 @@ class ContentRulesTest extends TestCase
         $this->expectException(ValidationException::class); $this->article();
     }
     public function test_category_foreign_key_and_locale_validation(): void {
-        $category = Category::create(['name' => 'Linux', 'slug' => 'linux', 'language' => 'en']);
+        $category = Category::create(['name' => 'Linux QA', 'slug' => 'linux-qa', 'language' => 'en']);
         $article = $this->article(['category_id' => $category->id]);
         $this->assertTrue($article->category->is($category));
         $category->delete(); $this->assertNull($article->fresh()->category_id);
-        $fa = Category::create(['name' => 'لینوکس', 'slug' => 'linux', 'language' => 'fa']);
+        $fa = Category::create(['name' => 'لینوکس', 'slug' => 'linux-qa', 'language' => 'fa']);
         $this->expectException(ValidationException::class); $article->update(['category_id' => $fa->id]);
     }
     public function test_roles_protect_contacts_and_content(): void {
@@ -43,7 +43,11 @@ class ContentRulesTest extends TestCase
         $this->assertNotSame('test-password', $editor->password);
     }
     public function test_deletion_cascades_redirects_and_preserves_category(): void {
-        $article = $this->article(); $article->redirects()->create(['old_path' => '/articles/original.html']);
-        $article->delete(); $this->assertSame(0, ArticleRedirect::count());
+        $category = Category::create(['name' => 'Deletion QA', 'slug' => 'deletion-qa', 'language' => 'en']);
+        $article = $this->article(['category_id' => $category->id]);
+        $article->redirects()->create(['old_path' => '/articles/original.html']);
+        $article->delete();
+        $this->assertDatabaseMissing('article_redirects', ['article_id' => $article->id]);
+        $this->assertDatabaseHas('categories', ['id' => $category->id]);
     }
 }

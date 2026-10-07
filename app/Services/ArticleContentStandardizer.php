@@ -15,6 +15,9 @@ class ArticleContentStandardizer
     {
         $content = Article::normalizeContentMarkup($content);
         $content = $this->removeArticleBackButton($content);
+        if (is_array(data_get($article->presentation, 'localizations'))) {
+            return $content;
+        }
         $content = preg_replace('/id=["\']references["\']/i', 'id="official-references"', $content) ?? $content;
         $content = str_ireplace('Official references', 'Official References', $content);
 
@@ -127,27 +130,54 @@ class ArticleContentStandardizer
             return $content;
         }
         $section = $match[0][0];
+        $fallback = $this->faqFallbacks();
+        $translations = [];
+        foreach ($fallback as [$question, $answer, $questionFa, $answerFa]) {
+            $translations[$question] = $questionFa;
+            $translations[$answer] = $answerFa;
+        }
+        // Repair known generated English fallbacks even when eight FAQ items
+        // are already stored. Preserve custom Persian copy and English labels.
+        $section = preg_replace_callback('/<[a-z][a-z0-9]*\b[^>]*\bdata-en="([^"]*)"[^>]*>/i', function (array $tag) use ($translations): string {
+            $english = html_entity_decode($tag[1], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            if (! isset($translations[$english])) {
+                return $tag[0];
+            }
+            if (preg_match('/\bdata-fa="([^"]*)"/i', $tag[0], $fa)) {
+                if (preg_match('/\p{Arabic}/u', html_entity_decode($fa[1], ENT_QUOTES | ENT_HTML5, 'UTF-8'))) {
+                    return $tag[0];
+                }
+
+                return preg_replace('/\bdata-fa="[^"]*"/i', 'data-fa="'.e($translations[$english]).'"', $tag[0], 1);
+            }
+
+            return substr($tag[0], 0, -1).' data-fa="'.e($translations[$english]).'">';
+        }, $section) ?? $section;
         $count = substr_count($section, 'article-faq-item');
         if ($count >= 8) {
-            return $content;
+            return substr_replace($content, $section, $match[0][1], strlen($match[0][0]));
         }
 
         $extras = '';
-        $fallback = [
-            ['Is this safe for production?', 'Use a tested backup, a rollback plan, least privilege, and a controlled validation window.'],
-            ['How do I troubleshoot a timeout?', 'Check DNS, routing, firewall rules, listening ports, TLS, and service logs from both endpoints.'],
-            ['How should secrets be stored?', 'Use protected environment configuration or a secret manager; never commit tokens or passwords to Git.'],
-            ['What should be monitored afterward?', 'Monitor availability, errors, latency, resource saturation, certificates, and configuration drift.'],
-            ['When should I roll back?', 'Roll back when availability or data integrity is at risk and the blast radius is increasing.'],
-            ['How do I verify the result?', 'Check service health, logs, metrics, and a representative client-side transaction.'],
-            ['Can the procedure be automated?', 'Yes; prefer idempotent checks, dry-run support, review gates, clear logs, and useful exit codes.'],
-            ['What is the enterprise change-control requirement?', 'Record owner, impact, maintenance window, validation evidence, and rollback steps in the change record.'],
-        ];
-        foreach (array_slice($fallback, 0, 8 - $count) as [$question, $answer]) {
-            $extras .= '<div class="article-faq-item"><h3 class="article-faq-question" data-en="'.e($question).'" data-fa="'.e($question).'">'.e($question).'<i class="bi bi-chevron-down" aria-hidden="true"></i></h3><div class="article-faq-answer"><p data-en="'.e($answer).'" data-fa="'.e($answer).'">'.e($answer).'</p></div></div>';
+        foreach (array_slice($fallback, 0, 8 - $count) as [$question, $answer, $questionFa, $answerFa]) {
+            $extras .= '<div class="article-faq-item"><h3 class="article-faq-question" data-en="'.e($question).'" data-fa="'.e($questionFa).'">'.e($question).'<i class="bi bi-chevron-down" aria-hidden="true"></i></h3><div class="article-faq-answer"><p data-en="'.e($answer).'" data-fa="'.e($answerFa).'">'.e($answer).'</p></div></div>';
         }
         $updated = preg_replace('~</div>\s*</section>\s*$~i', $extras.'</div></section>', $section, 1) ?? $section;
-        return substr_replace($content, $updated, $match[0][1], strlen($section));
+        return substr_replace($content, $updated, $match[0][1], strlen($match[0][0]));
+    }
+
+    private function faqFallbacks(): array
+    {
+        return [
+            ['Is this safe for production?', 'Use a tested backup, a rollback plan, least privilege, and a controlled validation window.', 'آیا اجرای این روش در محیط عملیاتی ایمن است؟', 'پیش از اجرا، نسخهٔ پشتیبان و روش بازگردانی را آزمایش کنید، دسترسی‌ها را محدود نگه دارید و تغییر را در بازهٔ کنترل‌شده انجام دهید.'],
+            ['How do I troubleshoot a timeout?', 'Check DNS, routing, firewall rules, listening ports, TLS, and service logs from both endpoints.', 'خطای پایان مهلت اتصال را چگونه بررسی کنیم؟', 'نام‌گشایی، مسیریابی، قوانین فایروال، پورت‌های فعال، ارتباط امن و گزارش‌های سرویس را در هر دو سمت اتصال بررسی کنید.'],
+            ['How should secrets be stored?', 'Use protected environment configuration or a secret manager; never commit tokens or passwords to Git.', 'رمزها و اطلاعات محرمانه را چگونه نگهداری کنیم؟', 'از سامانهٔ مدیریت اسرار یا تنظیمات محافظت‌شدهٔ محیط استفاده کنید؛ رمز عبور و توکن را در مخزن کد ذخیره نکنید.'],
+            ['What should be monitored afterward?', 'Monitor availability, errors, latency, resource saturation, certificates, and configuration drift.', 'پس از اجرا چه مواردی باید پایش شوند؟', 'دسترس‌پذیری سرویس، خطاها، تأخیر، مصرف منابع، اعتبار گواهی‌ها و تغییرات ناخواستهٔ تنظیمات را پایش کنید.'],
+            ['When should I roll back?', 'Roll back when availability or data integrity is at risk and the blast radius is increasing.', 'چه زمانی باید به وضعیت قبلی بازگردیم؟', 'اگر دسترس‌پذیری سرویس یا صحت داده‌ها در خطر است و دامنهٔ مشکل گسترش می‌یابد، تغییر را بازگردانید.'],
+            ['How do I verify the result?', 'Check service health, logs, metrics, and a representative client-side transaction.', 'درستی نتیجه را چگونه تأیید کنیم؟', 'وضعیت سلامت سرویس، گزارش‌ها و شاخص‌ها را بررسی کنید و یک عملیات واقعی از سمت کاربر انجام دهید.'],
+            ['Can the procedure be automated?', 'Yes; prefer idempotent checks, dry-run support, review gates, clear logs, and useful exit codes.', 'آیا می‌توان این فرایند را خودکار کرد؟', 'بله؛ بررسی‌ها را طوری طراحی کنید که تکرارشان اثر اضافی نداشته باشد. اجرای آزمایشی، بازبینی، گزارش روشن و کد خروج قابل استفاده برای پایش را در نظر بگیرید.'],
+            ['What is the enterprise change-control requirement?', 'Record owner, impact, maintenance window, validation evidence, and rollback steps in the change record.', 'برای مدیریت تغییر در سازمان چه اطلاعاتی لازم است؟', 'مسئول تغییر، اثر آن، بازهٔ نگهداری، شواهد تأیید نتیجه و مراحل بازگردانی را در سابقهٔ تغییر ثبت کنید.'],
+        ];
     }
 
     private function referencesSection(Article $article, string $content): ?string

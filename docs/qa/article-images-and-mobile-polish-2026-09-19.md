@@ -1,5 +1,7 @@
 # Article images and mobile polish
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 ## Live diagnosis
 
 Read-only checks of https://meetaj.ir/ on 2026-09-19 found:

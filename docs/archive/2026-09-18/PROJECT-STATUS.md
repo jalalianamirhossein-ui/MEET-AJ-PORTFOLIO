@@ -1,5 +1,7 @@
 # Project status — Meet AJ
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 **Authority:** SINGLE authoritative current-state document. Everything else in `docs/current/` expands one section of this file.
 **Date verified:** 2026-09-17
 **Verification method:** `php artisan about`, `php artisan migrate:status`, `php artisan route:list`, `php artisan test`, `php artisan site:compare-content`, direct SQLite schema/row inspection, and reading `app/`, `routes/`, `database/`, `resources/`, `config/`, `tests/`.
@@ -56,7 +58,7 @@ Nine migrations, all **Ran** (batches 1–3). Eleven tables exist, including Lar
 | `services` | 6 |
 | `migrations` | 9 |
 
-There is **no** `pages` table and **no** `contact_requests` table. Full column, index, foreign-key and delete-behaviour detail: [DATABASE.md](DATABASE.md).
+There is **no** `pages` table and **no** `contact_requests` table. Full column, index, foreign-key and delete-behaviour detail: [DATABASE.md](../../current/DATABASE.md).
 
 **`users` currently holds 0 rows on this workstation**, so no interactive admin login is possible right now without running `php artisan cms:create-user`. This is why several admin UI checks are BLOCKED rather than PASS.
 
@@ -83,7 +85,7 @@ Routes: **36 total** from `php artisan route:list` after `optimize:clear` — 11
 | Contact endpoints `/forms/get-csrf-token.php` and `/forms/contact.php` | PASS (local) |
 | Production rendering on meetaj.ir | NOT TESTED |
 
-Feature-by-feature description: [FEATURES.md](FEATURES.md). Asset cache versions currently in the Blade heads: `visual-upgrade.css?v=1405`, `main.js?v=1201`, `i18n.js?v=1201`, `lang-toggle.css?v=1202`.
+Feature-by-feature description: [FEATURES.md](../../current/FEATURES.md). Asset cache versions currently in the Blade heads: `visual-upgrade.css?v=1405`, `main.js?v=1201`, `i18n.js?v=1201`, `lang-toggle.css?v=1202`.
 
 ## 6. CMS / Admin
 
@@ -104,11 +106,11 @@ Detail: [ADMIN.md](ADMIN.md).
 ## 7. Articles
 
 23 imported English articles, all `status = published` with a non-null `published_at`, 23 matching `article_redirects` rows, 10 categories (5 EN + 5 FA sharing `translation_key`), 8 tags, 38 article↔tag links.
-`php artisan site:compare-content` on 2026-09-17: **Failures: 0** across all 23 articles. Detail: [ARTICLES.md](ARTICLES.md).
+`php artisan site:compare-content` on 2026-09-17: **Failures: 0** across all 23 articles. Detail: [ARTICLES.md](../../current/ARTICLES.md).
 
 ## 8. Services
 
-Six published English services, ordered by `sort_order`, prices read from the `services` table (AED): Network Design 4900, System Administration 3900, DevOps & Automation 6900, Monitoring & Security 4200, Virtualization Solutions 5900, Technical Consulting 2500. All six use `price_type = fixed` and `price_label = "Fixed Price"`. Detail: [SERVICES.md](SERVICES.md).
+Six published English services, ordered by `sort_order`, prices read from the `services` table (AED): Network Design 4900, System Administration 3900, DevOps & Automation 6900, Monitoring & Security 4200, Virtualization Solutions 5900, Technical Consulting 2500. All six use `price_type = fixed` and `price_label = "Fixed Price"`. Detail: [SERVICES.md](../../current/SERVICES.md).
 
 ## 9. Requests
 
@@ -120,15 +122,15 @@ EN and FA are the public languages on the **same** URLs (`data-en` / `data-fa` a
 
 ## 11. SEO
 
-Canonical URLs, Open Graph, Twitter cards, JSON-LD (home, services, articles), `/sitemap.xml`, `/robots.txt`, 301 redirects for `/index.html` and all legacy `.html` paths. Status PASS locally (PHPUnit); production crawler behaviour NOT TESTED. Detail: [SEO.md](SEO.md).
+Canonical URLs, Open Graph, Twitter cards, JSON-LD (home, services, articles), `/sitemap.xml`, `/robots.txt`, 301 redirects for `/index.html` and all legacy `.html` paths. Status PASS locally (PHPUnit); production crawler behaviour NOT TESTED. Detail: [SEO.md](../../current/SEO.md).
 
 ## 12. PWA
 
-`public/manifest.json`, `public/sw.js` (cache `meet-aj-v2.0.0-cms-3`), `public/offline.html`, with `/admin`, `/livewire`, `/forms` and `/storage/livewire-tmp` excluded from the worker. Files and logic PASS by code review and local HTTP; installability, offline browsing and Lighthouse are **NOT TESTED**. Detail: [PWA.md](PWA.md).
+`public/manifest.json`, `public/sw.js` (cache `meet-aj-v2.0.0-cms-3`), `public/offline.html`, with `/admin`, `/livewire`, `/forms` and `/storage/livewire-tmp` excluded from the worker. Files and logic PASS by code review and local HTTP; installability, offline browsing and Lighthouse are **NOT TESTED**. Detail: [PWA.md](../../current/PWA.md).
 
 ## 13. Security
 
-CSRF (including the legacy `csrf_token` field contract), honeypot, two-layer rate limiting, `StoreContactRequest` validation, hashed passwords with a 12-character minimum, Filament session auth, six policies, and the `SecurityHeaders` middleware. No penetration test and no formal CVE audit were performed. Detail: [SECURITY.md](SECURITY.md).
+CSRF (including the legacy `csrf_token` field contract), honeypot, two-layer rate limiting, `StoreContactRequest` validation, hashed passwords with a 12-character minimum, Filament session auth, six policies, and the `SecurityHeaders` middleware. No penetration test and no formal CVE audit were performed. Detail: [SECURITY.md](../../current/SECURITY.md).
 
 ## 14. Testing
 
@@ -140,11 +142,11 @@ CSRF (including the legacy `csrf_token` field contract), honeypot, two-layer rat
 | Lighthouse / performance budget | never executed | NOT TESTED |
 | Production smoke tests | no production environment | BLOCKED |
 
-The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Detail: [TESTING.md](TESTING.md); evidence matrix: [../qa/QA-MATRIX.md](../qa/QA-MATRIX.md).
+The skipped test is `MysqlSchemaTest`, which only runs when a MySQL connection is bound. Detail: [TESTING.md](TESTING.md); evidence matrix: [../qa/QA-MATRIX.md](../../qa/QA-MATRIX.md).
 
 ## 15. Deployment status
 
-Documented DirectAdmin procedure exists and is complete, but **no deployment has been executed** from this environment. PHP 8.4 selector, production MySQL database, `.env`, document-root switch to `public/`, SSL, and post-deploy checks are all **BLOCKED / NOT TESTED**. Detail: [DEPLOYMENT.md](DEPLOYMENT.md).
+Documented DirectAdmin procedure exists and is complete, but **no deployment has been executed** from this environment. PHP 8.4 selector, production MySQL database, `.env`, document-root switch to `public/`, SSL, and post-deploy checks are all **BLOCKED / NOT TESTED**. Detail: [DEPLOYMENT.md](../../current/DEPLOYMENT.md).
 
 ## 16. Known blockers
 

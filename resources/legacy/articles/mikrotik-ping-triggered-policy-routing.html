@@ -1,0 +1,1944 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-article-language="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MikroTik Ping-Triggered Policy Routing with Address Lists</title>
+    <meta
+      name="description"
+      content="A RouterOS v7 runbook for ping-controlled client routing, address-list removal, internal-network exclusions, FastTrack, NAT and operational verification."
+    />
+    <meta
+      property="og:title"
+      content="MikroTik Ping-Triggered Policy Routing with Address Lists"
+    />
+    <meta name="article:content-language" content="en" />
+    <meta name="robots" content="index, follow" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "MikroTik Ping-Triggered Policy Routing with Address Lists",
+        "description": "A RouterOS v7 runbook for ping-controlled client routing, address-list removal, internal-network exclusions, FastTrack, NAT and operational verification.",
+        "inLanguage": "en",
+        "datePublished": "2026-10-05T00:00:00+03:30",
+        "dateModified": "2026-10-05"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "en": {
+          "title": "MikroTik Ping-Triggered Policy Routing with Address Lists",
+          "meta_title": "MikroTik Ping-Triggered Policy Routing with Address Lists",
+          "description": "A RouterOS v7 runbook for ping-controlled client routing, address-list removal, internal-network exclusions, FastTrack, NAT and operational verification.",
+          "keywords": [
+            "MikroTik",
+            "RouterOS v7",
+            "Policy Routing",
+            "Ping Trigger",
+            "Address List",
+            "FastTrack"
+          ],
+          "faq": [
+            [
+              "Can MikroTik remove an IP from an address list directly from a firewall rule?",
+              "No. The v7 firewall action set has addition actions but no source-address removal action. Queue a request and let a script remove the exact host entry."
+            ],
+            [
+              "Does this work with WireGuard?",
+              "Yes, with a validated WireGuard route, peer allowed-address coverage, endpoint underlay reachability and return routing or appropriate NAT. The L2TP gateway example must be adapted to that topology."
+            ],
+            [
+              "Can I use a second ISP instead of a VPN?",
+              "Yes. Use the second ISP next hop in VPN-ROUTE, resolve it through a reachable underlay such as main, and review NAT and return-path symmetry. The table name is only an example label."
+            ],
+            [
+              "Does FastTrack affect policy routing?",
+              "Yes. Non-main routing must be excluded in both directions. Use a stable trigger-eligible population for this scenario; active-list exclusions alone do not fix flows FastTracked before enable."
+            ],
+            [
+              "Will existing connections immediately switch routes?",
+              "Do not expect seamless migration. Packets may receive a new routing mark while the previous NAT mapping remains, or FastTrack/other policy state may retain the earlier path. Test fresh sessions first."
+            ],
+            [
+              "Can multiple clients use the same trigger?",
+              "Yes. Each echo adds its source independently. Clients sharing an upstream NAT identity will appear as one source to this router, so this mechanism cannot distinguish them."
+            ],
+            [
+              "Can I automatically expire PBR access after a specific time?",
+              "Yes. Replace none-dynamic on the enable rule with a finite value such as 30m. Each new matching trigger refreshes the timeout. Verify this on the target release; a strict nonrenewable entitlement needs separate state. Keep stable FastTrack exclusions after expiry and reconnect sessions as needed."
+            ]
+          ]
+        },
+        "fa": {
+          "title": "MikroTik Policy Routing با Ping Trigger و Address List",
+          "meta_title": "MikroTik Policy Routing با Ping Trigger و Address List",
+          "description": "راهنمای RouterOS v7 برای تغییر مسیر Client با Ping، حذف از Address List، استثنای شبکه داخلی، FastTrack، NAT و آزمون عملیاتی.",
+          "keywords": [
+            "MikroTik",
+            "RouterOS v7",
+            "Policy Routing",
+            "Ping Trigger",
+            "Address List",
+            "FastTrack"
+          ],
+          "faq": [
+            [
+              "آیا MikroTik می‌تواند IP را مستقیماً با Firewall Rule از Address List حذف کند؟",
+              "خیر. Actionهای Firewall در v7 گزینه افزودن دارند، اما Action حذف مبدأ ندارند. درخواست را در صف قرار دهید تا Script همان Host Entry را حذف کند."
+            ],
+            [
+              "آیا این روش با WireGuard کار می‌کند؟",
+              "بله؛ Route معتبر WireGuard، پوشش allowed-address مربوط به Peer، دسترسی Endpoint از Underlay و Routing برگشت یا NAT مناسب لازم است. Gateway مثال L2TP باید با آن توپولوژی تطبیق داده شود."
+            ],
+            [
+              "آیا می‌توان به‌جای VPN از ISP دوم استفاده کرد؟",
+              "بله. Next Hop مربوط به ISP دوم را در VPN-ROUTE قرار دهید، آن را از Underlay قابل دسترس مثل main Resolve و NAT و تقارن مسیر برگشت را بررسی کنید. نام Table صرفاً برچسب مثال است."
+            ],
+            [
+              "آیا FastTrack روی Policy Routing اثر دارد؟",
+              "بله. Routing خارج از main باید در هر دو جهت مستثنا شود. در این سناریو جمعیت ثابت مجاز Trigger را مستثنا کنید؛ استثنای List فعال به‌تنهایی Flowهای FastTrackشده قبل از Enable را اصلاح نمی‌کند."
+            ],
+            [
+              "آیا اتصال‌های موجود بلافاصله تغییر مسیر می‌دهند؟",
+              "انتظار مهاجرت بدون اختلال نداشته باشید. Packet ممکن است Mark جدید بگیرد ولی Mapping قبلی NAT باقی بماند، یا FastTrack/Policy دیگر مسیر قبلی را حفظ کند. ابتدا Session تازه را تست کنید."
+            ],
+            [
+              "آیا چند Client می‌توانند از یک Trigger استفاده کنند؟",
+              "بله. هر Echo مبدأ خود را مستقل اضافه می‌کند. Clientهای دارای NAT مشترک در بالادست، برای این روتر یک مبدأ دیده می‌شوند و این مکانیزم آن‌ها را تفکیک نمی‌کند."
+            ],
+            [
+              "آیا می‌توان دسترسی PBR را بعد از زمان مشخص خودکار منقضی کرد؟",
+              "بله. none-dynamic در Rule فعال‌سازی را با زمان محدود مثل 30m جایگزین کنید. هر Trigger منطبق جدید Timeout را تمدید می‌کند. این رفتار را روی Release هدف بررسی کنید؛ دسترسی با پایان قطعی غیرقابل تمدید به State جدا نیاز دارد. استثنای ثابت FastTrack را پس از انقضا حفظ و در صورت نیاز Sessionها را دوباره برقرار کنید."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
+  <body class="article-page theme-mikrotik">
+    <header>
+      <nav>
+        <ul>
+          <li class="article-nav-item">
+            <a href="#introduction"
+              ><span data-en="1. Introduction" data-fa="۱. مقدمه"
+                >1. Introduction</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#architecture"
+              ><span data-en="2. Architecture" data-fa="۲. معماری"
+                >2. Architecture</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#technical-limitation"
+              ><span
+                data-en="3. Root Cause / Technical Limitation"
+                data-fa="۳. محدودیت فنی Firewall"
+                >3. Root Cause / Technical Limitation</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#control-interface"
+              ><span
+                data-en="4. Control Interface"
+                data-fa="۴. Interface کنترلی"
+                >4. Control Interface</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#local-networks"
+              ><span data-en="5. Local Networks" data-fa="۵. شبکه‌های داخلی"
+                >5. Local Networks</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enable-trigger"
+              ><span data-en="6. Enable Trigger" data-fa="۶. Trigger فعال‌سازی"
+                >6. Enable Trigger</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#disable-trigger"
+              ><span
+                data-en="7. Disable Trigger"
+                data-fa="۷. Trigger غیرفعال‌سازی"
+                >7. Disable Trigger</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#routing-table"
+              ><span
+                data-en="8. RouterOS v7 Routing Table"
+                data-fa="۸. Routing Table در RouterOS v7"
+                >8. RouterOS v7 Routing Table</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#mangle-policy"
+              ><span
+                data-en="9. Mangle Policy Routing"
+                data-fa="۹. Policy Routing با Mangle"
+                >9. Mangle Policy Routing</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#removal-script"
+              ><span data-en="10. Removal Script" data-fa="۱۰. Script حذف"
+                >10. Removal Script</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#scheduler"
+              ><span data-en="11. Scheduler" data-fa="۱۱. Scheduler"
+                >11. Scheduler</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#fasttrack"
+              ><span data-en="12. FastTrack" data-fa="۱۲. FastTrack"
+                >12. FastTrack</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#nat"
+              ><span data-en="13. NAT" data-fa="۱۳. NAT">13. NAT</span></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#connection-tracking"
+              ><span
+                data-en="14. Connection Tracking"
+                data-fa="۱۴. Connection Tracking"
+                >14. Connection Tracking</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#testing"
+              ><span data-en="15. Testing" data-fa="۱۵. آزمون"
+                >15. Testing</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#expected-result"
+              ><span
+                data-en="16. Expected Result"
+                data-fa="۱۶. نتیجه مورد انتظار"
+                >16. Expected Result</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#troubleshooting"
+              ><span data-en="17. Troubleshooting" data-fa="۱۷. عیب‌یابی"
+                >17. Troubleshooting</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#security"
+              ><span
+                data-en="18. Security Considerations"
+                data-fa="۱۸. ملاحظات امنیتی"
+                >18. Security Considerations</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#best-practices"
+              ><span
+                data-en="19. Production Best Practices"
+                data-fa="۱۹. توصیه‌های Production"
+                >19. Production Best Practices</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#complete-configuration"
+              ><span
+                data-en="20. Complete Example Configuration"
+                data-fa="۲۰. پیکربندی کامل مثال"
+                >20. Complete Example Configuration</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#conclusion"
+              ><span data-en="Conclusion" data-fa="جمع‌بندی"
+                >Conclusion</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#faq"
+              ><span data-en="FAQ" data-fa="پرسش‌های متداول">FAQ</span></a
+            >
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section class="article-hero article-header hero">
+        <span class="article-category" data-en="MikroTik" data-fa="میکروتیک"
+          >MikroTik</span
+        >
+        <h1
+          class="article-title hero-title"
+          data-en="MikroTik Ping-Triggered Policy Routing with Address Lists"
+          data-fa="MikroTik Policy Routing با Ping Trigger و Address List"
+        >
+          MikroTik Ping-Triggered Policy Routing with Address Lists
+        </h1>
+        <p
+          class="article-excerpt hero-subtitle"
+          data-en="A RouterOS v7 runbook for ping-controlled client routing, address-list removal, internal-network exclusions, FastTrack, NAT and operational verification."
+          data-fa="راهنمای RouterOS v7 برای تغییر مسیر Client با Ping، حذف از Address List، استثنای شبکه داخلی، FastTrack، NAT و آزمون عملیاتی."
+        >
+          A RouterOS v7 runbook for ping-controlled client routing, address-list
+          removal, internal-network exclusions, FastTrack, NAT and operational
+          verification.
+        </p>
+        <img
+          class="article-hero-thumbnail"
+          src="/assets/img/articles/banners/mikrotik-ping-triggered-policy-routing.png"
+          alt="MikroTik policy routing"
+        />
+      </section>
+      <article class="article-body" lang="en" dir="ltr">
+        <section id="introduction">
+          <h2 data-en="1. Introduction" data-fa="۱. مقدمه">1. Introduction</h2>
+          <p data-en="English Version" data-fa="Persian Version — نسخه فارسی">
+            English Version
+          </p>
+          <p
+            data-en="A client can request an alternate IPv4 Internet path by pinging one control address, then return to ordinary routing by pinging another. The router uses the source address of the echo request as the client identity. This is useful for temporary VPN routing, a second ISP, routing experiments, troubleshooting and temporary access to a special path without logging in to MikroTik."
+            data-fa="Client با Ping کردن یک آدرس کنترلی، مسیر IPv4 اینترنت خود را تغییر می‌دهد و با Ping آدرس دوم به مسیر عادی برمی‌گردد. روتر IP مبدأ Echo Request را شناسه Client در نظر می‌گیرد. کاربردها شامل عبور موقت از VPN، استفاده از ISP دوم، آزمایش Routing، عیب‌یابی و دسترسی موقت به مسیر خاص بدون Login به MikroTik است."
+          >
+            A client can request an alternate IPv4 Internet path by pinging one
+            control address, then return to ordinary routing by pinging another.
+            The router uses the source address of the echo request as the client
+            identity. This is useful for temporary VPN routing, a second ISP,
+            routing experiments, troubleshooting and temporary access to a
+            special path without logging in to MikroTik.
+          </p>
+          <p
+            data-en="This runbook targets RouterOS v7. Every network, client, interface, list and gateway below is fictional. It assumes an existing working LAN, main default route, firewall and authenticated, running l2tp-vpn-example tunnel. Creating the tunnel, credentials and its upstream Internet service is outside this configuration. No configuration from the hosting environment is used."
+            data-fa="این Runbook مخصوص RouterOS v7 است. تمام شبکه‌ها، Clientها، Interfaceها، Listها و Gatewayهای زیر مثال هستند. پیش‌فرض، LAN فعال، Default Route سالم در main، Firewall موجود و Tunnel احراز هویت‌شده و فعال با نام فرضی l2tp-vpn-example است. ساخت Tunnel، Credential و سرویس اینترنت سمت مقابل در این Config انجام نمی‌شود. هیچ اطلاعاتی از محیط میزبانی وارد مثال نشده است."
+          >
+            This runbook targets RouterOS v7. Every network, client, interface,
+            list and gateway below is fictional. It assumes an existing working
+            LAN, main default route, firewall and authenticated, running
+            l2tp-vpn-example tunnel. Creating the tunnel, credentials and its
+            upstream Internet service is outside this configuration. No
+            configuration from the hosting environment is used.
+          </p>
+          <p
+            data-en="The examples steer client-originated IPv4 traffic. IPv6, router-originated traffic and Internet connections initiated by a router DNS proxy need separate policies. This is an operator control mechanism, not an authentication protocol or a VPN leak-prevention policy."
+            data-fa="مثال‌ها ترافیک IPv4 ایجادشده توسط Client را هدایت می‌کنند. IPv6، ترافیک تولیدشده توسط خود روتر و اتصال اینترنتی DNS Proxy روتر به Policy مستقل نیاز دارند. این روش ابزار کنترل مسیر است؛ پروتکل احراز هویت یا Policy جلوگیری از نشت VPN نیست."
+          >
+            The examples steer client-originated IPv4 traffic. IPv6,
+            router-originated traffic and Internet connections initiated by a
+            router DNS proxy need separate policies. This is an operator control
+            mechanism, not an authentication protocol or a VPN leak-prevention
+            policy.
+          </p>
+        </section>
+        <section id="architecture">
+          <h2 data-en="2. Architecture" data-fa="۲. معماری">2. Architecture</h2>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">Normal:  Client -&gt; main -&gt; Default ISP
+Enable:  Client -&gt; Ping 10.255.255.1 -&gt; PBR-ACTIVE
+                -&gt; Mangle -&gt; VPN-ROUTE -&gt; VPN / Secondary Gateway
+Disable: Client -&gt; Ping 10.255.255.2 -&gt; PBR-REMOVE
+                -&gt; Script -&gt; Remove from PBR-ACTIVE -&gt; main</code></pre>
+          <p
+            data-en="The example client is 192.168.10.50 on LAN 192.168.10.0/24. Internal services use 192.168.20.0/24, which may represent an example VLAN 20. LAN is an interface list, not a physical port. The control bridge has no member ports. Echo requests enter prerouting; local delivery and input filtering follow. A successful ping reply is useful feedback, but address-list membership is the authoritative state."
+            data-fa="Client مثال 192.168.10.50 در LAN با شبکه 192.168.10.0/24 قرار دارد. سرویس‌های داخلی از 192.168.20.0/24 استفاده می‌کنند که می‌تواند VLAN فرضی 20 باشد. LAN یک Interface List است، نه پورت فیزیکی. Bridge کنترلی هیچ Member Port ندارد. Echo Request ابتدا وارد prerouting و سپس مسیر Local Delivery و input می‌شود. پاسخ موفق Ping بازخورد مفیدی است، اما عضویت Address List وضعیت واقعی را مشخص می‌کند."
+          >
+            The example client is 192.168.10.50 on LAN 192.168.10.0/24. Internal
+            services use 192.168.20.0/24, which may represent an example VLAN
+            20. LAN is an interface list, not a physical port. The control
+            bridge has no member ports. Echo requests enter prerouting; local
+            delivery and input filtering follow. A successful ping reply is
+            useful feedback, but address-list membership is the authoritative
+            state.
+          </p>
+          <p
+            data-en="Enable applies to subsequent eligible packets; disable is asynchronous, normally processed at the next one-second scheduler tick. Disable wins while a removal request is queued: the enable rule excludes PBR-REMOVE. Wait for that list to clear before enabling again. Continuous pings are repeated commands, so stop the disable ping before issuing enable."
+            data-fa="فعال‌سازی روی Packetهای واجد شرایط بعدی اثر می‌گذارد؛ غیرفعال‌سازی غیرهم‌زمان است و معمولاً در اجرای بعدی Scheduler یک‌ثانیه‌ای پردازش می‌شود. تا وقتی درخواست حذف در صف است، Disable اولویت دارد؛ Rule فعال‌سازی PBR-REMOVE را مستثنا می‌کند. برای Enable مجدد، صبر کنید صف پاک شود. Ping پیوسته فرمان تکراری است؛ قبل از Enable، Ping مربوط به Disable را متوقف کنید."
+          >
+            Enable applies to subsequent eligible packets; disable is
+            asynchronous, normally processed at the next one-second scheduler
+            tick. Disable wins while a removal request is queued: the enable
+            rule excludes PBR-REMOVE. Wait for that list to clear before
+            enabling again. Continuous pings are repeated commands, so stop the
+            disable ping before issuing enable.
+          </p>
+        </section>
+        <section id="technical-limitation">
+          <h2
+            data-en="3. Root Cause / Technical Limitation"
+            data-fa="۳. محدودیت فنی Firewall"
+          >
+            3. Root Cause / Technical Limitation
+          </h2>
+          <p
+            data-en="Firewall actions can add the packet source with action=add-src-to-address-list. There is no remove-src-from-address-list action in the RouterOS v7 mangle action set. Therefore the second trigger adds a short-lived removal request; a script performs the deletion. Adding a client to PBR-REMOVE alone does not delete PBR-ACTIVE."
+            data-fa="Firewall با action=add-src-to-address-list مبدأ Packet را به List اضافه می‌کند. در Actionهای Mangle در RouterOS v7 گزینه remove-src-from-address-list وجود ندارد. بنابراین Trigger دوم یک درخواست حذف کوتاه‌عمر ثبت می‌کند و Script حذف را انجام می‌دهد. عضویت در PBR-REMOVE به‌تنهایی PBR-ACTIVE را حذف نمی‌کند."
+          >
+            Firewall actions can add the packet source with
+            action=add-src-to-address-list. There is no
+            remove-src-from-address-list action in the RouterOS v7 mangle action
+            set. Therefore the second trigger adds a short-lived removal
+            request; a script performs the deletion. Adding a client to
+            PBR-REMOVE alone does not delete PBR-ACTIVE.
+          </p>
+          <p>
+            <a
+              href="https://manual.mikrotik.com/docs/cli-reference/ip/firewall/mangle/"
+              >RouterOS mangle action reference</a
+            >
+          </p>
+        </section>
+        <section id="control-interface">
+          <h2 data-en="4. Control Interface" data-fa="۴. Interface کنترلی">
+            4. Control Interface
+          </h2>
+          <p
+            data-en="Create an empty bridge to own both control addresses. The /32 prefix defines an individual host address, avoiding an unnecessary connected subnet and any implication that other control addresses are on-link. The LAN client sends these destinations through its existing default gateway; do not assign them to the client or add bridge ports."
+            data-fa="یک Bridge خالی برای نگهداری هر دو آدرس کنترلی بسازید. Prefix برابر /32 یک Host Address تعریف می‌کند؛ Subnet متصل اضافی نمی‌سازد و سایر آدرس‌های کنترلی را On-link فرض نمی‌کند. Client این مقصدها را از Default Gateway موجود ارسال می‌کند؛ آن‌ها را روی Client تنظیم نکنید و به Bridge پورت اضافه نکنید."
+          >
+            Create an empty bridge to own both control addresses. The /32 prefix
+            defines an individual host address, avoiding an unnecessary
+            connected subnet and any implication that other control addresses
+            are on-link. The LAN client sends these destinations through its
+            existing default gateway; do not assign them to the client or add
+            bridge ports.
+          </p>
+          <pre dir="ltr"><code class="language-routeros">/interface bridge
+add name=PBR-Control protocol-mode=none comment=&quot;PBR Control Interface&quot;
+/ip address
+add address=10.255.255.1/32 interface=PBR-Control comment=&quot;Enable PBR&quot;
+add address=10.255.255.2/32 interface=PBR-Control comment=&quot;Disable PBR&quot;</code></pre>
+          <p
+            data-en="Verify that the bridge exists without ports and both addresses are enabled. This bridge does not replace the LAN bridge or an existing VLAN interface."
+            data-fa="وجود Bridge بدون پورت و فعال بودن هر دو IP را بررسی کنید. این Bridge جایگزین LAN Bridge یا Interface مربوط به VLAN موجود نیست."
+          >
+            Verify that the bridge exists without ports and both addresses are
+            enabled. This bridge does not replace the LAN bridge or an existing
+            VLAN interface.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/interface bridge print detail where name=&quot;PBR-Control&quot;
+/interface bridge port print where bridge=&quot;PBR-Control&quot;
+/ip address print where interface=&quot;PBR-Control&quot;</code></pre>
+        </section>
+        <section id="local-networks">
+          <h2 data-en="5. Local Networks" data-fa="۵. شبکه‌های داخلی">
+            5. Local Networks
+          </h2>
+          <p
+            data-en="List every internal routed subnet that must retain main-table reachability. A remote private network is not automatically local: add the actual internal prefixes required by the example topology. PBR-ELIGIBLE is a separate stable population for FastTrack exclusion and covers all clients allowed to use the triggers, even while inactive."
+            data-fa="تمام Subnetهای داخلی مسیریابی‌شده را که باید از main قابل دسترس بمانند در List قرار دهید. هر شبکه خصوصی دوردست الزاماً Local نیست؛ Prefixهای داخلی موردنیاز توپولوژی مثال را ثبت کنید. PBR-ELIGIBLE جمعیت ثابت Clientهای مجاز برای استثنای FastTrack است و آن‌ها را حتی در حالت غیرفعال پوشش می‌دهد."
+          >
+            List every internal routed subnet that must retain main-table
+            reachability. A remote private network is not automatically local:
+            add the actual internal prefixes required by the example topology.
+            PBR-ELIGIBLE is a separate stable population for FastTrack exclusion
+            and covers all clients allowed to use the triggers, even while
+            inactive.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall address-list
+add list=LOCAL-NETS address=192.168.10.0/24 comment=&quot;LAN example&quot;
+add list=LOCAL-NETS address=192.168.20.0/24 comment=&quot;Internal VLAN example&quot;
+add list=PBR-ELIGIBLE address=192.168.10.0/24 comment=&quot;Stable FastTrack exclusion for trigger-capable clients&quot;</code></pre>
+          <p
+            data-en="Verify both internal prefixes and the eligible range. Local exceptions retain normal routing; they do not grant firewall access or create missing routes."
+            data-fa="هر دو Prefix داخلی و محدوده Clientهای مجاز را بررسی کنید. استثنای Local فقط Routing عادی را حفظ می‌کند؛ مجوز Firewall نمی‌دهد و Route گمشده را ایجاد نمی‌کند."
+          >
+            Verify both internal prefixes and the eligible range. Local
+            exceptions retain normal routing; they do not grant firewall access
+            or create missing routes.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall address-list print where list=&quot;LOCAL-NETS&quot;
+/ip firewall address-list print where list=&quot;PBR-ELIGIBLE&quot;</code></pre>
+        </section>
+        <section id="enable-trigger">
+          <h2 data-en="6. Enable Trigger" data-fa="۶. Trigger فعال‌سازی">
+            6. Enable Trigger
+          </h2>
+          <p
+            data-en="Only LAN sources in the example subnet can activate PBR. icmp-options=8:0 matches IPv4 ICMP Echo Request: type 8, code 0. The extra pending-removal exclusion avoids an enable request immediately being undone by the worker. passthrough=yes allows the packet to continue through mangle and local delivery."
+            data-fa="فقط مبدأهای LAN در Subnet مثال می‌توانند PBR را فعال کنند. icmp-options=8:0 یعنی IPv4 ICMP Echo Request با Type 8 و Code 0. استثنای درخواست حذف معلق مانع می‌شود Worker بلافاصله Enable جدید را خنثی کند. passthrough=yes پردازش بعدی Mangle و تحویل Local را ادامه می‌دهد."
+          >
+            Only LAN sources in the example subnet can activate PBR.
+            icmp-options=8:0 matches IPv4 ICMP Echo Request: type 8, code 0. The
+            extra pending-removal exclusion avoids an enable request immediately
+            being undone by the worker. passthrough=yes allows the packet to
+            continue through mangle and local delivery.
+          </p>
+          <pre dir="ltr"><code class="language-routeros">/ip firewall mangle
+add chain=prerouting in-interface-list=LAN src-address=192.168.10.0/24 \
+    src-address-list=!PBR-REMOVE protocol=icmp icmp-options=8:0 \
+    dst-address=10.255.255.1 action=add-src-to-address-list \
+    address-list=PBR-ACTIVE address-list-timeout=none-dynamic \
+    passthrough=yes comment=&quot;Enable PBR using ICMP trigger&quot;</code></pre>
+          <p
+            data-en="none-dynamic keeps the dynamic entry until explicit removal or reboot. It is not disk-persistent. For the first rollout, use src-address=192.168.10.50/32 on both trigger rules; expand to the shown /24 only after validation. Verify a single enable ping produces a dynamic host entry and increments the enable counter."
+            data-fa="none-dynamic رکورد Dynamic را تا حذف صریح یا Reboot نگه می‌دارد؛ روی دیسک پایدار نیست. در Rollout اولیه روی هر دو Trigger از src-address=192.168.10.50/32 استفاده کنید و پس از تأیید، محدوده را به /24 نمایش‌داده‌شده گسترش دهید. یک Ping فعال‌سازی باید رکورد Dynamic مربوط به Host ایجاد کند و Counter فعال‌سازی را افزایش دهد."
+          >
+            none-dynamic keeps the dynamic entry until explicit removal or
+            reboot. It is not disk-persistent. For the first rollout, use
+            src-address=192.168.10.50/32 on both trigger rules; expand to the
+            shown /24 only after validation. Verify a single enable ping
+            produces a dynamic host entry and increments the enable counter.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall address-list print where list=&quot;PBR-ACTIVE&quot;
+/ip firewall mangle print stats where comment=&quot;Enable PBR using ICMP trigger&quot;</code></pre>
+        </section>
+        <section id="disable-trigger">
+          <h2 data-en="7. Disable Trigger" data-fa="۷. Trigger غیرفعال‌سازی">
+            7. Disable Trigger
+          </h2>
+          <p
+            data-en="The second echo destination queues the source in PBR-REMOVE for ten seconds. This is a queue lifetime, not the access lifetime. The worker must run within that window; if it is stopped or failing, the request can expire without disabling the client. Monitor scheduler health and retry the ping after repair. For loaded routers consider a longer queue timeout, such as one minute."
+            data-fa="مقصد دوم Echo، مبدأ را برای ده ثانیه در PBR-REMOVE قرار می‌دهد. این زمان عمر صف است، نه مدت دسترسی. Worker باید در این بازه اجرا شود؛ اگر متوقف یا دچار خطا باشد، درخواست ممکن است بدون غیرفعال‌شدن Client منقضی شود. سلامت Scheduler را پایش کنید و پس از اصلاح دوباره Ping بزنید. در روترهای پربار می‌توان عمر صف را مثلاً یک دقیقه در نظر گرفت."
+          >
+            The second echo destination queues the source in PBR-REMOVE for ten
+            seconds. This is a queue lifetime, not the access lifetime. The
+            worker must run within that window; if it is stopped or failing, the
+            request can expire without disabling the client. Monitor scheduler
+            health and retry the ping after repair. For loaded routers consider
+            a longer queue timeout, such as one minute.
+          </p>
+          <pre dir="ltr"><code class="language-routeros">/ip firewall mangle
+add chain=prerouting in-interface-list=LAN src-address=192.168.10.0/24 \
+    protocol=icmp icmp-options=8:0 dst-address=10.255.255.2 \
+    action=add-src-to-address-list address-list=PBR-REMOVE \
+    address-list-timeout=10s passthrough=yes comment=&quot;Disable PBR request&quot;</code></pre>
+          <p
+            data-en="Verify the disable counter increases and PBR-ACTIVE loses the client after the worker runs. PBR-REMOVE may already be empty by the time it is printed; that is expected after successful processing."
+            data-fa="افزایش Counter غیرفعال‌سازی و حذف Client از PBR-ACTIVE پس از اجرای Worker را بررسی کنید. ممکن است هنگام Print، PBR-REMOVE از قبل خالی شده باشد؛ بعد از پردازش موفق طبیعی است."
+          >
+            Verify the disable counter increases and PBR-ACTIVE loses the client
+            after the worker runs. PBR-REMOVE may already be empty by the time
+            it is printed; that is expected after successful processing.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall mangle print stats where comment=&quot;Disable PBR request&quot;
+/ip firewall address-list print where list=&quot;PBR-REMOVE&quot;</code></pre>
+        </section>
+        <section id="routing-table">
+          <h2
+            data-en="8. RouterOS v7 Routing Table"
+            data-fa="۸. Routing Table در RouterOS v7"
+          >
+            8. RouterOS v7 Routing Table
+          </h2>
+          <p
+            data-en="Create the FIB-enabled table before referring to it in new-routing-mark. The illustrated interface gateway is suitable for an already established point-to-point L2TP tunnel. Confirm upstream forwarding and a return path; an active route alone does not prove Internet access."
+            data-fa="Table با fib را پیش از استفاده در new-routing-mark بسازید. Gateway مبتنی بر Interface نمایش‌داده‌شده برای Tunnel نقطه‌به‌نقطه L2TP که از قبل برقرار است مناسب است. Forwarding سمت مقابل و مسیر برگشت را تأیید کنید؛ Route فعال به‌تنهایی دسترسی اینترنت را ثابت نمی‌کند."
+          >
+            Create the FIB-enabled table before referring to it in
+            new-routing-mark. The illustrated interface gateway is suitable for
+            an already established point-to-point L2TP tunnel. Confirm upstream
+            forwarding and a return path; an active route alone does not prove
+            Internet access.
+          </p>
+          <pre dir="ltr"><code class="language-routeros">/routing table
+add fib name=VPN-ROUTE
+/ip route
+add dst-address=0.0.0.0/0 gateway=l2tp-vpn-example \
+    routing-table=VPN-ROUTE comment=&quot;PBR default route&quot;</code></pre>
+          <p
+            data-en="Verify VPN-ROUTE appears with FIB enabled and its default route has the active flag. RouterOS v7 uses routing-table on routes; do not substitute the v6 route property routing-mark."
+            data-fa="وجود VPN-ROUTE با FIB فعال و Flag فعال روی Default Route آن را بررسی کنید. در RouterOS v7 روی Route از routing-table استفاده می‌شود؛ آن را با Property نسخه v6 یعنی routing-mark جایگزین نکنید."
+          >
+            Verify VPN-ROUTE appears with FIB enabled and its default route has
+            the active flag. RouterOS v7 uses routing-table on routes; do not
+            substitute the v6 route property routing-mark.
+          </p>
+          <pre dir="ltr"><code class="language-routeros">/routing table print
+/ip route print detail where routing-table=&quot;VPN-ROUTE&quot;
+/interface print detail where name=&quot;l2tp-vpn-example&quot;</code></pre>
+          <p
+            data-en="A production egress can be a VPN interface, WireGuard peer, GRE path, a secondary ISP next hop or a recursive route. These are alternatives, not interchangeable gateway strings. For an example Ethernet ISP, resolve the next hop through main as below; main must have reachability to that next hop. On multi-access Ethernet, use a next-hop IP rather than an interface-only default route."
+            data-fa="خروجی Production می‌تواند VPN Interface، Peer در WireGuard، مسیر GRE، Next Hop مربوط به ISP دوم یا Recursive Route باشد. این‌ها گزینه‌های جایگزین هستند و رشته Gateway یکسان ندارند. برای ISP اترنت مثال، Next Hop را طبق فرمان زیر از main Resolve کنید؛ main باید به آن Next Hop دسترسی داشته باشد. در Ethernet چنددسترسی برای Default Route از IP مربوط به Next Hop استفاده کنید، نه فقط نام Interface."
+          >
+            A production egress can be a VPN interface, WireGuard peer, GRE
+            path, a secondary ISP next hop or a recursive route. These are
+            alternatives, not interchangeable gateway strings. For an example
+            Ethernet ISP, resolve the next hop through main as below; main must
+            have reachability to that next hop. On multi-access Ethernet, use a
+            next-hop IP rather than an interface-only default route.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip route add dst-address=0.0.0.0/0 gateway=192.0.2.1@main routing-table=VPN-ROUTE comment=&quot;Alternative secondary ISP example&quot;</code></pre>
+          <p
+            data-en="Use this alternative instead of the L2TP default, not alongside it unless equal-cost routing is intended. For WireGuard, configure the correct peer allowed-address ranges and keep the endpoint reachable through the underlay. GRE needs its own remote forwarding and return routing. Recursive routing requires explicit resolver routes and compatible scope/target-scope settings. Validate the chosen design separately."
+            data-fa="این جایگزین را به‌جای Default مربوط به L2TP استفاده کنید؛ هم‌زمان اضافه نکنید مگر ECMP مدنظر باشد. در WireGuard محدوده allowed-address مربوط به Peer و دسترسی Endpoint از Underlay را تنظیم کنید. GRE به Forwarding سمت مقابل و Routing برگشت نیاز دارد. Recursive Routing به Resolver Route صریح و تنظیم سازگار scope/target-scope نیاز دارد. طراحی انتخاب‌شده را جداگانه آزمون کنید."
+          >
+            Use this alternative instead of the L2TP default, not alongside it
+            unless equal-cost routing is intended. For WireGuard, configure the
+            correct peer allowed-address ranges and keep the endpoint reachable
+            through the underlay. GRE needs its own remote forwarding and return
+            routing. Recursive routing requires explicit resolver routes and
+            compatible scope/target-scope settings. Validate the chosen design
+            separately.
+          </p>
+          <p>
+            <a
+              href="https://help.mikrotik.com/docs/spaces/ROS/pages/59965508/Policy%20Routing"
+              >RouterOS v7 policy routing</a
+            >
+          </p>
+        </section>
+        <section id="mangle-policy">
+          <h2
+            data-en="9. Mangle Policy Routing"
+            data-fa="۹. Policy Routing با Mangle"
+          >
+            9. Mangle Policy Routing
+          </h2>
+          <p
+            data-en="Mark only active-client traffic arriving from LAN, with an Internet destination rather than an internal subnet or a router-owned address. Keep both trigger rules before this mark rule, and review any earlier PCC, routing marks, jump chains or terminating actions. passthrough=no prevents later mangle rules from overwriting this decision for a matched packet."
+            data-fa="فقط ترافیک Client فعال که از LAN وارد می‌شود و مقصد آن اینترنت است، نه Subnet داخلی یا آدرس متعلق به روتر، Mark شود. هر دو Trigger را قبل از این Rule قرار دهید و PCC، Routing Mark، Jump Chain و Actionهای خاتمه‌دهنده قبلی را بررسی کنید. passthrough=no اجازه نمی‌دهد Rule بعدی Mangle تصمیم این Packet منطبق را بازنویسی کند."
+          >
+            Mark only active-client traffic arriving from LAN, with an Internet
+            destination rather than an internal subnet or a router-owned
+            address. Keep both trigger rules before this mark rule, and review
+            any earlier PCC, routing marks, jump chains or terminating actions.
+            passthrough=no prevents later mangle rules from overwriting this
+            decision for a matched packet.
+          </p>
+          <pre dir="ltr"><code class="language-routeros">/ip firewall mangle
+add chain=prerouting in-interface-list=LAN src-address-list=PBR-ACTIVE \
+    dst-address-list=!LOCAL-NETS dst-address-type=!local \
+    action=mark-routing new-routing-mark=VPN-ROUTE passthrough=no \
+    comment=&quot;Route PBR clients using VPN-ROUTE&quot;</code></pre>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th data-en="Matcher" data-fa="شرط">Matcher</th>
+                  <th data-en="Purpose" data-fa="کارکرد">Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    data-en="src-address-list=PBR-ACTIVE"
+                    data-fa="src-address-list=PBR-ACTIVE"
+                  >
+                    src-address-list=PBR-ACTIVE
+                  </td>
+                  <td
+                    data-en="Selects enabled source clients."
+                    data-fa="Clientهای فعال را با IP مبدأ انتخاب می‌کند."
+                  >
+                    Selects enabled source clients.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="dst-address-list=!LOCAL-NETS"
+                    data-fa="dst-address-list=!LOCAL-NETS"
+                  >
+                    dst-address-list=!LOCAL-NETS
+                  </td>
+                  <td
+                    data-en="Excludes listed internal destination subnets."
+                    data-fa="Subnetهای مقصد داخلی ثبت‌شده را مستثنا می‌کند."
+                  >
+                    Excludes listed internal destination subnets.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="dst-address-type=!local"
+                    data-fa="dst-address-type=!local"
+                  >
+                    dst-address-type=!local
+                  </td>
+                  <td
+                    data-en="Excludes every address owned by this router, including both triggers. It does not exclude all private networks."
+                    data-fa="تمام آدرس‌های متعلق به خود روتر، از جمله Triggerها را مستثنا می‌کند؛ به معنی استثنای تمام شبکه‌های خصوصی نیست."
+                  >
+                    Excludes every address owned by this router, including both
+                    triggers. It does not exclude all private networks.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-en="new-routing-mark=VPN-ROUTE"
+                    data-fa="new-routing-mark=VPN-ROUTE"
+                  >
+                    new-routing-mark=VPN-ROUTE
+                  </td>
+                  <td
+                    data-en="Selects the pre-created v7 routing table for matching packets."
+                    data-fa="Table ساخته‌شده در v7 را برای Packet منطبق انتخاب می‌کند."
+                  >
+                    Selects the pre-created v7 routing table for matching
+                    packets.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p
+            data-en="Verify the counter rises on a fresh Internet connection from 192.168.10.50. An internal-only test should not raise this rule’s counter. Other existing mangle rules can still mark excluded traffic, so audit the complete ruleset."
+            data-fa="افزایش Counter در اتصال اینترنتی تازه از 192.168.10.50 را بررسی کنید. تست صرفاً داخلی نباید Counter این Rule را افزایش دهد. Ruleهای دیگر موجود هنوز می‌توانند ترافیک مستثناشده را Mark کنند؛ کل Ruleset را بررسی کنید."
+          >
+            Verify the counter rises on a fresh Internet connection from
+            192.168.10.50. An internal-only test should not raise this rule’s
+            counter. Other existing mangle rules can still mark excluded
+            traffic, so audit the complete ruleset.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall mangle print stats where comment=&quot;Route PBR clients using VPN-ROUTE&quot;
+/ip firewall mangle print detail</code></pre>
+        </section>
+        <section id="removal-script">
+          <h2 data-en="10. Removal Script" data-fa="۱۰. Script حذف">
+            10. Removal Script
+          </h2>
+          <p
+            data-en="The worker queries the exact client address inside PBR-ACTIVE rather than scanning every active client for every request. Both lists are reserved for this mechanism and contain individual host entries; do not place aggregate prefixes, ranges or DNS names in them. Manual aggregate entries would require different removal semantics."
+            data-fa="Worker به‌جای پیمایش تمام Clientهای فعال برای هر درخواست، IP دقیق Client را در PBR-ACTIVE جست‌وجو می‌کند. هر دو List به این مکانیزم اختصاص دارند و شامل Host Entry هستند؛ Prefix تجمیعی، Range یا نام DNS داخل آن‌ها قرار ندهید. رکورد دستی تجمیعی به منطق حذف متفاوتی نیاز دارد."
+          >
+            The worker queries the exact client address inside PBR-ACTIVE rather
+            than scanning every active client for every request. Both lists are
+            reserved for this mechanism and contain individual host entries; do
+            not place aggregate prefixes, ranges or DNS names in them. Manual
+            aggregate entries would require different removal semantics.
+          </p>
+          <p
+            data-en="The job guard avoids normal scheduler overlap. Per-request error handling tolerates an entry expiring during processing; a failed deletion leaves the request available for retry until its timeout. A successful state change produces one info log; repeated disable requests for an inactive client are silent. Permissions are explicit, and permission checks remain enabled."
+            data-fa="Guard مربوط به Job از هم‌پوشانی معمول اجرای Scheduler جلوگیری می‌کند. مدیریت خطای هر درخواست، انقضای رکورد حین پردازش را تحمل می‌کند؛ حذف ناموفق درخواست را تا پایان Timeout برای Retry نگه می‌دارد. تغییر موفق وضعیت یک Log با سطح info ایجاد می‌کند؛ Disable تکراری Client غیرفعال Log ندارد. Permissionها صریح هستند و بررسی Permission غیرفعال نشده است."
+          >
+            The job guard avoids normal scheduler overlap. Per-request error
+            handling tolerates an entry expiring during processing; a failed
+            deletion leaves the request available for retry until its timeout. A
+            successful state change produces one info log; repeated disable
+            requests for an inactive client are silent. Permissions are
+            explicit, and permission checks remain enabled.
+          </p>
+          <pre dir="ltr"><code class="language-routeros">/system script
+add name=PBR-Remove-Worker policy=read,write,test dont-require-permissions=no source={
+    :if ([:len [/system script job find where script=&quot;PBR-Remove-Worker&quot;]] &gt; 1) do={
+        :return
+    }
+    :foreach request in=[/ip firewall address-list find where list=&quot;PBR-REMOVE&quot;] do={
+        :local clientIP &quot;&quot;
+        :do {
+            :set clientIP [/ip firewall address-list get $request address]
+            :local active [/ip firewall address-list find where list=&quot;PBR-ACTIVE&quot; and address=$clientIP]
+            :if ([:len $active] &gt; 0) do={
+                /ip firewall address-list remove $active
+                :log info (&quot;PBR disabled for client &quot; . $clientIP)
+            }
+            /ip firewall address-list remove $request
+        } on-error={
+            :if ([:len [/ip firewall address-list find where list=&quot;PBR-REMOVE&quot; and address=$clientIP]] &gt; 0) do={
+                :log warning (&quot;PBR removal failed; queued retry for &quot; . $clientIP)
+            }
+        }
+    }
+}</code></pre>
+          <p
+            data-en="Verify manually after queuing one disable request: the worker should remove that exact host from both lists and log the transition. Review warnings and scheduler run-count; a growing run-count alone does not prove successful removal. This is a small operational queue, not a durable transactional message system."
+            data-fa="پس از ثبت یک درخواست Disable، اجرای دستی را بررسی کنید: Worker باید همان Host را از هر دو List حذف و تغییر وضعیت را Log کند. Warningها و run-count را بررسی کنید؛ افزایش run-count به‌تنهایی حذف موفق را ثابت نمی‌کند. این یک صف عملیاتی کوچک است، نه سیستم پیام تراکنشی و پایدار."
+          >
+            Verify manually after queuing one disable request: the worker should
+            remove that exact host from both lists and log the transition.
+            Review warnings and scheduler run-count; a growing run-count alone
+            does not prove successful removal. This is a small operational
+            queue, not a durable transactional message system.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/system script run PBR-Remove-Worker
+/ip firewall address-list print where list=&quot;PBR-ACTIVE&quot;
+/ip firewall address-list print where list=&quot;PBR-REMOVE&quot;
+/log print where message~&quot;PBR&quot;</code></pre>
+          <p>
+            <a
+              href="https://manual.mikrotik.com/docs/developer-guides/scripting/"
+              >RouterOS scripting and execution permissions</a
+            >
+          </p>
+        </section>
+        <section id="scheduler">
+          <h2 data-en="11. Scheduler" data-fa="۱۱. Scheduler">11. Scheduler</h2>
+          <p
+            data-en="Firewall list actions cannot invoke this removal logic themselves. Run the worker every second with permissions matching the script. Calling the script by name uses its script permissions; the scheduler needs sufficient rights to execute it. start-time=startup with a nonzero interval establishes recurring scheduling after boot; do not rely on an immediate boot-time cleanup."
+            data-fa="Action مربوط به List در Firewall این منطق حذف را اجرا نمی‌کند. Worker را هر ثانیه با Permission سازگار با Script اجرا کنید. فراخوانی Script با نام، Permission خود Script را استفاده می‌کند؛ Scheduler باید مجوز کافی برای اجرای آن داشته باشد. start-time=startup همراه interval غیرصفر زمان‌بندی تکرارشونده پس از Boot را برقرار می‌کند؛ به پاک‌سازی فوری در لحظه Boot تکیه نکنید."
+          >
+            Firewall list actions cannot invoke this removal logic themselves.
+            Run the worker every second with permissions matching the script.
+            Calling the script by name uses its script permissions; the
+            scheduler needs sufficient rights to execute it. start-time=startup
+            with a nonzero interval establishes recurring scheduling after boot;
+            do not rely on an immediate boot-time cleanup.
+          </p>
+          <pre dir="ltr"><code class="language-routeros">/system scheduler
+add name=PBR-Remove-Scheduler start-time=startup interval=1s \
+    on-event=PBR-Remove-Worker policy=read,write,test \
+    comment=&quot;Process queued PBR disable requests&quot;</code></pre>
+          <p
+            data-en="Verify enabled status, interval=1s, next-run and an increasing run-count. Test the actual disable operation. A disabled worker, insufficient rights or scheduler delay beyond ten seconds can lose the short-lived request."
+            data-fa="فعال بودن، interval=1s، next-run و افزایش run-count را بررسی کنید و عملیات Disable واقعی را تست کنید. Worker غیرفعال، Permission ناکافی یا تأخیر بیش از ده ثانیه ممکن است درخواست کوتاه‌عمر را از بین ببرد."
+          >
+            Verify enabled status, interval=1s, next-run and an increasing
+            run-count. Test the actual disable operation. A disabled worker,
+            insufficient rights or scheduler delay beyond ten seconds can lose
+            the short-lived request.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/system scheduler print detail where name=&quot;PBR-Remove-Scheduler&quot;
+/system script print detail where name=&quot;PBR-Remove-Worker&quot;</code></pre>
+          <p>
+            <a
+              href="https://help.mikrotik.com/docs/spaces/ROS/pages/40992881/Scheduler"
+              >Scheduler properties</a
+            >
+          </p>
+        </section>
+        <section id="fasttrack">
+          <h2 data-en="12. FastTrack" data-fa="۱۲. FastTrack">12. FastTrack</h2>
+          <p
+            data-en="FastTrack forwards much of an established connection outside the normal firewall processing path and uses main-table routing. A connection requiring a custom routing mark must be excluded in both directions. Some packets still take the slow path, so nonzero mangle counters do not prove that FastTrack is harmless."
+            data-fa="FastTrack بخش بزرگی از Packetهای Established را خارج از مسیر عادی پردازش Firewall عبور می‌دهد و از Routing جدول main استفاده می‌کند. اتصال نیازمند Routing Mark اختصاصی باید در هر دو جهت مستثنا شود. بعضی Packetها هنوز Slow Path را طی می‌کنند؛ Counter غیرصفر Mangle بی‌اثر بودن FastTrack را ثابت نمی‌کند."
+          >
+            FastTrack forwards much of an established connection outside the
+            normal firewall processing path and uses main-table routing. A
+            connection requiring a custom routing mark must be excluded in both
+            directions. Some packets still take the slow path, so nonzero mangle
+            counters do not prove that FastTrack is harmless.
+          </p>
+          <p
+            data-en="The commonly suggested src-address-list=!PBR-ACTIVE and dst-address-list=!PBR-ACTIVE exclude currently active clients. They do not reliably undo FastTrack already attached to a connection before enable. They also make a connection eligible again immediately after disable. For this dynamic scenario, permanently exclude the trigger-capable population with PBR-ELIGIBLE, then start fresh sessions or selectively clear that population’s old tracked sessions during maintenance."
+            data-fa="استثنای رایج src-address-list=!PBR-ACTIVE و dst-address-list=!PBR-ACTIVE Clientهای فعلی فعال را مستثنا می‌کند، اما FastTrack اتصال ایجادشده پیش از Enable را به‌طور قابل اتکا لغو نمی‌کند. پس از Disable نیز اتصال دوباره واجد شرایط می‌شود. برای این سناریوی Dynamic، جمعیت مجاز Trigger را با PBR-ELIGIBLE به‌صورت ثابت مستثنا کنید و Session تازه بسازید یا در Maintenance اتصال‌های قدیمی همان Clientها را انتخابی پاک کنید."
+          >
+            The commonly suggested src-address-list=!PBR-ACTIVE and
+            dst-address-list=!PBR-ACTIVE exclude currently active clients. They
+            do not reliably undo FastTrack already attached to a connection
+            before enable. They also make a connection eligible again
+            immediately after disable. For this dynamic scenario, permanently
+            exclude the trigger-capable population with PBR-ELIGIBLE, then start
+            fresh sessions or selectively clear that population’s old tracked
+            sessions during maintenance.
+          </p>
+          <p
+            data-en="Inspect the existing firewall before any FastTrack change. The following guarded example applies only to one reviewed rule whose example comment was explicitly assigned. If it already has address-list conditions, integrate the exception into its existing logic rather than overwriting those conditions. Audit every FastTrack rule and retain the ordinary established/related accept rule that serves slow-path traffic. Do not insert broad accept rules merely to bypass FastTrack."
+            data-fa="پیش از تغییر FastTrack، Firewall فعلی را بررسی کنید. مثال Guardدار زیر فقط به یک Rule بررسی‌شده با Comment فرضی که عمداً تعیین شده اعمال می‌شود. اگر Rule از قبل شرط Address List دارد، استثنا را در منطق موجود ادغام کنید و شرط قبلی را بازنویسی نکنید. تمام FastTrack Ruleها را بررسی و Rule عادی پذیرش established/related برای Slow Path را حفظ کنید. صرفاً برای دورزدن FastTrack یک accept گسترده اضافه نکنید."
+          >
+            Inspect the existing firewall before any FastTrack change. The
+            following guarded example applies only to one reviewed rule whose
+            example comment was explicitly assigned. If it already has
+            address-list conditions, integrate the exception into its existing
+            logic rather than overwriting those conditions. Audit every
+            FastTrack rule and retain the ordinary established/related accept
+            rule that serves slow-path traffic. Do not insert broad accept rules
+            merely to bypass FastTrack.
+          </p>
+          <pre dir="ltr"><code class="language-routeros">/ip firewall filter
+print detail where action=fasttrack-connection
+# Only after reviewing the existing rule and assigning this example comment:
+{
+    :local ft [/ip firewall filter find where action=&quot;fasttrack-connection&quot; and comment=&quot;Example reviewed FastTrack&quot;]
+    :if ([:len $ft] != 1) do={ :error &quot;Identify exactly one reviewed FastTrack rule first&quot; }
+    /ip firewall filter set $ft src-address-list=!PBR-ELIGIBLE dst-address-list=!PBR-ELIGIBLE
+}</code></pre>
+          <p
+            data-en="Verify no FastTrack rule can match eligible client traffic in either direction. Inspect a newly opened connection from the example client: it must not carry the FastTrack flag. Changing a filter rule does not by itself flush already tracked connections. Excluding a full subnet increases CPU work; measure capacity before expanding the eligible range."
+            data-fa="تأیید کنید هیچ FastTrack Rule در هیچ جهت با ترافیک Client مجاز Match نمی‌شود. اتصال تازه Client مثال نباید Flag مربوط به FastTrack داشته باشد. تغییر Filter به‌تنهایی Connectionهای موجود را پاک نمی‌کند. استثنای یک Subnet کامل بار CPU را بیشتر می‌کند؛ قبل از گسترش محدوده ظرفیت را اندازه‌گیری کنید."
+          >
+            Verify no FastTrack rule can match eligible client traffic in either
+            direction. Inspect a newly opened connection from the example
+            client: it must not carry the FastTrack flag. Changing a filter rule
+            does not by itself flush already tracked connections. Excluding a
+            full subnet increases CPU work; measure capacity before expanding
+            the eligible range.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall filter print detail where action=fasttrack-connection
+/ip firewall connection print detail where src-address~&quot;^192[.]168[.]10[.]50(:|$)&quot;</code></pre>
+          <p>
+            <a
+              href="https://manual.mikrotik.com/docs/firewall-and-quality-of-service/packet-flow-in-routeros/"
+              >Packet flow and FastTrack routing</a
+            >
+          </p>
+        </section>
+        <section id="nat">
+          <h2 data-en="13. NAT" data-fa="۱۳. NAT">13. NAT</h2>
+          <p
+            data-en="Use masquerade when the example tunnel egress requires translation to its assigned address. Install this scoped rule before any earlier source-NAT rule that would match the same traffic with a different translation. If a site-to-site tunnel already routes the LAN prefix back, NAT may be unnecessary or harmful to source visibility. A VPN interface alone does not imply that NAT is required."
+            data-fa="اگر خروجی Tunnel مثال به ترجمه مبدأ به آدرس اختصاص‌یافته خود نیاز دارد، از masquerade استفاده کنید. این Rule محدود را قبل از Source NAT قبلی که همین ترافیک را با ترجمه متفاوت Match می‌کند قرار دهید. اگر Tunnel نوع Site-to-site مسیر برگشت Prefix مربوط به LAN را دارد، NAT ممکن است غیرضروری باشد یا مشاهده مبدأ اصلی را مختل کند. صرف وجود VPN Interface به معنی نیاز به NAT نیست."
+          >
+            Use masquerade when the example tunnel egress requires translation
+            to its assigned address. Install this scoped rule before any earlier
+            source-NAT rule that would match the same traffic with a different
+            translation. If a site-to-site tunnel already routes the LAN prefix
+            back, NAT may be unnecessary or harmful to source visibility. A VPN
+            interface alone does not imply that NAT is required.
+          </p>
+          <pre dir="ltr"><code class="language-routeros">/ip firewall nat
+add chain=srcnat src-address-list=PBR-ACTIVE out-interface=l2tp-vpn-example \
+    action=masquerade comment=&quot;NAT PBR traffic&quot;</code></pre>
+          <p
+            data-en="Verify the NAT counter on a new connection, remote reachability and return traffic. NAT decisions are stored per connection; membership or rule changes do not rewrite existing mappings. For a fixed-address secondary ISP, a reviewed src-nat rule may be preferable; match the actual example egress and intended source translation."
+            data-fa="Counter مربوط به NAT را با اتصال تازه، دسترسی مقصد و ترافیک برگشت بررسی کنید. تصمیم NAT در Connection ذخیره می‌شود؛ تغییر عضویت یا Rule، Mapping قبلی را بازنویسی نمی‌کند. برای ISP دوم با آدرس ثابت، src-nat بررسی‌شده ممکن است مناسب‌تر باشد؛ خروجی مثال و ترجمه مبدأ موردنظر را دقیق Match کنید."
+          >
+            Verify the NAT counter on a new connection, remote reachability and
+            return traffic. NAT decisions are stored per connection; membership
+            or rule changes do not rewrite existing mappings. For a
+            fixed-address secondary ISP, a reviewed src-nat rule may be
+            preferable; match the actual example egress and intended source
+            translation.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall nat print stats where comment=&quot;NAT PBR traffic&quot;
+/ip firewall nat print detail</code></pre>
+          <p>
+            <a
+              href="https://help.mikrotik.com/docs/spaces/ROS/pages/3211299/NAT"
+              >RouterOS NAT and connection mapping</a
+            >
+          </p>
+        </section>
+        <section id="connection-tracking">
+          <h2
+            data-en="14. Connection Tracking"
+            data-fa="۱۴. Connection Tracking"
+          >
+            14. Connection Tracking
+          </h2>
+          <p
+            data-en="Tracking remembers connection state, NAT mappings and flags such as FastTrack. It does not mean every established connection is unconditionally pinned to its original gateway. Without FastTrack, this packet-based mark rule can reroute subsequent packets immediately, while their old NAT identity remains. The result can be broken sessions or asymmetric replies rather than a clean migration. Existing routing/connection-mark designs may retain their own path decisions."
+            data-fa="Connection Tracking وضعیت اتصال، Mapping مربوط به NAT و Flagهایی مثل FastTrack را نگه می‌دارد؛ این به معنی Pin شدن قطعی تمام Established Connectionها به Gateway اولیه نیست. بدون FastTrack، Rule مبتنی بر Packet می‌تواند Packet بعدی را فوراً تغییر مسیر دهد، در حالی که هویت NAT قبلی باقی مانده است. نتیجه ممکن است قطع Session یا پاسخ نامتقارن باشد، نه مهاجرت سالم اتصال. طراحی‌های موجود مبتنی بر Connection Mark نیز ممکن است تصمیم مسیر خود را حفظ کنند."
+          >
+            Tracking remembers connection state, NAT mappings and flags such as
+            FastTrack. It does not mean every established connection is
+            unconditionally pinned to its original gateway. Without FastTrack,
+            this packet-based mark rule can reroute subsequent packets
+            immediately, while their old NAT identity remains. The result can be
+            broken sessions or asymmetric replies rather than a clean migration.
+            Existing routing/connection-mark designs may retain their own path
+            decisions.
+          </p>
+          <p
+            data-en="Test with new sessions first. Only for troubleshooting, preview exact client-originated connections and then remove that same selection if a deliberate session reset is acceptable. This disconnects active TCP, UDP and application sessions from the client. It is not part of either trigger script and does not clear the entire router table or match neighboring addresses."
+            data-fa="ابتدا با Session تازه تست کنید. فقط برای Troubleshooting، اتصال‌های ایجادشده توسط Client دقیق را ببینید و اگر Reset عمدی Session قابل قبول است همان انتخاب را حذف کنید. این کار Sessionهای TCP، UDP و برنامه‌های فعال Client را قطع می‌کند. جزئی از Scriptهای Trigger نیست و کل Table روتر یا آدرس‌های همسایه را Match نمی‌کند."
+          >
+            Test with new sessions first. Only for troubleshooting, preview
+            exact client-originated connections and then remove that same
+            selection if a deliberate session reset is acceptable. This
+            disconnects active TCP, UDP and application sessions from the
+            client. It is not part of either trigger script and does not clear
+            the entire router table or match neighboring addresses.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall connection print detail where src-address~&quot;^192[.]168[.]10[.]50(:|$)&quot;
+# Troubleshooting only: interrupts this client&#x27;s active sessions.
+/ip firewall connection remove [find where src-address~&quot;^192[.]168[.]10[.]50(:|$)&quot;]</code></pre>
+          <p
+            data-en="The anchors, literal-dot character classes and port/address boundary prevent an accidental substring match on another host. This targets original-direction client sources; inspect dst-address and reply tuples separately if inbound sessions also require reset. Verify that only the intended rows disappeared, then open a fresh connection."
+            data-fa="Anchorها، Character Class نقطه و مرز Port/Address مانع Match تصادفی Substring مربوط به Host دیگر می‌شوند. انتخاب فقط مبدأ جهت اصلی اتصال‌های Client را پوشش می‌دهد؛ برای Reset اتصال ورودی، dst-address و Reply Tuple را جداگانه بررسی کنید. تأیید کنید فقط Rowهای موردنظر حذف شده‌اند و سپس اتصال تازه باز کنید."
+          >
+            The anchors, literal-dot character classes and port/address boundary
+            prevent an accidental substring match on another host. This targets
+            original-direction client sources; inspect dst-address and reply
+            tuples separately if inbound sessions also require reset. Verify
+            that only the intended rows disappeared, then open a fresh
+            connection.
+          </p>
+          <p>
+            <a
+              href="https://help.mikrotik.com/docs/spaces/ROS/pages/130220087/Connection%2Btracking"
+              >Connection tracking fields and flags</a
+            >
+          </p>
+        </section>
+        <section id="testing">
+          <h2 data-en="15. Testing" data-fa="۱۵. آزمون">15. Testing</h2>
+          <p
+            data-en="Before rollout, confirm both trigger IPs are unused, LAN contains the client-facing L3 interface, and the tunnel can carry a fresh test connection. Capture the baseline public IPv4 using a trusted IP-check service of your choice; no real service domain is embedded here. Use an IPv4-specific check so an unrelated IPv6 path does not mask the result."
+            data-fa="قبل از Rollout تأیید کنید Trigger IPها استفاده نشده‌اند، LAN شامل Interface لایه ۳ سمت Client است و Tunnel اتصال آزمایشی تازه را عبور می‌دهد. Public IPv4 پایه را با سرویس قابل اعتماد انتخاب خود بررسی کنید؛ هیچ Domain واقعی سرویس در مثال درج نشده است. بررسی را مخصوص IPv4 انجام دهید تا مسیر مستقل IPv6 نتیجه را پنهان نکند."
+          >
+            Before rollout, confirm both trigger IPs are unused, LAN contains
+            the client-facing L3 interface, and the tunnel can carry a fresh
+            test connection. Capture the baseline public IPv4 using a trusted
+            IP-check service of your choice; no real service domain is embedded
+            here. Use an IPv4-specific check so an unrelated IPv6 path does not
+            mask the result.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall address-list print where list=&quot;PBR-ACTIVE&quot;
+/ip firewall address-list print where list=&quot;PBR-REMOVE&quot;
+/ip firewall mangle print stats
+/routing table print
+/ip route print detail where routing-table=&quot;VPN-ROUTE&quot;
+/ip firewall connection print where src-address~&quot;^192[.]168[.]10[.]50(:|$)&quot;
+/system scheduler print detail where name=&quot;PBR-Remove-Scheduler&quot;
+/log print where message~&quot;PBR&quot;</code></pre>
+          <p
+            data-en="These are the core router diagnostics. Expect an active custom default route, a rising PBR mangle counter only for enabled Internet traffic, and a removal log after disable. The address-anchored connection query is safer than an unescaped substring search."
+            data-fa="این‌ها Diagnosticهای اصلی روتر هستند. انتظار می‌رود Default Route اختصاصی فعال باشد، Counter مربوط به PBR فقط برای اینترنت Client فعال افزایش یابد و پس از Disable، Log حذف ثبت شود. Query مربوط به Connection با Anchor آدرس از جست‌وجوی Substring بدون Escape امن‌تر است."
+          >
+            These are the core router diagnostics. Expect an active custom
+            default route, a rising PBR mangle counter only for enabled Internet
+            traffic, and a removal log after disable. The address-anchored
+            connection query is safer than an unescaped substring search.
+          </p>
+          <p
+            data-en="From the client, send one enable echo, confirm membership, and open a fresh IPv4 IP-check session. Then send one disable echo, wait for the worker, confirm absence from PBR-ACTIVE and repeat with a fresh session. Standard Windows and Linux one-shot commands are shown separately."
+            data-fa="از Client یک Echo فعال‌سازی ارسال، عضویت را تأیید و Session تازه بررسی IPv4 باز کنید. سپس یک Echo غیرفعال‌سازی ارسال، منتظر Worker بمانید، نبودن Client در PBR-ACTIVE را تأیید و با Session تازه بررسی را تکرار کنید. فرمان تک‌درخواست Windows و Linux جداگانه نمایش داده شده‌اند."
+          >
+            From the client, send one enable echo, confirm membership, and open
+            a fresh IPv4 IP-check session. Then send one disable echo, wait for
+            the worker, confirm absence from PBR-ACTIVE and repeat with a fresh
+            session. Standard Windows and Linux one-shot commands are shown
+            separately.
+          </p>
+          <pre dir="ltr"><code class="language-routeros"># Windows client
+ping -n 1 10.255.255.1
+# Check public IPv4 with a fresh connection, then:
+ping -n 1 10.255.255.2
+
+# Linux client
+ping -c 1 10.255.255.1
+# Check public IPv4 with a fresh connection, then:
+ping -c 1 10.255.255.2</code></pre>
+          <p
+            data-en="Verify local services on both example subnets in every state. A shared upstream exit can have the same public IP on both paths; in that case use router counters and packet-path observation rather than treating identical public IPs as definitive failure. Do not leave both trigger pings running."
+            data-fa="دسترسی سرویس‌های داخلی هر دو Subnet مثال را در تمام وضعیت‌ها بررسی کنید. خروجی مشترک Upstream ممکن است Public IP یکسان بدهد؛ در این حالت Counter و مشاهده مسیر Packet را بررسی کنید و IP یکسان را به‌تنهایی شکست تست ندانید. هر دو Ping مربوط به Trigger را پیوسته اجرا نگذارید."
+          >
+            Verify local services on both example subnets in every state. A
+            shared upstream exit can have the same public IP on both paths; in
+            that case use router counters and packet-path observation rather
+            than treating identical public IPs as definitive failure. Do not
+            leave both trigger pings running.
+          </p>
+        </section>
+        <section id="expected-result">
+          <h2 data-en="16. Expected Result" data-fa="۱۶. نتیجه مورد انتظار">
+            16. Expected Result
+          </h2>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th data-en="State" data-fa="وضعیت">State</th>
+                  <th data-en="Trigger" data-fa="Trigger">Trigger</th>
+                  <th data-en="Address List" data-fa="Address List">
+                    Address List
+                  </th>
+                  <th data-en="Routing Table" data-fa="Routing Table">
+                    Routing Table
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-en="Normal" data-fa="عادی">Normal</td>
+                  <td data-en="No trigger" data-fa="بدون Trigger">
+                    No trigger
+                  </td>
+                  <td data-en="None" data-fa="بدون عضویت">None</td>
+                  <td data-en="main" data-fa="main">main</td>
+                </tr>
+                <tr>
+                  <td data-en="Enabled" data-fa="فعال">Enabled</td>
+                  <td data-en="Ping 10.255.255.1" data-fa="Ping 10.255.255.1">
+                    Ping 10.255.255.1
+                  </td>
+                  <td data-en="PBR-ACTIVE" data-fa="PBR-ACTIVE">PBR-ACTIVE</td>
+                  <td data-en="VPN-ROUTE" data-fa="VPN-ROUTE">VPN-ROUTE</td>
+                </tr>
+                <tr>
+                  <td data-en="Disabled" data-fa="غیرفعال">Disabled</td>
+                  <td data-en="Ping 10.255.255.2" data-fa="Ping 10.255.255.2">
+                    Ping 10.255.255.2
+                  </td>
+                  <td data-en="Removed after worker" data-fa="حذف پس از Worker">
+                    Removed after worker
+                  </td>
+                  <td data-en="main" data-fa="main">main</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p
+            data-en="The table describes eligible Internet packets after state processing. Internal destinations and router-owned addresses always remain excluded from this PBR rule. Other policy rules and existing sessions still need the checks described above."
+            data-fa="جدول مربوط به Packet اینترنت واجد شرایط پس از پردازش وضعیت است. مقصد داخلی و آدرس متعلق به روتر همیشه از این Rule مستثنا می‌ماند. سایر Policy Ruleها و Sessionهای موجود همچنان به بررسی‌های توضیح‌داده‌شده نیاز دارند."
+          >
+            The table describes eligible Internet packets after state
+            processing. Internal destinations and router-owned addresses always
+            remain excluded from this PBR rule. Other policy rules and existing
+            sessions still need the checks described above.
+          </p>
+        </section>
+        <section id="troubleshooting">
+          <h2 data-en="17. Troubleshooting" data-fa="۱۷. عیب‌یابی">
+            17. Troubleshooting
+          </h2>
+          <p
+            data-en="Use state, counters and fresh sessions together. Output below describes expected properties, not guaranteed numeric rule IDs or interface flags on every device."
+            data-fa="وضعیت، Counter و Session تازه را کنار هم بررسی کنید. خروجی‌های زیر ویژگی مورد انتظار را توضیح می‌دهند، نه Rule ID عددی یا Flag تضمین‌شده یکسان روی همه دستگاه‌ها."
+          >
+            Use state, counters and fresh sessions together. Output below
+            describes expected properties, not guaranteed numeric rule IDs or
+            interface flags on every device.
+          </p>
+          <h3
+            data-en="Client never enters the list"
+            data-fa="Client وارد List نمی‌شود"
+          >
+            Client never enters the list
+          </h3>
+          <p
+            data-en="Cause: Wrong LAN membership, source restriction or an earlier raw/mangle action."
+            data-fa="علت: عضویت اشتباه LAN، محدودیت مبدأ یا Action قبلی در raw/mangle."
+          >
+            Cause: Wrong LAN membership, source restriction or an earlier
+            raw/mangle action.
+          </p>
+          <p data-en="Diagnostic commands:" data-fa="فرمان‌های Diagnostic:">
+            Diagnostic commands:
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/interface list member print where list=&quot;LAN&quot;
+/ip firewall mangle print stats
+/ip firewall raw print stats</code></pre>
+          <p
+            data-en="Expected output: The client-facing L3 interface is a LAN member; enable counter rises on a new echo."
+            data-fa="خروجی مورد انتظار: Interface لایه ۳ سمت Client عضو LAN است و Counter فعال‌سازی با Echo جدید افزایش می‌یابد."
+          >
+            Expected output: The client-facing L3 interface is a LAN member;
+            enable counter rises on a new echo.
+          </p>
+          <p
+            data-en="Solution: Correct membership and source restrictions; put triggers before conflicting policy rules. Do not add the control bridge to LAN as a substitute."
+            data-fa="راه‌حل: عضویت و محدودیت مبدأ را اصلاح و Triggerها را قبل از Policy متعارض قرار دهید؛ Bridge کنترلی جای Interface ورودی Client نیست."
+          >
+            Solution: Correct membership and source restrictions; put triggers
+            before conflicting policy rules. Do not add the control bridge to
+            LAN as a substitute.
+          </p>
+          <h3
+            data-en="Trigger ping has no reply"
+            data-fa="Ping مربوط به Trigger پاسخ ندارد"
+          >
+            Trigger ping has no reply
+          </h3>
+          <p
+            data-en="Cause: Missing /32 address, client route, or input firewall drop. The request can still reach mangle before input rejects it."
+            data-fa="علت: نبود IP با /32، Route مربوط به Client یا Drop در input؛ درخواست ممکن است قبل از ردشدن در input به Mangle برسد."
+          >
+            Cause: Missing /32 address, client route, or input firewall drop.
+            The request can still reach mangle before input rejects it.
+          </p>
+          <p data-en="Diagnostic commands:" data-fa="فرمان‌های Diagnostic:">
+            Diagnostic commands:
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip address print where interface=&quot;PBR-Control&quot;
+/ip firewall filter print stats where chain=&quot;input&quot;
+/ip firewall address-list print where list=&quot;PBR-ACTIVE&quot;</code></pre>
+          <p
+            data-en="Expected output: Two enabled /32 addresses and authorized echo accept counters; inspect list state separately."
+            data-fa="خروجی مورد انتظار: دو آدرس /32 فعال و Counter پذیرش Echo مجاز؛ وضعیت List را جدا بررسی کنید."
+          >
+            Expected output: Two enabled /32 addresses and authorized echo
+            accept counters; inspect list state separately.
+          </p>
+          <p
+            data-en="Solution: Fix client gateway and control addresses; position scoped input permissions before general ICMP accepts and final drops."
+            data-fa="راه‌حل: Gateway مربوط به Client و آدرس‌ها را اصلاح و مجوز محدود input را قبل از accept عمومی ICMP و Drop نهایی قرار دهید."
+          >
+            Solution: Fix client gateway and control addresses; position scoped
+            input permissions before general ICMP accepts and final drops.
+          </p>
+          <h3
+            data-en="Membership changes, route does not"
+            data-fa="Client عضو می‌شود ولی مسیر عوض نمی‌شود"
+          >
+            Membership changes, route does not
+          </h3>
+          <p
+            data-en="Cause: Mark rule not reached, wrong source/destination match or competing PCC/routing marks."
+            data-fa="علت: Rule مربوط به Mark اجرا نمی‌شود، Match اشتباه است یا PCC/Routing Mark متعارض وجود دارد."
+          >
+            Cause: Mark rule not reached, wrong source/destination match or
+            competing PCC/routing marks.
+          </p>
+          <p data-en="Diagnostic commands:" data-fa="فرمان‌های Diagnostic:">
+            Diagnostic commands:
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall mangle print detail
+/ip firewall mangle print stats
+/routing rule print detail</code></pre>
+          <p
+            data-en="Expected output: The PBR counter rises for a new nonlocal IPv4 connection; correct routing mark and no earlier terminating action."
+            data-fa="خروجی مورد انتظار: Counter مربوط به PBR برای اتصال تازه IPv4 غیرLocal افزایش می‌یابد؛ Mark درست و بدون Action خاتمه‌دهنده قبلی."
+          >
+            Expected output: The PBR counter rises for a new nonlocal IPv4
+            connection; correct routing mark and no earlier terminating action.
+          </p>
+          <p
+            data-en="Solution: Review prerouting order and all policy interactions; verify with new IPv4 sessions."
+            data-fa="راه‌حل: ترتیب prerouting و تعامل تمام Policyها را بررسی و با Session تازه IPv4 تست کنید."
+          >
+            Solution: Review prerouting order and all policy interactions;
+            verify with new IPv4 sessions.
+          </p>
+          <h3
+            data-en="Internal services become unreachable"
+            data-fa="شبکه داخلی از دسترس خارج می‌شود"
+          >
+            Internal services become unreachable
+          </h3>
+          <p
+            data-en="Cause: An internal prefix is missing or another policy marks internal traffic."
+            data-fa="علت: Prefix داخلی ثبت نشده یا Policy دیگر ترافیک داخلی را Mark می‌کند."
+          >
+            Cause: An internal prefix is missing or another policy marks
+            internal traffic.
+          </p>
+          <p data-en="Diagnostic commands:" data-fa="فرمان‌های Diagnostic:">
+            Diagnostic commands:
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall address-list print where list=&quot;LOCAL-NETS&quot;
+/ip route print detail where routing-table=&quot;main&quot;
+/ip firewall mangle print detail</code></pre>
+          <p
+            data-en="Expected output: Both internal prefixes are listed, reachable in main, and excluded by all relevant policy rules."
+            data-fa="خروجی مورد انتظار: هر دو Prefix داخلی در List و main قابل دسترس هستند و Policyهای مرتبط آن‌ها را مستثنا می‌کنند."
+          >
+            Expected output: Both internal prefixes are listed, reachable in
+            main, and excluded by all relevant policy rules.
+          </p>
+          <p
+            data-en="Solution: Add the exact missing internal prefixes; repair main routes and competing rules. !local alone is insufficient."
+            data-fa="راه‌حل: Prefix داخلی دقیق را اضافه و Routeهای main و Rule متعارض را اصلاح کنید؛ !local به‌تنهایی کافی نیست."
+          >
+            Solution: Add the exact missing internal prefixes; repair main
+            routes and competing rules. !local alone is insufficient.
+          </p>
+          <h3
+            data-en="Internet stops when enabled"
+            data-fa="اینترنت پس از Enable قطع می‌شود"
+          >
+            Internet stops when enabled
+          </h3>
+          <p
+            data-en="Cause: Upstream tunnel forwarding, return routing, DNS or MTU/MSS failure."
+            data-fa="علت: خرابی Forwarding سمت Tunnel، Routing برگشت، DNS یا MTU/MSS."
+          >
+            Cause: Upstream tunnel forwarding, return routing, DNS or MTU/MSS
+            failure.
+          </p>
+          <p data-en="Diagnostic commands:" data-fa="فرمان‌های Diagnostic:">
+            Diagnostic commands:
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/interface print detail where name=&quot;l2tp-vpn-example&quot;
+/ip route print detail where routing-table=&quot;VPN-ROUTE&quot;
+/ip firewall filter print stats where chain=&quot;forward&quot;</code></pre>
+          <p
+            data-en="Expected output: Running interface, active default route and allowed forward/return traffic; IP and DNS tests both succeed."
+            data-fa="خروجی مورد انتظار: Interface در حال اجرا، Default فعال و Forward/Return مجاز؛ تست IP و DNS هر دو موفق."
+          >
+            Expected output: Running interface, active default route and allowed
+            forward/return traffic; IP and DNS tests both succeed.
+          </p>
+          <p
+            data-en="Solution: Test IP reachability before DNS; repair upstream Internet/return path and forwarding policy. Investigate MTU if only large transfers fail."
+            data-fa="راه‌حل: قبل از DNS دسترسی IP را تست و مسیر اینترنت/برگشت سمت مقابل و Forward را اصلاح کنید؛ اگر فقط انتقال بزرگ خراب است MTU را بررسی کنید."
+          >
+            Solution: Test IP reachability before DNS; repair upstream
+            Internet/return path and forwarding policy. Investigate MTU if only
+            large transfers fail.
+          </p>
+          <h3
+            data-en="VPN default is inactive"
+            data-fa="Route مربوط به VPN فعال نیست"
+          >
+            VPN default is inactive
+          </h3>
+          <p
+            data-en="Cause: Tunnel disconnected, disabled route or unusable gateway."
+            data-fa="علت: Tunnel قطع است، Route غیرفعال یا Gateway غیرقابل استفاده است."
+          >
+            Cause: Tunnel disconnected, disabled route or unusable gateway.
+          </p>
+          <p data-en="Diagnostic commands:" data-fa="فرمان‌های Diagnostic:">
+            Diagnostic commands:
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip route print detail where routing-table=&quot;VPN-ROUTE&quot;
+/interface print detail where name=&quot;l2tp-vpn-example&quot;</code></pre>
+          <p
+            data-en="Expected output: Default route carries the active flag and tunnel carries the running flag."
+            data-fa="خروجی مورد انتظار: Default Route دارای Flag فعال و Tunnel دارای Flag Running است."
+          >
+            Expected output: Default route carries the active flag and tunnel
+            carries the running flag.
+          </p>
+          <p
+            data-en="Solution: Restore the preconfigured tunnel and verify the route is enabled. Do not assume the interface name proves the tunnel is established."
+            data-fa="راه‌حل: Tunnel ازپیش‌تنظیم‌شده را بازیابی و فعال بودن Route را تأیید کنید؛ نام Interface برقرار بودن Tunnel را ثابت نمی‌کند."
+          >
+            Solution: Restore the preconfigured tunnel and verify the route is
+            enabled. Do not assume the interface name proves the tunnel is
+            established.
+          </p>
+          <h3
+            data-en="FastTrack bypasses PBR"
+            data-fa="FastTrack موجب Bypass می‌شود"
+          >
+            FastTrack bypasses PBR
+          </h3>
+          <p
+            data-en="Cause: An eligible flow matched a FastTrack rule or was FastTracked before rollout."
+            data-fa="علت: Flow مجاز با FastTrack Rule منطبق شده یا پیش از Rollout FastTrack بوده است."
+          >
+            Cause: An eligible flow matched a FastTrack rule or was FastTracked
+            before rollout.
+          </p>
+          <p data-en="Diagnostic commands:" data-fa="فرمان‌های Diagnostic:">
+            Diagnostic commands:
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall filter print detail where action=&quot;fasttrack-connection&quot;
+/ip firewall connection print detail where src-address~&quot;^192[.]168[.]10[.]50(:|$)&quot;</code></pre>
+          <p
+            data-en="Expected output: New eligible flows have no FastTrack flag; both direction exceptions exist on every applicable rule."
+            data-fa="خروجی مورد انتظار: Flow تازه مجاز Flag مربوط به FastTrack ندارد و استثنای هر دو جهت در همه Ruleهای مرتبط وجود دارد."
+          >
+            Expected output: New eligible flows have no FastTrack flag; both
+            direction exceptions exist on every applicable rule.
+          </p>
+          <p
+            data-en="Solution: Use stable PBR-ELIGIBLE exclusions and reset only selected old client sessions if necessary."
+            data-fa="راه‌حل: استثنای ثابت PBR-ELIGIBLE اعمال و در صورت نیاز فقط Sessionهای قدیمی انتخاب‌شده Client را Reset کنید."
+          >
+            Solution: Use stable PBR-ELIGIBLE exclusions and reset only selected
+            old client sessions if necessary.
+          </p>
+          <h3
+            data-en="Required NAT is missing"
+            data-fa="NAT موردنیاز وجود ندارد"
+          >
+            Required NAT is missing
+          </h3>
+          <p
+            data-en="Cause: The egress has no LAN return route and no matching source translation, or an earlier NAT rule wins."
+            data-fa="علت: خروجی Route برگشت LAN و ترجمه مبدأ منطبق ندارد یا NAT قبلی اول Match می‌شود."
+          >
+            Cause: The egress has no LAN return route and no matching source
+            translation, or an earlier NAT rule wins.
+          </p>
+          <p data-en="Diagnostic commands:" data-fa="فرمان‌های Diagnostic:">
+            Diagnostic commands:
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall nat print stats
+/ip firewall nat print detail</code></pre>
+          <p
+            data-en="Expected output: The intended egress NAT rule matches new connections; remote return traffic reaches the client."
+            data-fa="خروجی مورد انتظار: NAT خروجی موردنظر اتصال تازه را Match می‌کند و پاسخ سمت مقابل به Client می‌رسد."
+          >
+            Expected output: The intended egress NAT rule matches new
+            connections; remote return traffic reaches the client.
+          </p>
+          <p
+            data-en="Solution: Install or reposition scoped NAT when required; for routed site-to-site traffic fix the return route instead."
+            data-fa="راه‌حل: در صورت نیاز NAT محدود را نصب یا جابه‌جا کنید؛ برای Site-to-site مسیریابی‌شده، Route برگشت را اصلاح کنید."
+          >
+            Solution: Install or reposition scoped NAT when required; for routed
+            site-to-site traffic fix the return route instead.
+          </p>
+          <h3
+            data-en="Old sessions do not switch cleanly"
+            data-fa="Session قبلی بلافاصله سالم تغییر مسیر نمی‌دهد"
+          >
+            Old sessions do not switch cleanly
+          </h3>
+          <p
+            data-en="Cause: Old NAT identity, FastTrack state or another connection-mark design survives the toggle."
+            data-fa="علت: هویت NAT قبلی، وضعیت FastTrack یا طراحی Connection Mark دیگری باقی مانده است."
+          >
+            Cause: Old NAT identity, FastTrack state or another connection-mark
+            design survives the toggle.
+          </p>
+          <p data-en="Diagnostic commands:" data-fa="فرمان‌های Diagnostic:">
+            Diagnostic commands:
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall connection print detail where src-address~&quot;^192[.]168[.]10[.]50(:|$)&quot;</code></pre>
+          <p
+            data-en="Expected output: Compare an old flow with a new flow; new flow uses the intended path and mapping."
+            data-fa="خروجی مورد انتظار: Flow قدیمی را با تازه مقایسه کنید؛ Flow تازه مسیر و Mapping موردنظر را دارد."
+          >
+            Expected output: Compare an old flow with a new flow; new flow uses
+            the intended path and mapping.
+          </p>
+          <p
+            data-en="Solution: Reconnect applications first; selectively remove tracked sessions only after accepting the interruption."
+            data-fa="راه‌حل: ابتدا برنامه را دوباره متصل کنید؛ فقط با پذیرش قطع Session رکوردهای انتخاب‌شده را حذف کنید."
+          >
+            Solution: Reconnect applications first; selectively remove tracked
+            sessions only after accepting the interruption.
+          </p>
+          <h3
+            data-en="Routing table is missing"
+            data-fa="Routing Table ساخته نشده"
+          >
+            Routing table is missing
+          </h3>
+          <p
+            data-en="Cause: mark-routing was configured before the v7 table or the table was deleted."
+            data-fa="علت: mark-routing قبل از ساخت Table در v7 تنظیم شده یا Table حذف شده است."
+          >
+            Cause: mark-routing was configured before the v7 table or the table
+            was deleted.
+          </p>
+          <p data-en="Diagnostic commands:" data-fa="فرمان‌های Diagnostic:">
+            Diagnostic commands:
+          </p>
+          <pre dir="ltr"><code class="language-routeros">/routing table print
+/ip firewall mangle print detail</code></pre>
+          <p
+            data-en="Expected output: VPN-ROUTE exists with fib enabled and matches new-routing-mark exactly."
+            data-fa="خروجی مورد انتظار: VPN-ROUTE با fib وجود دارد و دقیقاً با new-routing-mark یکسان است."
+          >
+            Expected output: VPN-ROUTE exists with fib enabled and matches
+            new-routing-mark exactly.
+          </p>
+          <p
+            data-en="Solution: Create the table first, then its routes and mark rule; check spelling and case."
+            data-fa="راه‌حل: ابتدا Table، سپس Route و Rule مربوط به Mark را بسازید؛ املا و حروف نام را بررسی کنید."
+          >
+            Solution: Create the table first, then its routes and mark rule;
+            check spelling and case.
+          </p>
+          <h3
+            data-en="Gateway cannot resolve"
+            data-fa="Gateway در Table قابل Resolve نیست"
+          >
+            Gateway cannot resolve
+          </h3>
+          <p
+            data-en="Cause: An IP next hop lacks main reachability or recursive scope/target-scope is wrong."
+            data-fa="علت: Next Hop مبتنی بر IP در main قابل دسترس نیست یا scope/target-scope مربوط به Recursive اشتباه است."
+          >
+            Cause: An IP next hop lacks main reachability or recursive
+            scope/target-scope is wrong.
+          </p>
+          <p data-en="Diagnostic commands:" data-fa="فرمان‌های Diagnostic:">
+            Diagnostic commands:
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip route print detail where routing-table=&quot;VPN-ROUTE&quot;
+/ip route print detail where routing-table=&quot;main&quot;
+/ip arp print where address=&quot;192.0.2.1&quot;</code></pre>
+          <p
+            data-en="Expected output: IP-gateway routes have a resolved immediate-gw and active flag; Ethernet neighbor resolves where applicable."
+            data-fa="خروجی مورد انتظار: Route مبتنی بر IP دارای immediate-gw Resolveشده و Flag فعال است؛ همسایه Ethernet در صورت کاربرد Resolve می‌شود."
+          >
+            Expected output: IP-gateway routes have a resolved immediate-gw and
+            active flag; Ethernet neighbor resolves where applicable.
+          </p>
+          <p
+            data-en="Solution: Use the reviewed 192.0.2.1@main example with a valid connected underlay; repair resolver routes. Do not add an arbitrary main default as a blind fix."
+            data-fa="راه‌حل: از مثال بررسی‌شده 192.0.2.1@main با Underlay متصل معتبر استفاده و Resolver Route را اصلاح کنید؛ Default تصادفی main راه‌حل کورکورانه نیست."
+          >
+            Solution: Use the reviewed 192.0.2.1@main example with a valid
+            connected underlay; repair resolver routes. Do not add an arbitrary
+            main default as a blind fix.
+          </p>
+          <h3 data-en="Disable never completes" data-fa="Disable کامل نمی‌شود">
+            Disable never completes
+          </h3>
+          <p
+            data-en="Cause: Scheduler disabled, permission mismatch, worker failure or request timeout."
+            data-fa="علت: Scheduler غیرفعال، Permission ناسازگار، خطای Worker یا انقضای درخواست."
+          >
+            Cause: Scheduler disabled, permission mismatch, worker failure or
+            request timeout.
+          </p>
+          <p data-en="Diagnostic commands:" data-fa="فرمان‌های Diagnostic:">
+            Diagnostic commands:
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/system scheduler print detail where name=&quot;PBR-Remove-Scheduler&quot;
+/log print where message~&quot;PBR&quot;
+/ip firewall address-list print where list=&quot;PBR-REMOVE&quot;</code></pre>
+          <p
+            data-en="Expected output: Enabled one-second worker, advancing run-count, successful removal log, and no active entry for the client."
+            data-fa="خروجی مورد انتظار: Worker فعال یک‌ثانیه‌ای، run-count افزایشی، Log حذف موفق و نبود رکورد فعال Client."
+          >
+            Expected output: Enabled one-second worker, advancing run-count,
+            successful removal log, and no active entry for the client.
+          </p>
+          <p
+            data-en="Solution: Repair permissions and worker; reissue one disable ping. Increase queue lifetime if scheduler latency warrants it."
+            data-fa="راه‌حل: Permission و Worker را اصلاح و یک Ping مربوط به Disable دوباره ارسال کنید؛ در صورت تأخیر Scheduler عمر صف را افزایش دهید."
+          >
+            Solution: Repair permissions and worker; reissue one disable ping.
+            Increase queue lifetime if scheduler latency warrants it.
+          </p>
+        </section>
+        <section id="security">
+          <h2
+            data-en="18. Security Considerations"
+            data-fa="۱۸. ملاحظات امنیتی"
+          >
+            18. Security Considerations
+          </h2>
+          <p
+            data-en="Keep the control addresses inaccessible from WAN. LAN-only trigger matchers protect state changes even if a broad input rule permits ping from elsewhere; input policy must separately restrict replies and all other services on these router-owned addresses. Add the following scoped destination list and input rules, then position allow followed by deny before broad input accepts and final drops."
+            data-fa="آدرس‌های کنترلی از WAN قابل دسترسی نباشند. شرط LAN روی Trigger تغییر وضعیت را محدود می‌کند، حتی اگر Rule عمومی input به مبدأ دیگری پاسخ Ping بدهد؛ Policy مربوط به input باید جداگانه پاسخ و تمام سرویس‌های دیگر روی این آدرس‌های روتر را محدود کند. List مقصد و Ruleهای محدود زیر را اضافه و به‌ترتیب Allow و Deny قبل از accept عمومی input و Drop نهایی قرار دهید."
+          >
+            Keep the control addresses inaccessible from WAN. LAN-only trigger
+            matchers protect state changes even if a broad input rule permits
+            ping from elsewhere; input policy must separately restrict replies
+            and all other services on these router-owned addresses. Add the
+            following scoped destination list and input rules, then position
+            allow followed by deny before broad input accepts and final drops.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall address-list
+add list=PBR-CONTROL-IPS address=10.255.255.1 comment=&quot;Enable trigger destination&quot;
+add list=PBR-CONTROL-IPS address=10.255.255.2 comment=&quot;Disable trigger destination&quot;
+/ip firewall filter
+add chain=input in-interface-list=LAN src-address=192.168.10.0/24 \
+    dst-address-list=PBR-CONTROL-IPS protocol=icmp icmp-options=8:0 \
+    action=accept comment=&quot;Allow authorized PBR echo requests&quot;
+add chain=input dst-address-list=PBR-CONTROL-IPS action=drop \
+    comment=&quot;Deny other access to PBR control addresses&quot;</code></pre>
+          <p
+            data-en="Verify an authorized LAN client receives an echo reply and an unauthorized internal or WAN source cannot reach either control IP. Existing established/related accepts and rule ordering must be reviewed; appending these rules below an earlier broad accept does not enforce the restriction. Do not expose control prefixes through WAN forwarding, published routes or DNAT."
+            data-fa="تأیید کنید Client مجاز LAN پاسخ Echo دریافت می‌کند و مبدأ داخلی غیرمجاز یا WAN به هیچ‌یک از IPهای کنترلی دسترسی ندارد. accept مربوط به established/related و ترتیب Ruleها را بررسی کنید؛ افزودن زیر accept گسترده محدودیت را اعمال نمی‌کند. Prefix کنترلی را از طریق WAN Forwarding، Route منتشرشده یا DNAT در دسترس قرار ندهید."
+          >
+            Verify an authorized LAN client receives an echo reply and an
+            unauthorized internal or WAN source cannot reach either control IP.
+            Existing established/related accepts and rule ordering must be
+            reviewed; appending these rules below an earlier broad accept does
+            not enforce the restriction. Do not expose control prefixes through
+            WAN forwarding, published routes or DNAT.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall filter print detail where chain=&quot;input&quot;
+/ip firewall filter print stats where dst-address-list=&quot;PBR-CONTROL-IPS&quot;</code></pre>
+          <p
+            data-en="A ping does not authenticate a person. Any authorized source can toggle its own state, and a spoofed LAN source can potentially toggle another client. Enforce access at the edge with suitable VLAN separation, source validation and DHCP/IP binding controls. For a strict allowlist, narrow both trigger source ranges and the input allow rule to approved hosts; keep the stable FastTrack exclusion covering that complete population."
+            data-fa="Ping شخص را احراز هویت نمی‌کند. هر مبدأ مجاز می‌تواند وضعیت خود را تغییر دهد و جعل IP در LAN ممکن است وضعیت Client دیگر را تغییر دهد. کنترل دسترسی را در لبه با جداسازی VLAN، اعتبارسنجی مبدأ و کنترل مناسب DHCP/IP Binding اعمال کنید. برای Allowlist سخت‌گیرانه، مبدأ هر دو Trigger و input allow را به Hostهای مجاز محدود و استثنای ثابت FastTrack را شامل تمام آن جمعیت نگه دارید."
+          >
+            A ping does not authenticate a person. Any authorized source can
+            toggle its own state, and a spoofed LAN source can potentially
+            toggle another client. Enforce access at the edge with suitable VLAN
+            separation, source validation and DHCP/IP binding controls. For a
+            strict allowlist, narrow both trigger source ranges and the input
+            allow rule to approved hosts; keep the stable FastTrack exclusion
+            covering that complete population.
+          </p>
+          <p
+            data-en="Do not use this mechanism as a VPN kill switch. Review lookup fall-through, gateway health and explicit drop/blackhole policy if traffic must never escape through main. The presented design does not guarantee fail-closed behavior when the custom route disappears. IPv6 can still follow a separate Internet route."
+            data-fa="این مکانیزم را VPN Kill Switch در نظر نگیرید. اگر ترافیک نباید هرگز از main خارج شود، Lookup Fall-through، سلامت Gateway و Policy صریح Drop/Blackhole را بررسی کنید. طراحی ارائه‌شده هنگام حذف Route اختصاصی رفتار Fail-closed را تضمین نمی‌کند. IPv6 نیز می‌تواند مسیر اینترنت جداگانه داشته باشد."
+          >
+            Do not use this mechanism as a VPN kill switch. Review lookup
+            fall-through, gateway health and explicit drop/blackhole policy if
+            traffic must never escape through main. The presented design does
+            not guarantee fail-closed behavior when the custom route disappears.
+            IPv6 can still follow a separate Internet route.
+          </p>
+        </section>
+        <section id="best-practices">
+          <h2
+            data-en="19. Production Best Practices"
+            data-fa="۱۹. توصیه‌های Production"
+          >
+            19. Production Best Practices
+          </h2>
+          <p
+            data-en="Before changes, save a binary backup and a readable export, transfer them to protected storage, and use RouterOS terminal Safe Mode (Ctrl+X). Exports may include sensitive topology even without exposed passwords; keep operational backups out of public documentation. Take a new backup after successful validation."
+            data-fa="قبل از تغییر، Binary Backup و Export قابل خواندن بگیرید، به فضای محافظت‌شده منتقل کنید و در Terminal از Safe Mode با Ctrl+X استفاده کنید. Export حتی بدون Password آشکار می‌تواند توپولوژی حساس داشته باشد؛ Backup عملیاتی را وارد مستند عمومی نکنید. پس از آزمون موفق نیز Backup جدید بگیرید."
+          >
+            Before changes, save a binary backup and a readable export, transfer
+            them to protected storage, and use RouterOS terminal Safe Mode
+            (Ctrl+X). Exports may include sensitive topology even without
+            exposed passwords; keep operational backups out of public
+            documentation. Take a new backup after successful validation.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/system backup save name=pbr-before-example
+/export file=pbr-before-example</code></pre>
+          <p
+            data-en="Verify both files exist, are downloaded securely and correspond to the target router/version. Safe Mode protects an interactive change session, not an unlimited bulk import; apply in small reviewed stages and verify connectivity before committing."
+            data-fa="وجود هر دو فایل، دانلود امن و تطابق با روتر/نسخه هدف را تأیید کنید. Safe Mode برای Session تعاملی تغییر است، نه Import انبوه نامحدود؛ تغییر را در مرحله‌های کوچک بررسی‌شده اعمال و قبل از Commit اتصال را تأیید کنید."
+          >
+            Verify both files exist, are downloaded securely and correspond to
+            the target router/version. Safe Mode protects an interactive change
+            session, not an unlimited bulk import; apply in small reviewed
+            stages and verify connectivity before committing.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/file print where name~&quot;pbr-before-example&quot;</code></pre>
+          <p
+            data-en="Comment each persistent rule and route; the dynamic entries are generated by their commented trigger rule. Reserve the operational lists, create the table before marking, order triggers before PBR marks, audit preceding rules, exclude every required internal prefix, and check all FastTrack/NAT interactions. Use logging for state transitions and monitor warning volume rather than logging every packet."
+            data-fa="برای هر Rule و Route پایدار Comment بگذارید؛ Entryهای Dynamic توسط Trigger دارای Comment ساخته می‌شوند. Listهای عملیاتی را اختصاصی نگه دارید، Table را قبل از Mark بسازید، Trigger را قبل از Mark قرار دهید، Rule قبلی را بررسی، تمام Prefixهای داخلی لازم را مستثنا و تعامل همه FastTrack/NATها را کنترل کنید. به‌جای Log هر Packet، تغییر وضعیت را ثبت و حجم Warning را پایش کنید."
+          >
+            Comment each persistent rule and route; the dynamic entries are
+            generated by their commented trigger rule. Reserve the operational
+            lists, create the table before marking, order triggers before PBR
+            marks, audit preceding rules, exclude every required internal
+            prefix, and check all FastTrack/NAT interactions. Use logging for
+            state transitions and monitor warning volume rather than logging
+            every packet.
+          </p>
+          <p
+            data-en="Pilot 192.168.10.50/32 first, test enable/disable and internal services, then expand authorization. Measure CPU impact of stable FastTrack exclusions and the one-second job. Keep documentation examples anonymous. Review the exact installed RouterOS v7 release in a lab before deployment; documentation review and website tests are not device execution tests."
+            data-fa="ابتدا 192.168.10.50/32 را Pilot کنید، Enable/Disable و سرویس‌های داخلی را تست و سپس مجوز را گسترش دهید. اثر استثنای ثابت FastTrack و Job یک‌ثانیه‌ای بر CPU را اندازه‌گیری کنید. مثال‌های مستند را ناشناس نگه دارید. Release دقیق RouterOS v7 نصب‌شده را قبل از استقرار در Lab بررسی کنید؛ بازبینی مستند و تست سایت معادل اجرای فرمان روی دستگاه نیست."
+          >
+            Pilot 192.168.10.50/32 first, test enable/disable and internal
+            services, then expand authorization. Measure CPU impact of stable
+            FastTrack exclusions and the one-second job. Keep documentation
+            examples anonymous. Review the exact installed RouterOS v7 release
+            in a lab before deployment; documentation review and website tests
+            are not device execution tests.
+          </p>
+        </section>
+        <section id="complete-configuration">
+          <h2
+            data-en="20. Complete Example Configuration"
+            data-fa="۲۰. پیکربندی کامل مثال"
+          >
+            20. Complete Example Configuration
+          </h2>
+          <p
+            data-en="Apply this once to the reviewed example environment in the sequence shown. The existing LAN interface list and working point-to-point tunnel must already exist; ordinary main routing and established/related forwarding must already work. This is an additive example, not an idempotent installer or a replacement firewall. Do not execute both individual section commands and the full block, or run the block twice: duplicate rules and name conflicts would result."
+            data-fa="این Config را یک‌بار به محیط مثال بررسی‌شده و به‌ترتیب زیر اعمال کنید. Interface List موجود LAN و Tunnel نقطه‌به‌نقطه فعال باید از قبل وجود داشته باشند؛ Routing عادی main و Forward مربوط به established/related باید سالم باشند. این مثال افزایشی است، نه Installer تکرارپذیر یا Firewall جایگزین. بخش‌های جداگانه و Block کامل را هر دو اجرا نکنید و Block را دوبار اجرا نکنید؛ Rule تکراری و تضاد نام ایجاد می‌شود."
+          >
+            Apply this once to the reviewed example environment in the sequence
+            shown. The existing LAN interface list and working point-to-point
+            tunnel must already exist; ordinary main routing and
+            established/related forwarding must already work. This is an
+            additive example, not an idempotent installer or a replacement
+            firewall. Do not execute both individual section commands and the
+            full block, or run the block twice: duplicate rules and name
+            conflicts would result.
+          </p>
+          <p
+            data-en="Step 1: back up, enter Safe Mode and inspect LAN, tunnel, input, mangle, NAT and all FastTrack rules. Step 2: integrate the stable FastTrack exceptions described in section 12 before client activation. Existing criteria must be preserved; the guarded example intentionally stops unless the reviewed rule is uniquely identified. Step 3: apply the following infrastructure and policy block; omit the final NAT rule if the selected routed design does not require it."
+            data-fa="مرحله ۱: Backup، Safe Mode و بررسی LAN، Tunnel، input، mangle، NAT و تمام FastTrack Ruleها. مرحله ۲: استثنای ثابت FastTrack بخش ۱۲ را قبل از فعال‌سازی Client ادغام کنید. شرط موجود باید حفظ شود؛ مثال Guardدار عمداً بدون شناسایی یکتای Rule بررسی‌شده متوقف می‌شود. مرحله ۳: Block زیر را اعمال کنید؛ اگر طراحی مسیریابی‌شده انتخاب‌شده به NAT نیاز ندارد، آخرین Rule آن را اجرا نکنید."
+          >
+            Step 1: back up, enter Safe Mode and inspect LAN, tunnel, input,
+            mangle, NAT and all FastTrack rules. Step 2: integrate the stable
+            FastTrack exceptions described in section 12 before client
+            activation. Existing criteria must be preserved; the guarded example
+            intentionally stops unless the reviewed rule is uniquely identified.
+            Step 3: apply the following infrastructure and policy block; omit
+            the final NAT rule if the selected routed design does not require
+            it.
+          </p>
+          <pre dir="ltr"><code class="language-routeros">/interface bridge
+add name=PBR-Control protocol-mode=none comment=&quot;PBR Control Interface&quot;
+/ip address
+add address=10.255.255.1/32 interface=PBR-Control comment=&quot;Enable PBR&quot;
+add address=10.255.255.2/32 interface=PBR-Control comment=&quot;Disable PBR&quot;
+
+/ip firewall address-list
+add list=LOCAL-NETS address=192.168.10.0/24 comment=&quot;LAN example&quot;
+add list=LOCAL-NETS address=192.168.20.0/24 comment=&quot;Internal VLAN example&quot;
+add list=PBR-ELIGIBLE address=192.168.10.0/24 comment=&quot;Stable FastTrack exclusion for trigger-capable clients&quot;
+
+/routing table
+add fib name=VPN-ROUTE
+/ip route
+add dst-address=0.0.0.0/0 gateway=l2tp-vpn-example \
+    routing-table=VPN-ROUTE comment=&quot;PBR default route&quot;
+
+/ip firewall mangle
+add chain=prerouting in-interface-list=LAN src-address=192.168.10.0/24 \
+    src-address-list=!PBR-REMOVE protocol=icmp icmp-options=8:0 \
+    dst-address=10.255.255.1 action=add-src-to-address-list \
+    address-list=PBR-ACTIVE address-list-timeout=none-dynamic \
+    passthrough=yes comment=&quot;Enable PBR using ICMP trigger&quot;
+
+/ip firewall mangle
+add chain=prerouting in-interface-list=LAN src-address=192.168.10.0/24 \
+    protocol=icmp icmp-options=8:0 dst-address=10.255.255.2 \
+    action=add-src-to-address-list address-list=PBR-REMOVE \
+    address-list-timeout=10s passthrough=yes comment=&quot;Disable PBR request&quot;
+
+/ip firewall mangle
+add chain=prerouting in-interface-list=LAN src-address-list=PBR-ACTIVE \
+    dst-address-list=!LOCAL-NETS dst-address-type=!local \
+    action=mark-routing new-routing-mark=VPN-ROUTE passthrough=no \
+    comment=&quot;Route PBR clients using VPN-ROUTE&quot;
+
+/system script
+add name=PBR-Remove-Worker policy=read,write,test dont-require-permissions=no source={
+    :if ([:len [/system script job find where script=&quot;PBR-Remove-Worker&quot;]] &gt; 1) do={
+        :return
+    }
+    :foreach request in=[/ip firewall address-list find where list=&quot;PBR-REMOVE&quot;] do={
+        :local clientIP &quot;&quot;
+        :do {
+            :set clientIP [/ip firewall address-list get $request address]
+            :local active [/ip firewall address-list find where list=&quot;PBR-ACTIVE&quot; and address=$clientIP]
+            :if ([:len $active] &gt; 0) do={
+                /ip firewall address-list remove $active
+                :log info (&quot;PBR disabled for client &quot; . $clientIP)
+            }
+            /ip firewall address-list remove $request
+        } on-error={
+            :if ([:len [/ip firewall address-list find where list=&quot;PBR-REMOVE&quot; and address=$clientIP]] &gt; 0) do={
+                :log warning (&quot;PBR removal failed; queued retry for &quot; . $clientIP)
+            }
+        }
+    }
+}
+
+/system scheduler
+add name=PBR-Remove-Scheduler start-time=startup interval=1s \
+    on-event=PBR-Remove-Worker policy=read,write,test \
+    comment=&quot;Process queued PBR disable requests&quot;
+
+/ip firewall address-list
+add list=PBR-CONTROL-IPS address=10.255.255.1 comment=&quot;Enable trigger destination&quot;
+add list=PBR-CONTROL-IPS address=10.255.255.2 comment=&quot;Disable trigger destination&quot;
+/ip firewall filter
+add chain=input in-interface-list=LAN src-address=192.168.10.0/24 \
+    dst-address-list=PBR-CONTROL-IPS protocol=icmp icmp-options=8:0 \
+    action=accept comment=&quot;Allow authorized PBR echo requests&quot;
+add chain=input dst-address-list=PBR-CONTROL-IPS action=drop \
+    comment=&quot;Deny other access to PBR control addresses&quot;
+
+/ip firewall nat
+add chain=srcnat src-address-list=PBR-ACTIVE out-interface=l2tp-vpn-example \
+    action=masquerade comment=&quot;NAT PBR traffic&quot;</code></pre>
+          <p
+            data-en="Step 4: review placement. On an existing router these add commands append rules: move the two input rules together before broad input accepts/drops, put trigger rules before policy-routing marks, and place scoped NAT before a conflicting earlier srcnat rule. There is no universal safe numeric move target. Integrate with PCC, security filtering and any other routing policies rather than blindly moving everything to position zero."
+            data-fa="مرحله ۴: جایگاه Ruleها را بررسی کنید. add روی روتر موجود Rule را در انتها اضافه می‌کند؛ دو Rule مربوط به input را کنار هم قبل از accept/drop عمومی، Triggerها را قبل از Routing Mark و NAT محدود را قبل از srcnat قبلی متعارض جابه‌جا کنید. شماره مقصد move امن و عمومی وجود ندارد. با PCC، فیلتر امنیتی و Policyهای دیگر ادغام کنید؛ همه Ruleها را کورکورانه به موقعیت صفر منتقل نکنید."
+          >
+            Step 4: review placement. On an existing router these add commands
+            append rules: move the two input rules together before broad input
+            accepts/drops, put trigger rules before policy-routing marks, and
+            place scoped NAT before a conflicting earlier srcnat rule. There is
+            no universal safe numeric move target. Integrate with PCC, security
+            filtering and any other routing policies rather than blindly moving
+            everything to position zero.
+          </p>
+          <p
+            data-en="Step 5: verify the complete state below, stop ongoing trigger pings, test the single pilot host with new sessions and confirm internal access in all states. Commit Safe Mode only after validation. The full block does not provision a VPN or automatically modify an unknown FastTrack ruleset."
+            data-fa="مرحله ۵: وضعیت کامل زیر را بررسی، Ping پیوسته Trigger را متوقف، Host آزمایشی را با Session تازه تست و دسترسی داخلی را در تمام وضعیت‌ها تأیید کنید. Safe Mode را فقط پس از تأیید Commit کنید. Block کامل VPN ایجاد نمی‌کند و Ruleset ناشناخته FastTrack را خودکار تغییر نمی‌دهد."
+          >
+            Step 5: verify the complete state below, stop ongoing trigger pings,
+            test the single pilot host with new sessions and confirm internal
+            access in all states. Commit Safe Mode only after validation. The
+            full block does not provision a VPN or automatically modify an
+            unknown FastTrack ruleset.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall address-list print where list=&quot;PBR-ACTIVE&quot;
+/ip firewall address-list print where list=&quot;PBR-REMOVE&quot;
+/ip firewall mangle print stats
+/routing table print
+/ip route print detail where routing-table=&quot;VPN-ROUTE&quot;
+/ip firewall connection print where src-address~&quot;^192[.]168[.]10[.]50(:|$)&quot;
+/system scheduler print detail where name=&quot;PBR-Remove-Scheduler&quot;
+/log print where message~&quot;PBR&quot;</code></pre>
+        </section>
+        <section id="conclusion">
+          <h2 data-en="Conclusion" data-fa="جمع‌بندی">Conclusion</h2>
+          <p
+            data-en="Two ICMP destinations provide a simple per-source control surface for RouterOS v7 policy routing. The operational requirements are precise local exclusions, a reachable custom table, a monitored removal worker, stable FastTrack exclusions and correct return routing/NAT. Treat route toggles as path changes for fresh traffic, not as a promise that existing sessions will migrate intact."
+            data-fa="دو مقصد ICMP یک روش کنترل ساده بر اساس IP مبدأ برای Policy Routing در RouterOS v7 فراهم می‌کنند. الزامات عملیاتی شامل استثنای دقیق شبکه داخلی، Table اختصاصی قابل دسترس، Worker حذف پایش‌شده، استثنای ثابت FastTrack و Routing برگشت/NAT صحیح است. تغییر Route را تغییر مسیر ترافیک تازه بدانید، نه تضمین مهاجرت سالم Session موجود."
+          >
+            Two ICMP destinations provide a simple per-source control surface
+            for RouterOS v7 policy routing. The operational requirements are
+            precise local exclusions, a reachable custom table, a monitored
+            removal worker, stable FastTrack exclusions and correct return
+            routing/NAT. Treat route toggles as path changes for fresh traffic,
+            not as a promise that existing sessions will migrate intact.
+          </p>
+        </section>
+        <section id="faq">
+          <h2 data-en="FAQ" data-fa="پرسش‌های متداول">FAQ</h2>
+          <div class="article-faq-item">
+            <h3
+              data-en="Can MikroTik remove an IP from an address list directly from a firewall rule?"
+              data-fa="آیا MikroTik می‌تواند IP را مستقیماً با Firewall Rule از Address List حذف کند؟"
+            >
+              Can MikroTik remove an IP from an address list directly from a
+              firewall rule?
+            </h3>
+            <p
+              data-en="No. The v7 firewall action set has addition actions but no source-address removal action. Queue a request and let a script remove the exact host entry."
+              data-fa="خیر. Actionهای Firewall در v7 گزینه افزودن دارند، اما Action حذف مبدأ ندارند. درخواست را در صف قرار دهید تا Script همان Host Entry را حذف کند."
+            >
+              No. The v7 firewall action set has addition actions but no
+              source-address removal action. Queue a request and let a script
+              remove the exact host entry.
+            </p>
+          </div>
+          <div class="article-faq-item">
+            <h3
+              data-en="Does this work with WireGuard?"
+              data-fa="آیا این روش با WireGuard کار می‌کند؟"
+            >
+              Does this work with WireGuard?
+            </h3>
+            <p
+              data-en="Yes, with a validated WireGuard route, peer allowed-address coverage, endpoint underlay reachability and return routing or appropriate NAT. The L2TP gateway example must be adapted to that topology."
+              data-fa="بله؛ Route معتبر WireGuard، پوشش allowed-address مربوط به Peer، دسترسی Endpoint از Underlay و Routing برگشت یا NAT مناسب لازم است. Gateway مثال L2TP باید با آن توپولوژی تطبیق داده شود."
+            >
+              Yes, with a validated WireGuard route, peer allowed-address
+              coverage, endpoint underlay reachability and return routing or
+              appropriate NAT. The L2TP gateway example must be adapted to that
+              topology.
+            </p>
+          </div>
+          <div class="article-faq-item">
+            <h3
+              data-en="Can I use a second ISP instead of a VPN?"
+              data-fa="آیا می‌توان به‌جای VPN از ISP دوم استفاده کرد؟"
+            >
+              Can I use a second ISP instead of a VPN?
+            </h3>
+            <p
+              data-en="Yes. Use the second ISP next hop in VPN-ROUTE, resolve it through a reachable underlay such as main, and review NAT and return-path symmetry. The table name is only an example label."
+              data-fa="بله. Next Hop مربوط به ISP دوم را در VPN-ROUTE قرار دهید، آن را از Underlay قابل دسترس مثل main Resolve و NAT و تقارن مسیر برگشت را بررسی کنید. نام Table صرفاً برچسب مثال است."
+            >
+              Yes. Use the second ISP next hop in VPN-ROUTE, resolve it through
+              a reachable underlay such as main, and review NAT and return-path
+              symmetry. The table name is only an example label.
+            </p>
+          </div>
+          <div class="article-faq-item">
+            <h3
+              data-en="Does FastTrack affect policy routing?"
+              data-fa="آیا FastTrack روی Policy Routing اثر دارد؟"
+            >
+              Does FastTrack affect policy routing?
+            </h3>
+            <p
+              data-en="Yes. Non-main routing must be excluded in both directions. Use a stable trigger-eligible population for this scenario; active-list exclusions alone do not fix flows FastTracked before enable."
+              data-fa="بله. Routing خارج از main باید در هر دو جهت مستثنا شود. در این سناریو جمعیت ثابت مجاز Trigger را مستثنا کنید؛ استثنای List فعال به‌تنهایی Flowهای FastTrackشده قبل از Enable را اصلاح نمی‌کند."
+            >
+              Yes. Non-main routing must be excluded in both directions. Use a
+              stable trigger-eligible population for this scenario; active-list
+              exclusions alone do not fix flows FastTracked before enable.
+            </p>
+          </div>
+          <div class="article-faq-item">
+            <h3
+              data-en="Will existing connections immediately switch routes?"
+              data-fa="آیا اتصال‌های موجود بلافاصله تغییر مسیر می‌دهند؟"
+            >
+              Will existing connections immediately switch routes?
+            </h3>
+            <p
+              data-en="Do not expect seamless migration. Packets may receive a new routing mark while the previous NAT mapping remains, or FastTrack/other policy state may retain the earlier path. Test fresh sessions first."
+              data-fa="انتظار مهاجرت بدون اختلال نداشته باشید. Packet ممکن است Mark جدید بگیرد ولی Mapping قبلی NAT باقی بماند، یا FastTrack/Policy دیگر مسیر قبلی را حفظ کند. ابتدا Session تازه را تست کنید."
+            >
+              Do not expect seamless migration. Packets may receive a new
+              routing mark while the previous NAT mapping remains, or
+              FastTrack/other policy state may retain the earlier path. Test
+              fresh sessions first.
+            </p>
+          </div>
+          <div class="article-faq-item">
+            <h3
+              data-en="Can multiple clients use the same trigger?"
+              data-fa="آیا چند Client می‌توانند از یک Trigger استفاده کنند؟"
+            >
+              Can multiple clients use the same trigger?
+            </h3>
+            <p
+              data-en="Yes. Each echo adds its source independently. Clients sharing an upstream NAT identity will appear as one source to this router, so this mechanism cannot distinguish them."
+              data-fa="بله. هر Echo مبدأ خود را مستقل اضافه می‌کند. Clientهای دارای NAT مشترک در بالادست، برای این روتر یک مبدأ دیده می‌شوند و این مکانیزم آن‌ها را تفکیک نمی‌کند."
+            >
+              Yes. Each echo adds its source independently. Clients sharing an
+              upstream NAT identity will appear as one source to this router, so
+              this mechanism cannot distinguish them.
+            </p>
+          </div>
+          <div class="article-faq-item">
+            <h3
+              data-en="Can I automatically expire PBR access after a specific time?"
+              data-fa="آیا می‌توان دسترسی PBR را بعد از زمان مشخص خودکار منقضی کرد؟"
+            >
+              Can I automatically expire PBR access after a specific time?
+            </h3>
+            <p
+              data-en="Yes. Replace none-dynamic on the enable rule with a finite value such as 30m. Each new matching trigger refreshes the timeout. Verify this on the target release; a strict nonrenewable entitlement needs separate state. Keep stable FastTrack exclusions after expiry and reconnect sessions as needed."
+              data-fa="بله. none-dynamic در Rule فعال‌سازی را با زمان محدود مثل 30m جایگزین کنید. هر Trigger منطبق جدید Timeout را تمدید می‌کند. این رفتار را روی Release هدف بررسی کنید؛ دسترسی با پایان قطعی غیرقابل تمدید به State جدا نیاز دارد. استثنای ثابت FastTrack را پس از انقضا حفظ و در صورت نیاز Sessionها را دوباره برقرار کنید."
+            >
+              Yes. Replace none-dynamic on the enable rule with a finite value
+              such as 30m. Each new matching trigger refreshes the timeout.
+              Verify this on the target release; a strict nonrenewable
+              entitlement needs separate state. Keep stable FastTrack exclusions
+              after expiry and reconnect sessions as needed.
+            </p>
+          </div>
+        </section>
+      </article>
+    </main>
+  </body>
+</html>

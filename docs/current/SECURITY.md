@@ -1,8 +1,10 @@
 # Security — Meet AJ
 
-**Authority:** AUTHORITATIVE security-controls document.  
-**Verified:** 2026-09-17 against middleware, the contact stack, Filament policies, `.env.example` and `.env.production.example`.  
-**No penetration test was performed.**  
+> Maintenance review: 2026-10-06. Eight policy files exist, including homepage content and testimonials. Selected MSI/Bash files are public downloads; the MikroTik source ZIP remains outside the document root. Environment recovery preserves existing APP_KEY. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
+**Authority:** AUTHORITATIVE security-controls document.
+**Verified:** 2026-09-17 against middleware, the contact stack, Filament policies, `.env.example` and `.env.production.example`.
+**No penetration test was performed.**
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md)
 
 ## CSRF
@@ -49,6 +51,7 @@ Standard Laravel hasher (bcrypt/argon as configured). No plaintext passwords in 
 | `X-Frame-Options` | `SAMEORIGIN` |
 | `Strict-Transport-Security` | `max-age=31536000; includeSubDomains` **only if** `$request->secure()` |
 | Cache-Control | `no-store` on `/admin`, `/livewire`, `/forms`, and all POST |
+| Article caching | `private, max-age=0, must-revalidate`; HTML depends on the language preference cookie |
 
 Not a full CSP. Clickjacking protection is SAMEORIGIN, not DENY.
 

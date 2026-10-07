@@ -11,3 +11,7 @@ Master applies. Extra rules:
 - Search toolbar: DNA inputs + primary search button.
 - Testimonials: one quote surface (allowed card).
 - Contact: one form surface; method list is typography, not glass tiles.
+
+## Maintenance alignment — 2026-10-06
+
+The current public cascade ends with `resources/assets/css/glass-system.css` (version 18 in page links). The admin source `resources/css/filament-admin.css` includes a glass overlay while retaining white/red branding. Earlier visual measurements remain dated evidence. See [the maintained design guide](../../../current/DESIGN-SYSTEM.md).

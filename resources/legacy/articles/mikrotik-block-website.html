@@ -1,18 +1,16 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-article-language="en">
   <head>
-    <title>
-      Complete Guide to Blocking Websites in MikroTik RouterOS - Meet AJ
-    </title>
+    <title>Block Domains on MikroTik: DNS and SNI Limits | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      content="راهنمای کامل مسدودسازی وب‌سایت‌ها در میکروتیک RouterOS شامل روش‌های مختلف بلاک کردن، نکات امنیتی و رفع اشکال"
       name="description"
+      content="Configure NXDOMAIN and tls-host rules, test DNS and TLS independently, and assess DoH, QUIC and ECH bypass limits."
     />
     <meta
-      content="MikroTik, RouterOS, Website Blocking, Firewall, Content Filter, Layer7, Address List, Network Security, آموزش میکروتیک, بلاک سایت"
       name="keywords"
+      content="MikroTik Web Access Policy, mikrotik block website, infrastructure operations, production operations, troubleshooting"
     />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
@@ -30,20 +28,20 @@
     <meta name="msapplication-navbutton-color" content="#d04338" />
     <meta
       name="msapplication-TileImage"
-      content="../assets/img/apple-touch-icon.png"
+      content="../assets/img/icons/apple-touch-icon.png"
     />
     <meta property="og:type" content="article" />
     <meta
       property="og:title"
-      content="آموزش جامع بلاک کردن سایت در میکروتیک RouterOS"
+      content="Block Domains on MikroTik: DNS and SNI Limits"
     />
     <meta
       property="og:description"
-      content="راهنمای کامل مسدودسازی وب‌سایت‌ها در میکروتیک RouterOS شامل روش‌های مختلف بلاک کردن، نکات امنیتی و رفع اشکال"
+      content="Configure NXDOMAIN and tls-host rules, test DNS and TLS independently, and assess DoH, QUIC and ECH bypass limits."
     />
     <meta
       property="og:image"
-      content="../assets/img/portfolio/mikrotik-1.png"
+      content="../assets/img/articles/banners/mikrotik-block-website.png"
     />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -54,21 +52,21 @@
     />
     <meta
       property="og:url"
-      content="https://meetaj.ir/articles/mikrotik-block-website.html"
+      content="https://meetaj.ir/articles/mikrotik-block-website"
     />
     <meta property="og:site_name" content="Meet AJ - Technical Articles" />
     <meta property="twitter:card" content="summary_large_image" />
     <meta
       property="twitter:title"
-      content="آموزش جامع بلاک کردن سایت در میکروتیک RouterOS"
+      content="Block Domains on MikroTik: DNS and SNI Limits"
     />
     <meta
       property="twitter:description"
-      content="راهنمای کامل مسدودسازی وب‌سایت‌ها در میکروتیک RouterOS شامل روش‌های مختلف بلاک کردن، نکات امنیتی و رفع اشکال"
+      content="Configure NXDOMAIN and tls-host rules, test DNS and TLS independently, and assess DoH, QUIC and ECH bypass limits."
     />
     <meta
       property="twitter:image"
-      content="../assets/img/portfolio/mikrotik-1.png"
+      content="../assets/img/articles/banners/mikrotik-block-website.png"
     />
     <meta
       property="twitter:image:alt"
@@ -92,88 +90,10 @@
     <meta name="apple-mobile-web-app-title" content="Meet AJ" />
     <link
       rel="canonical"
-      href="https://meetaj.ir/articles/mikrotik-block-website.html"
+      href="https://meetaj.ir/articles/mikrotik-block-website"
     />
-    <link
-      rel="alternate"
-      hreflang="fa"
-      href="https://meetaj.ir/articles/mikrotik-block-website.html"
-    />
-    <link
-      rel="alternate"
-      hreflang="en"
-      href="https://meetaj.ir/articles/mikrotik-block-website.html"
-    />
-    <link
-      rel="alternate"
-      hreflang="x-default"
-      href="https://meetaj.ir/articles/mikrotik-block-website.html"
-    />
-    <link href="../assets/img/favicon.png" rel="icon" />
-    <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "آموزش جامع بلاک کردن سایت در میکروتیک RouterOS",
-        "description": "راهنمای کامل مسدودسازی وب‌سایت‌ها در میکروتیک RouterOS شامل روش‌های مختلف بلاک کردن، نکات امنیتی و رفع اشکال",
-        "image": "../assets/img/my-profile-img.jpg",
-        "author": {
-          "@type": "Person",
-          "name": "AmirHossein Jalalian",
-          "url": "https://meetaj.ir"
-        },
-        "publisher": {
-          "@type": "Organization",
-          "name": "Meet AJ",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "../assets/img/logo.png"
-          }
-        },
-        "datePublished": "2024-01-15T00:00:00+03:30",
-        "dateModified": "2024-01-15T00:00:00+03:30",
-        "mainEntityOfPage": {
-          "@type": "WebPage",
-          "@id": "https://meetaj.ir/articles/mikrotik-block-website.html"
-        },
-        "articleSection": "Network Security",
-        "keywords": [
-          "Website Blocking",
-          "MikroTik",
-          "RouterOS",
-          "Firewall",
-          "Network Security",
-          "Content Filter",
-          "Layer7",
-          "Address List",
-          "آموزش میکروتیک",
-          "بلاک سایت"
-        ],
-        "inLanguage": ["fa", "en"],
-        "wordCount": "3000",
-        "timeRequired": "PT20M",
-        "educationalLevel": "Expert",
-        "learningResourceType": "Tutorial",
-        "about": {
-          "@type": "Thing",
-          "name": "MikroTik RouterOS",
-          "description": "Network operating system for MikroTik routers"
-        },
-        "mentions": [
-          {
-            "@type": "Thing",
-            "name": "Website Blocking",
-            "description": "Network content filtering and website blocking"
-          },
-          {
-            "@type": "Thing",
-            "name": "Network Security",
-            "description": "Security measures for computer networks"
-          }
-        ]
-      }
-    </script>
+    <link href="../assets/img/icons/favicon.png" rel="icon" />
+    <link href="../assets/img/icons/apple-touch-icon.png" rel="apple-touch-icon" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -207,13 +127,92 @@
       rel="stylesheet"
       disabled
     />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Block Domains on MikroTik: DNS and SNI Limits",
+        "description": "Configure NXDOMAIN and tls-host rules, test DNS and TLS independently, and assess DoH, QUIC and ECH bypass limits.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/mikrotik-block-website",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/mikrotik-block-website"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does tls-host block all HTTPS?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. ECH, QUIC, fragmentation and VPNs limit its visibility."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does one destination IP identify one website?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. A CDN can share an IP across multiple services."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "مسدودسازی دامنه در MikroTik و محدودیت DNS و SNI",
+          "meta_title": "مسدودسازی دامنه در MikroTik و محدودیت DNS و SNI | Meet AJ",
+          "description": "تنظیم NXDOMAIN و tls-host، آزمون مستقل DNS و TLS و بررسی محدودیت DoH، QUIC و ECH.",
+          "keywords": [
+            "مسدودسازی دامنه در MikroTik و محدودیت DNS و SNI",
+            "عیب‌یابی",
+            "بازیابی",
+            "mikrotik block website"
+          ],
+          "faq": [
+            [
+              "آیا tls-host همه HTTPS را مسدود می‌کند؟",
+              "خیر. ECH، QUIC، fragmentation و VPN محدودیت ایجاد می‌کنند."
+            ],
+            [
+              "آیا یک IP مقصد برابر یک سایت است؟",
+              "خیر. CDN می‌تواند یک IP را بین چندین سرویس مشترک کند."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Block Domains on MikroTik: DNS and SNI Limits",
+          "meta_title": "Block Domains on MikroTik: DNS and SNI Limits | Meet AJ",
+          "description": "Configure NXDOMAIN and tls-host rules, test DNS and TLS independently, and assess DoH, QUIC and ECH bypass limits.",
+          "keywords": [
+            "Block Domains on MikroTik: DNS and SNI Limits",
+            "mikrotik block website",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Does tls-host block all HTTPS?",
+              "No. ECH, QUIC, fragmentation and VPNs limit its visibility."
+            ],
+            [
+              "Does one destination IP identify one website?",
+              "No. A CDN can share an IP across multiple services."
+            ]
+          ]
+        }
+      }
+    </script>
   </head>
   <body class="article-page theme-mikrotik">
-    <a href="#main-content" class="skip-link sr-only sr-only-focusable"
-      ><span data-en="Skip to main content" data-fa="رفتن به محتوای اصلی"
-        >Skip to main content</span
-      ></a
-    >
     <button
       id="menu-toggle"
       class="menu-toggle d-xl-none"
@@ -231,7 +230,7 @@
       =============================================== -->
       <div class="profile-img">
         <img
-          src="../assets/img/my-profile-img.jpg"
+          src="../assets/img/avatars/profile/my-profile-img.jpg"
           loading="lazy"
           alt="AmirHossein Jalalian Profile Picture"
           class="img-fluid rounded-circle"
@@ -246,7 +245,7 @@
       >
         <!-- Site Logo & Name -->
         <a href="../index.html#hero" class="logo d-flex align-items-center">
-          <img src="../assets/img/logo.png" alt="Aj-Network" loading="lazy" />
+          <img src="../assets/img/brand/logo.png" alt="Aj-Network" loading="lazy" />
           <p class="sitename">Meet AJ</p>
         </a>
       </div>
@@ -362,68 +361,90 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#introduction"
-              ><i class="bi bi-info-circle navicon" aria-hidden="true"></i
-              ><span data-en="Introduction" data-fa="مقدمه">Introduction</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#blocking-methods"
-              ><i class="bi bi-slash-circle navicon" aria-hidden="true"></i
+            <a href="#enterprise-intro"
               ><span
-                data-en="1. Website Blocking Methods in MikroTik"
-                data-fa="1. روش‌های بلاک کردن سایت در میکروتیک"
-                >1. Website Blocking Methods in MikroTik</span
+                data-fa="مسدودسازی دامنه با چه اطلاعاتی؟"
+                data-en="What domain filtering sees"
+                >What domain filtering sees</span
               ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#implementation-steps"
-              ><i class="bi bi-list-check navicon" aria-hidden="true"></i
+            <a href="#enterprise-architecture"
               ><span
-                data-en="2. Step-by-Step Implementation"
-                data-fa="2. پیاده‌سازی گام‌به‌گام"
-                >2. Step-by-Step Implementation</span
+                data-fa="DNS Policy با SNI Filtering فرق دارد"
+                data-en="DNS policy and SNI filtering differ"
+                >DNS policy and SNI filtering differ</span
               ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#management-tips"
-              ><i class="bi bi-gear navicon" aria-hidden="true"></i
-              ><span data-en="3. Management Tips" data-fa="3. نکات مدیریتی"
-                >3. Management Tips</span
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="Resolver و نسخه RouterOS"
+                data-en="Resolver and RouterOS requirements"
+                >Resolver and RouterOS requirements</span
               ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#troubleshooting"
-              ><i class="bi bi-wrench-adjustable navicon" aria-hidden="true"></i
-              ><span data-en="4. Troubleshooting" data-fa="4. رفع اشکال"
-                >4. Troubleshooting</span
+            <a href="#enterprise-security"
+              ><span
+                data-fa="جلوگیری از Open Resolver و قطع CDN"
+                data-en="Avoid open recursion and CDN collateral damage"
+                >Avoid open recursion and CDN collateral damage</span
               ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#security-tips"
-              ><i class="bi bi-shield-check navicon" aria-hidden="true"></i
-              ><span data-en="5. Security Tips" data-fa="5. نکات امنیتی"
-                >5. Security Tips</span
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="تنظیم دامنه و آزمون جداگانه DNS و TLS"
+                data-en="Configure the domain and test DNS/TLS separately"
+                >Configure the domain and test DNS/TLS separately</span
               ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#conclusion"
-              ><i class="bi bi-flag navicon" aria-hidden="true"></i
-              ><span data-en="Conclusion" data-fa="جمع‌بندی">Conclusion</span></a
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="سایت هنوز باز می‌شود"
+                data-en="When the site still opens"
+                >When the site still opens</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="سنجش اثر Policy بر کاربران"
+                data-en="Measure user impact"
+                >Measure user impact</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="برگشت Policy و Cache"
+                data-en="Undo policy and handle caches"
+                >Undo policy and handle caches</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
             <a href="#faq"
-              ><i class="bi bi-question-circle navicon" aria-hidden="true"></i
               ><span
-                data-en="6. Frequently Asked Questions"
-                data-fa="6. پرسش‌های متداول"
-                >6. Frequently Asked Questions</span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
               ></a
             >
           </li>
@@ -455,23 +476,24 @@
               </div>
               <h1
                 class="article-title hero-title"
-                data-en="Website Blocking on MikroTik"
-                data-fa="مسدودسازی وب‌سایت در MikroTik"
+                data-fa="مسدودسازی دامنه در MikroTik و محدودیت DNS و SNI"
+                data-en="Block Domains on MikroTik: DNS and SNI Limits"
               >
-                Website Blocking on MikroTik
+                Block Domains on MikroTik: DNS and SNI Limits
               </h1>
               <p
                 class="article-excerpt hero-subtitle"
-                data-en="Practical website and domain blocking in RouterOS"
-                data-fa="راهنمای عملی مسدودسازی وب‌سایت و دامنه در RouterOS"
+                data-fa="تنظیم NXDOMAIN و tls-host، آزمون مستقل DNS و TLS و بررسی محدودیت DoH، QUIC و ECH."
+                data-en="Configure NXDOMAIN and tls-host rules, test DNS and TLS independently, and assess DoH, QUIC and ECH bypass limits."
               >
-                Practical website and domain blocking in RouterOS
+                Configure NXDOMAIN and tls-host rules, test DNS and TLS
+                independently, and assess DoH, QUIC and ECH bypass limits.
               </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
                     class="article-hero-thumbnail"
-                    src="../assets/img/portfolio/mikrotik-1.png"
+                    src="../assets/img/articles/banners/mikrotik-block-website.png"
                     alt="Website Blocking on MikroTik"
                   />
                   <div class="banner-content">
@@ -515,1697 +537,316 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body">
-                <!-- Introduction -->
-                <section id="introduction" class="article-section">
-                  <h2 data-en="Introduction" data-fa="مقدمه">مقدمه</h2>
-                  <div class="intro-content">
-                    <p
-                      data-en="In today's digital world, network administrators often need to control and restrict access to specific websites or domains for various reasons including productivity, security, bandwidth management, and compliance with organizational policies. MikroTik RouterOS provides powerful and flexible firewall capabilities that allow administrators to implement comprehensive website blocking solutions."
-                      data-fa="در دنیای دیجیتال امروز، مدیران شبکه اغلب نیاز دارند دسترسی به سایت‌ها یا دامنه‌های خاص را کنترل و محدود کنند. این کار ممکن است به دلایل مختلفی از جمله افزایش بهره‌وری، امنیت، مدیریت پهنای باند و رعایت سیاست‌های سازمانی انجام شود. MikroTik RouterOS ابزارهای قدرتمند و انعطاف‌پذیر فایروال ارائه می‌دهد که به مدیران امکان پیاده‌سازی راهکارهای جامع بلاک کردن سایت را می‌دهد."
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="مسدودسازی دامنه با چه اطلاعاتی؟"
+                      data-en="What domain filtering sees"
                     >
-                      در دنیای دیجیتال امروز، مدیران شبکه اغلب نیاز دارند دسترسی
-                      به سایت‌ها یا دامنه‌های خاص را کنترل و محدود کنند. این کار
-                      ممکن است به دلایل مختلفی از جمله افزایش بهره‌وری، امنیت،
-                      مدیریت پهنای باند و رعایت سیاست‌های سازمانی انجام شود.
-                      MikroTik RouterOS ابزارهای قدرتمند و انعطاف‌پذیر فایروال
-                      ارائه می‌دهد که به مدیران امکان پیاده‌سازی راهکارهای جامع
-                      بلاک کردن سایت را می‌دهد.
-                    </p>
-
-                    <div class="article-callout article-callout--info">
-                      <h3
-                        class="article-callout-title"
-                        data-en="Why Block Websites?"
-                        data-fa="چرا سایت‌ها را بلاک کنیم؟"
-                      >
-                        چرا سایت‌ها را بلاک کنیم؟
-                      </h3>
-                      <ul>
-                        <li
-                          data-en="Increase employee productivity"
-                          data-fa="افزایش بهره‌وری کارمندان"
-                        >
-                          افزایش بهره‌وری کارمندان
-                        </li>
-                        <li
-                          data-en="Protect against malicious websites"
-                          data-fa="محافظت در برابر سایت‌های مخرب"
-                        >
-                          محافظت در برابر سایت‌های مخرب
-                        </li>
-                        <li
-                          data-en="Manage bandwidth usage"
-                          data-fa="مدیریت مصرف پهنای باند"
-                        >
-                          مدیریت مصرف پهنای باند
-                        </li>
-                        <li
-                          data-en="Comply with organizational policies"
-                          data-fa="رعایت سیاست‌های سازمانی"
-                        >
-                          رعایت سیاست‌های سازمانی
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </section>
-
-                <!-- Table of Contents -->
-                <section id="article-toc" class="article-section">
-                  <h2 data-en="Table of Contents" data-fa="فهرست مطالب">
-                    Table of Contents
-                  </h2>
-                  <nav class="article-toc">
-                    <ul>
-                      <li>
-                        <a
-                          href="#blocking-methods"
-                          data-en="1. Website Blocking Methods in MikroTik"
-                          data-fa="1. روش‌های بلاک کردن سایت در میکروتیک"
-                          >1. روش‌های بلاک کردن سایت در میکروتیک</a
-                        >
-                      </li>
-                      <li>
-                        <a
-                          href="#implementation-steps"
-                          data-en="2. Implementation Steps"
-                          data-fa="2. مراحل پیاده‌سازی"
-                          >2. مراحل پیاده‌سازی</a
-                        >
-                      </li>
-                      <li>
-                        <a
-                          href="#management-tips"
-                          data-en="3. Management Tips"
-                          data-fa="3. نکات مدیریتی"
-                          >3. نکات مدیریتی</a
-                        >
-                      </li>
-                      <li>
-                        <a
-                          href="#troubleshooting"
-                          data-en="4. Troubleshooting"
-                          data-fa="4. رفع اشکال"
-                          >4. رفع اشکال</a
-                        >
-                      </li>
-                      <li>
-                        <a
-                          href="#security-tips"
-                          data-en="5. Security Tips"
-                          data-fa="5. نکات امنیتی"
-                          >5. نکات امنیتی</a
-                        >
-                      </li>
-                      <li>
-                        <a
-                          href="#faq"
-                          data-en="6. Frequently Asked Questions"
-                          data-fa="6. پرسش‌های متداول"
-                          >6. پرسش‌های متداول</a
-                        >
-                      </li>
-                    </ul>
-                  </nav>
-                </section>
-
-                <!-- Blocking Methods -->
-                <section
-                  id="legacy-blocking-methods"
-                  class="article-section"
-                  hidden
-                >
-                  <h2
-                    data-en="1. Website Blocking Methods in MikroTik"
-                    data-fa="1. روش‌های بلاک کردن سایت در میکروتیک"
-                  >
-                    1. روش‌های بلاک کردن سایت در میکروتیک
-                  </h2>
-
-                  <div class="article-grid">
-                    <p
-                      data-en="MikroTik RouterOS offers several methods for blocking websites, each with its own advantages and use cases. Understanding these methods will help you choose the most appropriate solution for your specific requirements."
-                      data-fa="MikroTik RouterOS چندین روش برای بلاک کردن سایت‌ها ارائه می‌دهد که هر کدام مزایا و موارد استفاده خاص خود را دارند. درک این روش‌ها به شما کمک می‌کند تا مناسب‌ترین راهکار را برای نیازهای خاص خود انتخاب کنید."
-                    >
-                      MikroTik RouterOS چندین روش برای بلاک کردن سایت‌ها ارائه
-                      می‌دهد که هر کدام مزایا و موارد استفاده خاص خود را دارند.
-                      درک این روش‌ها به شما کمک می‌کند تا مناسب‌ترین راهکار را
-                      برای نیازهای خاص خود انتخاب کنید.
-                    </p>
-                  </div>
-
-                  <div class="article-table-wrap">
-                    <table class="article-table">
-                      <caption
-                        data-en="Methods Comparison"
-                        data-fa="مقایسه روش‌ها"
-                      >
-                        مقایسه روش‌ها
-                      </caption>
-                      <thead>
-                        <tr>
-                          <th scope="col" data-en="Method" data-fa="روش">
-                            Method
-                          </th>
-                          <th
-                            scope="col"
-                            data-en="Description"
-                            data-fa="توضیحات"
-                          >
-                            Description
-                          </th>
-                          <th scope="col" data-en="Advantage" data-fa="مزیت">
-                            Advantage
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <th scope="row">
-                            <strong
-                              data-en="Content Filtering"
-                              data-fa="فیلتر محتوا"
-                              >فیلتر محتوا</strong
-                            >
-                          </th>
-                          <td>
-                            <span
-                              data-en="Simple domain blocking"
-                              data-fa="بلاک کردن ساده دامنه"
-                              >بلاک کردن ساده دامنه</span
-                            >
-                          </td>
-                          <td>
-                            <span
-                              data-en="Easy to implement"
-                              data-fa="آسان برای پیاده‌سازی"
-                              >آسان برای پیاده‌سازی</span
-                            >
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">
-                            <strong data-en="IP Blocking" data-fa="بلاک IP"
-                              >بلاک IP</strong
-                            >
-                          </th>
-                          <td>
-                            <span
-                              data-en="Block by IP address"
-                              data-fa="بلاک بر اساس آدرس IP"
-                              >بلاک بر اساس آدرس IP</span
-                            >
-                          </td>
-                          <td>
-                            <span data-en="More effective" data-fa="موثرتر"
-                              >موثرتر</span
-                            >
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">
-                            <strong
-                              data-en="Layer7 Filtering"
-                              data-fa="فیلتر Layer7"
-                              >فیلتر Layer7</strong
-                            >
-                          </th>
-                          <td>
-                            <span
-                              data-en="Advanced pattern matching"
-                              data-fa="تطبیق الگوی پیشرفته"
-                              >تطبیق الگوی پیشرفته</span
-                            >
-                          </td>
-                          <td>
-                            <span
-                              data-en="Very flexible"
-                              data-fa="بسیار انعطاف‌پذیر"
-                              >بسیار انعطاف‌پذیر</span
-                            >
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">
-                            <strong
-                              data-en="Address Lists"
-                              data-fa="لیست آدرس‌ها"
-                              >لیست آدرس‌ها</strong
-                            >
-                          </th>
-                          <td>
-                            <span
-                              data-en="Centralized management"
-                              data-fa="مدیریت متمرکز"
-                              >مدیریت متمرکز</span
-                            >
-                          </td>
-                          <td>
-                            <span
-                              data-en="Easy management"
-                              data-fa="مدیریت آسان"
-                              >مدیریت آسان</span
-                            >
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </section>
-
-                <!-- Current RouterOS approaches -->
-                <section id="blocking-methods" class="article-section">
-                  <h2
-                    data-en="1. Website Blocking Approaches in MikroTik"
-                    data-fa="1. روش‌های مسدودسازی وب‌سایت در MikroTik"
-                  >
-                    1. Website Blocking Approaches in MikroTik
-                  </h2>
-                  <p
-                    data-en="Modern RouterOS policies should use a method that matches the traffic actually visible to the router. For HTTPS, the useful hostname signal is TLS SNI via tls-host; DNS policy is effective only while clients use the router's DNS; IP address lists contain IP addresses and prefixes, not wildcard domain names. Layer7 is kept here only to explain why it should not be used as a general website-blocking method."
-                    data-fa="در RouterOS جدید، روش مسدودسازی باید با اطلاعاتی انتخاب شود که واقعاً برای روتر قابل مشاهده است. برای HTTPS، نام میزبان از TLS SNI و matcherِ tls-host قابل استفاده است؛ سیاست DNS فقط زمانی مؤثر است که کلاینت‌ها از DNS روتر استفاده کنند؛ و Address List فقط آدرس IP و prefix نگه می‌دارد، نه wildcard دامنه. Layer7 در این مقاله فقط برای توضیح محدودیت‌هایش آمده و روش عمومی مسدودسازی وب‌سایت نیست."
-                  >
-                    Modern RouterOS policies should use a method that matches
-                    the traffic actually visible to the router. For HTTPS, the
-                    useful hostname signal is TLS SNI via tls-host; DNS policy
-                    is effective only while clients use the router's DNS; IP
-                    address lists contain IP addresses and prefixes, not
-                    wildcard domain names. Layer7 is kept here only to explain
-                    why it should not be used as a general website-blocking
-                    method.
-                  </p>
-                  <div class="article-callout article-callout--warning">
-                    <h3
-                      class="article-callout-title"
-                      data-en="Important scope"
-                      data-fa="محدودهٔ مهم"
-                    >
-                      Important scope
-                    </h3>
-                    <p
-                      data-en="No router-only rule can guarantee URL filtering for every modern application. QUIC uses UDP/443 and does not use the TCP TLS flow matched by tls-host. Encrypted DNS (DoH/DoT), VPNs, proxies, changing CDN addresses, and encrypted client hello can also bypass a simple policy."
-                      data-fa="هیچ Rule صرفاً روی روتر نمی‌تواند برای همهٔ برنامه‌های امروزی فیلتر URL قطعی ایجاد کند. QUIC از UDP/443 استفاده می‌کند و در جریان TCP مورد بررسی tls-host نیست. DNS رمزگذاری‌شده (DoH/DoT)، VPN، proxy، تغییر مداوم آدرس‌های CDN و Client Hello رمزگذاری‌شده نیز می‌توانند یک سیاست ساده را دور بزنند."
-                    >
-                      No router-only rule can guarantee URL filtering for every
-                      modern application. QUIC uses UDP/443 and does not use the
-                      TCP TLS flow matched by tls-host. Encrypted DNS (DoH/DoT),
-                      VPNs, proxies, changing CDN addresses, and encrypted
-                      client hello can also bypass a simple policy.
-                    </p>
-                  </div>
-                </section>
-
-                <!-- Implementation Steps -->
-                <section id="implementation-steps" class="article-section">
-                  <h2
-                    data-en="2. Step-by-Step Implementation"
-                    data-fa="2. پیاده‌سازی گام‌به‌گام"
-                  >
-                    2. پیاده‌سازی گام‌به‌گام
-                  </h2>
-
-                  <div class="implementation-intro">
-                    <p
-                      data-en="Now let's dive into the practical implementation of each method. We'll provide detailed step-by-step instructions with actual MikroTik RouterOS commands that you can copy and use directly."
-                      data-fa="حالا بیایید به پیاده‌سازی عملی هر روش بپردازیم. ما دستورالعمل‌های گام‌به‌گام دقیق با دستورات واقعی MikroTik RouterOS ارائه می‌دهیم که می‌توانید مستقیماً کپی و استفاده کنید."
-                    >
-                      حالا بیایید به پیاده‌سازی عملی هر روش بپردازیم. ما
-                      دستورالعمل‌های گام‌به‌گام دقیق با دستورات واقعی MikroTik
-                      RouterOS ارائه می‌دهیم که می‌توانید مستقیماً کپی و استفاده
-                      کنید.
-                    </p>
-                  </div>
-
-                  <div class="article-callout article-callout--info">
-                    <h3
-                      class="article-callout-title"
-                      data-en="Prerequisites"
-                      data-fa="پیش‌نیازها"
-                    >
-                      پیش‌نیازها
-                    </h3>
-                    <ul>
-                      <li
-                        data-en="Access to MikroTik RouterOS (WinBox or SSH)"
-                        data-fa="دسترسی به MikroTik RouterOS (WinBox یا SSH)"
-                      >
-                        دسترسی به MikroTik RouterOS (WinBox یا SSH)
-                      </li>
-                      <li
-                        data-en="Admin privileges on the router"
-                        data-fa="دسترسی مدیر روی روتر"
-                      >
-                        دسترسی مدیر روی روتر
-                      </li>
-                      <li
-                        data-en="Basic knowledge of MikroTik RouterOS"
-                        data-fa="دانش پایه MikroTik RouterOS"
-                      >
-                        دانش پایه MikroTik RouterOS
-                      </li>
-                      <li
-                        data-en="List of websites/domains to block"
-                        data-fa="لیست سایت‌ها/دامنه‌های مورد نظر برای بلاک"
-                      >
-                        لیست سایت‌ها/دامنه‌های مورد نظر برای بلاک
-                      </li>
-                    </ul>
-                  </div>
-                </section>
-
-                <!-- Management Tips -->
-                <section
-                  id="legacy-management-tips"
-                  class="article-section"
-                  hidden
-                >
-                  <h2 data-en="3. Management Tips" data-fa="3. نکات مدیریتی">
-                    3. نکات مدیریتی
-                  </h2>
-
-                  <div class="article-callout article-callout--info">
-                    <h3
-                      class="article-callout-title"
-                      data-en="Important Considerations"
-                      data-fa="ملاحظات مهم"
-                    >
-                      ملاحظات مهم
-                    </h3>
-                    <ul>
-                      <li
-                        data-en="Use wildcard (*) for blocking all subdomains"
-                        data-fa="از wildcard (*) برای بلاک کردن همه subdomainها استفاده کنید"
-                      >
-                        از wildcard (*) برای بلاک کردن همه subdomainها استفاده
-                        کنید
-                      </li>
-                      <li
-                        data-en="VPN users can bypass restrictions"
-                        data-fa="کاربران VPN می‌توانند محدودیت‌ها را دور بزنند"
-                      >
-                        کاربران VPN می‌توانند محدودیت‌ها را دور بزنند
-                      </li>
-                      <li
-                        data-en="Schedule rules for time-based blocking"
-                        data-fa="قوانین زمان‌بندی برای بلاک کردن بر اساس زمان"
-                      >
-                        قوانین زمان‌بندی برای بلاک کردن بر اساس زمان
-                      </li>
-                      <li
-                        data-en="Monitor blocked traffic in logs"
-                        data-fa="مانیتورینگ ترافیک بلاک شده در logها"
-                      >
-                        مانیتورینگ ترافیک بلاک شده در logها
-                      </li>
-                    </ul>
-                  </div>
-                </section>
-
-                <!-- Troubleshooting -->
-                <section
-                  id="legacy-troubleshooting"
-                  class="article-section"
-                  hidden
-                >
-                  <div class="article-section-intro">
-                    <h2 data-en="4. Troubleshooting" data-fa="4. رفع اشکال">
-                      4. رفع اشکال
+                      What domain filtering sees
                     </h2>
                     <p
-                      class="article-section-description"
-                      data-en="Common issues and solutions when blocking websites on MikroTik RouterOS. Follow these troubleshooting steps to resolve problems."
-                      data-fa="مشکلات رایج و راه‌حل‌ها هنگام بلاک کردن سایت‌ها در MikroTik RouterOS. این مراحل عیب‌یابی را دنبال کنید تا مشکلات را حل کنید."
+                      data-fa="برای وب‌سایت HTTPS، روتر معمولاً محتوای درخواست را نمی‌بیند. DNS Policy نام دامنه را در Resolver کنترل می‌کند و tls-host از SNI قابل مشاهده استفاده می‌کند. IP مشترک CDN و نام پنهان‌شده با ECH، این روش‌ها را محدود می‌کنند."
+                      data-en="For HTTPS sites, the router generally cannot read request content. DNS policy controls names at the resolver, while tls-host inspects visible SNI. Shared CDN addresses and names hidden by ECH limit these approaches."
                     >
-                      مشکلات رایج و راه‌حل‌ها هنگام بلاک کردن سایت‌ها در
-                      MikroTik RouterOS. این مراحل عیب‌یابی را دنبال کنید تا
-                      مشکلات را حل کنید.
+                      For HTTPS sites, the router generally cannot read request
+                      content. DNS policy controls names at the resolver, while
+                      tls-host inspects visible SNI. Shared CDN addresses and
+                      names hidden by ECH limit these approaches.
                     </p>
-                  </div>
-
-                  <!-- ===============================================
-                  TROUBLESHOOTING METHODS
-                  ===============================================
-                  Common issues and solutions for website blocking:
-                  - Website still accessible after blocking
-                  - VPN bypassing restrictions
-                  - Performance issues with blocking rules
-                  - DNS cache problems
-                  =============================================== -->
-                  <div class="article-grid">
-                    <div class="article-card article-card--method">
-                      <div class="article-card-icon">
-                        <i class="bi bi-exclamation-triangle"></i>
-                      </div>
-                      <div class="article-card-content">
-                        <h3
-                          class="article-card-title"
-                          data-en="Website Still Accessible"
-                          data-fa="سایت هنوز قابل دسترسی است"
-                        >
-                          سایت هنوز قابل دسترسی است
-                        </h3>
-                        <ul>
-                          <li
-                            data-en="Clear browser cache and DNS cache"
-                            data-fa="کش مرورگر و DNS را پاک کنید"
-                          >
-                            کش مرورگر و DNS را پاک کنید
-                          </li>
-                          <li
-                            data-en="Ensure rule is at the top of firewall list"
-                            data-fa="اطمینان حاصل کنید که قانون در ابتدای لیست فایروال قرار دارد"
-                          >
-                            اطمینان حاصل کنید که قانون در ابتدای لیست فایروال
-                            قرار دارد
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div class="article-card article-card--method">
-                      <div class="article-card-icon">
-                        <i class="bi bi-shield-x"></i>
-                      </div>
-                      <div class="article-card-content">
-                        <h3
-                          class="article-card-title"
-                          data-en="VPN Bypassing Restrictions"
-                          data-fa="VPN محدودیت‌ها را دور می‌زند"
-                        >
-                          VPN محدودیت‌ها را دور می‌زند
-                        </h3>
-                        <ul>
-                          <li
-                            data-en="Block common VPN ports (1194, 500, 4500)"
-                            data-fa="پورت‌های رایج VPN (1194, 500, 4500) را بلاک کنید"
-                          >
-                            پورت‌های رایج VPN (1194, 500, 4500) را بلاک کنید
-                          </li>
-                          <li
-                            data-en="Monitor suspicious traffic patterns"
-                            data-fa="الگوهای ترافیک مشکوک را مانیتور کنید"
-                          >
-                            الگوهای ترافیک مشکوک را مانیتور کنید
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div class="article-card article-card--method">
-                      <div class="article-card-icon">
-                        <i class="bi bi-speedometer2"></i>
-                      </div>
-                      <div class="article-card-content">
-                        <h3
-                          class="article-card-title"
-                          data-en="Performance Issues"
-                          data-fa="مشکلات عملکرد"
-                        >
-                          مشکلات عملکرد
-                        </h3>
-                        <ul>
-                          <li
-                            data-en="Use Address List instead of Layer7 for better performance"
-                            data-fa="برای عملکرد بهتر از Address List به جای Layer7 استفاده کنید"
-                          >
-                            برای عملکرد بهتر از Address List به جای Layer7
-                            استفاده کنید
-                          </li>
-                          <li
-                            data-en="Limit the number of blocking rules"
-                            data-fa="تعداد قوانین بلاک کردن را محدود کنید"
-                          >
-                            تعداد قوانین بلاک کردن را محدود کنید
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- ===============================================
-                  BLOCKING METHODS IMPLEMENTATION
-                  ===============================================
-                  Different methods for blocking websites:
-                  - Content filtering method
-                  - IP address blocking
-                  - Layer7 protocol filtering
-                  - Address list management
-                  =============================================== -->
-                  <div class="article-grid article-grid--steps" hidden>
-                    <!-- Method 1: Content Filtering -->
-                    <div class="article-card article-card--method">
-                      <div class="article-card-index">01</div>
-                      <div class="article-card-header">
-                        <div class="article-card-icon">
-                          <i class="bi bi-shield-check"></i>
-                        </div>
-                        <div class="article-card-info">
-                          <h3
-                            class="article-card-title"
-                            data-en="Method 1: Content Filtering"
-                            data-fa="روش اول: فیلتر محتوا"
-                          >
-                            روش اول: فیلتر محتوا
-                          </h3>
-                          <p
-                            class="article-card-description"
-                            data-en="The simplest method for blocking websites. Uses the content field in firewall rules to match domain names in HTTP requests."
-                            data-fa="ساده‌ترین روش برای بلاک کردن سایت‌ها. از فیلد content در قوانین فایروال برای تطبیق نام دامنه در درخواست‌های HTTP استفاده می‌کند."
-                          >
-                            ساده‌ترین روش برای بلاک کردن سایت‌ها. از فیلد
-                            content در قوانین فایروال برای تطبیق نام دامنه در
-                            درخواست‌های HTTP استفاده می‌کند.
-                          </p>
-                        </div>
-                      </div>
-                      <div class="article-card-content">
-                        <div class="article-grid">
-                          <h4
-                            data-en="Implementation Steps"
-                            data-fa="مراحل پیاده‌سازی"
-                          >
-                            مراحل پیاده‌سازی
-                          </h4>
-                          <ol>
-                            <li
-                              data-en="Open WinBox or connect via SSH"
-                              data-fa="WinBox را باز کنید یا از طریق SSH متصل شوید"
-                            >
-                              WinBox را باز کنید یا از طریق SSH متصل شوید
-                            </li>
-                            <li
-                              data-en="Navigate to IP > Firewall > Filter Rules"
-                              data-fa="به IP > Firewall > Filter Rules بروید"
-                            >
-                              به IP > Firewall > Filter Rules بروید
-                            </li>
-                            <li
-                              data-en="Click the + button to add a new rule"
-                              data-fa="روی دکمه + کلیک کنید تا قانون جدید اضافه کنید"
-                            >
-                              روی دکمه + کلیک کنید تا قانون جدید اضافه کنید
-                            </li>
-                            <li
-                              data-en="Configure the rule as shown below"
-                              data-fa="قانون را مطابق زیر پیکربندی کنید"
-                            >
-                              قانون را مطابق زیر پیکربندی کنید
-                            </li>
-                          </ol>
-                        </div>
-
-                        <div class="article-code">
-                          <div class="article-code-header">
-                            <span class="article-code-label"
-                              >MikroTik RouterOS</span
-                            >
-                            <button
-                              type="button"
-                              class="article-copy-button"
-                              data-en="Copy"
-                              data-fa="کپی"
-                            >
-                              Copy
-                            </button>
-                          </div>
-                          <pre><code class="language-bash">/ip firewall filter add chain=forward \
-   content="facebook.com" action=drop comment="Block Facebook"</code></pre>
-                        </div>
-
-                        <div class="article-card-note">
-                          <h4
-                            data-en="Configuration Details"
-                            data-fa="جزئیات پیکربندی"
-                          >
-                            جزئیات پیکربندی
-                          </h4>
-                          <ul>
-                            <li
-                              data-en="Chain: Forward (for outgoing traffic)"
-                              data-fa="Chain: Forward (برای ترافیک خروجی)"
-                            >
-                              Chain: Forward (برای ترافیک خروجی)
-                            </li>
-                            <li
-                              data-en="Content: Domain name to block"
-                              data-fa="Content: نام دامنه برای بلاک کردن"
-                            >
-                              Content: نام دامنه برای بلاک کردن
-                            </li>
-                            <li
-                              data-en="Action: Drop (block the traffic)"
-                              data-fa="Action: Drop (مسدود کردن ترافیک)"
-                            >
-                              Action: Drop (مسدود کردن ترافیک)
-                            </li>
-                          </ul>
-                        </div>
-
-                        <div class="article-card-columns">
-                          <div
-                            class="article-card-column article-card-column--positive"
-                          >
-                            <h5 data-en="Advantages" data-fa="مزایا">مزایا</h5>
-                            <ul>
-                              <li
-                                data-en="Simple to implement"
-                                data-fa="ساده برای پیاده‌سازی"
-                              >
-                                ساده برای پیاده‌سازی
-                              </li>
-                              <li data-en="Low CPU usage" data-fa="مصرف CPU کم">
-                                مصرف CPU کم
-                              </li>
-                              <li
-                                data-en="Easy to understand"
-                                data-fa="آسان برای درک"
-                              >
-                                آسان برای درک
-                              </li>
-                            </ul>
-                          </div>
-                          <div
-                            class="article-card-column article-card-column--caution"
-                          >
-                            <h5 data-en="Limitations" data-fa="محدودیت‌ها">
-                              محدودیت‌ها
-                            </h5>
-                            <ul>
-                              <li
-                                data-en="Only works with HTTP traffic"
-                                data-fa="فقط با ترافیک HTTP کار می‌کند"
-                              >
-                                فقط با ترافیک HTTP کار می‌کند
-                              </li>
-                              <li
-                                data-en="Can be bypassed with HTTPS"
-                                data-fa="می‌تواند با HTTPS دور زده شود"
-                              >
-                                می‌تواند با HTTPS دور زده شود
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Method 2: IP Address Blocking -->
-                    <div class="article-card article-card--method">
-                      <div class="article-card-index">02</div>
-                      <div class="article-card-header">
-                        <div class="article-card-icon">
-                          <i class="bi bi-globe"></i>
-                        </div>
-                        <div class="article-card-info">
-                          <h3
-                            class="article-card-title"
-                            data-en="Method 2: IP Address Blocking"
-                            data-fa="روش دوم: بلاک کردن آدرس IP"
-                          >
-                            روش دوم: بلاک کردن آدرس IP
-                          </h3>
-                          <p
-                            class="article-card-description"
-                            data-en="Block websites by their IP addresses using address lists."
-                            data-fa="بلاک کردن سایت‌ها با آدرس IP آنها با استفاده از لیست آدرس‌ها."
-                          >
-                            بلاک کردن سایت‌ها با آدرس IP آنها با استفاده از لیست
-                            آدرس‌ها.
-                          </p>
-                        </div>
-                      </div>
-                      <div class="article-card-content">
-                        <div class="article-code">
-                          <div class="article-code-header">
-                            <span class="article-code-label"
-                              >MikroTik RouterOS</span
-                            >
-                            <button
-                              type="button"
-                              class="article-copy-button"
-                              data-en="Copy"
-                              data-fa="کپی"
-                            >
-                              Copy
-                            </button>
-                          </div>
-                          <pre><code class="language-bash">/ip firewall address-list add list=blocked-sites \
-   address=31.13.72.36 comment="Facebook IP"
-/ip firewall filter add chain=forward \
-   dst-address-list=blocked-sites action=drop</code></pre>
-                        </div>
-                        <div class="article-card-note">
-                          <h4
-                            data-en="Configuration Details"
-                            data-fa="جزئیات پیکربندی"
-                          >
-                            جزئیات پیکربندی
-                          </h4>
-                          <ul>
-                            <li
-                              data-en="Create address list with blocked IPs"
-                              data-fa="ایجاد لیست آدرس با IPهای بلاک شده"
-                            >
-                              ایجاد لیست آدرس با IPهای بلاک شده
-                            </li>
-                            <li
-                              data-en="Use dst-address-list for destination filtering"
-                              data-fa="از dst-address-list برای فیلتر مقصد استفاده کنید"
-                            >
-                              از dst-address-list برای فیلتر مقصد استفاده کنید
-                            </li>
-                            <li
-                              data-en="More effective than content filtering"
-                              data-fa="موثرتر از فیلتر محتوا"
-                            >
-                              موثرتر از فیلتر محتوا
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Method 3: Layer7 Protocol Filtering -->
-                    <div class="article-card article-card--method">
-                      <div class="article-card-index">03</div>
-                      <div class="article-card-header">
-                        <div class="article-card-icon">
-                          <i class="bi bi-layers"></i>
-                        </div>
-                        <div class="article-card-info">
-                          <h3
-                            class="article-card-title"
-                            data-en="Method 3: Layer7 Protocol Filtering"
-                            data-fa="روش سوم: فیلتر پروتکل Layer7"
-                          >
-                            روش سوم: فیلتر پروتکل Layer7
-                          </h3>
-                          <p
-                            class="article-card-description"
-                            data-en="Block websites using Layer7 protocol detection for complex patterns."
-                            data-fa="بلاک کردن سایت‌ها با استفاده از تشخیص پروتکل Layer7 برای الگوهای پیچیده."
-                          >
-                            بلاک کردن سایت‌ها با استفاده از تشخیص پروتکل Layer7
-                            برای الگوهای پیچیده.
-                          </p>
-                        </div>
-                      </div>
-                      <div class="article-card-content">
-                        <div class="article-code">
-                          <div class="article-code-header">
-                            <span class="article-code-label"
-                              >MikroTik RouterOS</span
-                            >
-                            <button
-                              type="button"
-                              class="article-copy-button"
-                              data-en="Copy"
-                              data-fa="کپی"
-                            >
-                              Copy
-                            </button>
-                          </div>
-                          <pre><code>/ip firewall layer7-protocol add name=block-fb \
-   regexp="^.+(facebook.com).*$"
-/ip firewall filter add chain=forward \
-   layer7-protocol=block-fb action=drop</code></pre>
-                        </div>
-                        <div class="article-card-note">
-                          <h4
-                            data-en="Configuration Details"
-                            data-fa="جزئیات پیکربندی"
-                          >
-                            جزئیات پیکربندی
-                          </h4>
-                          <ul>
-                            <li
-                              data-en="Use regex patterns for complex matching"
-                              data-fa="از الگوهای regex برای تطبیق پیچیده استفاده کنید"
-                            >
-                              از الگوهای regex برای تطبیق پیچیده استفاده کنید
-                            </li>
-                            <li
-                              data-en="Effective for sites with multiple domains"
-                              data-fa="موثر برای سایت‌هایی با دامنه‌های متعدد"
-                            >
-                              موثر برای سایت‌هایی با دامنه‌های متعدد
-                            </li>
-                            <li
-                              data-en="Higher CPU usage compared to other methods"
-                              data-fa="مصرف CPU بالاتر نسبت به روش‌های دیگر"
-                            >
-                              مصرف CPU بالاتر نسبت به روش‌های دیگر
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Method 4: Address List Management -->
-                    <div class="article-card article-card--method">
-                      <div class="article-card-index">04</div>
-                      <div class="article-card-header">
-                        <div class="article-card-icon">
-                          <i class="bi bi-list-ul"></i>
-                        </div>
-                        <div class="article-card-info">
-                          <h3
-                            class="article-card-title"
-                            data-en="Method 4: Address List Management"
-                            data-fa="روش چهارم: مدیریت لیست آدرس‌ها"
-                          >
-                            روش چهارم: مدیریت لیست آدرس‌ها
-                          </h3>
-                          <p
-                            class="article-card-description"
-                            data-en="Manage multiple websites in a single rule using address lists."
-                            data-fa="مدیریت چندین سایت در یک قانون با استفاده از لیست آدرس‌ها."
-                          >
-                            مدیریت چندین سایت در یک قانون با استفاده از لیست
-                            آدرس‌ها.
-                          </p>
-                        </div>
-                      </div>
-                      <div class="article-card-content">
-                        <div class="article-code">
-                          <div class="article-code-header">
-                            <span class="article-code-label"
-                              >MikroTik RouterOS</span
-                            >
-                            <button
-                              type="button"
-                              class="article-copy-button"
-                              data-en="Copy"
-                              data-fa="کپی"
-                            >
-                              Copy
-                            </button>
-                          </div>
-                          <pre><code>/ip firewall address-list add list=blocked \
-   address=*.example.com comment="Block subdomains"
-/ip firewall filter add chain=forward \
-   dst-address-list=blocked action=drop</code></pre>
-                        </div>
-                        <div class="article-card-note">
-                          <h4
-                            data-en="Management Benefits"
-                            data-fa="مزایای مدیریت"
-                          >
-                            مزایای مدیریت
-                          </h4>
-                          <ul>
-                            <li
-                              data-en="Easy to add or remove domains"
-                              data-fa="آسان برای افزودن یا حذف دامنه‌ها"
-                            >
-                              آسان برای افزودن یا حذف دامنه‌ها
-                            </li>
-                            <li
-                              data-en="Wildcard support for subdomains"
-                              data-fa="پشتیبانی از wildcard برای subdomainها"
-                            >
-                              پشتیبانی از wildcard برای subdomainها
-                            </li>
-                            <li
-                              data-en="Better performance than Layer7"
-                              data-fa="عملکرد بهتر نسبت به Layer7"
-                            >
-                              عملکرد بهتر نسبت به Layer7
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <!-- Current implementation details -->
-                <div
-                  id="implementation-methods"
-                  class="article-grid article-grid--steps"
-                  aria-label="Website-blocking implementation methods"
-                >
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">01</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-shield-lock"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-en="Method 1: TLS SNI filtering"
-                          data-fa="روش ۱: فیلتر TLS SNI"
-                        >
-                          Method 1: TLS SNI filtering
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-en="For HTTPS over TCP, match the hostname sent in the TLS SNI field with tls-host."
-                          data-fa="برای HTTPS روی TCP، نام میزبانِ ارسال‌شده در فیلد TLS SNI را با tls-host تطبیق دهید."
-                        >
-                          For HTTPS over TCP, match the hostname sent in the TLS
-                          SNI field with tls-host.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="article-card-content">
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span class="article-code-label"
-                            >MikroTik RouterOS</span
-                          ><button
-                            type="button"
-                            class="article-copy-button"
-                            data-en="Copy"
-                            data-fa="کپی"
-                          >
-                            Copy
-                          </button>
-                        </div>
-                        <pre><code class="language-bash">/ip firewall filter add chain=forward protocol=tcp dst-port=443 \
-  tls-host="*.example.com" action=drop \
-  comment="Block example.com by TLS SNI"</code></pre>
-                      </div>
-                      <div class="article-card-note">
-                        <h4 data-en="Limits" data-fa="محدودیت‌ها">Limits</h4>
-                        <ul>
-                          <li
-                            data-en="tls-host matches the HTTPS SNI hostname and accepts glob wildcards."
-                            data-fa="tls-host نام میزبان SNI در HTTPS را تطبیق می‌دهد و wildcard از نوع glob را می‌پذیرد."
-                          >
-                            tls-host matches the HTTPS SNI hostname and accepts
-                            glob wildcards.
-                          </li>
-                          <li
-                            data-en="It does not cover QUIC traffic on UDP/443, and it cannot match every fragmented or encrypted handshake."
-                            data-fa="این روش ترافیک QUIC روی UDP/443 را پوشش نمی‌دهد و هر Handshake تکه‌تکه یا رمزگذاری‌شده را هم نمی‌تواند تطبیق دهد."
-                          >
-                            It does not cover QUIC traffic on UDP/443, and it
-                            cannot match every fragmented or encrypted
-                            handshake.
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">02</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-diagram-3"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-en="Method 2: DNS policy"
-                          data-fa="روش ۲: سیاست DNS"
-                        >
-                          Method 2: DNS policy
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-en="Use the router's DNS service to return NXDOMAIN for a domain and its subdomains."
-                          data-fa="با سرویس DNS روتر، برای یک دامنه و زیردامنه‌هایش پاسخ NXDOMAIN برگردانید."
-                        >
-                          Use the router's DNS service to return NXDOMAIN for a
-                          domain and its subdomains.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="article-card-content">
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span class="article-code-label"
-                            >MikroTik RouterOS</span
-                          ><button
-                            type="button"
-                            class="article-copy-button"
-                            data-en="Copy"
-                            data-fa="کپی"
-                          >
-                            Copy
-                          </button>
-                        </div>
-                        <pre><code class="language-bash">/ip dns set allow-remote-requests=yes
-/ip dns static add name=example.com match-subdomain=yes \
-  type=NXDOMAIN comment="Policy block"</code></pre>
-                      </div>
-                      <div class="article-card-note">
-                        <h4 data-en="Limits" data-fa="محدودیت‌ها">Limits</h4>
-                        <ul>
-                          <li
-                            data-en="Clients must use the router as their DNS resolver for this policy to take effect."
-                            data-fa="برای اثرگذاری این سیاست، کلاینت‌ها باید DNS روتر را استفاده کنند."
-                          >
-                            Clients must use the router as their DNS resolver
-                            for this policy to take effect.
-                          </li>
-                          <li
-                            data-en="DoH, DoT, VPNs, and an external resolver can bypass a DNS-only policy; apply any DNS redirect or outbound restriction only to the intended client scope."
-                            data-fa="DoH، DoT، VPN و resolver خارجی می‌توانند سیاست صرفاً DNS را دور بزنند؛ هرگونه redirect یا محدودیت خروجی DNS را فقط در محدودهٔ کلاینت‌های موردنظر اعمال کنید."
-                          >
-                            DoH, DoT, VPNs, and an external resolver can bypass
-                            a DNS-only policy; apply any DNS redirect or
-                            outbound restriction only to the intended client
-                            scope.
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">03</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-list-ul"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-en="Method 3: IP address lists"
-                          data-fa="روش ۳: فهرست آدرس IP"
-                        >
-                          Method 3: IP address lists
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-en="Use an address list only when you intentionally want to block verified IP addresses or prefixes."
-                          data-fa="Address List را فقط زمانی به‌کار ببرید که عمداً می‌خواهید IP یا prefix تأییدشده را مسدود کنید."
-                        >
-                          Use an address list only when you intentionally want
-                          to block verified IP addresses or prefixes.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="article-card-content">
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span class="article-code-label"
-                            >MikroTik RouterOS</span
-                          ><button
-                            type="button"
-                            class="article-copy-button"
-                            data-en="Copy"
-                            data-fa="کپی"
-                          >
-                            Copy
-                          </button>
-                        </div>
-                        <pre><code class="language-bash">/ip firewall address-list add list=blocked-ip \
-  address=&lt;verified-ip-or-prefix&gt; comment="Review ownership first"
-/ip firewall filter add chain=forward dst-address-list=blocked-ip \
-  action=drop</code></pre>
-                      </div>
-                      <div class="article-card-note">
-                        <h4 data-en="Limits" data-fa="محدودیت‌ها">Limits</h4>
-                        <ul>
-                          <li
-                            data-en="Address lists contain IP addresses and prefixes; address=*.example.com is not a domain wildcard rule."
-                            data-fa="Address List شامل آدرس IP و prefix است؛ دستور address=*.example.com یک wildcard دامنهٔ معتبر نیست."
-                          >
-                            Address lists contain IP addresses and prefixes;
-                            address=*.example.com is not a domain wildcard rule.
-                          </li>
-                          <li
-                            data-en="CDNs and shared hosting can change or share IPs, so verify ownership and review the list regularly."
-                            data-fa="CDN و میزبانی اشتراکی ممکن است IP را تغییر دهند یا بین چند سرویس مشترک باشند؛ مالکیت را تأیید و فهرست را مرتب بازبینی کنید."
-                          >
-                            CDNs and shared hosting can change or share IPs, so
-                            verify ownership and review the list regularly.
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="article-card article-card--method">
-                    <div class="article-card-index">04</div>
-                    <div class="article-card-header">
-                      <div class="article-card-icon">
-                        <i class="bi bi-exclamation-octagon"></i>
-                      </div>
-                      <div class="article-card-info">
-                        <h3
-                          class="article-card-title"
-                          data-en="Method 4: Layer7 — do not use for general web blocking"
-                          data-fa="روش ۴: Layer7 — برای فیلتر عمومی وب استفاده نکنید"
-                        >
-                          Method 4: Layer7 — do not use for general web blocking
-                        </h3>
-                        <p
-                          class="article-card-description"
-                          data-en="Layer7 pattern matching is resource-intensive and cannot inspect encrypted HTTPS payloads."
-                          data-fa="تطبیق الگو با Layer7 پرمصرف است و محتوای رمزگذاری‌شدهٔ HTTPS را نمی‌تواند بررسی کند."
-                        >
-                          Layer7 pattern matching is resource-intensive and
-                          cannot inspect encrypted HTTPS payloads.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="article-card-content">
-                      <div class="article-code">
-                        <div class="article-code-header">
-                          <span class="article-code-label"
-                            >MikroTik RouterOS</span
-                          ><button
-                            type="button"
-                            class="article-copy-button"
-                            data-en="Copy"
-                            data-fa="کپی"
-                          >
-                            Copy
-                          </button>
-                        </div>
-                        <pre><code class="language-bash"># Do not add a generic Layer7 rule for website blocking.
-# Prefer tls-host for visible TCP TLS SNI or a scoped DNS policy.</code></pre>
-                      </div>
-                      <div class="article-card-note">
-                        <h4 data-en="Why" data-fa="دلیل">Why</h4>
-                        <ul>
-                          <li
-                            data-en="RouterOS documents Layer7 as resource-intensive and advises against it for generic web-page blocking."
-                            data-fa="مستندات RouterOS، Layer7 را پرمصرف می‌داند و استفاده از آن را برای مسدودسازی عمومی صفحات وب توصیه نمی‌کند."
-                          >
-                            RouterOS documents Layer7 as resource-intensive and
-                            advises against it for generic web-page blocking.
-                          </li>
-                          <li
-                            data-en="Keep it only for narrowly scoped, non-web traffic patterns that you have tested on the target hardware."
-                            data-fa="آن را فقط برای الگوهای غیر وب، بسیار محدود و آزمایش‌شده روی سخت‌افزار مقصد نگه دارید."
-                          >
-                            Keep it only for narrowly scoped, non-web traffic
-                            patterns that you have tested on the target
-                            hardware.
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <section id="management-tips" class="article-section">
-                  <h2
-                    data-en="3. Management and policy limits"
-                    data-fa="3. مدیریت و محدودیت‌های سیاست"
-                  >
-                    3. Management and policy limits
-                  </h2>
-                  <div class="article-callout article-callout--info">
-                    <h3
-                      class="article-callout-title"
-                      data-en="Operate safely"
-                      data-fa="اجرای ایمن"
-                    >
-                      Operate safely
-                    </h3>
-                    <ul>
-                      <li
-                        data-en="Scope rules to the intended users or VLANs before applying them network-wide."
-                        data-fa="پیش از اعمال سراسری، Ruleها را به کاربران یا VLANهای موردنظر محدود کنید."
-                      >
-                        Scope rules to the intended users or VLANs before
-                        applying them network-wide.
-                      </li>
-                      <li
-                        data-en="Log and test a new rule with a small pilot group before enforcing it broadly."
-                        data-fa="Rule جدید را ابتدا با log و یک گروه آزمایشی کوچک بررسی کنید، سپس آن را گسترده اعمال کنید."
-                      >
-                        Log and test a new rule with a small pilot group before
-                        enforcing it broadly.
-                      </li>
-                      <li
-                        data-en="Review DNS, address-list, and firewall entries whenever a provider changes domains, CDN addresses, or client applications."
-                        data-fa="هر زمان ارائه‌دهنده دامنه، IPهای CDN یا برنامهٔ کلاینت را تغییر داد، ورودی‌های DNS، Address List و Firewall را بازبینی کنید."
-                      >
-                        Review DNS, address-list, and firewall entries whenever
-                        a provider changes domains, CDN addresses, or client
-                        applications.
-                      </li>
-                    </ul>
-                  </div>
-                </section>
-
-                <section id="troubleshooting" class="article-section">
-                  <h2 data-en="4. Troubleshooting" data-fa="4. رفع اشکال">
-                    4. Troubleshooting
-                  </h2>
-                  <div class="article-grid">
-                    <div class="article-card article-card--method">
-                      <div class="article-card-icon">
-                        <i class="bi bi-search"></i>
-                      </div>
-                      <div class="article-card-content">
-                        <h3
-                          class="article-card-title"
-                          data-en="A site is still reachable"
-                          data-fa="وب‌سایت هنوز باز می‌شود"
-                        >
-                          A site is still reachable
-                        </h3>
-                        <ul>
-                          <li
-                            data-en="Confirm that the traffic matches the method: TCP TLS for tls-host, router DNS for DNS policy, or the intended IP for an address list."
-                            data-fa="بررسی کنید ترافیک با روش انتخابی منطبق است: TLS روی TCP برای tls-host، DNS روتر برای سیاست DNS یا IP موردنظر برای Address List."
-                          >
-                            Confirm that the traffic matches the method: TCP TLS
-                            for tls-host, router DNS for DNS policy, or the
-                            intended IP for an address list.
-                          </li>
-                          <li
-                            data-en="Place the rule before a broader accept rule that would otherwise match the traffic, then re-test with a new connection."
-                            data-fa="Rule را پیش از یک Rule پذیرش گسترده که در غیر این صورت ترافیک را تطبیق می‌دهد قرار دهید، سپس با اتصال جدید دوباره آزمایش کنید."
-                          >
-                            Place the rule before a broader accept rule that
-                            would otherwise match the traffic, then re-test with
-                            a new connection.
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div class="article-card article-card--method">
-                      <div class="article-card-icon">
-                        <i class="bi bi-lightning-charge"></i>
-                      </div>
-                      <div class="article-card-content">
-                        <h3
-                          class="article-card-title"
-                          data-en="QUIC or encrypted DNS bypasses the policy"
-                          data-fa="QUIC یا DNS رمزگذاری‌شده سیاست را دور می‌زند"
-                        >
-                          QUIC or encrypted DNS bypasses the policy
-                        </h3>
-                        <ul>
-                          <li
-                            data-en="Identify whether the client uses UDP/443, DoH, DoT, VPN, or a proxy before changing firewall rules."
-                            data-fa="پیش از تغییر Ruleهای فایروال، مشخص کنید کلاینت از UDP/443، DoH، DoT، VPN یا proxy استفاده می‌کند یا نه."
-                          >
-                            Identify whether the client uses UDP/443, DoH, DoT,
-                            VPN, or a proxy before changing firewall rules.
-                          </li>
-                          <li
-                            data-en="Apply a scoped policy appropriate to the organization; blindly blocking common VPN ports is neither complete nor a reliable control."
-                            data-fa="سیاستی متناسب با سازمان و در محدودهٔ مشخص اعمال کنید؛ مسدود کردن کورکورانهٔ پورت‌های رایج VPN نه کامل است و نه کنترل قابل اتکا."
-                          >
-                            Apply a scoped policy appropriate to the
-                            organization; blindly blocking common VPN ports is
-                            neither complete nor a reliable control.
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <section id="security-tips" class="article-section">
-                  <h2 data-en="5. Security tips" data-fa="5. نکات امنیتی">
-                    5. Security tips
-                  </h2>
-                  <div class="article-callout article-callout--warning">
-                    <ul>
-                      <li
-                        data-en="Do not treat website blocking as a complete security boundary; maintain endpoint protection, access control, logging, and user education."
-                        data-fa="مسدودسازی وب‌سایت را مرز امنیتی کامل در نظر نگیرید؛ حفاظت endpoint، کنترل دسترسی، لاگ‌برداری و آموزش کاربر را نیز حفظ کنید."
-                      >
-                        Do not treat website blocking as a complete security
-                        boundary; maintain endpoint protection, access control,
-                        logging, and user education.
-                      </li>
-                      <li
-                        data-en="Keep management access to RouterOS restricted and export a configuration backup before changing firewall or DNS policy."
-                        data-fa="دسترسی مدیریتی RouterOS را محدود نگه دارید و پیش از تغییر سیاست فایروال یا DNS، از پیکربندی backup بگیرید."
-                      >
-                        Keep management access to RouterOS restricted and export
-                        a configuration backup before changing firewall or DNS
-                        policy.
-                      </li>
-                    </ul>
-                  </div>
-                  <p
-                    data-en="If you enable remote DNS requests on the router, permit DNS service only from trusted client networks; never leave it reachable from an untrusted WAN."
-                    data-fa="اگر پاسخ‌گویی DNS روتر به کلاینت‌ها را فعال می‌کنید، سرویس DNS را فقط برای شبکه‌های قابل اعتماد مجاز کنید و هرگز آن را از WAN غیرقابل اعتماد در دسترس نگذارید."
-                  >
-                    If you enable remote DNS requests on the router, permit DNS
-                    service only from trusted client networks; never leave it
-                    reachable from an untrusted WAN.
-                  </p>
-                </section>
-
-                <section id="faq" class="article-section">
-                  <h2
-                    data-en="6. Frequently asked questions"
-                    data-fa="6. پرسش‌های متداول"
-                  >
-                    6. Frequently asked questions
-                  </h2>
-                  <div class="article-faq-item">
-                    <h3
-                      class="article-faq-question"
-                      data-en="Does tls-host block every HTTPS visit?"
-                      data-fa="آیا tls-host همهٔ بازدیدهای HTTPS را مسدود می‌کند؟"
-                    >
-                      Does tls-host block every HTTPS visit?
-                    </h3>
-                    <div class="article-faq-answer">
-                      <p
-                        data-en="No. It relies on visible TCP TLS SNI, so it does not cover QUIC/UDP traffic and may not match every fragmented or encrypted handshake."
-                        data-fa="خیر. این روش به TCP TLS SNI قابل مشاهده متکی است؛ بنابراین ترافیک QUIC/UDP را پوشش نمی‌دهد و ممکن است همهٔ Handshakeهای تکه‌تکه یا رمزگذاری‌شده را تطبیق ندهد."
-                      >
-                        No. It relies on visible TCP TLS SNI, so it does not
-                        cover QUIC/UDP traffic and may not match every
-                        fragmented or encrypted handshake.
-                      </p>
-                    </div>
-                  </div>
-                  <div class="article-faq-item">
-                    <h3
-                      class="article-faq-question"
-                      data-en="Can an address list contain *.example.com?"
-                      data-fa="آیا Address List می‌تواند شامل *.example.com باشد؟"
-                    >
-                      Can an address list contain *.example.com?
-                    </h3>
-                    <div class="article-faq-answer">
-                      <p
-                        data-en="No. Firewall address lists are for IP addresses and prefixes. Use DNS policy or tls-host for hostname-oriented controls, with their stated limits."
-                        data-fa="خیر. Firewall Address List برای IP و prefix است. برای کنترل مبتنی بر نام میزبان از سیاست DNS یا tls-host استفاده کنید و محدودیت‌های هر کدام را در نظر بگیرید."
-                      >
-                        No. Firewall address lists are for IP addresses and
-                        prefixes. Use DNS policy or tls-host for
-                        hostname-oriented controls, with their stated limits.
-                      </p>
-                    </div>
-                  </div>
-                  <div class="article-faq-item">
-                    <h3
-                      class="article-faq-question"
-                      data-en="Should Layer7 be used to block modern websites?"
-                      data-fa="آیا باید از Layer7 برای مسدودسازی وب‌سایت‌های امروزی استفاده کرد؟"
-                    >
-                      Should Layer7 be used to block modern websites?
-                    </h3>
-                    <div class="article-faq-answer">
-                      <p
-                        data-en="No. RouterOS describes it as resource-intensive and advises against using it for generic web-page blocking; encrypted HTTPS payloads are not suitable for this matcher."
-                        data-fa="خیر. RouterOS آن را پرمصرف می‌داند و برای مسدودسازی عمومی صفحات وب توصیه نمی‌کند؛ محتوای رمزگذاری‌شدهٔ HTTPS نیز برای این matcher مناسب نیست."
-                      >
-                        No. RouterOS describes it as resource-intensive and
-                        advises against using it for generic web-page blocking;
-                        encrypted HTTPS payloads are not suitable for this
-                        matcher.
-                      </p>
-                    </div>
-                  </div>
-                </section>
-
-                <section id="conclusion" class="article-section">
-                  <h2 data-en="Conclusion" data-fa="جمع‌بندی">Conclusion</h2>
-                  <p
-                    data-en="For a current RouterOS deployment, prefer a narrowly scoped tls-host rule for visible TCP TLS SNI or a DNS policy for clients that use the router's resolver. Treat IP address lists as IP-only controls and avoid Layer7 for general web filtering. Test each policy against QUIC, encrypted DNS, VPN, and CDN behavior before relying on it."
-                    data-fa="در RouterOS امروزی، برای TCP TLS SNI قابل مشاهده از Rule محدودِ tls-host یا برای کلاینت‌هایی که resolver روتر را استفاده می‌کنند از سیاست DNS بهره بگیرید. Address List را کنترل مبتنی بر IP بدانید و از Layer7 برای فیلتر عمومی وب استفاده نکنید. پیش از اتکا به هر سیاست، آن را در برابر QUIC، DNS رمزگذاری‌شده، VPN و رفتار CDN آزمایش کنید."
-                  >
-                    For a current RouterOS deployment, prefer a narrowly scoped
-                    tls-host rule for visible TCP TLS SNI or a DNS policy for
-                    clients that use the router's resolver. Treat IP address
-                    lists as IP-only controls and avoid Layer7 for general web
-                    filtering. Test each policy against QUIC, encrypted DNS,
-                    VPN, and CDN behavior before relying on it.
-                  </p>
-                  <p>
-                    <a
-                      href="https://help.mikrotik.com/docs/spaces/ROS/pages/250708064/Common%2BFirewall%2BMatchers%2Band%2BActions"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      data-en="Official RouterOS firewall matcher documentation"
-                      data-fa="مستندات رسمی matcherهای فایروال RouterOS"
-                      >Official RouterOS firewall matcher documentation</a
-                    >
-                  </p>
-                  <p>
-                    <a
-                      href="https://help.mikrotik.com/docs/spaces/ROS/pages/37748767/DNS"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      data-en="Official RouterOS DNS documentation"
-                      data-fa="مستندات رسمی DNS در RouterOS"
-                      >Official RouterOS DNS documentation</a
-                    >
-                  </p>
-                </section>
-
-                <!-- Legacy sections retained only in source history; hidden from the rendered article. -->
-                <!-- Security Tips -->
-                <section
-                  id="legacy-security-tips"
-                  class="article-section"
-                  hidden
-                >
-                  <h2 data-en="5. Security Tips" data-fa="5. نکات امنیتی">
-                    5. نکات امنیتی
-                  </h2>
-
-                  <div class="article-callout article-callout--tip">
-                    <h3
-                      class="article-callout-title"
-                      data-en="Security Recommendations"
-                      data-fa="توصیه‌های امنیتی"
-                    >
-                      Security Recommendations
-                    </h3>
-                    <ul>
-                      <li
-                        data-en="Use wildcard (*) for blocking all subdomains"
-                        data-fa="از wildcard (*) برای بلاک کردن همه subdomainها استفاده کنید"
-                      >
-                        از wildcard (*) برای بلاک کردن همه subdomainها استفاده
-                        کنید
-                      </li>
-                      <li
-                        data-en="VPN users can bypass restrictions"
-                        data-fa="کاربران VPN می‌توانند محدودیت‌ها را دور بزنند"
-                      >
-                        کاربران VPN می‌توانند محدودیت‌ها را دور بزنند
-                      </li>
-                      <li
-                        data-en="Schedule rules for time-based blocking"
-                        data-fa="قوانین زمان‌بندی برای بلاک کردن بر اساس زمان"
-                      >
-                        قوانین زمان‌بندی برای بلاک کردن بر اساس زمان
-                      </li>
-                      <li
-                        data-en="Monitor blocked traffic in logs"
-                        data-fa="مانیتورینگ ترافیک بلاک شده در logها"
-                      >
-                        مانیتورینگ ترافیک بلاک شده در logها
-                      </li>
-                      <li
-                        data-en="Use Address List for better performance"
-                        data-fa="از Address List برای عملکرد بهتر استفاده کنید"
-                      >
-                        از Address List برای عملکرد بهتر استفاده کنید
-                      </li>
-                    </ul>
-                  </div>
-                </section>
-
-                <!-- FAQ -->
-                <section id="legacy-faq" class="article-section" hidden>
-                  <h2
-                    data-en="6. Frequently Asked Questions"
-                    data-fa="6. پرسش‌های متداول"
-                  >
-                    6. پرسش‌های متداول
-                  </h2>
-
-                  <div class="article-faq-item">
-                    <h3
-                      class="article-faq-question"
-                      data-en="Q: Does website blocking work with HTTPS?"
-                      data-fa="س: آیا بلاک کردن سایت روی HTTPS هم عمل می‌کند؟"
-                    >
-                      س: آیا بلاک کردن سایت روی HTTPS هم عمل می‌کند؟
-                    </h3>
-                    <div class="article-faq-answer">
-                      <p
-                        data-en="A: Yes, but in some cases you need to configure rules more precisely for addresses."
-                        data-fa="ج: بله، ولی در برخی موارد نیاز است Rule دقیق‌تر برای آدرس‌ها تنظیم شود."
-                      >
-                        ج: بله، ولی در برخی موارد نیاز است Rule دقیق‌تر برای
-                        آدرس‌ها تنظیم شود.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="article-faq-item">
-                    <h3
-                      class="article-faq-question"
-                      data-en="Q: Can users bypass restrictions with VPN?"
-                      data-fa="س: آیا کاربران می‌توانند با VPN محدودیت‌ها را دور بزنند؟"
-                    >
-                      س: آیا کاربران می‌توانند با VPN محدودیت‌ها را دور بزنند؟
-                    </h3>
-                    <div class="article-faq-answer">
-                      <p
-                        data-en="A: Yes, users with VPN can bypass restrictions. To prevent this, you should also block VPN access."
-                        data-fa="ج: بله، کاربران با VPN می‌توانند محدودیت‌ها را دور بزنند. برای جلوگیری باید دسترسی به VPN نیز مسدود گردد."
-                      >
-                        ج: بله، کاربران با VPN می‌توانند محدودیت‌ها را دور
-                        بزنند. برای جلوگیری باید دسترسی به VPN نیز مسدود گردد.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="article-faq-item">
-                    <h3
-                      class="article-faq-question"
-                      data-en="Q: Is it possible to schedule blocking rules?"
-                      data-fa="س: آیا امکان زمان‌بندی برای قوانین بلاک کردن وجود دارد؟"
-                    >
-                      س: آیا امکان زمان‌بندی برای قوانین بلاک کردن وجود دارد؟
-                    </h3>
-                    <div class="article-faq-answer">
-                      <p
-                        data-en="A: Yes, you can define schedules in rule settings for time-based blocking."
-                        data-fa="ج: بله، در تنظیمات Rule می‌توان Schedule تعریف کرد."
-                      >
-                        ج: بله، در تنظیمات Rule می‌توان Schedule تعریف کرد.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="article-faq-item">
-                    <h3
-                      class="article-faq-question"
-                      data-en="Q: Which method is most effective for blocking?"
-                      data-fa="س: کدام روش برای بلاک کردن موثرتر است؟"
-                    >
-                      س: کدام روش برای بلاک کردن موثرتر است؟
-                    </h3>
-                    <div class="article-faq-answer">
-                      <p
-                        data-en="A: Address List method is more effective than Layer7 and consumes less CPU resources."
-                        data-fa="ج: روش Address List موثرتر از Layer7 است و منابع CPU کمتری مصرف می‌کند."
-                      >
-                        ج: روش Address List موثرتر از Layer7 است و منابع CPU
-                        کمتری مصرف می‌کند.
-                      </p>
-                    </div>
-                  </div>
-                </section>
-
-                <!-- Conclusion -->
-                <section class="article-section" hidden>
-                  <h2 data-en="Conclusion" data-fa="نتیجه‌گیری">Conclusion</h2>
-                  <p
-                    data-en="Blocking websites on MikroTik RouterOS can be done through multiple methods. Choosing the right method depends on your network needs: use Content filtering for simple domains, Layer7 for complex sites, and Address List for managing multiple websites. By combining these methods, you can fully implement your network policies."
-                    data-fa="بلاک کردن سایت در میکروتیک RouterOS به چند روش مختلف قابل انجام است. انتخاب روش بستگی به نیاز شبکه دارد: برای دامنه‌های ساده از Content، برای سایت‌های پیچیده از Layer7 و برای مدیریت چند سایت از Address List استفاده کنید. در نهایت با ترکیب این روش‌ها می‌توانید سیاست‌های شبکه را به‌طور کامل پیاده‌سازی کنید."
-                  >
-                    بلاک کردن سایت در میکروتیک RouterOS به چند روش مختلف قابل
-                    انجام است. انتخاب روش بستگی به نیاز شبکه دارد: برای
-                    دامنه‌های ساده از Content، برای سایت‌های پیچیده از Layer7 و
-                    برای مدیریت چند سایت از Address List استفاده کنید. در نهایت
-                    با ترکیب این روش‌ها می‌توانید سیاست‌های شبکه را به‌طور کامل
-                    پیاده‌سازی کنید.
-                  </p>
-                </section>
-
-                <!-- Enhanced Author Bio Section -->
-
-                <footer class="article-footer" aria-label="Article footer">
-                  <section
-                    id="author"
-                    class="article-author"
-                    role="complementary"
-                    aria-labelledby="author-title"
-                    hidden
-                  >
-                    <div class="article-author-card">
-                      <img
-                        class="article-author-avatar"
-                        src="../assets/img/my-profile-img.jpg"
-                        alt="AmirHossein Jalalian"
-                        loading="lazy"
-                        width="120"
-                        height="120"
-                        decoding="async"
-                      />
-                      <div class="article-author-content">
-                        <p
-                          class="article-author-kicker"
-                          id="author-title"
-                          data-en="About the author"
-                          data-fa="درباره نویسنده"
-                        >
-                          About the author
-                        </p>
-                        <h2
-                          data-en="AmirHossein Jalalian"
-                          data-fa="امیرحسین جلالیان"
-                        >
-                          AmirHossein Jalalian
-                        </h2>
-                        <p
-                          class="article-author-role"
-                          data-en="Infrastructure & DevOps Engineer"
-                          data-fa="مهندس زیرساخت و DevOps"
-                        >
-                          Infrastructure & DevOps Engineer
-                        </p>
-                        <p
-                          class="article-author-description"
-                          data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
-                          data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-                        >
-                          Delivering reliable, secure, and scalable IT solutions
-                          for your business success.
-                        </p>
-                        <div
-                          class="article-author-social"
-                          role="group"
-                          aria-label="Author links"
-                        >
-                          <a
-                            href="https://linkedin.com/in/amirhossein-jalalian"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="LinkedIn Profile"
-                            ><i class="bi bi-linkedin" aria-hidden="true"></i
-                          ></a>
-                          <a
-                            href="https://github.com/amirhossein-jalalian"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="GitHub Profile"
-                            ><i class="bi bi-github" aria-hidden="true"></i
-                          ></a>
-                          <a
-                            href="https://twitter.com/amirhossein_j"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Twitter Profile"
-                            ><i class="bi bi-twitter-x" aria-hidden="true"></i
-                          ></a>
-                        </div>
-                      </div>
-                    </div>
                   </section>
-                  <nav
-                    class="article-footer-nav"
-                    aria-label="Article footer navigation"
-                  >
-                    <a class="article-back" href="../index.html#portfolio"
-                      ><i class="bi bi-arrow-left" aria-hidden="true"></i
-                      ><span
-                        data-en="Back to portfolio"
-                        data-fa="بازگشت به مقالات"
-                        >Back to portfolio</span
-                      ></a
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="DNS Policy با SNI Filtering فرق دارد"
+                      data-en="DNS policy and SNI filtering differ"
                     >
-                  </nav>
-                </footer>
+                      DNS policy and SNI filtering differ
+                    </h2>
+                    <p
+                      data-fa="NXDOMAIN پاسخ نام را رد می‌کند. tls-host روی ترافیک TCP و ClientHello قابل مشاهده عمل می‌کند. QUIC از UDP استفاده می‌کند، ECH نام را پنهان می‌کند و VPN مسیر را تغییر می‌دهد. برای Policy سخت‌گیرانه، Endpoint و Secure Web Gateway را هم طراحی کنید."
+                      data-en="NXDOMAIN rejects name resolution. Tls-host acts on TCP traffic with a visible ClientHello. QUIC uses UDP, ECH hides the name and VPNs change the path. Strict enforcement also needs endpoint and secure-web-gateway design."
+                    >
+                      NXDOMAIN rejects name resolution. Tls-host acts on TCP
+                      traffic with a visible ClientHello. QUIC uses UDP, ECH
+                      hides the name and VPNs change the path. Strict
+                      enforcement also needs endpoint and secure-web-gateway
+                      design.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: Policy روی کلاینت مدیریت‌شده"
+                      data-en="Example: a managed-client policy"
+                    >
+                      Example: a managed-client policy
+                    </h3>
+                    <p
+                      data-fa="در این مثال، کاربران از Resolver داخلی استفاده می‌کنند و example.com دامنه آزمایش است. مسیر DNS و اتصال TCP را جدا می‌سنجیم. مدیریت Endpoint مسئول کنترل DoH و VPN است. Router Rule به‌تنهایی الزام سراسری را تضمین نمی‌کند."
+                      data-en="Users query an internal resolver and example.com is the test domain. Test DNS and TCP independently. Endpoint management controls DoH and VPN use. Router rules alone do not guarantee organization-wide enforcement."
+                    >
+                      Users query an internal resolver and example.com is the
+                      test domain. Test DNS and TCP independently. Endpoint
+                      management controls DoH and VPN use. Router rules alone do
+                      not guarantee organization-wide enforcement.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="Resolver و نسخه RouterOS"
+                      data-en="Resolver and RouterOS requirements"
+                    >
+                      Resolver and RouterOS requirements
+                    </h2>
+                    <p
+                      data-fa="مثال برای RouterOS v7 است. پشتیبانی type=NXDOMAIN و match-subdomain را روی Patch انتخاب‌شده بررسی کنید. Syntax یک نسخه را برای همه v7ها فرض نکنید."
+                      data-en="Use RouterOS v7 and verify type=NXDOMAIN and match-subdomain on the selected patch. Do not assume identical syntax across all v7 releases."
+                    >
+                      Use RouterOS v7 and verify type=NXDOMAIN and
+                      match-subdomain on the selected patch. Do not assume
+                      identical syntax across all v7 releases.
+                    </p>
+                    <p
+                      data-fa="عضویت LAN و WAN و مسیر IPv6 کاربران را مشخص کنید. قبل از تغییر، CPU و Connection Tracking و Ruleهای FastTrack را ثبت کنید."
+                      data-en="Identify LAN/WAN membership and client IPv6 paths. Record CPU, connection tracking and FastTrack rules before the change."
+                    >
+                      Identify LAN/WAN membership and client IPv6 paths. Record
+                      CPU, connection tracking and FastTrack rules before the
+                      change.
+                    </p>
+                    <p
+                      data-fa="Export خارج روتر و دسترسی Console داشته باشید. Resolver روتر فقط زمانی قابل استفاده است که درخواست LAN مجاز و DNS ورودی WAN بسته باشد."
+                      data-en="Keep an off-router export and console access. Use router recursion only with permitted LAN DNS and blocked WAN DNS access."
+                    >
+                      Keep an off-router export and console access. Use router
+                      recursion only with permitted LAN DNS and blocked WAN DNS
+                      access.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="Wildcard در DNS و Address List"
+                      data-en="Wildcards in DNS and address lists"
+                    >
+                      Wildcards in DNS and address lists
+                    </h3>
+                    <p
+                      data-fa="*.example.com در Address List یک Wildcard عمومی DNS نیست. match-subdomain در DNS و GLOB در tls-host رفتار مشخص خود را دارند. نسخه قدیمی Ruleهای Content را راهکار HTTPS جدید حساب نکنید."
+                      data-en="An address-list value of *.example.com is not a general DNS wildcard. DNS match-subdomain and tls-host glob syntax have distinct behavior. Historical content rules are not modern HTTPS enforcement."
+                    >
+                      An address-list value of *.example.com is not a general
+                      DNS wildcard. DNS match-subdomain and tls-host glob syntax
+                      have distinct behavior. Historical content rules are not
+                      modern HTTPS enforcement.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="جلوگیری از Open Resolver و قطع CDN"
+                      data-en="Avoid open recursion and CDN collateral damage"
+                    >
+                      Avoid open recursion and CDN collateral damage
+                    </h2>
+                    <p
+                      data-fa="DNS روتر را به WAN باز نکنید. اجبار Resolver را به Subnet کاربر و استثناهای مشخص محدود کنید. یک IP CDN ممکن است چند سرویس نامرتبط را میزبانی کند. آن را صرفاً بر اساس یک پاسخ DNS مسدود نکنید. Layer7 عمومی متن رمزنگاری‌شده HTTPS را قابل اتکا تشخیص نمی‌دهد."
+                      data-en="Do not expose router DNS recursion to WAN. Scope resolver enforcement to user subnets with explicit exceptions. A CDN IP might host unrelated services, so avoid blocking it from one DNS answer. Generic Layer7 matching does not reliably inspect encrypted HTTPS content."
+                    >
+                      Do not expose router DNS recursion to WAN. Scope resolver
+                      enforcement to user subnets with explicit exceptions. A
+                      CDN IP might host unrelated services, so avoid blocking it
+                      from one DNS answer. Generic Layer7 matching does not
+                      reliably inspect encrypted HTTPS content.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="تنظیم دامنه و آزمون جداگانه DNS و TLS"
+                      data-en="Configure the domain and test DNS/TLS separately"
+                    >
+                      Configure the domain and test DNS/TLS separately
+                    </h2>
+                    <p
+                      data-fa="وضعیت DNS و Firewall را ثبت کنید. LAN و WAN باید عضوهای درست داشته باشند. ورودی DNS روی TCP و UDP 53 فقط از LAN مجاز باشد و WAN به Resolver نرسد."
+                      data-en="Record DNS/firewall state and verify LAN/WAN membership. Permit router TCP/UDP 53 from LAN only and prevent WAN recursion."
+                    >
+                      Record DNS/firewall state and verify LAN/WAN membership.
+                      Permit router TCP/UDP 53 from LAN only and prevent WAN
+                      recursion.
+                    </p>
+                    <pre dir="ltr"><code class="language-routeros">/ip dns print
+/ip firewall filter print detail
+/ip dns static add name=example.com match-subdomain=yes type=NXDOMAIN comment=&quot;ENT-WEB DNS policy&quot;
+/ip firewall filter add chain=forward in-interface-list=LAN out-interface-list=WAN protocol=tcp dst-port=443 tls-host=example.com action=drop comment=&quot;ENT-WEB root SNI&quot;
+/ip firewall filter add chain=forward in-interface-list=LAN out-interface-list=WAN protocol=tcp dst-port=443 tls-host=*.example.com action=drop comment=&quot;ENT-WEB subdomain SNI&quot;</code></pre>
+                    <p
+                      data-fa="از Resolver فعالِ محدود استفاده کنید. allow-remote-requests را پیش از تنظیم Firewall روشن نکنید. Ruleهای SNI باید قبل از FastTrack و Accept Established مربوط باشند. برای سنجش، اتصال تازه بسازید."
+                      data-en="Use an existing restricted resolver. Do not enable allow-remote-requests before firewall controls. Put SNI rules before relevant FastTrack/established accepts and test fresh connections."
+                    >
+                      Use an existing restricted resolver. Do not enable
+                      allow-remote-requests before firewall controls. Put SNI
+                      rules before relevant FastTrack/established accepts and
+                      test fresh connections.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-routeros">/ip firewall filter print stats where comment~&quot;ENT-WEB&quot;
+/ip dns static print detail where comment~&quot;ENT-WEB&quot;</code></pre>
+                    <p
+                      data-fa="روی Client مدیریت‌شده، DNS و TCP TLS را جدا امتحان کنید."
+                      data-en="Test DNS and TCP TLS separately from a managed client."
+                    >
+                      Test DNS and TCP TLS separately from a managed client.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-bash">dig @10.20.30.1 example.com
+curl --http1.1 --connect-timeout 5 https://example.com</code></pre>
+                    <p
+                      data-fa="10.20.30.1 را با Resolver واقعی عوض کنید. dig باید NXDOMAIN بدهد. برای آزمون SNI، ابتدا IP را از مسیر DNS مجاز بگیرید و TLS را با نام دامنه واقعی بسنجید. DNS ناموفق دلیل Match شدن TLS نیست."
+                      data-en="Replace 10.20.30.1 with the actual resolver. Expect NXDOMAIN from dig. For SNI tests, resolve through an allowed DNS path and test TLS with the real name. Failed DNS does not prove a TLS match."
+                    >
+                      Replace 10.20.30.1 with the actual resolver. Expect
+                      NXDOMAIN from dig. For SNI tests, resolve through an
+                      allowed DNS path and test TLS with the real name. Failed
+                      DNS does not prove a TLS match.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="سایت هنوز باز می‌شود"
+                      data-en="When the site still opens"
+                    >
+                      When the site still opens
+                    </h2>
+                    <p
+                      data-fa="ابتدا دامنه اصلی و Subdomain و DNS Cache را بررسی کنید. سپس مسیر DoH، QUIC، ECH، Proxy و IPv6 را جدا کنترل کنید. ClientHello تقسیم‌شده بین چند TCP Segment نیز ممکن است Match نشود. خطای DNS، اثر Rule SNI را ثابت نمی‌کند. برای آن آزمون، Resolve مجاز و اتصال تازه لازم است."
+                      data-en="Check root/subdomains and DNS caches first, then isolate DoH, QUIC, ECH, proxies and IPv6. A ClientHello split across TCP segments might not match. DNS failure does not establish SNI-rule effectiveness. Test it with permitted resolution and a fresh connection."
+                    >
+                      Check root/subdomains and DNS caches first, then isolate
+                      DoH, QUIC, ECH, proxies and IPv6. A ClientHello split
+                      across TCP segments might not match. DNS failure does not
+                      establish SNI-rule effectiveness. Test it with permitted
+                      resolution and a fresh connection.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="سنجش اثر Policy بر کاربران"
+                      data-en="Measure user impact"
+                    >
+                      Measure user impact
+                    </h2>
+                    <p
+                      data-fa="Counter Rule را با نتیجه واقعی کلاینت مقایسه کنید. حجم UDP/443 و شکایت کاربران و False Positive را ثبت کنید. پیش از مسدودکردن QUIC، رفتار Fallback برنامه‌ها را آزمایش کنید."
+                      data-en="Compare rule counters with actual client outcomes. Record UDP/443 volume, user reports and false positives. Test application fallback before blocking QUIC."
+                    >
+                      Compare rule counters with actual client outcomes. Record
+                      UDP/443 volume, user reports and false positives. Test
+                      application fallback before blocking QUIC.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="برگشت Policy و Cache"
+                      data-en="Undo policy and handle caches"
+                    >
+                      Undo policy and handle caches
+                    </h2>
+                    <p
+                      data-fa="برای برگشت، Ruleها و DNS Entryهای ENT-WEB را Disable کنید. سایر تنظیمات Firewall را دست‌نخورده نگه دارید."
+                      data-en="Disable ENT-WEB rules and DNS entries to undo this policy, leaving unrelated firewall configuration intact."
+                    >
+                      Disable ENT-WEB rules and DNS entries to undo this policy,
+                      leaving unrelated firewall configuration intact.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-routeros">/ip firewall filter disable [find where comment~&quot;ENT-WEB&quot;]
+/ip dns static disable [find where comment~&quot;ENT-WEB&quot;]</code></pre>
+                    <p
+                      data-fa="سپس Cache موردنیاز کلاینت و Resolver را طبق روش همان سیستم پاک کنید و دسترسی برنامه را دوباره بسنجید. زمان Cache می‌تواند نتیجه آزمون فوری را تغییر دهد."
+                      data-en="Then clear relevant client/resolver caches through their supported methods and retest the application. Cached answers affect immediate test results."
+                    >
+                      Then clear relevant client/resolver caches through their
+                      supported methods and retest the application. Cached
+                      answers affect immediate test results.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="مالک Policy و استثناها"
+                      data-en="Policy owners and exceptions"
+                    >
+                      Policy owners and exceptions
+                    </h3>
+                    <p
+                      data-fa="دامنه، دامنه فرعی، گروه کاربر و استثنای مجاز را مشخص کنید. برای الزام سازمانی، Router Filtering را همراه Endpoint Management و Gateway وب ارزیابی کنید."
+                      data-en="Specify domains, subdomains, user groups and authorized exceptions. Assess router filtering alongside endpoint management and a web gateway for organizational enforcement."
+                    >
+                      Specify domains, subdomains, user groups and authorized
+                      exceptions. Assess router filtering alongside endpoint
+                      management and a web gateway for organizational
+                      enforcement.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا tls-host همه HTTPS را مسدود می‌کند؟"
+                      data-en="Does tls-host block all HTTPS?"
+                    >
+                      Does tls-host block all HTTPS?
+                    </h3>
+                    <p
+                      data-fa="خیر. ECH، QUIC، fragmentation و VPN محدودیت ایجاد می‌کنند."
+                      data-en="No. ECH, QUIC, fragmentation and VPNs limit its visibility."
+                    >
+                      No. ECH, QUIC, fragmentation and VPNs limit its
+                      visibility.
+                    </p>
+                    <h3
+                      data-fa="آیا یک IP مقصد برابر یک سایت است؟"
+                      data-en="Does one destination IP identify one website?"
+                    >
+                      Does one destination IP identify one website?
+                    </h3>
+                    <p
+                      data-fa="خیر. CDN می‌تواند یک IP را بین چندین سرویس مشترک کند."
+                      data-en="No. A CDN can share an IP across multiple services."
+                    >
+                      No. A CDN can share an IP across multiple services.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://help.mikrotik.com/docs/spaces/ROS/pages/37748767/DNS"
+                          rel="noopener"
+                          >MikroTik: DNS</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://help.mikrotik.com/docs/spaces/ROS/pages/250708064/Common+Firewall+Matchers+and+Actions"
+                          rel="noopener"
+                          >MikroTik: Matchers</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
               </article>
             </div>
           </div>
@@ -2229,10 +870,10 @@
               </h3>
               <p
                 class="brand-title"
-                data-en="Infrastructure & DevOps Engineer"
+                data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
               >
-                Infrastructure & DevOps Engineer
+                Infrastructure &amp; DevOps Engineer
               </p>
               <p
                 class="brand-description"

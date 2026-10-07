@@ -1,4 +1,6 @@
 > **HISTORICAL / SUPERSEDED.**
+
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
 > **Original date:** 2026-09-16.
 > **Original purpose:** implementation report for the service catalog CMS, including the test counts and git state of that day.
 > **Superseded by:** [../current/SERVICES.md](../current/SERVICES.md) and [../phases/phase-07-service-cms.md](../phases/phase-07-service-cms.md).
@@ -6,7 +8,7 @@
 
 # Service CMS implementation — Meet AJ
 
-**Date:** 2026-09-16  
+**Date:** 2026-09-16
 **Scope:** Homepage service catalog, Filament Service CMS, pricing, requests, SEO, EN/FA (no invented DE).
 
 ## Services implemented

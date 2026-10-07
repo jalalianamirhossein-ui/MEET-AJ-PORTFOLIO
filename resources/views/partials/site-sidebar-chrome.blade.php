@@ -7,7 +7,7 @@
       <div class="brand-lang" id="lang-mount"></div>
       <div class="profile-img">
         <img
-          src="{{ data_get($siteContent, 'profile_image', '/assets/img/my-profile-img.jpg') }}"
+          src="{{ data_get($siteContent, 'profile_image', '/assets/img/avatars/profile/my-profile-img.jpg') }}"
           alt="{{ data_get($siteContent, 'site_name', 'Meet AJ') }} Profile Picture"
           class="img-fluid rounded-circle"
           width="200"
@@ -20,7 +20,7 @@
       <div class="logo-section d-flex align-items-center justify-content-center">
         <a href="{{ $logoHref }}" class="logo d-flex align-items-center">
           <img
-            src="{{ data_get($siteContent, 'logo_image', '/assets/img/logo.png') }}"
+            src="{{ data_get($siteContent, 'logo_image', '/assets/img/brand/logo.png') }}"
             alt="Aj-Network"
             width="40"
             height="40"
@@ -28,7 +28,7 @@
             fetchpriority="high"
             sizes="40px"
           />
-          <div class="sitename">{{ data_get($siteContent, 'site_name', 'Meet AJ') }}</div>
+          <div class="sitename" data-en="AmirHossein Jalalian" data-fa="امیرحسین جلالیان">AmirHossein Jalalian</div>
         </a>
       </div>
       <div class="social-links text-center">

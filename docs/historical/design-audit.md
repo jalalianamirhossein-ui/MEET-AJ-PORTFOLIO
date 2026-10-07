@@ -1,10 +1,12 @@
 > **HISTORICAL.** Visual audit that preceded the overlay upgrade. Later work: [visual-upgrade-report.md](visual-upgrade-report.md), [final-ui-qa.md](final-ui-qa.md). Current status: [PROJECT-STATUS.md](../current/PROJECT-STATUS.md).
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 # Meet AJ — Visual Design Audit
 
-Date: 2026-09-16  
-Origin: `http://127.0.0.1:8000`  
-Scope: Homepage, 6 service pages, `/articles`, article detail template, EN/FA, PWA, existing a11y, existing CSS tokens.  
+Date: 2026-09-16
+Origin: `http://127.0.0.1:8000`
+Scope: Homepage, 6 service pages, `/articles`, article detail template, EN/FA, PWA, existing a11y, existing CSS tokens.
 Mode: Read-only visual/UX audit first. No identity replacement. No content rewrite.
 
 ## Skills used

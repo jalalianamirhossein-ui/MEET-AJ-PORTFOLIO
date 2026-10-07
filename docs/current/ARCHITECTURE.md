@@ -1,7 +1,9 @@
 # Architecture — Meet AJ
 
+> Maintenance review: 2026-10-06. Article ordering/localization/presentation services and article packages are part of the maintained architecture. Only `public/` is the web document root. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
 **Authority:** AUTHORITATIVE description of the running application.
-**Verified:** 2026-09-20 against `app/`, `routes/web.php`, `config/`, `resources/views/`, `public/`, and `php artisan route:list` after `optimize:clear`.
+**Verified:** 2026-09-21 against `app/`, `routes/web.php`, `config/`, `resources/views/`, `public/`, and `php artisan route:list` after `optimize:clear`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md). Decision record: [../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md](../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md).
 
 ## Request flow
@@ -72,6 +74,8 @@ There is no `/de` route.
 | `Tag` | `tags` | `TagPolicy` | admin + editor |
 | `Service` | `services` | `ServicePolicy` | admin only |
 | `Request` | `requests` | `RequestPolicy` | admin only, create denied |
+| `HomepageContent` | `homepage_contents` | `HomepageContentPolicy` | admin + editor |
+| `Testimonial` | `testimonials` | `TestimonialPolicy` | admin + editor |
 | `User` | `users` | `UserPolicy` | admin only |
 | `ArticleRedirect` | `article_redirects` | — | managed by the importer and slug changes |
 
@@ -82,7 +86,7 @@ Policies are registered in `App\Providers\AppServiceProvider`.
 | Class | Role |
 |-------|------|
 | `LegacyArticleImporter` | Parse `resources/legacy/articles/*.html` into `articles` + `article_redirects` |
-| `LegacyServiceImporter` | Parse `resources/legacy/services/*.html` into `services` |
+| `LegacyServiceImporter` | Import optional legacy service HTML and synchronize `HomepageServiceCatalog` (legacy HTML folder is currently empty) |
 | `LegacySitePublisher` | Copy allowlisted assets into `public/` and rebuild Blade views from the original HTML |
 | `ArticleSeo` | Canonical, Open Graph, Twitter and JSON-LD for article detail |
 | `ArticleShareLinks` | Share URLs on the article page |
@@ -95,7 +99,7 @@ Policies are registered in `App\Providers\AppServiceProvider`.
 
 | Command | Class | Options |
 |---------|-------|---------|
-| `articles:import-legacy` | `ImportLegacyArticles` | `--dry-run`, `--refresh` |
+| `articles:import-legacy` | `ImportLegacyArticles` | `--dry-run`, `--refresh`, `--update-existing`, `--slug=*` |
 | `services:import-legacy` | `ImportLegacyServices` | `--dry-run`, `--refresh` |
 | `articles:sync-tags` | `SyncArticleTags` | — |
 | `site:publish-assets` | `PublishLegacyAssets` | `--views` |
@@ -125,7 +129,7 @@ The homepage service catalog is the only public service presentation. Homepage c
 
 - Provider: `app/Providers/Filament/AdminPanelProvider.php`, panel path `/admin`
 - Resources: `ArticleResource`, `CategoryResource`, `TagResource`, `HomepageContentResource`, `ServiceResource`, `TestimonialResource`, `RequestResource`, `Users/UserResource`
-- Widgets: `CmsStatsOverview`, `RecentArticles`, `RecentRequests`
+- Widgets: `CmsStatsOverview`, `RecentArticles`, `RecentRequests`, `WorkspaceActions`
 - Livewire 4 is a Filament dependency; the public pages use no Livewire components
 
 Detail: [ADMIN.md](ADMIN.md).
@@ -139,7 +143,7 @@ Detail: [ADMIN.md](ADMIN.md).
 
 ## Assets and document root
 
-Site CSS/JS/images live in `resources/assets/` and are copied into `public/assets/` by `php artisan site:publish-assets`. Public cascade: `main.css?v=1002` → `lang-toggle.css?v=1403` → `rtl.css?v=1405` → `visual-upgrade.css?v=1711` → **`site-modules.css?v=1840` last**. Scripts: `main.js?v=1412`, `i18n.js?v=1403`. Admin CSS is **not** in this public overlay — Filament loads `resources/css/filament-admin.css` (published as `public/css/app/meet-aj-admin.css`).
+Site CSS/JS/images live in `resources/assets/` and are copied into `public/assets/` by `php artisan site:publish-assets`. Public cascade: `main.css?v=1002` → `lang-toggle.css?v=1403` → `rtl.css?v=1405` → `visual-upgrade.css?v=1713` → `site-modules.css?v=1853` → `glass-system.css?v=18` last. Scripts: `main.js?v=1420`; shared `i18n.js?v=1407` on the homepage/library and article detail. Article detail resolves EN/FA content and SEO from the saved preference cookie before the instant client-side toggle runs. See [MULTILINGUAL.md](MULTILINGUAL.md). Admin CSS is **not** in this public overlay — Filament loads `resources/css/filament-admin.css` (published as `public/css/app/meet-aj-admin.css`).
 
 Only `public/` may be exposed by the web server. Frontend assets, static files, downloads, and original HTML live under `resources/`. Importers and the publisher read those sources; public URL paths are unchanged. See [PROJECT-STRUCTURE.md](PROJECT-STRUCTURE.md).
 

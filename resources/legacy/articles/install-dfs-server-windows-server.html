@@ -1,26 +1,37 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-article-language="en">
   <head>
-    <title>Install DFS Server on Windows Server | Meet AJ</title>
+    <title>
+      Configure DFS Namespaces and Replication on Windows Server | Meet AJ
+    </title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Step-by-step DFS namespace and replication setup for secure file sharing"
+      content="Create a domain namespace, configure DFS-R, verify initial synchronization and diagnose backlog and SMB access."
     />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <link
       rel="canonical"
-      href="https://meetaj.ir/articles/install-dfs-server-windows-server.html"
+      href="https://meetaj.ir/articles/install-dfs-server-windows-server"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Install DFS Server on Windows Server | Meet AJ" />
-    <meta property="og:description" content="Step-by-step DFS namespace and replication setup for secure file sharing" />
-    <meta property="og:url" content="https://meetaj.ir/articles/install-dfs-server-windows-server.html" />
+    <meta
+      property="og:title"
+      content="Configure DFS Namespaces and Replication on Windows Server"
+    />
+    <meta
+      property="og:description"
+      content="Create a domain namespace, configure DFS-R, verify initial synchronization and diagnose backlog and SMB access."
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/install-dfs-server-windows-server"
+    />
     <meta property="og:site_name" content="Meet AJ" />
     <meta name="twitter:card" content="summary" />
-    <link href="../assets/img/favicon.png" rel="icon" />
+    <link href="../assets/img/icons/favicon.png" rel="icon" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -54,13 +65,96 @@
       rel="stylesheet"
       disabled
     />
+    <meta
+      name="keywords"
+      content="Windows Server DFS, install dfs server windows server, infrastructure operations, production operations, troubleshooting"
+    />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Configure DFS Namespaces and Replication on Windows Server",
+        "description": "Create a domain namespace, configure DFS-R, verify initial synchronization and diagnose backlog and SMB access.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/install-dfs-server-windows-server",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/install-dfs-server-windows-server"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is DFS-R a backup replacement?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Deletes/overwrites can replicate. Independent backups remain necessary."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is PrimaryMember a permanent leader?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. It selects the initial-sync source. Normal replication is multi-master."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "نصب DFS Namespace و DFS Replication در Windows Server",
+          "meta_title": "نصب DFS Namespace و DFS Replication در Windows Server | Meet AJ",
+          "description": "ساخت Namespace دامنه، تنظیم DFS-R، کنترل Initial Sync و عیب‌یابی Backlog و دسترسی SMB.",
+          "keywords": [
+            "نصب DFS Namespace و DFS Replication در Windows Server",
+            "عیب‌یابی",
+            "بازیابی",
+            "install dfs server windows server"
+          ],
+          "faq": [
+            [
+              "آیا DFS-R جای backup است؟",
+              "خیر. حذف و overwrite می‌توانند replicate شوند و backup مستقل لازم است."
+            ],
+            [
+              "آیا PrimaryMember رهبر دائمی است؟",
+              "خیر. برای initial sync استفاده می‌شود و replication معمول multi-master است."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Configure DFS Namespaces and Replication on Windows Server",
+          "meta_title": "Configure DFS Namespaces and Replication on Windows Server | Meet AJ",
+          "description": "Create a domain namespace, configure DFS-R, verify initial synchronization and diagnose backlog and SMB access.",
+          "keywords": [
+            "Configure DFS Namespaces and Replication on Windows Server",
+            "install dfs server windows server",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Is DFS-R a backup replacement?",
+              "No. Deletes/overwrites can replicate. Independent backups remain necessary."
+            ],
+            [
+              "Is PrimaryMember a permanent leader?",
+              "No. It selects the initial-sync source. Normal replication is multi-master."
+            ]
+          ]
+        }
+      }
+    </script>
   </head>
   <body class="article-page theme-microsoft">
-    <a href="#main-content" class="skip-link sr-only sr-only-focusable"
-      ><span data-en="Skip to main content" data-fa="رفتن به محتوای اصلی"
-        >Skip to main content</span
-      ></a
-    >
     <button
       id="menu-toggle"
       class="menu-toggle d-xl-none"
@@ -78,7 +172,7 @@
       =============================================== -->
       <div class="profile-img">
         <img
-          src="../assets/img/my-profile-img.jpg"
+          src="../assets/img/avatars/profile/my-profile-img.jpg"
           loading="lazy"
           alt="AmirHossein Jalalian Profile Picture"
           class="img-fluid rounded-circle"
@@ -93,7 +187,7 @@
       >
         <!-- Site Logo & Name -->
         <a href="../index.html#hero" class="logo d-flex align-items-center">
-          <img src="../assets/img/logo.png" alt="Aj-Network" loading="lazy" />
+          <img src="../assets/img/brand/logo.png" alt="Aj-Network" loading="lazy" />
           <p class="sitename">Meet AJ</p>
         </a>
       </div>
@@ -209,75 +303,91 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#overview"
-              ><i class="bi bi-info-circle navicon" aria-hidden="true"></i
-              ><span data-en="Introduction" data-fa="مقدمه">Introduction</span></a
+            <a href="#enterprise-intro"
+              ><span
+                data-fa="DFS-N و DFS-R چه تفاوتی دارند؟"
+                data-en="How DFS-N and DFS-R differ"
+                >How DFS-N and DFS-R differ</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#article-status"
-              ><i class="bi bi-clipboard-check navicon" aria-hidden="true"></i
-              ><span data-en="Prerequisites" data-fa="پیش‌نیازها">Prerequisites</span></a
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="Referral و مسیر Replication"
+                data-en="Referrals and replication paths"
+                >Referrals and replication paths</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#planned-sections"
-              ><i class="bi bi-server navicon" aria-hidden="true"></i
-              ><span data-en="Install DFS roles" data-fa="۰۱ — نصب DFS-N و DFS-R">Install DFS roles</span></a
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="آماده‌سازی AD، دیسک و Share"
+                data-en="Prepare AD, storage and shares"
+                >Prepare AD, storage and shares</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#namespace"
-              ><i class="bi bi-folder navicon" aria-hidden="true"></i
-              ><span data-en="Create Namespace" data-fa="۰۲ — ساخت Namespace">Create Namespace</span></a
+            <a href="#enterprise-security"
+              ><span
+                data-fa="مجوزهای Share، NTFS و Firewall"
+                data-en="Share, NTFS and firewall permissions"
+                >Share, NTFS and firewall permissions</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#folder-target"
-              ><i class="bi bi-folder-plus navicon" aria-hidden="true"></i
-              ><span data-en="Add Folder Targets" data-fa="۰۳ — افزودن Folder Target">Add Folder Targets</span></a
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="ساخت Namespace و گروه Replication"
+                data-en="Create the namespace and replication group"
+                >Create the namespace and replication group</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#replication"
-              ><i class="bi bi-arrow-repeat navicon" aria-hidden="true"></i
-              ><span data-en="Replication Group" data-fa="۰۴ — ساخت Replication Group">Replication Group</span></a
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="Backlog و فشار Staging"
+                data-en="Backlog and staging pressure"
+                >Backlog and staging pressure</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#test"
-              ><i class="bi bi-activity navicon" aria-hidden="true"></i
-              ><span data-en="Test DFS-R" data-fa="۰۵ — تست DFS-R">Test DFS-R</span></a
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="فایل قدیمی با Namespace سالم"
+                data-en="Stale files with a healthy namespace"
+                >Stale files with a healthy namespace</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#troubleshooting"
-              ><i class="bi bi-wrench-adjustable navicon" aria-hidden="true"></i
-              ><span data-en="Troubleshooting" data-fa="رفع اشکال">Troubleshooting</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#best-practices"
-              ><i class="bi bi-check2-square navicon" aria-hidden="true"></i
-              ><span data-en="Best Practices" data-fa="بهترین روش‌ها">Best Practices</span></a
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="Restore بدون انتشار Overwrite ناخواسته"
+                data-en="Restore without unintended overwrite propagation"
+                >Restore without unintended overwrite propagation</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
             <a href="#faq"
-              ><i class="bi bi-question-circle navicon" aria-hidden="true"></i
-              ><span data-en="Frequently Asked Questions" data-fa="سوالات متداول">Frequently Asked Questions</span></a
+              ><span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#conclusion"
-              ><i class="bi bi-flag navicon" aria-hidden="true"></i
-              ><span data-en="Conclusion" data-fa="جمع‌بندی">Conclusion</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#references"
-              ><i class="bi bi-book navicon" aria-hidden="true"></i
-              ><span data-en="Official references" data-fa="منابع رسمی">Official references</span></a
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
+              ></a
             >
           </li>
         </ul>
@@ -308,24 +418,24 @@
               </div>
               <h1
                 class="article-title hero-title"
-                data-en="Install and configure DFS on Windows Server"
-                data-fa="نصب و راه‌اندازی DFS در Windows Server"
+                data-fa="نصب DFS Namespace و DFS Replication در Windows Server"
+                data-en="Configure DFS Namespaces and Replication on Windows Server"
               >
-                Install DFS Server on Windows Server
+                Configure DFS Namespaces and Replication on Windows Server
               </h1>
               <p
                 class="article-excerpt hero-subtitle"
-                data-en="Step-by-step DFS namespace and replication setup for secure file sharing"
-                data-fa="نصب DFS-N و DFS-R، ساخت Namespace و همگام‌سازی پوشه‌ها در Windows Server"
+                data-fa="ساخت Namespace دامنه، تنظیم DFS-R، کنترل Initial Sync و عیب‌یابی Backlog و دسترسی SMB."
+                data-en="Create a domain namespace, configure DFS-R, verify initial synchronization and diagnose backlog and SMB access."
               >
-                Step-by-step DFS namespace and replication setup for secure file
-                sharing
+                Create a domain namespace, configure DFS-R, verify initial
+                synchronization and diagnose backlog and SMB access.
               </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
                     class="article-hero-thumbnail"
-                    src="../assets/img/portfolio/windows-6.png"
+                    src="../assets/img/articles/banners/install-dfs-server-windows-server.png"
                     alt="Install DFS Server on Windows Server"
                   />
                   <div class="banner-content">
@@ -369,112 +479,350 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body">
-                <section id="overview" class="article-section"><h2 data-en="Introduction" data-fa="مقدمه">Introduction</h2><p data-en="DFS Namespaces (DFS-N) presents shared folders through a logical path, while DFS Replication (DFS-R) synchronizes replicated folders between servers. Together they can provide a consistent user path and copies of data on multiple members." data-fa="DFS Namespaces یا DFS-N پوشه‌های اشتراکی را با یک مسیر منطقی نمایش می‌دهد و DFS Replication یا DFS-R پوشه‌های Replicated را میان سرورها همگام می‌کند. این دو در کنار هم می‌توانند مسیر یکنواخت برای کاربر و کپی داده روی چند Member فراهم کنند.">DFS Namespaces (DFS-N) presents shared folders through a logical path, while DFS Replication (DFS-R) synchronizes replicated folders between servers. Together they can provide a consistent user path and copies of data on multiple members.</p></section>
-                <section id="article-status" class="article-section"><h2 data-en="Prerequisites" data-fa="پیش‌نیازها">Prerequisites</h2><ul><li data-en="Supported Windows Server members joined to the same Active Directory forest for DFS-R." data-fa="Windows Serverهای پشتیبانی‌شده که برای DFS-R عضو یک Active Directory forest هستند.">Supported Windows Server members joined to the same Active Directory forest for DFS-R.</li><li data-en="DNS and Active Directory replication are healthy, and an administrator has the necessary permissions." data-fa="DNS و Active Directory Replication سالم هستند و Administrator دسترسی لازم دارد.">DNS and Active Directory replication are healthy, and an administrator has the necessary permissions.</li><li data-en="Replicated folders are on NTFS volumes; DFS-R does not support ReFS or FAT for replicated data." data-fa="پوشه‌های Replicated روی Volumeهای NTFS قرار دارند؛ DFS-R برای دادهٔ Replicated از ReFS یا FAT پشتیبانی نمی‌کند.">Replicated folders are on NTFS volumes; DFS-R does not support ReFS or FAT for replicated data.</li></ul></section>
-                <section id="planned-sections" class="article-section"><h2 data-en="01 — Install DFS-N and DFS-R" data-fa="۰۱ — نصب DFS-N و DFS-R">01 — Install DFS-N and DFS-R</h2><p data-en="Run PowerShell as an administrator on each intended namespace or replication member, then confirm the installed feature state." data-fa="PowerShell را با دسترسی Administrator روی هر Namespace Server یا Replication Member موردنظر اجرا و وضعیت Featureهای نصب‌شده را بررسی کنید.">Run PowerShell as an administrator on each intended namespace or replication member, then confirm the installed feature state.</p><div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="PowerShell" data-fa="PowerShell">PowerShell</span><button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی">Copy</button></div><pre><code class="language-powershell">Install-WindowsFeature FS-DFS-Namespace,FS-DFS-Replication -IncludeManagementTools
-Get-WindowsFeature *DFS*</code></pre></div></section>
-                <section id="namespace" class="article-section"><h2 data-en="02 — Create the Namespace" data-fa="۰۲ — ساخت Namespace">02 — Create the Namespace</h2><ol><li data-en="Open DFS Management and select New Namespace." data-fa="DFS Management را باز و New Namespace را انتخاب کنید.">Open DFS Management and select New Namespace.</li><li data-en="Choose a namespace server and create a domain-based namespace when the organization needs a domain path and centralized referrals." data-fa="یک Namespace Server انتخاب کنید و زمانی که سازمان به مسیر Domain و Referralهای متمرکز نیاز دارد، Domain-based Namespace بسازید.">Choose a namespace server and create a domain-based namespace when the organization needs a domain path and centralized referrals.</li><li data-en="Use a clear namespace path, for example:" data-fa="یک مسیر شفاف برای Namespace انتخاب کنید، برای مثال:">Use a clear namespace path, for example:</li></ol><div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="Namespace path" data-fa="مسیر Namespace">Namespace path</span><button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی">Copy</button></div><pre><code class="language-text">\\domain.local\Company</code></pre></div></section>
-                <section id="folder-target" class="article-section"><h2 data-en="03 — Add folder targets" data-fa="۰۳ — افزودن Folder Target">03 — Add folder targets</h2><p data-en="Under the new namespace, create a DFS folder and add one or more Folder Targets that point to the existing shared folders on file servers. The Namespace path is what users access; a Folder Target is the underlying server share." data-fa="زیر Namespace جدید، یک DFS Folder بسازید و یک یا چند Folder Target اضافه کنید که به پوشه‌های Shareشدهٔ موجود روی File Serverها اشاره می‌کنند. مسیر Namespace همان چیزی است که کاربر استفاده می‌کند و Folder Target همان Share زیربنایی سرور است.">Under the new namespace, create a DFS folder and add one or more Folder Targets that point to the existing shared folders on file servers. The Namespace path is what users access; a Folder Target is the underlying server share.</p></section>
-                <section id="replication" class="article-section"><h2 data-en="04 — Create the Replication Group" data-fa="۰۴ — ساخت Replication Group">04 — Create the Replication Group</h2><ol><li data-en="In DFS Management, choose Replicate Folder for a DFS folder that has at least two targets, or create a Multipurpose Replication Group." data-fa="در DFS Management برای DFS Folder دارای دست‌کم دو Target، گزینهٔ Replicate Folder را انتخاب کنید یا یک Multipurpose Replication Group بسازید.">In DFS Management, choose Replicate Folder for a DFS folder that has at least two targets, or create a Multipurpose Replication Group.</li><li data-en="Add the member servers and map the local folder path on every member." data-fa="Member Serverها را اضافه و مسیر پوشهٔ محلی را روی هر Member مشخص کنید.">Add the member servers and map the local folder path on every member.</li><li data-en="Choose a topology: Full Mesh is simple for a small member count; Hub and Spoke can suit branch designs." data-fa="Topology را انتخاب کنید: Full Mesh برای تعداد کم Member ساده است و Hub and Spoke می‌تواند برای طراحی شعب مناسب باشد.">Choose a topology: Full Mesh is simple for a small member count; Hub and Spoke can suit branch designs.</li><li data-en="Select the Primary Member carefully for initial replication; it is the authoritative source used to seed initial content." data-fa="Primary Member را برای Initial Replication با دقت انتخاب کنید؛ این Member منبع اصلی Seed کردن محتوای اولیه است.">Select the Primary Member carefully for initial replication; it is the authoritative source used to seed initial content.</li><li data-en="Set Replication Schedule and bandwidth for the available WAN capacity, and place the Staging folder on a volume with adequate free space." data-fa="Replication Schedule و Bandwidth را متناسب با ظرفیت WAN تنظیم کنید و Staging folder را روی Volume دارای فضای آزاد کافی قرار دهید.">Set Replication Schedule and bandwidth for the available WAN capacity, and place the Staging folder on a volume with adequate free space.</li></ol><div class="article-callout article-callout--warning"><p data-en="Initial synchronization and configuration changes depend on Active Directory replication and member polling. Do not assume a new configuration is applied immediately everywhere." data-fa="همگام‌سازی اولیه و تغییرات پیکربندی به Active Directory Replication و Polling Memberها وابسته است. اعمال فوری یک پیکربندی جدید روی همهٔ سرورها را فرض نکنید.">Initial synchronization and configuration changes depend on Active Directory replication and member polling. Do not assume a new configuration is applied immediately everywhere.</p></div></section>
-                <section id="test" class="article-section"><h2 data-en="05 — Test DFS-R" data-fa="۰۵ — تست DFS-R">05 — Test DFS-R</h2><p data-en="Create a non-production test file in the intended replicated folder, wait for the configured schedule, and confirm it arrives at the other member. Then check the current replication state and backlog." data-fa="یک فایل آزمایشی غیرProduction در پوشهٔ Replicated ایجاد کنید، تا زمان Schedule تنظیم‌شده صبر و رسیدن آن به Member دیگر را تأیید کنید. سپس وضعیت Replication و Backlog را بررسی کنید.">Create a non-production test file in the intended replicated folder, wait for the configured schedule, and confirm it arrives at the other member. Then check the current replication state and backlog.</p><div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="Command Prompt" data-fa="Command Prompt">Command Prompt</span><button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی">Copy</button></div><pre><code class="language-bash">dfsrdiag ReplicationState
-dfsrdiag backlog /rgname:"Data-RG" /rfname:"Data" /smem:SERVER1 /rmem:SERVER2</code></pre></div></section>
-                <section id="troubleshooting" class="article-section"><h2 data-en="Troubleshooting" data-fa="رفع اشکال">Troubleshooting</h2><ul><li data-en="DNS or AD: verify name resolution, domain membership, AD replication health, and that all DFS-R members are in the same forest." data-fa="DNS یا AD: Name Resolution، Domain Membership، سلامت AD Replication و قرارداشتن تمام DFS-R Memberها در یک forest را بررسی کنید.">DNS or AD: verify name resolution, domain membership, AD replication health, and that all DFS-R members are in the same forest.</li><li data-en="NTFS permissions: verify share and NTFS access separately; DFS-N does not bypass file-system permissions." data-fa="مجوزهای NTFS: مجوز Share و NTFS را جداگانه بررسی کنید؛ DFS-N مجوزهای File System را دور نمی‌زند.">NTFS permissions: verify share and NTFS access separately; DFS-N does not bypass file-system permissions.</li><li data-en="Replication: check the DFS Replication event log, free space for the replicated and Staging folders, schedule, network reachability, and backlog." data-fa="Replication: DFS Replication event log، فضای آزاد پوشه‌های Replicated و Staging، Schedule، دسترسی شبکه و Backlog را بررسی کنید.">Replication: check the DFS Replication event log, free space for the replicated and Staging folders, schedule, network reachability, and backlog.</li></ul></section>
-                <section id="best-practices" class="article-section"><h2 data-en="Best Practices" data-fa="بهترین روش‌ها">Best Practices</h2><ul><li data-en="Use stable domain-based paths, document each target and topology, and monitor quota and backlog." data-fa="از مسیرهای Domain-based پایدار استفاده کنید، Target و Topology را مستند و Quota و Backlog را پایش کنید.">Use stable domain-based paths, document each target and topology, and monitor quota and backlog.</li><li data-en="Keep replicated data on NTFS volumes and test both replication and client referral behavior before production use." data-fa="دادهٔ Replicated را روی Volumeهای NTFS نگه دارید و قبل از Production، Replication و Client Referral را تست کنید.">Keep replicated data on NTFS volumes and test both replication and client referral behavior before production use.</li><li data-en="Plan backups separately; replication propagates changes and is not a replacement for tested backups." data-fa="Backup را جداگانه برنامه‌ریزی کنید؛ Replication تغییرات را منتشر می‌کند و جایگزین Backup آزموده‌شده نیست.">Plan backups separately; replication propagates changes and is not a replacement for tested backups.</li></ul></section>
-                <section id="faq" class="article-section"><h2 data-en="Frequently Asked Questions" data-fa="سوالات متداول">Frequently Asked Questions</h2><div class="article-faq"><div class="article-faq-item"><h3 class="article-faq-question"><span data-en="Does DFS-N replicate files?" data-fa="آیا DFS-N فایل‌ها را Replicate می‌کند؟">Does DFS-N replicate files?</span><i class="bi bi-chevron-down" aria-hidden="true"></i></h3><div class="article-faq-answer"><p data-en="No. DFS-N provides the logical namespace; DFS-R is the replication service." data-fa="خیر. DFS-N مسیر منطقی را فراهم می‌کند و DFS-R سرویس Replication است.">No. DFS-N provides the logical namespace; DFS-R is the replication service.</p></div></div><div class="article-faq-item"><h3 class="article-faq-question"><span data-en="Can DFS-R use ReFS for replicated folders?" data-fa="آیا DFS-R می‌تواند از ReFS برای پوشهٔ Replicated استفاده کند؟">Can DFS-R use ReFS for replicated folders?</span><i class="bi bi-chevron-down" aria-hidden="true"></i></h3><div class="article-faq-answer"><p data-en="No. Microsoft documents NTFS as the supported file system for replicated folders." data-fa="خیر. Microsoft، NTFS را File System پشتیبانی‌شده برای پوشه‌های Replicated اعلام کرده است.">No. Microsoft documents NTFS as the supported file system for replicated folders.</p></div></div></div></section>
-                <section id="conclusion" class="article-section"><h2 data-en="Conclusion" data-fa="جمع‌بندی">Conclusion</h2><p data-en="Deploy DFS-N for a stable user path and DFS-R for replicated folder content. Select targets, topology, primary member, schedule, and staging capacity deliberately; then validate with a real controlled file test and DFS diagnostics." data-fa="برای مسیر پایدار کاربران، DFS-N و برای محتوای پوشهٔ Replicated، DFS-R را راه‌اندازی کنید. Target، Topology، Primary Member، Schedule و ظرفیت Staging را آگاهانه انتخاب و سپس با یک فایل آزمایشی کنترل‌شده و ابزارهای تشخیصی DFS اعتبارسنجی کنید.">Deploy DFS-N for a stable user path and DFS-R for replicated folder content. Select targets, topology, primary member, schedule, and staging capacity deliberately; then validate with a real controlled file test and DFS diagnostics.</p></section>
-                <section id="references" class="article-section"><h2 data-en="Official references" data-fa="منابع رسمی">Official references</h2><ul><li><a href="https://learn.microsoft.com/en-us/windows-server/storage/dfs-replication/install-dfs-replication" target="_blank" rel="noopener noreferrer" data-en="Microsoft Learn — Install DFS Replication" data-fa="Microsoft Learn — نصب DFS Replication">Microsoft Learn — Install DFS Replication</a></li><li><a href="https://learn.microsoft.com/en-us/windows-server/storage/dfs-replication/dfs-replication-overview" target="_blank" rel="noopener noreferrer" data-en="Microsoft Learn — DFS Replication overview" data-fa="Microsoft Learn — نمای کلی DFS Replication">Microsoft Learn — DFS Replication overview</a></li><li><a href="https://learn.microsoft.com/en-us/windows-server/storage/dfs-namespaces/checklist-deploy-dfs-namespaces" target="_blank" rel="noopener noreferrer" data-en="Microsoft Learn — Deploy DFS Namespaces" data-fa="Microsoft Learn — استقرار DFS Namespaces">Microsoft Learn — Deploy DFS Namespaces</a></li></ul></section>
-                <footer class="article-footer" aria-label="Article footer">
-                  <section
-                    id="author"
-                    class="article-author"
-                    role="complementary"
-                    aria-labelledby="author-title"
-                  >
-                    <div class="article-author-card">
-                      <img
-                        class="article-author-avatar"
-                        src="../assets/img/my-profile-img.jpg"
-                        alt="AmirHossein Jalalian"
-                        loading="lazy"
-                        width="120"
-                        height="120"
-                        decoding="async"
-                      />
-                      <div class="article-author-content">
-                        <p
-                          class="article-author-kicker"
-                          id="author-title"
-                          data-en="About the author"
-                          data-fa="درباره نویسنده"
-                        >
-                          About the author
-                        </p>
-                        <h2
-                          data-en="AmirHossein Jalalian"
-                          data-fa="امیرحسین جلالیان"
-                        >
-                          AmirHossein Jalalian
-                        </h2>
-                        <p
-                          class="article-author-role"
-                          data-en="Infrastructure & DevOps Engineer"
-                          data-fa="مهندس زیرساخت و DevOps"
-                        >
-                          Infrastructure & DevOps Engineer
-                        </p>
-                        <p
-                          class="article-author-description"
-                          data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
-                          data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-                        >
-                          Delivering reliable, secure, and scalable IT solutions
-                          for your business success.
-                        </p>
-                        <div
-                          class="article-author-social"
-                          role="group"
-                          aria-label="Author links"
-                        >
-                          <a
-                            href="https://linkedin.com/in/amirhossein-jalalian"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="LinkedIn Profile"
-                            ><i class="bi bi-linkedin" aria-hidden="true"></i
-                          ></a>
-                          <a
-                            href="https://github.com/amirhossein-jalalian"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="GitHub Profile"
-                            ><i class="bi bi-github" aria-hidden="true"></i
-                          ></a>
-                          <a
-                            href="https://twitter.com/amirhossein_j"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Twitter Profile"
-                            ><i class="bi bi-twitter-x" aria-hidden="true"></i
-                          ></a>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                  <nav
-                    class="article-footer-nav"
-                    aria-label="Article footer navigation"
-                  >
-                    <a class="article-back" href="../index.html#portfolio"
-                      ><i class="bi bi-arrow-left" aria-hidden="true"></i
-                      ><span
-                        data-en="Back to portfolio"
-                        data-fa="بازگشت به مقالات"
-                        >Back to portfolio</span
-                      ></a
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="DFS-N و DFS-R چه تفاوتی دارند؟"
+                      data-en="How DFS-N and DFS-R differ"
                     >
-                  </nav>
-                </footer>
+                      How DFS-N and DFS-R differ
+                    </h2>
+                    <p
+                      data-fa="DFS Namespace یک مسیر ثابت به Shareها می‌دهد. DFS Replication فایل‌ها را بین سرورها کپی می‌کند. Namespace بدون Replication هم کار می‌کند. در طرح دو شعبه، ابتدا مسیر دسترسی و سپس همگام‌سازی محتوا را تنظیم کنید. حذف و Overwrite نیز تکثیر می‌شوند و Backup جدا لازم است."
+                      data-en="DFS Namespaces provide stable paths to shares. DFS Replication copies files between servers. Namespaces also work without replication. For two branches, configure the access path and then content synchronization. Replicated deletions and overwrites require independent backups."
+                    >
+                      DFS Namespaces provide stable paths to shares. DFS
+                      Replication copies files between servers. Namespaces also
+                      work without replication. For two branches, configure the
+                      access path and then content synchronization. Replicated
+                      deletions and overwrites require independent backups.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="Referral و مسیر Replication"
+                      data-en="Referrals and replication paths"
+                    >
+                      Referrals and replication paths
+                    </h2>
+                    <p
+                      data-fa="کلاینت از DFS-N مقصد SMB را می‌گیرد. DFS-R جداگانه فایل بسته‌شده را تکثیر می‌کند. Multi-master به معنی قفل مشترک بین شعبه‌ها نیست. برای Database زنده یا فایل نیازمند Lock بین سایت‌ها، این طرح مناسب نیست."
+                      data-en="Clients obtain SMB targets through DFS-N. Separately, DFS-R replicates closed files. Multi-master does not provide shared cross-site locking. This design is unsuitable for live databases or files requiring cross-site locks."
+                    >
+                      Clients obtain SMB targets through DFS-N. Separately,
+                      DFS-R replicates closed files. Multi-master does not
+                      provide shared cross-site locking. This design is
+                      unsuitable for live databases or files requiring
+                      cross-site locks.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: مسیر مشترک دو شعبه"
+                      data-en="Example: a shared path for two branches"
+                    >
+                      Example: a shared path for two branches
+                    </h3>
+                    <p
+                      data-fa="مسیر Company/Data دو مقصد FS01 و FS02 دارد. FS01 داده اولیه را تأمین می‌کند. تا پایان Initial Sync، مقصد FS02 در Referral آفلاین است و کاربران نباید مستقیم روی Share آن بنویسند."
+                      data-en="Company/Data has FS01 and FS02 targets. FS01 supplies the initial data. FS02 remains offline for referrals during initial sync, and users must not write directly to its share."
+                    >
+                      Company/Data has FS01 and FS02 targets. FS01 supplies the
+                      initial data. FS02 remains offline for referrals during
+                      initial sync, and users must not write directly to its
+                      share.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="آماده‌سازی AD، دیسک و Share"
+                      data-en="Prepare AD, storage and shares"
+                    >
+                      Prepare AD, storage and shares
+                    </h2>
+                    <p
+                      data-fa="مثال برای Windows Server 2022/2025 عضو AD DS با ماژول‌های DFSN و DFSR است. محتوای DFS-R را روی NTFS نگه دارید. ReFS برای DFS-R پشتیبانی نمی‌شود."
+                      data-en="Use AD DS-joined Windows Server 2022/2025 with DFSN and DFSR modules. Store replicated content on NTFS. DFS-R does not support ReFS."
+                    >
+                      Use AD DS-joined Windows Server 2022/2025 with DFSN and
+                      DFSR modules. Store replicated content on NTFS. DFS-R does
+                      not support ReFS.
+                    </p>
+                    <p
+                      data-fa="روی هر دو File Server فضای داده، Staging و Conflict/Deleted را در نظر بگیرید. اندازه Staging به فایل‌های بزرگ و حجم تغییرات وابسته است، نه یک عدد ثابت برای همه محیط‌ها."
+                      data-en="Allow data, staging and conflict/deleted space on both file servers. Staging size depends on large files and change volume rather than one universal allocation."
+                    >
+                      Allow data, staging and conflict/deleted space on both
+                      file servers. Staging size depends on large files and
+                      change volume rather than one universal allocation.
+                    </p>
+                    <p
+                      data-fa="corp.example.com، FS01، FS02، درایو D: و گروه CORP\FileUsers نمونه‌اند. مسیرهای NTFS و Share و مجوز نصب Role و مدیریت AD را پیش از اجرا آماده کنید."
+                      data-en="Replace corp.example.com, FS01, FS02, D: and CORP\FileUsers with actual values. Prepare NTFS paths, shares, role-installation rights and AD delegation."
+                    >
+                      Replace corp.example.com, FS01, FS02, D: and
+                      CORP\FileUsers with actual values. Prepare NTFS paths,
+                      shares, role-installation rights and AD delegation.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="دامنه و PrimaryMember"
+                      data-en="Domain namespaces and PrimaryMember"
+                    >
+                      Domain namespaces and PrimaryMember
+                    </h3>
+                    <p
+                      data-fa="این مثال Domain-based است. رفتار دسترس‌پذیری Namespace مستقل را جدا بررسی کنید. PrimaryMember فقط منبع Initial Sync را تعیین می‌کند و رهبر دائمی Replication نیست."
+                      data-en="This example uses a domain-based namespace. Assess standalone-namespace availability separately. PrimaryMember selects the initial-sync source rather than a permanent replication leader."
+                    >
+                      This example uses a domain-based namespace. Assess
+                      standalone-namespace availability separately.
+                      PrimaryMember selects the initial-sync source rather than
+                      a permanent replication leader.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="مجوزهای Share، NTFS و Firewall"
+                      data-en="Share, NTFS and firewall permissions"
+                    >
+                      Share, NTFS and firewall permissions
+                    </h2>
+                    <p
+                      data-fa="مجوز Share و NTFS هر دو باید دسترسی موردنظر را بدهند. کاربران روی Namespace Root حق نوشتن نیاز ندارند. SMB و RPC موردنیاز را بین اعضا و Subnetهای مجاز محدود کنید و Dynamic RPC را با Policy شبکه تطبیق دهید. Signing و Audit دسترسی را نیز بررسی کنید."
+                      data-en="Share and NTFS permissions must both permit the intended access. End users need no namespace-root writes. Scope SMB and required RPC to members and approved subnets, aligning dynamic RPC with network policy. Review signing and access auditing."
+                    >
+                      Share and NTFS permissions must both permit the intended
+                      access. End users need no namespace-root writes. Scope SMB
+                      and required RPC to members and approved subnets, aligning
+                      dynamic RPC with network policy. Review signing and access
+                      auditing.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="ساخت Namespace و گروه Replication"
+                      data-en="Create the namespace and replication group"
+                    >
+                      Create the namespace and replication group
+                    </h2>
+                    <p
+                      data-fa="روی هر دو file server، role و مسیر را آماده کنید. D: باید volume NTFS مناسب باشد. گروه CORP\FileUsers placeholder گروه واقعی سازمان است."
+                      data-en="Prepare roles and paths on both file servers. D: must be suitable NTFS storage. CORP FileUsers represents the actual organizational group."
+                    >
+                      Prepare roles and paths on both file servers. D: must be
+                      suitable NTFS storage. CORP FileUsers represents the
+                      actual organizational group.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-powershell">Install-WindowsFeature FS-DFS-Namespace,FS-DFS-Replication -IncludeManagementTools
+New-Item -ItemType Directory -Path &#x27;D:\DFSRoots\Company&#x27;,&#x27;D:\Data&#x27; -Force | Out-Null
+New-SmbShare -Name Company -Path &#x27;D:\DFSRoots\Company&#x27; -ReadAccess &#x27;CORP\FileUsers&#x27;
+New-SmbShare -Name Data -Path &#x27;D:\Data&#x27; -ChangeAccess &#x27;CORP\FileUsers&#x27;
+Get-WindowsFeature FS-DFS-Namespace,FS-DFS-Replication</code></pre>
+                    <p
+                      data-fa="NTFS ACL نیز با گروه مالک داده طراحی و اعمال شود. Share permission به‌تنهایی اجازه NTFS نمی‌دهد. از یک management host دارای module و delegation:"
+                      data-en="Design/apply NTFS ACLs with the data owner. Share permissions do not grant NTFS access. Continue from a management host with modules and delegation."
+                    >
+                      Design/apply NTFS ACLs with the data owner. Share
+                      permissions do not grant NTFS access. Continue from a
+                      management host with modules and delegation.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-powershell">Import-Module DFSN
+Import-Module DFSR
+New-DfsnRoot -Path &#x27;\\corp.example.com\Company&#x27; -TargetPath &#x27;\\FS01\Company&#x27; -Type DomainV2
+New-DfsnRootTarget -Path &#x27;\\corp.example.com\Company&#x27; -TargetPath &#x27;\\FS02\Company&#x27;
+New-DfsnFolder -Path &#x27;\\corp.example.com\Company\Data&#x27; -TargetPath &#x27;\\FS01\Data&#x27;
+New-DfsnFolderTarget -Path &#x27;\\corp.example.com\Company\Data&#x27; -TargetPath &#x27;\\FS02\Data&#x27; -State Offline
+New-DfsReplicationGroup -GroupName &#x27;Company-Data&#x27;
+New-DfsReplicatedFolder -GroupName &#x27;Company-Data&#x27; -FolderName &#x27;Data&#x27;
+Add-DfsrMember -GroupName &#x27;Company-Data&#x27; -ComputerName &#x27;FS01&#x27;,&#x27;FS02&#x27;
+Add-DfsrConnection -GroupName &#x27;Company-Data&#x27; -SourceComputerName &#x27;FS01&#x27; -DestinationComputerName &#x27;FS02&#x27;
+Set-DfsrMembership -GroupName &#x27;Company-Data&#x27; -FolderName &#x27;Data&#x27; -ComputerName &#x27;FS01&#x27; -ContentPath &#x27;D:\Data&#x27; -PrimaryMember $true -Force
+Set-DfsrMembership -GroupName &#x27;Company-Data&#x27; -FolderName &#x27;Data&#x27; -ComputerName &#x27;FS02&#x27; -ContentPath &#x27;D:\Data&#x27; -Force</code></pre>
+                    <p
+                      data-fa="Add-DfsrConnection به‌صورت پیش‌فرض reverse connection نیز می‌سازد. topology را با Get-DfsrConnection بررسی کنید. روی نصب موجود createها را تکرار نکنید. propagation AD و initial sync زمان می‌برد. PrimaryMember فقط انتخاب منبع initial sync است. مقصد FS02 با State Offline ساخته می‌شود تا پیش از پذیرش referral دریافت نکند. دسترسی مستقیم کاربران به share مقصد را نیز در زمان initial sync محدود کنید. قبل پذیرش، فایل canary بسته‌شده از FS01 به FS02 با hash یکسان برسد و backlog هر دو جهت صفر شود. پس از تأیید این شروط، فقط دستور زیر مقصد را Online می‌کند."
+                      data-en="Add-DfsrConnection creates the reverse connection by default. Inspect Get-DfsrConnection. Do not repeat creation on existing deployments. AD propagation/initial sync takes time. PrimaryMember selects the initial source only. FS02 starts Offline so clients receive no referrals before acceptance. Also restrict direct user access to its share during initial sync. Accept only after a closed canary file reaches FS02 with the same hash and both backlogs reach zero. Run the following commands to bring that target Online only after these checks pass."
+                    >
+                      Add-DfsrConnection creates the reverse connection by
+                      default. Inspect Get-DfsrConnection. Do not repeat
+                      creation on existing deployments. AD propagation/initial
+                      sync takes time. PrimaryMember selects the initial source
+                      only. FS02 starts Offline so clients receive no referrals
+                      before acceptance. Also restrict direct user access to its
+                      share during initial sync. Accept only after a closed
+                      canary file reaches FS02 with the same hash and both
+                      backlogs reach zero. Run the following commands to bring
+                      that target Online only after these checks pass.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-powershell">Set-DfsnFolderTarget -Path &#x27;\\corp.example.com\Company\Data&#x27; -TargetPath &#x27;\\FS02\Data&#x27; -State Online
+Get-DfsnFolderTarget -Path &#x27;\\corp.example.com\Company\Data&#x27;</code></pre>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="Backlog و فشار Staging"
+                      data-en="Backlog and staging pressure"
+                    >
+                      Backlog and staging pressure
+                    </h2>
+                    <p
+                      data-fa="Backlog را در هر دو جهت اندازه بگیرید و روند آن را با فضای دیسک و Eventهای DFS Replication مقایسه کنید. Backlog کوتاه پس از تغییر طبیعی است. رشد مداوم نشان می‌دهد Replication به نرخ تغییرات نمی‌رسد یا ارتباط مختل است."
+                      data-en="Measure backlog in both directions and correlate its trend with disk space and DFS Replication events. Brief backlog after writes is expected. Sustained growth indicates replication is falling behind or connectivity is impaired."
+                    >
+                      Measure backlog in both directions and correlate its trend
+                      with disk space and DFS Replication events. Brief backlog
+                      after writes is expected. Sustained growth indicates
+                      replication is falling behind or connectivity is impaired.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="پذیرش Initial Sync پیش از دسترسی کاربران"
+                      data-en="Accept initial sync before user access"
+                    >
+                      Accept initial sync before user access
+                    </h3>
+                    <p
+                      data-fa="فایل آزمایشی را روی FS01 ببندید و رسیدن آن به FS02 با Hash یکسان را بررسی کنید. Backlog هر دو جهت باید در آزمون کنترل‌شده تخلیه شود. پس از این بررسی، مقصد FS02 را Online کنید."
+                      data-en="Close a test file on FS01 and verify the matching hash on FS02. Both backlogs must drain during the controlled test. Only then bring the FS02 target online."
+                    >
+                      Close a test file on FS01 and verify the matching hash on
+                      FS02. Both backlogs must drain during the controlled test.
+                      Only then bring the FS02 target online.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="فایل قدیمی با Namespace سالم"
+                      data-en="Stale files with a healthy namespace"
+                    >
+                      Stale files with a healthy namespace
+                    </h2>
+                    <p
+                      data-fa="اگر مسیر باز می‌شود ولی فایل قدیمی است، دسترسی SMB را از سلامت DFS-R جدا کنید. از میزبان دارای ماژول، Connection و Backlog را بررسی کنید. Event Log را روی عضو درگیر بخوانید."
+                      data-en="When the path opens but content is stale, separate SMB reachability from DFS-R health. Inspect connections and backlog from a module-equipped host, then read events on the affected member."
+                    >
+                      When the path opens but content is stale, separate SMB
+                      reachability from DFS-R health. Inspect connections and
+                      backlog from a module-equipped host, then read events on
+                      the affected member.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-powershell">Get-DfsrConnection -GroupName &#x27;Company-Data&#x27;
+Get-DfsrBacklog -GroupName &#x27;Company-Data&#x27; -FolderName &#x27;Data&#x27; -SourceComputerName &#x27;FS01&#x27; -DestinationComputerName &#x27;FS02&#x27; -Verbose
+Get-DfsrBacklog -GroupName &#x27;Company-Data&#x27; -FolderName &#x27;Data&#x27; -SourceComputerName &#x27;FS02&#x27; -DestinationComputerName &#x27;FS01&#x27; -Verbose
+Get-WinEvent -LogName &#x27;DFS Replication&#x27; -MaxEvents 30
+Test-NetConnection FS02 -Port 445</code></pre>
+                    <p
+                      data-fa="Get-DfsrBacklog فهرست محدودی برمی‌گرداند. تعداد کامل را در Verbose بررسی کنید. فایل باز، کمبود Staging و Content Freshness علت‌های متفاوت‌اند. برای رفع عمومی خطا، Database مربوط به DFS-R را حذف نکنید."
+                      data-en="Get-DfsrBacklog returns a limited file list. Check verbose output for the full count. Open files, insufficient staging and content freshness need different corrections. Do not delete the DFS-R database as a generic repair."
+                    >
+                      Get-DfsrBacklog returns a limited file list. Check verbose
+                      output for the full count. Open files, insufficient
+                      staging and content freshness need different corrections.
+                      Do not delete the DFS-R database as a generic repair.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="Restore بدون انتشار Overwrite ناخواسته"
+                      data-en="Restore without unintended overwrite propagation"
+                    >
+                      Restore without unintended overwrite propagation
+                    </h2>
+                    <p
+                      data-fa="Backup مستقل VSS-aware از فایل‌ها و برنامه حفاظت AD/Namespace داشته باشید. ابتدا فایل را در مسیر جدا Restore و ACL و Hash را مقایسه کنید. سپس بازگرداندن فایل منتخب را با کنترل Replication انجام دهید. عضو خراب را طبق روش مستند Non-authoritative بازسازی کنید. RPO به Backup واقعی وابسته است."
+                      data-en="Use independent VSS-aware file backups and an AD/namespace protection plan. Restore selected files to an isolated path, compare ACLs and hashes, then control their return to replication. Rebuild failed members through the documented non-authoritative procedure. RPO depends on actual backups."
+                    >
+                      Use independent VSS-aware file backups and an AD/namespace
+                      protection plan. Restore selected files to an isolated
+                      path, compare ACLs and hashes, then control their return
+                      to replication. Rebuild failed members through the
+                      documented non-authoritative procedure. RPO depends on
+                      actual backups.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا DFS-R جای backup است؟"
+                      data-en="Is DFS-R a backup replacement?"
+                    >
+                      Is DFS-R a backup replacement?
+                    </h3>
+                    <p
+                      data-fa="خیر. حذف و overwrite می‌توانند replicate شوند و backup مستقل لازم است."
+                      data-en="No. Deletes/overwrites can replicate. Independent backups remain necessary."
+                    >
+                      No. Deletes/overwrites can replicate. Independent backups
+                      remain necessary.
+                    </p>
+                    <h3
+                      data-fa="آیا PrimaryMember رهبر دائمی است؟"
+                      data-en="Is PrimaryMember a permanent leader?"
+                    >
+                      Is PrimaryMember a permanent leader?
+                    </h3>
+                    <p
+                      data-fa="خیر. برای initial sync استفاده می‌شود و replication معمول multi-master است."
+                      data-en="No. It selects the initial-sync source. Normal replication is multi-master."
+                    >
+                      No. It selects the initial-sync source. Normal replication
+                      is multi-master.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://learn.microsoft.com/en-us/powershell/module/dfsn/new-dfsnfoldertarget?view=windowsserver2025-ps"
+                          rel="noopener"
+                          >Microsoft: DFS target state</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://learn.microsoft.com/en-us/windows-server/storage/dfs-replication/dfs-replication-overview"
+                          rel="noopener"
+                          >Microsoft: DFS-R overview</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://learn.microsoft.com/en-us/windows-server/storage/dfs-namespaces/checklist-deploy-dfs-namespaces"
+                          rel="noopener"
+                          >Microsoft: DFS namespace deployment</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://learn.microsoft.com/en-us/powershell/module/dfsr/"
+                          rel="noopener"
+                          >Microsoft: DFSR PowerShell</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
               </article>
             </div>
           </div>
@@ -498,10 +846,10 @@ dfsrdiag backlog /rgname:"Data-RG" /rfname:"Data" /smem:SERVER1 /rmem:SERVER2</c
               </h3>
               <p
                 class="brand-title"
-                data-en="Infrastructure & DevOps Engineer"
+                data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
               >
-                Infrastructure & DevOps Engineer
+                Infrastructure &amp; DevOps Engineer
               </p>
               <p
                 class="brand-description"

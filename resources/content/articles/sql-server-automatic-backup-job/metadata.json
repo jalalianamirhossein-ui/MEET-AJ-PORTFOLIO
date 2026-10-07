@@ -1,0 +1,44 @@
+{
+  "slug": "sql-server-automatic-backup-job",
+  "title_en": "SQL Server Automatic Backup Job: Enterprise Backup Strategy",
+  "title_fa": "بکاپ خودکار SQL Server؛ طراحی Enterprise با SQL Server Agent",
+  "excerpt_en": "Design SQL Server backups for Jira and Confluence with full, differential and log jobs, whitelist automation, retention, encryption and restore validation.",
+  "excerpt_fa": "طراحی بکاپ SQL Server برای Jira و Confluence با Full، Differential و Log، اجرای Whitelist، Retention سی‌روزه، Encryption و تست Restore.",
+  "meta_title": "بکاپ خودکار SQL Server؛ راهنمای Enterprise با Agent | Meet AJ",
+  "meta_description": "طراحی بکاپ SQL Server برای Jira و Confluence؛ Full، Differential و Log، اسکریپت Whitelist، Retention سی‌روزه، Encryption، مانیتورینگ و تست Restore.",
+  "suggested_url": "https://meetaj.ir/articles/sql-server-automatic-backup-job",
+  "faq": [
+    {
+      "question": "چرا در Recovery Model ساده نمی‌توان Log Backup گرفت؟",
+      "answer": "در SIMPLE، بخش غیرفعال Transaction Log در صورت نبود مانع پس از Checkpoint قابل استفادهٔ مجدد می‌شود و زنجیرهٔ Log Backup نگهداری نمی‌شود. برای Log Backup باید FULL یا BULK_LOGGED داشته باشید و زنجیره را با Backup داده آغاز کنید."
+    },
+    {
+      "question": "بعد از تغییر SIMPLE به FULL چه کاری لازم است؟",
+      "answer": "باید یک Full یا Differential معتبر برای شروع زنجیرهٔ Log گرفته شود. در این سناریو Full معمولی جدید انتخاب می‌شود تا پایهٔ بازیابی روشن باشد؛ سپس Log Backup زمان‌بندی می‌شود. این الزام برای تمام تغییرات Recovery Model یکسان نیست."
+    },
+    {
+      "question": "آیا Differential تغییرات از Differential قبلی را ذخیره می‌کند؟",
+      "answer": "خیر. Differential تغییرات از Full پایهٔ معمولی را نگه می‌دارد. برای Restore از Full سازگار، آخرین Differential مناسب و Logهای موردنیاز به ترتیب استفاده می‌شود."
+    },
+    {
+      "question": "آیا VERIFYONLY جایگزین تست Restore است؟",
+      "answer": "خیر. VERIFYONLY خوانایی Backup و Checksumهای موجود را بررسی می‌کند، ولی دیتابیس را Restore نمی‌کند. تست Restore، کنترل DBCC CHECKDB، سازگاری برنامه و اندازه‌گیری RTO همچنان لازم‌اند."
+    },
+    {
+      "question": "چرا بعضی فایل‌های قدیمی‌تر از ۳۰ روز حذف نمی‌شوند؟",
+      "answer": "برای بازیابی تمام پنجرهٔ سی‌روزه، Full پایهٔ قبل از مرز Retention و Backupهای بعد از آن لازم‌اند. Cleanup این وابستگی را حفظ می‌کند و فایل پایه یا Logهای موردنیاز را صرفاً به خاطر سن حذف نمی‌کند."
+    },
+    {
+      "question": "چه حسابی باید به فولدر Backup دسترسی داشته باشد؟",
+      "answer": "سرویس Database Engine فایل Backup را می‌نویسد و می‌خواند. ساخت فولدر و Cleanup در این راهکار با CmdExec Proxy انجام می‌شوند. هر دو هویت به مجوزهای متناسب روی مسیر اختصاصی نیاز دارند."
+    },
+    {
+      "question": "آیا این Job از master، model، msdb و tempdb بکاپ می‌گیرد؟",
+      "answer": "خیر. دیتابیس‌های سیستمی حتی اگر به Whitelist اضافه شوند رد می‌شوند. master، model و msdb باید Job جداگانه داشته باشند؛ tempdb بکاپ‌پذیر نیست."
+    },
+    {
+      "question": "آیا SQL Server Agent به‌تنهایی بکاپ Jira و Confluence را کامل می‌کند؟",
+      "answer": "خیر. علاوه بر دیتابیس، Home، Shared Home، Attachmentها و تنظیمات برنامه باید با روش سازگار با نسخهٔ نصب‌شده Backup شوند. نسخهٔ مستقل Off-site و تست راه‌اندازی برنامه پس از Restore نیز لازم است."
+    }
+  ]
+}

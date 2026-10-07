@@ -1,5 +1,7 @@
 > **Phase log for the current documentation set.** Full report: [../qa/DOCUMENTATION-QA.md](../qa/DOCUMENTATION-QA.md). Current status: [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md).
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 # Phase 10 — Documentation reorganisation and current-state sync
 
 **Phase:** 10

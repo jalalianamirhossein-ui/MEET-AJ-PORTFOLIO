@@ -1,10 +1,12 @@
 # Visual QA — Meet AJ
 
-**Date:** 2026-09-17  
-**Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md) · **Accessibility:** [ACCESSIBILITY-QA.md](ACCESSIBILITY-QA.md) · **Responsive:** [RESPONSIVE-QA.md](RESPONSIVE-QA.md)  
-**Overlay:** `assets/css/visual-upgrade.css?v=1405`  
-**Scripts:** `main.js?v=1201`, `i18n.js?v=1201`, `lang-toggle.css?v=1202`  
-**Latest visual pass:** [VISUAL-UX-FINAL-REPORT.md](VISUAL-UX-FINAL-REPORT.md)  
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
+**Date:** 2026-09-17
+**Current status:** [../current/PROJECT-STATUS.md](../../current/PROJECT-STATUS.md) · **Accessibility:** [ACCESSIBILITY-QA.md](../../qa/ACCESSIBILITY-QA.md) · **Responsive:** [RESPONSIVE-QA.md](RESPONSIVE-QA.md)
+**Overlay:** `assets/css/visual-upgrade.css?v=1405`
+**Scripts:** `main.js?v=1201`, `i18n.js?v=1201`, `lang-toggle.css?v=1202`
+**Latest visual pass:** [VISUAL-UX-FINAL-REPORT.md](VISUAL-UX-FINAL-REPORT.md)
 **Method:** Cursor browser snapshots + CDP overflow/computed styles. Screenshots are often **stale vs URL**; CDP and the accessibility tree are the visual/layout truth this pass.
 
 Skills followed: visual-qa-testing (navigate, snapshot, screenshot, CDP resources/overflow), responsive-testing (320 / 375 / 412 / 1280 + HTTP), accessibility-auditing (aria tree, labels, headings, keyboard Escape, inert).

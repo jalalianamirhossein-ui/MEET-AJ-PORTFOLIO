@@ -1,8 +1,10 @@
 # Responsive QA — Meet AJ
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 **Date:** 2026-09-17
 **Method:** Cursor browser with CDP. The overflow test is `document.documentElement.scrollWidth > clientWidth + 1`; a cropped screenshot is **not** evidence of overflow.
-**Related:** [VISUAL-QA.md](VISUAL-QA.md) · [ACCESSIBILITY-QA.md](ACCESSIBILITY-QA.md) · [QA-MATRIX.md](QA-MATRIX.md) · [VISUAL-UX-FINAL-REPORT.md](VISUAL-UX-FINAL-REPORT.md)
+**Related:** [VISUAL-QA.md](VISUAL-QA.md) · [ACCESSIBILITY-QA.md](../../qa/ACCESSIBILITY-QA.md) · [QA-MATRIX.md](QA-MATRIX.md) · [VISUAL-UX-FINAL-REPORT.md](VISUAL-UX-FINAL-REPORT.md)
 
 Only the cells that were actually measured are marked PASS. Everything else is BLOCKED or NOT TESTED and must not be upgraded without a new run.
 

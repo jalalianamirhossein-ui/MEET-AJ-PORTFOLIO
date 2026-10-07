@@ -1,4 +1,6 @@
 > **HISTORICAL / SUPERSEDED.**
+
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
 > **Original date:** 2026-09-16.
 > **Original purpose:** UI/UX browser QA pass, including the 10-viewport matrix that has not been re-measured since.
 > **Superseded by:** [../qa/VISUAL-QA.md](../qa/VISUAL-QA.md), [../qa/RESPONSIVE-QA.md](../qa/RESPONSIVE-QA.md), [../qa/ACCESSIBILITY-QA.md](../qa/ACCESSIBILITY-QA.md).
@@ -6,14 +8,14 @@
 
 # Final UI/UX QA — Meet AJ
 
-Date: 2026-09-16 (navigation + language switcher pass)  
-Origin: `http://127.0.0.1:8000`  
-Overlay: `assets/css/visual-upgrade.css?v=1116` (after `rtl.css`)  
-Language chrome: `assets/css/lang-toggle.css?v=1115`, `assets/js/i18n.js?v=1115`, `assets/js/main.js?v=1115`  
+Date: 2026-09-16 (navigation + language switcher pass)
+Origin: `http://127.0.0.1:8000`
+Overlay: `assets/css/visual-upgrade.css?v=1116` (after `rtl.css`)
+Language chrome: `assets/css/lang-toggle.css?v=1115`, `assets/js/i18n.js?v=1115`, `assets/js/main.js?v=1115`
 Source of truth: browser-rendered site.
 
-PHPUnit: **30 tests, 584 assertions, 1 skipped (MySQL), 0 failures**  
-`php artisan site:compare-content`: **Failures: 0**  
+PHPUnit: **30 tests, 584 assertions, 1 skipped (MySQL), 0 failures**
+`php artisan site:compare-content`: **Failures: 0**
 `php artisan optimize:clear`: ran locally.
 
 Git was not initialized, committed, or pushed.
@@ -126,7 +128,7 @@ Also exercised 390 conceptually with neighbors; 1024/1366 follow the same 1200 b
 
 The remainder of this file is the earlier 2026-09-16 article/card QA. Overlay at that time was `visual-upgrade.css?v=1108`. PHPUnit counts in that pass were 23 tests / 510 assertions; the live suite is now 30 / 584.
 
-PHPUnit then: **23 tests, 510 assertions, 1 skipped (MySQL), 0 failures**  
+PHPUnit then: **23 tests, 510 assertions, 1 skipped (MySQL), 0 failures**
 `php artisan site:compare-content` then: **Failures: 0**
 
 Lighthouse was not run in that pass either.

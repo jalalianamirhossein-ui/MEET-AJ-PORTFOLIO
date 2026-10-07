@@ -1,8 +1,10 @@
 # Testing — Meet AJ
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 **Authority:** AUTHORITATIVE testing document.
 **Verified:** 2026-09-17 by running the suite and reading `phpunit.xml`, `phpunit.mysql.xml`, `tests/TestCase.php` and every file in `tests/Feature/`.
-**Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md). Per-URL evidence: [../qa/QA-MATRIX.md](../qa/QA-MATRIX.md).
+**Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md). Per-URL evidence: [../qa/QA-MATRIX.md](../../qa/QA-MATRIX.md).
 
 ## Latest run
 
@@ -58,7 +60,7 @@ php artisan route:list                                        # route inventory
 
 `php artisan site:compare-content` renders each article through Laravel and compares it against the original HTML file for complete body, bilingual attributes, headings and SEO tokens.
 
-Result on 2026-09-17: **Failures: 0** across 23 articles. Evidence: [../qa/CONTENT-INTEGRITY.md](../qa/CONTENT-INTEGRITY.md).
+Result on 2026-09-17: **Failures: 0** across 23 articles. Evidence: [../qa/CONTENT-INTEGRITY.md](../../qa/CONTENT-INTEGRITY.md).
 
 ## MySQL integration
 

@@ -1,0 +1,56 @@
+{
+  "revision_date": "2026-10-01",
+  "articles": 25,
+  "server_rendered_language_pages": 50,
+  "shared_code_blocks": 90,
+  "checks": [
+    "Complete FA/EN editions, matching section IDs and unchanged executable code",
+    "Localized title, description, keywords, Article and visible FAQ schemas",
+    "Shared clean canonical, sharing, copy and related URLs without a language query",
+    "Plain preference cookie selects server language; saved homepage preference also initializes article language",
+    "Old article language-query URLs return 301 while preserving unrelated parameters",
+    "English fallback without a valid Persian preference; article HTML uses private HTTP caching",
+    "Sitemap lists the homepage and 25 articles once each, with article modification dates",
+    "Original archive hashes and final source hashes match; HTML/TOC and embedded Python syntax pass",
+    "Browser checks passed: homepage/article/related/search navigation, reopening, instant toggles, clean URLs and code parity",
+    "Bilingual builder repeated with all 25 source hashes unchanged",
+    "Source updates preserve draft/scheduled publication status, dates and translation keys",
+    "Obsolete alternate head tags removed; SQL SEO paragraph updated to describe the shared URL; operational prose and executable examples retained",
+    "Generated source-review paragraph removed in FA/EN and the generator; official reference links retained; old stored bodies filtered at render time"
+  ],
+  "targeted_tests": {
+    "tests": 15,
+    "assertions": 4202,
+    "failures": 0,
+    "errors": 0
+  },
+  "full_suite": {
+    "tests": 85,
+    "assertions": 5453,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1,
+    "skipped_tests": [
+      "test_mysql_engine_constraints_when_connected"
+    ]
+  },
+  "http_checks": {
+    "article_pages": 50,
+    "sitemap_urls": 26,
+    "errors": []
+  },
+  "latest_article_tests": {
+    "tests": 10,
+    "assertions": 3907,
+    "failures": 0,
+    "errors": 0
+  },
+  "deployment": "Local database metadata synchronized after a full SQLite backup and editorial parity check; original dates retained. Remote server not changed.",
+  "infrastructure_commands_executed": false,
+  "historical_editions": "Removed from public pages; originals retained only in originals.zip",
+  "default_language": "en",
+  "english_url": "/articles/{slug}",
+  "persian_url": "/articles/{slug}",
+  "language_selection": "Saved preference shared with homepage and library; no language query parameters",
+  "evidence": "docs/qa/FULL-AUDIT-2026-10-01.md"
+}

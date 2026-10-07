@@ -1,9 +1,11 @@
 > **HISTORICAL.** Overlay implementation report. Later UI QA: [final-ui-qa.md](final-ui-qa.md). Authoritative overall QA: [QA-MATRIX.md](../qa/QA-MATRIX.md).
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 # Meet AJ — Visual upgrade report
 
-Date: 2026-09-16  
-Origin: `http://127.0.0.1:8000`  
+Date: 2026-09-16
+Origin: `http://127.0.0.1:8000`
 Mode: Additive polish on the migrated Laravel site. Identity, copy, URLs, Filament, contact contracts, and PWA cache name were preserved. Git was not initialized, committed, or pushed.
 
 ## 1. Before / after design problems

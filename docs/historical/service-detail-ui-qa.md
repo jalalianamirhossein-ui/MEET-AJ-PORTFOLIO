@@ -1,4 +1,6 @@
 > **HISTORICAL / SUPERSEDED.**
+
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
 > **Original date:** 2026-09-17 (before the master design audit of the same day).
 > **Original purpose:** QA of the service detail template at overlay `v=1310`.
 > **Superseded by:** [../qa/VISUAL-QA.md](../qa/VISUAL-QA.md) at overlay `v=1314`, and [../current/SERVICES.md](../current/SERVICES.md).
@@ -6,9 +8,9 @@
 
 # Service detail UI QA — Meet AJ
 
-**Date:** 2026-09-17  
-**Template:** `resources/views/services/show.blade.php`  
-**Overlay:** `visual-upgrade.css?v=1310` (loaded **after** `lang-toggle.css`)  
+**Date:** 2026-09-17
+**Template:** `resources/views/services/show.blade.php`
+**Overlay:** `visual-upgrade.css?v=1310` (loaded **after** `lang-toggle.css`)
 **URLs:** canonical `/services/{slug}` only. Static `resources/views/services/{slug}.blade.php` is unused.
 
 ## Shared landing story (existing CMS content)

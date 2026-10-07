@@ -1,9 +1,11 @@
 # Admin UI QA — Meet AJ Filament 5
 
-**Date verified:** 2026-09-18  
-**Panel:** `/admin` (Filament 5.8.2, Livewire 4.4.5)  
-**Brand:** `#2563eb` / cyan `#0ea5e9` / slate, existing logo, groups Content / Communications / Administration.  
-**Superseded:** [../archive/2026-09-18/ADMIN-QA.md](../archive/2026-09-18/ADMIN-QA.md)
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
+**Date verified:** 2026-09-18
+**Panel:** `/admin` (Filament 5.8.2, Livewire 4.4.5)
+**Brand:** `#2563eb` / cyan `#0ea5e9` / slate, existing logo, groups Content / Communications / Administration.
+**Superseded:** [../archive/2026-09-18/ADMIN-QA.md](ADMIN-QA.md)
 
 ## Browser this pass
 

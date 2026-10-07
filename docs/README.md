@@ -1,12 +1,12 @@
 # Meet AJ — documentation
 
-Navigation map for every document in this repository. Last updated **2026-09-20** (homepage CMS sections, dynamic navigation/footer, and full test suite sync).
+Navigation map for every document in this repository. Last updated **2026-10-06** after the full structural, documentation and test audit.
 
-**Start here:** [current/PROJECT-STATUS.md](current/PROJECT-STATUS.md) — the single authoritative statement of what exists today.
+**Start here:** [current/README.md](current/README.md), then [current/PROJECT-STATUS.md](current/PROJECT-STATUS.md) — the single authoritative statement of what exists today.
 
 Status vocabulary used throughout: **PASS**, **FAIL**, **BLOCKED**, **NOT TESTED**, plus **UNKNOWN / NOT VERIFIED** where code cannot prove a claim.
 
-Documentation sync evidence: [qa/DOCUMENTATION-QA.md](qa/DOCUMENTATION-QA.md).
+Documentation sync evidence: [qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md](qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md). Complete file-by-file navigation: [DOCUMENTATION-INDEX.md](DOCUMENTATION-INDEX.md).
 
 ## Current documentation
 
@@ -19,8 +19,8 @@ Describes the application as it is now. When one of these disagrees with `PROJEC
 | [current/DATABASE.md](current/DATABASE.md) | Every table, column, index, foreign key, delete behaviour |
 | [current/ADMIN.md](current/ADMIN.md) | Filament panel, resources, authorization |
 | [current/FEATURES.md](current/FEATURES.md) | Public and CMS feature inventory |
-| [current/ARTICLES.md](current/ARTICLES.md) | 24 articles, import, slugs, redirects, search, tags |
-| [current/SERVICES.md](current/SERVICES.md) | Six services, pricing, publication, requests |
+| [current/ARTICLES.md](current/ARTICLES.md) | 28 maintained article sources, import, slugs, redirects, search, tags |
+| [current/SERVICES.md](current/SERVICES.md) | 13 services, 12 catalog entries, pricing, publication, requests |
 | [current/REQUESTS.md](current/REQUESTS.md) | Contact and quote pipeline, statuses, internal notes |
 | [current/MULTILINGUAL.md](current/MULTILINGUAL.md) | EN / FA / draft-only DE, RTL, hreflang status |
 | [current/SEO.md](current/SEO.md) | Canonicals, OG, JSON-LD, sitemap, robots, redirects |
@@ -40,13 +40,14 @@ Evidence, not intentions. Each file names its method and marks BLOCKED work hone
 
 | Document | Covers |
 |----------|--------|
+| [qa/FULL-AUDIT-2026-10-01.md](qa/FULL-AUDIT-2026-10-01.md) | Current full suite, bilingual articles, local database sync, browser and documentation review |
 | [qa/FINAL-QA-REPORT.md](qa/FINAL-QA-REPORT.md) | Master audit acceptance matrix, fixes, open items |
 | [qa/QA-MATRIX.md](qa/QA-MATRIX.md) | Per-URL expected vs actual, test method, status |
 | [qa/VISUAL-QA.md](qa/VISUAL-QA.md) | Browser and CDP visual verification |
 | [qa/RESPONSIVE-QA.md](qa/RESPONSIVE-QA.md) | Viewport overflow measurements |
 | [qa/ACCESSIBILITY-QA.md](qa/ACCESSIBILITY-QA.md) | Manual a11y audit, WARN items, untested areas |
 | [qa/ADMIN-QA.md](qa/ADMIN-QA.md) | Filament QA, including what is blocked |
-| [qa/CONTENT-INTEGRITY.md](qa/CONTENT-INTEGRITY.md) | `site:compare-content` result across 24 articles |
+| [qa/CONTENT-INTEGRITY.md](qa/CONTENT-INTEGRITY.md) | `site:compare-content` result across 25 articles |
 | [qa/DESIGN-AUDIT.md](qa/DESIGN-AUDIT.md) | Full-site design audit findings |
 | [qa/DOCUMENTATION-QA.md](qa/DOCUMENTATION-QA.md) | Doc reorganisation (2026-09-17) + evening sync to match live app (2026-09-18) |
 
@@ -117,7 +118,21 @@ Superseded snapshots, plans and audits. Kept on purpose: they hold measurements,
 | File | Why |
 |------|-----|
 | [qa/baseline-files.json](qa/baseline-files.json) | Historical SHA-256 baseline; the verifier maps original paths to the reorganized layout |
-| [NetBox download source](../resources/downloads/netbox_installation_guide_v2.pdf) | Published to `public/docs/` with the same public URL |
+| Optional NetBox PDF | Expected at `resources/downloads/netbox_installation_guide_v2.pdf`; source is absent, so the publisher skips it |
 | [Design system](design-system/meet-aj/MASTER.md) | Visual design notes and page overrides |
 
 See [the directory map](current/PROJECT-STRUCTURE.md) for source ownership and publishing commands.
+
+## Additional maintained areas
+
+- [Article ordering](current/ARTICLE-ORDERING.md): editorial priority and synchronization.
+- [Article packages](../resources/content/README.md): generators and runbook source ownership.
+- [Scripts](../scripts/README.md): maintenance commands and bulk-generator boundaries.
+- [Deployment scripts](../deploy/README.md): Ubuntu VPS workflow.
+- [Enterprise editorial evidence](enterprise-articles/README.md): dated inventory and exact originals.
+- [2026-09-19 archive](archive/2026-09-19/README.md): historical debug evidence.
+
+- [Image folder guide](current/IMAGES.md): banners, article-body images, avatars, icons, previews and CMS uploads.
+- [Image audit](qa/IMAGE-ORGANIZATION-2026-10-06.md): migration preservation, checks and rendering evidence.
+
+- [Image unification audit](qa/IMAGE-UNIFICATION-2026-10-06.md): 28 named banners, duplicate removal, reserved article-content folder and PWA screenshots dependency.

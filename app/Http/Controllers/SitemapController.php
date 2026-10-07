@@ -18,7 +18,7 @@ class SitemapController extends Controller
         foreach ($articles as $article) {
             $urls[] = [
                 'loc' => $article->canonicalUrl(),
-                'lastmod' => $article->published_at?->toDateString(),
+                'lastmod' => ($article->updated_at ?? $article->published_at)?->toDateString(),
             ];
         }
 

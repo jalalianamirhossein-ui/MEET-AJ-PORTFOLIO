@@ -11,6 +11,7 @@
                       <a
                         class="article-share-btn"
                         href="{{ $share['linkedin'] }}"
+                        data-share-channel="linkedin"
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Share on LinkedIn"
@@ -22,6 +23,7 @@
                       <a
                         class="article-share-btn"
                         href="{{ $share['twitter'] }}"
+                        data-share-channel="twitter"
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Share on X"
@@ -33,6 +35,7 @@
                       <a
                         class="article-share-btn"
                         href="{{ $share['telegram'] }}"
+                        data-share-channel="telegram"
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Share on Telegram"
@@ -44,6 +47,7 @@
                       <a
                         class="article-share-btn"
                         href="{{ $share['whatsapp'] }}"
+                        data-share-channel="whatsapp"
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Share on WhatsApp"

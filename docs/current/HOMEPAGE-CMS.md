@@ -1,7 +1,9 @@
 # Homepage CMS — Meet AJ
 
-**Verified:** 2026-09-20  
-**Admin route:** `/admin/homepage-contents`  
+> Maintenance review: 2026-10-06. Migrations `2026_10_05_000018` through `000020` update testimonial attribution, contact headings and the contact intro while the seven-section CMS remains in place. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
+**Verified:** 2026-09-21
+**Admin route:** `/admin/homepage-contents`
 **Public view:** `/`
 
 The homepage is rendered by `HomeController` and reads its editable copy from the `homepage_contents` table through `HomepageContentCatalog`. The catalog creates the seven default records on the first public or admin visit and never overwrites an existing record.

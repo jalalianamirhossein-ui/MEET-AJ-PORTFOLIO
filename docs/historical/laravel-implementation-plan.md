@@ -1,5 +1,7 @@
 # Meet AJ Portfolio — Laravel implementation plan
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 > **SUPERSEDED (HISTORICAL).** Planning document retained as history. Do not follow Laravel 11, PHP 8.2, Filament 3, `/de` routes, `pages`, or `contact_requests` from this file. Current status: [PROJECT-STATUS.md](../current/PROJECT-STATUS.md). Decision record: [architecture-decision-record.md](../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md).
 
 **Status: superseded.** Audit approved; implementation is paused under the final instruction in the latest request. This document proposes the implementation; it does not claim that installation, conversion, import or testing has been completed.

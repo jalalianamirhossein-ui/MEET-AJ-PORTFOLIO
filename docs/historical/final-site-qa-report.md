@@ -1,11 +1,13 @@
 > **HISTORICAL.** Site QA snapshot from the CMS implementation pass. Authoritative current QA: [QA-MATRIX.md](../qa/QA-MATRIX.md). Later UI evidence: [final-ui-qa.md](final-ui-qa.md).
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 # Final site QA report
 
-Date: 2026-09-16  
-Origin: `http://127.0.0.1:8000`  
-PHPUnit SQLite: **OK, 23 tests, 510 assertions, 1 skipped** (`MysqlSchemaTest`)  
-PHPUnit MariaDB (`phpunit.mysql.xml`): **OK (23 tests, 517 assertions)**  
+Date: 2026-09-16
+Origin: `http://127.0.0.1:8000`
+PHPUnit SQLite: **OK, 23 tests, 510 assertions, 1 skipped** (`MysqlSchemaTest`)
+PHPUnit MariaDB (`phpunit.mysql.xml`): **OK (23 tests, 517 assertions)**
 `site:compare-content`: **31/31 PASS** (home, 6 services, article index, 23 articles)
 
 ## Verdict

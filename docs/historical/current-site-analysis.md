@@ -1,5 +1,7 @@
 > **HISTORICAL.** Pre-implementation audit of the static site (2026-09-14). Not the current Laravel CMS status. See [PROJECT-STATUS.md](../current/PROJECT-STATUS.md).
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 # Current site analysis — audit before implementation
 
 Audit completed: 2026-09-14. Source: complete local file inventory and HTML/link scan, manual review of shared scripts, styles, PHP endpoints, manifest, service worker, sitemap, and existing documentation. The public homepage at https://meetaj.ir was also inspected; local files are the migration source of truth.
