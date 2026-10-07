@@ -18,7 +18,7 @@
     <link href="/assets/css/lang-toggle.css?v=1403" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1405" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1855" rel="stylesheet" />
     <link href="/assets/css/glass-system.css?v=18" rel="stylesheet" />
     <link href="/preloader.css?v=devops-2" rel="stylesheet" />
     <noscript><style>#preloader { display: none !important; }</style></noscript>

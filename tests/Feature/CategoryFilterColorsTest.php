@@ -26,6 +26,7 @@ class CategoryFilterColorsTest extends TestCase
 
     public function test_brand_without_category_keeps_its_palette_fallback(): void
     {
+        Category::where('slug', 'fortinet')->delete();
         $html = view('articles.partials.category-filters')->render();
         $dom = new \DOMDocument;
         @$dom->loadHTML($html, LIBXML_NONET);

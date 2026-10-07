@@ -2,7 +2,7 @@
 
 **مخاطب:** مدیران زیرساخت، System Administratorها، DevOps و Network Engineerها؛ سطح Intermediate تا Advanced.
 
-**وضعیت راهنما:** Production-oriented و مبتنی بر مستندات رسمی فعلی TrueNAS. نام بعضی منوها ممکن است بین Releaseهای پایدار تغییر جزئی داشته باشد؛ قبل از اجرا، مستندات همان Release را بررسی و در محیط آزمایشی Validate کنید.
+**وضعیت راهنما:** این راهنما برای TrueNAS مبتنی بر Linux نوشته شده است؛ مسیرهای نمونه با مستندات نسخهٔ 25.04 تطبیق داده شده‌اند. نام بعضی منوها ممکن است بین Releaseهای پایدار تغییر جزئی داشته باشد؛ قبل از اجرا، مستندات همان Release را بررسی و در محیط آزمایشی Validate کنید.
 
 ![راهکار Enterprise Storage با TrueNAS](/assets/img/articles/banners/TrueNAS%20Enterprise%20Storage%20Solution.png)
 
@@ -24,7 +24,7 @@ TrueNAS سیستم‌عاملی تخصصی برای ساخت NAS و Storage Serv
 
 ## 2. NAS چیست و TrueNAS چه مشکلی را حل می‌کند؟
 
-NAS فایل یا Block Storage را از طریق شبکه در اختیار Clientها و Hypervisorها قرار می‌دهد. یک File Server عمومی معمولاً به RAID Controller، ابزار Backup، ابزار Snapshot، Monitoring و فرآیندهای جداگانه نیاز دارد.
+NAS فایل‌ها را از طریق پروتکل‌هایی مانند SMB و NFS در اختیار کاربران و میزبان‌ها قرار می‌دهد. TrueNAS علاوه بر قابلیت NAS، با iSCSI ذخیره‌سازی بلوکی نیز ارائه می‌کند؛ این کاربرد از نظر معماری در دستهٔ SAN قرار می‌گیرد. یک File Server عمومی معمولاً به RAID Controller، ابزار Backup، ابزار Snapshot، Monitoring و فرآیندهای جداگانه نیاز دارد.
 
 TrueNAS این قابلیت‌ها را به‌صورت یکپارچه ارائه می‌کند، اما جایگزین معماری Backup، Disaster Recovery یا تیم متخصص نیست.
 
@@ -44,7 +44,7 @@ TrueNAS این قابلیت‌ها را به‌صورت یکپارچه ارائ�
 
 | ویژگی | TrueNAS | Windows File Server | Synology/QNAP |
 |---|---|---|---|
-| مدل استقرار | Bare Metal، Appliance یا VM با طراحی دقیق | معمولاً VM یا Bare Metal | Appliance یکپارچه |
+| مدل استقرار | Bare Metal یا Appliance؛ VM برای آزمایش و با بررسی محدودیت‌های پشتیبانی | معمولاً VM یا Bare Metal | Appliance یکپارچه |
 | File Protocol | SMB، NFS، iSCSI | SMB، NFS با Role/Feature | SMB، NFS، iSCSI |
 | File Integrity | Checksum و Self-Healing با ZFS | وابسته به File System/Storage | وابسته به پلتفرم و File System |
 | Snapshot/Replication | Native با ZFS | نیازمند ابزار و Storage مناسب | معمولاً ساده‌تر و Vendor-specific |
@@ -99,7 +99,7 @@ Deduplication را بدون محاسبه RAM و تست واقعی فعال نک�
 
 - CPU سازگار با x86_64
 - حداقل 8 GB RAM
-- Boot Device حداقل 20 GB
+- SSD برای Boot با ظرفیت حداقل 20 GB مطابق راهنمای نصب 25.04؛ دیسک Boot از دیسک‌های Pool جدا باشد
 - حداقل دو Disk مشابه برای یک Pool
 
 ### پیشنهاد Production
@@ -457,10 +457,44 @@ TrueNAS انتخاب مناسبی است اگر به کنترل کامل روی 
 
 انتخاب مناسبی نیست اگر تیمی برای مدیریت ZFS ندارید، فقط چند Disk نامشابه و بدون Backup در اختیار است، انتظار Appliance کاملاً بدون طراحی دارید، Web UI قرار است روی Internet منتشر شود، یا بدون HA و سایت دوم به Availability بسیار بالا نیاز دارید. در این شرایط، Appliance پشتیبانی‌شده، Managed Storage یا راهکار Vendorمحور ممکن است انتخاب منطقی‌تری باشد.
 
+## پرسش‌های متداول TrueNAS
+
+### آیا RAIDZ و Snapshot جای نسخهٔ پشتیبان را می‌گیرند؟
+
+خیر. RAIDZ برای تحمل خرابی دیسک و Snapshot برای بازگشت به یک زمان مشخص است. برای خرابی کل Pool، حذف مخرب و حادثهٔ سایت، نسخهٔ مستقل و خارج از سایت لازم است.
+
+### تفاوت Dataset و ZVOL چیست؟
+
+Dataset یک فایل‌سیستم با سهمیه، ACL و Snapshot مستقل است و برای اشتراک SMB یا NFS استفاده می‌شود. ZVOL یک دستگاه بلوکی است و معمولاً پشت Extent در iSCSI قرار می‌گیرد.
+
+### برای ماشین‌های مجازی Mirror مناسب‌تر است یا RAIDZ2؟
+
+انتخاب به IOPS، تأخیر، ظرفیت و الگوی بار بستگی دارد. Mirror VDEVها معمولاً برای بار تصادفی ماشین‌های مجازی مناسب‌اند؛ RAIDZ2 ظرفیت و تحمل خرابی دو دیسک در هر VDEV را ارائه می‌کند. انتخاب نهایی را با بار واقعی آزمایش کنید.
+
+### چرا دیسک Boot باید از دیسک‌های Pool جدا باشد؟
+
+نصب TrueNAS دیسک انتخاب‌شده را پاک می‌کند. جداسازی Boot از داده‌ها خطر انتخاب اشتباه و تداخل نقش دیسک‌ها را کم می‌کند. قبل از نصب، مدل و شمارهٔ سریال دیسک مقصد را بررسی کنید.
+
+### چگونه دسترسی به SMB را محدود کنیم؟
+
+Dataset مستقل بسازید، ACL را به گروه‌های موردنیاز بدهید و دسترسی شبکه به سرویس را محدود کنید. با یک کاربر مجاز و یک کاربر غیرمجاز، خواندن، نوشتن و حذف را آزمایش کنید.
+
+### آیا فعال کردن Deduplication همیشه فضای بیشتری آزاد می‌کند؟
+
+خیر. نتیجه به تکرار واقعی داده‌ها و منابع سیستم بستگی دارد و ممکن است هزینهٔ حافظه و کارایی از صرفه‌جویی بیشتر باشد. بدون اندازه‌گیری و آزمایش، آن را فعال نکنید.
+
+### موفق بودن Replication برای اطمینان از بازیابی کافی است؟
+
+خیر. علاوه بر بررسی Job و Snapshotهای مقصد، بازیابی فایل یا Dataset را عملاً آزمایش کنید. Retention مقصد و کلیدهای رمزنگاری را جدا از سرور اصلی نگهداری کنید.
+
+### هنگام Degraded شدن Pool چه کاری انجام دهیم؟
+
+از Dashboard و zpool status وضعیت را بررسی کنید، دیسک معیوب را با شمارهٔ سریال شناسایی و سلامت Backup را تأیید کنید. تعویض را از روش پشتیبانی‌شدهٔ رابط TrueNAS انجام دهید و پیشرفت Resilver را پایش کنید.
+
 ## منابع رسمی
 
-- [TrueNAS Hardware Guide](https://www.truenas.com/docs/scale/gettingstarted/tnhardwareguide/)
-- [Installing TrueNAS](https://www.truenas.com/docs/scale/gettingstarted/install/installingscale/)
-- [Setting Up Storage](https://www.truenas.com/docs/scale/gettingstarted/configure/setupstoragescale/)
-- [Setting Up Data Sharing](https://www.truenas.com/docs/scale/gettingstarted/configure/setupsharing/)
-- [TrueNAS Configuration Instructions](https://www.truenas.com/docs/scale/gettingstarted/configure/)
+- [TrueNAS Hardware Guide](https://www.truenas.com/docs/scale/25.04/gettingstarted/scalehardwareguide/)
+- [Installing TrueNAS](https://www.truenas.com/docs/scale/25.04/gettingstarted/install/installingscale/)
+- [Setting Up Storage](https://www.truenas.com/docs/scale/25.04/gettingstarted/configure/setupstoragescale/)
+- [Setting Up Data Sharing](https://www.truenas.com/docs/scale/25.04/gettingstarted/configure/setupsharing/)
+- [TrueNAS Configuration Instructions](https://www.truenas.com/docs/scale/25.04/gettingstarted/configure/)

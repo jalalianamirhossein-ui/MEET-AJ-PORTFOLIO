@@ -45,9 +45,9 @@
     <link href="/assets/css/lang-toggle.css?v=1403" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1405" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1855" rel="stylesheet" />
     <link href="/assets/css/glass-system.css?v=18" rel="stylesheet" />
-    <link href="/assets/css/article-reading.css?v=4" rel="stylesheet" />
+    <link href="/assets/css/article-reading.css?v=6" rel="stylesheet" />
     <link href="/preloader.css?v=devops-2" rel="stylesheet" />
     <noscript><style>#preloader { display: none !important; }</style></noscript>
     @if (!empty($languageSeo))
@@ -172,12 +172,14 @@
           <div class="article-shell{{ $tocHtml ? ' article-shell--with-toc' : '' }}">
             @if ($tocHtml)
               <aside class="article-toc" aria-label="Table of contents" data-en-aria-label="Table of contents" data-fa-aria-label="فهرست مطالب">
-                <p id="article-toc-heading" class="article-toc-title" data-en="On this page" data-fa="در این مقاله">On this page</p>
-                <nav class="article-toc-nav" tabindex="0" aria-labelledby="article-toc-heading" @if(data_get($article->presentation, 'content_language') === 'fa') lang="fa" dir="rtl" @endif>
-                  <ul class="article-toc-list">
-                    {!! $tocHtml !!}
-                  </ul>
-                </nav>
+                <details class="article-toc-disclosure">
+                  <summary class="article-toc-title"><span id="article-toc-heading" data-en="On this page" data-fa="در این مقاله">On this page</span></summary>
+                  <nav class="article-toc-nav" aria-labelledby="article-toc-heading" @if(data_get($article->presentation, 'content_language') === 'fa') lang="fa" dir="rtl" @endif>
+                    <ul class="article-toc-list">
+                      {!! $tocHtml !!}
+                    </ul>
+                  </nav>
+                </details>
               </aside>
             @endif
             <div class="article-reading">

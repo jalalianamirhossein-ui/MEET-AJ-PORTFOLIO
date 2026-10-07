@@ -197,6 +197,11 @@ class LegacyArticleImporter
         $theme = $bodyClass[1] ?? 'article-page theme-other';
         $categorySlug = $this->categoryFromTheme($theme, $card['filter_class'] ?? null);
         $category = Category::query()->where('language', 'en')->where('slug', $categorySlug)->first();
+        if (! $category && $categorySlug === 'qnap') {
+            $category = Category::firstOrCreate(['language' => 'en', 'slug' => 'qnap'], [
+                'name' => 'QNAP', 'accent_color' => \App\Models\Tag::BRAND_COLORS['qnap'],
+            ]);
+        }
 
         $title = $this->meta($html, 'og:title') ?: $this->tagContent($html, 'title') ?: $slug;
         $description = $this->namedMeta($html, 'description') ?: $this->attr($html, 'class="article-excerpt hero-subtitle"', 'data-en');
@@ -327,6 +332,7 @@ class LegacyArticleImporter
         if ($filterClass) {
             return match (true) {
                 str_contains($filterClass, 'cisco') => 'cisco',
+                str_contains($filterClass, 'qnap') => 'qnap',
                 str_contains($filterClass, 'linux') => 'linux',
                 str_contains($filterClass, 'microsoft') => 'microsoft',
                 str_contains($filterClass, 'mikrotik') => 'mikrotik',
@@ -337,6 +343,7 @@ class LegacyArticleImporter
 
         return match (true) {
             str_contains($bodyClass, 'theme-cisco') => 'cisco',
+            str_contains($bodyClass, 'theme-qnap') => 'qnap',
             str_contains($bodyClass, 'theme-linux') => 'linux',
             str_contains($bodyClass, 'theme-microsoft') => 'microsoft',
             str_contains($bodyClass, 'theme-mikrotik') => 'mikrotik',

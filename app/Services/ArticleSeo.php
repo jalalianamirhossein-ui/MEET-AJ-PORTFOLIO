@@ -49,11 +49,32 @@ class ArticleSeo
             'twitter_description' => $seo['twitter_description'] ?? $description,
             'twitter_image' => isset($seo['twitter_image']) ? $this->absolute($seo['twitter_image']) : null,
             'schema' => $schema,
-            'faq_schema' => is_array($seo['faq_schema'] ?? null)
-                && ($seo['faq_schema']['@type'] ?? '') === 'FAQPage' ? $seo['faq_schema'] : null,
+            'faq_schema' => $this->faqSchema($article, $seo['faq_schema'] ?? null),
             'breadcrumb' => $this->breadcrumb($article, $canonical),
             'robots' => $seo['robots'] ?? 'index, follow',
         ];
+    }
+
+    private function faqSchema(Article $article, mixed $schema): ?array
+    {
+        if (is_array($schema) && ($schema['@type'] ?? '') === 'FAQPage' && ! empty($schema['mainEntity'])) {
+            return $schema;
+        }
+        $locale = data_get($article->presentation, 'content_language', 'en');
+        $html = app(ArticleLocalization::class)->html($article->displayContent(), $locale);
+        $dom = new \DOMDocument();
+        @$dom->loadHTML('<?xml encoding="UTF-8">'.$html, LIBXML_NONET);
+        $xp = new \DOMXPath($dom);
+        $questions = [];
+        foreach ($xp->query('//section[@id="faq"]//details') as $item) {
+            $question = trim($xp->evaluate('string(./summary)', $item));
+            $answer = trim($xp->evaluate('string(./div)', $item));
+            if ($question === '' || $answer === '') { continue; }
+            $questions[] = ['@type' => 'Question', 'name' => $question,
+                'acceptedAnswer' => ['@type' => 'Answer', 'text' => $answer]];
+        }
+        return $questions ? ['@context' => 'https://schema.org', '@type' => 'FAQPage',
+            'inLanguage' => $locale, 'mainEntity' => $questions] : null;
     }
 
     /**

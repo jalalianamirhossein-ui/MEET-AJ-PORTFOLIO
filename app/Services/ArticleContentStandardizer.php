@@ -16,12 +16,12 @@ class ArticleContentStandardizer
         $content = Article::normalizeContentMarkup($content);
         $content = $this->removeArticleBackButton($content);
         $content = $this->removeSeoSections($content);
+        $content = $this->reuseAuthoredSections($article, $content);
         $content = $this->addKnownSectionIds($content);
-        $content = preg_replace('/id=["\']references["\']/i', 'id="official-references"', $content) ?? $content;
         $content = str_ireplace('Official references', 'Official References', $content);
         // Existing FAQ accordions are extended in place so the original
         // questions remain visible and the shared minimum of eight is met.
-        $content = $this->extendExistingFaq($content);
+        $content = $this->extendExistingFaq($content, ! data_get($article->presentation, 'localizations'));
 
         $missing = [];
         foreach ($this->sections($article) as $id => $html) {
@@ -49,6 +49,72 @@ class ArticleContentStandardizer
         }
 
         return $this->orderEndingSections(substr($content, 0, $footerPosition).$addition.substr($content, $footerPosition));
+    }
+
+    /** Reuse detailed authored sections and remove only matching automatic filler. */
+    private function reuseAuthoredSections(Article $article, string $content): string
+    {
+        $patterns = [
+            'introduction' => '/^(?:introduction|overview|مقدمه|معرفی)\b/iu',
+            'architecture' => '/architecture|معماری|مفاهیم\s+(?:اصلی|کلیدی)|برنامه چگونه کار/iu',
+            'prerequisites' => '/prerequisites|pre[- ]?(?:checks|hardening checks)|hardware|پیش[‌ -]?نیاز|سخت[‌ -]?افزار/iu',
+            'configuration' => '/^(?:installation|configuration|(?:safe\s+)?deployment|نصب|راه[‌ -]?اندازی|تنظیم)/iu',
+            'best-practices' => '/best\s+practices|checklist|recommendations|اشتباهات رایج|توصیه|چک[‌ -]?لیست/iu',
+            'security' => '/security|hardening|امنیت|ایمن[‌ -]?سازی/iu',
+            'troubleshooting' => '/troubleshoot|عیب[‌ -]?یابی/iu',
+            'conclusion' => '/^(?:conclusion|summary\b|جمع[‌ -]?بندی|نتیجه[‌ -]?گیری|چه زمانی TrueNAS)/iu',
+            'official-references' => '/^(?:official\s+(?:references|sources)|references|sources|منابع|مراجع)/iu',
+        ];
+        $templates = $this->sections($article);
+        $references = $this->referencesSection($article, '');
+        if ($references !== null) { $templates['official-references'] = $references; }
+        $sectionPattern = '~<section\b([^>]*)>(.*?)</section>~is';
+
+        foreach ($patterns as $id => $pattern) {
+            // Attribute values keep this comparison stable after FA/EN localization.
+            $signature = function (string $html): string {
+                $dom = new \DOMDocument();
+                @$dom->loadHTML('<?xml encoding="UTF-8">'.$html, LIBXML_NONET);
+                $xp = new \DOMXPath($dom);
+                foreach (iterator_to_array($xp->query('//*[@data-en]')) as $node) {
+                    while ($node->firstChild) { $node->removeChild($node->firstChild); }
+                    $node->appendChild($dom->createTextNode($node->getAttribute('data-en')));
+                }
+                return trim(preg_replace('/\s+/u', ' ', $dom->textContent) ?? '');
+            };
+            $generatedSignature = isset($templates[$id]) ? $signature($templates[$id]) : null;
+            preg_match_all($sectionPattern, $content, $sections, PREG_SET_ORDER);
+            $authored = null;
+            $generated = null;
+            foreach ($sections as $section) {
+                preg_match('/\bid=["\']([^"\']+)["\']/', $section[1], $sectionId);
+                $currentId = $sectionId[1] ?? '';
+                if ($currentId !== $id && array_key_exists($currentId, $patterns)) { continue; }
+                if ($currentId === $id && $generatedSignature !== null && $signature($section[0]) === $generatedSignature) {
+                    $generated = $section[0];
+                    continue;
+                }
+                if (! preg_match('~<h2\b([^>]*)>(.*?)</h2>~is', $section[2], $heading)) { continue; }
+                preg_match('/\bdata-en="([^"]*)"/i', $heading[1], $english);
+                $label = html_entity_decode($english[1] ?? strip_tags($heading[2]), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $label = preg_replace('/^\s*[0-9۰-۹]+[.،):\s-]+/u', '', $label) ?? $label;
+                if ($currentId === $id || preg_match($pattern, $label)) {
+                    $authored ??= [$section, $currentId];
+                }
+            }
+            if ($authored === null) { continue; }
+            if ($generated !== null) { $content = str_replace($generated, '', $content); }
+            [$section, $oldId] = $authored;
+            if ($oldId === $id || preg_match('/\bid=["\']'.preg_quote($id, '/').'["\']/', $content)) { continue; }
+            $attributes = $oldId !== ''
+                ? preg_replace('/\bid=["\'][^"\']*["\']/', 'id="'.$id.'"', $section[1], 1)
+                : ' id="'.$id.'"'.$section[1];
+            // Preserve old TOC and external fragment links when assigning a canonical ID.
+            $anchor = $oldId !== '' ? '<span id="'.e($oldId).'" class="article-section-anchor" aria-hidden="true"></span>' : '';
+            $content = str_replace($section[0], '<section'.$attributes.'>'.$anchor.$section[2].'</section>', $content);
+        }
+
+        return $content;
     }
 
     /**
@@ -208,7 +274,7 @@ class ArticleContentStandardizer
         return '<section id="faq" class="article-section"><h2 data-en="Frequently Asked Questions" data-fa="پرسش‌های متداول">Frequently Asked Questions</h2><div class="article-faq">'.$items.'</div></section>';
     }
 
-    private function extendExistingFaq(string $content): string
+    private function extendExistingFaq(string $content, bool $pad = true): string
     {
         if (! preg_match('/<section\b[^>]*id=["\']faq["\'][^>]*>(.*?)<\/section>/is', $content, $match, PREG_OFFSET_CAPTURE)) {
             return $content;
@@ -238,7 +304,7 @@ class ArticleContentStandardizer
             return substr($tag[0], 0, -1).' data-fa="'.e($translations[$english]).'">';
         }, $section) ?? $section;
         $count = substr_count($section, 'article-faq-item');
-        if ($count >= 8) {
+        if ($count >= 8 || ! $pad) {
             return substr_replace($content, $section, $match[0][1], strlen($match[0][0]));
         }
 

@@ -11,10 +11,10 @@
     $accentStyle = '--topic: '.$accent.'; --article-primary: '.$accent.';';
     $categoryEn = $article->categoryLabelEn();
     $categoryFa = $article->categoryLabelFa();
-    $titleEn = $article->englishCardTitle();
+    $titleEn = $article->englishCardTitle() ?: $article->title;
     $titleFa = data_get($article->presentation, 'card_title_fa') ?: $article->title;
-    $excerptEn = $article->englishCardExcerpt();
-    $excerptFa = data_get($article->presentation, 'card_excerpt_fa') ?: $excerptEn;
+    $excerptEn = $article->englishCardExcerpt() ?: $article->excerpt;
+    $excerptFa = data_get($article->presentation, 'card_excerpt_fa') ?: data_get($article->presentation, 'excerpt_translations.fa') ?: $excerptEn;
     $cardTags = $article->relationLoaded('tags') ? $article->tags->take(3) : collect();
     $variant = $variant ?? 'library';
     $isRelated = $variant === 'related';

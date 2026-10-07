@@ -166,6 +166,10 @@ class Article extends Model
         $content = app(\App\Services\ArticleContentStandardizer::class)
             ->standardize($this, (string) $this->content);
 
+        if (! data_get($this->presentation, 'localizations') && data_get($this->presentation, 'content_language') === 'fa') {
+            $content = app(\App\Services\ArticleLocalization::class)->html($content, 'fa');
+        }
+
         return app(\App\Services\ArticlePresentation::class)->prepare($content);
     }
 

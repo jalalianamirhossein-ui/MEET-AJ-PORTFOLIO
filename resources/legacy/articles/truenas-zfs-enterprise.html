@@ -1,50 +1,297 @@
-<!doctype html><html lang="fa" dir="rtl" data-article-language="fa"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>راه‌اندازی TrueNAS از صفر؛ ساخت NAS سازمانی با ZFS</title><meta name="article:content-language" content="fa"><meta name="description" content="راهنمای Production-Ready راه‌اندازی TrueNAS با ZFS، ساخت Pool و Dataset، SMB، NFS، iSCSI، Snapshot، Replication، امنیت و Backup سه-دو-یک."><meta name="keywords" content="TrueNAS, ZFS, NAS سازمانی, RAIDZ, Dataset, Pool, VDEV, SMB, NFS, iSCSI, Snapshot, Replication, Backup"><meta name="robots" content="index, follow"><link rel="canonical" href="https://meetaj.ir/articles/truenas-zfs-enterprise"><meta property="og:type" content="article"><meta property="og:title" content="راه‌اندازی TrueNAS از صفر؛ ساخت NAS سازمانی با ZFS"><meta property="og:description" content="راهنمای Production-Ready راه‌اندازی TrueNAS با ZFS، ساخت Pool و Dataset، SMB، NFS، iSCSI، Snapshot، Replication، امنیت و Backup سه-دو-یک."><meta property="og:image" content="/assets/img/articles/banners/TrueNAS%20Enterprise%20Storage%20Solution.png"><meta property="og:url" content="https://meetaj.ir/articles/truenas-zfs-enterprise"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"راه‌اندازی TrueNAS از صفر؛ ساخت NAS سازمانی با ZFS","description":"راهنمای Production-Ready راه‌اندازی TrueNAS با ZFS، ساخت Pool و Dataset، SMB، NFS، iSCSI، Snapshot، Replication، امنیت و Backup سه-دو-یک.","inLanguage":"fa","mainEntityOfPage":"https://meetaj.ir/articles/truenas-zfs-enterprise","image":"/assets/img/articles/banners/TrueNAS%20Enterprise%20Storage%20Solution.png","author":{"@type":"Organization","name":"Meet AJ"}}</script></head><body class="article-page theme-other"><section class="article-hero article-header hero"><div class="container"><div class="article-hero-layout"><div class="article-hero-copy"><span class="article-category" data-en="Infrastructure" data-fa="زیرساخت">Infrastructure</span><h1 class="article-title hero-title" data-en="راه‌اندازی TrueNAS از صفر؛ ساخت NAS سازمانی با ZFS" data-fa="راه‌اندازی TrueNAS از صفر؛ ساخت NAS سازمانی با ZFS">راه‌اندازی TrueNAS از صفر؛ ساخت NAS سازمانی با ZFS</h1><p class="article-excerpt hero-subtitle" data-en="راهنمای Production-Ready راه‌اندازی TrueNAS با ZFS، ساخت Pool و Dataset، SMB، NFS، iSCSI، Snapshot، Replication، امنیت و Backup سه-دو-یک." data-fa="راهنمای Production-Ready راه‌اندازی TrueNAS با ZFS، ساخت Pool و Dataset، SMB، NFS، iSCSI، Snapshot، Replication، امنیت و Backup سه-دو-یک.">راهنمای Production-Ready راه‌اندازی TrueNAS با ZFS، ساخت Pool و Dataset، SMB، NFS، iSCSI، Snapshot، Replication، امنیت و Backup سه-دو-یک.</p></div><figure class="article-hero-media"><img class="article-hero-thumbnail" src="/assets/img/articles/banners/TrueNAS%20Enterprise%20Storage%20Solution.png" alt="راهکار Enterprise Storage با TrueNAS" loading="eager" fetchpriority="high"></figure></div></div></section><article class="article-body" lang="fa"><p><strong>مخاطب:</strong> مدیران زیرساخت، System Administratorها، DevOps و Network Engineerها؛ سطح Intermediate تا Advanced.</p>
-<p><strong>وضعیت راهنما:</strong> Production-oriented و مبتنی بر مستندات رسمی فعلی TrueNAS. نام بعضی منوها ممکن است بین Releaseهای پایدار تغییر جزئی داشته باشد؛ قبل از اجرا، مستندات همان Release را بررسی و در محیط آزمایشی Validate کنید.</p>
-<p><img loading="lazy" src="/assets/img/articles/banners/TrueNAS%20Enterprise%20Storage%20Solution.png" alt="راهکار Enterprise Storage با TrueNAS" /></p>
-<p><em>تصویر ۱ — TrueNAS به‌عنوان Storage مرکزی برای File Sharing، Virtualization، Backup و Replication.</em></p>
-<blockquote>
-<p><strong>هشدار عملیاتی:</strong> RAID و Snapshot به‌تنهایی Backup نیستند. برای داده‌های Production، قانون 3-2-1، نسخه خارج از سایت و Remote Replication را هم‌زمان اجرا کنید.</p>
-</blockquote>
-<section id="section-1"><h2>مقدمه</h2>
-<p>TrueNAS یک پلتفرم Storage مبتنی بر ZFS است که SMB، NFS، iSCSI، Snapshot، Replication، ACL، مانیتورینگ و Alerting را در یک رابط مدیریتی ارائه می‌کند. قدرت TrueNAS فقط در ساختن یک File Server نیست؛ ارزش اصلی آن در ترکیب Integrity، Redundancy، مشاهده‌پذیری و Recovery عملیاتی است.</p>
-<p>این مقاله یک Runbook کامل از طراحی تا بهره‌برداری است و در تمام مراحل تفاوت <strong>Home Lab</strong> و <strong>Production</strong> را مشخص می‌کند.</p>
-</section><section id="section-2"><h2>1. TrueNAS چیست؟</h2>
-<p>TrueNAS سیستم‌عاملی تخصصی برای ساخت NAS و Storage Server است. در مدل‌های فعلی، ZFS/OpenZFS لایه اصلی مدیریت Pool و حفاظت داده است و سرویس‌های File و Block Storage از طریق Web UI مدیریت می‌شوند.</p>
-<p>برای Production، نصب Bare Metal روی سخت‌افزار سروری، ECC RAM، Boot SSDهای Mirror، HBA مناسب، UPS، شبکه مجزا و Backup قابل‌بازیابی را در نظر بگیرید.</p>
-</section><section id="section-3"><h2>2. NAS چیست و TrueNAS چه مشکلی را حل می‌کند؟</h2>
-<p>NAS فایل یا Block Storage را از طریق شبکه در اختیار Clientها و Hypervisorها قرار می‌دهد. یک File Server عمومی معمولاً به RAID Controller، ابزار Backup، ابزار Snapshot، Monitoring و فرآیندهای جداگانه نیاز دارد.</p>
-<p>TrueNAS این قابلیت‌ها را به‌صورت یکپارچه ارائه می‌کند، اما جایگزین معماری Backup، Disaster Recovery یا تیم متخصص نیست.</p>
-</section><section id="section-4"><h2>3. کاربردهای TrueNAS در سازمان</h2>
-<ul>
-<li><strong>File Server:</strong> فایل‌های واحدها، Project Share و Home Directory با SMB.</li>
-<li><strong>Central Storage:</strong> Datasetهای مستقل برای تیم‌ها، سرویس‌ها و سطح‌های امنیتی مختلف.</li>
-<li><strong>Backup Repository:</strong> مقصد Backup نرم‌افزارهایی مانند Veeam یا ابزارهای Native سیستم‌عامل.</li>
-<li><strong>VMware/Hyper-V Storage:</strong> ارائه NFS یا iSCSI با Storage VLAN مجزا.</li>
-<li><strong>SMB:</strong> مناسب برای Windows و احراز هویت Local یا Active Directory.</li>
-<li><strong>NFS:</strong> مناسب برای Linux، Unix و VMware.</li>
-<li><strong>iSCSI:</strong> Block Storage مبتنی بر ZVOL برای Virtualization و Workloadهای Block-Level.</li>
-<li><strong>Snapshot:</strong> بازیابی سریع فایل یا Dataset به یک Point-in-Time.</li>
-<li><strong>Replication:</strong> انتقال Snapshotهای ZFS به TrueNAS دوم در سایت یا Rack جدا.</li>
-</ul>
-</section><section id="section-5"><h2>4. مزایای TrueNAS نسبت به File Server معمولی</h2>
-<p>| ویژگی | TrueNAS | Windows File Server | Synology/QNAP |
-|---|---|---|---|
-| مدل استقرار | Bare Metal، Appliance یا VM با طراحی دقیق | معمولاً VM یا Bare Metal | Appliance یکپارچه |
-| File Protocol | SMB، NFS، iSCSI | SMB، NFS با Role/Feature | SMB، NFS، iSCSI |
-| File Integrity | Checksum و Self-Healing با ZFS | وابسته به File System/Storage | وابسته به پلتفرم و File System |
-| Snapshot/Replication | Native با ZFS | نیازمند ابزار و Storage مناسب | معمولاً ساده‌تر و Vendor-specific |
-| انعطاف Hardware | زیاد | زیاد | محدود به Appliance |
-| مدیریت | عمیق و مناسب تیم فنی | آشنا برای تیم Microsoft | ساده‌تر برای تیم کوچک |
-| پیچیدگی | بیشتر؛ نیازمند دانش ZFS | متوسط | کمتر در سناریوهای رایج |
-| هزینه | مناسب Self-Build؛ نسخه و Support را جدا بررسی کنید | License و CAL/Software | هزینه Appliance و Support |
-| بهترین کاربرد | Storage مهندسی‌شده و قابل‌کنترل | Domain/File Services متمرکز | SMB سازمانی کوچک تا متوسط |</p>
-</section><section id="section-6"><h2>5. معماری ZFS و مفاهیم کلیدی</h2>
-<h3>Pool و VDEV</h3>
-<p>Pool فضای ذخیره‌سازی اصلی است و از یک یا چند VDEV ساخته می‌شود. نوع VDEV میزان ظرفیت، Performance و تحمل خرابی را تعیین می‌کند. پس از ایجاد Pool، تغییر بنیادی Layout آسان نیست؛ قبل از Create کردن، Workload و رشد آینده را محاسبه کنید.</p>
-<h3>Dataset و ZVOL</h3>
-<p>Dataset یک File System مستقل با ACL، Quota، Compression و Snapshot جداگانه است. ZVOL یک Block Device مجازی است و عموماً برای iSCSI و بعضی VMها به‌کار می‌رود.</p>
-<p>ساختار پیشنهادی:</p>
-<pre><code class="language-text">tank/
+<!doctype html>
+<html lang="fa" dir="rtl" data-article-language="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>راه‌اندازی TrueNAS از صفر؛ ساخت NAS سازمانی با ZFS</title>
+    <meta name="article:content-language" content="fa" />
+    <meta
+      name="description"
+      content="راهنمای Production-Ready راه‌اندازی TrueNAS با ZFS، ساخت Pool و Dataset، SMB، NFS، iSCSI، Snapshot، Replication، امنیت و Backup سه-دو-یک."
+    />
+    <meta
+      name="keywords"
+      content="TrueNAS, ZFS, NAS سازمانی, RAIDZ, Dataset, Pool, VDEV, SMB, NFS, iSCSI, Snapshot, Replication, Backup"
+    />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://meetaj.ir/articles/truenas-zfs-enterprise"
+    />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="راه‌اندازی TrueNAS از صفر؛ ساخت NAS سازمانی با ZFS"
+    />
+    <meta
+      property="og:description"
+      content="راهنمای Production-Ready راه‌اندازی TrueNAS با ZFS، ساخت Pool و Dataset، SMB، NFS، iSCSI، Snapshot، Replication، امنیت و Backup سه-دو-یک."
+    />
+    <meta
+      property="og:image"
+      content="/assets/img/articles/banners/TrueNAS%20Enterprise%20Storage%20Solution.png"
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/truenas-zfs-enterprise"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "راه‌اندازی TrueNAS از صفر؛ ساخت NAS سازمانی با ZFS",
+        "description": "راهنمای Production-Ready راه‌اندازی TrueNAS با ZFS، ساخت Pool و Dataset، SMB، NFS، iSCSI، Snapshot، Replication، امنیت و Backup سه-دو-یک.",
+        "inLanguage": "fa",
+        "mainEntityOfPage": "https://meetaj.ir/articles/truenas-zfs-enterprise",
+        "image": "/assets/img/articles/banners/TrueNAS%20Enterprise%20Storage%20Solution.png",
+        "author": { "@type": "Organization", "name": "Meet AJ" }
+      }
+    </script>
+  </head>
+  <body class="article-page theme-qnap">
+    <section class="article-hero article-header hero">
+      <div class="container">
+        <div class="article-hero-layout">
+          <div class="article-hero-copy">
+            <span
+              class="article-category"
+              data-en="Infrastructure"
+              data-fa="زیرساخت"
+              >Infrastructure</span
+            >
+            <h1
+              class="article-title hero-title"
+              data-en="TrueNAS Enterprise NAS with ZFS"
+              data-fa="راه‌اندازی TrueNAS از صفر؛ ساخت NAS سازمانی با ZFS"
+            >
+              راه‌اندازی TrueNAS از صفر؛ ساخت NAS سازمانی با ZFS
+            </h1>
+            <p
+              class="article-excerpt hero-subtitle"
+              data-en="Build a TrueNAS storage server with ZFS pools, datasets, SMB, NFS, iSCSI, snapshots, replication and a tested backup plan."
+              data-fa="راهنمای Production-Ready راه‌اندازی TrueNAS با ZFS، ساخت Pool و Dataset، SMB، NFS، iSCSI، Snapshot، Replication، امنیت و Backup سه-دو-یک."
+            >
+              راهنمای Production-Ready راه‌اندازی TrueNAS با ZFS، ساخت Pool و
+              Dataset، SMB، NFS، iSCSI، Snapshot، Replication، امنیت و Backup
+              سه-دو-یک.
+            </p>
+          </div>
+          <figure class="article-hero-media">
+            <img
+              class="article-hero-thumbnail"
+              src="/assets/img/articles/banners/TrueNAS%20Enterprise%20Storage%20Solution.png"
+              alt="راهکار Enterprise Storage با TrueNAS"
+              loading="eager"
+              fetchpriority="high"
+            />
+          </figure>
+        </div>
+      </div>
+    </section>
+    <article class="article-body" lang="fa">
+      <p>
+        <strong>مخاطب:</strong> مدیران زیرساخت، System Administratorها، DevOps و
+        Network Engineerها؛ سطح Intermediate تا Advanced.
+      </p>
+      <p>
+        <strong>وضعیت راهنما:</strong> این راهنما برای TrueNAS مبتنی بر Linux
+        نوشته شده است؛ مسیرهای نمونه با مستندات نسخهٔ 25.04 تطبیق داده شده‌اند.
+        نام بعضی منوها ممکن است بین Releaseهای پایدار تغییر جزئی داشته باشد؛ قبل
+        از اجرا، مستندات همان Release را بررسی و در محیط آزمایشی Validate کنید.
+      </p>
+      <p>
+        <img
+          loading="lazy"
+          src="/assets/img/articles/banners/TrueNAS%20Enterprise%20Storage%20Solution.png"
+          alt="راهکار Enterprise Storage با TrueNAS"
+        />
+      </p>
+      <p>
+        <em
+          >تصویر ۱ — TrueNAS به‌عنوان Storage مرکزی برای File Sharing،
+          Virtualization، Backup و Replication.</em
+        >
+      </p>
+      <blockquote>
+        <p>
+          <strong>هشدار عملیاتی:</strong> RAID و Snapshot به‌تنهایی Backup
+          نیستند. برای داده‌های Production، قانون 3-2-1، نسخه خارج از سایت و
+          Remote Replication را هم‌زمان اجرا کنید.
+        </p>
+      </blockquote>
+      <section id="section-1">
+        <h2>مقدمه</h2>
+        <p>
+          TrueNAS یک پلتفرم Storage مبتنی بر ZFS است که SMB، NFS، iSCSI،
+          Snapshot، Replication، ACL، مانیتورینگ و Alerting را در یک رابط
+          مدیریتی ارائه می‌کند. قدرت TrueNAS فقط در ساختن یک File Server نیست؛
+          ارزش اصلی آن در ترکیب Integrity، Redundancy، مشاهده‌پذیری و Recovery
+          عملیاتی است.
+        </p>
+        <p>
+          این مقاله یک Runbook کامل از طراحی تا بهره‌برداری است و در تمام مراحل
+          تفاوت <strong>Home Lab</strong> و <strong>Production</strong> را مشخص
+          می‌کند.
+        </p>
+      </section>
+      <section id="section-2">
+        <h2>1. TrueNAS چیست؟</h2>
+        <p>
+          TrueNAS سیستم‌عاملی تخصصی برای ساخت NAS و Storage Server است. در
+          مدل‌های فعلی، ZFS/OpenZFS لایه اصلی مدیریت Pool و حفاظت داده است و
+          سرویس‌های File و Block Storage از طریق Web UI مدیریت می‌شوند.
+        </p>
+        <p>
+          برای Production، نصب Bare Metal روی سخت‌افزار سروری، ECC RAM، Boot
+          SSDهای Mirror، HBA مناسب، UPS، شبکه مجزا و Backup قابل‌بازیابی را در
+          نظر بگیرید.
+        </p>
+      </section>
+      <section id="section-3">
+        <h2>2. NAS چیست و TrueNAS چه مشکلی را حل می‌کند؟</h2>
+        <p>
+          NAS فایل‌ها را از طریق پروتکل‌هایی مانند SMB و NFS در اختیار کاربران و
+          میزبان‌ها قرار می‌دهد. TrueNAS علاوه بر قابلیت NAS، با iSCSI
+          ذخیره‌سازی بلوکی نیز ارائه می‌کند؛ این کاربرد از نظر معماری در دستهٔ
+          SAN قرار می‌گیرد. یک File Server عمومی معمولاً به RAID Controller،
+          ابزار Backup، ابزار Snapshot، Monitoring و فرآیندهای جداگانه نیاز
+          دارد.
+        </p>
+        <p>
+          TrueNAS این قابلیت‌ها را به‌صورت یکپارچه ارائه می‌کند، اما جایگزین
+          معماری Backup، Disaster Recovery یا تیم متخصص نیست.
+        </p>
+      </section>
+      <section id="section-4">
+        <h2>3. کاربردهای TrueNAS در سازمان</h2>
+        <ul>
+          <li>
+            <strong>File Server:</strong> فایل‌های واحدها، Project Share و Home
+            Directory با SMB.
+          </li>
+          <li>
+            <strong>Central Storage:</strong> Datasetهای مستقل برای تیم‌ها،
+            سرویس‌ها و سطح‌های امنیتی مختلف.
+          </li>
+          <li>
+            <strong>Backup Repository:</strong> مقصد Backup نرم‌افزارهایی مانند
+            Veeam یا ابزارهای Native سیستم‌عامل.
+          </li>
+          <li>
+            <strong>VMware/Hyper-V Storage:</strong> ارائه NFS یا iSCSI با
+            Storage VLAN مجزا.
+          </li>
+          <li>
+            <strong>SMB:</strong> مناسب برای Windows و احراز هویت Local یا
+            Active Directory.
+          </li>
+          <li><strong>NFS:</strong> مناسب برای Linux، Unix و VMware.</li>
+          <li>
+            <strong>iSCSI:</strong> Block Storage مبتنی بر ZVOL برای
+            Virtualization و Workloadهای Block-Level.
+          </li>
+          <li>
+            <strong>Snapshot:</strong> بازیابی سریع فایل یا Dataset به یک
+            Point-in-Time.
+          </li>
+          <li>
+            <strong>Replication:</strong> انتقال Snapshotهای ZFS به TrueNAS دوم
+            در سایت یا Rack جدا.
+          </li>
+        </ul>
+      </section>
+      <section id="section-5">
+        <h2>4. مزایای TrueNAS نسبت به File Server معمولی</h2>
+        <div class="article-table-wrap">
+          <table class="article-table">
+            <thead>
+              <tr>
+                <th scope="col">ویژگی</th>
+                <th scope="col">TrueNAS</th>
+                <th scope="col">Windows File Server</th>
+                <th scope="col">Synology/QNAP</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>مدل استقرار</td>
+                <td>
+                  Bare Metal یا Appliance؛ VM برای آزمایش و با بررسی محدودیت‌های
+                  پشتیبانی
+                </td>
+                <td>معمولاً VM یا Bare Metal</td>
+                <td>Appliance یکپارچه</td>
+              </tr>
+              <tr>
+                <td>File Protocol</td>
+                <td>SMB، NFS، iSCSI</td>
+                <td>SMB، NFS با Role/Feature</td>
+                <td>SMB، NFS، iSCSI</td>
+              </tr>
+              <tr>
+                <td>File Integrity</td>
+                <td>Checksum و Self-Healing با ZFS</td>
+                <td>وابسته به File System/Storage</td>
+                <td>وابسته به پلتفرم و File System</td>
+              </tr>
+              <tr>
+                <td>Snapshot/Replication</td>
+                <td>Native با ZFS</td>
+                <td>نیازمند ابزار و Storage مناسب</td>
+                <td>معمولاً ساده‌تر و Vendor-specific</td>
+              </tr>
+              <tr>
+                <td>انعطاف Hardware</td>
+                <td>زیاد</td>
+                <td>زیاد</td>
+                <td>محدود به Appliance</td>
+              </tr>
+              <tr>
+                <td>مدیریت</td>
+                <td>عمیق و مناسب تیم فنی</td>
+                <td>آشنا برای تیم Microsoft</td>
+                <td>ساده‌تر برای تیم کوچک</td>
+              </tr>
+              <tr>
+                <td>پیچیدگی</td>
+                <td>بیشتر؛ نیازمند دانش ZFS</td>
+                <td>متوسط</td>
+                <td>کمتر در سناریوهای رایج</td>
+              </tr>
+              <tr>
+                <td>هزینه</td>
+                <td>مناسب Self-Build؛ نسخه و Support را جدا بررسی کنید</td>
+                <td>License و CAL/Software</td>
+                <td>هزینه Appliance و Support</td>
+              </tr>
+              <tr>
+                <td>بهترین کاربرد</td>
+                <td>Storage مهندسی‌شده و قابل‌کنترل</td>
+                <td>Domain/File Services متمرکز</td>
+                <td>SMB سازمانی کوچک تا متوسط</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section id="section-6">
+        <h2>5. معماری ZFS و مفاهیم کلیدی</h2>
+        <h3>Pool و VDEV</h3>
+        <p>
+          Pool فضای ذخیره‌سازی اصلی است و از یک یا چند VDEV ساخته می‌شود. نوع
+          VDEV میزان ظرفیت، Performance و تحمل خرابی را تعیین می‌کند. پس از
+          ایجاد Pool، تغییر بنیادی Layout آسان نیست؛ قبل از Create کردن،
+          Workload و رشد آینده را محاسبه کنید.
+        </p>
+        <h3>Dataset و ZVOL</h3>
+        <p>
+          Dataset یک File System مستقل با ACL، Quota، Compression و Snapshot
+          جداگانه است. ZVOL یک Block Device مجازی است و عموماً برای iSCSI و بعضی
+          VMها به‌کار می‌رود.
+        </p>
+        <p>ساختار پیشنهادی:</p>
+        <pre><code class="language-text">tank/
 ├── shares/finance
 ├── shares/hr
 ├── shares/projects
@@ -52,231 +299,447 @@
 ├── vmstore
 └── replication
 </code></pre>
-<h3>Mirror و RAIDZ1/2/3</h3>
-<ul>
-<li><strong>Mirror:</strong> شبیه RAID1؛ مناسب IOPS و Latency حساس مانند VM و Database.</li>
-<li><strong>RAIDZ1:</strong> تحمل خرابی یک Disk؛ برای Diskهای بزرگ و داده‌های مهم با احتیاط.</li>
-<li><strong>RAIDZ2:</strong> تحمل خرابی دو Disk؛ انتخاب متعادل برای File Serverهای سازمانی.</li>
-<li><strong>RAIDZ3:</strong> تحمل خرابی سه Disk؛ مناسب Poolهای بزرگ یا آرشیوی با Rebuild طولانی.</li>
-</ul>
-<h3>ARC، Compression، Scrub و Snapshot</h3>
-<p>ARC Cache اصلی ZFS در RAM است. Compression مانند <code>lz4</code> معمولاً انتخاب مناسبی است. Scrub Checksumها را بررسی و در صورت وجود Redundancy، خطا را اصلاح می‌کند. Snapshot نسخه Point-in-Time است، اما چون روی همان Pool ذخیره می‌شود، Backup مستقل محسوب نمی‌شود.</p>
-<p>Deduplication را بدون محاسبه RAM و تست واقعی فعال نکنید؛ مصرف RAM آن می‌تواند بسیار زیاد باشد.</p>
-<p><img loading="lazy" src="/assets/img/articles/content/TrueNAS%20ZFS%20Architecture%20Infographic.png" alt="معماری ZFS در TrueNAS" /></p>
-<p><em>تصویر ۲ — رابطه Pool، VDEV، Dataset، ZVOL و قابلیت‌های حفاظتی ZFS.</em></p>
-</section><section id="section-7"><h2>6. حداقل و Recommended Hardware برای Production</h2>
-<h3>حداقل رسمی برای شروع</h3>
-<ul>
-<li>CPU سازگار با x86_64</li>
-<li>حداقل 8 GB RAM</li>
-<li>Boot Device حداقل 20 GB</li>
-<li>حداقل دو Disk مشابه برای یک Pool</li>
-</ul>
-<h3>پیشنهاد Production</h3>
-<ul>
-<li>32 تا 64 GB یا بیشتر ECC RAM، متناسب با تعداد Disk و Workload</li>
-<li>دو SSD برای Boot به‌صورت Mirror</li>
-<li>HBA در حالت IT/HBA و بدون Hardware RAID پنهان‌کننده Disk</li>
-<li>Diskهای NAS/Enterprise تست‌شده و Burn-in شده</li>
-<li>10 GbE برای VM، iSCSI و Backup سنگین</li>
-<li>PSU و مسیر برق Redundant، UPS و IPMI/BMC</li>
-<li>Hot-Swap Bay و فضای کافی برای Rebuild و رشد</li>
-</ul>
-<h3>Home Lab در برابر Production</h3>
-<p>در Home Lab می‌توان با 8 تا 16 GB RAM، یک Boot SSD و شبکه 1 GbE یادگیری را شروع کرد. در Production باید Downtime، RPO/RTO، Monitoring، Replace کردن Disk و Restore واقعی را طراحی کنید. USB Flash را برای نصب موقت استفاده کنید، نه Boot دائمی Production.</p>
-</section><section id="section-8"><h2>7. طراحی شبکه سازمانی</h2>
-<p><img loading="lazy" src="/assets/img/articles/content/TrueNAS%20Enterprise%20Network%20Topology.png" alt="توپولوژی شبکه TrueNAS Enterprise" /></p>
-<p><em>تصویر ۳ — تفکیک Management، User/LAN، Storage و Backup/Replication.</em></p>
-<pre><code class="language-text">Internet → Firewall → Core Switch
+        <h3>Mirror و RAIDZ1/2/3</h3>
+        <ul>
+          <li>
+            <strong>Mirror:</strong> شبیه RAID1؛ مناسب IOPS و Latency حساس مانند
+            VM و Database.
+          </li>
+          <li>
+            <strong>RAIDZ1:</strong> تحمل خرابی یک Disk؛ برای Diskهای بزرگ و
+            داده‌های مهم با احتیاط.
+          </li>
+          <li>
+            <strong>RAIDZ2:</strong> تحمل خرابی دو Disk؛ انتخاب متعادل برای File
+            Serverهای سازمانی.
+          </li>
+          <li>
+            <strong>RAIDZ3:</strong> تحمل خرابی سه Disk؛ مناسب Poolهای بزرگ یا
+            آرشیوی با Rebuild طولانی.
+          </li>
+        </ul>
+        <h3>ARC، Compression، Scrub و Snapshot</h3>
+        <p>
+          ARC Cache اصلی ZFS در RAM است. Compression مانند
+          <code>lz4</code> معمولاً انتخاب مناسبی است. Scrub Checksumها را بررسی
+          و در صورت وجود Redundancy، خطا را اصلاح می‌کند. Snapshot نسخه
+          Point-in-Time است، اما چون روی همان Pool ذخیره می‌شود، Backup مستقل
+          محسوب نمی‌شود.
+        </p>
+        <p>
+          Deduplication را بدون محاسبه RAM و تست واقعی فعال نکنید؛ مصرف RAM آن
+          می‌تواند بسیار زیاد باشد.
+        </p>
+        <p>
+          <img
+            loading="lazy"
+            src="/assets/img/articles/content/TrueNAS%20ZFS%20Architecture%20Infographic.png"
+            alt="معماری ZFS در TrueNAS"
+          />
+        </p>
+        <p>
+          <em
+            >تصویر ۲ — رابطه Pool، VDEV، Dataset، ZVOL و قابلیت‌های حفاظتی
+            ZFS.</em
+          >
+        </p>
+      </section>
+      <section id="section-7">
+        <h2>6. حداقل و Recommended Hardware برای Production</h2>
+        <h3>حداقل رسمی برای شروع</h3>
+        <ul>
+          <li>CPU سازگار با x86_64</li>
+          <li>حداقل 8 GB RAM</li>
+          <li>
+            SSD برای Boot با ظرفیت حداقل 20 GB مطابق راهنمای نصب 25.04؛ دیسک
+            Boot از دیسک‌های Pool جدا باشد
+          </li>
+          <li>حداقل دو Disk مشابه برای یک Pool</li>
+        </ul>
+        <h3>پیشنهاد Production</h3>
+        <ul>
+          <li>32 تا 64 GB یا بیشتر ECC RAM، متناسب با تعداد Disk و Workload</li>
+          <li>دو SSD برای Boot به‌صورت Mirror</li>
+          <li>HBA در حالت IT/HBA و بدون Hardware RAID پنهان‌کننده Disk</li>
+          <li>Diskهای NAS/Enterprise تست‌شده و Burn-in شده</li>
+          <li>10 GbE برای VM، iSCSI و Backup سنگین</li>
+          <li>PSU و مسیر برق Redundant، UPS و IPMI/BMC</li>
+          <li>Hot-Swap Bay و فضای کافی برای Rebuild و رشد</li>
+        </ul>
+        <h3>Home Lab در برابر Production</h3>
+        <p>
+          در Home Lab می‌توان با 8 تا 16 GB RAM، یک Boot SSD و شبکه 1 GbE
+          یادگیری را شروع کرد. در Production باید Downtime، RPO/RTO، Monitoring،
+          Replace کردن Disk و Restore واقعی را طراحی کنید. USB Flash را برای نصب
+          موقت استفاده کنید، نه Boot دائمی Production.
+        </p>
+      </section>
+      <section id="section-8">
+        <h2>7. طراحی شبکه سازمانی</h2>
+        <p>
+          <img
+            loading="lazy"
+            src="/assets/img/articles/content/TrueNAS%20Enterprise%20Network%20Topology.png"
+            alt="توپولوژی شبکه TrueNAS Enterprise"
+          />
+        </p>
+        <p>
+          <em
+            >تصویر ۳ — تفکیک Management، User/LAN، Storage و
+            Backup/Replication.</em
+          >
+        </p>
+        <pre><code class="language-text">Internet → Firewall → Core Switch
                          ├── Management VLAN 10.10.10.0/24
                          ├── User/LAN VLAN 10.10.20.0/24
                          ├── Storage VLAN 10.10.30.0/24
                          └── Backup VLAN 10.10.40.0/24
 </code></pre>
-<p>Web UI را فقط روی Management VLAN قرار دهید. SMB روی LAN، NFS/iSCSI روی Storage VLAN و Replication روی Backup VLAN یا لینک اختصاصی قرار گیرد. Storage VLAN را به Internet Route نکنید.</p>
-</section><section id="section-9"><h2>8. دانلود ISO و ساخت Bootable USB</h2>
-<ol>
-<li>ISO را فقط از صفحه رسمی TrueNAS دانلود کنید.</li>
-<li>Checksum یا Signature را بررسی کنید.</li>
-<li>با Rufus یا Etcher USB نصب بسازید.</li>
-<li>برای سیستم‌های جدید از GPT/UEFI استفاده کنید.</li>
-<li>USB را بعد از نصب جدا کنید.</li>
-</ol>
-<p>USB نصب با Boot Device دائمی تفاوت دارد؛ Boot Device Production بهتر است SSD داخلی یا M.2 با کیفیت مناسب باشد.</p>
-</section><section id="section-10"><h2>9. نصب TrueNAS روی Bare Metal</h2>
-<ol>
-<li>از USB Boot کنید و Install/Upgrade را انتخاب کنید.</li>
-<li>Boot SSD را انتخاب کنید؛ Diskهای دیتا را هرگز انتخاب نکنید.</li>
-<li>در صورت وجود دو SSD، هر دو را برای Boot Pool انتخاب کنید.</li>
-<li>هشدار پاک‌شدن Disk را تأیید کنید.</li>
-<li>رمز Administrator را تنظیم کنید.</li>
-<li>UEFI را انتخاب و نصب را کامل کنید.</li>
-<li>پس از Restart، USB را جدا کنید.</li>
-<li>IP نمایش‌داده‌شده در Console را در مرورگر باز کنید:</li>
-</ol>
-<pre><code class="language-text">https://&lt;TRUENAS-IP&gt;
+        <p>
+          Web UI را فقط روی Management VLAN قرار دهید. SMB روی LAN، NFS/iSCSI
+          روی Storage VLAN و Replication روی Backup VLAN یا لینک اختصاصی قرار
+          گیرد. Storage VLAN را به Internet Route نکنید.
+        </p>
+      </section>
+      <section id="section-9">
+        <h2>8. دانلود ISO و ساخت Bootable USB</h2>
+        <ol>
+          <li>ISO را فقط از صفحه رسمی TrueNAS دانلود کنید.</li>
+          <li>Checksum یا Signature را بررسی کنید.</li>
+          <li>با Rufus یا Etcher USB نصب بسازید.</li>
+          <li>برای سیستم‌های جدید از GPT/UEFI استفاده کنید.</li>
+          <li>USB را بعد از نصب جدا کنید.</li>
+        </ol>
+        <p>
+          USB نصب با Boot Device دائمی تفاوت دارد؛ Boot Device Production بهتر
+          است SSD داخلی یا M.2 با کیفیت مناسب باشد.
+        </p>
+      </section>
+      <section id="section-10">
+        <h2>9. نصب TrueNAS روی Bare Metal</h2>
+        <ol>
+          <li>از USB Boot کنید و Install/Upgrade را انتخاب کنید.</li>
+          <li>Boot SSD را انتخاب کنید؛ Diskهای دیتا را هرگز انتخاب نکنید.</li>
+          <li>در صورت وجود دو SSD، هر دو را برای Boot Pool انتخاب کنید.</li>
+          <li>هشدار پاک‌شدن Disk را تأیید کنید.</li>
+          <li>رمز Administrator را تنظیم کنید.</li>
+          <li>UEFI را انتخاب و نصب را کامل کنید.</li>
+          <li>پس از Restart، USB را جدا کنید.</li>
+          <li>IP نمایش‌داده‌شده در Console را در مرورگر باز کنید:</li>
+        </ol>
+        <pre><code class="language-text">https://&lt;TRUENAS-IP&gt;
 </code></pre>
-<p>مسیرهای رسمی: <code>Storage → Pools</code>، <code>Datasets</code> و <code>System Settings</code>.</p>
-</section><section id="section-11"><h2>10. تنظیم Static IP، DNS، Gateway و NTP</h2>
-<p>مسیر GUI:</p>
-<pre><code class="language-text">Network → Interfaces
+        <p>
+          مسیرهای رسمی: <code>Storage → Pools</code>، <code>Datasets</code> و
+          <code>System Settings</code>.
+        </p>
+      </section>
+      <section id="section-11">
+        <h2>10. تنظیم Static IP، DNS، Gateway و NTP</h2>
+        <p>مسیر GUI:</p>
+        <pre><code class="language-text">Network → Interfaces
 </code></pre>
-<p>نمونه:</p>
-<pre><code class="language-text">IPv4: 10.10.10.20/24
+        <p>نمونه:</p>
+        <pre><code class="language-text">IPv4: 10.10.10.20/24
 Gateway: 10.10.10.1
 DNS: 10.10.10.10, 10.10.10.11
 Hostname: truenas01.example.local
 </code></pre>
-<p>NTP را از مسیر <code>System Settings → Services → NTP</code> با NTP داخلی سازمان تنظیم کنید. DNS و NTP صحیح برای Active Directory، TLS و Replication ضروری‌اند.</p>
-</section><section id="section-12"><h2>11. ساخت Storage Pool</h2>
-<p>برای چهار Disk هشت ترابایتی File Server:</p>
-<pre><code class="language-text">Storage → Pools → Create Pool
+        <p>
+          NTP را از مسیر <code>System Settings → Services → NTP</code> با NTP
+          داخلی سازمان تنظیم کنید. DNS و NTP صحیح برای Active Directory، TLS و
+          Replication ضروری‌اند.
+        </p>
+      </section>
+      <section id="section-12">
+        <h2>11. ساخت Storage Pool</h2>
+        <p>برای چهار Disk هشت ترابایتی File Server:</p>
+        <pre><code class="language-text">Storage → Pools → Create Pool
 Pool: tank
 Layout: RAIDZ2
 Compression: lz4
 </code></pre>
-<p>Diskهای Boot را انتخاب نکنید. برای VMهای پرتراکنش، دو Mirror VDEV معمولاً Latency و IOPS بهتری از RAIDZ ارائه می‌دهد. Capacity، نوع داده و زمان Rebuild را پیش از Create مقایسه کنید.</p>
-</section><section id="section-13"><h2>12. ساخت Dataset</h2>
-<pre><code class="language-text">Datasets → Add Dataset
+        <p>
+          Diskهای Boot را انتخاب نکنید. برای VMهای پرتراکنش، دو Mirror VDEV
+          معمولاً Latency و IOPS بهتری از RAIDZ ارائه می‌دهد. Capacity، نوع داده
+          و زمان Rebuild را پیش از Create مقایسه کنید.
+        </p>
+      </section>
+      <section id="section-13">
+        <h2>12. ساخت Dataset</h2>
+        <pre><code class="language-text">Datasets → Add Dataset
 </code></pre>
-<p>برای SMB، Preset را <code>SMB</code>؛ برای NFS و iSCSI، <code>Generic</code> انتخاب کنید. <code>Compression=lz4</code> و <code>Deduplication=Off</code> نقطه شروع مناسبی است. برای داده‌های حیاتی Sync را روی مقدار پیش‌فرض Production نگه دارید و آن را بدون آزمون روی Disabled نگذارید.</p>
-<p>هر Share باید Child Dataset مستقل داشته باشد؛ Root Dataset یا Pool-level Dataset را Share نکنید.</p>
-</section><section id="section-14"><h2>13. ایجاد User و Group</h2>
-<pre><code class="language-text">Credentials → Local Users
+        <p>
+          برای SMB، Preset را <code>SMB</code>؛ برای NFS و iSCSI،
+          <code>Generic</code> انتخاب کنید. <code>Compression=lz4</code> و
+          <code>Deduplication=Off</code> نقطه شروع مناسبی است. برای داده‌های
+          حیاتی Sync را روی مقدار پیش‌فرض Production نگه دارید و آن را بدون
+          آزمون روی Disabled نگذارید.
+        </p>
+        <p>
+          هر Share باید Child Dataset مستقل داشته باشد؛ Root Dataset یا
+          Pool-level Dataset را Share نکنید.
+        </p>
+      </section>
+      <section id="section-14">
+        <h2>13. ایجاد User و Group</h2>
+        <pre><code class="language-text">Credentials → Local Users
 Credentials → Local Groups
 </code></pre>
-<p>گروه‌هایی مانند <code>finance-rw</code>، <code>finance-ro</code> و <code>it-admins</code> بسازید و Permission را به Group بدهید. در سازمان Domainمحور:</p>
-<pre><code class="language-text">Credentials → Directory Services → Active Directory
+        <p>
+          گروه‌هایی مانند <code>finance-rw</code>، <code>finance-ro</code> و
+          <code>it-admins</code> بسازید و Permission را به Group بدهید. در
+          سازمان Domainمحور:
+        </p>
+        <pre><code class="language-text">Credentials → Directory Services → Active Directory
 </code></pre>
-<p>قبل از Join شدن، DNS، NTP، FQDN و دسترسی به Domain Controller را تست کنید.</p>
-</section><section id="section-15"><h2>14. راه‌اندازی SMB برای Windows</h2>
-<p>Dataset بسازید:</p>
-<pre><code class="language-text">Name: projects
+        <p>
+          قبل از Join شدن، DNS، NTP، FQDN و دسترسی به Domain Controller را تست
+          کنید.
+        </p>
+      </section>
+      <section id="section-15">
+        <h2>14. راه‌اندازی SMB برای Windows</h2>
+        <p>Dataset بسازید:</p>
+        <pre><code class="language-text">Name: projects
 Preset: SMB
 </code></pre>
-<p>سپس:</p>
-<pre><code class="language-text">Shares → Windows Shares (SMB) → Add
+        <p>سپس:</p>
+        <pre><code class="language-text">Shares → Windows Shares (SMB) → Add
 Path: /mnt/tank/shares/projects
 Name: Projects
 </code></pre>
-<p>از <code>System Settings → Services → SMB</code> سرویس را Start و در صورت نیاز Start Automatically را فعال کنید. ACL را از <code>Datasets → Edit Permissions</code> و بر اساس Group تنظیم کنید.</p>
-<p><img loading="lazy" src="/assets/img/articles/content/TrueNAS%20SMB%20Sharing%20Setup%20Guide.png" alt="راهنمای SMB در TrueNAS" /></p>
-<p><em>تصویر ۴ — ساخت Dataset، ACL و SMB Share برای کاربران Windows.</em></p>
-</section><section id="section-16"><h2>15. Map Network Drive در Windows</h2>
-<p>در File Explorer، روی This PC گزینه Map Network Drive را انتخاب کنید و مسیر زیر را وارد کنید:</p>
-<pre><code class="language-text">\\truenas01.example.local\Projects
+        <p>
+          از <code>System Settings → Services → SMB</code> سرویس را Start و در
+          صورت نیاز Start Automatically را فعال کنید. ACL را از
+          <code>Datasets → Edit Permissions</code> و بر اساس Group تنظیم کنید.
+        </p>
+        <p>
+          <img
+            loading="lazy"
+            src="/assets/img/articles/content/TrueNAS%20SMB%20Sharing%20Setup%20Guide.png"
+            alt="راهنمای SMB در TrueNAS"
+          />
+        </p>
+        <p>
+          <em>تصویر ۴ — ساخت Dataset، ACL و SMB Share برای کاربران Windows.</em>
+        </p>
+      </section>
+      <section id="section-16">
+        <h2>15. Map Network Drive در Windows</h2>
+        <p>
+          در File Explorer، روی This PC گزینه Map Network Drive را انتخاب کنید و
+          مسیر زیر را وارد کنید:
+        </p>
+        <pre><code class="language-text">\\truenas01.example.local\Projects
 </code></pre>
-<p>با PowerShell:</p>
-<pre><code class="language-powershell">New-PSDrive -Name P -PSProvider FileSystem `
+        <p>با PowerShell:</p>
+        <pre><code class="language-powershell">New-PSDrive -Name P -PSProvider FileSystem `
   -Root &quot;\\truenas01.example.local\Projects&quot; -Persist
 </code></pre>
-<p>Credentialها را در Script عمومی ذخیره نکنید.</p>
-</section><section id="section-17"><h2>16. راه‌اندازی NFS برای Linux و VMware</h2>
-<p>Dataset با Preset <code>Generic</code> بسازید و سپس:</p>
-<pre><code class="language-text">Shares → Unix Shares (NFS) → Add
+        <p>Credentialها را در Script عمومی ذخیره نکنید.</p>
+      </section>
+      <section id="section-17">
+        <h2>16. راه‌اندازی NFS برای Linux و VMware</h2>
+        <p>Dataset با Preset <code>Generic</code> بسازید و سپس:</p>
+        <pre><code class="language-text">Shares → Unix Shares (NFS) → Add
 Path: /mnt/tank/vmware_nfs
 Authorized Networks: 10.10.30.0/24
 </code></pre>
-<p>در Linux:</p>
-<pre><code class="language-bash">sudo mkdir -p /mnt/truenas
+        <p>در Linux:</p>
+        <pre><code class="language-bash">sudo mkdir -p /mnt/truenas
 sudo mount -t nfs truenas01:/mnt/tank/vmware_nfs /mnt/truenas
 showmount -e truenas01
 </code></pre>
-<p>در VMware، از <code>Add Datastore → NFS</code> استفاده کنید و فقط Hostهای مجاز Storage VLAN را اجازه دهید.</p>
-</section><section id="section-18"><h2>17. iSCSI برای Virtualization</h2>
-<p>iSCSI Block Storage ارائه می‌کند. اجزای آن شامل Portal، Initiator، Target، Extent و Association است.</p>
-<ol>
-<li>یک ZVOL بسازید: <code>Datasets → Add Zvol</code>.</li>
-<li>به <code>Shares → Block Shares (iSCSI)</code> بروید.</li>
-<li>Portal و Initiator را تعریف کنید.</li>
-<li>Target و Extent را بسازید.</li>
-<li>آن‌ها را Associate کنید.</li>
-</ol>
-<p>iSCSI را روی Storage VLAN، با 10 GbE یا بیشتر، Latency کنترل‌شده و در صورت نیاز Multipath اجرا کنید. ZVOL را بیش از ظرفیت واقعی Pool تخصیص ندهید.</p>
-</section><section id="section-19"><h2>18. Snapshot خودکار</h2>
-<pre><code class="language-text">Data Protection → Periodic Snapshot Tasks → Add
+        <p>
+          در VMware، از <code>Add Datastore → NFS</code> استفاده کنید و فقط
+          Hostهای مجاز Storage VLAN را اجازه دهید.
+        </p>
+      </section>
+      <section id="section-18">
+        <h2>17. iSCSI برای Virtualization</h2>
+        <p>
+          iSCSI Block Storage ارائه می‌کند. اجزای آن شامل Portal، Initiator،
+          Target، Extent و Association است.
+        </p>
+        <ol>
+          <li>یک ZVOL بسازید: <code>Datasets → Add Zvol</code>.</li>
+          <li>به <code>Shares → Block Shares (iSCSI)</code> بروید.</li>
+          <li>Portal و Initiator را تعریف کنید.</li>
+          <li>Target و Extent را بسازید.</li>
+          <li>آن‌ها را Associate کنید.</li>
+        </ol>
+        <p>
+          iSCSI را روی Storage VLAN، با 10 GbE یا بیشتر، Latency کنترل‌شده و در
+          صورت نیاز Multipath اجرا کنید. ZVOL را بیش از ظرفیت واقعی Pool تخصیص
+          ندهید.
+        </p>
+      </section>
+      <section id="section-19">
+        <h2>18. Snapshot خودکار</h2>
+        <pre><code class="language-text">Data Protection → Periodic Snapshot Tasks → Add
 </code></pre>
-<p>نمونه Retention:</p>
-<pre><code class="language-text">Hourly: 24 ساعت
+        <p>نمونه Retention:</p>
+        <pre><code class="language-text">Hourly: 24 ساعت
 Daily: 30 روز
 Weekly: 12 هفته
 Monthly: 12 ماه
 </code></pre>
-<p>Snapshot برای Recovery سریع است؛ اگر Pool اصلی از بین برود، Snapshot همان Pool نیز از بین می‌رود.</p>
-</section><section id="section-20"><h2>19. ZFS Replication به TrueNAS دوم</h2>
-<p>ابتدا TrueNAS دوم، SSH Credential، مقصد و فضای کافی را آماده کنید. سپس:</p>
-<pre><code class="language-text">Data Protection → Replication Tasks → Add
+        <p>
+          Snapshot برای Recovery سریع است؛ اگر Pool اصلی از بین برود، Snapshot
+          همان Pool نیز از بین می‌رود.
+        </p>
+      </section>
+      <section id="section-20">
+        <h2>19. ZFS Replication به TrueNAS دوم</h2>
+        <p>
+          ابتدا TrueNAS دوم، SSH Credential، مقصد و فضای کافی را آماده کنید.
+          سپس:
+        </p>
+        <pre><code class="language-text">Data Protection → Replication Tasks → Add
 Source: tank/shares
 Destination: truenas02/tank-replica/shares
 Recursive: Enabled
 Schedule: هر 30 دقیقه
 Transport: SSH
 </code></pre>
-<p>مقصد را در سایت دوم یا حداقل Rack/اتاق جدا قرار دهید و Restore را دوره‌ای تست کنید. Replication بدون Retention مناسب ممکن است خطای منطقی یا حذف مخرب را نیز منتقل کند؛ Snapshotهای مقصد را مدیریت کنید.</p>
-<p><img loading="lazy" src="/assets/img/articles/content/TrueNAS%20Snapshots%20and%20Replication%20Infographic.png" alt="Snapshot و Replication در TrueNAS" /></p>
-<p><em>تصویر ۵ — تفاوت Snapshot محلی با Replication و نسخه خارج از سایت.</em></p>
-</section><section id="section-21"><h2>20. SMART و Scrub</h2>
-<p>SMART:</p>
-<pre><code class="language-text">Storage → Disks → S.M.A.R.T. Tests
+        <p>
+          مقصد را در سایت دوم یا حداقل Rack/اتاق جدا قرار دهید و Restore را
+          دوره‌ای تست کنید. Replication بدون Retention مناسب ممکن است خطای منطقی
+          یا حذف مخرب را نیز منتقل کند؛ Snapshotهای مقصد را مدیریت کنید.
+        </p>
+        <p>
+          <img
+            loading="lazy"
+            src="/assets/img/articles/content/TrueNAS%20Snapshots%20and%20Replication%20Infographic.png"
+            alt="Snapshot و Replication در TrueNAS"
+          />
+        </p>
+        <p>
+          <em
+            >تصویر ۵ — تفاوت Snapshot محلی با Replication و نسخه خارج از
+            سایت.</em
+          >
+        </p>
+      </section>
+      <section id="section-21">
+        <h2>20. SMART و Scrub</h2>
+        <p>SMART:</p>
+        <pre><code class="language-text">Storage → Disks → S.M.A.R.T. Tests
 Short: روزانه یا هفتگی
 Long: ماهانه
 </code></pre>
-<p>Scrub:</p>
-<pre><code class="language-text">Data Protection → Scrub Tasks → Add
+        <p>Scrub:</p>
+        <pre><code class="language-text">Data Protection → Scrub Tasks → Add
 Pool: tank
 Schedule: ماهانه
 </code></pre>
-<p>تست‌های Long را در ساعات کم‌مصرف اجرا کنید و Alertها را به Email یا سیستم Monitoring ارسال کنید.</p>
-</section><section id="section-22"><h2>21. Backup از Configuration</h2>
-<pre><code class="language-text">System Settings → General → Manage Configuration → Download File
+        <p>
+          تست‌های Long را در ساعات کم‌مصرف اجرا کنید و Alertها را به Email یا
+          سیستم Monitoring ارسال کنید.
+        </p>
+      </section>
+      <section id="section-22">
+        <h2>21. Backup از Configuration</h2>
+        <pre><code class="language-text">System Settings → General → Manage Configuration → Download File
 </code></pre>
-<p>فایل Configuration را رمزنگاری و در سیستم مدیریت امن، سایت دوم و Storage خارج از TrueNAS نگهداری کنید. Configuration Backup، Backup داده‌های Pool نیست.</p>
-</section><section id="section-23"><h2>22. Security Hardening</h2>
-<ul>
-<li>Web UI را روی Internet منتشر نکنید؛ فقط Management VLAN، VPN یا Bastion.</li>
-<li>از HTTPS و Certificate معتبر سازمانی استفاده کنید.</li>
-<li>Least Privilege و Group-Based ACL را اجرا کنید.</li>
-<li>Admin Account جدا از User Account داشته باشید.</li>
-<li>MFA را در صورت پشتیبانی Release و روش احراز هویت فعال کنید.</li>
-<li>SMB/NFS/iSCSI را روی Subnet مناسب محدود کنید.</li>
-<li>Management، Storage و Backup VLAN را جدا کنید.</li>
-<li>برای Ransomware، Snapshot Retention، Remote Replication و نسخه Offline داشته باشید.</li>
-<li>Serviceهای بلااستفاده را فعال نکنید.</li>
-</ul>
-</section><section id="section-24"><h2>23. Monitoring و Alerting</h2>
-<p>از مسیرهای زیر استفاده کنید:</p>
-<pre><code class="language-text">Dashboard
+        <p>
+          فایل Configuration را رمزنگاری و در سیستم مدیریت امن، سایت دوم و
+          Storage خارج از TrueNAS نگهداری کنید. Configuration Backup، Backup
+          داده‌های Pool نیست.
+        </p>
+      </section>
+      <section id="section-23">
+        <h2>22. Security Hardening</h2>
+        <ul>
+          <li>
+            Web UI را روی Internet منتشر نکنید؛ فقط Management VLAN، VPN یا
+            Bastion.
+          </li>
+          <li>از HTTPS و Certificate معتبر سازمانی استفاده کنید.</li>
+          <li>Least Privilege و Group-Based ACL را اجرا کنید.</li>
+          <li>Admin Account جدا از User Account داشته باشید.</li>
+          <li>MFA را در صورت پشتیبانی Release و روش احراز هویت فعال کنید.</li>
+          <li>SMB/NFS/iSCSI را روی Subnet مناسب محدود کنید.</li>
+          <li>Management، Storage و Backup VLAN را جدا کنید.</li>
+          <li>
+            برای Ransomware، Snapshot Retention، Remote Replication و نسخه
+            Offline داشته باشید.
+          </li>
+          <li>Serviceهای بلااستفاده را فعال نکنید.</li>
+        </ul>
+      </section>
+      <section id="section-24">
+        <h2>23. Monitoring و Alerting</h2>
+        <p>از مسیرهای زیر استفاده کنید:</p>
+        <pre><code class="language-text">Dashboard
 System Settings → Alerts
 Reporting
 </code></pre>
-<p>هشدارهای Pool Degraded، Disk Failure، SMART، Low Space، Scrub Error، Replication Failure، Temperature، Certificate Expiration، DNS/NTP و Service Down را فعال کنید. Email Alert را با SMTP سازمان تست کنید و در صورت نیاز SNMP، Syslog، Prometheus یا Grafana را اضافه کنید.</p>
-</section><section id="section-25"><h2>24. اشتباهات رایج</h2>
-<ol>
-<li><strong>RAID جای Backup نیست.</strong> در برابر حذف، Ransomware، آتش‌سوزی و خرابی کامل کافی نیست.</li>
-<li><strong>Snapshot جای Backup نیست.</strong> Snapshot روی همان Pool قرار دارد.</li>
-<li><strong>RAIDZ را برای هر Workload انتخاب نکنید.</strong> VM و Database اغلب به Mirror VDEV نیاز دارند.</li>
-<li><strong>USB را Boot Disk دائمی Production نکنید.</strong></li>
-<li><strong>RAM را دست‌کم نگیرید.</strong> ARC، SMB، VM، iSCSI و Deduplication RAM می‌خواهند.</li>
-<li><strong>Root Dataset را Share نکنید.</strong> Child Dataset مستقل بسازید.</li>
-<li><strong>Deduplication را بدون محاسبه و تست فعال نکنید.</strong></li>
-<li><strong>Replication بدون Restore Test کافی نیست.</strong> Backup باید قابل‌بازیابی باشد.</li>
-</ol>
-</section><section id="section-26"><h2>25. سناریوی واقعی شرکت متوسط</h2>
-<p>برای 80 کاربر، 10 VM و حدود 30 TB داده:</p>
-<pre><code class="language-text">TrueNAS-01: 8×12 TB، RAIDZ2، 64 GB ECC، 2×10 GbE، Boot SSD Mirror
+        <p>
+          هشدارهای Pool Degraded، Disk Failure، SMART، Low Space، Scrub Error،
+          Replication Failure، Temperature، Certificate Expiration، DNS/NTP و
+          Service Down را فعال کنید. Email Alert را با SMTP سازمان تست کنید و در
+          صورت نیاز SNMP، Syslog، Prometheus یا Grafana را اضافه کنید.
+        </p>
+      </section>
+      <section id="section-25">
+        <h2>24. اشتباهات رایج</h2>
+        <ol>
+          <li>
+            <strong>RAID جای Backup نیست.</strong> در برابر حذف، Ransomware،
+            آتش‌سوزی و خرابی کامل کافی نیست.
+          </li>
+          <li>
+            <strong>Snapshot جای Backup نیست.</strong> Snapshot روی همان Pool
+            قرار دارد.
+          </li>
+          <li>
+            <strong>RAIDZ را برای هر Workload انتخاب نکنید.</strong> VM و
+            Database اغلب به Mirror VDEV نیاز دارند.
+          </li>
+          <li><strong>USB را Boot Disk دائمی Production نکنید.</strong></li>
+          <li>
+            <strong>RAM را دست‌کم نگیرید.</strong> ARC، SMB، VM، iSCSI و
+            Deduplication RAM می‌خواهند.
+          </li>
+          <li>
+            <strong>Root Dataset را Share نکنید.</strong> Child Dataset مستقل
+            بسازید.
+          </li>
+          <li>
+            <strong>Deduplication را بدون محاسبه و تست فعال نکنید.</strong>
+          </li>
+          <li>
+            <strong>Replication بدون Restore Test کافی نیست.</strong> Backup
+            باید قابل‌بازیابی باشد.
+          </li>
+        </ol>
+      </section>
+      <section id="section-26">
+        <h2>25. سناریوی واقعی شرکت متوسط</h2>
+        <p>برای 80 کاربر، 10 VM و حدود 30 TB داده:</p>
+        <pre><code class="language-text">TrueNAS-01: 8×12 TB، RAIDZ2، 64 GB ECC، 2×10 GbE، Boot SSD Mirror
 TrueNAS-02: 8×12 TB، RAIDZ2، 64 GB ECC، سایت دوم
 </code></pre>
-<p>Datasetها:</p>
-<pre><code class="language-text">tank/shares/finance
+        <p>Datasetها:</p>
+        <pre><code class="language-text">tank/shares/finance
 tank/shares/hr
 tank/shares/projects
 tank/backups
 tank/vmware_nfs
 tank/replication
 </code></pre>
-<p>SMB روی User VLAN، NFS/iSCSI روی Storage VLAN، Snapshot ساعتی و روزانه، Replication هر 30 دقیقه به سایت دوم و یک Copy هفتگی خارج از سایت، الگوی مناسبی برای شروع است. Capacity نهایی را بر اساس داده واقعی، رشد سالانه، Retention و فضای لازم برای Rebuild محاسبه کنید.</p>
-</section><section id="section-27"><h2>26. Troubleshooting اولیه و Commandهای Diagnostic</h2>
-<pre><code class="language-bash">zpool status
+        <p>
+          SMB روی User VLAN، NFS/iSCSI روی Storage VLAN، Snapshot ساعتی و
+          روزانه، Replication هر 30 دقیقه به سایت دوم و یک Copy هفتگی خارج از
+          سایت، الگوی مناسبی برای شروع است. Capacity نهایی را بر اساس داده
+          واقعی، رشد سالانه، Retention و فضای لازم برای Rebuild محاسبه کنید.
+        </p>
+      </section>
+      <section id="section-27">
+        <h2>26. Troubleshooting اولیه و Commandهای Diagnostic</h2>
+        <pre><code class="language-bash">zpool status
 zpool list
 zfs list
 zfs list -o name,used,avail,refer,mountpoint
@@ -287,38 +750,189 @@ ping &lt;gateway&gt;
 dig truenas01.example.local
 showmount -e &lt;truenas-ip&gt;
 </code></pre>
-<p>در Windows:</p>
-<pre><code class="language-powershell">Test-NetConnection truenas01 -Port 445
+        <p>در Windows:</p>
+        <pre><code class="language-powershell">Test-NetConnection truenas01 -Port 445
 </code></pre>
-<p>ابتدا Dashboard، Pool، SMART، فضای آزاد، DNS، NTP، VLAN، Firewall، ACL، Service و آخرین Snapshot/Replication را بررسی کنید. دستورات تغییر‌دهنده ZFS را بدون Runbook و تأیید اجرا نکنید.</p>
-</section><section id="section-28"><h2>27. Checklist نهایی Production Deployment</h2>
-<ul>
-<li>[ ] ECC RAM، Boot SSD Mirror، HBA، UPS و IPMI آماده است.</li>
-<li>[ ] Diskها Burn-in و SMART شده‌اند.</li>
-<li>[ ] Management، User، Storage و Backup VLAN جدا شده‌اند.</li>
-<li>[ ] DNS، FQDN، Gateway و NTP صحیح است.</li>
-<li>[ ] Pool Layout با Workload و Rebuild Window هماهنگ است.</li>
-<li>[ ] Compression فعال و Deduplication آگاهانه انتخاب شده است.</li>
-<li>[ ] Root Dataset Share نشده و Datasetهای مستقل ساخته شده‌اند.</li>
-<li>[ ] ACL و Groupها تست شده‌اند.</li>
-<li>[ ] SMB/NFS/iSCSI فقط به Clientهای مجاز دسترسی دارند.</li>
-<li>[ ] Snapshot Schedule و Retention مستند است.</li>
-<li>[ ] Remote Replication به مقصد دوم فعال است.</li>
-<li>[ ] Backup خارج از سایت و نسخه Offline وجود دارد.</li>
-<li>[ ] Configuration Backup رمزنگاری و خارج از دستگاه ذخیره شده است.</li>
-<li>[ ] SMART، Scrub، Alerting و Monitoring فعال است.</li>
-<li>[ ] Restore و Disaster Recovery به‌صورت عملی تست شده است.</li>
-<li>[ ] RPO، RTO، Runbook تعویض Disk و فرآیند Escalation مستند است.</li>
-</ul>
-</section><section id="section-29"><h2>چه زمانی TrueNAS انتخاب مناسبی است و چه زمانی نیست؟</h2>
-<p>TrueNAS انتخاب مناسبی است اگر به کنترل کامل روی Storage، ZFS، Snapshot، Replication، SMB/NFS/iSCSI، انعطاف Hardware و هزینه قابل‌کنترل نیاز دارید و تیم شما دانش Storage، Network و Recovery را دارد.</p>
-<p>انتخاب مناسبی نیست اگر تیمی برای مدیریت ZFS ندارید، فقط چند Disk نامشابه و بدون Backup در اختیار است، انتظار Appliance کاملاً بدون طراحی دارید، Web UI قرار است روی Internet منتشر شود، یا بدون HA و سایت دوم به Availability بسیار بالا نیاز دارید. در این شرایط، Appliance پشتیبانی‌شده، Managed Storage یا راهکار Vendorمحور ممکن است انتخاب منطقی‌تری باشد.</p>
-</section><section id="section-30"><h2>منابع رسمی</h2>
-<ul>
-<li><a href="https://www.truenas.com/docs/scale/gettingstarted/tnhardwareguide/">TrueNAS Hardware Guide</a></li>
-<li><a href="https://www.truenas.com/docs/scale/gettingstarted/install/installingscale/">Installing TrueNAS</a></li>
-<li><a href="https://www.truenas.com/docs/scale/gettingstarted/configure/setupstoragescale/">Setting Up Storage</a></li>
-<li><a href="https://www.truenas.com/docs/scale/gettingstarted/configure/setupsharing/">Setting Up Data Sharing</a></li>
-<li><a href="https://www.truenas.com/docs/scale/gettingstarted/configure/">TrueNAS Configuration Instructions</a></li>
-</ul>
-</section></article></body></html>
+        <p>
+          ابتدا Dashboard، Pool، SMART، فضای آزاد، DNS، NTP، VLAN، Firewall،
+          ACL، Service و آخرین Snapshot/Replication را بررسی کنید. دستورات
+          تغییر‌دهنده ZFS را بدون Runbook و تأیید اجرا نکنید.
+        </p>
+      </section>
+      <section id="section-28">
+        <h2>27. Checklist نهایی Production Deployment</h2>
+        <ul>
+          <li>ECC RAM، Boot SSD Mirror، HBA، UPS و IPMI آماده است.</li>
+          <li>Diskها Burn-in و SMART شده‌اند.</li>
+          <li>Management، User، Storage و Backup VLAN جدا شده‌اند.</li>
+          <li>DNS، FQDN، Gateway و NTP صحیح است.</li>
+          <li>Pool Layout با Workload و Rebuild Window هماهنگ است.</li>
+          <li>Compression فعال و Deduplication آگاهانه انتخاب شده است.</li>
+          <li>Root Dataset Share نشده و Datasetهای مستقل ساخته شده‌اند.</li>
+          <li>ACL و Groupها تست شده‌اند.</li>
+          <li>SMB/NFS/iSCSI فقط به Clientهای مجاز دسترسی دارند.</li>
+          <li>Snapshot Schedule و Retention مستند است.</li>
+          <li>Remote Replication به مقصد دوم فعال است.</li>
+          <li>Backup خارج از سایت و نسخه Offline وجود دارد.</li>
+          <li>Configuration Backup رمزنگاری و خارج از دستگاه ذخیره شده است.</li>
+          <li>SMART، Scrub، Alerting و Monitoring فعال است.</li>
+          <li>Restore و Disaster Recovery به‌صورت عملی تست شده است.</li>
+          <li>RPO، RTO، Runbook تعویض Disk و فرآیند Escalation مستند است.</li>
+        </ul>
+      </section>
+      <section id="section-29">
+        <h2>چه زمانی TrueNAS انتخاب مناسبی است و چه زمانی نیست؟</h2>
+        <p>
+          TrueNAS انتخاب مناسبی است اگر به کنترل کامل روی Storage، ZFS،
+          Snapshot، Replication، SMB/NFS/iSCSI، انعطاف Hardware و هزینه
+          قابل‌کنترل نیاز دارید و تیم شما دانش Storage، Network و Recovery را
+          دارد.
+        </p>
+        <p>
+          انتخاب مناسبی نیست اگر تیمی برای مدیریت ZFS ندارید، فقط چند Disk
+          نامشابه و بدون Backup در اختیار است، انتظار Appliance کاملاً بدون
+          طراحی دارید، Web UI قرار است روی Internet منتشر شود، یا بدون HA و سایت
+          دوم به Availability بسیار بالا نیاز دارید. در این شرایط، Appliance
+          پشتیبانی‌شده، Managed Storage یا راهکار Vendorمحور ممکن است انتخاب
+          منطقی‌تری باشد.
+        </p>
+      </section>
+      <section id="faq" class="article-section">
+        <h2>پرسش‌های متداول TrueNAS</h2>
+        <div class="article-faq">
+          <div class="article-faq-item">
+            <h3 class="article-faq-question">
+              آیا RAIDZ و Snapshot جای نسخهٔ پشتیبان را می‌گیرند؟
+            </h3>
+            <div class="article-faq-answer">
+              <p>
+                خیر. RAIDZ برای تحمل خرابی دیسک و Snapshot برای بازگشت به یک
+                زمان مشخص است. برای خرابی کل Pool، حذف مخرب و حادثهٔ سایت، نسخهٔ
+                مستقل و خارج از سایت لازم است.
+              </p>
+            </div>
+          </div>
+          <div class="article-faq-item">
+            <h3 class="article-faq-question">تفاوت Dataset و ZVOL چیست؟</h3>
+            <div class="article-faq-answer">
+              <p>
+                Dataset یک فایل‌سیستم با سهمیه، ACL و Snapshot مستقل است و برای
+                اشتراک SMB یا NFS استفاده می‌شود. ZVOL یک دستگاه بلوکی است و
+                معمولاً پشت Extent در iSCSI قرار می‌گیرد.
+              </p>
+            </div>
+          </div>
+          <div class="article-faq-item">
+            <h3 class="article-faq-question">
+              برای ماشین‌های مجازی Mirror مناسب‌تر است یا RAIDZ2؟
+            </h3>
+            <div class="article-faq-answer">
+              <p>
+                انتخاب به IOPS، تأخیر، ظرفیت و الگوی بار بستگی دارد. Mirror
+                VDEVها معمولاً برای بار تصادفی ماشین‌های مجازی مناسب‌اند؛ RAIDZ2
+                ظرفیت و تحمل خرابی دو دیسک در هر VDEV را ارائه می‌کند. انتخاب
+                نهایی را با بار واقعی آزمایش کنید.
+              </p>
+            </div>
+          </div>
+          <div class="article-faq-item">
+            <h3 class="article-faq-question">
+              چرا دیسک Boot باید از دیسک‌های Pool جدا باشد؟
+            </h3>
+            <div class="article-faq-answer">
+              <p>
+                نصب TrueNAS دیسک انتخاب‌شده را پاک می‌کند. جداسازی Boot از
+                داده‌ها خطر انتخاب اشتباه و تداخل نقش دیسک‌ها را کم می‌کند. قبل
+                از نصب، مدل و شمارهٔ سریال دیسک مقصد را بررسی کنید.
+              </p>
+            </div>
+          </div>
+          <div class="article-faq-item">
+            <h3 class="article-faq-question">
+              چگونه دسترسی به SMB را محدود کنیم؟
+            </h3>
+            <div class="article-faq-answer">
+              <p>
+                Dataset مستقل بسازید، ACL را به گروه‌های موردنیاز بدهید و دسترسی
+                شبکه به سرویس را محدود کنید. با یک کاربر مجاز و یک کاربر
+                غیرمجاز، خواندن، نوشتن و حذف را آزمایش کنید.
+              </p>
+            </div>
+          </div>
+          <div class="article-faq-item">
+            <h3 class="article-faq-question">
+              آیا فعال کردن Deduplication همیشه فضای بیشتری آزاد می‌کند؟
+            </h3>
+            <div class="article-faq-answer">
+              <p>
+                خیر. نتیجه به تکرار واقعی داده‌ها و منابع سیستم بستگی دارد و
+                ممکن است هزینهٔ حافظه و کارایی از صرفه‌جویی بیشتر باشد. بدون
+                اندازه‌گیری و آزمایش، آن را فعال نکنید.
+              </p>
+            </div>
+          </div>
+          <div class="article-faq-item">
+            <h3 class="article-faq-question">
+              موفق بودن Replication برای اطمینان از بازیابی کافی است؟
+            </h3>
+            <div class="article-faq-answer">
+              <p>
+                خیر. علاوه بر بررسی Job و Snapshotهای مقصد، بازیابی فایل یا
+                Dataset را عملاً آزمایش کنید. Retention مقصد و کلیدهای رمزنگاری
+                را جدا از سرور اصلی نگهداری کنید.
+              </p>
+            </div>
+          </div>
+          <div class="article-faq-item">
+            <h3 class="article-faq-question">
+              هنگام Degraded شدن Pool چه کاری انجام دهیم؟
+            </h3>
+            <div class="article-faq-answer">
+              <p>
+                از Dashboard و zpool status وضعیت را بررسی کنید، دیسک معیوب را
+                با شمارهٔ سریال شناسایی و سلامت Backup را تأیید کنید. تعویض را
+                از روش پشتیبانی‌شدهٔ رابط TrueNAS انجام دهید و پیشرفت Resilver
+                را پایش کنید.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="section-30">
+        <h2>منابع رسمی</h2>
+        <ul>
+          <li>
+            <a
+              href="https://www.truenas.com/docs/scale/25.04/gettingstarted/scalehardwareguide/"
+              >TrueNAS Hardware Guide</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://www.truenas.com/docs/scale/25.04/gettingstarted/install/installingscale/"
+              >Installing TrueNAS</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://www.truenas.com/docs/scale/25.04/gettingstarted/configure/setupstoragescale/"
+              >Setting Up Storage</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://www.truenas.com/docs/scale/25.04/gettingstarted/configure/setupsharing/"
+              >Setting Up Data Sharing</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://www.truenas.com/docs/scale/25.04/gettingstarted/configure/"
+              >TrueNAS Configuration Instructions</a
+            >
+          </li>
+        </ul>
+      </section>
+    </article>
+  </body>
+</html>

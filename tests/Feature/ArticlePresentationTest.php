@@ -29,7 +29,8 @@ class ArticlePresentationTest extends TestCase
                 @$dom->loadHTML('<?xml encoding="UTF-8">'.$prepared, LIBXML_NONET);
                 $xp = new \DOMXPath($dom);
                 $faq = $xp->query('//section[@id="faq"]//details[contains(@class,"article-faq-disclosure")]');
-                $this->assertCount(count($article->presentation['localizations'][$locale]['faq']), $faq, $article->slug);
+                $authoredFaq = data_get($article->presentation, 'localizations.'.$locale.'.faq', []);
+                $this->assertCount($authoredFaq ? count($authoredFaq) : 8, $faq, $article->slug);
                 foreach ($faq as $item) {
                     $this->assertFalse($item->hasAttribute('open'));
                     $this->assertSame(1, $xp->query('./summary/h3', $item)->length);

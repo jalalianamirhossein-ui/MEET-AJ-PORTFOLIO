@@ -44,6 +44,56 @@ class ArticlePresentation
             }
         }
 
+        // Pasted Markdown tables otherwise render as one long, overflowing paragraph.
+        foreach (iterator_to_array($xp->query('.//p[not(ancestor::pre)]', $root)) as $paragraph) {
+            if ($paragraph->hasAttribute('data-en') || $paragraph->hasAttribute('data-fa') || $paragraph->getElementsByTagName('*')->length > 0) {
+                continue;
+            }
+            $lines = preg_split('/\R/u', trim($paragraph->textContent)) ?: [];
+            if (count($lines) < 3 || ! preg_match('/^\s*\|?\s*:?-{3,}:?\s*\|/', $lines[1])) {
+                continue;
+            }
+            $cells = fn (string $line): array => array_map('trim', explode('|', trim(trim($line), '|')));
+            $headings = $cells($lines[0]);
+            $separators = $cells($lines[1]);
+            if (count($headings) !== count($separators)
+                || array_filter($separators, fn ($cell) => ! preg_match('/^:?-{3,}:?$/', $cell))
+                || array_filter(array_slice($lines, 2), fn ($line) => count($cells($line)) !== count($headings))) {
+                continue;
+            }
+            $table = $dom->createElement('table');
+            $thead = $dom->createElement('thead');
+            $tbody = $dom->createElement('tbody');
+            foreach (array_merge([$lines[0]], array_slice($lines, 2)) as $index => $line) {
+                $row = $dom->createElement('tr');
+                foreach ($cells($line) as $value) {
+                    $cell = $dom->createElement($index === 0 ? 'th' : 'td');
+                    $cell->appendChild($dom->createTextNode($value));
+                    if ($index === 0) { $cell->setAttribute('scope', 'col'); }
+                    $row->appendChild($cell);
+                }
+                ($index === 0 ? $thead : $tbody)->appendChild($row);
+            }
+            $table->appendChild($thead);
+            $table->appendChild($tbody);
+            $paragraph->parentNode->replaceChild($table, $paragraph);
+        }
+
+        foreach (iterator_to_array($xp->query('.//table', $root)) as $table) {
+            $this->addClass($table, 'article-table');
+            if ($xp->query('ancestor::*[contains(concat(" ", normalize-space(@class), " "), " article-table-wrap ") or contains(concat(" ", normalize-space(@class), " "), " table-responsive ")]', $table)->length === 0) {
+                $wrapper = $dom->createElement('div');
+                $wrapper->setAttribute('class', 'article-table-wrap');
+                $wrapper->setAttribute('tabindex', '0');
+                $wrapper->setAttribute('role', 'region');
+                $wrapper->setAttribute('aria-label', 'Scrollable table');
+                $wrapper->setAttribute('data-en-aria-label', 'Scrollable table');
+                $wrapper->setAttribute('data-fa-aria-label', 'جدول قابل پیمایش');
+                $table->parentNode->replaceChild($wrapper, $table);
+                $wrapper->appendChild($table);
+            }
+        }
+
         // Normalize both current h3 questions and older FAQ question nodes
         // that use a different heading level or only the shared CSS class.
         $faqQuestions = $xp->query(

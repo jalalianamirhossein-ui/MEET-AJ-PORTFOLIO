@@ -69,6 +69,17 @@
   background: transparent;
 }
 .article-page .article-body section:last-child { margin-block-end: 0; }
+.article-page .article-reading,
+.article-page .article-body,
+.article-page .article-body section { min-width: 0; }
+.article-page .article-body :is(p, li, a) { overflow-wrap: break-word; }
+.article-page .article-body :is(td, th) { overflow-wrap: normal; word-break: normal; }
+.article-page .article-body :is(.article-table-wrap, .table-responsive) {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+.article-page .article-table-wrap:focus-visible { outline: 2px solid var(--article-primary); outline-offset: 2px; }
 .article-page .article-body :is(p, li, td) {
   color: var(--reading-ink);
   font-size: 1rem;
@@ -230,24 +241,88 @@ html[dir="rtl"] .article-page .article-body .article-section h2:hover { transfor
   outline: 3px solid var(--article-primary);
   outline-offset: -3px;
 }
-/* Keep the article TOC integrated with the page instead of rendering a
-   second white card around the navigation. */
+/* Let readers expand the full TOC without a narrow, nested scroll panel. */
+.article-page .article-shell--with-toc {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "toc" "reading";
+  gap: 1rem;
+}
 .article-page aside.article-toc {
-  width: min(100%, 12rem);
+  position: static;
+  display: block;
+  width: 100%;
+  max-height: none;
+  overflow: visible;
   border: 0 !important;
-  border-inline-start: 2px solid var(--article-primary) !important;
   border-radius: 0;
   background: transparent !important;
   box-shadow: none !important;
-  padding: .25rem 0 .25rem .35rem;
+  padding: 0;
+}
+.article-page aside.article-toc .article-toc-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+  padding: .85rem 1rem;
+  border-radius: .7rem;
+  background: var(--reading-topic-fill);
+  color: var(--reading-topic-ink);
+  font-size: .95rem;
+  line-height: 1.7;
+  letter-spacing: 0;
+  list-style: none;
+  cursor: pointer;
+}
+.article-page .article-toc-title::-webkit-details-marker { display: none; }
+.article-page .article-toc-title::after {
+  content: "+";
+  margin-inline-start: auto;
+  font: 500 1.4rem/1 Arial, sans-serif;
+}
+.article-page .article-toc-disclosure[open] > .article-toc-title::after { content: "−"; }
+.article-page .article-toc-title:focus-visible {
+  outline: 2px solid var(--article-primary);
+  outline-offset: 3px;
 }
 .article-page aside.article-toc :is(.article-toc-nav, .article-toc-list, .article-nav-item, .article-nav-item a, .article-nav-item a > span) {
   background: transparent !important;
 }
-.article-page aside.article-toc .article-nav-item a {
-  color: var(--article-text, #1e293b);
+.article-page aside.article-toc .article-toc-nav {
+  max-height: none;
+  overflow: visible;
+  scrollbar-gutter: auto;
+  padding-block: .75rem .25rem;
 }
-.article-page aside.article-toc .article-toc-list { max-height: 14rem; }
+.article-page aside.article-toc .article-toc-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: .25rem 1.5rem;
+  max-height: none;
+  overflow: visible;
+  padding: 0;
+}
+.article-page aside.article-toc .article-nav-item + .article-nav-item { margin: 0; }
+.article-page aside.article-toc .article-nav-item a {
+  min-height: 2.75rem;
+  padding: .55rem 1rem;
+  color: var(--article-text, #1e293b);
+  font-size: .9rem;
+  line-height: 1.75;
+  overflow-wrap: break-word;
+}
+.article-page aside.article-toc .article-nav-item a:hover {
+  color: var(--reading-topic-ink);
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+.article-page aside.article-toc .article-nav-item a:focus-visible {
+  outline: 2px solid var(--article-primary);
+  outline-offset: -2px;
+}
+@media (min-width: 768px) {
+  .article-page aside.article-toc .article-toc-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 .article-page .article-faq-disclosure summary h3.article-faq-question {
   margin: 0 !important;
   padding: 0 !important;
