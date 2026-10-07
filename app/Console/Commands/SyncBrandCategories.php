@@ -27,7 +27,7 @@ class SyncBrandCategories extends Command
             'ubiquiti' => ['Ubiquiti', '#0559c9'],
             'juniper' => ['Juniper', '#0096a6'],
             'avaya' => ['AVAYA', '#da291c'],
-            'qnap' => ['QNAP', '#6f2da8'],
+            'qnap' => ['Storage', '#6f2da8'],
             'dell' => ['DELL', '#007db8'],
             'others' => ['Others', '#a16207'],
         ];

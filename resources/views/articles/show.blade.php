@@ -110,7 +110,7 @@
                 @if ($article->tags->isNotEmpty())
                   <ul class="article-tags">
                     @foreach ($article->tags as $tag)
-                      <li><a href="{{ $tag->path() }}">{{ $tag->name }}</a></li>
+                      <li><a href="{{ $tag->path() }}" data-en="{{ $tag->displayName('en') }}" data-fa="{{ $tag->displayName('fa') }}">{{ $tag->displayName(data_get($article->presentation, 'content_language', 'en')) }}</a></li>
                     @endforeach
                   </ul>
                 @endif

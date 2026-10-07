@@ -24,7 +24,7 @@ class ArticleTagAssigner
         'ubiquiti' => 'Ubiquiti',
         'juniper' => 'Juniper',
         'avaya' => 'AVAYA',
-        'qnap' => 'QNAP',
+        'qnap' => 'Storage',
         'dell' => 'DELL',
         'other' => 'Other',
         'linux' => 'Linux',

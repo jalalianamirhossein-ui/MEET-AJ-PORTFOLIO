@@ -55,7 +55,7 @@
                   style="--topic: {{ $tag->accentColor() }};"
                   href="{{ url('/articles') }}?tag={{ urlencode($tag->slug) }}"
                   @if ($tagSlug === $tag->slug) aria-current="page" @endif
-                ><span class="article-chip-label">{{ $tag->displayName() }}</span></a>
+                ><span class="article-chip-label" data-en="{{ $tag->displayName('en') }}" data-fa="{{ $tag->displayName('fa') }}">{{ $tag->displayName() }}</span></a>
                 @endif
               @endforeach
               </div>
@@ -68,7 +68,7 @@
           <div class="article-search-status">
             <p class="article-search-summary" role="status">
               @if ($activeTag && $q === '')
-                <span data-en="Articles tagged {{ $activeTag->displayName() }}" data-fa="مقالات با برچسب {{ $activeTag->displayName() }}">Articles tagged {{ $activeTag->displayName() }}</span>
+                <span data-en="Articles tagged {{ $activeTag->displayName('en') }}" data-fa="مقالات با برچسب {{ $activeTag->displayName('fa') }}">Articles tagged {{ $activeTag->displayName() }}</span>
               @elseif ($q !== '')
                 <span data-en="{{ $results->total() }} result(s) for “{{ $q }}”" data-fa="{{ $results->total() }} نتیجه برای «{{ $q }}»">{{ $results->total() }} result(s) for “{{ $q }}”</span>
               @else

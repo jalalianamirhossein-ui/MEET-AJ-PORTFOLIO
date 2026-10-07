@@ -312,6 +312,7 @@ class Article extends Model
 
     public function categoryLabelEn(): string
     {
+        if ($this->primaryFilterSlug() === 'qnap') { return 'Storage'; }
         $stored = trim((string) data_get($this->presentation, 'category_label_en'));
 
         if ($stored !== '' && preg_match('/\p{Arabic}/u', $stored)) {
@@ -323,6 +324,7 @@ class Article extends Model
 
     public function categoryLabelFa(): string
     {
+        if ($this->primaryFilterSlug() === 'qnap') { return 'استوریج'; }
         $stored = trim((string) data_get($this->presentation, 'category_label_fa'));
 
         return $stored !== '' ? $stored : $this->localizedCategoryLabel('fa');

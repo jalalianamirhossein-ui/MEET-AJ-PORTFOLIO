@@ -35,9 +35,10 @@ class Tag extends Model
         return '/articles?tag='.urlencode($this->slug);
     }
 
-    public function displayName(): string
+    public function displayName(string $locale = 'en'): string
     {
         return match (strtolower((string) $this->slug)) {
+            'qnap' => $locale === 'fa' ? 'استوریج' : 'Storage',
             'vmware' => 'VMware',
             'mikrotik' => 'MikroTik',
             'devops' => 'DevOps',

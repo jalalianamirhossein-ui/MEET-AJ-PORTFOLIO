@@ -93,7 +93,7 @@
                     @if ($cardTags->isNotEmpty())
                       <ul class="article-teaser-tags">
                         @foreach ($cardTags as $tag)
-                          <li><a href="{{ $tag->path() }}">{{ $tag->name }}</a></li>
+                          <li><a href="{{ $tag->path() }}" data-en="{{ $tag->displayName('en') }}" data-fa="{{ $tag->displayName('fa') }}">{{ $tag->displayName($pageLocale ?? 'en') }}</a></li>
                         @endforeach
                       </ul>
                     @endif

@@ -11,8 +11,8 @@
     $filterGroups = $brandFilters
         ->map(function ($tag) use ($brandCategories): array {
             $category = $brandCategories->get($tag->slug === 'other' ? 'others' : $tag->slug);
-            $labelEn = $tag->slug === 'qnap' ? 'Storage' : $tag->displayName();
-            $labelFa = $tag->slug === 'qnap' ? 'استوریج' : $tag->displayName();
+            $labelEn = $tag->displayName('en');
+            $labelFa = $tag->displayName('fa');
 
             return ['slug' => $tag->slug, 'en' => $labelEn, 'fa' => $labelFa, 'color' => $category?->accentColor() ?? $tag->accentColor(), 'topic' => $tag->slug, 'sort_order' => 0, 'id' => $tag->id];
         })

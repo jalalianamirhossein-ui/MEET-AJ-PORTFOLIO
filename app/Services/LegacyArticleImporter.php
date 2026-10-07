@@ -199,7 +199,7 @@ class LegacyArticleImporter
         $category = Category::query()->where('language', 'en')->where('slug', $categorySlug)->first();
         if (! $category && $categorySlug === 'qnap') {
             $category = Category::firstOrCreate(['language' => 'en', 'slug' => 'qnap'], [
-                'name' => 'QNAP', 'accent_color' => \App\Models\Tag::BRAND_COLORS['qnap'],
+                'name' => 'Storage', 'accent_color' => \App\Models\Tag::BRAND_COLORS['qnap'],
             ]);
         }
 
