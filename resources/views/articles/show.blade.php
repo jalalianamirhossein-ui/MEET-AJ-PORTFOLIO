@@ -155,13 +155,13 @@
             // toc_html stored during import. Legacy TOCs were often stale or
             // contained only the FAQ link after article repairs.
             $tocHtml = '';
-            if (preg_match_all('~<section\\b[^>]*\\bid=["\\']([^"\\']+)["\\'][^>]*>.*?<h2\\b([^>]*)>(.*?)</h2>~is', $articleContent, $tocSections, PREG_SET_ORDER)) {
+            if (preg_match_all("~<section\\b[^>]*\\bid=['\"]([^'\"]+)['\"][^>]*>.*?<h2\\b([^>]*)>(.*?)</h2>~is", $articleContent, $tocSections, PREG_SET_ORDER)) {
                 foreach ($tocSections as $tocSection) {
                     $id = $tocSection[1];
                     $attributes = $tocSection[2];
                     $heading = trim(strip_tags($tocSection[3]));
-                    preg_match('/\\bdata-en=["\\']([^"\\']*)["\\']/i', $attributes, $enMatch);
-                    preg_match('/\\bdata-fa=["\\']([^"\\']*)["\\']/i', $attributes, $faMatch);
+                    preg_match("/\\bdata-en=['\"]([^'\"]*)['\"]/i", $attributes, $enMatch);
+                    preg_match("/\\bdata-fa=['\"]([^'\"]*)['\"]/i", $attributes, $faMatch);
                     $en = html_entity_decode($enMatch[1] ?? $heading, ENT_QUOTES | ENT_HTML5, 'UTF-8');
                     $fa = html_entity_decode($faMatch[1] ?? $en, ENT_QUOTES | ENT_HTML5, 'UTF-8');
                     $tocHtml .= '<li class="article-nav-item"><a href="#'.e($id).'" data-en-aria-label="'.e($en).'" data-fa-aria-label="'.e($fa).'" aria-label="'.e($en).'"><span data-en="'.e($en).'" data-fa="'.e($fa).'">'.e($en).'</span></a></li>';
