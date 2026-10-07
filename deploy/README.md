@@ -23,6 +23,17 @@ sudo bash deploy/update_project.sh
 
 اسکریپت `update_project.sh` اگر تغییر محلی پیدا کند متوقف می‌شود و از overwrite کردن آن‌ها جلوگیری می‌کند.
 
+فایل `public/css/app/meet-aj-admin.css` خروجی تولیدشدهٔ `php artisan filament:assets` است و در Git نگهداری نمی‌شود. منبع قابل ویرایش آن `resources/css/filament-admin.css` است. اگر checkout قدیمی هنگام انتشار فقط برای تغییر این خروجی متوقف شد، ابتدا نسخهٔ محلی را خارج از پروژه ذخیره کنید، سپس همان فایل را به نسخهٔ Git برگردانید و انتشار را دوباره اجرا کنید:
+
+```bash
+cd /var/www/meetaj
+cp public/css/app/meet-aj-admin.css "/var/tmp/meet-aj-admin.css.$(date +%Y%m%d-%H%M%S).bak"
+git restore -- public/css/app/meet-aj-admin.css
+/opt/deploy/update_project.sh
+```
+
+این راهکار برای همان خروجی CSS است؛ تغییرات سایر فایل‌ها را بررسی و حفظ کنید. اسکریپت انتشار فایل CSS را پس از دریافت کد جدید بازتولید می‌کند.
+
 `setup_env.sh` فقط برای نصب اولیه روی Ubuntu VPS با کاربر سرویس `www-data` است. اگر `.env` موجود باشد متوقف می‌شود تا APP_KEY و تنظیمات سایت حفظ شوند. مقادیر ورودی، از جمله رمز دارای فاصله یا علامت `$` و `#`، با parser واقعی dotenv بررسی و بدون نمایش secret نوشته می‌شوند. برای DirectAdmin از [راهنمای استقرار](../docs/current/DEPLOYMENT.md) استفاده کنید.
 
 `update_project.sh` فایل‌های برنامه و migrationها را به‌روز می‌کند؛ جایگزینی متن مقاله‌های موجود عمدی و جداست. پس از Backup و بررسی ویرایش CMS، فرمان `php artisan articles:import-legacy --update-existing` و سپس `php artisan site:compare-content` را اجرا کنید. Import معمولی محتوای موجود را تغییر نمی‌دهد.
