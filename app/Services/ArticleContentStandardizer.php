@@ -17,10 +17,6 @@ class ArticleContentStandardizer
         $content = $this->removeArticleBackButton($content);
         $content = preg_replace('/id=["\']references["\']/i', 'id="official-references"', $content) ?? $content;
         $content = str_ireplace('Official references', 'Official References', $content);
-        if (is_array(data_get($article->presentation, 'localizations'))) {
-            return $this->orderEndingSections($content);
-        }
-
         // Existing FAQ accordions are extended in place so the original
         // questions remain visible and the shared minimum of eight is met.
         $content = $this->extendExistingFaq($content);
