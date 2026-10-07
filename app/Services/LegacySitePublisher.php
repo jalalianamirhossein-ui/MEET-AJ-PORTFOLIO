@@ -504,7 +504,7 @@ BLADE;
     private function writeServiceWorker(): void
     {
         $js = <<<'JS'
-const ASSET_VERSION = "cms-3";
+const ASSET_VERSION = "cms-4";
 const CACHE_NAME = `meet-aj-v2.0.0-${ASSET_VERSION}`;
 const PRIVATE_PREFIXES = ["/admin", "/livewire", "/forms", "/storage/livewire-tmp"];
 
@@ -567,11 +567,15 @@ self.addEventListener("fetch", (event) => {
     event.respondWith((async () => {
       const cache = await caches.open(CACHE_NAME);
       const cached = await cache.match(request);
-      const network = fetch(request).then((response) => {
-        if (response.ok) cache.put(request, response.clone());
+      try {
+        const response = await fetch(request);
+        if (response.ok) {
+          await cache.put(request, response.clone());
+        }
         return response;
-      }).catch(() => cached);
-      return cached || network;
+      } catch (error) {
+        return cached || Response.error();
+      }
     })());
   }
 });

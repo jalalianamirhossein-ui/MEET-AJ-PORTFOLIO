@@ -15,11 +15,11 @@ class ArticleContentStandardizer
     {
         $content = Article::normalizeContentMarkup($content);
         $content = $this->removeArticleBackButton($content);
-        if (is_array(data_get($article->presentation, 'localizations'))) {
-            return $content;
-        }
         $content = preg_replace('/id=["\']references["\']/i', 'id="official-references"', $content) ?? $content;
         $content = str_ireplace('Official references', 'Official References', $content);
+        if (is_array(data_get($article->presentation, 'localizations'))) {
+            return $this->orderEndingSections($content);
+        }
 
         // Existing FAQ accordions are extended in place so the original
         // questions remain visible and the shared minimum of eight is met.
@@ -41,13 +41,43 @@ class ArticleContentStandardizer
         }
 
         if ($missing === []) {
-            return $content;
+            return $this->orderEndingSections($content);
         }
 
         $addition = "\n".implode("\n", $missing)."\n";
         $footerPosition = stripos($content, '<footer class="article-footer"');
         if ($footerPosition === false) {
-            return $content.$addition;
+            return $this->orderEndingSections($content.$addition);
+        }
+
+        return $this->orderEndingSections(substr($content, 0, $footerPosition).$addition.substr($content, $footerPosition));
+    }
+
+    /**
+     * Keep the article footer sections predictable for readers and crawlers.
+     * Existing authored sections used to remain wherever they were found,
+     * while generated sections were appended, producing mixed orderings.
+     */
+    private function orderEndingSections(string $content): string
+    {
+        $orderedIds = ['conclusion', 'faq', 'official-references'];
+        $sections = [];
+        foreach ($orderedIds as $id) {
+            $pattern = "~<section\\b(?=[^>]*\\bid=[\"']".preg_quote($id, '~')."[\"'])[^>]*>.*?</section>~is";
+            if (preg_match($pattern, $content, $match)) {
+                $sections[$id] = $match[0];
+                $content = str_replace($match[0], '', $content, $count);
+            }
+        }
+
+        if ($sections === []) {
+            return $content;
+        }
+
+        $addition = "\n".implode("\n", array_map(fn ($id) => $sections[$id], array_keys($sections)))."\n";
+        $footerPosition = stripos($content, '<footer class="article-footer"');
+        if ($footerPosition === false) {
+            return rtrim($content).$addition;
         }
 
         return substr($content, 0, $footerPosition).$addition.substr($content, $footerPosition);
