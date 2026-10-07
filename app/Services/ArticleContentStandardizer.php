@@ -15,6 +15,8 @@ class ArticleContentStandardizer
     {
         $content = Article::normalizeContentMarkup($content);
         $content = $this->removeArticleBackButton($content);
+        $content = $this->removeSeoSections($content);
+        $content = $this->addKnownSectionIds($content);
         $content = preg_replace('/id=["\']references["\']/i', 'id="official-references"', $content) ?? $content;
         $content = str_ireplace('Official references', 'Official References', $content);
         // Existing FAQ accordions are extended in place so the original
@@ -86,6 +88,62 @@ class ArticleContentStandardizer
             '',
             $content
         ) ?? $content;
+    }
+
+    /** Remove editorial SEO fields that were accidentally imported as article sections. */
+    private function removeSeoSections(string $content): string
+    {
+        $content = preg_replace_callback('~<section\b[^>]*>.*?</section>~is', function (array $match): string {
+            if (preg_match('~<h[12]\b([^>]*)>(.*?)</h[12]>~is', $match[0], $heading)) {
+                $label = html_entity_decode(strip_tags($heading[2]), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                if (preg_match('/\b(?:SEO\s+Title|Meta\s+Description|Keywords)\b|عنوان\s+SEO|توضیحات\s+متا|کلمات\s+کلیدی/iu', $label)) {
+                    return '';
+                }
+            }
+
+            return $match[0];
+        }, $content) ?? $content;
+
+        // Some imported articles stored the SEO block as a bare h2 followed
+        // by a list, rather than wrapping it in a section.
+        return preg_replace(
+            '~<h[12]\b[^>]*>\s*(?:SEO|SEO\s+Title|عنوان\s+SEO)\s*</h[12]>.*?(?=<h[12]\b|$)~isu',
+            '',
+            $content
+        ) ?? $content;
+    }
+
+    /** Reuse authored sections instead of adding a second generic introduction or references section. */
+    private function addKnownSectionIds(string $content): string
+    {
+        $known = [
+            'introduction' => '/(?:introduction|overview|مقدمه|معرفی)/iu',
+            'conclusion' => '/(?:conclusion|summary|جمع[‌ ]?بندی|نتیجه)/iu',
+            'official-references' => '/(?:official\s+(?:references|sources)|references?|sources?|منابع|مراجع)/iu',
+        ];
+
+        foreach ($known as $id => $pattern) {
+            if (preg_match('/\bid=["\']'.preg_quote($id, '/').'["\']/i', $content)) {
+                continue;
+            }
+
+            $content = preg_replace_callback('~<section\b([^>]*)>(.*?)</section>~is', function (array $match) use ($id, $pattern): string {
+                if (preg_match('/\bid=["\'][^"\']+["\']/i', $match[1])) {
+                    return $match[0];
+                }
+                if (! preg_match('~<h[12]\b([^>]*)>(.*?)</h[12]>~is', $match[2], $heading)) {
+                    return $match[0];
+                }
+                $label = html_entity_decode(strip_tags($heading[2]), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                if (! preg_match($pattern, $label)) {
+                    return $match[0];
+                }
+
+                return '<section id="'.$id.'"'.$match[1].'>'.$match[2].'</section>';
+            }, $content, 1) ?? $content;
+        }
+
+        return $content;
     }
 
     /** @return array<string, string> */
