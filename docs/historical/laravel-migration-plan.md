@@ -1,5 +1,7 @@
 # Meet AJ Laravel migration plan
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 > **SUPERSEDED (HISTORICAL).** Planning document retained as history. Obsolete targets in this file: Laravel 11, PHP 8.2, Filament 3, public `/de`, `pages`, `contact_requests`. Current status: [PROJECT-STATUS.md](../current/PROJECT-STATUS.md). Decision record: [architecture-decision-record.md](../decisions/ADR/ADR-001-laravel-13-filament-5-stack.md).
 
 Date: 2026-09-14. Status: **Superseded.**

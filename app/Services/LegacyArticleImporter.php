@@ -62,7 +62,10 @@ class LegacyArticleImporter
                         }
 
                         $translationKey = $existing->translation_key;
-                        $existing->forceFill($parsed['attributes']);
+                        $attributes = $parsed['attributes'];
+                        // Source/SEO updates must not republish drafts or move publication dates.
+                        unset($attributes['status'], $attributes['published_at'], $attributes['sort_order']);
+                        $existing->forceFill($attributes);
                         $existing->translation_key = $translationKey;
                         $existing->save();
                         $updated++;
@@ -107,7 +110,10 @@ class LegacyArticleImporter
         if ($dryRun) {
             $run();
         } else {
-            DB::transaction($run);
+            DB::transaction(function () use ($run): void {
+                $run();
+                app(ArticleOrdering::class)->synchronize();
+            });
             app(\App\Services\ArticleTagAssigner::class)->syncPublishedLibrary();
         }
 
@@ -146,8 +152,8 @@ class LegacyArticleImporter
                 continue;
             }
             $slug = $slugMatch[1];
-            preg_match('/src="(assets\/img\/portfolio\/optimized\/[^"]+)"/', $block, $thumb);
-            preg_match('/href="(assets\/img\/portfolio\/[^"]+\.png)"/', $block, $gallery);
+            preg_match('/src="(assets\/img\/articles\/banners\/[^"]+)"/', $block, $thumb);
+            preg_match('/href="(assets\/img\/articles\/banners\/[^"]+\.png)"/', $block, $gallery);
             preg_match('/alt="([^"]*)"/', $block, $alt);
             preg_match('/data-en="([^"]*)"[^>]*data-fa="([^"]*)"/', $block, $titles);
             preg_match('/<p[^>]*data-en="([^"]*)"[^>]*data-fa="([^"]*)"/s', $block, $excerpts);
@@ -198,30 +204,45 @@ class LegacyArticleImporter
         $heroTitleFa = $this->attr($html, 'class="article-title hero-title"', 'data-fa');
         $excerpt = $this->attr($html, 'class="article-excerpt hero-subtitle"', 'data-en') ?: $description;
         $excerptFa = $this->attr($html, 'class="article-excerpt hero-subtitle"', 'data-fa');
-        $heroImage = $this->heroImage($html) ?: ($card['gallery'] ?? $card['thumbnail'] ?? '/assets/img/hero-bg.jpg');
+        $heroImage = $this->heroImage($html) ?: ($card['gallery'] ?? $card['thumbnail'] ?? '/assets/img/banners/site/hero-bg.jpg');
         $heroImage = $this->rewritePublicPaths($heroImage);
         $categoryLabelEn = $this->attr($html, 'class="article-category"', 'data-en') ?: Str::headline($categorySlug);
         $categoryLabelFa = $this->attr($html, 'class="article-category"', 'data-fa');
 
         $schema = $this->jsonLd($html);
+        $contentLanguage = $this->namedMeta($html, 'article:content-language') === 'fa' ? 'fa' : 'en';
+        $localizations = null;
+        if (preg_match('~<script\b[^>]*id="article-localizations"[^>]*>(.*?)</script>~is', $html, $localized)) {
+            $candidate = json_decode($localized[1], true);
+            if (is_array($candidate) && isset($candidate['fa'], $candidate['en'])) {
+                $localizations = $candidate;
+                $heroTitle = $candidate['en']['title'];
+                $heroTitleFa = $candidate['fa']['title'];
+                $excerpt = $candidate['en']['description'];
+                $excerptFa = $candidate['fa']['description'];
+            }
+        }
         $publishedAt = $this->publishedAt($schema, $relative);
         $seo = [
-            'og_title' => $this->englishOrFallback($this->meta($html, 'og:title'), $heroTitle),
+            'og_title' => $contentLanguage === 'fa' ? $this->meta($html, 'og:title') : $this->englishOrFallback($this->meta($html, 'og:title'), $heroTitle),
             'og_description' => $this->meta($html, 'og:description'),
             'og_type' => $this->meta($html, 'og:type'),
             'og_image' => $this->meta($html, 'og:image'),
             'og_url' => $this->meta($html, 'og:url'),
             'twitter_card' => $this->namedMeta($html, 'twitter:card'),
-            'twitter_title' => $this->englishOrFallback($this->namedMeta($html, 'twitter:title'), $heroTitle),
+            'twitter_title' => $contentLanguage === 'fa' ? $this->namedMeta($html, 'twitter:title') : $this->englishOrFallback($this->namedMeta($html, 'twitter:title'), $heroTitle),
             'twitter_description' => $this->namedMeta($html, 'twitter:description'),
             'twitter_image' => $this->namedMeta($html, 'twitter:image'),
             'robots' => $this->namedMeta($html, 'robots'),
             'original_canonical' => $this->canonical($html),
             'schema' => $schema,
+            'faq_schema' => $this->jsonLd($html, 'FAQPage'),
             'date_provenance' => $publishedAt['provenance'],
         ];
 
         $presentation = array_filter([
+            'localizations' => $localizations,
+            'content_language' => $contentLanguage,
             'source_file' => $relative,
             'source_hash' => $hash,
             'source_identity' => $relative,
@@ -238,10 +259,10 @@ class LegacyArticleImporter
             'filter_class' => $card['filter_class'] ?? $this->filterFromCategory($categorySlug),
             'thumbnail' => $card['thumbnail'] ?? $heroImage,
             'gallery' => $card['gallery'] ?? $heroImage,
-            'card_title_en' => $card['card_title_en'] ?? $heroTitle,
-            'card_title_fa' => $card['card_title_fa'] ?? $heroTitleFa,
-            'card_excerpt_en' => $card['card_excerpt_en'] ?? $excerpt,
-            'card_excerpt_fa' => $card['card_excerpt_fa'] ?? $excerptFa,
+            'card_title_en' => $localizations ? $heroTitle : ($card['card_title_en'] ?? $heroTitle),
+            'card_title_fa' => $localizations ? $heroTitleFa : ($card['card_title_fa'] ?? $heroTitleFa),
+            'card_excerpt_en' => $localizations ? $excerpt : ($card['card_excerpt_en'] ?? $excerpt),
+            'card_excerpt_fa' => $localizations ? $excerptFa : ($card['card_excerpt_fa'] ?? $excerptFa),
             'image_alt' => $card['alt'] ?? $heroTitle,
         ], fn ($value) => $value !== null && $value !== '');
 
@@ -259,7 +280,7 @@ class LegacyArticleImporter
                 'content' => $body,
                 'featured_image' => $card['thumbnail'] ?? $heroImage,
                 'category_id' => $category?->id,
-                'meta_title' => $heroTitle,
+                'meta_title' => $contentLanguage === 'fa' ? $this->tagContent($html, 'title') : $this->englishOrFallback($this->tagContent($html, 'title'), $heroTitle),
                 'meta_description' => $description,
                 'canonical_url' => null,
                 'seo_data' => $seo,
@@ -277,6 +298,7 @@ class LegacyArticleImporter
     private function ensureCategories(): array
     {
         $names = [
+            'cisco' => ['en' => 'Cisco', 'fa' => 'سیسکو'],
             'microsoft' => ['en' => 'Microsoft', 'fa' => 'مایکروسافت'],
             'linux' => ['en' => 'Linux', 'fa' => 'لینوکس'],
             'mikrotik' => ['en' => 'MikroTik', 'fa' => 'میکروتیک'],
@@ -304,6 +326,7 @@ class LegacyArticleImporter
     {
         if ($filterClass) {
             return match (true) {
+                str_contains($filterClass, 'cisco') => 'cisco',
                 str_contains($filterClass, 'linux') => 'linux',
                 str_contains($filterClass, 'microsoft') => 'microsoft',
                 str_contains($filterClass, 'mikrotik') => 'mikrotik',
@@ -313,6 +336,7 @@ class LegacyArticleImporter
         }
 
         return match (true) {
+            str_contains($bodyClass, 'theme-cisco') => 'cisco',
             str_contains($bodyClass, 'theme-linux') => 'linux',
             str_contains($bodyClass, 'theme-microsoft') => 'microsoft',
             str_contains($bodyClass, 'theme-mikrotik') => 'mikrotik',
@@ -328,6 +352,7 @@ class LegacyArticleImporter
 
     private function rewritePublicPaths(string $html): string
     {
+        $html = ImagePaths::rewrite($html);
         $html = str_replace('../assets/', '/assets/', $html);
         $html = str_replace('href="../index.html', 'href="/', $html);
         $html = preg_replace('#href="(?:\.\./)?articles/([a-z0-9-]+)\.html#', 'href="/articles/$1', $html) ?? $html;
@@ -343,12 +368,10 @@ class LegacyArticleImporter
 
     private function sliceArticleBody(string $html): ?string
     {
-        $startTag = '<article class="article-body">';
-        $from = strpos($html, $startTag);
-        if ($from === false) {
+        if (! preg_match('~<article\b[^>]*class=["\']article-body["\'][^>]*>~i', $html, $start, PREG_OFFSET_CAPTURE)) {
             return null;
         }
-        $from += strlen($startTag);
+        $from = $start[0][1] + strlen($start[0][0]);
         $pos = $from;
         $depth = 1;
         while ($depth > 0) {
@@ -454,14 +477,14 @@ class LegacyArticleImporter
     /**
      * @return array<string, mixed>|null
      */
-    private function jsonLd(string $html): ?array
+    private function jsonLd(string $html, string $type = 'Article'): ?array
     {
         if (! preg_match_all('/<script type="application\/ld\+json">(.*?)<\/script>/is', $html, $matches)) {
             return null;
         }
         foreach ($matches[1] as $json) {
             $data = json_decode(html_entity_decode(trim($json), ENT_QUOTES | ENT_HTML5, 'UTF-8'), true);
-            if (is_array($data) && ($data['@type'] ?? null) === 'Article') {
+            if (is_array($data) && ($data['@type'] ?? null) === $type) {
                 return $data;
             }
         }
@@ -494,6 +517,17 @@ class LegacyArticleImporter
      */
     private function ensureEnglishTitles(Article $article, array $parsed): bool
     {
+        // A reviewed Persian editorial package intentionally has Persian SEO.
+        if (data_get($article->presentation, 'content_language') === 'fa') {
+            // The shared row keeps its English identity, while Persian SEO is intentional.
+            if ($this->hasArabic((string) $article->title) && ! $this->hasArabic((string) $parsed['title'])) {
+                $article->title = $parsed['title'];
+                $article->save();
+
+                return true;
+            }
+            return false;
+        }
         $english = $this->englishOrFallback($parsed['title'] ?? null, $article->title);
         $changed = false;
 

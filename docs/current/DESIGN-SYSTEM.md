@@ -1,8 +1,10 @@
 # Design system — Meet AJ public site
 
-**Authority:** [docs/design-system/meet-aj/MASTER.md](../design-system/meet-aj/MASTER.md). Live cascade last overlay `assets/css/site-modules.css?v=1840` after `visual-upgrade.css?v=1711`.
-**Visual DNA:** [ARTICLE-VISUAL-DNA.md](ARTICLE-VISUAL-DNA.md) (Article detail pages are the reference; they are not restyled from this file).  
-**Date:** 2026-09-18  
+> Maintenance review: 2026-10-06. The current cascade includes `glass-system.css?v=18`; public layouts use glass styling with blue accents, and the Filament white/red theme has a glass overlay. Earlier design measurements retain their evidence dates. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
+**Authority:** [docs/design-system/meet-aj/MASTER.md](../design-system/meet-aj/MASTER.md). Live cascade ends with `assets/css/glass-system.css?v=18` after `site-modules.css?v=1853`.
+**Visual DNA:** [ARTICLE-VISUAL-DNA.md](ARTICLE-VISUAL-DNA.md) (Article detail pages are the reference; they are not restyled from this file).
+**Date:** 2026-09-21
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md)
 
 ui-ux-pro-max catalogs were read directly (Python is not installed, so `search.py` was not executed): Portfolio/Personal + B2B Service; Swiss Modernism 2.0 + Editorial Grid; primary `#2563EB`; Poppins + Vazirmatn; 150–200ms micro-interaction and 400–560ms reveal. frontend-design: Article DNA is the distinctive language — not a SaaS card kit, not cream/terracotta, not glass everywhere.
@@ -33,7 +35,7 @@ Green is success / availability on the hero (“Available for Work”) and form 
 
 Eyebrow → Display/H1 → H2 (bar, weight 700) → H3 → Body → Small → Caption. Same family on Homepage, Services, Articles chrome, Contact, Footer.
 
-Article library teasers are **H3** (after section H2). Homepage skill/value/cert titles still use **H4** in `index.html` (WARN — heading skip).
+Article library teasers are **H3** (after section H2). Homepage skill/value/cert titles use **H4** under their local H3 groups; the current heading hierarchy has no observed level skip.
 
 ## Components
 
@@ -42,8 +44,8 @@ Article library teasers are **H3** (after section H2). Homepage skill/value/cert
 - **Not cards:** stats, resume items, skill rows, FAQ, SLA lines, about domain lists, process steps, contact methods.
 - **Homepage Expertise / تخصص‌ها:** five columns with pastel category accents (Infrastructure `#15803d`, Networking `#2563eb`, DevOps `#6d28d9`, Monitoring `#0f766e`, Security `#c2410c`). Title is a tinted pill + icon, not a filled card. Skill rows use a 3px `border-inline-start` (left in LTR, right in RTL).
 - **Filters:** pill buttons, keyboard + touch, min-height 44px.
-- **Nav / i18n:** solid listbox (no glass); DE only if `[data-de]` exists. Fullscreen mobile `#header.header-show` with icy-blue chrome (`visual-upgrade.css` + `site-modules.css`). Closed header is `hidden` + `inert`. Open menu inerts `main` / `footer` / skip-link (`main.js?v=1412`). Hamburger `inset-inline-start`; language `inset-inline-end`.
-- **Quote form:** hidden until Request a Quote. Same field language as homepage contact. Placeholders: `data-en-placeholder` / `data-fa-placeholder` applied by `i18n.js?v=1403`.
+- **Nav / i18n:** solid listbox (no glass); DE only if `[data-de]` exists. Fullscreen mobile `#header.header-show` with icy-blue chrome (`visual-upgrade.css` + `site-modules.css`). Closed header is `hidden` + `inert`. Open menu inerts `main` and `footer` (`main.js?v=1415`). Hamburger `inset-inline-start`; language `inset-inline-end`.
+- **Quote form:** hidden until Request a Quote. Same field language as homepage contact. Placeholders: `data-en-placeholder` / `data-fa-placeholder` applied by `i18n.js?v=1407`.
 
 ## Motion
 

@@ -21,7 +21,7 @@
     <meta property="og:title" content="DevOps & Automation — Pricing & Scope" />
     <meta property="og:description" content="Docker, CI/CD pipelines, infrastructure automation services. Fixed price AED 6,900." />
     <meta property="og:url" content="https://meetaj.ir/services/devops-automation.html" />
-    <meta property="og:image" content="https://meetaj.ir/assets/img/hero-bg.jpg" />
+    <meta property="og:image" content="https://meetaj.ir/assets/img/banners/site/hero-bg.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Modern Service Pages CSS -->
@@ -47,7 +47,6 @@
     <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
   </head>
   <body class="service-page">
-    <a class="skip-link" href="#main-content">Skip to main content</a>
     <!-- Language Toggle -->
     <!-- Auto-injected by i18n-switch.js -->
 

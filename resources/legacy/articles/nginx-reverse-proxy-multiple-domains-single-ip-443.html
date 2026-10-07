@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-article-language="en"><head>
+<meta charset="UTF-8"><title>Nginx Reverse Proxy: Multiple Domains on One IP and Port 443 Using SNI</title>
+<meta name="article:content-language" content="en">
+<meta name="description" content="Configure five HTTPS domains on one public IP with Nginx SNI, certificates, WebSocket, secure defaults, renewal, testing and enterprise troubleshooting.">
+<meta name="keywords" content="Nginx, Reverse Proxy, Nginx SNI, server_name, Multiple Domains, Single Public IP, HTTPS Reverse Proxy, Nginx Virtual Host, TLS SNI, Nginx Proxy Pass">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Nginx Reverse Proxy: Multiple Domains on One IP and Port 443 Using SNI">
+<meta property="og:description" content="Configure five HTTPS domains on one public IP with Nginx SNI, certificates, WebSocket, secure defaults, renewal, testing and enterprise troubleshooting.">
+<meta property="og:type" content="article"><meta property="og:image" content="/assets/img/articles/banners/Nginx Reverse Proxy Routing Infographic.png">
+<meta property="og:url" content="https://meetaj.ir/articles/nginx-reverse-proxy-multiple-domains-single-ip-443"><link rel="canonical" href="https://meetaj.ir/articles/nginx-reverse-proxy-multiple-domains-single-ip-443">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Nginx Reverse Proxy: Multiple Domains on One IP and Port 443 Using SNI", "description": "Configure five HTTPS domains on one public IP with Nginx SNI, certificates, WebSocket, secure defaults, renewal, testing and enterprise troubleshooting.", "inLanguage": "en", "datePublished": "2026-10-07T00:00:00+03:30", "dateModified": "2026-10-07", "image": "/assets/img/articles/banners/Nginx Reverse Proxy Routing Infographic.png", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}}</script>
+<script id="article-localizations" type="application/json">{"en": {"title": "Nginx Reverse Proxy: Multiple Domains on One IP and Port 443 Using SNI", "meta_title": "Nginx Reverse Proxy: Multiple Domains on One IP and Port 443 Using SNI", "description": "Configure five HTTPS domains on one public IP with Nginx SNI, certificates, WebSocket, secure defaults, renewal, testing and enterprise troubleshooting.", "keywords": ["Nginx", "Reverse Proxy", "Nginx SNI", "server_name", "Multiple Domains", "Single Public IP", "HTTPS Reverse Proxy", "Nginx Virtual Host", "TLS SNI", "Nginx Proxy Pass"], "faq": [["Does DNS select the backend?", "No. DNS returns the ingress IP; Nginx selects the request server and its proxy_pass destination."], ["Are SNI and Host interchangeable?", "No. SNI is TLS handshake input; Host is HTTP request input. They can differ, which this configuration rejects."], ["Is port 80 mandatory?", "Not for HTTPS routing. It is required for HTTP-01 and optional for redirects; automated DNS-01 permits a 443-only ingress."], ["Can I issue certificates for these exact example addresses?", "No. Replace documentation IPs and reserved example domains with your own real reachable infrastructure."], ["Does a 200 response prove the correct backend?", "No. Verify service-specific content and the per-host log upstream address, as multiple services can return similar pages."], ["Does curl -k validate TLS trust?", "No. It disables certificate verification. Repeat without -k and verify hostname and chain before release."], ["Will a renewal automatically update active Nginx workers?", "Not with certonly alone. Use a deploy hook that tests and reloads Nginx, then monitor the certificate served externally."], ["Can ordinary NAT distinguish these domains?", "No. Ordinary L3/L4 DNAT sees the shared destination IP and port. Forward to Nginx for TLS/HTTP name processing."]]}, "fa": {"title": "Nginx Reverse Proxy: میزبانی چند دامنه روی یک IP و Port 443 با SNI", "meta_title": "Nginx Reverse Proxy: میزبانی چند دامنه روی یک IP و Port 443 با SNI", "description": "راه‌اندازی پنج دامنه HTTPS روی یک IP با Nginx و SNI؛ تنظیم Certificate، WebSocket، امنیت، تمدید گواهی، تست و عیب‌یابی عملیاتی در شبکه سازمانی.", "keywords": ["Nginx", "Reverse Proxy", "Nginx SNI", "server_name", "Multiple Domains", "Single Public IP", "HTTPS Reverse Proxy", "Nginx Virtual Host", "TLS SNI", "Nginx Proxy Pass"], "faq": [["آیا DNS، Backend را انتخاب می‌کند؟", "خیر. DNS آدرس ورودی را برمی‌گرداند؛ Nginx سرور Request و مقصد proxy_pass را انتخاب می‌کند."], ["آیا SNI و Host معادل هستند؟", "خیر. SNI ورودی Handshake در TLS و Host ورودی درخواست HTTP است. ممکن است متفاوت باشند و این تنظیمات اختلاف را رد می‌کند."], ["آیا Port 80 اجباری است؟", "برای Routing HTTPS خیر. برای HTTP-01 لازم و برای Redirect اختیاری است؛ DNS-01 خودکار ورودی فقط 443 را ممکن می‌کند."], ["آیا می‌توان برای همین آدرس‌های نمونه گواهی صادر کرد؟", "خیر. IP مستنداتی و دامنه رزروشده مثال را با زیرساخت واقعی قابل دسترسی و تحت مالکیت خود جایگزین کنید."], ["آیا پاسخ 200، Backend صحیح را اثبات می‌کند؟", "خیر. محتوای مخصوص سرویس و آدرس Upstream لاگ هر Host را بررسی کنید؛ چند سرویس ممکن است صفحه مشابه برگردانند."], ["آیا curl -k اعتماد TLS را بررسی می‌کند؟", "خیر. بررسی گواهی را غیرفعال می‌کند. پیش از انتشار بدون -k تست و Hostname و Chain را تأیید کنید."], ["آیا تمدید به‌تنهایی گواهی Worker فعال Nginx را عوض می‌کند؟", "با certonly به‌تنهایی خیر. Deploy Hook برای تست و Reload قرار دهید و گواهی ارائه‌شده از بیرون را مانیتور کنید."], ["آیا NAT معمولی این دامنه‌ها را تفکیک می‌کند؟", "خیر. DNAT معمولی لایه ۳/۴ IP و Port مشترک مقصد را می‌بیند. ترافیک را برای پردازش نام TLS/HTTP به Nginx بفرستید."]]}}</script>
+</head><body class="article-page theme-linux">
+<header><nav><ul><li class="article-nav-item"><a href="#introduction"><span  data-en="1. Introduction" data-fa="۱. مقدمه">1. Introduction</span></a></li><li class="article-nav-item"><a href="#scenario"><span  data-en="2. Scenario" data-fa="۲. سناریو">2. Scenario</span></a></li><li class="article-nav-item"><a href="#architecture"><span  data-en="3. Architecture" data-fa="۳. معماری">3. Architecture</span></a></li><li class="article-nav-item"><a href="#sni"><span  data-en="4. How SNI Works" data-fa="۴. نحوه کار SNI">4. How SNI Works</span></a></li><li class="article-nav-item"><a href="#dns"><span  data-en="5. DNS Configuration" data-fa="۵. تنظیم DNS">5. DNS Configuration</span></a></li><li class="article-nav-item"><a href="#installation"><span  data-en="6. Nginx Installation" data-fa="۶. نصب Nginx">6. Nginx Installation</span></a></li><li class="article-nav-item"><a href="#backend-connectivity"><span  data-en="7. Backend Connectivity Check" data-fa="۷. بررسی ارتباط با Backend">7. Backend Connectivity Check</span></a></li><li class="article-nav-item"><a href="#certificates"><span  data-en="8. SSL Certificate" data-fa="۸. گواهی SSL و TLS">8. SSL Certificate</span></a></li><li class="article-nav-item"><a href="#complete-configuration"><span  data-en="9. Complete Nginx Configuration" data-fa="۹. تنظیمات کامل Nginx">9. Complete Nginx Configuration</span></a></li><li class="article-nav-item"><a href="#http-redirect"><span  data-en="10. HTTP to HTTPS Redirect" data-fa="۱۰. هدایت HTTP به HTTPS">10. HTTP to HTTPS Redirect</span></a></li><li class="article-nav-item"><a href="#default-server"><span  data-en="11. Default Server Security" data-fa="۱۱. امنیت Default Server">11. Default Server Security</span></a></li><li class="article-nav-item"><a href="#websocket"><span  data-en="12. WebSocket Support and Upload Size" data-fa="۱۲. WebSocket و اندازه Upload">12. WebSocket Support and Upload Size</span></a></li><li class="article-nav-item"><a href="#logging"><span  data-en="13. Logging" data-fa="۱۳. لاگ‌گیری">13. Logging</span></a></li><li class="article-nav-item"><a href="#hardening"><span  data-en="14. Security Hardening" data-fa="۱۴. تقویت امنیت">14. Security Hardening</span></a></li><li class="article-nav-item"><a href="#testing"><span  data-en="15. Testing Configuration and Renewal" data-fa="۱۵. تست تنظیمات و تمدید">15. Testing Configuration and Renewal</span></a></li><li class="article-nav-item"><a href="#resolve"><span  data-en="16. curl --resolve: Test Before DNS Cutover" data-fa="۱۶. تست با curl --resolve پیش از تغییر DNS">16. curl --resolve: Test Before DNS Cutover</span></a></li><li class="article-nav-item"><a href="#openssl"><span  data-en="17. openssl s_client: SNI and Certificate Verification" data-fa="۱۷. تست SNI و گواهی با openssl s_client">17. openssl s_client: SNI and Certificate Verification</span></a></li><li class="article-nav-item"><a href="#troubleshooting"><span  data-en="18. Troubleshooting" data-fa="۱۸. عیب‌یابی">18. Troubleshooting</span></a></li><li class="article-nav-item"><a href="#root-cause"><span  data-en="19. Root Cause Analysis" data-fa="۱۹. تحلیل علت ریشه‌ای">19. Root Cause Analysis</span></a></li><li class="article-nav-item"><a href="#nat"><span  data-en="20. Why NAT Alone Is Not Enough" data-fa="۲۰. Why NAT Alone Is Not Enough؛ چرا NAT کافی نیست؟">20. Why NAT Alone Is Not Enough</span></a></li><li class="article-nav-item"><a href="#enterprise"><span  data-en="21. Enterprise Architecture Example" data-fa="۲۱. مثال معماری سازمانی">21. Enterprise Architecture Example</span></a></li><li class="article-nav-item"><a href="#recommendations"><span  data-en="22. Security Recommendations and Operational Limits" data-fa="۲۲. توصیه‌های امنیتی و محدودیت عملیاتی">22. Security Recommendations and Operational Limits</span></a></li><li class="article-nav-item"><a href="#conclusion"><span  data-en="23. Conclusion" data-fa="۲۳. نتیجه‌گیری">23. Conclusion</span></a></li><li class="article-nav-item"><a href="#seo-title"><span  data-en="24. SEO Title" data-fa="۲۴. عنوان SEO">24. SEO Title</span></a></li><li class="article-nav-item"><a href="#meta-description"><span  data-en="25. Meta Description" data-fa="۲۵. توضیحات متا">25. Meta Description</span></a></li><li class="article-nav-item"><a href="#keywords"><span  data-en="26. Keywords" data-fa="۲۶. کلمات کلیدی">26. Keywords</span></a></li><li class="article-nav-item"><a href="#faq"><span  data-en="Frequently Asked Questions" data-fa="پرسش‌های متداول">Frequently Asked Questions</span></a></li><li class="article-nav-item"><a href="#official-references"><span  data-en="Official References" data-fa="منابع رسمی">Official References</span></a></li></ul></nav></header><main>
+<section class="article-hero article-header hero">
+<span class="article-category" data-en="Linux" data-fa="لینوکس">Linux</span>
+<h1 class="article-title hero-title" data-en="Nginx Reverse Proxy: Multiple Domains on One IP and Port 443 Using SNI" data-fa="Nginx Reverse Proxy: میزبانی چند دامنه روی یک IP و Port 443 با SNI">Nginx Reverse Proxy: Multiple Domains on One IP and Port 443 Using SNI</h1>
+<p class="article-excerpt hero-subtitle" data-en="Configure five HTTPS domains on one public IP with Nginx SNI, certificates, WebSocket, secure defaults, renewal, testing and enterprise troubleshooting." data-fa="راه‌اندازی پنج دامنه HTTPS روی یک IP با Nginx و SNI؛ تنظیم Certificate، WebSocket، امنیت، تمدید گواهی، تست و عیب‌یابی عملیاتی در شبکه سازمانی.">Configure five HTTPS domains on one public IP with Nginx SNI, certificates, WebSocket, secure defaults, renewal, testing and enterprise troubleshooting.</p>
+<img class="article-hero-thumbnail" src="/assets/img/articles/banners/Nginx Reverse Proxy Routing Infographic.png" alt="Nginx HTTPS reverse proxy">
+</section><article class="article-body" lang="en" dir="ltr">
+<section id="introduction"><h2  data-en="1. Introduction" data-fa="۱. مقدمه">1. Introduction</h2>
+<pre dir="ltr"><code class="language-text">Internet
+                            |
+                   Public IP: 203.0.113.10
+                            |
+                         TCP/443
+                            |
+                    +---------------+
+                    |     NGINX     |
+                    | Reverse Proxy |
+                    +---------------+
+                      /   /   |   \   \
+                     /   /    |    \   \
+                    v   v     v     v   v
+
+app.example.com          -&gt; 10.10.10.11:8080
+api.example.com          -&gt; 10.10.10.12:9000
+jira.example.com         -&gt; 10.10.10.13:8080
+grafana.example.com      -&gt; 10.10.10.14:3000
+gitlab.example.com       -&gt; 10.10.10.15:80</code></pre>
+<p  data-en="One public IP and one TCP listener can publish independent HTTPS services. This design is a Name-Based HTTPS Reverse Proxy, also called TLS SNI-Based Virtual Hosting. Nginx terminates client TLS and opens a separate HTTP connection to the selected private backend." data-fa="یک Public IP و یک Listener روی TCP/443 برای انتشار چند سرویس مستقل HTTPS کافی است. نام این معماری Name-Based HTTPS Reverse Proxy یا TLS SNI-Based Virtual Hosting است. Nginx اتصال TLS کاربر را خاتمه می‌دهد و اتصال HTTP جداگانه‌ای به Backend خصوصی سرویس باز می‌کند.">One public IP and one TCP listener can publish independent HTTPS services. This design is a Name-Based HTTPS Reverse Proxy, also called TLS SNI-Based Virtual Hosting. Nginx terminates client TLS and opens a separate HTTP connection to the selected private backend.</p>
+<p  data-en="This runbook targets System Administrators, Network Engineers and DevOps Engineers. The configuration requires Nginx 1.19.4 or later with the HTTP SSL module and OpenSSL 1.1.1 or later; use a currently supported distribution and security-patched packages. All commands below run on Ubuntu/Debian unless marked as backend commands." data-fa="این راهنما برای System Administrator، Network Engineer و DevOps Engineer نوشته شده است. تنظیمات به Nginx نسخه 1.19.4 یا جدیدتر با HTTP SSL Module و OpenSSL نسخه 1.1.1 یا جدیدتر نیاز دارد؛ در محیط واقعی از توزیع پشتیبانی‌شده و بسته‌های دارای وصله امنیتی استفاده کنید. فرمان‌ها روی Ubuntu/Debian اجرا می‌شوند مگر آنکه محل اجرا Backend ذکر شود.">This runbook targets System Administrators, Network Engineers and DevOps Engineers. The configuration requires Nginx 1.19.4 or later with the HTTP SSL module and OpenSSL 1.1.1 or later; use a currently supported distribution and security-patched packages. All commands below run on Ubuntu/Debian unless marked as backend commands.</p>
+<p  data-en="203.0.113.10 and 198.51.100.20 are documentation addresses; example.com is reserved for examples. Replace them with a routable public IP and domains you control. A public CA cannot issue these example certificates for you. Production-ready here means a deployable baseline with explicit prerequisites, not a claim that the sample addresses are live." data-fa="آدرس‌های 203.0.113.10 و 198.51.100.20 مخصوص مستندسازی هستند و example.com نیز دامنه نمونه است. آن‌ها را با IP عمومی قابل Route و دامنه‌های تحت مالکیت خود جایگزین کنید. CA عمومی این گواهی‌های نمونه را برای شما صادر نمی‌کند. Production-Ready در این مقاله یعنی تنظیمات قابل استقرار با پیش‌نیاز مشخص، نه فعال‌بودن آدرس‌های مثال.">203.0.113.10 and 198.51.100.20 are documentation addresses; example.com is reserved for examples. Replace them with a routable public IP and domains you control. A public CA cannot issue these example certificates for you. Production-ready here means a deployable baseline with explicit prerequisites, not a claim that the sample addresses are live.</p>
+</section>
+<section id="scenario"><h2  data-en="2. Scenario" data-fa="۲. سناریو">2. Scenario</h2>
+<pre dir="ltr"><code class="language-text">app.example.com -&gt; 10.10.10.11:8080
+api.example.com -&gt; 10.10.10.12:9000
+jira.example.com -&gt; 10.10.10.13:8080
+grafana.example.com -&gt; 10.10.10.14:3000
+gitlab.example.com -&gt; 10.10.10.15:80</code></pre>
+<p  data-en="All five A records point to 203.0.113.10. HTTPS service traffic enters on TCP/443; TCP/80 below is an optional redirect and HTTP-01 validation listener, not another HTTPS service port. Different domains such as app.example.net use the same pattern with their own DNS records, server_name and certificate." data-fa="رکورد A هر پنج نام به 203.0.113.10 اشاره می‌کند. ترافیک سرویس HTTPS از TCP/443 وارد می‌شود؛ TCP/80 در ادامه فقط برای Redirect و اعتبارسنجی HTTP-01 است و Port دیگری برای سرویس HTTPS نیست. دامنه مستقل مثل app.example.net هم با DNS، server_name و Certificate مخصوص خود از همین الگو استفاده می‌کند.">All five A records point to 203.0.113.10. HTTPS service traffic enters on TCP/443; TCP/80 below is an optional redirect and HTTP-01 validation listener, not another HTTPS service port. Different domains such as app.example.net use the same pattern with their own DNS records, server_name and certificate.</p>
+</section>
+<section id="architecture"><h2  data-en="3. Architecture" data-fa="۳. معماری">3. Architecture</h2>
+<figure><img src="/assets/img/articles/content/Nginx Reverse Proxy Infrastructure Diagram.png" loading="lazy" decoding="async" alt="Five private services behind one Nginx HTTPS ingress" data-en-alt="Five private services behind one Nginx HTTPS ingress" data-fa-alt="پنج سرویس خصوصی پشت یک ورودی HTTPS در Nginx"><figcaption ><span  data-en="Five private services behind one Nginx HTTPS ingress" data-fa="پنج سرویس خصوصی پشت یک ورودی HTTPS در Nginx">Five private services behind one Nginx HTTPS ingress</span></figcaption></figure>
+<pre dir="ltr"><code class="language-text">Client
+   |
+   | TLS SNI: app.example.com
+   v
+NGINX :443
+   |
+   | server_name app.example.com
+   | HTTP Host: app.example.com
+   v
+10.10.10.11:8080</code></pre>
+<p  data-en="DNS locates the proxy IP; it does not select a backend or encode a TCP port. A server block defines a virtual service. server_name matches names, while proxy_pass defines the upstream destination inside a location. DNS, certificate coverage and backend routing are separate settings and all must agree." data-fa="DNS آدرس Proxy را پیدا می‌کند؛ Backend انتخاب نمی‌کند و Port TCP را در رکورد A قرار نمی‌دهد. هر server block یک سرویس مجازی را تعریف می‌کند. server_name نام‌ها را تطبیق می‌دهد و proxy_pass مقصد Upstream را در location تعیین می‌کند. DNS، پوشش Certificate و مسیر Backend تنظیمات جداگانه‌اند و باید با هم سازگار باشند.">DNS locates the proxy IP; it does not select a backend or encode a TCP port. A server block defines a virtual service. server_name matches names, while proxy_pass defines the upstream destination inside a location. DNS, certificate coverage and backend routing are separate settings and all must agree.</p>
+<p  data-en="The illustrated upstream links are plaintext HTTP. A private VLAN reduces exposure but does not encrypt traffic. Where policy requires encryption inside the network, use HTTPS upstreams with certificate verification, or an authenticated encrypted network transport. TLS passthrough is a different design: this HTTP proxy needs to decrypt requests to inspect HTTP headers." data-fa="ارتباط Upstream در این سناریو HTTP بدون رمزنگاری است. Private VLAN سطح دسترسی را محدود می‌کند ولی ترافیک را رمز نمی‌کند. اگر Policy سازمان رمزنگاری داخلی می‌خواهد، از HTTPS Upstream با بررسی Certificate یا ارتباط شبکه رمزنگاری‌شده و احراز هویت‌شده استفاده کنید. TLS Passthrough طراحی دیگری است؛ این HTTP Proxy برای بررسی Headerها باید درخواست را رمزگشایی کند.">The illustrated upstream links are plaintext HTTP. A private VLAN reduces exposure but does not encrypt traffic. Where policy requires encryption inside the network, use HTTPS upstreams with certificate verification, or an authenticated encrypted network transport. TLS passthrough is a different design: this HTTP proxy needs to decrypt requests to inspect HTTP headers.</p>
+</section>
+<section id="sni"><h2  data-en="4. How SNI Works" data-fa="۴. نحوه کار SNI">4. How SNI Works</h2>
+<figure><img src="/assets/img/articles/content/Nginx SNI Routing Infographic.png" loading="lazy" decoding="async" alt="TLS SNI selection precedes HTTP request routing" data-en-alt="TLS SNI selection precedes HTTP request routing" data-fa-alt="انتخاب TLS با SNI پیش از Routing درخواست HTTP انجام می‌شود"><figcaption ><span  data-en="TLS SNI selection precedes HTTP request routing" data-fa="انتخاب TLS با SNI پیش از Routing درخواست HTTP انجام می‌شود">TLS SNI selection precedes HTTP request routing</span></figcaption></figure>
+<ul><li  data-en="The client resolves the name, connects to IP:443 and sends a TLS ClientHello containing SNI, normally the URL hostname." data-fa="Client نام را Resolve می‌کند، به IP:443 متصل می‌شود و در TLS ClientHello مقدار SNI، معمولاً Hostname آدرس URL، را می‌فرستد.">The client resolves the name, connects to IP:443 and sends a TLS ClientHello containing SNI, normally the URL hostname.</li><li  data-en="Nginx starts in the listener default context. During the handshake SNI can select a named virtual server and its certificate before HTTP exists." data-fa="Nginx ابتدا در Context پیش‌فرض Listener قرار دارد. هنگام Handshake، SNI می‌تواند Virtual Server و Certificate آن را پیش از وجود Request HTTP انتخاب کند.">Nginx starts in the listener default context. During the handshake SNI can select a named virtual server and its certificate before HTTP exists.</li><li  data-en="After TLS completes, Nginx reads the request line and HTTP Host header; HTTP/2 uses :authority. HTTP name selection can change the request server context." data-fa="پس از تکمیل TLS، Nginx خط درخواست و HTTP Host Header را می‌خواند؛ در HTTP/2 از :authority استفاده می‌شود. انتخاب نام در HTTP می‌تواند Context سرور پردازش Request را تغییر دهد.">After TLS completes, Nginx reads the request line and HTTP Host header; HTTP/2 uses :authority. HTTP name selection can change the request server context.</li><li  data-en="server_name is configuration, not a network header. proxy_pass forwards the decrypted request to the configured backend." data-fa="server_name تنظیم Nginx است، نه Header شبکه. proxy_pass درخواست رمزگشایی‌شده را به Backend تنظیم‌شده می‌فرستد.">server_name is configuration, not a network header. proxy_pass forwards the decrypted request to the configured backend.</li></ul>
+<p  data-en="SNI and Host are client input, not authentication. They need not match. This baseline rejects a missing or different SNI for each named service with HTTP 421; it prevents a connection for one name being reused to reach another tenant. This is a deliberate policy and can limit HTTP/2 connection coalescing if HTTP/2 is enabled later. A Host-only curl request to an IP does not test correct SNI." data-fa="SNI و Host ورودی Client هستند و احراز هویت محسوب نمی‌شوند؛ ممکن است با هم متفاوت باشند. این تنظیمات در هر سرویس SNI خالی یا متفاوت را با HTTP 421 رد می‌کند تا اتصال یک نام برای دسترسی به سرویس دیگر استفاده نشود. این Policy آگاهانه است و اگر بعداً HTTP/2 فعال شود می‌تواند Connection Coalescing را محدود کند. اجرای curl به IP با فقط Host Header، تست صحیح SNI نیست.">SNI and Host are client input, not authentication. They need not match. This baseline rejects a missing or different SNI for each named service with HTTP 421; it prevents a connection for one name being reused to reach another tenant. This is a deliberate policy and can limit HTTP/2 connection coalescing if HTTP/2 is enabled later. A Host-only curl request to an IP does not test correct SNI.</p>
+<p><a href="https://nginx.org/en/docs/http/server_names.html" rel="noopener"><span  data-en="Official reference: virtual server selection and server names" data-fa="مرجع رسمی: انتخاب Virtual Server و server_name">Official reference: virtual server selection and server names</span></a></p>
+</section>
+<section id="dns"><h2  data-en="5. DNS Configuration" data-fa="۵. تنظیم DNS">5. DNS Configuration</h2>
+<pre dir="ltr"><code class="language-text">app.example.com    A    203.0.113.10
+api.example.com    A    203.0.113.10
+jira.example.com    A    203.0.113.10
+grafana.example.com    A    203.0.113.10
+gitlab.example.com    A    203.0.113.10</code></pre>
+<pre dir="ltr"><code class="language-bash">dig app.example.com +short
+dig api.example.com +short
+nslookup app.example.com</code></pre>
+<p  data-en="Expected dig output for each name is 203.0.113.10; nslookup also prints the resolver and answer labels. Check from the client network and a public resolver when split DNS is used. Remove stale AAAA records unless a working IPv6 path serves the same names. An IPv6 listen directive alone does not create IPv6 connectivity." data-fa="خروجی مورد انتظار dig برای هر نام 203.0.113.10 است؛ nslookup مشخصات Resolver و برچسب‌های پاسخ را هم نمایش می‌دهد. در Split DNS از شبکه Client و Resolver عمومی بررسی کنید. AAAA قدیمی را حذف کنید مگر مسیر IPv6 فعال همان نام‌ها را سرویس دهد. صرف listen مربوط به IPv6 اتصال عمومی IPv6 ایجاد نمی‌کند.">Expected dig output for each name is 203.0.113.10; nslookup also prints the resolver and answer labels. Check from the client network and a public resolver when split DNS is used. Remove stale AAAA records unless a working IPv6 path serves the same names. An IPv6 listen directive alone does not create IPv6 connectivity.</p>
+<pre dir="ltr"><code class="language-text">203.0.113.10</code></pre>
+</section>
+<section id="installation"><h2  data-en="6. Nginx Installation" data-fa="۶. نصب Nginx">6. Nginx Installation</h2>
+<pre dir="ltr"><code class="language-bash">sudo apt update
+sudo apt install nginx -y
+sudo systemctl enable --now nginx
+sudo apt install curl dnsutils netcat-openbsd openssl -y</code></pre>
+<p  data-en="apt refreshes the package index and installs Nginx plus diagnostic tools. enable --now starts Nginx and enables startup at boot. Package versions depend on your distribution and configured repositories; verify the installed binary rather than assuming apt installs the latest upstream release." data-fa="apt فهرست بسته‌ها را تازه می‌کند و Nginx و ابزارهای تشخیص را نصب می‌کند. enable --now سرویس را اجرا و شروع در Boot را فعال می‌کند. نسخه بسته به توزیع و Repository بستگی دارد؛ نسخه Binary نصب‌شده را بررسی کنید و فرض نکنید apt جدیدترین Release بالادستی را نصب می‌کند.">apt refreshes the package index and installs Nginx plus diagnostic tools. enable --now starts Nginx and enables startup at boot. Package versions depend on your distribution and configured repositories; verify the installed binary rather than assuming apt installs the latest upstream release.</p>
+<pre dir="ltr"><code class="language-bash">nginx -v
+nginx -V
+openssl version
+certbot --version
+systemctl status nginx --no-pager
+sudo ss -lntp | grep nginx</code></pre>
+<p  data-en="Run certbot --version after installing Certbot in section 8. Expect active (running), an Nginx version meeting the prerequisite, SSL module support in -V and initially a port 80 listener. Port 443 appears after certificates and the final configuration are installed. nginx -V writes build information to stderr." data-fa="certbot --version را بعد از نصب Certbot در بخش ۸ اجرا کنید. انتظار active (running)، نسخه Nginx مطابق پیش‌نیاز، پشتیبانی SSL Module در -V و در ابتدا Listener روی Port 80 را دارید. Port 443 پس از نصب Certificate و تنظیم نهایی ظاهر می‌شود. nginx -V اطلاعات Build را روی stderr می‌نویسد.">Run certbot --version after installing Certbot in section 8. Expect active (running), an Nginx version meeting the prerequisite, SSL module support in -V and initially a port 80 listener. Port 443 appears after certificates and the final configuration are installed. nginx -V writes build information to stderr.</p>
+</section>
+<section id="backend-connectivity"><h2  data-en="7. Backend Connectivity Check" data-fa="۷. بررسی ارتباط با Backend">7. Backend Connectivity Check</h2>
+<p  data-en="Run these checks on the Nginx host before writing proxy configuration. A TCP success proves reachability, not application health. curl -I sends HEAD; 405 can mean the application does not implement HEAD. Retry with GET and the public Host expected by that application." data-fa="پیش از نوشتن تنظیم Proxy این بررسی‌ها را روی سرور Nginx اجرا کنید. موفقیت TCP فقط Reachability را اثبات می‌کند، نه سلامت Application. curl -I درخواست HEAD می‌فرستد؛ پاسخ 405 ممکن است به معنی پشتیبانی‌نکردن برنامه از HEAD باشد. با GET و Host عمومی مورد انتظار برنامه دوباره بررسی کنید.">Run these checks on the Nginx host before writing proxy configuration. A TCP success proves reachability, not application health. curl -I sends HEAD; 405 can mean the application does not implement HEAD. Retry with GET and the public Host expected by that application.</p>
+<pre dir="ltr"><code class="language-bash">curl -I --connect-timeout 5 --max-time 15 http://10.10.10.11:8080
+curl -I --connect-timeout 5 --max-time 15 http://10.10.10.12:9000
+curl -I --connect-timeout 5 --max-time 15 http://10.10.10.13:8080
+curl -I --connect-timeout 5 --max-time 15 http://10.10.10.14:3000
+curl -I --connect-timeout 5 --max-time 15 http://10.10.10.15:80</code></pre>
+<pre dir="ltr"><code class="language-bash">nc -zv 10.10.10.11 8080
+nc -zv 10.10.10.12 9000
+ip route get 10.10.10.11
+curl -v --connect-timeout 5 --max-time 15 -H &quot;Host: app.example.com&quot; http://10.10.10.11:8080/</code></pre>
+<p  data-en="Expected: nc reports succeeded; curl receives an application HTTP response such as 200, 302 or an expected authentication response. ip route get shows the selected interface, gateway when needed and source IP. Record that source IP for backend firewall rules, including any intervening SNAT." data-fa="انتظار: nc موفقیت succeeded را گزارش می‌کند و curl پاسخ HTTP برنامه مثل 200، 302 یا پاسخ احراز هویت مورد انتظار می‌گیرد. ip route get رابط، Gateway در صورت نیاز و Source IP انتخاب‌شده را نشان می‌دهد. همین Source IP را با درنظرگرفتن SNAT احتمالی برای Rule فایروال Backend ثبت کنید.">Expected: nc reports succeeded; curl receives an application HTTP response such as 200, 302 or an expected authentication response. ip route get shows the selected interface, gateway when needed and source IP. Record that source IP for backend firewall rules, including any intervening SNAT.</p>
+<p  data-en="If connectivity fails, investigate routing and return routes, firewall/ACL, nftables or iptables, a stopped backend, a wrong port, application bind address and SELinux policy where enabled. Ubuntu/Debian commonly use AppArmor instead; inspect the active security framework. Do not disable enforcement to hide a denial. This failure precedes Nginx proxy processing." data-fa="اگر ارتباط Fail شد، Routing و مسیر برگشت، Firewall/ACL، nftables یا iptables، توقف Backend، Port اشتباه، Bind Address برنامه و در صورت فعال‌بودن Policy مربوط به SELinux را بررسی کنید. در Ubuntu/Debian معمولاً AppArmor استفاده می‌شود؛ Security Framework فعال را بررسی کنید. برای پنهان‌کردن Denial حفاظت را غیرفعال نکنید. این خرابی قبل از پردازش Proxy در Nginx رخ می‌دهد.">If connectivity fails, investigate routing and return routes, firewall/ACL, nftables or iptables, a stopped backend, a wrong port, application bind address and SELinux policy where enabled. Ubuntu/Debian commonly use AppArmor instead; inspect the active security framework. Do not disable enforcement to hide a denial. This failure precedes Nginx proxy processing.</p>
+</section>
+<section id="certificates"><h2  data-en="8. SSL Certificate" data-fa="۸. گواهی SSL و TLS">8. SSL Certificate</h2>
+<pre dir="ltr"><code class="language-bash">sudo apt install certbot python3-certbot-nginx -y
+certbot --version</code></pre>
+<p  data-en="The Nginx plugin is available, but this runbook uses certonly --webroot to keep configuration changes explicit. Use a public CA such as Let’s Encrypt or a commercial provider for public browsers. An Internal Enterprise CA fits managed clients with its root distributed to their trust stores. Protect private keys and give the Nginx master only the access it needs." data-fa="Plugin مربوط به Nginx نصب می‌شود، اما این راهنما از certonly --webroot استفاده می‌کند تا تغییرات تنظیمات صریح باشند. برای Browser عمومی از CA عمومی مثل Let’s Encrypt یا صادرکننده تجاری استفاده کنید. Internal Enterprise CA برای Clientهای مدیریت‌شده‌ای مناسب است که Root آن در Trust Store توزیع شده باشد. Private Keyها را محافظت کنید و فقط دسترسی لازم را به Nginx Master بدهید.">The Nginx plugin is available, but this runbook uses certonly --webroot to keep configuration changes explicit. Use a public CA such as Let’s Encrypt or a commercial provider for public browsers. An Internal Enterprise CA fits managed clients with its root distributed to their trust stores. Protect private keys and give the Nginx master only the access it needs.</p>
+<p  data-en="Bootstrap first: do not enable a configuration referencing certificate files that do not exist. On a dedicated new proxy, disable the packaged default site after reviewing it, create the webroot, and install this temporary HTTP configuration. On a shared proxy, integrate it with existing listeners instead of disabling active sites. Keep a copy of the current configuration before each change." data-fa="ابتدا Bootstrap کنید: تنظیماتی را که به Certificate موجودنبود اشاره می‌کند فعال نکنید. روی Proxy جدید و اختصاصی، پس از بررسی Default Site بسته، آن را غیرفعال کنید، Webroot بسازید و این تنظیم HTTP موقت را نصب کنید. روی Proxy مشترک تنظیمات را با Listener موجود ادغام کنید و سایت فعال را غیرفعال نکنید. پیش از هر تغییر از تنظیمات فعلی کپی نگه دارید.">Bootstrap first: do not enable a configuration referencing certificate files that do not exist. On a dedicated new proxy, disable the packaged default site after reviewing it, create the webroot, and install this temporary HTTP configuration. On a shared proxy, integrate it with existing listeners instead of disabling active sites. Keep a copy of the current configuration before each change.</p>
+<pre dir="ltr"><code class="language-bash">sudo cp -a /etc/nginx /etc/nginx.before-sni
+sudo mkdir -p /var/www/letsencrypt/.well-known/acme-challenge
+sudo unlink /etc/nginx/sites-enabled/default
+sudoedit /etc/nginx/conf.d/reverse-proxy.conf</code></pre>
+<p  data-en="The unlink command assumes the standard packaged default symlink exists; run it only for that reviewed default. Write the following temporary file, test it and reload. DNS must already resolve to this reachable proxy, and public TCP/80 must reach it for HTTP-01." data-fa="فرمان unlink وجود Symlink استاندارد Default بسته را فرض می‌کند؛ فقط برای همان Default بررسی‌شده اجرا شود. فایل موقت زیر را بنویسید، تست و Reload کنید. برای HTTP-01 باید DNS قبلاً به این Proxy قابل دسترسی اشاره کند و TCP/80 عمومی به آن برسد.">The unlink command assumes the standard packaged default symlink exists; run it only for that reviewed default. Write the following temporary file, test it and reload. DNS must already resolve to this reachable proxy, and public TCP/80 must reach it for HTTP-01.</p>
+<pre dir="ltr"><code class="language-nginx">server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
+    return 444;
+}
+server {
+    listen 80;
+    listen [::]:80;
+    server_name app.example.com api.example.com jira.example.com grafana.example.com gitlab.example.com;
+    location ^~ /.well-known/acme-challenge/ {
+        root /var/www/letsencrypt;
+        default_type text/plain;
+        try_files $uri =404;
+    }
+    location / { return 404; }
+}</code></pre>
+<pre dir="ltr"><code class="language-bash">sudo nginx -t
+sudo systemctl reload nginx</code></pre>
+<pre dir="ltr"><code class="language-bash">sudo certbot certonly --webroot -w /var/www/letsencrypt --cert-name app.example.com -d app.example.com
+sudo certbot certonly --webroot -w /var/www/letsencrypt --cert-name api.example.com -d api.example.com
+sudo certbot certonly --webroot -w /var/www/letsencrypt --cert-name jira.example.com -d jira.example.com
+sudo certbot certonly --webroot -w /var/www/letsencrypt --cert-name grafana.example.com -d grafana.example.com
+sudo certbot certonly --webroot -w /var/www/letsencrypt --cert-name gitlab.example.com -d gitlab.example.com</code></pre>
+<p  data-en="Each command requests a separate certificate and interactively asks for account details where necessary. --cert-name fixes the intended lineage name; verify actual paths with certbot certificates, especially if an earlier lineage already exists. For a brand-new issuance, the paths used below follow these names." data-fa="هر فرمان Certificate جدا درخواست می‌کند و در صورت نیاز اطلاعات Account را تعاملی می‌پرسد. --cert-name نام Lineage مورد نظر را مشخص می‌کند؛ خصوصاً اگر Lineage قبلی وجود دارد، مسیر واقعی را با certbot certificates بررسی کنید. برای صدور جدید، مسیرهای زیر مطابق همین نام‌ها هستند.">Each command requests a separate certificate and interactively asks for account details where necessary. --cert-name fixes the intended lineage name; verify actual paths with certbot certificates, especially if an earlier lineage already exists. For a brand-new issuance, the paths used below follow these names.</p>
+<pre dir="ltr"><code class="language-bash">sudo certbot certificates</code></pre>
+<pre dir="ltr"><code class="language-text">/etc/letsencrypt/live/app.example.com/fullchain.pem
+/etc/letsencrypt/live/app.example.com/privkey.pem
+/etc/letsencrypt/live/api.example.com/fullchain.pem
+/etc/letsencrypt/live/api.example.com/privkey.pem
+/etc/letsencrypt/live/jira.example.com/fullchain.pem
+/etc/letsencrypt/live/jira.example.com/privkey.pem
+/etc/letsencrypt/live/grafana.example.com/fullchain.pem
+/etc/letsencrypt/live/grafana.example.com/privkey.pem
+/etc/letsencrypt/live/gitlab.example.com/fullchain.pem
+/etc/letsencrypt/live/gitlab.example.com/privkey.pem</code></pre>
+<p  data-en="The paths above are expected files, not shell commands. fullchain.pem contains the leaf plus intermediates; privkey.pem is the secret key. Nginx must serve the complete chain in the right order." data-fa="مسیرهای بالا فایل مورد انتظار هستند و فرمان Shell نیستند. fullchain.pem شامل Leaf و Intermediateها است و privkey.pem کلید محرمانه است. Nginx باید زنجیره کامل را با ترتیب صحیح ارائه کند.">The paths above are expected files, not shell commands. fullchain.pem contains the leaf plus intermediates; privkey.pem is the secret key. Nginx must serve the complete chain in the right order.</p>
+<p  data-en="A SAN certificate can cover all five exact names, even across different domains, but renewal and compromise affect the shared group. A wildcard such as *.example.com covers one label level, not example.com or x.app.example.com. Add the apex as a separate SAN when needed. Let’s Encrypt wildcard issuance requires DNS-01. Automate it with your DNS provider’s supported Certbot plugin and narrowly scoped credentials; manual DNS renewal needs a documented automation hook." data-fa="SAN Certificate می‌تواند هر پنج نام دقیق حتی از دامنه‌های مختلف را پوشش دهد، اما تمدید و افشای کلید روی همه اثر می‌گذارد. Wildcard مثل *.example.com فقط یک سطح را پوشش می‌دهد، نه example.com یا x.app.example.com. در صورت نیاز Apex را SAN جدا اضافه کنید. صدور Wildcard در Let’s Encrypt به DNS-01 نیاز دارد. آن را با Plugin پشتیبانی‌شده Certbot برای DNS Provider و Credential محدود خودکار کنید؛ تمدید DNS دستی به Hook خودکار مستند نیاز دارد.">A SAN certificate can cover all five exact names, even across different domains, but renewal and compromise affect the shared group. A wildcard such as *.example.com covers one label level, not example.com or x.app.example.com. Add the apex as a separate SAN when needed. Let’s Encrypt wildcard issuance requires DNS-01. Automate it with your DNS provider’s supported Certbot plugin and narrowly scoped credentials; manual DNS renewal needs a documented automation hook.</p>
+<p  data-en="If only TCP/443 may be exposed, use automated DNS-01 and omit the port 80 listeners. HTTP-01 always validates on port 80. Redirecting it does not eliminate that requirement. This article’s final file intentionally preserves the webroot exception for unattended HTTP-01 renewals." data-fa="اگر فقط TCP/443 مجاز است، DNS-01 خودکار استفاده کنید و Listenerهای Port 80 را حذف کنید. اعتبارسنجی HTTP-01 همواره از Port 80 شروع می‌شود و Redirect نیاز به آن را حذف نمی‌کند. فایل نهایی این مقاله عمداً استثنای Webroot را برای تمدید HTTP-01 بدون دخالت نگه می‌دارد.">If only TCP/443 may be exposed, use automated DNS-01 and omit the port 80 listeners. HTTP-01 always validates on port 80. Redirecting it does not eliminate that requirement. This article’s final file intentionally preserves the webroot exception for unattended HTTP-01 renewals.</p>
+<p><a href="https://letsencrypt.org/docs/challenge-types/" rel="noopener"><span  data-en="Official reference: ACME challenge types" data-fa="مرجع رسمی: انواع ACME Challenge">Official reference: ACME challenge types</span></a></p>
+</section>
+<section id="complete-configuration"><h2  data-en="9. Complete Nginx Configuration" data-fa="۹. تنظیمات کامل Nginx">9. Complete Nginx Configuration</h2>
+<p><a href="/downloads/nginx-reverse-proxy-multiple-domains-single-ip-443/reverse-proxy.conf" rel="noopener"><span  data-en="Download the complete reverse-proxy.conf" data-fa="دانلود فایل کامل reverse-proxy.conf">Download the complete reverse-proxy.conf</span></a></p>
+<p><a href="/downloads/nginx-reverse-proxy-multiple-domains-single-ip-443/bootstrap-http.conf" rel="noopener"><span  data-en="Download the temporary HTTP bootstrap configuration" data-fa="دانلود تنظیم HTTP موقت برای Bootstrap">Download the temporary HTTP bootstrap configuration</span></a></p>
+<p  data-en="After all five certificate/key pairs exist, replace /etc/nginx/conf.d/reverse-proxy.conf with the full file below. Ubuntu/Debian normally include conf.d/*.conf inside http in /etc/nginx/nginx.conf; confirm with nginx -T. Do not wrap this file in another http block. Remove conflicting listeners and duplicate default_server declarations in other included files." data-fa="پس از موجودبودن هر پنج جفت Certificate و Key، محتوای /etc/nginx/conf.d/reverse-proxy.conf را با فایل کامل زیر جایگزین کنید. در Ubuntu/Debian معمولاً conf.d/*.conf داخل http در /etc/nginx/nginx.conf Include می‌شود؛ با nginx -T بررسی کنید. این فایل را داخل http دیگری نگذارید. Listener متعارض و default_server تکراری را در فایل‌های Include دیگر برطرف کنید.">After all five certificate/key pairs exist, replace /etc/nginx/conf.d/reverse-proxy.conf with the full file below. Ubuntu/Debian normally include conf.d/*.conf inside http in /etc/nginx/nginx.conf; confirm with nginx -T. Do not wrap this file in another http block. Remove conflicting listeners and duplicate default_server declarations in other included files.</p>
+<p  data-en="TLS and server_tokens settings are placed in individual servers because distribution nginx.conf files may already define them in http. Repeating a singleton directive in the same context can fail nginx -t. Keep the default TLS server’s protocol/session policy aligned with every named server. The baseline uses listen 443 ssl and does not enable HTTP/2. If adding HTTP/2, http2 on is available since 1.25.1; the older listen ... http2 parameter is deprecated in newer releases. Do not use the removed ssl on directive." data-fa="تنظیم TLS و server_tokens در serverهای جدا قرار دارد چون nginx.conf توزیع ممکن است آن‌ها را قبلاً در http تعریف کرده باشد. تکرار Directive تک‌مقداری در همان Context می‌تواند nginx -t را Fail کند. Policy پروتکل و Session در Default TLS را با همه Named Serverها هماهنگ نگه دارید. تنظیم اصلی از listen 443 ssl استفاده می‌کند و HTTP/2 را فعال نمی‌کند. اگر HTTP/2 اضافه می‌کنید، http2 on از 1.25.1 موجود است و پارامتر قدیمی listen ... http2 در نسخه جدید Deprecated شده است. از Directive حذف‌شده ssl on استفاده نکنید.">TLS and server_tokens settings are placed in individual servers because distribution nginx.conf files may already define them in http. Repeating a singleton directive in the same context can fail nginx -t. Keep the default TLS server’s protocol/session policy aligned with every named server. The baseline uses listen 443 ssl and does not enable HTTP/2. If adding HTTP/2, http2 on is available since 1.25.1; the older listen ... http2 parameter is deprecated in newer releases. Do not use the removed ssl on directive.</p>
+<pre dir="ltr"><code class="language-nginx"># Included in the http context. Requires Nginx &gt;= 1.19.4.
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    &#x27;&#x27; close;
+}
+
+log_format sni_proxy &#x27;$remote_addr [$time_local] &quot;$request&quot; &#x27;
+                     &#x27;host=$host sni=$ssl_server_name status=$status &#x27;
+                     &#x27;bytes=$body_bytes_sent rt=$request_time &#x27;
+                     &#x27;upstream=$upstream_addr us=$upstream_status &#x27;
+                     &#x27;uct=$upstream_connect_time urt=$upstream_response_time&#x27;;
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
+    server_tokens off;
+    return 444;
+}
+
+server {
+    listen 443 ssl default_server;
+    listen [::]:443 ssl default_server;
+    server_name _;
+    server_tokens off;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_session_cache shared:SNI_TLS:10m;
+    ssl_session_timeout 10m;
+    ssl_session_tickets off;
+    ssl_reject_handshake on;
+    return 444;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name app.example.com api.example.com jira.example.com
+                grafana.example.com gitlab.example.com;
+    server_tokens off;
+
+    location ^~ /.well-known/acme-challenge/ {
+        root /var/www/letsencrypt;
+        default_type text/plain;
+        try_files $uri =404;
+    }
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name app.example.com;
+    server_tokens off;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_session_cache shared:SNI_TLS:10m;
+    ssl_session_timeout 10m;
+    ssl_session_tickets off;
+
+    ssl_certificate     /etc/letsencrypt/live/app.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/app.example.com/privkey.pem;
+
+    # Return-only guard: do not route mismatched SNI/HTTP names.
+    if ($ssl_server_name != $host) { return 421; }
+    if ($host != app.example.com) { return 421; }
+
+    client_max_body_size 100M;
+    access_log /var/log/nginx/app.example.com.access.log sni_proxy;
+    error_log  /var/log/nginx/app.example.com.error.log warn;
+
+    location / {
+        proxy_pass http://10.10.10.11:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_connect_timeout 10s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name api.example.com;
+    server_tokens off;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_session_cache shared:SNI_TLS:10m;
+    ssl_session_timeout 10m;
+    ssl_session_tickets off;
+
+    ssl_certificate     /etc/letsencrypt/live/api.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/api.example.com/privkey.pem;
+
+    # Return-only guard: do not route mismatched SNI/HTTP names.
+    if ($ssl_server_name != $host) { return 421; }
+    if ($host != api.example.com) { return 421; }
+
+    client_max_body_size 100M;
+    access_log /var/log/nginx/api.example.com.access.log sni_proxy;
+    error_log  /var/log/nginx/api.example.com.error.log warn;
+
+    location / {
+        proxy_pass http://10.10.10.12:9000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_connect_timeout 10s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name jira.example.com;
+    server_tokens off;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_session_cache shared:SNI_TLS:10m;
+    ssl_session_timeout 10m;
+    ssl_session_tickets off;
+
+    ssl_certificate     /etc/letsencrypt/live/jira.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/jira.example.com/privkey.pem;
+
+    # Return-only guard: do not route mismatched SNI/HTTP names.
+    if ($ssl_server_name != $host) { return 421; }
+    if ($host != jira.example.com) { return 421; }
+
+    client_max_body_size 100M;
+    access_log /var/log/nginx/jira.example.com.access.log sni_proxy;
+    error_log  /var/log/nginx/jira.example.com.error.log warn;
+
+    location / {
+        proxy_pass http://10.10.10.13:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_connect_timeout 10s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name grafana.example.com;
+    server_tokens off;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_session_cache shared:SNI_TLS:10m;
+    ssl_session_timeout 10m;
+    ssl_session_tickets off;
+
+    ssl_certificate     /etc/letsencrypt/live/grafana.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/grafana.example.com/privkey.pem;
+
+    # Return-only guard: do not route mismatched SNI/HTTP names.
+    if ($ssl_server_name != $host) { return 421; }
+    if ($host != grafana.example.com) { return 421; }
+
+    client_max_body_size 100M;
+    access_log /var/log/nginx/grafana.example.com.access.log sni_proxy;
+    error_log  /var/log/nginx/grafana.example.com.error.log warn;
+
+    location / {
+        proxy_pass http://10.10.10.14:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_connect_timeout 10s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name gitlab.example.com;
+    server_tokens off;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_session_cache shared:SNI_TLS:10m;
+    ssl_session_timeout 10m;
+    ssl_session_tickets off;
+
+    ssl_certificate     /etc/letsencrypt/live/gitlab.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/gitlab.example.com/privkey.pem;
+
+    # Return-only guard: do not route mismatched SNI/HTTP names.
+    if ($ssl_server_name != $host) { return 421; }
+    if ($host != gitlab.example.com) { return 421; }
+
+    client_max_body_size 100M;
+    access_log /var/log/nginx/gitlab.example.com.access.log sni_proxy;
+    error_log  /var/log/nginx/gitlab.example.com.error.log warn;
+
+    location / {
+        proxy_pass http://10.10.10.15:80;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_connect_timeout 10s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+}</code></pre>
+<p  data-en="proxy_pass has no URI suffix here, preserving the original request path and query in this simple location. Adding a URI or a trailing slash can change path replacement behavior. Explicit upstream HTTP/1.1 avoids relying on version-specific defaults. Timeout values are examples: read/send timeouts apply between successive I/O operations, not a total 60-second transaction budget." data-fa="proxy_pass اینجا URI اضافه ندارد و در این location ساده Path و Query اصلی را حفظ می‌کند. اضافه‌کردن URI یا Slash پایانی می‌تواند رفتار جایگزینی Path را تغییر دهد. HTTP/1.1 صریح برای Upstream وابستگی به Default نسخه را حذف می‌کند. Timeoutها نمونه‌اند؛ Read/Send Timeout فاصله بین عملیات I/O متوالی را محدود می‌کنند، نه کل زمان Transaction را به ۶۰ ثانیه.">proxy_pass has no URI suffix here, preserving the original request path and query in this simple location. Adding a URI or a trailing slash can change path replacement behavior. Explicit upstream HTTP/1.1 avoids relying on version-specific defaults. Timeout values are examples: read/send timeouts apply between successive I/O operations, not a total 60-second transaction budget.</p>
+<p  data-en="Configure each application’s public URL as https://its-name.example.com and trust forwarded headers only from the proxy. Jira needs the appropriate proxy/base URL settings; Grafana needs its root_url; GitLab needs external_url and the supported external-proxy/Workhorse setup. Port 80 on 10.10.10.15 must actually expose the GitLab HTTP entry point. Wrong application settings cause redirect loops, insecure cookies, CSRF failures or incorrect absolute links even when proxy routing works." data-fa="Public URL هر برنامه را https://نام-آن.example.com تنظیم کنید و Forwarded Header را فقط از Proxy معتبر بپذیرید. Jira به تنظیم Proxy/Base URL، Grafana به root_url و GitLab به external_url و تنظیم پشتیبانی‌شده External Proxy/Workhorse نیاز دارد. Port 80 روی 10.10.10.15 باید واقعاً ورودی HTTP گیت‌لب باشد. تنظیم برنامه اشتباه حتی با Routing صحیح باعث Redirect Loop، Cookie ناامن، خطای CSRF یا لینک Absolute نادرست می‌شود.">Configure each application’s public URL as https://its-name.example.com and trust forwarded headers only from the proxy. Jira needs the appropriate proxy/base URL settings; Grafana needs its root_url; GitLab needs external_url and the supported external-proxy/Workhorse setup. Port 80 on 10.10.10.15 must actually expose the GitLab HTTP entry point. Wrong application settings cause redirect loops, insecure cookies, CSRF failures or incorrect absolute links even when proxy routing works.</p>
+<p><a href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html" rel="noopener"><span  data-en="Official reference: proxy module and URI behavior" data-fa="مرجع رسمی: Proxy Module و رفتار URI">Official reference: proxy module and URI behavior</span></a></p>
+</section>
+<section id="http-redirect"><h2  data-en="10. HTTP to HTTPS Redirect" data-fa="۱۰. هدایت HTTP به HTTPS">10. HTTP to HTTPS Redirect</h2>
+<p  data-en="The final file redirects ordinary requests and keeps ACME challenges reachable. If certificates use DNS-01 or another issuance method that does not need HTTP-01, replace only the named port 80 block with this simpler version. Do not add a second copy of it." data-fa="فایل نهایی درخواست معمول را Redirect می‌کند و ACME Challenge را قابل دسترسی نگه می‌دارد. اگر گواهی با DNS-01 یا روش دیگری بدون نیاز به HTTP-01 صادر می‌شود، فقط Block نام‌دار Port 80 را با نسخه ساده زیر جایگزین کنید؛ کپی دوم اضافه نکنید.">The final file redirects ordinary requests and keeps ACME challenges reachable. If certificates use DNS-01 or another issuance method that does not need HTTP-01, replace only the named port 80 block with this simpler version. Do not add a second copy of it.</p>
+<pre dir="ltr"><code class="language-nginx">server {
+    listen 80;
+    listen [::]:80;
+    server_name app.example.com api.example.com jira.example.com grafana.example.com gitlab.example.com;
+    return 301 https://$host$request_uri;
+}</code></pre>
+<p  data-en="A server-level return executes before a location-based webroot handler, so do not use this replacement for the webroot workflow. 301 is conventional for browser navigation; clients may rewrite POST to GET. Configure API clients to start with HTTPS, or deliberately select 308 when preserving the method is required." data-fa="return در سطح server پیش از Handler مربوط به Webroot در location اجرا می‌شود؛ بنابراین این جایگزین را برای روش Webroot استفاده نکنید. 301 برای مرورگر رایج است، اما Client ممکن است POST را GET کند. Client API را از ابتدا روی HTTPS تنظیم کنید یا اگر حفظ Method لازم است آگاهانه 308 انتخاب کنید.">A server-level return executes before a location-based webroot handler, so do not use this replacement for the webroot workflow. 301 is conventional for browser navigation; clients may rewrite POST to GET. Configure API clients to start with HTTPS, or deliberately select 308 when preserving the method is required.</p>
+</section>
+<section id="default-server"><h2  data-en="11. Default Server Security" data-fa="۱۱. امنیت Default Server">11. Default Server Security</h2>
+<p  data-en="default_server belongs to an address/port listener. server_name _ is only a conventional unmatched name, not a catch-all mechanism. The explicit HTTP default returns Nginx’s nonstandard 444, closing the connection without an HTTP response. Unknown HTTPS SNI or no SNI is rejected in the TLS handshake by ssl_reject_handshake on. This modern default needs no dummy certificate, as documented by Nginx." data-fa="default_server متعلق به Listener آدرس/Port است. server_name _ فقط یک نام قراردادی نامنطبق است، نه مکانیزم Catch-All. Default صریح HTTP مقدار غیراستاندارد 444 را برمی‌گرداند و اتصال را بدون Response HTTP می‌بندد. SNI ناشناس یا نبود SNI در HTTPS با ssl_reject_handshake on هنگام TLS Handshake رد می‌شود. طبق مستندات Nginx این Default جدید به Certificate ساختگی نیاز ندارد.">default_server belongs to an address/port listener. server_name _ is only a conventional unmatched name, not a catch-all mechanism. The explicit HTTP default returns Nginx’s nonstandard 444, closing the connection without an HTTP response. Unknown HTTPS SNI or no SNI is rejected in the TLS handshake by ssl_reject_handshake on. This modern default needs no dummy certificate, as documented by Nginx.</p>
+<p  data-en="return 444 in the HTTPS default also handles a request whose HTTP name selects that default after a valid named handshake. The return-only guards in every service cover unknown Host fallback and known-name mismatches. Test both paths; SNI selection alone is not an HTTP authorization boundary." data-fa="return 444 در Default HTTPS درخواست‌هایی را هم پوشش می‌دهد که بعد از Handshake معتبر یک سرویس، نام HTTP آن‌ها Default را انتخاب کند. Guardهای فقط-return در هر سرویس، Fallback مربوط به Host ناشناس و اختلاف نام‌های معتبر را پوشش می‌دهند. هر دو مسیر را تست کنید؛ انتخاب SNI به‌تنهایی مرز Authorization در HTTP نیست.">return 444 in the HTTPS default also handles a request whose HTTP name selects that default after a valid named handshake. The return-only guards in every service cover unknown Host fallback and known-name mismatches. Test both paths; SNI selection alone is not an HTTP authorization boundary.</p>
+<p  data-en="ssl_reject_handshake appeared in 1.19.4. On an older binary, upgrade to a supported release, or replace only the HTTPS default with the following certificate-bearing fallback. The referenced app certificate must already exist. Unknown clients receive that certificate before closure and can see it; return 444 alone cannot reject an earlier TLS handshake." data-fa="ssl_reject_handshake از 1.19.4 اضافه شده است. روی Binary قدیمی به Release پشتیبانی‌شده ارتقا دهید یا فقط Default HTTPS را با Fallback دارای گواهی زیر جایگزین کنید. گواهی app باید از قبل موجود باشد. Client ناشناس پیش از بسته‌شدن اتصال آن Certificate را دریافت و مشاهده می‌کند؛ return 444 به‌تنهایی نمی‌تواند Handshake قبلی را رد کند.">ssl_reject_handshake appeared in 1.19.4. On an older binary, upgrade to a supported release, or replace only the HTTPS default with the following certificate-bearing fallback. The referenced app certificate must already exist. Unknown clients receive that certificate before closure and can see it; return 444 alone cannot reject an earlier TLS handshake.</p>
+<pre dir="ltr"><code class="language-nginx">server {
+    listen 443 ssl default_server;
+    listen [::]:443 ssl default_server;
+    server_name _;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_certificate /etc/letsencrypt/live/app.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/app.example.com/privkey.pem;
+    return 444;
+}</code></pre>
+<p><a href="https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_reject_handshake" rel="noopener"><span  data-en="Official reference: ssl_reject_handshake" data-fa="مرجع رسمی: ssl_reject_handshake">Official reference: ssl_reject_handshake</span></a></p>
+</section>
+<section id="websocket"><h2  data-en="12. WebSocket Support and Upload Size" data-fa="۱۲. WebSocket و اندازه Upload">12. WebSocket Support and Upload Size</h2>
+<pre dir="ltr"><code class="language-nginx">map $http_upgrade $connection_upgrade {
+    default upgrade;
+    &#x27;&#x27; close;
+}
+
+# Inside the existing proxy location:
+proxy_http_version 1.1;
+proxy_set_header Upgrade $http_upgrade;
+proxy_set_header Connection $connection_upgrade;</code></pre>
+<p  data-en="These directives are already in the full file. map belongs in http, while the headers belong in the proxy location. Upgrade and Connection are hop-by-hop headers and must be forwarded explicitly. Grafana Live, GitLab features, web applications and real-time services may need this. Expect 101 Switching Protocols for an accepted HTTP/1.1 upgrade, not for every ordinary request." data-fa="این Directiveها در فایل کامل موجودند. map داخل http قرار می‌گیرد و Headerها داخل location مربوط به Proxy. Upgrade و Connection از نوع Hop-by-Hop هستند و باید صریح ارسال شوند. Grafana Live، برخی قابلیت‌های GitLab، Web Application و سرویس Real-Time ممکن است به آن‌ها نیاز داشته باشند. برای Upgrade پذیرفته‌شده HTTP/1.1 انتظار 101 Switching Protocols دارید، نه برای هر درخواست عادی.">These directives are already in the full file. map belongs in http, while the headers belong in the proxy location. Upgrade and Connection are hop-by-hop headers and must be forwarded explicitly. Grafana Live, GitLab features, web applications and real-time services may need this. Expect 101 Switching Protocols for an accepted HTTP/1.1 upgrade, not for every ordinary request.</p>
+<p  data-en="An idle upstream WebSocket can close after proxy_read_timeout. Prefer application ping frames, or increase timeout only for the real-time endpoint after measuring its needs. Do not globally stretch timeouts to conceal a slow backend." data-fa="WebSocket بدون داده از Upstream ممکن است پس از proxy_read_timeout بسته شود. از Ping Frame برنامه استفاده کنید یا فقط Timeout مسیر Real-Time را پس از بررسی نیاز افزایش دهید. برای پنهان‌کردن کندی Backend، Timeout همه سرویس‌ها را افزایش ندهید.">An idle upstream WebSocket can close after proxy_read_timeout. Prefer application ping frames, or increase timeout only for the real-time endpoint after measuring its needs. Do not globally stretch timeouts to conceal a slow backend.</p>
+<pre dir="ltr"><code class="language-nginx">client_max_body_size 100M;</code></pre>
+<p  data-en="100M is an example per-service limit already set in each server. Choose smaller limits for APIs that only accept small JSON and larger reviewed limits for GitLab artifacts when required. Oversize requests receive 413. Align application limits, request buffering, temporary-disk capacity and upload duration. An unlimited or huge limit without a business need increases resource-exhaustion risk." data-fa="100M محدودیت نمونه هر سرویس است و در هر server تنظیم شده است. برای API با JSON کوچک مقدار کمتر و برای Artifact گیت‌لب در صورت نیاز مقدار بزرگ‌تر بررسی‌شده بگذارید. درخواست بزرگ‌تر پاسخ 413 می‌گیرد. محدودیت برنامه، Request Buffering، ظرفیت دیسک موقت و مدت Upload را هماهنگ کنید. مقدار نامحدود یا بسیار بزرگ بدون نیاز واقعی خطر مصرف منابع را بالا می‌برد.">100M is an example per-service limit already set in each server. Choose smaller limits for APIs that only accept small JSON and larger reviewed limits for GitLab artifacts when required. Oversize requests receive 413. Align application limits, request buffering, temporary-disk capacity and upload duration. An unlimited or huge limit without a business need increases resource-exhaustion risk.</p>
+<p><a href="https://nginx.org/en/docs/http/websocket.html" rel="noopener"><span  data-en="Official reference: WebSocket proxying" data-fa="مرجع رسمی: WebSocket Proxying">Official reference: WebSocket proxying</span></a></p>
+</section>
+<section id="logging"><h2  data-en="13. Logging" data-fa="۱۳. لاگ‌گیری">13. Logging</h2>
+<pre dir="ltr"><code class="language-nginx">access_log /var/log/nginx/app.example.com.access.log sni_proxy;
+error_log /var/log/nginx/app.example.com.error.log warn;
+access_log /var/log/nginx/api.example.com.access.log sni_proxy;
+error_log /var/log/nginx/api.example.com.error.log warn;
+access_log /var/log/nginx/jira.example.com.access.log sni_proxy;
+error_log /var/log/nginx/jira.example.com.error.log warn;
+access_log /var/log/nginx/grafana.example.com.access.log sni_proxy;
+error_log /var/log/nginx/grafana.example.com.error.log warn;
+access_log /var/log/nginx/gitlab.example.com.access.log sni_proxy;
+error_log /var/log/nginx/gitlab.example.com.error.log warn;</code></pre>
+<p  data-en="Separate virtual-host logs isolate incidents and feed SIEM pipelines. The custom format records Host, SNI, upstream address/status and connect/response timing. A slow request can then be correlated with its exact backend. Handshake failures can appear in the global error log before a named request log exists." data-fa="لاگ جدا برای Virtual Host حادثه را تفکیک می‌کند و برای SIEM مفید است. فرمت سفارشی Host، SNI، آدرس و Status Upstream و زمان Connect/Response را ثبت می‌کند. درخواست کند را می‌توان به Backend دقیق مرتبط کرد. خطای Handshake ممکن است پیش از ایجاد لاگ Request نام‌دار در Error Log عمومی دیده شود.">Separate virtual-host logs isolate incidents and feed SIEM pipelines. The custom format records Host, SNI, upstream address/status and connect/response timing. A slow request can then be correlated with its exact backend. Handshake failures can appear in the global error log before a named request log exists.</p>
+<p  data-en="Protect log permissions, rotate logs, verify collection and set retention. The request field contains the URL and query, so avoid credentials in URLs and redact sensitive application data in the logging pipeline. Monitor 5xx rates, upstream latency, TLS failures, certificate expiry, disk space and worker/resource pressure." data-fa="Permission لاگ را محدود کنید، Rotation و جمع‌آوری را تست کنید و Retention تعیین کنید. فیلد Request شامل URL و Query است؛ Credential در URL قرار ندهید و داده حساس برنامه را در Pipeline پالایش کنید. نرخ 5xx، Latency Upstream، خطای TLS، انقضای Certificate، فضای دیسک و فشار Worker/Resource را مانیتور کنید.">Protect log permissions, rotate logs, verify collection and set retention. The request field contains the URL and query, so avoid credentials in URLs and redact sensitive application data in the logging pipeline. Monitor 5xx rates, upstream latency, TLS failures, certificate expiry, disk space and worker/resource pressure.</p>
+</section>
+<section id="hardening"><h2  data-en="14. Security Hardening" data-fa="۱۴. تقویت امنیت">14. Security Hardening</h2>
+<ul><li  data-en="Expose TCP/443 and only expose TCP/80 when redirect/HTTP-01 is required. Keep SSH and management access on approved VPN or management networks." data-fa="TCP/443 را منتشر کنید و TCP/80 را فقط برای Redirect/HTTP-01 باز کنید. SSH و Management فقط از VPN یا شبکه مدیریتی مجاز قابل دسترسی باشد.">Expose TCP/443 and only expose TCP/80 when redirect/HTTP-01 is required. Keep SSH and management access on approved VPN or management networks.</li><li  data-en="Keep backends off the Internet. Permit only the proxy’s actual source IP to the required backend ports through the inter-VLAN firewall." data-fa="Backend مستقیماً از اینترنت قابل دسترسی نباشد. فقط Source IP واقعی Proxy به Port لازم Backend در Firewall بین VLANها مجاز باشد.">Keep backends off the Internet. Permit only the proxy’s actual source IP to the required backend ports through the inter-VLAN firewall.</li><li  data-en="Disable old TLS; apply the same explicit policy to the default and named TLS servers. Restrict key access and monitor renewal failure as well as expiry." data-fa="TLS قدیمی را غیرفعال کنید؛ Policy صریح یکسان روی Default و Named Serverهای TLS بگذارید. دسترسی Key را محدود و هم شکست تمدید و هم انقضا را مانیتور کنید.">Disable old TLS; apply the same explicit policy to the default and named TLS servers. Restrict key access and monitor renewal failure as well as expiry.</li><li  data-en="server_tokens off reduces version disclosure; it does not remove every server identifier or replace security updates." data-fa="server_tokens off افشای نسخه را محدود می‌کند؛ همه شناسه‌های سرور را حذف نمی‌کند و جایگزین Update امنیتی نیست.">server_tokens off reduces version disclosure; it does not remove every server identifier or replace security updates.</li><li  data-en="Restrict Jira, Grafana and GitLab administration through VPN, identity-aware access or carefully tested allow/deny rules; add MFA and application authorization." data-fa="مدیریت Jira، Grafana و GitLab را با VPN، دسترسی مبتنی بر هویت یا Ruleهای allow/deny تست‌شده محدود کنید؛ MFA و Authorization برنامه هم لازم است.">Restrict Jira, Grafana and GitLab administration through VPN, identity-aware access or carefully tested allow/deny rules; add MFA and application authorization.</li></ul>
+<pre dir="ltr"><code class="language-nginx">server_tokens off;
+
+# Example inside a management-only location/server after reviewing source IPs:
+allow 10.10.99.0/24;
+deny all;</code></pre>
+<p  data-en="Apply headers against application requirements. A restrictive CSP or frame policy can break embeds and sign-in flows. Enable HSTS only after stable HTTPS rollout and recovery planning. Start with a short max-age, then increase deliberately. includeSubDomains covers every subordinate name; preload requires a separate long-term commitment. Do not copy those options blindly. Consider add_header inheritance in your installed Nginx version and headers already emitted by the application." data-fa="Headerها را طبق نیاز برنامه اعمال کنید. CSP یا Frame Policy محدود می‌تواند Embed یا Login را خراب کند. HSTS فقط پس از استقرار پایدار HTTPS و برنامه Recovery فعال شود. با max-age کوتاه شروع و آگاهانه افزایش دهید. includeSubDomains همه زیرنام‌ها را پوشش می‌دهد و preload تعهد بلندمدت جدا می‌خواهد؛ آن‌ها را کورکورانه کپی نکنید. Inheritance مربوط به add_header در نسخه نصب‌شده و Header موجود برنامه را بررسی کنید.">Apply headers against application requirements. A restrictive CSP or frame policy can break embeds and sign-in flows. Enable HSTS only after stable HTTPS rollout and recovery planning. Start with a short max-age, then increase deliberately. includeSubDomains covers every subordinate name; preload requires a separate long-term commitment. Do not copy those options blindly. Consider add_header inheritance in your installed Nginx version and headers already emitted by the application.</p>
+<pre dir="ltr"><code class="language-nginx"># Optional trial in a reviewed HTTPS server, after HTTPS is stable:
+add_header Strict-Transport-Security &quot;max-age=300&quot; always;
+
+# Optional http-context rate-limit zone, not enabled by the main file:
+limit_req_zone $binary_remote_addr zone=api_per_ip:10m rate=10r/s;
+
+# In the existing API location if this policy fits actual traffic:
+limit_req zone=api_per_ip burst=20 nodelay;
+limit_req_status 429;</code></pre>
+<p  data-en="Rate limits need load testing: shared NAT clients use one apparent IP and may be penalized together. Start with dry-run observation on versions supporting limit_req_dry_run (1.17.1+), then enforce appropriate endpoint limits. These optional examples are additions in their specified contexts, not a standalone configuration." data-fa="Rate Limit به Load Test نیاز دارد؛ Clientهای پشت NAT مشترک یک IP دیده می‌شوند و ممکن است همگی محدود شوند. در نسخه پشتیبان limit_req_dry_run یعنی 1.17.1 به بعد با مشاهده Dry-Run شروع و سپس محدودیت مناسب Endpoint را اعمال کنید. مثال‌های اختیاری در Context مشخص اضافه می‌شوند و فایل مستقل نیستند.">Rate limits need load testing: shared NAT clients use one apparent IP and may be penalized together. Start with dry-run observation on versions supporting limit_req_dry_run (1.17.1+), then enforce appropriate endpoint limits. These optional examples are additions in their specified contexts, not a standalone configuration.</p>
+<p  data-en="The baseline appends X-Forwarded-For as requested, so an incoming header may contain spoofed entries. Applications must trust only known proxies and parse from the trusted end of the chain. At a direct Internet edge, replacing X-Forwarded-For with $remote_addr is a simpler policy. If a load balancer precedes Nginx, configure real_ip only for its exact trusted ranges; never trust arbitrary sources." data-fa="تنظیم اصلی طبق الگو X-Forwarded-For را Append می‌کند؛ Header ورودی ممکن است مقدار جعلی داشته باشد. برنامه فقط Proxy شناخته‌شده را Trust کند و زنجیره را از سمت معتبر تحلیل کند. در لبه مستقیم اینترنت، جایگزینی X-Forwarded-For با $remote_addr Policy ساده‌تری است. اگر Load Balancer پیش از Nginx دارید، real_ip را فقط برای Range دقیق معتبر تنظیم کنید؛ Source دلخواه را Trust نکنید.">The baseline appends X-Forwarded-For as requested, so an incoming header may contain spoofed entries. Applications must trust only known proxies and parse from the trusted end of the chain. At a direct Internet edge, replacing X-Forwarded-For with $remote_addr is a simpler policy. If a load balancer precedes Nginx, configure real_ip only for its exact trusted ranges; never trust arbitrary sources.</p>
+</section>
+<section id="testing"><h2  data-en="15. Testing Configuration and Renewal" data-fa="۱۵. تست تنظیمات و تمدید">15. Testing Configuration and Renewal</h2>
+<pre dir="ltr"><code class="language-bash">sudo nginx -t</code></pre>
+<pre dir="ltr"><code class="language-text">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful</code></pre>
+<p  data-en="nginx -t checks syntax and referenced files, including certificate/key access. It does not prove a backend is healthy. If it fails, fix the reported file and line before reloading. A missing certificate is an issuance/path problem, not a reason to remove TLS security." data-fa="nginx -t سینتکس و فایل‌های ارجاع‌شده از جمله دسترسی Certificate/Key را بررسی می‌کند؛ سلامت Backend را اثبات نمی‌کند. اگر Fail شد، فایل و خط گزارش‌شده را پیش از Reload اصلاح کنید. نبود Certificate مشکل صدور یا مسیر است، نه دلیل حذف امنیت TLS.">nginx -t checks syntax and referenced files, including certificate/key access. It does not prove a backend is healthy. If it fails, fix the reported file and line before reloading. A missing certificate is an issuance/path problem, not a reason to remove TLS security.</p>
+<pre dir="ltr"><code class="language-bash">sudo systemctl reload nginx
+systemctl status nginx --no-pager
+sudo ss -lntp | grep &quot;:443&quot;
+sudo journalctl -u nginx --since &quot;10 minutes ago&quot; --no-pager</code></pre>
+<p  data-en="Expected: active (running) and listening on 0.0.0.0:443 and [::]:443 where IPv6 is enabled. Reload starts workers using the new configuration while old workers drain existing connections. It is usually preferable to restart, which interrupts the service. Long-lived connections can keep old workers alive; check reload logs and drain behavior during changes." data-fa="انتظار: active (running) و Listen روی 0.0.0.0:443 و در صورت IPv6 فعال روی [::]:443. Reload Workerهای جدید را با تنظیم تازه اجرا می‌کند و Worker قدیمی Connection موجود را تخلیه می‌کند. معمولاً بر Restart که سرویس را قطع می‌کند ترجیح دارد. Connection طولانی ممکن است Worker قدیمی را نگه دارد؛ لاگ Reload و Drain را هنگام تغییر بررسی کنید.">Expected: active (running) and listening on 0.0.0.0:443 and [::]:443 where IPv6 is enabled. Reload starts workers using the new configuration while old workers drain existing connections. It is usually preferable to restart, which interrupts the service. Long-lived connections can keep old workers alive; check reload logs and drain behavior during changes.</p>
+<pre dir="ltr"><code class="language-bash">sudo install -d -m 0755 /etc/letsencrypt/renewal-hooks/deploy
+sudo tee /etc/letsencrypt/renewal-hooks/deploy/reload-nginx &gt;/dev/null &lt;&lt;&#x27;SH&#x27;
+#!/bin/sh
+set -eu
+/usr/sbin/nginx -t
+/usr/bin/systemctl reload nginx
+SH
+sudo chmod 0750 /etc/letsencrypt/renewal-hooks/deploy/reload-nginx
+sudo certbot renew --dry-run
+sudo certbot renew --dry-run --run-deploy-hooks
+systemctl list-timers --all | grep -i certbot</code></pre>
+<p  data-en="The deploy hook tests and reloads Nginx after a successful renewal so new connections see the renewed certificate. Verify executable paths on the target host. renew --dry-run uses the staging CA; --run-deploy-hooks exercises deploy hooks on Certbot versions supporting it. Check certbot renew --help all if unavailable and execute the hook separately. Expect simulated renewals to succeed, then verify the scheduler installed by your package; some installations use cron instead of a systemd timer." data-fa="Deploy Hook پس از تمدید موفق Nginx را تست و Reload می‌کند تا اتصال جدید گواهی تازه ببیند. مسیر Executableها را روی Host مقصد بررسی کنید. renew --dry-run از CA آزمایشی استفاده می‌کند؛ --run-deploy-hooks در نسخه پشتیبان Certbot، Hook را هم اجرا می‌کند. اگر گزینه موجود نبود certbot renew --help all را ببینید و Hook را جدا اجرا کنید. انتظار موفقیت تمدید شبیه‌سازی‌شده را دارید؛ سپس Scheduler بسته را بررسی کنید. بعضی نصب‌ها به‌جای Systemd Timer از Cron استفاده می‌کنند.">The deploy hook tests and reloads Nginx after a successful renewal so new connections see the renewed certificate. Verify executable paths on the target host. renew --dry-run uses the staging CA; --run-deploy-hooks exercises deploy hooks on Certbot versions supporting it. Check certbot renew --help all if unavailable and execute the hook separately. Expect simulated renewals to succeed, then verify the scheduler installed by your package; some installations use cron instead of a systemd timer.</p>
+<p  data-en="Keep an external certificate-expiry alert and an alert for failed renewals. A timer existing is not proof of successful issuance, reload or external reachability. For rollback, restore the reviewed previous file, run nginx -t, reload and repeat external tests; retain a recovery path independent of this proxy." data-fa="Alert خارجی انقضای گواهی و Alert شکست تمدید داشته باشید. وجود Timer، موفقیت صدور، Reload یا Reachability بیرونی را اثبات نمی‌کند. برای Rollback فایل قبلی بررسی‌شده را بازگردانید، nginx -t و Reload اجرا کنید و تست خارجی را تکرار کنید؛ مسیر Recovery مستقل از این Proxy نگه دارید.">Keep an external certificate-expiry alert and an alert for failed renewals. A timer existing is not proof of successful issuance, reload or external reachability. For rollback, restore the reviewed previous file, run nginx -t, reload and repeat external tests; retain a recovery path independent of this proxy.</p>
+<p><a href="https://eff-certbot.readthedocs.io/en/stable/using.html" rel="noopener"><span  data-en="Official reference: Certbot issuance, renewal and hooks" data-fa="مرجع رسمی: صدور، تمدید و Hook در Certbot">Official reference: Certbot issuance, renewal and hooks</span></a></p>
+</section>
+<section id="resolve"><h2  data-en="16. curl --resolve: Test Before DNS Cutover" data-fa="۱۶. تست با curl --resolve پیش از تغییر DNS">16. curl --resolve: Test Before DNS Cutover</h2>
+<pre dir="ltr"><code class="language-bash">curl -vk \
++  --resolve app.example.com:443:203.0.113.10 \
++  https://app.example.com/</code></pre>
+<p  data-en="--resolve overrides the connection address while preserving the URL hostname for SNI and Host. It is useful for migration, pre-production testing, cutover and testing before DNS changes. -v prints diagnostics; -k disables certificate verification and is only a diagnostic option. This command cannot prove certificate trust." data-fa="--resolve آدرس اتصال را Override می‌کند اما Hostname آدرس URL را برای SNI و Host حفظ می‌کند. برای Migration، Pre-production، Cutover و تست قبل از تغییر DNS کاربرد دارد. -v جزئیات را چاپ می‌کند و -k بررسی Certificate را غیرفعال می‌کند و فقط گزینه تشخیصی است. این فرمان Trust گواهی را اثبات نمی‌کند.">--resolve overrides the connection address while preserving the URL hostname for SNI and Host. It is useful for migration, pre-production testing, cutover and testing before DNS changes. -v prints diagnostics; -k disables certificate verification and is only a diagnostic option. This command cannot prove certificate trust.</p>
+<pre dir="ltr"><code class="language-bash">curl -v --resolve app.example.com:443:203.0.113.10 https://app.example.com/
+curl --resolve app.example.com:443:203.0.113.10 -I https://app.example.com/
+curl --resolve api.example.com:443:203.0.113.10 -I https://api.example.com/
+curl --resolve jira.example.com:443:203.0.113.10 -I https://jira.example.com/
+curl --resolve grafana.example.com:443:203.0.113.10 -I https://grafana.example.com/
+curl --resolve gitlab.example.com:443:203.0.113.10 -I https://gitlab.example.com/</code></pre>
+<p  data-en="For release acceptance, omit -k and expect certificate verification to pass plus the application’s expected status/content. Use --cacert /path/to/enterprise-root.pem for an approved internal CA. Follow redirects only after inspecting Location: an absolute redirect to another hostname needs its own --resolve entry. For HEAD-incompatible services use GET. Confirm routing from per-host upstream logs, not just five identical login pages." data-fa="برای پذیرش Release، -k را حذف کنید و انتظار موفقیت بررسی Certificate و Status/Content مورد انتظار برنامه را داشته باشید. برای CA داخلی مورد تأیید از --cacert /path/to/enterprise-root.pem استفاده کنید. Redirect را بعد از بررسی Location دنبال کنید؛ Redirect به Hostname دیگر به --resolve جدا نیاز دارد. برای سرویس بدون HEAD از GET استفاده کنید. Routing را از لاگ Upstream هر Host تأیید کنید، نه صرفاً پنج صفحه Login مشابه.">For release acceptance, omit -k and expect certificate verification to pass plus the application’s expected status/content. Use --cacert /path/to/enterprise-root.pem for an approved internal CA. Follow redirects only after inspecting Location: an absolute redirect to another hostname needs its own --resolve entry. For HEAD-incompatible services use GET. Confirm routing from per-host upstream logs, not just five identical login pages.</p>
+<pre dir="ltr"><code class="language-bash">curl -I --resolve app.example.com:80:203.0.113.10 http://app.example.com/
+curl -v --resolve unknown.example.com:80:203.0.113.10 http://unknown.example.com/
+curl -v --resolve unknown.example.com:443:203.0.113.10 https://unknown.example.com/
+curl -v --resolve app.example.com:443:203.0.113.10 https://app.example.com/ -H &#x27;Host: api.example.com&#x27;
+curl -v --resolve app.example.com:443:203.0.113.10 https://app.example.com/ -H &#x27;Host: unknown.example.com&#x27;</code></pre>
+<p  data-en="Expected in order: 301 with Location https://app.example.com/; empty reply/closed connection for unknown HTTP; TLS handshake failure for unknown HTTPS SNI; 421 for app SNI with api Host; closure or 421 for an unknown Host after app TLS, never backend content. Test the actual client’s HTTP protocol because the exact failure text varies." data-fa="به‌ترتیب انتظار دارید: 301 با Location برابر https://app.example.com/؛ پاسخ خالی یا اتصال بسته برای HTTP ناشناس؛ شکست TLS Handshake برای SNI ناشناس؛ 421 برای SNI مربوط به app با Host مربوط به api؛ و بسته‌شدن اتصال یا 421 برای Host ناشناس پس از TLS مربوط به app، بدون محتوای Backend. پروتکل واقعی Client را تست کنید چون متن دقیق خطا متغیر است.">Expected in order: 301 with Location https://app.example.com/; empty reply/closed connection for unknown HTTP; TLS handshake failure for unknown HTTPS SNI; 421 for app SNI with api Host; closure or 421 for an unknown Host after app TLS, never backend content. Test the actual client’s HTTP protocol because the exact failure text varies.</p>
+</section>
+<section id="openssl"><h2  data-en="17. openssl s_client: SNI and Certificate Verification" data-fa="۱۷. تست SNI و گواهی با openssl s_client">17. openssl s_client: SNI and Certificate Verification</h2>
+<pre dir="ltr"><code class="language-bash">openssl s_client -connect 203.0.113.10:443 -servername app.example.com
+openssl s_client -connect 203.0.113.10:443 -servername api.example.com</code></pre>
+<p  data-en="-connect selects the address and -servername sends SNI. Inspect the presented certificate and chain for each name. Setting SNI alone is not hostname verification; use the strict command below and verify the SAN, dates and chain. s_client may continue after verification errors unless -verify_return_error is supplied." data-fa="-connect آدرس را انتخاب و -servername مقدار SNI را ارسال می‌کند. گواهی و Chain ارائه‌شده را برای هر نام بررسی کنید. تنظیم SNI به‌تنهایی Hostname Verification نیست؛ از فرمان سخت‌گیرانه زیر استفاده و SAN، تاریخ و زنجیره را بررسی کنید. s_client ممکن است بدون -verify_return_error پس از خطای Verification ادامه دهد.">-connect selects the address and -servername sends SNI. Inspect the presented certificate and chain for each name. Setting SNI alone is not hostname verification; use the strict command below and verify the SAN, dates and chain. s_client may continue after verification errors unless -verify_return_error is supplied.</p>
+<pre dir="ltr"><code class="language-bash">openssl s_client -connect 203.0.113.10:443 \
+  -servername app.example.com -verify_hostname app.example.com \
+  -verify_return_error -CApath /etc/ssl/certs &lt;/dev/null
+
+openssl s_client -connect 203.0.113.10:443 -servername app.example.com &lt;/dev/null 2&gt;/dev/null \
+  | openssl x509 -noout -subject -issuer -dates -ext subjectAltName
+
+openssl s_client -connect 203.0.113.10:443 -noservername &lt;/dev/null</code></pre>
+<p  data-en="With a publicly trusted certificate and the system CA store installed, expect Verify return code: 0 (ok), a SAN covering app.example.com and valid dates. Repeat strict verification for all five names. For a private CA use its trusted -CAfile. The last command should fail the handshake because this baseline rejects clients without SNI." data-fa="با گواهی Public مورد اعتماد و CA Store سیستم، انتظار Verify return code: 0 (ok)، SAN شامل app.example.com و تاریخ معتبر دارید. تست سخت‌گیرانه را برای هر پنج نام تکرار کنید. برای CA خصوصی از -CAfile معتبر آن استفاده کنید. فرمان آخر باید Handshake را Fail کند چون این تنظیمات Client بدون SNI را رد می‌کند.">With a publicly trusted certificate and the system CA store installed, expect Verify return code: 0 (ok), a SAN covering app.example.com and valid dates. Repeat strict verification for all five names. For a private CA use its trusted -CAfile. The last command should fail the handshake because this baseline rejects clients without SNI.</p>
+<p><a href="https://docs.openssl.org/3.0/man1/openssl-s_client/" rel="noopener"><span  data-en="Official reference: OpenSSL s_client options" data-fa="مرجع رسمی: گزینه‌های OpenSSL s_client">Official reference: OpenSSL s_client options</span></a></p>
+</section>
+<section id="troubleshooting"><h2  data-en="18. Troubleshooting" data-fa="۱۸. عیب‌یابی">18. Troubleshooting</h2>
+<div class="table-responsive"><table><thead><tr><th  data-en="Error" data-fa="خطا">Error</th><th  data-en="Likely root cause" data-fa="علت احتمالی">Likely root cause</th><th  data-en="Diagnostic" data-fa="تشخیص">Diagnostic</th></tr></thead><tbody>
+<tr><td>502 Bad Gateway</td><td  data-en="Backend down, refused connection, invalid upstream response or wrong protocol" data-fa="توقف Backend، اتصال Refused، پاسخ نامعتبر یا Protocol اشتباه">Backend down, refused connection, invalid upstream response or wrong protocol</td><td>curl / nc / error log</td></tr>
+<tr><td>504 Gateway Timeout</td><td  data-en="Upstream connect/read timeout; application or dependency latency" data-fa="Timeout اتصال/خواندن Upstream؛ کندی برنامه یا Dependency">Upstream connect/read timeout; application or dependency latency</td><td>upstream timing / proxy_read_timeout / backend logs</td></tr>
+<tr><td>Wrong Website</td><td  data-en="Wrong server_name, duplicate block, default fallback or wrong app public URL" data-fa="server_name اشتباه، Block تکراری، Default یا Public URL اشتباه برنامه">Wrong server_name, duplicate block, default fallback or wrong app public URL</td><td>nginx -T / Host / upstream logs</td></tr>
+<tr><td>SSL Certificate Wrong</td><td  data-en="Incorrect SNI, certificate path, listener or unreloaded renewal" data-fa="SNI، مسیر Certificate یا Listener اشتباه؛ تمدید بدون Reload">Incorrect SNI, certificate path, listener or unreloaded renewal</td><td>openssl s_client / certbot certificates</td></tr>
+<tr><td>Connection Refused</td><td  data-en="No listener, backend stopped or active firewall reject" data-fa="نبود Listener، توقف Backend یا Reject فعال Firewall">No listener, backend stopped or active firewall reject</td><td>nc / ss / firewall rules</td></tr>
+<tr><td>Connection Timeout</td><td  data-en="Silent firewall drop, route failure or asymmetric return path" data-fa="Drop بدون پاسخ Firewall، خرابی Route یا برگشت نامتقارن">Silent firewall drop, route failure or asymmetric return path</td><td>nc / ip route get / firewall counters</td></tr>
+<tr><td>DNS Wrong</td><td  data-en="Incorrect A/AAAA, stale cache or split-DNS mismatch" data-fa="A/AAAA اشتباه، Cache قدیمی یا اختلاف Split DNS">Incorrect A/AAAA, stale cache or split-DNS mismatch</td><td>dig / nslookup</td></tr>
+<tr><td>WebSocket Fail</td><td  data-en="Missing Upgrade headers, origin/auth failure or idle timeout" data-fa="نبود Upgrade Header، خطای Origin/Auth یا Idle Timeout">Missing Upgrade headers, origin/auth failure or idle timeout</td><td>Browser DevTools / 101 / logs</td></tr>
+<tr><td>413 Request Entity Too Large</td><td  data-en="Proxy or application body-size limit" data-fa="محدودیت Body در Proxy یا برنامه">Proxy or application body-size limit</td><td>client_max_body_size / app limits</td></tr>
+<tr><td>Redirect Loop / CSRF</td><td  data-en="Wrong forwarded scheme or untrusted proxy/public URL settings" data-fa="Scheme اشتباه یا تنظیم Trust Proxy/Public URL نادرست">Wrong forwarded scheme or untrusted proxy/public URL settings</td><td>Location / cookies / application logs</td></tr>
+<tr><td>421 Misdirected Request</td><td  data-en="SNI and HTTP host differ under the explicit strict policy" data-fa="اختلاف SNI و Host طبق Policy سخت‌گیرانه">SNI and HTTP host differ under the explicit strict policy</td><td>curl --resolve / Host / SNI log</td></tr>
+<tr><td>ACME Renewal Failed</td><td  data-en="Port 80 blocked, changed DNS, missing webroot exception or DNS credentials" data-fa="Port 80 بسته، DNS تغییرکرده، نبود استثنای Webroot یا Credential DNS">Port 80 blocked, changed DNS, missing webroot exception or DNS credentials</td><td>certbot renew --dry-run / ACME logs</td></tr>
+</tbody></table></div>
+<pre dir="ltr"><code class="language-bash">curl -v http://10.10.10.11:8080
+nc -zv 10.10.10.11 8080
+ip route get 10.10.10.11
+sudo tail -f /var/log/nginx/error.log /var/log/nginx/app.example.com.error.log</code></pre>
+<p  data-en="For 502 start from the Nginx host: verify TCP, HTTP protocol and expected Host, then correlate the upstream address with the per-host error log. The global error log alone may miss errors assigned to a named server. connect() failed (111: Connection refused) suggests no accepting listener or a reject; upstream timed out points to a connect/read stage. Do not increase timeouts until the failing stage and application dependency are known." data-fa="برای 502 از Host Nginx شروع کنید: TCP، Protocol HTTP و Host مورد انتظار را بررسی و آدرس Upstream را با Error Log هر Host تطبیق دهید. Error Log عمومی ممکن است خطای واگذارشده به Named Server را نداشته باشد. connect() failed (111: Connection refused) نبود Listener پذیرنده یا Reject را مطرح می‌کند؛ upstream timed out به مرحله Connect/Read اشاره دارد. قبل از شناخت مرحله شکست و Dependency برنامه Timeout را بالا نبرید.">For 502 start from the Nginx host: verify TCP, HTTP protocol and expected Host, then correlate the upstream address with the per-host error log. The global error log alone may miss errors assigned to a named server. connect() failed (111: Connection refused) suggests no accepting listener or a reject; upstream timed out points to a connect/read stage. Do not increase timeouts until the failing stage and application dependency are known.</p>
+<pre dir="ltr"><code class="language-bash">sudo nginx -T
+sudo ss -lntp | grep &quot;:443&quot;
+
+# Run on the app backend, not the proxy:
+sudo ss -lntp | grep &quot;:8080&quot;</code></pre>
+<p  data-en="nginx -T prints the effective configuration expanded across includes, plus a test. It is more useful than reading just one file when finding duplicate names, a packaged default site or inheritance. It prints configuration on disk, not proof that current workers loaded it: confirm the last reload succeeded. Its output may contain credentials in configured headers; redact it before sharing." data-fa="nginx -T تنظیم نهایی روی دیسک را با همه Includeها چاپ و تست می‌کند. برای پیداکردن نام تکراری، Default Site بسته یا Inheritance از خواندن یک فایل مفیدتر است. خروجی آن اثبات نمی‌کند Worker فعلی همین تنظیمات را بارگذاری کرده؛ موفقیت آخرین Reload را تأیید کنید. ممکن است Credential موجود در Header تنظیم‌شده را چاپ کند؛ پیش از اشتراک‌گذاری پالایش کنید.">nginx -T prints the effective configuration expanded across includes, plus a test. It is more useful than reading just one file when finding duplicate names, a packaged default site or inheritance. It prints configuration on disk, not proof that current workers loaded it: confirm the last reload succeeded. Its output may contain credentials in configured headers; redact it before sharing.</p>
+<p  data-en="A backend bound only to 127.0.0.1:8080 is unreachable from a separate proxy server. Bind it to the intended private interface, or an appropriately firewalled wildcard listener, and recheck. Do not solve this by exposing the backend publicly. A refused connection and a timeout have different meanings; compare source/destination captures and firewall counters when ambiguous." data-fa="Backend که فقط روی 127.0.0.1:8080 Bind شده از Proxy جدا قابل دسترسی نیست. آن را روی Interface خصوصی مورد نظر یا Listener عمومی محلی با Firewall مناسب Bind و دوباره تست کنید. مشکل را با انتشار عمومی Backend حل نکنید. Refused و Timeout معنای متفاوت دارند؛ در وضعیت مبهم Capture مبدأ/مقصد و Counter فایروال را مقایسه کنید.">A backend bound only to 127.0.0.1:8080 is unreachable from a separate proxy server. Bind it to the intended private interface, or an appropriately firewalled wildcard listener, and recheck. Do not solve this by exposing the backend publicly. A refused connection and a timeout have different meanings; compare source/destination captures and firewall counters when ambiguous.</p>
+</section>
+<section id="root-cause"><h2  data-en="19. Root Cause Analysis" data-fa="۱۹. تحلیل علت ریشه‌ای">19. Root Cause Analysis</h2>
+<figure><img src="/assets/img/articles/content/Nginx Reverse Proxy Troubleshooting Flowchart.png" loading="lazy" decoding="async" alt="Trace failures from DNS through TLS to the backend application" data-en-alt="Trace failures from DNS through TLS to the backend application" data-fa-alt="ردیابی خرابی از DNS و TLS تا برنامه Backend"><figcaption ><span  data-en="Trace failures from DNS through TLS to the backend application" data-fa="ردیابی خرابی از DNS و TLS تا برنامه Backend">Trace failures from DNS through TLS to the backend application</span></figcaption></figure>
+<pre dir="ltr"><code class="language-text">DNS Resolution
+     |
+     v
+TCP/443 Reachable?
+     |
+     v
+TLS Handshake OK?
+     |
+     v
+Correct SNI Certificate?
+     |
+     v
+Correct Nginx server_name?
+     |
+     v
+Backend Reachable?
+     |
+     v
+Backend Application Healthy?
+     |
+     v
+Proxy Headers Correct?
+     |
+     v
+Application Response</code></pre>
+<p  data-en="At the first failing gate, stop and gather evidence. DNS: compare A and AAAA from the client. TCP: test from outside and inspect listener/firewall/DNAT. TLS: separate protocol negotiation from hostname/chain verification. Routing: compare SNI, Host and upstream log. Backend: run nc and curl from the proxy. Application: inspect health endpoints and dependency logs. Headers: validate public URL, scheme, client-IP trust, origin and cookies." data-fa="در اولین مرحله ناموفق توقف و شاهد جمع کنید. DNS: A و AAAA را از سمت Client مقایسه کنید. TCP: از بیرون تست و Listener/Firewall/DNAT را بررسی کنید. TLS: مذاکره Protocol را از تأیید Hostname/Chain جدا کنید. Routing: SNI، Host و لاگ Upstream را تطبیق دهید. Backend: از Proxy فرمان nc و curl اجرا کنید. Application: Health Endpoint و لاگ Dependency را بررسی کنید. Headerها: Public URL، Scheme، Trust مربوط به Client IP، Origin و Cookie را اعتبارسنجی کنید.">At the first failing gate, stop and gather evidence. DNS: compare A and AAAA from the client. TCP: test from outside and inspect listener/firewall/DNAT. TLS: separate protocol negotiation from hostname/chain verification. Routing: compare SNI, Host and upstream log. Backend: run nc and curl from the proxy. Application: inspect health endpoints and dependency logs. Headers: validate public URL, scheme, client-IP trust, origin and cookies.</p>
+<p  data-en="Incident record example: app returns 502, app error log shows refused 10.10.10.11:8080, nc from proxy fails, backend ss shows 127.0.0.1:8080. Root cause is incorrect bind address after an application update. Correct the private-interface binding, confirm the firewall source allow, retest from the proxy and external client, then document the change and add a remote health check." data-fa="نمونه ثبت Incident: app پاسخ 502 می‌دهد؛ Error Log اتصال Refused به 10.10.10.11:8080 را نشان می‌دهد؛ nc از Proxy شکست می‌خورد؛ ss روی Backend مقدار 127.0.0.1:8080 دارد. Root Cause تغییر اشتباه Bind Address پس از Update برنامه است. Bind روی Interface خصوصی را اصلاح، Source مجاز Firewall را تأیید و از Proxy و Client بیرونی تست کنید؛ سپس تغییر را ثبت و Health Check از راه دور اضافه کنید.">Incident record example: app returns 502, app error log shows refused 10.10.10.11:8080, nc from proxy fails, backend ss shows 127.0.0.1:8080. Root cause is incorrect bind address after an application update. Correct the private-interface binding, confirm the firewall source allow, retest from the proxy and external client, then document the change and add a remote health check.</p>
+</section>
+<section id="nat"><h2  data-en="20. Why NAT Alone Is Not Enough" data-fa="۲۰. Why NAT Alone Is Not Enough؛ چرا NAT کافی نیست؟">20. Why NAT Alone Is Not Enough</h2>
+<figure><img src="/assets/img/articles/content/NAT vs Nginx Reverse Proxy.png" loading="lazy" decoding="async" alt="Ordinary NAT forwards by address and port; Nginx processes service names" data-en-alt="Ordinary NAT forwards by address and port; Nginx processes service names" data-fa-alt="NAT معمولی با آدرس و Port هدایت می‌کند؛ Nginx نام سرویس را پردازش می‌کند"><figcaption ><span  data-en="Ordinary NAT forwards by address and port; Nginx processes service names" data-fa="NAT معمولی با آدرس و Port هدایت می‌کند؛ Nginx نام سرویس را پردازش می‌کند">Ordinary NAT forwards by address and port; Nginx processes service names</span></figcaption></figure>
+<pre dir="ltr"><code class="language-text">203.0.113.10:443
+    cannot select by domain using ordinary dst-nat:
+    app.example.com -&gt; 10.10.10.11:443
+    api.example.com -&gt; 10.10.10.12:443
+    jira.example.com -&gt; 10.10.10.13:443
+
+Internet
+   |
+   v
+Firewall / NAT
+   |
+   | TCP 443
+   v
+Nginx
+   |
+   +--&gt; Backend A
+   +--&gt; Backend B
+   +--&gt; Backend C</code></pre>
+<p  data-en="Ordinary NAT operates on Layer 3/4 addresses and ports. The packets for these services share one destination IP and TCP port; a standard dst-nat rule cannot use the URL hostname to choose different backends. Multiple competing DNAT rules do not create name-based HTTPS hosting. Translate TCP/443 to Nginx, then let its TLS/HTTP processing select the certificate and request server. A specialized SNI-aware TCP proxy is another product/design, not ordinary NAT." data-fa="NAT معمولی روی آدرس و Port لایه ۳/۴ کار می‌کند. Packet این سرویس‌ها IP مقصد و TCP Port یکسان دارد؛ dst-nat استاندارد نمی‌تواند Hostname آدرس URL را برای انتخاب Backend مختلف استفاده کند. چند Rule رقیب DNAT میزبانی HTTPS مبتنی بر نام ایجاد نمی‌کند. TCP/443 را به Nginx ترجمه کنید؛ سپس پردازش TLS/HTTP آن گواهی و سرور Request را انتخاب می‌کند. TCP Proxy تخصصی آگاه از SNI محصول یا طراحی دیگری است، نه NAT معمولی.">Ordinary NAT operates on Layer 3/4 addresses and ports. The packets for these services share one destination IP and TCP port; a standard dst-nat rule cannot use the URL hostname to choose different backends. Multiple competing DNAT rules do not create name-based HTTPS hosting. Translate TCP/443 to Nginx, then let its TLS/HTTP processing select the certificate and request server. A specialized SNI-aware TCP proxy is another product/design, not ordinary NAT.</p>
+</section>
+<section id="enterprise"><h2  data-en="21. Enterprise Architecture Example" data-fa="۲۱. مثال معماری سازمانی">21. Enterprise Architecture Example</h2>
+<pre dir="ltr"><code class="language-text">Internet
+   |
+   v
+Public IP: 198.51.100.20:443
+   |
+Nginx Reverse Proxy
+   |
+Private Server VLAN
+   +-- gitlab.company.com  -&gt; 172.16.20.10:80
+   +-- grafana.company.com -&gt; 172.16.20.20:3000
+   +-- zabbix.company.com  -&gt; 172.16.20.30:8080
+   +-- jira.company.com    -&gt; 172.16.20.40:8080
+   +-- api.company.com     -&gt; 172.16.20.50:9000</code></pre>
+<p  data-en="All five company A records point to 198.51.100.20. In this variant the public IP is on the reverse-proxy ingress only; backend servers live in a private VLAN with no public IP or independent Internet publishing rule. Give each name an exact server block, appropriate certificate and its stated upstream. Separate management access from public application access." data-fa="رکورد A هر پنج نام سازمانی به 198.51.100.20 اشاره می‌کند. در این Variant، Public IP فقط روی ورودی Reverse Proxy قرار دارد؛ Backendها داخل Private VLAN هستند و IP عمومی یا Rule انتشار مستقل اینترنت ندارند. برای هر نام server block دقیق، Certificate مناسب و Upstream ذکرشده تعریف کنید. دسترسی مدیریت را از دسترسی عمومی برنامه جدا کنید.">All five company A records point to 198.51.100.20. In this variant the public IP is on the reverse-proxy ingress only; backend servers live in a private VLAN with no public IP or independent Internet publishing rule. Give each name an exact server block, appropriate certificate and its stated upstream. Separate management access from public application access.</p>
+<p  data-en="If the perimeter firewall owns the public IP instead, use this alternate ingress topology. The private proxy is 10.10.10.5. Backend addresses below intentionally use the separate 10.10.20.0/24 VLAN; they are a different firewall example, not changes to the main scenario." data-fa="اگر Public IP روی Firewall مرزی است، از ورودی جایگزین زیر استفاده کنید. IP خصوصی Proxy برابر 10.10.10.5 است. Backend این مثال عمداً در VLAN جدا 10.10.20.0/24 قرار دارد؛ این مثال Firewall مستقل است و آدرس‌های سناریوی اصلی را تغییر نمی‌دهد.">If the perimeter firewall owns the public IP instead, use this alternate ingress topology. The private proxy is 10.10.10.5. Backend addresses below intentionally use the separate 10.10.20.0/24 VLAN; they are a different firewall example, not changes to the main scenario.</p>
+<pre dir="ltr"><code class="language-text">Internet
+   |
+   v
+Firewall
+Public IP: 203.0.113.10
+   |
+   | DNAT TCP/443
+   v
+NGINX
+10.10.10.5
+   +--&gt; 10.10.20.11:8080
+   +--&gt; 10.10.20.12:9000
+   +--&gt; 10.10.20.13:8080</code></pre>
+<p  data-en="Permit Internet-to-proxy TCP/443 in the firewall forward policy as well as DNAT. Add TCP/80 only for the chosen redirect/ACME workflow. Permit proxy 10.10.10.5 to exactly the backend ports above and established return traffic; deny other sources. Backend firewalls should accept the actual proxy source IP seen after routing/SNAT. Verify return routing and use split DNS or a deliberately configured hairpin path for internal clients." data-fa="علاوه بر DNAT، Internet به TCP/443 Proxy را در Forward Policy فایروال مجاز کنید. TCP/80 فقط برای روش Redirect/ACME انتخاب‌شده اضافه شود. از Proxy با IP 10.10.10.5 فقط به Portهای Backend بالا و ترافیک برگشتی Established اجازه دهید و Source دیگر را رد کنید. Firewall Backend باید Source واقعی Proxy پس از Routing/SNAT را Accept کند. مسیر برگشت را بررسی و برای Client داخلی از Split DNS یا Hairpin آگاهانه تنظیم‌شده استفاده کنید.">Permit Internet-to-proxy TCP/443 in the firewall forward policy as well as DNAT. Add TCP/80 only for the chosen redirect/ACME workflow. Permit proxy 10.10.10.5 to exactly the backend ports above and established return traffic; deny other sources. Backend firewalls should accept the actual proxy source IP seen after routing/SNAT. Verify return routing and use split DNS or a deliberately configured hairpin path for internal clients.</p>
+</section>
+<section id="recommendations"><h2  data-en="22. Security Recommendations and Operational Limits" data-fa="۲۲. توصیه‌های امنیتی و محدودیت عملیاتی">22. Security Recommendations and Operational Limits</h2>
+<ul><li  data-en="Maintain a reviewed change plan, previous configuration, independent console access and a DNS TTL/cutover plan. Test each hostname and backend before and after cutover." data-fa="Change Plan بررسی‌شده، تنظیم قبلی، Console مستقل و برنامه TTL/Cutover DNS نگه دارید. هر Hostname و Backend را قبل و بعد از تغییر تست کنید.">Maintain a reviewed change plan, previous configuration, independent console access and a DNS TTL/cutover plan. Test each hostname and backend before and after cutover.</li><li  data-en="Use supported OS/Nginx/OpenSSL versions and patch them. Do not assume a syntactically valid configuration proves compliance with your organization’s cipher policy." data-fa="OS، Nginx و OpenSSL پشتیبانی‌شده استفاده و وصله کنید. معتبر بودن Syntax به معنی انطباق Cipher Policy سازمان نیست.">Use supported OS/Nginx/OpenSSL versions and patch them. Do not assume a syntactically valid configuration proves compliance with your organization’s cipher policy.</li><li  data-en="Use upstream TLS with peer and hostname verification where required. HTTPS on the client side does not encrypt the private HTTP hops shown here." data-fa="در صورت نیاز از TLS Upstream با تأیید Peer و Hostname استفاده کنید. HTTPS سمت Client ارتباط HTTP خصوصی این سناریو را رمز نمی‌کند.">Use upstream TLS with peer and hostname verification where required. HTTPS on the client side does not encrypt the private HTTP hops shown here.</li><li  data-en="Plan capacity for concurrent connections, long-lived WebSockets, upload temporary files, bandwidth and backend limits. One proxy and one backend per service are single points of failure." data-fa="ظرفیت Connection همزمان، WebSocket طولانی، فایل موقت Upload، پهنای باند و محدودیت Backend را برنامه‌ریزی کنید. یک Proxy و یک Backend برای هر سرویس نقطه شکست منفرد هستند.">Plan capacity for concurrent connections, long-lived WebSockets, upload temporary files, bandwidth and backend limits. One proxy and one backend per service are single points of failure.</li><li  data-en="For high availability, two proxies can share one public virtual IP using an appropriate failover or load-balancing design. Synchronize configuration and certificates securely and test failover; a single public IP does not require a single physical proxy." data-fa="برای HA دو Proxy می‌توانند با طراحی مناسب Failover یا Load Balancing یک Public Virtual IP مشترک داشته باشند. تنظیمات و Certificate را امن همگام و Failover را تست کنید؛ یک Public IP الزاماً یک Proxy فیزیکی نیست.">For high availability, two proxies can share one public virtual IP using an appropriate failover or load-balancing design. Synchronize configuration and certificates securely and test failover; a single public IP does not require a single physical proxy.</li><li  data-en="GitLab web traffic and HTTPS Git can use this listener. Git over SSH, mail, arbitrary TCP services and GitLab registry/Pages hostnames need their own protocol, name, certificate and port planning." data-fa="Web و Git روی HTTPS گیت‌لب می‌توانند از این Listener استفاده کنند. Git روی SSH، Mail، TCP دلخواه و نام‌های Registry/Pages گیت‌لب برنامه‌ریزی Protocol، نام، Certificate و Port جدا می‌خواهند.">GitLab web traffic and HTTPS Git can use this listener. Git over SSH, mail, arbitrary TCP services and GitLab registry/Pages hostnames need their own protocol, name, certificate and port planning.</li></ul>
+</section>
+<section id="conclusion"><h2  data-en="23. Conclusion" data-fa="۲۳. نتیجه‌گیری">23. Conclusion</h2>
+<p  data-en="DNS sends every name to one ingress. SNI chooses TLS identity during the handshake. HTTP name processing selects the request context, and proxy_pass forwards to the service backend. The production baseline includes an explicit default, name guards, renewable certificates, WebSocket headers, bounded uploads and per-host diagnostics. Release it only after validating all five routes, certificate trust, renewal and the firewall path." data-fa="DNS همه نام‌ها را به یک ورودی می‌فرستد. SNI هنگام Handshake هویت TLS را انتخاب می‌کند. پردازش نام HTTP، Context درخواست را تعیین و proxy_pass آن را به Backend سرویس ارسال می‌کند. تنظیم عملیاتی شامل Default صریح، Guard نام، گواهی قابل تمدید، Header WebSocket، Upload محدود و تشخیص جدا برای هر Host است. پس از تأیید هر پنج مسیر، Trust گواهی، تمدید و مسیر Firewall آن را عملیاتی کنید.">DNS sends every name to one ingress. SNI chooses TLS identity during the handshake. HTTP name processing selects the request context, and proxy_pass forwards to the service backend. The production baseline includes an explicit default, name guards, renewable certificates, WebSocket headers, bounded uploads and per-host diagnostics. Release it only after validating all five routes, certificate trust, renewal and the firewall path.</p>
+</section>
+<section id="seo-title"><h2  data-en="24. SEO Title" data-fa="۲۴. عنوان SEO">24. SEO Title</h2>
+<p  data-en="Nginx Reverse Proxy: Multiple Domains on One IP and Port 443 Using SNI" data-fa="Nginx Reverse Proxy: میزبانی چند دامنه روی یک IP و Port 443 با SNI">Nginx Reverse Proxy: Multiple Domains on One IP and Port 443 Using SNI</p>
+<p  data-en="Suggested slug: nginx-reverse-proxy-multiple-domains-single-ip-443" data-fa="Slug پیشنهادی: nginx-reverse-proxy-multiple-domains-single-ip-443">Suggested slug: nginx-reverse-proxy-multiple-domains-single-ip-443</p>
+</section>
+<section id="meta-description"><h2  data-en="25. Meta Description" data-fa="۲۵. توضیحات متا">25. Meta Description</h2>
+<p  data-en="Configure five HTTPS domains on one public IP with Nginx SNI, certificates, WebSocket, secure defaults, renewal, testing and enterprise troubleshooting." data-fa="راه‌اندازی پنج دامنه HTTPS روی یک IP با Nginx و SNI؛ تنظیم Certificate، WebSocket، امنیت، تمدید گواهی، تست و عیب‌یابی عملیاتی در شبکه سازمانی.">Configure five HTTPS domains on one public IP with Nginx SNI, certificates, WebSocket, secure defaults, renewal, testing and enterprise troubleshooting.</p>
+</section>
+<section id="keywords"><h2  data-en="26. Keywords" data-fa="۲۶. کلمات کلیدی">26. Keywords</h2>
+<pre dir="ltr"><code class="language-text">Nginx, Reverse Proxy, Nginx SNI, server_name, Multiple Domains, Single Public IP, HTTPS Reverse Proxy, Nginx Virtual Host, TLS SNI, Nginx Proxy Pass</code></pre>
+</section>
+<section id="faq"><h2  data-en="Frequently Asked Questions" data-fa="پرسش‌های متداول">Frequently Asked Questions</h2>
+<div class="article-faq-item"><h3  data-en="Does DNS select the backend?" data-fa="آیا DNS، Backend را انتخاب می‌کند؟">Does DNS select the backend?</h3><p  data-en="No. DNS returns the ingress IP; Nginx selects the request server and its proxy_pass destination." data-fa="خیر. DNS آدرس ورودی را برمی‌گرداند؛ Nginx سرور Request و مقصد proxy_pass را انتخاب می‌کند.">No. DNS returns the ingress IP; Nginx selects the request server and its proxy_pass destination.</p></div>
+<div class="article-faq-item"><h3  data-en="Are SNI and Host interchangeable?" data-fa="آیا SNI و Host معادل هستند؟">Are SNI and Host interchangeable?</h3><p  data-en="No. SNI is TLS handshake input; Host is HTTP request input. They can differ, which this configuration rejects." data-fa="خیر. SNI ورودی Handshake در TLS و Host ورودی درخواست HTTP است. ممکن است متفاوت باشند و این تنظیمات اختلاف را رد می‌کند.">No. SNI is TLS handshake input; Host is HTTP request input. They can differ, which this configuration rejects.</p></div>
+<div class="article-faq-item"><h3  data-en="Is port 80 mandatory?" data-fa="آیا Port 80 اجباری است؟">Is port 80 mandatory?</h3><p  data-en="Not for HTTPS routing. It is required for HTTP-01 and optional for redirects; automated DNS-01 permits a 443-only ingress." data-fa="برای Routing HTTPS خیر. برای HTTP-01 لازم و برای Redirect اختیاری است؛ DNS-01 خودکار ورودی فقط 443 را ممکن می‌کند.">Not for HTTPS routing. It is required for HTTP-01 and optional for redirects; automated DNS-01 permits a 443-only ingress.</p></div>
+<div class="article-faq-item"><h3  data-en="Can I issue certificates for these exact example addresses?" data-fa="آیا می‌توان برای همین آدرس‌های نمونه گواهی صادر کرد؟">Can I issue certificates for these exact example addresses?</h3><p  data-en="No. Replace documentation IPs and reserved example domains with your own real reachable infrastructure." data-fa="خیر. IP مستنداتی و دامنه رزروشده مثال را با زیرساخت واقعی قابل دسترسی و تحت مالکیت خود جایگزین کنید.">No. Replace documentation IPs and reserved example domains with your own real reachable infrastructure.</p></div>
+<div class="article-faq-item"><h3  data-en="Does a 200 response prove the correct backend?" data-fa="آیا پاسخ 200، Backend صحیح را اثبات می‌کند؟">Does a 200 response prove the correct backend?</h3><p  data-en="No. Verify service-specific content and the per-host log upstream address, as multiple services can return similar pages." data-fa="خیر. محتوای مخصوص سرویس و آدرس Upstream لاگ هر Host را بررسی کنید؛ چند سرویس ممکن است صفحه مشابه برگردانند.">No. Verify service-specific content and the per-host log upstream address, as multiple services can return similar pages.</p></div>
+<div class="article-faq-item"><h3  data-en="Does curl -k validate TLS trust?" data-fa="آیا curl -k اعتماد TLS را بررسی می‌کند؟">Does curl -k validate TLS trust?</h3><p  data-en="No. It disables certificate verification. Repeat without -k and verify hostname and chain before release." data-fa="خیر. بررسی گواهی را غیرفعال می‌کند. پیش از انتشار بدون -k تست و Hostname و Chain را تأیید کنید.">No. It disables certificate verification. Repeat without -k and verify hostname and chain before release.</p></div>
+<div class="article-faq-item"><h3  data-en="Will a renewal automatically update active Nginx workers?" data-fa="آیا تمدید به‌تنهایی گواهی Worker فعال Nginx را عوض می‌کند؟">Will a renewal automatically update active Nginx workers?</h3><p  data-en="Not with certonly alone. Use a deploy hook that tests and reloads Nginx, then monitor the certificate served externally." data-fa="با certonly به‌تنهایی خیر. Deploy Hook برای تست و Reload قرار دهید و گواهی ارائه‌شده از بیرون را مانیتور کنید.">Not with certonly alone. Use a deploy hook that tests and reloads Nginx, then monitor the certificate served externally.</p></div>
+<div class="article-faq-item"><h3  data-en="Can ordinary NAT distinguish these domains?" data-fa="آیا NAT معمولی این دامنه‌ها را تفکیک می‌کند؟">Can ordinary NAT distinguish these domains?</h3><p  data-en="No. Ordinary L3/L4 DNAT sees the shared destination IP and port. Forward to Nginx for TLS/HTTP name processing." data-fa="خیر. DNAT معمولی لایه ۳/۴ IP و Port مشترک مقصد را می‌بیند. ترافیک را برای پردازش نام TLS/HTTP به Nginx بفرستید.">No. Ordinary L3/L4 DNAT sees the shared destination IP and port. Forward to Nginx for TLS/HTTP name processing.</p></div>
+</section>
+<section id="official-references"><h2  data-en="Official References" data-fa="منابع رسمی">Official References</h2>
+<p  data-en="Syntax and behavior checked against official documentation on 7 October 2026. Distribution packages can differ from upstream releases; validate the target binary and ACME client before deployment. The Linux deployment commands are for the target host, not commands executed against this Windows website workspace." data-fa="سینتکس و رفتار با مستندات رسمی در ۷ اکتبر ۲۰۲۶ بررسی شده است. بسته توزیع ممکن است با Release بالادستی متفاوت باشد؛ Binary و ACME Client مقصد را قبل از استقرار اعتبارسنجی کنید. فرمان‌های استقرار Linux برای Host مقصد هستند و روی Workspace ویندوزی این سایت اجرا نشده‌اند.">Syntax and behavior checked against official documentation on 7 October 2026. Distribution packages can differ from upstream releases; validate the target binary and ACME client before deployment. The Linux deployment commands are for the target host, not commands executed against this Windows website workspace.</p>
+<p><a href="https://nginx.org/en/docs/http/request_processing.html" rel="noopener"><span  data-en="Nginx request processing" data-fa="پردازش Request در Nginx">Nginx request processing</span></a></p>
+<p><a href="https://nginx.org/en/docs/http/server_names.html" rel="noopener"><span  data-en="Nginx server names" data-fa="نام سرورها در Nginx">Nginx server names</span></a></p>
+<p><a href="https://nginx.org/en/docs/http/configuring_https_servers.html" rel="noopener"><span  data-en="Nginx HTTPS servers and SNI" data-fa="HTTPS و SNI در Nginx">Nginx HTTPS servers and SNI</span></a></p>
+<p><a href="https://nginx.org/en/docs/http/ngx_http_ssl_module.html" rel="noopener"><span  data-en="Nginx SSL module and version requirements" data-fa="SSL Module و پیش‌نیاز نسخه">Nginx SSL module and version requirements</span></a></p>
+<p><a href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html" rel="noopener"><span  data-en="Nginx proxy module" data-fa="Proxy Module">Nginx proxy module</span></a></p>
+<p><a href="https://nginx.org/en/docs/http/websocket.html" rel="noopener"><span  data-en="Nginx WebSocket proxying" data-fa="WebSocket در Nginx">Nginx WebSocket proxying</span></a></p>
+<p><a href="https://nginx.org/en/docs/http/ngx_http_core_module.html" rel="noopener"><span  data-en="Nginx core module and body-size limits" data-fa="Core Module و محدودیت Body">Nginx core module and body-size limits</span></a></p>
+<p><a href="https://nginx.org/en/docs/http/ngx_http_log_module.html" rel="noopener"><span  data-en="Nginx log module" data-fa="Log Module">Nginx log module</span></a></p>
+<p><a href="https://nginx.org/en/docs/http/ngx_http_limit_req_module.html" rel="noopener"><span  data-en="Nginx request rate limiting" data-fa="Rate Limit در Nginx">Nginx request rate limiting</span></a></p>
+<p><a href="https://nginx.org/en/docs/control.html" rel="noopener"><span  data-en="Nginx reload behavior" data-fa="رفتار Reload در Nginx">Nginx reload behavior</span></a></p>
+<p><a href="https://eff-certbot.readthedocs.io/en/stable/using.html" rel="noopener"><span  data-en="Certbot user guide" data-fa="راهنمای Certbot">Certbot user guide</span></a></p>
+<p><a href="https://letsencrypt.org/docs/challenge-types/" rel="noopener"><span  data-en="Let’s Encrypt challenges" data-fa="Challengeهای Let’s Encrypt">Let’s Encrypt challenges</span></a></p>
+<p><a href="https://curl.se/docs/manpage.html" rel="noopener"><span  data-en="curl manual" data-fa="راهنمای curl">curl manual</span></a></p>
+<p><a href="https://docs.openssl.org/3.0/man1/openssl-s_client/" rel="noopener"><span  data-en="OpenSSL s_client" data-fa="راهنمای OpenSSL s_client">OpenSSL s_client</span></a></p>
+<p><a href="https://www.rfc-editor.org/rfc/rfc5737" rel="noopener"><span  data-en="RFC 5737: documentation IPv4 ranges" data-fa="RFC 5737: آدرس‌های IPv4 مستنداتی">RFC 5737: documentation IPv4 ranges</span></a></p>
+<p><a href="https://www.rfc-editor.org/rfc/rfc6797" rel="noopener"><span  data-en="RFC 6797: HSTS" data-fa="RFC 6797: HSTS">RFC 6797: HSTS</span></a></p>
+<p><a href="https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#root_url" rel="noopener"><span  data-en="Grafana root_url" data-fa="تنظیم root_url در Grafana">Grafana root_url</span></a></p>
+<p><a href="https://docs.gitlab.com/omnibus/settings/nginx/" rel="noopener"><span  data-en="GitLab external Nginx configuration" data-fa="تنظیم Nginx خارجی برای GitLab">GitLab external Nginx configuration</span></a></p>
+<p><a href="https://confluence.atlassian.com/adminjiraserver/integrating-jira-with-nginx-933695894.html" rel="noopener"><span  data-en="Atlassian: Jira behind Nginx" data-fa="Atlassian: Jira پشت Nginx">Atlassian: Jira behind Nginx</span></a></p>
+</section>
+</article></main></body></html>

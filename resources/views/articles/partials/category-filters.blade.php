@@ -1,7 +1,19 @@
 @php
     $brandFilters = \App\Models\Tag::query()->whereIn('slug', \App\Models\Tag::BRAND_FILTERS)->get();
+    $brandCategories = \App\Models\Category::query()
+        ->whereIn('slug', array_merge(\App\Models\Tag::BRAND_FILTERS, ['others']))
+        ->whereIn('language', ['en', 'fa'])
+        ->orderByRaw("case when language = 'en' then 0 else 1 end")
+        ->orderBy('id')
+        ->get()
+        ->groupBy('slug')
+        ->map(fn ($categories) => $categories->first());
     $filterGroups = $brandFilters
-        ->map(fn ($tag): array => ['slug' => $tag->slug, 'en' => $tag->displayName(), 'fa' => $tag->displayName(), 'color' => $tag->accentColor(), 'topic' => $tag->slug, 'sort_order' => 0, 'id' => $tag->id])
+        ->map(function ($tag) use ($brandCategories): array {
+            $category = $brandCategories->get($tag->slug === 'other' ? 'others' : $tag->slug);
+
+            return ['slug' => $tag->slug, 'en' => $tag->displayName(), 'fa' => $tag->displayName(), 'color' => $category?->accentColor() ?? $tag->accentColor(), 'topic' => $tag->slug, 'sort_order' => 0, 'id' => $tag->id];
+        })
         ->sortBy(fn ($filter) => array_search($filter['slug'], \App\Models\Tag::BRAND_FILTERS, true))->values();
     $legacyFilterGroups = collect($filterCategories ?? [])
         ->groupBy(fn ($category) => strtolower((string) $category->slug))

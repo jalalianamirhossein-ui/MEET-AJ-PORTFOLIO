@@ -1,0 +1,167 @@
+<?php
+
+use App\Models\Article;
+use App\Models\Category;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Str;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        $slug = 'mikrotik-firewall-hardening-input-forward-chain';
+        if (Article::where('slug', $slug)->where('language', 'en')->exists()) {
+            return;
+        }
+
+        $enTitle = 'MikroTik Firewall Hardening for Enterprise Networks Using Input and Forward Chains';
+        $faTitle = 'هاردنینگ فایروال MikroTik برای شبکه سازمانی با Input و Forward Chain';
+        $enDescription = 'A production-oriented RouterOS v7 firewall policy for enterprise VLANs, with explicit input and forward rules, management protection, segmentation, logging and verification.';
+        $faDescription = 'راهنمای عملیاتی و Production-oriented برای Policy فایروال RouterOS v7 در شبکه سازمانی، با تمرکز بر Input و Forward، حفاظت Management، تفکیک VLAN، Logging و تست.';
+        $banner = '/assets/img/articles/banners/MikroTik Firewall Hardening Network Blueprint.png';
+        $chains = '/assets/img/articles/content/MikroTik Firewall Chains Input vs Forward.png';
+        $topology = '/assets/img/articles/content/MikroTik VLAN Firewall Topology.png';
+        $order = '/assets/img/articles/content/MikroTik Firewall Rule Order Infographic.png';
+        $troubleshooting = '/assets/img/articles/content/MikroTik Firewall Troubleshooting Flow.png';
+
+        $content = <<<'HTML'
+<section id="overview"><h2 data-en="Overview" data-fa="نمای کلی">Overview</h2>
+<p data-en="This runbook designs an IPv4 perimeter and inter-VLAN policy for RouterOS v7. It is an example to review in a lab, not a blind paste into a production router. The documentation network 203.0.113.0/24 is reserved for examples and tests. Replace every example IP, interface, service port and requirement with values from the target network." data-fa="این Runbook یک Policy IPv4 برای Perimeter و ارتباط بین VLANها در RouterOS v7 طراحی می‌کند. این یک مثال برای بررسی در Lab است و نباید بدون Review روی Router Production Paste شود. شبکه 203.0.113.0/24 فقط برای مستندسازی و تست رزرو شده است. تمام IPها، Interfaceها، Port سرویس‌ها و Requirementهای مثال را با مقادیر واقعی شبکه مقصد جایگزین کنید.">This runbook designs an IPv4 perimeter and inter-VLAN policy for RouterOS v7.</p>
+<pre dir="ltr"><code class="language-text">Internet
+   |
+MikroTik Router
+   +-- VLAN 10 Users     10.10.10.0/24
+   +-- VLAN 20 Servers   10.10.20.0/24
+   +-- VLAN 30 VoIP      10.10.30.0/24
+   +-- VLAN 40 Guest     10.10.40.0/24
+   +-- VLAN 99 Mgmt      10.10.99.0/24</code></pre>
+<div class="article-callout warning"><strong data-en="Production warning" data-fa="هشدار Production">Production warning</strong><p data-en="Do not apply these rules blindly. Export first, take a RouterOS backup, enter Safe Mode, add and test the management allow rule, then add the final drops. Keep an out-of-band console or recovery path available." data-fa="این Ruleها را Blindly اجرا نکنید. ابتدا Export بگیرید، Backup مناسب RouterOS تهیه کنید، وارد Safe Mode شوید، Rule دسترسی Management را ایجاد و تست کنید و سپس Dropهای نهایی را اضافه کنید. Console یا مسیر Recovery خارج از مسیر اصلی را در دسترس نگه دارید.">Do not apply these rules blindly.</p></div>
+<pre dir="ltr"><code class="language-routeros">/export file=before-firewall-hardening
+/system backup save name=before-firewall-hardening</code></pre>
+<p data-en="Safe Mode rolls back changes made during the session if the management session is lost. Use Ctrl+X in terminal, or the Safe Mode button in Winbox, and confirm that the administrator can reconnect before leaving Safe Mode." data-fa="Safe Mode تغییرات همان Session را در صورت قطع‌شدن Session مدیریتی Rollback می‌کند. در Terminal از Ctrl+X یا در Winbox از دکمه Safe Mode استفاده کنید و پیش از خروج، اتصال مجدد Administrator را تست کنید.">Safe Mode rolls back changes made during the session if the management session is lost.</p></section>
+
+<section id="input-forward"><h2 data-en="Input and Forward: the critical distinction" data-fa="تفاوت مهم Input و Forward">Input and Forward: the critical distinction</h2>
+<p data-en="input processes packets entering the router when the destination is one of the router's own addresses. forward processes packets passing through the router toward another host. This distinction is the foundation of a safe policy." data-fa="Chain برابر input Packetهایی را پردازش می‌کند که وارد روتر شده‌اند و مقصدشان یکی از Addressهای خود روتر است. Chain برابر forward Packetهایی را پردازش می‌کند که از روتر عبور کرده و به Host دیگری می‌روند. این تفاوت پایه یک Policy امن است.">input processes packets entering the router when the destination is one of the router's own addresses. forward processes packets passing through the router.</p>
+<ul><li data-en="Admin to MikroTik Winbox: input" data-fa="Admin به Winbox میکروتیک: input">Admin to MikroTik Winbox: input</li><li data-en="User to Internet: forward" data-fa="کاربر به اینترنت: forward">User to Internet: forward</li><li data-en="User VLAN to Server VLAN: forward" data-fa="Users VLAN به Server VLAN: forward">User VLAN to Server VLAN: forward</li><li data-en="Internet to published web server: forward after DST-NAT" data-fa="اینترنت به Web Server منتشرشده: پس از DST-NAT در forward">Internet to published web server: forward after DST-NAT</li><li data-en="DNS request to the router: input" data-fa="درخواست DNS به Router: input">DNS request to the router: input</li></ul>
+<figure><img src="/assets/img/articles/content/MikroTik Firewall Chains Input vs Forward.png" loading="lazy" decoding="async" alt="MikroTik RouterOS Input Chain vs Forward Chain firewall traffic flow"><figcaption data-en="Input protects RouterOS; Forward protects routed networks." data-fa="Input از خود RouterOS محافظت می‌کند و Forward شبکه‌های Routed را محافظت می‌کند.">Input protects RouterOS; Forward protects routed networks.</figcaption></figure></section>
+
+<section id="interfaces-addresses"><h2 data-en="Interface Lists and Address Lists" data-fa="Interface List و Address List">Interface Lists and Address Lists</h2>
+<p data-en="Interface lists make policy portable. A WAN rule refers to the trust boundary, not a hard-coded physical port. Address lists make the policy readable and let the organization add subnets without duplicating every rule." data-fa="Interface List Policy را قابل نگهداری می‌کند. Rule مربوط به WAN به مرز اعتماد اشاره می‌کند، نه یک Port فیزیکی ثابت. Address List نیز Policy را خواناتر می‌کند و اجازه می‌دهد Subnet جدید بدون تکرار همه Ruleها اضافه شود.">Interface lists make policy portable.</p>
+<pre dir="ltr"><code class="language-routeros">/interface list
+add name=WAN comment="Internet-facing interfaces"
+add name=LAN comment="Trusted internal interfaces"
+/interface list member
+add list=WAN interface=ether1
+add list=LAN interface=vlan10-users
+add list=LAN interface=vlan20-servers
+add list=LAN interface=vlan30-voip
+add list=LAN interface=vlan40-guest
+add list=LAN interface=vlan99-mgmt
+/ip firewall address-list
+add list=MGMT-ADMINS address=10.10.99.10 comment="Network Administrator"
+add list=INTERNAL-NETWORKS address=10.10.10.0/24 comment="Users"
+add list=INTERNAL-NETWORKS address=10.10.20.0/24 comment="Servers"
+add list=INTERNAL-NETWORKS address=10.10.30.0/24 comment="VoIP"
+add list=INTERNAL-NETWORKS address=10.10.40.0/24 comment="Guest"
+add list=INTERNAL-NETWORKS address=10.10.99.0/24 comment="Management"
+add list=SERVER-NETWORKS address=10.10.20.0/24 comment="Servers"
+add list=GUEST-NETWORKS address=10.10.40.0/24 comment="Guest"</code></pre></section>
+
+<section id="input-policy"><h2 data-en="Protecting the MikroTik Router: INPUT Chain" data-fa="محافظت از خود MikroTik: INPUT Chain">Protecting the MikroTik Router: INPUT Chain</h2>
+<p data-en="Start with return traffic, then remove invalid state, allow carefully scoped infrastructure and management traffic, and finish with default deny. ICMP should not be blocked completely because it supports troubleshooting, Path MTU Discovery and network diagnostics." data-fa="با ترافیک برگشتی شروع کنید، سپس State نامعتبر را حذف کنید، سرویس‌های ضروری و Management را محدود و صریح Allow کنید و در پایان Default Deny بگذارید. ICMP را کامل Block نکنید چون برای Troubleshooting، PMTUD و Network Diagnostics مهم است.">Start with return traffic, then remove invalid state, allow scoped traffic, and finish with default deny.</p>
+<pre dir="ltr"><code class="language-routeros">/ip firewall filter
+add chain=input action=accept connection-state=established,related,untracked comment="INPUT - Allow Established Related"
+add chain=input action=drop connection-state=invalid comment="INPUT - Drop Invalid"
+add chain=input action=accept protocol=icmp limit=20,5:packet comment="INPUT - Allow ICMP with controlled rate"
+add chain=input action=accept protocol=tcp dst-port=8291 src-address-list=MGMT-ADMINS in-interface=vlan99-mgmt comment="INPUT - Winbox from Admins"
+add chain=input action=accept protocol=tcp dst-port=22 src-address-list=MGMT-ADMINS in-interface=vlan99-mgmt comment="INPUT - SSH from Admins"
+add chain=input action=accept protocol=udp dst-port=53 src-address-list=INTERNAL-NETWORKS in-interface-list=LAN comment="INPUT - DNS UDP from LAN"
+add chain=input action=accept protocol=tcp dst-port=53 src-address-list=INTERNAL-NETWORKS in-interface-list=LAN comment="INPUT - DNS TCP from LAN"
+# DHCP server rules are scenario-dependent. Add only when this router is the DHCP server.
+add chain=input action=accept protocol=udp src-port=68 dst-port=67 in-interface-list=LAN comment="INPUT - DHCP client requests when required"
+# Add a VPN rule only when that VPN is enabled and its actual port is confirmed.
+# add chain=input action=accept protocol=udp dst-port=13231 in-interface-list=WAN comment="INPUT - WireGuard example, review port"
+add chain=input action=drop in-interface-list=WAN comment="INPUT - DROP New WAN Access"
+add chain=input action=drop comment="INPUT - DROP Everything Else"</code></pre>
+<p data-en="The invalid rule is recommended by MikroTik, but asymmetric routing can make valid flows appear invalid. If the design has multiple paths, IPsec, ECMP or policy routing, inspect connection tracking and return-path symmetry before enforcing it globally." data-fa="MikroTik Drop کردن invalid را توصیه می‌کند، اما در Asymmetric Routing ممکن است Flow معتبر invalid دیده شود. اگر طراحی دارای چند مسیر، IPsec، ECMP یا Policy Routing است، پیش از اعمال سراسری، Connection Tracking و تقارن مسیر برگشت را بررسی کنید.">The invalid rule is recommended by MikroTik, but asymmetric routing requires review.</p></section>
+
+<section id="services-dns"><h2 data-en="Hardening RouterOS Services and DNS" data-fa="Hardening سرویس‌های RouterOS و DNS">Hardening RouterOS Services and DNS</h2>
+<p data-en="Firewall filtering and service binding are complementary. Disable services that are not used. Restrict Winbox and SSH at the service layer as well as in the firewall. If allow-remote-requests is enabled, DNS must never be exposed on WAN; permit both UDP and TCP 53 only from approved LAN networks." data-fa="Firewall Filter و محدودکردن Service مکمل یکدیگرند. سرویس‌های بدون استفاده را Disable کنید. Winbox و SSH را هم در Service و هم در Firewall محدود کنید. اگر allow-remote-requests فعال است، DNS هرگز نباید روی WAN در دسترس باشد؛ هر دو UDP و TCP روی Port 53 فقط از LAN مجاز پذیرفته شوند.">Firewall filtering and service binding are complementary.</p>
+<pre dir="ltr"><code class="language-routeros">/ip service
+set telnet disabled=yes
+set ftp disabled=yes
+set www disabled=yes
+set api disabled=yes
+set api-ssl disabled=yes
+set ssh address=10.10.99.0/24
+set winbox address=10.10.99.0/24
+/ip ssh set strong-crypto=yes
+/ip dns set allow-remote-requests=yes</code></pre>
+<p data-en="The final DNS command is intentional only if the router is the approved DNS cache. Otherwise use allow-remote-requests=no. DHCP needs an input rule only when clients send DHCP requests to this router's local DHCP server; do not add it merely because DHCP exists somewhere in the network." data-fa="فرمان DNS فقط زمانی درست است که Router Cache DNS مورد تأیید باشد؛ در غیر این صورت allow-remote-requests=no بگذارید. DHCP فقط وقتی به Rule در Input نیاز دارد که Clientها به DHCP Server محلی همین Router درخواست بفرستند؛ صرف وجود DHCP در شبکه دلیل افزودن Rule نیست.">Use allow-remote-requests=no when the router is not the approved DNS cache.</p></section>
+
+<section id="forward-policy"><h2 data-en="Protecting Internal Networks: FORWARD Chain" data-fa="محافظت از شبکه‌های داخلی: FORWARD Chain">Protecting Internal Networks: FORWARD Chain</h2>
+<p data-en="Forward rules protect clients and control Internet, inter-VLAN and published-service traffic. NAT is not permission: firewall filter is permission, while NAT is address translation. Every business flow must be an explicit allow before a segmentation or final drop." data-fa="Ruleهای Forward از Clientها محافظت و ترافیک Internet، Inter-VLAN و سرویس‌های Published را کنترل می‌کنند. NAT مجوز نیست: Firewall Filter مجوز است و NAT فقط Address Translation انجام می‌دهد. هر Business Flow باید پیش از Dropهای Segmentation یا Final Drop به‌صورت Explicit Allow شود.">Forward rules protect clients and control routed traffic. NAT is not permission.</p>
+<pre dir="ltr"><code class="language-routeros">/ip firewall filter
+add chain=forward action=accept connection-state=established,related,untracked comment="FORWARD - Allow Established Related"
+add chain=forward action=drop connection-state=invalid comment="FORWARD - Drop Invalid"
+add chain=forward action=drop connection-state=new connection-nat-state=!dstnat in-interface-list=WAN comment="FORWARD - Drop New WAN Traffic Not DSTNATed"
+add chain=forward action=accept src-address=10.10.10.0/24 dst-address=10.10.20.50 protocol=tcp dst-port=443 comment="FORWARD - Users to App HTTPS"
+add chain=forward action=accept src-address=10.10.99.0/24 dst-address-list=INTERNAL-NETWORKS protocol=tcp dst-port=22,443,3389 comment="FORWARD - Mgmt Administrative Services"
+add chain=forward action=accept src-address=10.10.10.0/24 out-interface-list=WAN protocol=tcp dst-port=80,443 comment="FORWARD - Users Internet Web"
+add chain=forward action=accept src-address=10.10.40.0/24 out-interface-list=WAN protocol=tcp dst-port=80,443 comment="FORWARD - Guest Internet Web"
+add chain=forward action=drop src-address-list=GUEST-NETWORKS dst-address-list=INTERNAL-NETWORKS log=yes log-prefix="DROP_GUEST " limit=10,5:packet comment="FORWARD - Drop Guest to Internal"
+add chain=forward action=drop src-address=10.10.10.0/24 dst-address-list=SERVER-NETWORKS comment="FORWARD - Drop Other Users to Servers"
+add chain=forward action=drop src-address-list=INTERNAL-NETWORKS dst-address-list=INTERNAL-NETWORKS log=yes log-prefix="DROP_INTERVLAN " limit=10,5:packet comment="FORWARD - Drop Unauthorized Inter-VLAN"
+add chain=forward action=drop in-interface-list=WAN log=yes log-prefix="DROP_WAN " limit=10,5:packet comment="FORWARD - Drop Unapproved WAN"
+add chain=forward action=drop log=yes log-prefix="DROP_FORWARD " limit=10,5:packet comment="FORWARD - DROP Everything Else"</code></pre>
+<p data-en="Add DNS, NTP, backup, monitoring, PBX and VoIP rules only after documenting the actual server addresses and ports. Do not hard-code universal SIP/RTP ranges without checking the PBX vendor. Guest must be Internet-only. VoIP should reach only the PBX and required services. Published web servers require an explicit dstnat rule and a matching forward accept rule." data-fa="Ruleهای DNS، NTP، Backup، Monitoring، PBX و VoIP را فقط پس از ثبت Address و Port واقعی اضافه کنید. Rangeهای SIP/RTP را بدون بررسی Vendor مربوط به PBX Hard-Code نکنید. Guest فقط به Internet دسترسی داشته باشد. VoIP فقط به PBX و سرویس‌های لازم برسد. Web Server منتشرشده هم به DST-NAT واقعی و هم Rule مجازکننده در Forward نیاز دارد.">Add business-service rules only after documenting real addresses and ports.</p>
+<figure><img src="/assets/img/articles/content/MikroTik VLAN Firewall Topology.png" loading="lazy" decoding="async" alt="MikroTik enterprise VLAN firewall topology with Users Servers VoIP Guest and Management networks"><figcaption data-en="Default deny between VLANs, with explicit service-based exceptions." data-fa="بین VLANها Default Deny برقرار است و فقط Exceptionهای Service-Based مجاز هستند.">Default deny between VLANs, with explicit service-based exceptions.</figcaption></figure></section>
+
+<section id="fasttrack"><h2 data-en="Should We Use FastTrack in Enterprise Networks?" data-fa="آیا FastTrack برای شبکه سازمانی مناسب است؟">Should We Use FastTrack in Enterprise Networks?</h2>
+<p data-en="FastTrack can bypass parts of firewall, queues, mangle, IPsec, traffic accounting, policy routing and monitoring processing. It is not enabled in the base configuration here. If the organization uses queues, IPsec, advanced routing or detailed accounting, test impact first and exclude affected traffic. Existing connections may also retain old processing until they expire or are cleared under an approved change plan." data-fa="FastTrack می‌تواند بخشی از پردازش Firewall، Queue، Mangle، IPsec، Traffic Accounting، Policy Routing و Monitoring را Bypass کند. در Configuration اصلی این مقاله فعال نیست. اگر سازمان از Queue، IPsec، Routing پیشرفته یا Accounting دقیق استفاده می‌کند، ابتدا Impact را تست و ترافیک متأثر را مستثنا کنید. Connectionهای موجود نیز ممکن است تا پایان عمر یا Clear کنترل‌شده، پردازش قبلی را حفظ کنند.">FastTrack is intentionally omitted from the base policy.</p></section>
+
+<section id="ordering"><h2 data-en="Why Firewall Rule Order Matters" data-fa="چرا ترتیب Ruleهای Firewall مهم است؟">Why Firewall Rule Order Matters</h2>
+<p data-en="RouterOS evaluates filter rules from top to bottom. The first terminating action wins. A broad accept above a segmentation drop, or a final drop above an application allow, changes the policy. Use this operational order: established/related, invalid, critical infrastructure, management, required services, inter-VLAN allows, Internet allows, WAN protection, segmentation drops, final drop." data-fa="RouterOS Ruleهای Filter را از بالا به پایین بررسی می‌کند و اولین Action نهایی تعیین‌کننده است. Accept گسترده بالاتر از Drop Segmentation یا Final Drop بالاتر از Allow برنامه، Policy را تغییر می‌دهد. ترتیب عملیاتی پیشنهادی: Established/Related، Invalid، زیرساخت حیاتی، Management، سرویس‌های لازم، Allowهای Inter-VLAN، Allow اینترنت، حفاظت WAN، Dropهای Segmentation و Final Drop.">RouterOS evaluates filter rules from top to bottom.</p>
+<figure><img src="/assets/img/articles/content/MikroTik Firewall Rule Order Infographic.png" loading="lazy" decoding="async" alt="MikroTik RouterOS firewall rule order best practices for Input and Forward chains"><figcaption data-en="Place narrow permits before broad drops and verify counters after each change." data-fa="Permitهای محدود را پیش از Dropهای گسترده قرار دهید و پس از هر تغییر Counterها را بررسی کنید.">Place narrow permits before broad drops.</figcaption></figure></section>
+
+<section id="troubleshooting"><h2 data-en="Firewall Troubleshooting" data-fa="عیب‌یابی Firewall">Firewall Troubleshooting</h2>
+<figure><img src="/assets/img/articles/content/MikroTik Firewall Troubleshooting Flow.png" loading="lazy" decoding="async" alt="MikroTik firewall troubleshooting flow using counters connections Torch packet sniffer and logs"><figcaption data-en="Start with the path, then counters, connections, Torch and packet capture." data-fa="از مسیر شروع کنید، سپس Counter، Connection، Torch و Packet Capture را بررسی کنید.">Start with the path, then counters, connections, Torch and packet capture.</figcaption></figure>
+<pre dir="ltr"><code class="language-routeros">/ip firewall filter print
+/ip firewall filter print stats
+/ip firewall connection print
+/tool torch interface=vlan10-users
+/tool sniffer quick interface=vlan10-users ip-protocol=tcp port=443
+/log print where message~"DROP_"
+/ping 10.10.20.50
+/tool traceroute 1.1.1.1</code></pre>
+<p data-en="Packets and bytes are evidence. A zero counter on an expected allow usually means wrong rule order, interface, address list, source/destination or that another rule matched first. If users have no Internet, check forward permission, srcnat/masquerade, the default route, DNS and WAN membership. If the router pings but the client cannot browse, the router-originated ping uses output, while the client flow uses forward. If Guest reaches Servers, inspect established connections, address lists, VLAN/bridge design and hardware offload assumptions. Do not use logging on every drop without a rate limit: attacks can cause CPU load and log flooding." data-fa="Packets و Bytes شواهد اصلی هستند. Counter صفر روی Allow مورد انتظار معمولاً یعنی Rule Order، Interface، Address List، Source/Destination اشتباه است یا Rule دیگری زودتر Match شده است. اگر کاربران Internet ندارند، Forward Permission، srcnat/masquerade، Default Route، DNS و عضویت WAN را بررسی کنید. Ping خود Router از Output استفاده می‌کند، اما Flow Client از Forward عبور می‌کند. اگر Guest به Server می‌رسد، Connectionهای Established، Address List، طراحی VLAN/Bridge و فرضیات Hardware Offload را بررسی کنید. روی همه Dropها بدون Rate Limit Logging نگذارید چون Attack می‌تواند CPU و Log Flood ایجاد کند.">Packets and bytes are evidence.</p></section>
+
+<section id="testing"><h2 data-en="Testing Matrix" data-fa="ماتریس تست">Testing Matrix</h2>
+<div class="table-responsive"><table><thead><tr><th data-en="Source" data-fa="مبدأ">Source</th><th data-en="Destination" data-fa="مقصد">Destination</th><th data-en="Service" data-fa="سرویس">Service</th><th data-en="Expected" data-fa="نتیجه مورد انتظار">Expected</th></tr></thead><tbody>
+<tr><td>Admin PC</td><td>MikroTik</td><td>Winbox</td><td>Allow</td></tr><tr><td>Users</td><td>MikroTik</td><td>Winbox</td><td>Drop</td></tr><tr><td>Internet</td><td>MikroTik</td><td>Winbox</td><td>Drop</td></tr><tr><td>Users</td><td>Internet</td><td>HTTP/HTTPS</td><td>Allow</td></tr><tr><td>Guest</td><td>Internet</td><td>HTTP/HTTPS</td><td>Allow</td></tr><tr><td>Guest</td><td>Servers</td><td>Any</td><td>Drop</td></tr><tr><td>Users</td><td>10.10.20.50</td><td>TCP 443</td><td>Allow</td></tr><tr><td>Users</td><td>Server VLAN</td><td>Other</td><td>Drop</td></tr><tr><td>Internet</td><td>LAN</td><td>New / No DST-NAT</td><td>Drop</td></tr>
+</tbody></table></div><p data-en="Run every row from the real source and destination before production deployment. Test fresh and existing connections separately." data-fa="پیش از Production Deployment تمام ردیف‌ها را از Source و Destination واقعی اجرا کنید. Connectionهای جدید و موجود را جداگانه تست کنید.">Run every row before production deployment.</p></section>
+
+<section id="advanced"><h2 data-en="Advanced Notes and Production Checklist" data-fa="نکات Advanced و Checklist Production">Advanced Notes and Production Checklist</h2>
+<p data-en="RouterOS also provides /ip firewall raw for advanced filtering before connection tracking. RAW can help with bogon or invalid-source filtering, but a large RAW design is outside this article. IPv4 hardening does not secure IPv6. If IPv6 is enabled, build and test a separate /ipv6 firewall filter policy." data-fa="RouterOS برای Filtering پیشرفته، /ip firewall raw را نیز دارد که پیش از Connection Tracking اجرا می‌شود و برای Bogon یا Invalid Source مفید است؛ Configuration بزرگ RAW خارج از محدوده این مقاله است. Hardening IPv4، IPv6 را امن نمی‌کند. اگر IPv6 فعال است، Policy جداگانه در /ipv6 firewall filter بسازید و تست کنید.">RAW and IPv6 require separate designs.</p>
+<ul><li data-en="Disable unused services and management exposure on WAN." data-fa="سرویس‌های بدون استفاده و دسترسی Management از WAN را Disable کنید.">Disable unused services and management exposure on WAN.</li><li data-en="Use meaningful comments, backups, Safe Mode and supported RouterOS releases." data-fa="از Comment معنادار، Backup، Safe Mode و Releaseهای پشتیبانی‌شده RouterOS استفاده کنید.">Use meaningful comments, backups, Safe Mode and supported RouterOS releases.</li><li data-en="Review and remove obsolete rules periodically." data-fa="Ruleهای قدیمی را به‌صورت دوره‌ای Review و حذف کنید.">Review and remove obsolete rules periodically.</li></ul>
+<p data-en="Official references: MikroTik Filter, Connection Tracking, Services, DNS and Securing Your Router documentation." data-fa="مراجع رسمی: مستندات MikroTik برای Filter، Connection Tracking، Services، DNS و Securing Your Router."><a href="https://help.mikrotik.com/docs/display/ROS/Filter">MikroTik Filter</a> · <a href="https://help.mikrotik.com/docs/display/ROS/Connection+tracking">Connection Tracking</a> · <a href="https://help.mikrotik.com/docs/display/ROS/Services">Services</a> · <a href="https://help.mikrotik.com/docs/display/ROS/DNS">DNS</a></p></section>
+HTML;
+
+        $localizations = [
+            'en' => ['title' => $enTitle, 'meta_title' => 'MikroTik Firewall Hardening with Input and Forward Chains | Meet AJ', 'description' => $enDescription, 'keywords' => ['MikroTik Firewall Hardening', 'RouterOS v7 Firewall', 'MikroTik Input Chain', 'MikroTik Forward Chain', 'MikroTik Enterprise Firewall', 'MikroTik VLAN Firewall', 'MikroTik Security Best Practices', 'MikroTik Firewall Rules'], 'faq' => [['What is the difference between input and forward?', 'Input protects services on the router itself; forward controls traffic routed through the router.'], ['Should FastTrack be enabled blindly?', 'No. Review queues, IPsec, mangle, policy routing, accounting and monitoring first.']]],
+            'fa' => ['title' => $faTitle, 'meta_title' => 'هاردنینگ فایروال MikroTik با Input و Forward Chain | Meet AJ', 'description' => $faDescription, 'keywords' => ['هاردنینگ میکروتیک', 'امن سازی فایروال میکروتیک', 'Input Chain میکروتیک', 'Forward Chain میکروتیک', 'فایروال سازمانی میکروتیک', 'امنیت RouterOS', 'فایروال VLAN میکروتیک'], 'faq' => [['تفاوت Input و Forward چیست؟', 'Input از سرویس‌های خود Router محافظت می‌کند و Forward ترافیک Routed را کنترل می‌کند.'], ['آیا FastTrack را Blindly فعال کنیم؟', 'خیر. Queue، IPsec، Mangle، Policy Routing، Accounting و Monitoring را بررسی کنید.']]],
+        ];
+        $translationKey = (string) Str::uuid();
+        $category = Category::where('language', 'en')->where('slug', 'mikrotik')->first();
+        if (! $category) {
+            $category = Category::create(['translation_key' => (string) Str::uuid(), 'name' => 'MikroTik', 'slug' => 'mikrotik', 'language' => 'en']);
+        }
+        $schema = ['@context' => 'https://schema.org', '@type' => 'Article', 'headline' => $enTitle, 'description' => $enDescription, 'inLanguage' => 'en', 'image' => $banner, 'author' => ['@type' => 'Person', 'name' => 'AmirHossein Jalalian'], 'publisher' => ['@type' => 'Organization', 'name' => 'Meet AJ']];
+        Article::create(['title' => $enTitle, 'slug' => $slug, 'language' => 'en', 'translation_key' => $translationKey, 'excerpt' => $enDescription, 'content' => $content, 'featured_image' => $banner, 'category_id' => $category->id, 'meta_title' => $localizations['en']['meta_title'], 'meta_description' => $enDescription, 'seo_data' => ['og_title' => $enTitle, 'og_description' => $enDescription, 'og_image' => $banner, 'twitter_card' => 'summary_large_image', 'twitter_title' => $enTitle, 'twitter_description' => $enDescription, 'twitter_image' => $banner, 'schema' => $schema], 'presentation' => ['localizations' => $localizations, 'content_language' => 'en', 'hero_title_en' => $enTitle, 'hero_title_fa' => $faTitle, 'excerpt_translations' => ['fa' => $faDescription], 'thumbnail' => $banner, 'gallery' => $banner, 'image_alt_en' => 'MikroTik Firewall Hardening Network Blueprint', 'image_alt_fa' => 'بلوپرینت هاردنینگ فایروال MikroTik برای شبکه سازمانی', 'image_alt' => 'MikroTik Firewall Hardening Network Blueprint', 'filter_class' => 'filter-mikrotik', 'card_title_en' => $enTitle, 'card_title_fa' => $faTitle, 'card_excerpt_en' => $enDescription, 'card_excerpt_fa' => $faDescription], 'sort_order' => 1, 'status' => 'published', 'published_at' => now()]);
+    }
+
+    public function down(): void
+    {
+        Article::where('slug', 'mikrotik-firewall-hardening-input-forward-chain')->delete();
+    }
+};

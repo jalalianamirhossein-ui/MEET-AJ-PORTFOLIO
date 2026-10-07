@@ -1,8 +1,10 @@
 # Documentation QA — sync report
 
-**Date:** 2026-09-18 (evening documentation sync)  
-**Scope:** documentation only. No application behaviour change in this pass. No git commit.  
-**Result:** **PASS**  
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
+**Date:** 2026-09-18 (evening documentation sync)
+**Scope:** documentation only. No application behaviour change in this pass. No git commit.
+**Result:** **PASS**
 **Current source of truth:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md)
 
 Earlier reorganisation history (2026-09-17 moves, deletes = 0, link repair) remains valid background; this file now states **what is current after the 2026-09-18 product work**.

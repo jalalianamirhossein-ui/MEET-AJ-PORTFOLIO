@@ -7,6 +7,7 @@ use App\Models\ArticleRedirect;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Services\ArticleSeo;
+use App\Services\ArticleLocalization;
 use App\Services\ArticleShareLinks;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,9 +24,7 @@ class ArticleController extends Controller
         $listing = Article::published()
             ->forListing()
             ->with(['category', 'tags'])
-            ->orderByDesc('published_at')
-            ->orderBy('sort_order')
-            ->orderBy('id');
+            ->inDisplayOrder();
 
         $results = null;
         $articles = collect();
@@ -42,9 +41,7 @@ class ArticleController extends Controller
                 ->with(['category', 'tags'])
                 ->search($q)
                 ->withTag($tagSlug)
-                ->orderByDesc('published_at')
-                ->orderBy('sort_order')
-                ->orderBy('id')
+                ->inDisplayOrder()
                 ->paginate(9)
                 ->withQueryString();
         } else {
@@ -63,7 +60,7 @@ class ArticleController extends Controller
         ]);
     }
 
-    public function show(string $slug): View
+    public function show(Request $request, string $slug): View|RedirectResponse
     {
         $article = Article::published()
             ->with(['category', 'tags'])
@@ -71,9 +68,26 @@ class ArticleController extends Controller
             ->where('language', 'en')
             ->first();
         abort_if($article === null, 404);
+        if ($request->query->has('lang')) {
+            return redirect()->to($this->cleanArticleTarget($request, $article), 301);
+        }
+        $localizer = app(ArticleLocalization::class);
+        $languageSeo = [];
+        if (data_get($article->presentation, 'localizations')) {
+            foreach (['en', 'fa'] as $locale) {
+                $localized = $localizer->apply(clone $article, $locale, false);
+                $languageSeo[$locale] = array_intersect_key(
+                    app(ArticleSeo::class)->forArticle($localized),
+                    array_flip(['title', 'description', 'keywords', 'canonical', 'og_title', 'og_description', 'og_url', 'twitter_title', 'twitter_description', 'schema', 'faq_schema', 'breadcrumb'])
+                );
+                $languageSeo[$locale]['share'] = app(ArticleShareLinks::class)->for($localized);
+            }
+        }
+        $article = $localizer->apply($article, $request->cookie('lang') === 'fa' ? 'fa' : 'en');
 
         return view('articles.show', [
             'article' => $article,
+            'languageSeo' => $languageSeo,
             'seo' => app(ArticleSeo::class)->forArticle($article),
             'share' => app(ArticleShareLinks::class)->for($article),
             'related' => $article->relatedArticles(3),
@@ -87,12 +101,15 @@ class ArticleController extends Controller
         $article = $redirect?->article ?: Article::published()->where('slug', $slug)->where('language', 'en')->first();
         abort_if($article === null || $article->language === 'de' || $article->status !== 'published' || $article->published_at === null || $article->published_at->isFuture(), 404);
 
-        $target = $article->path();
-        $query = $request->getQueryString();
-        if ($query) {
-            $target .= '?'.$query;
-        }
+        return redirect()->to($this->cleanArticleTarget($request, $article), 301);
+    }
 
-        return redirect()->to($target, 301);
+    private function cleanArticleTarget(Request $request, Article $article): string
+    {
+        $query = $request->query();
+        unset($query['lang']);
+        $queryString = http_build_query($query, '', '&', PHP_QUERY_RFC3986);
+
+        return $article->path().($queryString !== '' ? '?'.$queryString : '');
     }
 }

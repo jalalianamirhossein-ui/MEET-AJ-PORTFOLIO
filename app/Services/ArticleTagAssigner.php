@@ -78,10 +78,15 @@ class ArticleTagAssigner
     public function slugsFor(Article $article): array
     {
         $specific = [
+            'ubiquiti-unifi-wireless-mesh-network' => ['ubiquiti'],
+            'cisco-catalyst-layer-2-layer-3-switch-hardening' => ['cisco'],
             'netbox-installation-setup-ubuntu' => ['netbox', 'ubuntu', 'linux'],
             'oxidized-network-device-configuration-backup' => ['oxidized', 'ubuntu', 'linux'],
             'nginx-installation-configuration-ubuntu' => ['nginx', 'ubuntu', 'linux'],
+            'nginx-reverse-proxy-multiple-domains-single-ip-443' => ['nginx', 'ubuntu', 'linux'],
             'linux-security-account-access-management' => ['linux'],
+            'linux-security-auditor-bash' => ['linux', 'ubuntu', 'ssh'],
+            'mikrotik-ping-triggered-policy-routing' => ['mikrotik'],
             'mikrotik-unequal-dual-wan-load-balancing-ecmp' => ['mikrotik'],
             'sql-server-automatic-backup-job' => ['sql-server', 'microsoft'],
             'vsphere-standard-switch-vs-distributed-switch' => ['vsphere', 'vmware'],

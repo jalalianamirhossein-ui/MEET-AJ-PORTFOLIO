@@ -1,5 +1,7 @@
 > **HISTORICAL phase log.** This phase installed three resources and a `NewRequests` widget; both the resource set and the widgets changed later. Authoritative admin description: [../current/ADMIN.md](../current/ADMIN.md). Current status: [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md).
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 # Phase 03 — Filament admin
 
 **Phase:** 03

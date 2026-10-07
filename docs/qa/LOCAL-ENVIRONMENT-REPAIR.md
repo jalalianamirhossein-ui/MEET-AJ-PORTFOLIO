@@ -1,5 +1,7 @@
 # Local environment repair — 2026-09-20
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 Scope: this Windows checkout. No production deployment or SMTP delivery was performed.
 
 The checkout had changed since the earlier review. Filament 5.8.2 and Livewire 4.4.5 were already installed, public site assets/manifest/downloads were present, all fifteen migrations had run, and the local SQLite database was populated. Reinstalling dependencies or reimporting content was unnecessary.

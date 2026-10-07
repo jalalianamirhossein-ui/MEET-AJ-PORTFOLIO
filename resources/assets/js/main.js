@@ -18,7 +18,11 @@
   "use strict";
 
   document.querySelectorAll("[data-current-year]").forEach((element) => {
-    element.textContent = String(new Date().getFullYear());
+    const locale = document.documentElement.lang === "fa" ? "fa" : "en";
+    element.textContent = element.getAttribute(`data-${locale}`) || new Intl.DateTimeFormat(
+      locale === "fa" ? "fa-IR-u-ca-persian" : "en-US-u-ca-gregory",
+      { year: "numeric", timeZone: "Asia/Tehran" },
+    ).format(new Date());
   });
 
   const headerToggleBtn = document.querySelector("#menu-toggle");
@@ -457,6 +461,8 @@
         return new Set(matched.slice(0, state.visibleCount));
       };
 
+      const previousPositions = new Map();
+
       const capture = () => {
         const map = new Map();
         items().forEach((el) => {
@@ -505,10 +511,14 @@
         });
       };
 
-      const animateFilter = () => {
+      const animateFilter = ({ loadMore = false } = {}) => {
         const reduce = prefersReducedMotion() || !state.booted;
-        const duration = 420;
+        const duration = 620;
         const first = reduce ? new Map() : capture();
+        const origin = container.getBoundingClientRect();
+        first.forEach((box, el) => {
+          previousPositions.set(el, { left: box.left - origin.left, top: box.top - origin.top });
+        });
         const visible = nextVisible();
 
         items().forEach((el) => {
@@ -535,8 +545,8 @@
             el.style.zIndex = "0";
             const leave = el.animate(
               [
-                { transform: "translate3d(0,0,0)", opacity: 1 },
-                { transform: "translate3d(0,12px,0)", opacity: 0 },
+                { transform: "scale(1)" },
+                { transform: "scale(0)" },
               ],
               {
                 duration: Math.round(duration * 0.85),
@@ -550,16 +560,26 @@
             };
           });
 
+          let entryIndex = 0;
           last.forEach((box, el) => {
-            const prev = first.get(el);
+            const saved = previousPositions.get(el);
+            const prev = first.get(el) || (saved && {
+              left: parent.left + saved.left,
+              top: parent.top + saved.top,
+            });
             if (!prev) {
               el.classList.add("is-flip-enter");
               el.animate(
                 [
-                  { transform: "translate3d(0,14px,0)", opacity: 0 },
-                  { transform: "translate3d(0,0,0)", opacity: 1 },
+                  { transform: "translate3d(0,18px,0) scale(0)" },
+                  { transform: "translate3d(0,0,0) scale(1)" },
                 ],
-                { duration, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+                {
+                  duration,
+                  delay: loadMore ? Math.min(entryIndex++, 5) * 45 : 0,
+                  easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+                  fill: "backwards",
+                },
               ).onfinish = () => el.classList.remove("is-flip-enter");
               return;
             }
@@ -577,7 +597,8 @@
           });
         };
 
-        requestAnimationFrame(run);
+        // Install FLIP transforms before the browser paints the new layout.
+        run();
       };
 
       layout.querySelectorAll(".isotope-filters [data-filter]").forEach((btn) => {
@@ -618,7 +639,7 @@
       if (loadMore && inPortfolio) {
         loadMore.addEventListener("click", () => {
           state.visibleCount += state.batchSize;
-          animateFilter();
+          animateFilter({ loadMore: true });
         });
       }
 
@@ -1065,6 +1086,20 @@
     return path === "/" || path === "/index.html";
   };
 
+  let navigationScrollTimer;
+  const finishNavigationScroll = () => {
+    window.clearTimeout(navigationScrollTimer);
+    window.meetajNavigationScrolling = false;
+  };
+  // Wait for scrolling to settle: a previous scrollend can arrive after a new click.
+  const settleNavigationScroll = () => {
+    if (!window.meetajNavigationScrolling) return;
+    window.clearTimeout(navigationScrollTimer);
+    navigationScrollTimer = window.setTimeout(finishNavigationScroll, 180);
+  };
+  window.addEventListener("scroll", settleNavigationScroll, { passive: true });
+  window.addEventListener("scrollend", settleNavigationScroll);
+
   const scrollToHash = (hash, instant) => {
     if (!hash || hash === "#") return false;
     let section = null;
@@ -1081,10 +1116,28 @@
       el.classList.add("aos-init", "aos-animate");
     });
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    section.scrollIntoView({
-      behavior: instant || reduceMotion ? "auto" : "smooth",
-      block: "start",
+    // Use layout coordinates: reveal transforms must not move the destination.
+    let top = 0;
+    for (let element = section; element; element = element.offsetParent) {
+      top += element.offsetTop;
+    }
+    const padding = parseFloat(window.getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    const margin = parseFloat(window.getComputedStyle(section).scrollMarginTop) || 0;
+    window.clearTimeout(navigationScrollTimer);
+    window.meetajNavigationScrolling = !instant && !reduceMotion;
+    const destination = Math.max(0, top - padding - margin);
+    window.dispatchEvent(new CustomEvent("meetaj:navigationstart", {
+      detail: { top: destination },
+    }));
+    document.querySelectorAll(".meetaj-scroll-reveal").forEach((element) => {
+      element.classList.remove("meetaj-scroll-reveal");
     });
+    window.scrollTo({
+      top: destination,
+      behavior: instant || reduceMotion ? "instant" : "smooth",
+    });
+    // Fallback for browsers without scrollend, including no-op navigation.
+    navigationScrollTimer = window.setTimeout(finishNavigationScroll, 2000);
     return true;
   };
 
@@ -1129,29 +1182,20 @@
   });
 
   let navmenulinks = document.querySelectorAll(".navmenu a");
+  const navSections = [...navmenulinks].map((link) => ({
+    link,
+    section: link.hash ? document.querySelector(link.hash) : null,
+  })).filter(({ section }) => section);
   function navmenuScrollspy() {
-    navmenulinks.forEach((navmenulink) => {
-      if (!navmenulink.hash) return;
-      let section = document.querySelector(navmenulink.hash);
-      if (!section) return;
-
-      // Improve mobile performance for scrollspy
-      let offset = 200;
-      if (window.innerWidth <= 768) {
-        offset = 100; // Reduce offset for mobile
-      }
-
-      let position = window.scrollY + offset;
-      if (
-        position >= section.offsetTop &&
-        position <= section.offsetTop + section.offsetHeight
-      ) {
-        document
-          .querySelectorAll(".navmenu a.active")
-          .forEach((link) => link.classList.remove("active"));
-        navmenulink.classList.add("active");
-      } else {
-        navmenulink.classList.remove("active");
+    const position = window.scrollY + (window.innerWidth <= 768 ? 100 : 200);
+    // Finish all layout reads before changing classes to avoid forced reflows.
+    const active = navSections.find(({ section }) =>
+      position >= section.offsetTop && position < section.offsetTop + section.offsetHeight,
+    )?.link;
+    navSections.forEach(({ link }) => {
+      const selected = link === active;
+      if (link.classList.contains("active") !== selected) {
+        link.classList.toggle("active", selected);
       }
     });
   }
@@ -1207,10 +1251,13 @@
 
   window.addEventListener("load", initArticlesLoadMore);
 
-  // Meet AJ ambient preloader reveal
+  // Give the DevOps loop a visible cycle, including on cached reloads.
   const preloader = document.querySelector("#preloader");
 
   if (preloader) {
+    const preloaderStartedAt = performance.now();
+    const minimumPreloaderDuration = 1400;
+    let preloaderHideScheduled = false;
     let preloaderDismissed = false;
     preloader.setAttribute("aria-busy", "true");
     const hidePreloader = () => {
@@ -1221,13 +1268,21 @@
       preloader.classList.add("hidden");
       window.setTimeout(() => {
         preloader.style.display = "none";
-      }, 200);
+      }, 320);
     };
 
-    // Do not hide meaningful content behind a load-event gate. DOM-ready is
-    // sufficient, while the timeout remains a safe fallback for slow scripts.
-    document.addEventListener("DOMContentLoaded", hidePreloader, { once: true });
-    window.setTimeout(hidePreloader, 900);
+    const schedulePreloaderHide = () => {
+      if (preloaderHideScheduled) return;
+      preloaderHideScheduled = true;
+      window.setTimeout(hidePreloader, Math.max(0,
+        minimumPreloaderDuration - (performance.now() - preloaderStartedAt)));
+    };
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", schedulePreloaderHide, { once: true });
+    } else {
+      schedulePreloaderHide();
+    }
+    window.setTimeout(hidePreloader, 5000);
   }
 
   // ===============================================
@@ -1424,15 +1479,19 @@
 
     const progress = progressBar.querySelector(".scroll-progress");
 
-    window.addEventListener("scroll", () => {
-      const winScroll =
-        document.body.scrollTop || document.documentElement.scrollTop;
-      const height =
-        document.documentElement.scrollHeight -
-        document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      progress.style.width = scrolled + "%";
-    });
+    let progressFrame = null;
+    const updateProgress = () => {
+      if (progressFrame !== null) return;
+      progressFrame = window.requestAnimationFrame(() => {
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = height > 0 ? Math.min(100, Math.max(0, window.scrollY / height * 100)) : 0;
+        progress.style.width = scrolled + "%";
+        progressFrame = null;
+      });
+    };
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress, { passive: true });
+    updateProgress();
   }
 
   window.addEventListener("load", initScrollProgress);

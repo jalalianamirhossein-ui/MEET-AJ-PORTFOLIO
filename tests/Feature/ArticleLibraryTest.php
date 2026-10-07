@@ -34,7 +34,7 @@ class ArticleLibraryTest extends TestCase
             ->assertSee('isotope-container', false)
             ->assertSee('articles-load-more', false)
             ->assertSee('Linux', false)
-            ->assertSee('data-fa="رفتن به محتوای اصلی"', false)
+            ->assertDontSee('skip-link', false)
             ->assertSee('data-fa="نمایش مقالات بیشتر"', false)
             ->assertSee('article-chip-label', false);
     }
@@ -76,7 +76,8 @@ class ArticleLibraryTest extends TestCase
 
         $this->get('/articles/hidden-draft-needle-xyz')->assertNotFound();
 
-        $published = Article::published()->search('linux')->first();
+        $published = Article::published()->search('linux')
+            ->inDisplayOrder()->first();
         $this->assertNotNull($published);
         $this->get('/articles?q=linux')
             ->assertSee($published->thumbnailUrl(), false)

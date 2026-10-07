@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="{{ data_get($article->presentation, 'content_language', 'en') }}" dir="{{ data_get($article->presentation, 'content_language') === 'fa' ? 'rtl' : 'ltr' }}" @if(data_get($article->presentation, 'localizations')) data-article-language="{{ data_get($article->presentation, 'content_language') }}" @endif>
   <head>
     <title>{{ $seo['title'] }}</title>
     <meta charset="UTF-8" />
@@ -8,6 +8,12 @@
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="{{ $seo['robots'] }}" />
     <link rel="canonical" href="{{ $seo['canonical'] }}" />
+    @if (!empty($seo['keywords']))
+      <meta name="keywords" content="{{ $seo['keywords'] }}" />
+    @endif
+    @foreach ($seo['alternates'] ?? [] as $language => $target)
+      <link rel="alternate" hreflang="{{ $language }}" href="{{ $target }}" />
+    @endforeach
     <meta property="og:type" content="{{ $seo['og_type'] }}" />
     <meta property="og:title" content="{{ $seo['og_title'] }}" />
     <meta property="og:description" content="{{ $seo['og_description'] }}" />
@@ -24,7 +30,7 @@
     @if (!empty($seo['twitter_image']))
       <meta name="twitter:image" content="{{ $seo['twitter_image'] }}" />
     @endif
-    <link href="/assets/img/favicon.png" rel="icon" />
+    <link href="/assets/img/icons/favicon.png" rel="icon" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -35,20 +41,27 @@
     <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
     <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
     <link href="/assets/css/main.css?v=1002" rel="stylesheet" />
-    <link href="/assets/css/articles.css?v=1101" rel="stylesheet" />
+    <link href="/assets/css/articles.css?v=1102" rel="stylesheet" />
     <link href="/assets/css/lang-toggle.css?v=1403" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1405" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
     <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
-    <script type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+    <link href="/assets/css/glass-system.css?v=18" rel="stylesheet" />
+    <link href="/assets/css/article-reading.css?v=3" rel="stylesheet" />
+    <link href="/preloader.css?v=devops-2" rel="stylesheet" />
+    <noscript><style>#preloader { display: none !important; }</style></noscript>
+    @if (!empty($languageSeo))
+      <script id="article-language-seo" type="application/json">{!! json_encode($languageSeo, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+    @endif
+    <script id="article-schema" type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @if (!empty($seo['breadcrumb']))
-      <script type="application/ld+json">{!! json_encode($seo['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+      <script id="article-breadcrumb-schema" type="application/ld+json">{!! json_encode($seo['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+    @endif
+    @if (!empty($seo['faq_schema']))
+      <script id="article-faq-schema" type="application/ld+json">{!! json_encode($seo['faq_schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     @endif
   </head>
   <body class="{{ data_get($article->presentation, 'body_class', 'article-page theme-other') }}" style="{{ $article->accentCustomProperties() }}">
-    <a href="#main-content" class="skip-link sr-only sr-only-focusable"
-      ><span data-en="Skip to main content" data-fa="رفتن به محتوای اصلی">Skip to main content</span></a
-    >
     <button id="menu-toggle" class="menu-toggle d-xl-none" aria-label="Open menu" data-en-aria-label="Open menu" data-fa-aria-label="باز کردن منو" aria-expanded="false" aria-controls="header" type="button">
       <span class="menu-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
       <span class="sr-only" data-en="Open menu" data-fa="باز کردن منو">Open menu</span>
@@ -66,10 +79,10 @@
             <a href="/#resume"><i class="bi bi-file-earmark-text navicon" aria-hidden="true"></i><span data-en="Resume" data-fa="رزومه">Resume</span></a>
           </li>
           <li>
-            <a href="/#services"><i class="bi bi-hdd-stack navicon" aria-hidden="true"></i><span data-en="Services" data-fa="خدمات">Services</span></a>
+            <a href="/articles"><i class="bi bi-journal-text navicon" aria-hidden="true"></i><span data-en="Articles" data-fa="مقالات">Articles</span></a>
           </li>
           <li>
-            <a href="/articles"><i class="bi bi-journal-text navicon" aria-hidden="true"></i><span data-en="Articles" data-fa="مقالات">Articles</span></a>
+            <a href="/#services"><i class="bi bi-hdd-stack navicon" aria-hidden="true"></i><span data-en="Services" data-fa="خدمات">Services</span></a>
           </li>
           <li>
             <a href="/#testimonials"><i class="bi bi-chat-quote navicon" aria-hidden="true"></i><span data-en="Testimonials" data-fa="نظرات">Testimonials</span></a>
@@ -88,7 +101,7 @@
               @include('articles.partials.breadcrumbs')
               <div class="article-meta">
                 @if ($article->published_at)
-                  <time class="meta-date article-date" datetime="{{ $article->published_at->toAtomString() }}">{{ $article->published_at->timezone(config('cms.display_timezone', config('app.timezone')))->format('M j, Y') }}</time>
+                  <x-localized-date class="meta-date article-date" :date="$article->published_at" :locale="data_get($article->presentation, 'content_language', 'en')" />
                 @endif
                 <span class="article-readtime">{{ $article->readingMinutes() }} <span data-en="min read" data-fa="دقیقه مطالعه">min read</span></span>
               </div>
@@ -102,11 +115,29 @@
                   </ul>
                 @endif
               </div>
-              <h1 class="article-title hero-title" data-i18n-lock data-en="{{ $article->englishTitle() }}">{{ $article->englishTitle() }}</h1>
-              <p class="article-excerpt hero-subtitle" data-en="{{ $article->englishExcerpt() }}" data-fa="{{ data_get($article->presentation, 'excerpt_translations.fa', $article->englishExcerpt()) }}">{{ $article->englishExcerpt() }}</p>
+              @if (data_get($article->presentation, 'localizations'))
+                @php $locale = data_get($article->presentation, 'content_language', 'en'); @endphp
+                <h1 class="article-title hero-title" data-fa="{{ data_get($article->presentation, 'localizations.fa.title') }}" data-en="{{ data_get($article->presentation, 'localizations.en.title') }}">{{ data_get($article->presentation, 'localizations.'.$locale.'.title') }}</h1>
+                <p class="article-excerpt hero-subtitle" data-fa="{{ data_get($article->presentation, 'localizations.fa.description') }}" data-en="{{ data_get($article->presentation, 'localizations.en.description') }}">{{ data_get($article->presentation, 'localizations.'.$locale.'.description') }}</p>
+              @elseif (data_get($article->presentation, 'content_language') === 'fa')
+                <h1 class="article-title hero-title" lang="fa" dir="rtl">{{ data_get($article->presentation, 'hero_title_fa', $article->title) }}</h1>
+                <p class="article-excerpt hero-subtitle" lang="fa" dir="rtl">{{ data_get($article->presentation, 'excerpt_translations.fa', $article->excerpt) }}</p>
+              @else
+                <h1 class="article-title hero-title" data-i18n-lock data-en="{{ $article->englishTitle() }}">{{ $article->englishTitle() }}</h1>
+                <p class="article-excerpt hero-subtitle" data-en="{{ $article->englishExcerpt() }}" data-fa="{{ data_get($article->presentation, 'excerpt_translations.fa', $article->englishExcerpt()) }}">{{ $article->englishExcerpt() }}</p>
+              @endif
             </div>
             <figure class="article-hero-media">
-              <img class="article-hero-thumbnail" src="{{ $article->thumbnailUrl() }}" decoding="async" fetchpriority="high" alt="{{ data_get($article->presentation, 'image_alt') ?: $article->title }}" />
+              @php $heroLocale = data_get($article->presentation, 'content_language', 'en'); @endphp
+              <img class="article-hero-thumbnail" src="{{ $article->thumbnailUrl() }}" decoding="async" fetchpriority="high" alt="{{ data_get($article->presentation, 'localizations.'.$heroLocale.'.image_alt') ?: (data_get($article->presentation, 'image_alt') ?: $article->title) }}"
+                @if (data_get($article->presentation, 'localizations.en.image_alt'))
+                  data-en-alt="{{ data_get($article->presentation, 'localizations.en.image_alt') }}" data-fa-alt="{{ data_get($article->presentation, 'localizations.fa.image_alt') }}"
+                  title="{{ data_get($article->presentation, 'localizations.'.$heroLocale.'.image_title') }}" data-en-title="{{ data_get($article->presentation, 'localizations.en.image_title') }}" data-fa-title="{{ data_get($article->presentation, 'localizations.fa.image_title') }}"
+                @endif
+              />
+              @if (data_get($article->presentation, 'localizations.en.image_caption'))
+                <figcaption><span data-en="{{ data_get($article->presentation, 'localizations.en.image_caption') }}" data-fa="{{ data_get($article->presentation, 'localizations.fa.image_caption') }}">{{ data_get($article->presentation, 'localizations.'.$heroLocale.'.image_caption') }}</span></figcaption>
+              @endif
             </figure>
           </div>
         </div>
@@ -118,7 +149,7 @@
             $articleContent = str_replace('my-profile-img.jpg', 'my-profile-img-2.jpg', $article->displayContent());
             $articleContent = str_replace(
                 ['../index.html#portfolio', 'https://meetaj.ir/#portfolio', 'Back to portfolio', 'بازگشت به نمونه‌کارها'],
-                ['https://meetaj.ir/articles', 'https://meetaj.ir/articles', 'Back to Article', 'بازگشت به مقاله'],
+                [route('articles.index', [], false), route('articles.index', [], false), 'Back to articles', 'بازگشت به فهرست مقاله‌ها'],
                 $articleContent
             );
             $standardToc = [
@@ -143,8 +174,8 @@
           <div class="article-shell{{ $tocHtml ? ' article-shell--with-toc' : '' }}">
             @if ($tocHtml)
               <aside class="article-toc" aria-label="Table of contents" data-en-aria-label="Table of contents" data-fa-aria-label="فهرست مطالب">
-                <p class="article-toc-title" data-en="On this page" data-fa="در این مقاله">On this page</p>
-                <nav class="article-toc-nav">
+                <p id="article-toc-heading" class="article-toc-title" data-en="On this page" data-fa="در این مقاله">On this page</p>
+                <nav class="article-toc-nav" tabindex="0" aria-labelledby="article-toc-heading" @if(data_get($article->presentation, 'content_language') === 'fa') lang="fa" dir="rtl" @endif>
                   <ul class="article-toc-list">
                     {!! $tocHtml !!}
                   </ul>
@@ -152,15 +183,15 @@
               </aside>
             @endif
             <div class="article-reading">
-              <article class="article-body">
+              <article class="article-body" lang="{{ data_get($article->presentation, 'content_language', 'en') }}" dir="{{ data_get($article->presentation, 'content_language') === 'fa' ? 'rtl' : 'ltr' }}">
                 {!! $articleContent !!}
               </article>
               @include('articles.partials.related')
               @include('articles.partials.author')
               <nav class="article-nav article-footer-nav" aria-label="Article footer navigation">
-                <a class="article-back" href="https://meetaj.ir/articles">
+                <a class="article-back" href="{{ route('articles.index', [], false) }}">
                   <i class="bi bi-arrow-left" aria-hidden="true"></i>
-                  <span data-en="Back to Article" data-fa="بازگشت به مقاله">Back to Article</span>
+                  <span data-en="Back to articles" data-fa="بازگشت به فهرست مقاله‌ها">{{ data_get($article->presentation, 'content_language') === 'fa' ? 'بازگشت به فهرست مقاله‌ها' : 'Back to articles' }}</span>
                 </a>
               </nav>
               @include('articles.partials.share')
@@ -279,7 +310,7 @@
             <div class="footer-bottom-content">
               <div class="copyright">
                 <p>
-                  © <span>{{ now()->year }}</span>
+                  © <x-localized-year />
                   <strong
                     data-en="AmirHossein Jalalian"
                     data-fa="امیرحسین جلالیان"
@@ -304,7 +335,7 @@
         </div>
       </div>
     </footer>
-    <div id="preloader"></div>
+    @include('partials.devops-preloader')
     <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
     <script src="/assets/vendor/aos/aos.js" defer></script>
     <script src="/assets/vendor/typed.js/typed.umd.js" defer></script>
@@ -314,8 +345,9 @@
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
-    <script src="/assets/js/main.js?v=1414" defer></script>
-    <script src="/assets/js/i18n.js?v=1403" defer></script>
+    <script src="/assets/js/main.js?v=1420" defer></script>
+    <script src="/assets/js/scroll-reveal.js?v=4" defer></script>
+    <script src="/assets/js/i18n.js?v=1407" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {

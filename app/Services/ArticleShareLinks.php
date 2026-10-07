@@ -13,7 +13,8 @@ class ArticleShareLinks
     {
         $url = $article->canonicalUrl();
         $encodedUrl = rawurlencode($url);
-        $encodedTitle = rawurlencode($article->title);
+        $locale = data_get($article->presentation, 'content_language', 'en');
+        $encodedTitle = rawurlencode(data_get($article->presentation, 'localizations.'.$locale.'.title') ?: $article->title);
 
         return [
             'url' => $url,

@@ -1,0 +1,1828 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>
+      How to Deploy MSI Applications to Domain Computers Using Group Policy |
+      MeetAJ
+    </title>
+    <meta name="article:content-language" content="en" />
+    <meta
+      name="description"
+      content="Deploy 7-Zip MSI to domain computers with Group Policy: secure share permissions, computer targeting, startup processing, verification, troubleshooting and upgrades."
+    />
+    <meta
+      name="keywords"
+      content="Deploy MSI via Group Policy, GPO Software Installation, Active Directory MSI Deployment, Install MSI Domain Computers, Windows Server Group Policy, MSI Deployment Active Directory"
+    />
+    <meta
+      property="og:title"
+      content="How to Deploy MSI Applications to Domain Computers Using Group Policy"
+    />
+    <meta
+      property="og:description"
+      content="Deploy 7-Zip MSI to domain computers with Group Policy: secure share permissions, computer targeting, startup processing, verification, troubleshooting and upgrades."
+    />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:image"
+      content="/assets/img/articles/banners/deploy-msi-active-directory-group-policy.png"
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/deploy-msi-active-directory-group-policy"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="canonical"
+      href="https://meetaj.ir/articles/deploy-msi-active-directory-group-policy"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "How to Deploy MSI Applications to Domain Computers Using Group Policy",
+        "description": "Deploy 7-Zip MSI to domain computers with Group Policy: secure share permissions, computer targeting, startup processing, verification, troubleshooting and upgrades.",
+        "inLanguage": "en",
+        "image": "/assets/img/articles/banners/deploy-msi-active-directory-group-policy.png",
+        "datePublished": "2026-10-06T00:00:00+03:30",
+        "dateModified": "2026-10-06T00:00:00+03:30",
+        "author": {
+          "@type": "Person",
+          "name": "AmirHossein Jalalian",
+          "url": "https://meetaj.ir/"
+        }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "inLanguage": "en",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Can Software Installation deploy an EXE directly?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Not as an MSI package. Obtain the vendor's supported MSI or use a separate deployment method designed for EXE installers."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does the MSI not install immediately after gpupdate?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Computer Software Installation needs foreground startup processing. Refresh policy, then restart in a maintenance window with network access; synchronous processing may require a further startup cycle."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why must I use a UNC path?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A UNC identifies the shared source for every client. Local disk paths and user mapped drives do not reliably identify that source in computer startup context."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do Domain Users need access to the MSI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Not for this computer-assigned scenario. Target computer accounts need repository read access. User deployments have different access requirements."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I deploy to only a few computers?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Add their computer accounts to GG-Deploy-7Zip, link the GPO to their OU and give the group Read plus Apply Group Policy. Remove broad Apply grants and restart after membership changes."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What if 7-Zip is already installed?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The result depends on the installed product identity, version, installation context and MSI upgrade rules. It may enter maintenance, upgrade or fail with a version conflict. Test existing installations in the pilot."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does an applied GPO prove that installation succeeded?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Verify the application version, launch it as a standard user and correlate MsiInstaller events with the deployment attempt."
+            }
+          }
+        ]
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "en": {
+          "title": "How to Deploy MSI Applications to Domain Computers Using Group Policy",
+          "meta_title": "How to Deploy MSI Applications to Domain Computers Using Group Policy | MeetAJ",
+          "description": "Deploy 7-Zip MSI to domain computers with Group Policy: secure share permissions, computer targeting, startup processing, verification, troubleshooting and upgrades.",
+          "keywords": [
+            "Deploy MSI via Group Policy",
+            "GPO Software Installation",
+            "Active Directory MSI Deployment",
+            "Install MSI Domain Computers",
+            "Windows Server Group Policy",
+            "MSI Deployment Active Directory"
+          ],
+          "faq": [
+            [
+              "Can Software Installation deploy an EXE directly?",
+              "Not as an MSI package. Obtain the vendor's supported MSI or use a separate deployment method designed for EXE installers."
+            ],
+            [
+              "Why does the MSI not install immediately after gpupdate?",
+              "Computer Software Installation needs foreground startup processing. Refresh policy, then restart in a maintenance window with network access; synchronous processing may require a further startup cycle."
+            ],
+            [
+              "Why must I use a UNC path?",
+              "A UNC identifies the shared source for every client. Local disk paths and user mapped drives do not reliably identify that source in computer startup context."
+            ],
+            [
+              "Do Domain Users need access to the MSI?",
+              "Not for this computer-assigned scenario. Target computer accounts need repository read access. User deployments have different access requirements."
+            ],
+            [
+              "How do I deploy to only a few computers?",
+              "Add their computer accounts to GG-Deploy-7Zip, link the GPO to their OU and give the group Read plus Apply Group Policy. Remove broad Apply grants and restart after membership changes."
+            ],
+            [
+              "What if 7-Zip is already installed?",
+              "The result depends on the installed product identity, version, installation context and MSI upgrade rules. It may enter maintenance, upgrade or fail with a version conflict. Test existing installations in the pilot."
+            ],
+            [
+              "Does an applied GPO prove that installation succeeded?",
+              "No. Verify the application version, launch it as a standard user and correlate MsiInstaller events with the deployment attempt."
+            ]
+          ]
+        },
+        "fa": {
+          "title": "نصب فایل MSI روی کامپیوترهای Domain از طریق Active Directory Group Policy",
+          "meta_title": "نصب فایل MSI روی کامپیوترهای Domain از طریق Active Directory Group Policy | MeetAJ",
+          "description": "راهنمای عملی نصب MSI روی کلاینت‌های دامین با Group Policy؛ تنظیم Share و NTFS، هدف‌گیری کامپیوتر، بررسی Startup، عیب‌یابی، حذف و ارتقای 7-Zip.",
+          "keywords": [
+            "نصب MSI با Group Policy",
+            "نصب نرم افزار از طریق دامین",
+            "نصب برنامه روی کلاینت های دامین",
+            "Group Policy Software Installation",
+            "آموزش GPO",
+            "Active Directory Software Deployment"
+          ],
+          "faq": [
+            [
+              "آیا EXE را می‌توان مستقیماً با Software Installation نصب کرد؟",
+              "به‌عنوان بسته MSI خیر. MSI پشتیبانی‌شده سازنده را تهیه کنید یا از روش استقرار مستقل مناسب Installerهای EXE استفاده کنید."
+            ],
+            [
+              "چرا MSI بعد از gpupdate فوراً نصب نمی‌شود؟",
+              "Software Installation کامپیوتر به پردازش Foreground هنگام Startup نیاز دارد. Policy را تازه‌سازی و در پنجره نگهداری با دسترسی شبکه Restart کنید؛ پردازش همگام ممکن است به چرخه Startup دیگری نیاز داشته باشد."
+            ],
+            [
+              "چرا باید از مسیر UNC استفاده کنیم؟",
+              "UNC منبع اشتراکی را برای همه کلاینت‌ها مشخص می‌کند. مسیر دیسک محلی و Drive نگاشت‌شده کاربر، آن منبع را در Context کامپیوتر هنگام Startup به شکل قابل اتکا مشخص نمی‌کنند."
+            ],
+            [
+              "آیا Domain Users باید به MSI دسترسی داشته باشند؟",
+              "برای این سناریوی Computer Assignment خیر. حساب کامپیوترهای هدف به Read روی Repository نیاز دارند. نصب در سطح کاربر نیاز دسترسی متفاوتی دارد."
+            ],
+            [
+              "چگونه نصب را فقط روی چند کامپیوتر اجرا کنیم؟",
+              "حساب کامپیوترها را عضو GG-Deploy-7Zip کنید، GPO را به OU آن‌ها Link و به گروه Read و Apply Group Policy بدهید. Apply عمومی را حذف کنید و پس از تغییر عضویت Restart انجام دهید."
+            ],
+            [
+              "اگر 7-Zip قبلاً نصب شده باشد چه می‌شود؟",
+              "نتیجه به هویت محصول نصب‌شده، نسخه، Context نصب و قواعد Upgrade بسته MSI بستگی دارد. ممکن است Maintenance، Upgrade یا خطای تعارض نسخه رخ دهد. نصب‌های قبلی را در Pilot تست کنید."
+            ],
+            [
+              "آیا Applied بودن GPO موفقیت نصب را ثابت می‌کند؟",
+              "خیر. نسخه برنامه را بررسی کنید، آن را با کاربر معمولی اجرا و Eventهای MsiInstaller را با تلاش نصب تطبیق دهید."
+            ]
+          ]
+        }
+      }
+    </script>
+  </head>
+  <body class="article-page theme-microsoft">
+    <h1
+      class="article-title hero-title"
+      data-en="How to Deploy MSI Applications to Domain Computers Using Group Policy"
+      data-fa="نصب فایل MSI روی کامپیوترهای Domain از طریق Active Directory Group Policy"
+    >
+      How to Deploy MSI Applications to Domain Computers Using Group Policy
+    </h1>
+    <p
+      class="article-excerpt hero-subtitle"
+      data-en="Deploy 7-Zip MSI to domain computers with Group Policy: secure share permissions, computer targeting, startup processing, verification, troubleshooting and upgrades."
+      data-fa="راهنمای عملی نصب MSI روی کلاینت‌های دامین با Group Policy؛ تنظیم Share و NTFS، هدف‌گیری کامپیوتر، بررسی Startup، عیب‌یابی، حذف و ارتقای 7-Zip."
+    >
+      Deploy 7-Zip MSI to domain computers with Group Policy: secure share
+      permissions, computer targeting, startup processing, verification,
+      troubleshooting and upgrades.
+    </p>
+    <span class="article-category" data-en="Microsoft" data-fa="مایکروسافت"
+      >Microsoft</span
+    >
+    <img
+      class="article-hero-thumbnail"
+      src="/assets/img/articles/banners/deploy-msi-active-directory-group-policy.png"
+      alt="DC01 Group Policy deployment to Windows clients with FS01 MSI repository"
+    />
+    <nav>
+      <ul>
+        <li class="article-nav-item">
+          <a href="#introduction"
+            ><span
+              data-en="Introduction: deploy to the computer"
+              data-fa="مقدمه: نصب در سطح کامپیوتر"
+              >Introduction: deploy to the computer</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#lab"
+            ><span data-en="Lab scenario" data-fa="سناریوی Lab"
+              >Lab scenario</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#architecture"
+            ><span data-en="Deployment architecture" data-fa="معماری استقرار"
+              >Deployment architecture</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#prerequisites"
+            ><span
+              data-en="Prerequisites and compatibility"
+              data-fa="پیش‌نیازها و سازگاری"
+              >Prerequisites and compatibility</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#share"
+            ><span
+              data-en="Create the software distribution share"
+              data-fa="ایجاد Software Distribution Share"
+              >Create the software distribution share</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#permissions"
+            ><span
+              data-en="Share and NTFS permissions"
+              data-fa="مجوزهای Share و NTFS"
+              >Share and NTFS permissions</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#unc"
+            ><span data-en="Test the UNC path" data-fa="تست مسیر UNC"
+              >Test the UNC path</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#test-ou"
+            ><span data-en="Start with a Test OU" data-fa="شروع از Test OU"
+              >Start with a Test OU</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#gpo"
+            ><span
+              data-en="Create and link the GPO"
+              data-fa="ایجاد و Link کردن GPO"
+              >Create and link the GPO</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#installation"
+            ><span
+              data-en="Configure Software Installation"
+              data-fa="پیکربندی Software Installation"
+              >Configure Software Installation</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#startup-network"
+            ><span
+              data-en="Network availability during startup"
+              data-fa="دسترسی شبکه هنگام Startup"
+              >Network availability during startup</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#apply"
+            ><span
+              data-en="Apply policy and restart"
+              data-fa="اعمال Policy و Restart"
+              >Apply policy and restart</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#verification"
+            ><span
+              data-en="Verify policy and installed application"
+              data-fa="تأیید GPO و نصب برنامه"
+              >Verify policy and installed application</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#dns"
+            ><span
+              data-en="DNS and network troubleshooting"
+              data-fa="عیب‌یابی DNS و شبکه"
+              >DNS and network troubleshooting</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#rsop"
+            ><span
+              data-en="Additional Group Policy diagnostics"
+              data-fa="دستورهای تکمیلی بررسی Group Policy"
+              >Additional Group Policy diagnostics</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#events"
+            ><span
+              data-en="Event Viewer troubleshooting"
+              data-fa="عیب‌یابی با Event Viewer"
+              >Event Viewer troubleshooting</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#root-cause"
+            ><span
+              data-en="Common Problems and Root Cause Analysis"
+              data-fa="مشکلات رایج و تحلیل علت ریشه‌ای"
+              >Common Problems and Root Cause Analysis</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#security-filtering"
+            ><span
+              data-en="Limit deployment with Security Filtering"
+              data-fa="محدود کردن نصب با Security Filtering"
+              >Limit deployment with Security Filtering</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#best-practices"
+            ><span
+              data-en="Enterprise Best Practices"
+              data-fa="بهترین روش‌های استقرار سازمانی"
+              >Enterprise Best Practices</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#uninstall"
+            ><span
+              data-en="Uninstall and scope changes"
+              data-fa="حذف برنامه و تغییر Scope"
+              >Uninstall and scope changes</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#upgrade"
+            ><span
+              data-en="Upgrade and version management"
+              data-fa="Upgrade و مدیریت نسخه"
+              >Upgrade and version management</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#faq"
+            ><span
+              data-en="Frequently asked questions"
+              data-fa="پرسش‌های متداول"
+              >Frequently asked questions</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#modern-tools"
+            ><span
+              data-en="When to consider modern management tools"
+              data-fa="چه زمانی ابزارهای مدیریتی جدیدتر مناسب‌اند"
+              >When to consider modern management tools</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#references"
+            ><span
+              data-en="Official references and validation scope"
+              data-fa="مراجع رسمی و دامنه اعتبارسنجی"
+              >Official references and validation scope</span
+            ></a
+          >
+        </li>
+      </ul>
+    </nav>
+    <article class="article-body" lang="en" dir="ltr">
+      <section id="introduction">
+        <h2
+          data-en="Introduction: deploy to the computer"
+          data-fa="مقدمه: نصب در سطح کامپیوتر"
+        >
+          Introduction: deploy to the computer
+        </h2>
+        <p
+          data-en="Group Policy Software Installation (GPSI) distributes Windows Installer packages through an Active Directory GPO. It suits a small set of predictable MSI applications on domain computers that can reach the corporate network during startup. The GPO describes the assignment; the client obtains the installer from a file share."
+          data-fa="Group Policy Software Installation یا GPSI بسته‌های Windows Installer را با یک GPO در Active Directory توزیع می‌کند. این روش برای تعداد محدودی برنامه MSI و کامپیوترهای عضو دامین که هنگام روشن شدن به شبکه سازمان دسترسی دارند مناسب است. GPO اطلاعات تخصیص برنامه را نگه می‌دارد و کلاینت فایل نصب را از File Share دریافت می‌کند."
+        >
+          Group Policy Software Installation (GPSI) distributes Windows
+          Installer packages through an Active Directory GPO. It suits a small
+          set of predictable MSI applications on domain computers that can reach
+          the corporate network during startup. The GPO describes the
+          assignment; the client obtains the installer from a file share.
+        </p>
+        <p
+          data-en="User Configuration targets user accounts and supports assignment or publication. Computer Configuration targets computer accounts and supports assignment only. We choose computer assignment for 7-Zip so installation does not depend on which employee signs in, and the application is available to every user of the workstation."
+          data-fa="User Configuration حساب کاربر را هدف می‌گیرد و امکان Assigned یا Published دارد. Computer Configuration حساب کامپیوتر را هدف می‌گیرد و فقط Assigned را پشتیبانی می‌کند. برای 7-Zip نصب در سطح کامپیوتر را انتخاب می‌کنیم تا ورود یک کاربر مشخص شرط نصب نباشد و همه کاربران آن سیستم به برنامه دسترسی داشته باشند."
+        >
+          User Configuration targets user accounts and supports assignment or
+          publication. Computer Configuration targets computer accounts and
+          supports assignment only. We choose computer assignment for 7-Zip so
+          installation does not depend on which employee signs in, and the
+          application is available to every user of the workstation.
+        </p>
+        <p
+          data-en="MSI provides installation metadata, product identity and Windows Installer maintenance behavior. An EXE is not a drop-in GPSI package. Confirm that the vendor's MSI supports unattended, per-machine installation before introducing it to production."
+          data-fa="MSI اطلاعات نصب، هویت محصول و رفتار نگهداری Windows Installer را فراهم می‌کند. فایل EXE جایگزین مستقیم بسته GPSI نیست. پیش از استقرار مطمئن شوید MSI سازنده، نصب بدون تعامل کاربر و نصب per-machine را پشتیبانی می‌کند."
+        >
+          MSI provides installation metadata, product identity and Windows
+          Installer maintenance behavior. An EXE is not a drop-in GPSI package.
+          Confirm that the vendor's MSI supports unattended, per-machine
+          installation before introducing it to production.
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/dn789187(v=ws.11)"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft: Software Settings in GPMC</a
+          >
+        </p>
+      </section>
+      <section id="lab">
+        <h2 data-en="Lab scenario" data-fa="سناریوی Lab">Lab scenario</h2>
+        <pre
+          dir="ltr"
+        ><code class="language-text">Domain:             corp.local
+Domain Controller:  DC01.corp.local
+File Server:        FS01.corp.local
+Target OU:          Workstations
+Application:        7-Zip
+MSI:                7zip-x64.msi
+GPO:                Deploy - 7Zip - MSI</code></pre>
+        <pre dir="ltr"><code class="language-text">Active Directory
+        |
+        +-- OU=Workstations
+                 |
+                 +-- PC-001
+                 +-- PC-002
+                 +-- PC-003
+                 |
+                 +-- GPO: Deploy - 7Zip - MSI
+
+File Server
+        |
+        +-- \\FS01\Software$\7Zip\7zip-x64.msi</code></pre>
+        <p
+          data-en="These are lab names. 7zip-x64.msi is the chosen repository filename, not a claim about a vendor download name. Record the actual vendor version, source and hash before copying the approved x64 package under this name. Use the existing domain and its AD DNS in production."
+          data-fa="این نام‌ها متعلق به Lab هستند. نام 7zip-x64.msi برای Repository انتخاب شده و الزاماً نام فایل دانلودشده از سازنده نیست. نسخه واقعی، منبع و Hash بسته تأییدشده x64 را ثبت کنید و سپس آن را با این نام کپی کنید. در Production از دامین موجود و DNS مربوط به Active Directory استفاده کنید."
+        >
+          These are lab names. 7zip-x64.msi is the chosen repository filename,
+          not a claim about a vendor download name. Record the actual vendor
+          version, source and hash before copying the approved x64 package under
+          this name. Use the existing domain and its AD DNS in production.
+        </p>
+      </section>
+      <figure class="article-image">
+        <a
+          href="/assets/img/articles/content/diagram-deploy-msi-active-directory-group-policy.png"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><img
+            src="/assets/img/articles/content/diagram-deploy-msi-active-directory-group-policy.png"
+            alt="MSI deployment topology: DC01 Group Policy, Windows clients PC-001 to PC-003, and the FS01 software repository"
+            width="1672"
+            height="941"
+            loading="lazy"
+            decoding="async"
+        /></a>
+        <figcaption>
+          <span
+            data-en="Deployment topology: DC01 delivers Group Policy to domain computers, which retrieve the MSI package from FS01. Open the diagram to view it at full size."
+            data-fa="معماری استقرار: DC01 پالیسی را به کامپیوترهای دامین می‌رساند و کلاینت‌ها فایل MSI را از FS01 دریافت می‌کنند. برای مشاهده اندازه کامل، دیاگرام را باز کنید."
+            >Deployment topology: DC01 delivers Group Policy to domain
+            computers, which retrieve the MSI package from FS01. Open the
+            diagram to view it at full size.</span
+          >
+        </figcaption>
+      </figure>
+      <section id="architecture">
+        <h2 data-en="Deployment architecture" data-fa="معماری استقرار">
+          Deployment architecture
+        </h2>
+        <pre
+          dir="ltr"
+        ><code class="language-text">                Active Directory
+                       |
+                 Domain Controller
+                    DC01
+                       |
+                    Group Policy
+                       |
+              Deploy - 7Zip - MSI
+                       |
+               OU = Workstations
+                 /     |      \
+                /      |       \
+             PC-001  PC-002   PC-003
+                \      |       /
+                 \     |      /
+                  File Server
+                     FS01
+                       |
+             \\FS01\Software$
+                       |
+              7Zip\7zip-x64.msi</code></pre>
+        <p
+          data-en="The diagram shows logical relationships, not a physical cable layout. DC01 provides policy and directory services; FS01 supplies package bytes. Successful GPO processing and successful MSI retrieval are separate checkpoints."
+          data-fa="این دیاگرام رابطه منطقی اجزا را نشان می‌دهد، نه کابل‌کشی فیزیکی شبکه. DC01 سرویس دایرکتوری و Policy را فراهم می‌کند و FS01 فایل نصب را تحویل می‌دهد. دریافت موفق GPO و دریافت موفق MSI دو نقطه بررسی مستقل هستند."
+        >
+          The diagram shows logical relationships, not a physical cable layout.
+          DC01 provides policy and directory services; FS01 supplies package
+          bytes. Successful GPO processing and successful MSI retrieval are
+          separate checkpoints.
+        </p>
+      </section>
+      <section id="prerequisites">
+        <h2
+          data-en="Prerequisites and compatibility"
+          data-fa="پیش‌نیازها و سازگاری"
+        >
+          Prerequisites and compatibility
+        </h2>
+        <ul>
+          <li
+            data-en="An operational AD DS domain and reachable domain controller; a domain-joined FS01 with an NTFS volume and SMB file sharing."
+            data-fa="دامین AD DS عملیاتی و Domain Controller در دسترس؛ FS01 عضو دامین با Volume دارای NTFS و سرویس اشتراک SMB."
+          >
+            An operational AD DS domain and reachable domain controller; a
+            domain-joined FS01 with an NTFS volume and SMB file sharing.
+          </li>
+          <li
+            data-en="Domain-joined Windows 10/11 clients with an edition that supports AD domain join, matching x64 architecture and enough free disk space."
+            data-fa="کلاینت Windows 10/11 عضو دامین با Edition پشتیبان Domain Join، معماری x64 مناسب و فضای دیسک کافی."
+          >
+            Domain-joined Windows 10/11 clients with an edition that supports AD
+            domain join, matching x64 architecture and enough free disk space.
+          </li>
+          <li
+            data-en="GPMC on a management workstation with RSAT or on a Windows Server management host; delegated rights to create/edit a GPO and link it to the target OU."
+            data-fa="GPMC روی سیستم مدیریتی دارای RSAT یا میزبان مدیریتی Windows Server؛ مجوز واگذارشده برای ایجاد و ویرایش GPO و Link به OU هدف."
+          >
+            GPMC on a management workstation with RSAT or on a Windows Server
+            management host; delegated rights to create/edit a GPO and link it
+            to the target OU.
+          </li>
+          <li
+            data-en="A vendor-provided MSI validated on the exact client OS and application version; preserve any required companion files and transforms."
+            data-fa="MSI سازنده که روی نسخه واقعی سیستم‌عامل و برنامه تست شده باشد؛ فایل‌های همراه و Transformهای موردنیاز را حفظ کنید."
+          >
+            A vendor-provided MSI validated on the exact client OS and
+            application version; preserve any required companion files and
+            transforms.
+          </li>
+          <li
+            data-en="Clients use AD-aware DNS and can reach DC services, SYSVOL and FS01 over the required network paths. An Internet DNS resolver alone cannot discover your AD domain."
+            data-fa="کلاینت‌ها از DNS دارای اطلاعات AD استفاده کنند و به سرویس‌های DC، مسیر SYSVOL و FS01 دسترسی شبکه داشته باشند. DNS عمومی اینترنت به‌تنهایی دامین AD شما را پیدا نمی‌کند."
+          >
+            Clients use AD-aware DNS and can reach DC services, SYSVOL and FS01
+            over the required network paths. An Internet DNS resolver alone
+            cannot discover your AD domain.
+          </li>
+          <li
+            data-en="Correct share, NTFS and GPO permissions; a maintenance window, pilot machines and an approved rollback plan."
+            data-fa="مجوز صحیح Share، NTFS و GPO؛ پنجره نگهداری، سیستم‌های Pilot و برنامه بازگشت تأییدشده."
+          >
+            Correct share, NTFS and GPO permissions; a maintenance window, pilot
+            machines and an approved rollback plan.
+          </li>
+        </ul>
+        <p
+          data-en="The cited command references cover Windows Server 2016, 2019, 2022 and 2025 and Windows 10/11. The GroupPolicy PowerShell module requires GPMC/RSAT and is not present on every client. OS command compatibility does not certify a particular 7-Zip package or imply that every Windows 10 release remains in support; check the organization's supported release and servicing entitlement."
+          data-fa="مراجع دستورهای این راهنما Windows Server 2016، 2019، 2022 و 2025 و Windows 10/11 را پوشش می‌دهند. ماژول PowerShell با نام GroupPolicy به GPMC یا RSAT نیاز دارد و روی همه کلاینت‌ها نصب نیست. سازگاری دستورها، تأیید سازگاری یک MSI مشخص 7-Zip یا پشتیبانی همه نسخه‌های Windows 10 نیست؛ نسخه و شرایط پشتیبانی سازمان را جداگانه بررسی کنید."
+        >
+          The cited command references cover Windows Server 2016, 2019, 2022 and
+          2025 and Windows 10/11. The GroupPolicy PowerShell module requires
+          GPMC/RSAT and is not present on every client. OS command compatibility
+          does not certify a particular 7-Zip package or imply that every
+          Windows 10 release remains in support; check the organization's
+          supported release and servicing entitlement.
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/gpresult"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft: gpresult compatibility</a
+          >
+        </p>
+      </section>
+      <section id="share">
+        <h2
+          data-en="Create the software distribution share"
+          data-fa="ایجاد Software Distribution Share"
+        >
+          Create the software distribution share
+        </h2>
+        <p
+          data-en="On FS01, create D:\SoftwareDistribution\7Zip and copy the approved installer to D:\SoftwareDistribution\7Zip\7zip-x64.msi. Share the parent folder D:\SoftwareDistribution as Software$, using folder Properties → Sharing → Advanced Sharing. Keeping the share at the repository root allows other applications to use the same distribution point."
+          data-fa="روی FS01 پوشه D:\SoftwareDistribution\7Zip را بسازید و Installer تأییدشده را در D:\SoftwareDistribution\7Zip\7zip-x64.msi کپی کنید. پوشه والد یعنی D:\SoftwareDistribution را از مسیر Properties → Sharing → Advanced Sharing با نام Software$ به اشتراک بگذارید. Share در ریشه Repository امکان نگهداری برنامه‌های دیگر را هم فراهم می‌کند."
+        >
+          On FS01, create D:\SoftwareDistribution\7Zip and copy the approved
+          installer to D:\SoftwareDistribution\7Zip\7zip-x64.msi. Share the
+          parent folder D:\SoftwareDistribution as Software$, using folder
+          Properties → Sharing → Advanced Sharing. Keeping the share at the
+          repository root allows other applications to use the same distribution
+          point.
+        </p>
+        <pre
+          dir="ltr"
+        ><code class="language-text">Local folder:  D:\SoftwareDistribution\7Zip
+Local MSI:     D:\SoftwareDistribution\7Zip\7zip-x64.msi
+Share name:    Software$
+UNC package:   \\FS01\Software$\7Zip\7zip-x64.msi</code></pre>
+        <p
+          data-en="The trailing $ hides the share from ordinary browsing. Anyone who knows its UNC name can still try to access it. Authentication and ACLs provide security; a hidden name does not. Keep FS01's SMB service reachable from the workstation network."
+          data-fa="علامت $ انتهای نام، Share را از مرور معمول شبکه مخفی می‌کند. هر کسی که نام UNC را بداند همچنان می‌تواند برای دسترسی تلاش کند. امنیت از احراز هویت و ACL می‌آید، نه مخفی بودن نام. سرویس SMB روی FS01 باید از شبکه Workstationها در دسترس باشد."
+        >
+          The trailing $ hides the share from ordinary browsing. Anyone who
+          knows its UNC name can still try to access it. Authentication and ACLs
+          provide security; a hidden name does not. Keep FS01's SMB service
+          reachable from the workstation network.
+        </p>
+      </section>
+      <section id="permissions">
+        <h2 data-en="Share and NTFS permissions" data-fa="مجوزهای Share و NTFS">
+          Share and NTFS permissions
+        </h2>
+        <pre
+          dir="ltr"
+        ><code class="language-text">Share permissions on Software$:
+CORP\Domain Admins       Full Control
+CORP\Domain Computers    Read
+
+NTFS permissions on D:\SoftwareDistribution:
+CORP\Domain Admins       Full Control
+CORP\Domain Computers    Read &amp; Execute
+SYSTEM                   Full Control (local maintenance)</code></pre>
+        <p
+          data-en="Set share permissions under Advanced Sharing → Permissions and NTFS permissions under Security → Advanced. Apply the computer read permissions to the repository, subfolders and installer files. Review inherited write permissions as well: a read entry does not cancel a write grant inherited from another group. Preserve required local SYSTEM and administrative access."
+          data-fa="مجوز Share را در Advanced Sharing → Permissions و مجوز NTFS را در Security → Advanced تنظیم کنید. دسترسی خواندن کامپیوترها باید به Repository، زیرپوشه‌ها و فایل نصب برسد. مجوزهای Write ارث‌بری‌شده را هم بررسی کنید؛ افزودن Read، دسترسی Write حاصل از گروه دیگر را خنثی نمی‌کند. دسترسی ضروری SYSTEM محلی و مدیریت را حفظ کنید."
+        >
+          Set share permissions under Advanced Sharing → Permissions and NTFS
+          permissions under Security → Advanced. Apply the computer read
+          permissions to the repository, subfolders and installer files. Review
+          inherited write permissions as well: a read entry does not cancel a
+          write grant inherited from another group. Preserve required local
+          SYSTEM and administrative access.
+        </p>
+        <p
+          data-en="Computer-assigned installation runs in the system/computer context. On the network a domain member running as LocalSystem normally authenticates as its computer account, such as CORP\PC-001$. Domain Computers therefore needs access to read the MSI before a user signs in. Effective access must pass both share and NTFS checks; a denial at either layer blocks delivery."
+          data-fa="نصب Assigned کامپیوتر در Context سیستم و کامپیوتر انجام می‌شود. LocalSystem روی یک عضو دامین هنگام دسترسی شبکه معمولاً از حساب کامپیوتر، مانند CORP\PC-001$، استفاده می‌کند. بنابراین Domain Computers باید بتواند MSI را پیش از ورود کاربر بخواند. دسترسی مؤثر باید از بررسی Share و NTFS هر دو عبور کند؛ عدم دسترسی در هر لایه دریافت فایل را متوقف می‌کند."
+        >
+          Computer-assigned installation runs in the system/computer context. On
+          the network a domain member running as LocalSystem normally
+          authenticates as its computer account, such as CORP\PC-001$. Domain
+          Computers therefore needs access to read the MSI before a user signs
+          in. Effective access must pass both share and NTFS checks; a denial at
+          either layer blocks delivery.
+        </p>
+        <p
+          data-en="Do not grant Everyone: Full Control. Clients need read access, never installer write access. A writable repository could let a compromised client replace a package that later runs with system privileges. In a mature environment, delegate repository maintenance to a controlled publishing group instead of using Domain Admins for daily work."
+          data-fa="از Everyone: Full Control استفاده نکنید. کلاینت فقط به خواندن نیاز دارد و نباید Installer را تغییر دهد. Repository قابل نوشتن ممکن است به کلاینت آلوده اجازه دهد بسته‌ای را جایگزین کند که بعداً با دسترسی سیستم اجرا می‌شود. در محیط بالغ، نگهداری Repository را به گروه انتشار کنترل‌شده واگذار کنید و برای کار روزمره از Domain Admins استفاده نکنید."
+        >
+          Do not grant Everyone: Full Control. Clients need read access, never
+          installer write access. A writable repository could let a compromised
+          client replace a package that later runs with system privileges. In a
+          mature environment, delegate repository maintenance to a controlled
+          publishing group instead of using Domain Admins for daily work.
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/windows/win32/ad/the-localsystem-account"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft: LocalSystem network identity</a
+          >
+        </p>
+      </section>
+      <section id="unc">
+        <h2 data-en="Test the UNC path" data-fa="تست مسیر UNC">
+          Test the UNC path
+        </h2>
+        <pre
+          dir="ltr"
+        ><code class="language-cmd">dir \\FS01\Software$\7Zip</code></pre>
+        <p
+          data-en="Expected result: the directory listing includes 7zip-x64.msi. File not found suggests a filename/folder mismatch; network path not found suggests name resolution, SMB or share availability; access denied points to identity or ACLs. This command tests the current user's access only."
+          data-fa="نتیجه مورد انتظار: فایل 7zip-x64.msi در فهرست پوشه دیده شود. File not found معمولاً به نام یا پوشه اشتباه مربوط است؛ Network path not found به Name Resolution، SMB یا نبود Share اشاره دارد؛ Access denied نشانه مشکل هویت یا ACL است. این دستور فقط دسترسی کاربر فعلی را آزمایش می‌کند."
+        >
+          Expected result: the directory listing includes 7zip-x64.msi. File not
+          found suggests a filename/folder mismatch; network path not found
+          suggests name resolution, SMB or share availability; access denied
+          points to identity or ACLs. This command tests the current user's
+          access only.
+        </p>
+        <pre dir="ltr"><code class="language-text">Correct package location:
+\\FS01\Software$\7Zip\7zip-x64.msi
+
+Incorrect package location:
+D:\SoftwareDistribution\7Zip\7zip-x64.msi</code></pre>
+        <p
+          data-en="Type the UNC into the package dialog. A local D: path would refer to each client's own disk, and a mapped drive belongs to a user session. Neither identifies FS01 reliably during startup. In a pilot, also test access from a temporary scheduled task running as SYSTEM without stored user credentials, write its result to a local log, and remove the task afterward. Inspect effective access for PC-001$ on FS01; do not use a successful administrator browse as proof."
+          data-fa="در پنجره Package مسیر UNC را تایپ کنید. مسیر محلی D: به دیسک خود کلاینت اشاره می‌کند و Mapped Drive متعلق به نشست کاربر است. هیچ‌کدام هنگام Startup مسیر FS01 را به شکل قابل اتکا مشخص نمی‌کنند. در Pilot، دسترسی را با یک Scheduled Task موقت تحت SYSTEM و بدون Credential کاربر نیز آزمایش کنید، نتیجه را در Log محلی بنویسید و Task را بعداً حذف کنید. Effective Access حساب PC-001$ را روی FS01 بررسی کنید؛ باز شدن فایل برای Administrator اثبات کافی نیست."
+        >
+          Type the UNC into the package dialog. A local D: path would refer to
+          each client's own disk, and a mapped drive belongs to a user session.
+          Neither identifies FS01 reliably during startup. In a pilot, also test
+          access from a temporary scheduled task running as SYSTEM without
+          stored user credentials, write its result to a local log, and remove
+          the task afterward. Inspect effective access for PC-001$ on FS01; do
+          not use a successful administrator browse as proof.
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/troubleshoot/windows-server/group-policy/use-group-policy-to-install-software"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft: distribution point and UNC package path</a
+          >
+        </p>
+      </section>
+      <section id="test-ou">
+        <h2 data-en="Start with a Test OU" data-fa="شروع از Test OU">
+          Start with a Test OU
+        </h2>
+        <pre dir="ltr"><code class="language-text">corp.local
+└── OU=GPO-Test
+    ├── PC-GPO-TEST01
+    └── PC-GPO-TEST02</code></pre>
+        <p
+          data-en="Create GPO-Test and place two representative computer objects there. Link the deployment GPO to this OU first. Test a clean machine, a machine with an existing 7-Zip installation, startup network behavior, reboot time, removal and upgrade. Record the installed version and events."
+          data-fa="OU با نام GPO-Test بسازید و دو Computer Object نماینده محیط را در آن قرار دهید. ابتدا GPO نصب را به این OU Link کنید. سیستم بدون برنامه، سیستم دارای نسخه قبلی 7-Zip، وضعیت شبکه هنگام Boot، زمان Restart، حذف و Upgrade را تست کنید. نسخه نصب‌شده و Eventها را ثبت کنید."
+        >
+          Create GPO-Test and place two representative computer objects there.
+          Link the deployment GPO to this OU first. Test a clean machine, a
+          machine with an existing 7-Zip installation, startup network behavior,
+          reboot time, removal and upgrade. Record the installed version and
+          events.
+        </p>
+        <p
+          data-en="After acceptance, link the approved GPO to Workstations with a small pilot group, then expand membership. If you move test computers into Workstations, review the baseline policies of both OUs and keep deployment coverage during the move. OU moves can change many settings and may trigger scope-based uninstall."
+          data-fa="پس از تأیید، GPO را با یک گروه Pilot کوچک به Workstations لینک کنید و سپس عضویت را گسترش دهید. اگر کامپیوترهای تست را به Workstations منتقل می‌کنید، Policyهای پایه هر دو OU را بررسی و پوشش نصب را هنگام انتقال حفظ کنید. جابه‌جایی OU می‌تواند تنظیمات زیادی را تغییر دهد و حذف وابسته به Scope را فعال کند."
+        >
+          After acceptance, link the approved GPO to Workstations with a small
+          pilot group, then expand membership. If you move test computers into
+          Workstations, review the baseline policies of both OUs and keep
+          deployment coverage during the move. OU moves can change many settings
+          and may trigger scope-based uninstall.
+        </p>
+      </section>
+      <section id="gpo">
+        <h2 data-en="Create and link the GPO" data-fa="ایجاد و Link کردن GPO">
+          Create and link the GPO
+        </h2>
+        <pre dir="ltr"><code class="language-cmd">gpmc.msc</code></pre>
+        <p
+          data-en="Run GPMC on the management host. Expand Forest → Domains → corp.local → Workstations. Right-click Workstations and select Create a GPO in this domain, and Link it here. Name it Deploy - 7Zip - MSI. During the test phase, use GPO-Test instead. A GPO stored under Group Policy Objects without a link does not target that OU."
+          data-fa="روی میزبان مدیریتی GPMC را باز کنید. مسیر Forest → Domains → corp.local → Workstations را باز کنید. روی Workstations راست‌کلیک و Create a GPO in this domain, and Link it here را انتخاب کنید. نام را Deploy - 7Zip - MSI قرار دهید. در مرحله تست به‌جای Workstations از GPO-Test استفاده کنید. وجود GPO در Group Policy Objects بدون Link، آن OU را هدف نمی‌گیرد."
+        >
+          Run GPMC on the management host. Expand Forest → Domains → corp.local
+          → Workstations. Right-click Workstations and select Create a GPO in
+          this domain, and Link it here. Name it Deploy - 7Zip - MSI. During the
+          test phase, use GPO-Test instead. A GPO stored under Group Policy
+          Objects without a link does not target that OU.
+        </p>
+        <pre dir="ltr"><code class="language-text">corp.local
+└── Workstations
+    └── Deploy - 7Zip - MSI</code></pre>
+        <p
+          data-en="Confirm Link Enabled and that Computer Configuration is enabled in GPO Status. The targets must be computer objects inside the linked OU or its applicable descendants. A user account in Workstations is not enough. Keep deployment settings in this application-specific GPO rather than modifying Default Domain Policy."
+          data-fa="Link Enabled و فعال بودن Computer Configuration در GPO Status را کنترل کنید. هدف باید Computer Object داخل OU لینک‌شده یا زیرمجموعه مشمول آن باشد. وجود حساب کاربر در Workstations کافی نیست. تنظیمات نصب را در GPO مستقل برنامه نگه دارید و Default Domain Policy را برای این کار تغییر ندهید."
+        >
+          Confirm Link Enabled and that Computer Configuration is enabled in GPO
+          Status. The targets must be computer objects inside the linked OU or
+          its applicable descendants. A user account in Workstations is not
+          enough. Keep deployment settings in this application-specific GPO
+          rather than modifying Default Domain Policy.
+        </p>
+      </section>
+      <section id="installation">
+        <h2
+          data-en="Configure Software Installation"
+          data-fa="پیکربندی Software Installation"
+        >
+          Configure Software Installation
+        </h2>
+        <pre dir="ltr"><code class="language-text">Computer Configuration
+→ Policies
+→ Software Settings
+→ Software installation
+→ New
+→ Package
+
+\\FS01\Software$\7Zip\7zip-x64.msi
+
+Deployment Method: Assigned</code></pre>
+        <p
+          data-en="Right-click the GPO → Edit. Open the path above, right-click Software installation and choose New → Package. Enter the full UNC path and select Open → Assigned → OK. Wait until the package appears in the right pane; close the editor after confirming its deployment type and source."
+          data-fa="روی GPO راست‌کلیک و Edit را انتخاب کنید. مسیر بالا را باز کنید، روی Software installation راست‌کلیک و New → Package را بزنید. UNC کامل را وارد و Open → Assigned → OK را انتخاب کنید. منتظر بمانید بسته در سمت راست ظاهر شود؛ پس از بررسی نوع Deployment و Source، ویرایشگر را ببندید."
+        >
+          Right-click the GPO → Edit. Open the path above, right-click Software
+          installation and choose New → Package. Enter the full UNC path and
+          select Open → Assigned → OK. Wait until the package appears in the
+          right pane; close the editor after confirming its deployment type and
+          source.
+        </p>
+        <p
+          data-en="Expected result: a package entry for the MSI, assigned under Computer Configuration. At a successful startup policy pass, the client installs it for the computer. Do not select Published for this scenario; computer packages cannot be published."
+          data-fa="نتیجه مورد انتظار: یک Package برای MSI با روش Assigned در Computer Configuration دیده شود. در پردازش موفق Policy هنگام Startup، کلاینت آن را برای کامپیوتر نصب می‌کند. در این سناریو Published انتخاب نکنید؛ بسته کامپیوتر نمی‌تواند Published باشد."
+        >
+          Expected result: a package entry for the MSI, assigned under Computer
+          Configuration. At a successful startup policy pass, the client
+          installs it for the computer. Do not select Published for this
+          scenario; computer packages cannot be published.
+        </p>
+      </section>
+      <figure class="article-image">
+        <a
+          href="/assets/img/articles/content/windows-group-policy-msi-deployment-guide.png"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><img
+            src="/assets/img/articles/content/windows-group-policy-msi-deployment-guide.png"
+            alt="Illustrated Group Policy MSI configuration and troubleshooting workflow"
+            width="2172"
+            height="724"
+            loading="lazy"
+            decoding="async"
+        /></a>
+        <figcaption>
+          <span
+            data-en="Illustrated configuration and troubleshooting overview. Open the image for full detail. GUI panels are schematic; follow the exact GPMC paths and separate package-selection steps below."
+            data-fa="نمای تصویری تنظیمات و مسیر عیب‌یابی. برای مشاهده جزئیات تصویر را باز کنید. پنل‌های GUI شماتیک هستند؛ مسیر دقیق GPMC و مراحل جداگانه انتخاب Package را در متن زیر دنبال کنید."
+            >Illustrated configuration and troubleshooting overview. Open the
+            image for full detail. GUI panels are schematic; follow the exact
+            GPMC paths and separate package-selection steps below.</span
+          >
+        </figcaption>
+      </figure>
+      <section id="startup-network">
+        <h2
+          data-en="Network availability during startup"
+          data-fa="دسترسی شبکه هنگام Startup"
+        >
+          Network availability during startup
+        </h2>
+        <pre dir="ltr"><code class="language-text">Computer Configuration
+→ Policies
+→ Administrative Templates
+→ System
+→ Logon
+→ Always wait for the network at computer startup and logon
+
+Setting: Enabled</code></pre>
+        <p
+          data-en="Enable this for the pilot when fast startup/logon processing allows the desktop to appear before foreground policy completes. It makes startup and logon policy processing synchronous and is useful for software installation that needs the network at boot. Confirm the effective setting in RSoP."
+          data-fa="اگر پردازش سریع Startup یا Logon باعث می‌شود دسکتاپ پیش از تکمیل Policy ظاهر شود، این گزینه را برای Pilot فعال کنید. پردازش Policy هنگام Startup و Logon را همگام می‌کند و برای نصب نرم‌افزار وابسته به شبکه هنگام Boot مفید است. مقدار مؤثر را در RSoP کنترل کنید."
+        >
+          Enable this for the pilot when fast startup/logon processing allows
+          the desktop to appear before foreground policy completes. It makes
+          startup and logon policy processing synchronous and is useful for
+          software installation that needs the network at boot. Confirm the
+          effective setting in RSoP.
+        </p>
+        <p
+          data-en="Measure the added boot/logon delay before enabling it broadly. It cannot create connectivity to an unavailable DC, fix a broken DNS server or establish a VPN that only connects after sign-in. For Wi-Fi or remote clients, verify machine authentication and a usable pre-logon network path. Diagnose network initialization instead of treating this setting as a universal fix."
+          data-fa="پیش از فعال‌سازی گسترده، افزایش زمان Boot و Logon را اندازه بگیرید. این تنظیم نمی‌تواند DC خارج از دسترس را وصل کند، DNS خراب را اصلاح کند یا VPN وابسته به ورود کاربر را پیش از ورود برقرار کند. برای Wi-Fi و کلاینت راه‌دور، احراز هویت دستگاه و مسیر شبکه پیش از Logon را بررسی کنید. آماده شدن شبکه را عیب‌یابی کنید و این تنظیم را راه‌حل عمومی فرض نکنید."
+        >
+          Measure the added boot/logon delay before enabling it broadly. It
+          cannot create connectivity to an unavailable DC, fix a broken DNS
+          server or establish a VPN that only connects after sign-in. For Wi-Fi
+          or remote clients, verify machine authentication and a usable
+          pre-logon network path. Diagnose network initialization instead of
+          treating this setting as a universal fix.
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/previous-versions/windows/desktop/policy/logon-optimization"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft: synchronous policy and logon optimization</a
+          >
+        </p>
+      </section>
+      <section id="apply">
+        <h2 data-en="Apply policy and restart" data-fa="اعمال Policy و Restart">
+          Apply policy and restart
+        </h2>
+        <p
+          data-en="On a pilot client, open an elevated Command Prompt and refresh policy. Save work and perform the restart only in the agreed maintenance window."
+          data-fa="روی کلاینت Pilot، Command Prompt را با Run as administrator باز و Policy را تازه‌سازی کنید. کارهای باز را ذخیره کنید و Restart را فقط در پنجره نگهداری هماهنگ‌شده انجام دهید."
+        >
+          On a pilot client, open an elevated Command Prompt and refresh policy.
+          Save work and perform the restart only in the agreed maintenance
+          window.
+        </p>
+        <pre dir="ltr"><code class="language-cmd">gpupdate /force</code></pre>
+        <p
+          data-en="Expected result: computer policy updates successfully, possibly with a restart prompt. A refresh success confirms policy processing, not application installation. Computer Software Installation is processed at startup rather than as an immediate background install."
+          data-fa="نتیجه مورد انتظار: Computer Policy با موفقیت به‌روزرسانی شود و ممکن است درخواست Restart ظاهر شود. موفقیت Refresh، پردازش Policy را تأیید می‌کند و به معنی نصب برنامه نیست. Software Installation کامپیوتر هنگام Startup پردازش می‌شود و نصب فوری در Background نیست."
+        >
+          Expected result: computer policy updates successfully, possibly with a
+          restart prompt. A refresh success confirms policy processing, not
+          application installation. Computer Software Installation is processed
+          at startup rather than as an immediate background install.
+        </p>
+        <pre dir="ltr"><code class="language-cmd">shutdown /r /t 0</code></pre>
+        <p
+          data-en="This restarts immediately. With Fast Logon Optimization, an initial cycle can schedule synchronous processing for the following startup, so another controlled restart may be needed. If diagnosing that behavior, gpupdate /target:computer /sync requests synchronous processing on the next foreground pass; it does not install the MSI itself."
+          data-fa="این دستور بلافاصله Restart می‌کند. با Fast Logon Optimization، چرخه اول ممکن است پردازش همگام را برای Startup بعدی زمان‌بندی کند؛ بنابراین احتمال نیاز به Restart کنترل‌شده دیگری وجود دارد. برای بررسی این رفتار، gpupdate /target:computer /sync پردازش همگام را برای نوبت بعدی Foreground درخواست می‌کند؛ خودش MSI را نصب نمی‌کند."
+        >
+          This restarts immediately. With Fast Logon Optimization, an initial
+          cycle can schedule synchronous processing for the following startup,
+          so another controlled restart may be needed. If diagnosing that
+          behavior, gpupdate /target:computer /sync requests synchronous
+          processing on the next foreground pass; it does not install the MSI
+          itself.
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/gpupdate"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft: gpupdate foreground and background behavior</a
+          >
+        </p>
+      </section>
+      <section id="verification">
+        <h2
+          data-en="Verify policy and installed application"
+          data-fa="تأیید GPO و نصب برنامه"
+        >
+          Verify policy and installed application
+        </h2>
+        <pre
+          dir="ltr"
+        ><code class="language-cmd">gpresult /r /scope computer</code></pre>
+        <p
+          data-en="Run elevated. Expected result: Deploy - 7Zip - MSI appears under Applied Group Policy Objects for the computer. A GPO in this list establishes scope/application of policy; it does not prove that Windows Installer completed the package."
+          data-fa="با دسترسی Administrator اجرا کنید. نتیجه مورد انتظار: Deploy - 7Zip - MSI در Applied Group Policy Objects کامپیوتر دیده شود. حضور در این فهرست اعمال Policy را نشان می‌دهد و ثابت نمی‌کند Windows Installer نصب بسته را کامل کرده است."
+        >
+          Run elevated. Expected result: Deploy - 7Zip - MSI appears under
+          Applied Group Policy Objects for the computer. A GPO in this list
+          establishes scope/application of policy; it does not prove that
+          Windows Installer completed the package.
+        </p>
+        <pre dir="ltr"><code class="language-cmd">mkdir C:\Temp
+gpresult /h C:\Temp\gpresult.html /f</code></pre>
+        <p
+          data-en="If C:\Temp already exists, keep it and skip mkdir. Expected result: an HTML RSoP report at C:\Temp\gpresult.html. Open it and inspect Computer Details, applied/denied GPOs, filtering reasons and Software Installation settings."
+          data-fa="اگر C:\Temp وجود دارد، آن را نگه دارید و mkdir را اجرا نکنید. نتیجه مورد انتظار: گزارش HTML مربوط به RSoP در C:\Temp\gpresult.html ساخته شود. Computer Details، GPOهای Applied و Denied، علت Filtering و تنظیمات Software Installation را بررسی کنید."
+        >
+          If C:\Temp already exists, keep it and skip mkdir. Expected result: an
+          HTML RSoP report at C:\Temp\gpresult.html. Open it and inspect
+          Computer Details, applied/denied GPOs, filtering reasons and Software
+          Installation settings.
+        </p>
+        <pre
+          dir="ltr"
+        ><code class="language-cmd">dir &quot;C:\Program Files\7-Zip\7z.exe&quot;
+&quot;C:\Program Files\7-Zip\7z.exe&quot; i</code></pre>
+        <p
+          data-en="Expected result for the standard x64 package: the executable exists and the 7-Zip information header reports the approved version. Also check Installed apps/Programs and Features, launch 7-Zip as a standard user and test a small archive. Verify all three clients separately; folder existence alone is not a version or success check."
+          data-fa="نتیجه مورد انتظار برای بسته استاندارد x64: فایل اجرایی وجود دارد و Header اطلاعات 7-Zip نسخه تأییدشده را نشان می‌دهد. Installed apps یا Programs and Features را هم بررسی کنید، برنامه را با کاربر معمولی باز و یک Archive کوچک را تست کنید. هر سه کلاینت را جداگانه بررسی کنید؛ وجود پوشه به‌تنهایی نسخه یا موفقیت نصب را تأیید نمی‌کند."
+        >
+          Expected result for the standard x64 package: the executable exists
+          and the 7-Zip information header reports the approved version. Also
+          check Installed apps/Programs and Features, launch 7-Zip as a standard
+          user and test a small archive. Verify all three clients separately;
+          folder existence alone is not a version or success check.
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/gpresult"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft: gpresult syntax</a
+          >
+        </p>
+      </section>
+      <section id="dns">
+        <h2
+          data-en="DNS and network troubleshooting"
+          data-fa="عیب‌یابی DNS و شبکه"
+        >
+          DNS and network troubleshooting
+        </h2>
+        <pre dir="ltr"><code class="language-cmd">nslookup DC01.corp.local
+nslookup FS01.corp.local
+ping DC01.corp.local
+ping FS01.corp.local</code></pre>
+        <p
+          data-en="Expected result: nslookup returns the expected internal addresses for DC01 and FS01 using the configured DNS server. Ping should resolve each name to the expected IP; replies also indicate ICMP reachability when ICMP is allowed. A timeout can be a firewall decision and is not proof that the server is down."
+          data-fa="نتیجه مورد انتظار: nslookup با DNS تنظیم‌شده، IP داخلی درست DC01 و FS01 را برگرداند. Ping باید نام را به IP مورد انتظار تبدیل کند؛ دریافت پاسخ در صورت مجاز بودن ICMP، دسترسی ICMP را هم نشان می‌دهد. Timeout ممکن است ناشی از Firewall باشد و خرابی سرور را ثابت نمی‌کند."
+        >
+          Expected result: nslookup returns the expected internal addresses for
+          DC01 and FS01 using the configured DNS server. Ping should resolve
+          each name to the expected IP; replies also indicate ICMP reachability
+          when ICMP is allowed. A timeout can be a firewall decision and is not
+          proof that the server is down.
+        </p>
+        <pre dir="ltr"><code class="language-cmd">ipconfig /all
+nltest /dsgetdc:corp.local
+dir \\corp.local\SYSVOL</code></pre>
+        <p
+          data-en="Expected result: ipconfig shows the intended AD DNS servers; nltest discovers a domain controller and finishes successfully; SYSVOL can be listed under the tested identity. Resolving DC01's host record does not validate AD SRV discovery. Ping alone does not test Kerberos, LDAP, SMB, SYSVOL, ACLs or GPO processing."
+          data-fa="نتیجه مورد انتظار: ipconfig DNSهای مناسب AD را نشان دهد؛ nltest یک Domain Controller پیدا کند و موفق تمام شود؛ SYSVOL با هویت آزمایش‌شده قابل فهرست کردن باشد. Resolve شدن Host Record مربوط به DC01، صحت کشف AD با SRV را ثابت نمی‌کند. Ping به‌تنهایی Kerberos، LDAP، SMB، SYSVOL، ACL و پردازش GPO را تست نمی‌کند."
+        >
+          Expected result: ipconfig shows the intended AD DNS servers; nltest
+          discovers a domain controller and finishes successfully; SYSVOL can be
+          listed under the tested identity. Resolving DC01's host record does
+          not validate AD SRV discovery. Ping alone does not test Kerberos,
+          LDAP, SMB, SYSVOL, ACLs or GPO processing.
+        </p>
+        <pre
+          dir="ltr"
+        ><code class="language-powershell">Test-NetConnection FS01.corp.local -Port 445</code></pre>
+        <p
+          data-en="Expected result: TcpTestSucceeded is True. That verifies a TCP connection to SMB, not permission to read the MSI. If DC discovery fails, fix DNS/routing before editing package settings."
+          data-fa="نتیجه مورد انتظار: TcpTestSucceeded برابر True باشد. این فقط اتصال TCP به SMB را تأیید می‌کند، نه مجوز خواندن MSI. اگر کشف DC شکست می‌خورد، پیش از تغییر Package ابتدا DNS و Routing را اصلاح کنید."
+        >
+          Expected result: TcpTestSucceeded is True. That verifies a TCP
+          connection to SMB, not permission to read the MSI. If DC discovery
+          fails, fix DNS/routing before editing package settings.
+        </p>
+      </section>
+      <section id="rsop">
+        <h2
+          data-en="Additional Group Policy diagnostics"
+          data-fa="دستورهای تکمیلی بررسی Group Policy"
+        >
+          Additional Group Policy diagnostics
+        </h2>
+        <pre dir="ltr"><code class="language-cmd">gpupdate /force
+gpresult /r /scope computer</code></pre>
+        <p
+          data-en="Capture the output before changing filters or links. If computer results say access is denied, elevate the terminal. If no RSoP data exists, confirm that the client has completed domain policy processing rather than assuming the MSI is the problem."
+          data-fa="پیش از تغییر Filter یا Link خروجی را ذخیره کنید. اگر گزارش کامپیوتر Access denied می‌دهد، Terminal را با دسترسی Administrator اجرا کنید. اگر RSoP Data موجود نیست، ابتدا پردازش Policy دامین روی کلاینت را بررسی کنید و MSI را علت قطعی فرض نکنید."
+        >
+          Capture the output before changing filters or links. If computer
+          results say access is denied, elevate the terminal. If no RSoP data
+          exists, confirm that the client has completed domain policy processing
+          rather than assuming the MSI is the problem.
+        </p>
+        <pre
+          dir="ltr"
+        ><code class="language-powershell">Get-GPResultantSetOfPolicy -ReportType Html -Path C:\Temp\RSoP.html</code></pre>
+        <p
+          data-en="Run in Windows PowerShell on a host with the GroupPolicy module and appropriate access; create C:\Temp first. Expected result: C:\Temp\RSoP.html contains logged policy results for the local session. This is an alternative report, not a deployment command. On a management host, add -Computer PC-001.corp.local to request that client's results, subject to remote RSoP/firewall permissions."
+          data-fa="در Windows PowerShell روی میزبان دارای ماژول GroupPolicy و دسترسی مناسب اجرا کنید؛ ابتدا C:\Temp را بسازید. نتیجه مورد انتظار: C:\Temp\RSoP.html نتایج ثبت‌شده Policy نشست محلی را داشته باشد. این گزارش جایگزین است و دستور Deploy نیست. روی میزبان مدیریتی می‌توانید -Computer PC-001.corp.local را اضافه کنید؛ دسترسی RSoP راه‌دور و Firewall باید اجازه دهند."
+        >
+          Run in Windows PowerShell on a host with the GroupPolicy module and
+          appropriate access; create C:\Temp first. Expected result:
+          C:\Temp\RSoP.html contains logged policy results for the local
+          session. This is an alternative report, not a deployment command. On a
+          management host, add -Computer PC-001.corp.local to request that
+          client's results, subject to remote RSoP/firewall permissions.
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/powershell/module/grouppolicy/get-gpresultantsetofpolicy?view=windowsserver2025-ps"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft: Get-GPResultantSetOfPolicy</a
+          >
+        </p>
+      </section>
+      <section id="events">
+        <h2
+          data-en="Event Viewer troubleshooting"
+          data-fa="عیب‌یابی با Event Viewer"
+        >
+          Event Viewer troubleshooting
+        </h2>
+        <pre dir="ltr"><code class="language-text">Event Viewer
+→ Applications and Services Logs
+→ Microsoft
+→ Windows
+→ GroupPolicy
+→ Operational
+
+Windows Logs
+→ Application
+→ Source: MsiInstaller
+
+Windows Logs
+→ System
+→ Source: Microsoft-Windows-GroupPolicy</code></pre>
+        <p
+          data-en="Use the boot time of the failed attempt. In GroupPolicy Operational, correlate the processing instance by ActivityID and inspect the Software Installation extension, elapsed time, DC name and status. Application/MsiInstaller events identify the product and installation result. System GroupPolicy errors can expose network or SYSVOL failures. Save the actual message and decimal/hex error code rather than only an Event ID."
+          data-fa="زمان Boot ناموفق را مبنا قرار دهید. در GroupPolicy Operational رویدادهای همان پردازش را با ActivityID دنبال و افزونه Software Installation، زمان اجرا، نام DC و Status را بررسی کنید. رویدادهای Application با Source برابر MsiInstaller، محصول و نتیجه نصب را مشخص می‌کنند. خطاهای GroupPolicy در System می‌توانند مشکل شبکه یا SYSVOL را نشان دهند. متن واقعی و کد خطای Decimal یا Hex را ذخیره کنید؛ Event ID تنها کافی نیست."
+        >
+          Use the boot time of the failed attempt. In GroupPolicy Operational,
+          correlate the processing instance by ActivityID and inspect the
+          Software Installation extension, elapsed time, DC name and status.
+          Application/MsiInstaller events identify the product and installation
+          result. System GroupPolicy errors can expose network or SYSVOL
+          failures. Save the actual message and decimal/hex error code rather
+          than only an Event ID.
+        </p>
+        <ul>
+          <li
+            data-en="1129: investigate connectivity to a DC and the required services. 1058: inspect the referenced policy template/gpt.ini path, name resolution, access and AD/SYSVOL replication."
+            data-fa="1129: دسترسی به DC و سرویس‌های لازم را بررسی کنید. 1058: مسیر Policy Template یا gpt.ini ذکرشده، Name Resolution، دسترسی و Replication مربوط به AD/SYSVOL را بررسی کنید."
+          >
+            1129: investigate connectivity to a DC and the required services.
+            1058: inspect the referenced policy template/gpt.ini path, name
+            resolution, access and AD/SYSVOL replication.
+          </li>
+          <li
+            data-en="MSI result 1612: installation source unavailable. 1619: package cannot be opened. Check source persistence, access and package validity."
+            data-fa="نتیجه MSI برابر 1612: منبع نصب در دسترس نیست. 1619: بسته باز نمی‌شود. ماندگاری Source، دسترسی و صحت فایل را بررسی کنید."
+          >
+            MSI result 1612: installation source unavailable. 1619: package
+            cannot be opened. Check source persistence, access and package
+            validity.
+          </li>
+          <li
+            data-en="1603: fatal installation failure, not a diagnosis by itself. Inspect MSI details, disk space, prerequisites and vendor custom actions. 1618: another installation is running."
+            data-fa="1603: شکست جدی نصب است، نه علت نهایی. جزئیات MSI، فضای دیسک، پیش‌نیازها و Custom Action سازنده را بررسی کنید. 1618: نصب دیگری در حال اجراست."
+          >
+            1603: fatal installation failure, not a diagnosis by itself. Inspect
+            MSI details, disk space, prerequisites and vendor custom actions.
+            1618: another installation is running.
+          </li>
+          <li
+            data-en="1638: another version of the product is installed. 3010: success with restart required, not an installation failure."
+            data-fa="1638: نسخه دیگری از محصول نصب است. 3010: نصب موفق بوده و Restart لازم است؛ این کد شکست نصب نیست."
+          >
+            1638: another version of the product is installed. 3010: success
+            with restart required, not an installation failure.
+          </li>
+        </ul>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/troubleshoot/windows-server/group-policy/applying-group-policy-troubleshooting-guidance"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft: Group Policy event diagnosis</a
+          >
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/windows/win32/msi/error-codes"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft: MSI return codes</a
+          >
+        </p>
+      </section>
+      <section id="root-cause">
+        <h2
+          data-en="Common Problems and Root Cause Analysis"
+          data-fa="مشکلات رایج و تحلیل علت ریشه‌ای"
+        >
+          Common Problems and Root Cause Analysis
+        </h2>
+        <h3
+          data-en="GPO has not applied to the client"
+          data-fa="GPO روی کلاینت اعمال نشده است"
+        >
+          GPO has not applied to the client
+        </h3>
+        <p
+          data-en="Check the computer object's distinguished name first: it must be in Workstations or an applicable child OU. Then inspect the GPO link, GPO Status, inheritance, Security Filtering (Read + Apply), WMI filter result and DC discovery. If clients disagree, compare the DC each used and check both AD and SYSVOL replication on the controllers. On a DC/RSAT host, repadmin /replsummary should show zero failures; that checks AD replication, so inspect DFS Replication/SYSVOL health separately."
+          data-fa="ابتدا Distinguished Name مربوط به Computer Object را بررسی کنید؛ باید در Workstations یا OU زیرمجموعه مشمول باشد. سپس Link، GPO Status، Inheritance، Security Filtering با Read و Apply، نتیجه WMI Filter و کشف DC را بررسی کنید. اگر نتیجه کلاینت‌ها متفاوت است، DC استفاده‌شده را مقایسه و Replication مربوط به AD و SYSVOL را بررسی کنید. روی DC یا میزبان RSAT، repadmin /replsummary باید صفر Failure داشته باشد؛ این دستور Replication مربوط به AD را بررسی می‌کند و سلامت DFS Replication و SYSVOL باید جداگانه بررسی شود."
+        >
+          Check the computer object's distinguished name first: it must be in
+          Workstations or an applicable child OU. Then inspect the GPO link, GPO
+          Status, inheritance, Security Filtering (Read + Apply), WMI filter
+          result and DC discovery. If clients disagree, compare the DC each used
+          and check both AD and SYSVOL replication on the controllers. On a
+          DC/RSAT host, repadmin /replsummary should show zero failures; that
+          checks AD replication, so inspect DFS Replication/SYSVOL health
+          separately.
+        </p>
+        <pre
+          dir="ltr"
+        ><code class="language-cmd">repadmin /replsummary</code></pre>
+        <h3
+          data-en="GPO applies, but the MSI does not install"
+          data-fa="GPO اعمال می‌شود ولی MSI نصب نمی‌شود"
+        >
+          GPO applies, but the MSI does not install
+        </h3>
+        <p
+          data-en="Compare the package's stored UNC with the actual file. Check share and NTFS effective access for the computer account, package architecture, per-machine support, prerequisites, existing versions and disk space. Correlate startup events with MsiInstaller. If there is no installation attempt, investigate foreground processing and network readiness before replacing the MSI."
+          data-fa="UNC ذخیره‌شده Package را با فایل واقعی مقایسه کنید. Effective Access حساب کامپیوتر در Share و NTFS، معماری بسته، پشتیبانی per-machine، پیش‌نیازها، نسخه‌های موجود و فضای دیسک را بررسی کنید. Eventهای Startup را با MsiInstaller تطبیق دهید. اگر هیچ تلاش نصبی ثبت نشده، پیش از جایگزینی MSI، پردازش Foreground و آماده بودن شبکه را بررسی کنید."
+        >
+          Compare the package's stored UNC with the actual file. Check share and
+          NTFS effective access for the computer account, package architecture,
+          per-machine support, prerequisites, existing versions and disk space.
+          Correlate startup events with MsiInstaller. If there is no
+          installation attempt, investigate foreground processing and network
+          readiness before replacing the MSI.
+        </p>
+        <h3
+          data-en="The user can open the file, but GPO installation fails"
+          data-fa="فایل برای کاربر باز می‌شود ولی نصب GPO انجام نمی‌شود"
+        >
+          The user can open the file, but GPO installation fails
+        </h3>
+        <p
+          data-en="A user's token can contain Domain Users or administrative groups that PC-001$ does not have. Repeat the source access test in SYSTEM context on the pilot and inspect the computer ACL. Do not add Domain Users or broad write permissions to compensate for missing computer access."
+          data-fa="Token کاربر ممکن است Domain Users یا گروه‌های مدیریتی داشته باشد که PC-001$ ندارد. روی Pilot دسترسی Source را در Context مربوط به SYSTEM تکرار و ACL کامپیوتر را بررسی کنید. برای جبران نبود دسترسی کامپیوتر، Domain Users یا Write گسترده اضافه نکنید."
+        >
+          A user's token can contain Domain Users or administrative groups that
+          PC-001$ does not have. Repeat the source access test in SYSTEM context
+          on the pilot and inspect the computer ACL. Do not add Domain Users or
+          broad write permissions to compensate for missing computer access.
+        </p>
+        <h3
+          data-en="Network is unavailable at boot"
+          data-fa="کلاینت هنگام Boot شبکه ندارد"
+        >
+          Network is unavailable at boot
+        </h3>
+        <p
+          data-en="Check Ethernet/Wi-Fi machine authentication, DHCP timing, DNS and any pre-logon VPN. Evaluate Always wait for the network at computer startup and logon on the pilot. If the network becomes usable only after user sign-in, the deployment design needs a startup-capable connection or another management tool."
+          data-fa="احراز هویت دستگاه روی Ethernet یا Wi-Fi، زمان DHCP، DNS و VPN پیش از Logon را بررسی کنید. گزینه Always wait for the network at computer startup and logon را روی Pilot ارزیابی کنید. اگر شبکه فقط پس از ورود کاربر قابل استفاده است، طراحی نصب به اتصال قابل استفاده هنگام Startup یا ابزار مدیریتی دیگر نیاز دارد."
+        >
+          Check Ethernet/Wi-Fi machine authentication, DHCP timing, DNS and any
+          pre-logon VPN. Evaluate Always wait for the network at computer
+          startup and logon on the pilot. If the network becomes usable only
+          after user sign-in, the deployment design needs a startup-capable
+          connection or another management tool.
+        </p>
+        <h3
+          data-en="The GPO is absent from gpresult"
+          data-fa="GPO در gpresult دیده نمی‌شود"
+        >
+          The GPO is absent from gpresult
+        </h3>
+        <p
+          data-en="Run the elevated computer-scope report, then the HTML report. A Denied entry directs you to Security/WMI filtering; no entry directs you to OU placement, link/inheritance, disabled computer settings or failure to contact a DC. Refresh after fixing the cause and reboot after computer group membership changes. Compare a working pilot with the failing client using the same GPO revision."
+          data-fa="ابتدا گزارش Computer Scope را با دسترسی بالا و سپس گزارش HTML را بگیرید. وجود Denied شما را به Security یا WMI Filtering هدایت می‌کند؛ نبود کامل نام، بررسی OU، Link و Inheritance، غیرفعال بودن تنظیمات کامپیوتر یا عدم تماس با DC را لازم می‌کند. پس از اصلاح علت Refresh کنید و پس از تغییر عضویت گروه کامپیوتر Restart انجام دهید. کلاینت سالم Pilot و کلاینت ناموفق را با همان Revision مربوط به GPO مقایسه کنید."
+        >
+          Run the elevated computer-scope report, then the HTML report. A Denied
+          entry directs you to Security/WMI filtering; no entry directs you to
+          OU placement, link/inheritance, disabled computer settings or failure
+          to contact a DC. Refresh after fixing the cause and reboot after
+          computer group membership changes. Compare a working pilot with the
+          failing client using the same GPO revision.
+        </p>
+      </section>
+      <section id="security-filtering">
+        <h2
+          data-en="Limit deployment with Security Filtering"
+          data-fa="محدود کردن نصب با Security Filtering"
+        >
+          Limit deployment with Security Filtering
+        </h2>
+        <pre
+          dir="ltr"
+        ><code class="language-text">Security group: GG-Deploy-7Zip
+Members:        PC-001$, PC-002$, PC-003$
+
+GPMC
+→ Deploy - 7Zip - MSI
+→ Scope
+→ Security Filtering
+
+Target group permissions:
+Read              Allow
+Apply Group Policy Allow</code></pre>
+        <p
+          data-en="Create GG-Deploy-7Zip as a Global Security group in AD and add the target computer accounts, not their users. Select Computers in the object picker when adding members. In GPMC, add the group to Security Filtering. Its computer members still need to be inside the linked OU scope; a group does not replace a GPO link."
+          data-fa="در AD گروه GG-Deploy-7Zip از نوع Global Security بسازید و حساب کامپیوترهای هدف را عضو کنید، نه کاربران آن‌ها را. هنگام افزودن عضو، Object Type مربوط به Computers را فعال کنید. در GPMC گروه را به Security Filtering اضافه کنید. اعضا همچنان باید در Scope مربوط به OU لینک‌شده باشند؛ گروه جای Link را نمی‌گیرد."
+        >
+          Create GG-Deploy-7Zip as a Global Security group in AD and add the
+          target computer accounts, not their users. Select Computers in the
+          object picker when adding members. In GPMC, add the group to Security
+          Filtering. Its computer members still need to be inside the linked OU
+          scope; a group does not replace a GPO link.
+        </p>
+        <p
+          data-en="For a restricted rollout, remove the broad Apply grant from Authenticated Users and any other broad applying group. Keep Authenticated Users, or an appropriate computer read group, with Read only through Delegation → Advanced where needed. Verify that GG-Deploy-7Zip has both Read and Apply Group Policy and that no Deny overrides it. Read alone permits reading the GPO but does not apply it; leaving Authenticated Users with Apply defeats the restriction."
+          data-fa="برای Rollout محدود، Apply گسترده Authenticated Users و هر گروه عمومی اعمال‌کننده دیگر را حذف کنید. در صورت نیاز Authenticated Users یا گروه مناسب خواندن کامپیوترها را از Delegation → Advanced با Read تنها نگه دارید. بررسی کنید GG-Deploy-7Zip هر دو مجوز Read و Apply Group Policy را داشته باشد و Deny آن‌ها را خنثی نکند. Read تنها اجازه خواندن GPO می‌دهد و آن را اعمال نمی‌کند؛ باقی ماندن Apply برای Authenticated Users محدودسازی را بی‌اثر می‌کند."
+        >
+          For a restricted rollout, remove the broad Apply grant from
+          Authenticated Users and any other broad applying group. Keep
+          Authenticated Users, or an appropriate computer read group, with Read
+          only through Delegation → Advanced where needed. Verify that
+          GG-Deploy-7Zip has both Read and Apply Group Policy and that no Deny
+          overrides it. Read alone permits reading the GPO but does not apply
+          it; leaving Authenticated Users with Apply defeats the restriction.
+        </p>
+        <p
+          data-en="GPO permissions and repository permissions are independent. Filtering deployment to this group does not restrict file reads while Domain Computers retains share access. For stricter package access, use the same target group for repository Read after validating maintenance/repair needs. Allow AD replication and restart targets after adding computer group members so their machine authentication reflects the membership."
+          data-fa="مجوز GPO و مجوز Repository مستقل هستند. محدود شدن Deployment به این گروه، تا وقتی Domain Computers روی Share دسترسی دارد خواندن فایل را محدود نمی‌کند. برای محدودسازی بیشتر فایل، پس از بررسی نیاز Repair و نگهداری، Read مخزن را به همان گروه هدف بدهید. پس از افزودن کامپیوترها زمان Replication را در نظر بگیرید و سیستم‌ها را Restart کنید تا احراز هویت دستگاه عضویت جدید را منعکس کند."
+        >
+          GPO permissions and repository permissions are independent. Filtering
+          deployment to this group does not restrict file reads while Domain
+          Computers retains share access. For stricter package access, use the
+          same target group for repository Read after validating
+          maintenance/repair needs. Allow AD replication and restart targets
+          after adding computer group members so their machine authentication
+          reflects the membership.
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-policy/group-policy-scope"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft: GPO scope, Read and Apply permissions</a
+          >
+        </p>
+      </section>
+      <section id="best-practices">
+        <h2
+          data-en="Enterprise Best Practices"
+          data-fa="بهترین روش‌های استقرار سازمانی"
+        >
+          Enterprise Best Practices
+        </h2>
+        <pre dir="ltr"><code class="language-text">\\FS01\Software$
+│
+├── 7Zip
+│   └── 24.x
+│       └── 7zip-x64.msi
+│
+├── Chrome
+│   └── Enterprise
+│       └── GoogleChromeStandaloneEnterprise64.msi
+│
+└── OtherApplications
+
+Deploy - 7Zip - MSI
+Deploy - Chrome - MSI
+Deploy - ApplicationName - MSI</code></pre>
+        <p
+          data-en="24.x is an illustrative version folder, not a recommendation to deploy an old release. Select an approved maintained version. For production, configure the package with the versioned UNC from the beginning; the shorter lab path illustrates the first deployment only."
+          data-fa="24.x نمونه پوشه نسخه است و توصیه به نصب نسخه قدیمی نیست. نسخه نگهداری‌شده و تأییدشده را انتخاب کنید. در Production از ابتدا Package را با UNC نسخه‌دار معرفی کنید؛ مسیر کوتاه Lab فقط نصب اولیه را نشان می‌دهد."
+        >
+          24.x is an illustrative version folder, not a recommendation to deploy
+          an old release. Select an approved maintained version. For production,
+          configure the package with the versioned UNC from the beginning; the
+          shorter lab path illustrates the first deployment only.
+        </p>
+        <ul>
+          <li
+            data-en="Keep one application per GPO and use a consistent naming convention. Keep related version upgrades documented within that application's deployment plan."
+            data-fa="برای هر برنامه GPO مستقل و Naming Convention ثابت داشته باشید. Upgradeهای نسخه را در برنامه استقرار همان Application مستند کنید."
+          >
+            Keep one application per GPO and use a consistent naming convention.
+            Keep related version upgrades documented within that application's
+            deployment plan.
+          </li>
+          <li
+            data-en="Use immutable version folders. Record vendor source, version, SHA-256, package architecture, owner, deployment date and change ticket."
+            data-fa="پوشه نسخه را ثابت نگه دارید. منبع سازنده، نسخه، SHA-256، معماری، مسئول، تاریخ Deployment و Change Ticket را ثبت کنید."
+          >
+            Use immutable version folders. Record vendor source, version,
+            SHA-256, package architecture, owner, deployment date and change
+            ticket.
+          </li>
+          <li
+            data-en="Use a Test OU, then a small pilot security group, then staged expansion. Define success and rollback criteria before rollout."
+            data-fa="از Test OU شروع کنید، سپس گروه امنیتی Pilot کوچک و بعد گسترش مرحله‌ای. معیار موفقیت و بازگشت را پیش از Rollout مشخص کنید."
+          >
+            Use a Test OU, then a small pilot security group, then staged
+            expansion. Define success and rollback criteria before rollout.
+          </li>
+          <li
+            data-en="Store large installers on a file server rather than SYSVOL. Keep AD/SYSVOL replication focused on policy data and monitor repository capacity and SMB availability."
+            data-fa="Installer حجیم را روی File Server نگه دارید، نه SYSVOL. Replication مربوط به AD/SYSVOL را به داده Policy محدود و ظرفیت Repository و دسترسی SMB را پایش کنید."
+          >
+            Store large installers on a file server rather than SYSVOL. Keep
+            AD/SYSVOL replication focused on policy data and monitor repository
+            capacity and SMB availability.
+          </li>
+          <li
+            data-en="Limit write access to approved maintainers, verify package provenance and back up both the software repository and the GPO. Test restore procedures."
+            data-fa="Write را به مسئولان تأییدشده محدود کنید، اصالت بسته را بررسی و از Repository و GPO Backup بگیرید. روش Restore را تست کنید."
+          >
+            Limit write access to approved maintainers, verify package
+            provenance and back up both the software repository and the GPO.
+            Test restore procedures.
+          </li>
+          <li
+            data-en="Retain source files while clients may need repair, removal or upgrade. Avoid changing the share hostname or deleting old packages during a rollout."
+            data-fa="تا زمانی که کلاینت‌ها برای Repair، حذف یا Upgrade به Source نیاز دارند فایل‌ها را حفظ کنید. هنگام Rollout نام میزبان Share را تغییر ندهید و بسته قبلی را حذف نکنید."
+          >
+            Retain source files while clients may need repair, removal or
+            upgrade. Avoid changing the share hostname or deleting old packages
+            during a rollout.
+          </li>
+          <li
+            data-en="Schedule restarts and communicate expected boot delays. A GPO report is not inventory: verify application versions on representative clients and track exceptions."
+            data-fa="Restartها را زمان‌بندی و تأخیر احتمالی Boot را اطلاع‌رسانی کنید. گزارش GPO، Inventory نیست؛ نسخه برنامه روی کلاینت‌های نماینده و استثناها را ثبت کنید."
+          >
+            Schedule restarts and communicate expected boot delays. A GPO report
+            is not inventory: verify application versions on representative
+            clients and track exceptions.
+          </li>
+        </ul>
+      </section>
+      <section id="uninstall">
+        <h2
+          data-en="Uninstall and scope changes"
+          data-fa="حذف برنامه و تغییر Scope"
+        >
+          Uninstall and scope changes
+        </h2>
+        <pre
+          dir="ltr"
+        ><code class="language-text">Package → Properties → Deployment
+→ Uninstall this application when it falls out of the scope of management</code></pre>
+        <p
+          data-en="This is the GPMC label for the option often described as Remove this application when it falls out of the scope of management. When enabled, a managed computer installation can be removed at subsequent startup processing after the computer leaves deployment scope, such as moving to an OU where the application is not assigned. It is not a cleanup option for every manually installed copy."
+          data-fa="این نام واقعی گزینه در GPMC است که گاهی با عبارت Remove this application when it falls out of the scope of management توصیف می‌شود. با فعال بودن آن، نصب مدیریت‌شده کامپیوتر پس از خروج از Scope، مانند انتقال به OU بدون تخصیص برنامه، در پردازش بعدی Startup می‌تواند حذف شود. این گزینه پاک‌کننده عمومی همه نسخه‌های نصب‌شده دستی نیست."
+        >
+          This is the GPMC label for the option often described as Remove this
+          application when it falls out of the scope of management. When
+          enabled, a managed computer installation can be removed at subsequent
+          startup processing after the computer leaves deployment scope, such as
+          moving to an OU where the application is not assigned. It is not a
+          cleanup option for every manually installed copy.
+        </p>
+        <p
+          data-en="Treat OU moves, security group removals and filter/link changes as application lifecycle changes. An accidental scope reduction can remove a production tool. Decide deliberately whether to enable the option, test the exact transition and keep a recovery path; losing connectivity is not itself an approved uninstall workflow."
+          data-fa="جابه‌جایی OU، حذف عضویت گروه و تغییر Filter یا Link را تغییر چرخه عمر برنامه بدانید. کاهش اشتباهی Scope می‌تواند ابزار Production را حذف کند. درباره فعال بودن گزینه آگاهانه تصمیم بگیرید، انتقال واقعی را تست و مسیر بازیابی را حفظ کنید؛ قطع ارتباط شبکه روش تأییدشده حذف نیست."
+        >
+          Treat OU moves, security group removals and filter/link changes as
+          application lifecycle changes. An accidental scope reduction can
+          remove a production tool. Decide deliberately whether to enable the
+          option, test the exact transition and keep a recovery path; losing
+          connectivity is not itself an approved uninstall workflow.
+        </p>
+        <pre dir="ltr"><code class="language-text">Software installation
+→ Package
+→ All Tasks
+→ Remove
+
+1. Immediately uninstall the software from users and computers
+2. Allow users to continue to use the software, but prevent new installations</code></pre>
+        <p
+          data-en="The first choice schedules removal through policy processing, for computer assignments normally at startup, rather than instantly removing it from all running clients. The second leaves existing installations usable and stops new policy installations. Before confirming, review scope and rollback, back up the GPO and verify removal on the pilot. Do not delete the repository first."
+          data-fa="انتخاب اول حذف را از طریق پردازش Policy زمان‌بندی می‌کند؛ برای Computer Assignment معمولاً هنگام Startup، نه حذف آنی از همه کلاینت‌های روشن. انتخاب دوم نصب موجود را قابل استفاده نگه می‌دارد و نصب جدید از Policy را متوقف می‌کند. پیش از تأیید Scope و بازگشت را بررسی، از GPO Backup و حذف را روی Pilot تست کنید. Repository را پیش از این کار پاک نکنید."
+        >
+          The first choice schedules removal through policy processing, for
+          computer assignments normally at startup, rather than instantly
+          removing it from all running clients. The second leaves existing
+          installations usable and stops new policy installations. Before
+          confirming, review scope and rollback, back up the GPO and verify
+          removal on the pilot. Do not delete the repository first.
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/dn789187(v=ws.11)"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft: managed application removal and deployment options</a
+          >
+        </p>
+      </section>
+      <section id="upgrade">
+        <h2
+          data-en="Upgrade and version management"
+          data-fa="Upgrade و مدیریت نسخه"
+        >
+          Upgrade and version management
+        </h2>
+        <pre dir="ltr"><code class="language-text">7-Zip 24.x
+    ↓
+7-Zip New Version
+
+\\FS01\Software$\7Zip\24.x\7zip-x64.msi
+\\FS01\Software$\7Zip\NewVersion\7zip-x64.msi</code></pre>
+        <p
+          data-en="Do not overwrite the old MSI in place and assume every client upgrades. ProductCode, UpgradeCode, PackageCode and the vendor's upgrade logic determine how Windows Installer treats a package. Preserve the previous source, copy the approved release into a new version directory and add it as a new package."
+          data-fa="MSI قبلی را در همان مسیر جایگزین نکنید و Upgrade همه کلاینت‌ها را قطعی فرض نکنید. ProductCode، UpgradeCode، PackageCode و منطق Upgrade سازنده رفتار Windows Installer را تعیین می‌کنند. Source قبلی را حفظ کنید، نسخه تأییدشده را در پوشه جدید کپی و به‌عنوان Package جدید اضافه کنید."
+        >
+          Do not overwrite the old MSI in place and assume every client
+          upgrades. ProductCode, UpgradeCode, PackageCode and the vendor's
+          upgrade logic determine how Windows Installer treats a package.
+          Preserve the previous source, copy the approved release into a new
+          version directory and add it as a new package.
+        </p>
+        <pre
+          dir="ltr"
+        ><code class="language-text">New package → Properties → Upgrades → Add
+→ Current Group Policy object (or A specific GPO)
+→ Select the previous package
+
+Choose only after vendor/pilot validation:
+• Package can upgrade over the existing package
+• Uninstall the existing package, then install the upgrade package</code></pre>
+        <p
+          data-en="Use the Upgrades relationship after checking whether the MSI supports an in-place upgrade or requires removal first. Do not infer that from the filename. On the pilot, check a clean install and an upgrade from the deployed version, retained settings, reboot requests and MSI events. Prevent competing old/new assignments and define how to recover if rollback requires uninstalling the new release."
+          data-fa="رابطه Upgrades را پس از بررسی پشتیبانی MSI از Upgrade مستقیم یا نیاز به حذف قبلی تنظیم کنید. از نام فایل نمی‌توان این رفتار را نتیجه گرفت. روی Pilot نصب تازه و Upgrade از نسخه مستقر، حفظ تنظیمات، درخواست Restart و Eventهای MSI را بررسی کنید. از تخصیص متعارض نسخه قدیم و جدید جلوگیری کنید و اگر بازگشت نیازمند حذف نسخه جدید است روش بازیابی را مشخص کنید."
+        >
+          Use the Upgrades relationship after checking whether the MSI supports
+          an in-place upgrade or requires removal first. Do not infer that from
+          the filename. On the pilot, check a clean install and an upgrade from
+          the deployed version, retained settings, reboot requests and MSI
+          events. Prevent competing old/new assignments and define how to
+          recover if rollback requires uninstalling the new release.
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/dn789187(v=ws.11)"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft: package upgrade relationships</a
+          >
+        </p>
+      </section>
+      <section id="faq">
+        <h2 data-en="Frequently asked questions" data-fa="پرسش‌های متداول">
+          Frequently asked questions
+        </h2>
+        <div class="article-faq-item">
+          <h3
+            data-en="Can Software Installation deploy an EXE directly?"
+            data-fa="آیا EXE را می‌توان مستقیماً با Software Installation نصب کرد؟"
+          >
+            Can Software Installation deploy an EXE directly?
+          </h3>
+          <p
+            data-en="Not as an MSI package. Obtain the vendor's supported MSI or use a separate deployment method designed for EXE installers."
+            data-fa="به‌عنوان بسته MSI خیر. MSI پشتیبانی‌شده سازنده را تهیه کنید یا از روش استقرار مستقل مناسب Installerهای EXE استفاده کنید."
+          >
+            Not as an MSI package. Obtain the vendor's supported MSI or use a
+            separate deployment method designed for EXE installers.
+          </p>
+        </div>
+        <div class="article-faq-item">
+          <h3
+            data-en="Why does the MSI not install immediately after gpupdate?"
+            data-fa="چرا MSI بعد از gpupdate فوراً نصب نمی‌شود؟"
+          >
+            Why does the MSI not install immediately after gpupdate?
+          </h3>
+          <p
+            data-en="Computer Software Installation needs foreground startup processing. Refresh policy, then restart in a maintenance window with network access; synchronous processing may require a further startup cycle."
+            data-fa="Software Installation کامپیوتر به پردازش Foreground هنگام Startup نیاز دارد. Policy را تازه‌سازی و در پنجره نگهداری با دسترسی شبکه Restart کنید؛ پردازش همگام ممکن است به چرخه Startup دیگری نیاز داشته باشد."
+          >
+            Computer Software Installation needs foreground startup processing.
+            Refresh policy, then restart in a maintenance window with network
+            access; synchronous processing may require a further startup cycle.
+          </p>
+        </div>
+        <div class="article-faq-item">
+          <h3
+            data-en="Why must I use a UNC path?"
+            data-fa="چرا باید از مسیر UNC استفاده کنیم؟"
+          >
+            Why must I use a UNC path?
+          </h3>
+          <p
+            data-en="A UNC identifies the shared source for every client. Local disk paths and user mapped drives do not reliably identify that source in computer startup context."
+            data-fa="UNC منبع اشتراکی را برای همه کلاینت‌ها مشخص می‌کند. مسیر دیسک محلی و Drive نگاشت‌شده کاربر، آن منبع را در Context کامپیوتر هنگام Startup به شکل قابل اتکا مشخص نمی‌کنند."
+          >
+            A UNC identifies the shared source for every client. Local disk
+            paths and user mapped drives do not reliably identify that source in
+            computer startup context.
+          </p>
+        </div>
+        <div class="article-faq-item">
+          <h3
+            data-en="Do Domain Users need access to the MSI?"
+            data-fa="آیا Domain Users باید به MSI دسترسی داشته باشند؟"
+          >
+            Do Domain Users need access to the MSI?
+          </h3>
+          <p
+            data-en="Not for this computer-assigned scenario. Target computer accounts need repository read access. User deployments have different access requirements."
+            data-fa="برای این سناریوی Computer Assignment خیر. حساب کامپیوترهای هدف به Read روی Repository نیاز دارند. نصب در سطح کاربر نیاز دسترسی متفاوتی دارد."
+          >
+            Not for this computer-assigned scenario. Target computer accounts
+            need repository read access. User deployments have different access
+            requirements.
+          </p>
+        </div>
+        <div class="article-faq-item">
+          <h3
+            data-en="How do I deploy to only a few computers?"
+            data-fa="چگونه نصب را فقط روی چند کامپیوتر اجرا کنیم؟"
+          >
+            How do I deploy to only a few computers?
+          </h3>
+          <p
+            data-en="Add their computer accounts to GG-Deploy-7Zip, link the GPO to their OU and give the group Read plus Apply Group Policy. Remove broad Apply grants and restart after membership changes."
+            data-fa="حساب کامپیوترها را عضو GG-Deploy-7Zip کنید، GPO را به OU آن‌ها Link و به گروه Read و Apply Group Policy بدهید. Apply عمومی را حذف کنید و پس از تغییر عضویت Restart انجام دهید."
+          >
+            Add their computer accounts to GG-Deploy-7Zip, link the GPO to their
+            OU and give the group Read plus Apply Group Policy. Remove broad
+            Apply grants and restart after membership changes.
+          </p>
+        </div>
+        <div class="article-faq-item">
+          <h3
+            data-en="What if 7-Zip is already installed?"
+            data-fa="اگر 7-Zip قبلاً نصب شده باشد چه می‌شود؟"
+          >
+            What if 7-Zip is already installed?
+          </h3>
+          <p
+            data-en="The result depends on the installed product identity, version, installation context and MSI upgrade rules. It may enter maintenance, upgrade or fail with a version conflict. Test existing installations in the pilot."
+            data-fa="نتیجه به هویت محصول نصب‌شده، نسخه، Context نصب و قواعد Upgrade بسته MSI بستگی دارد. ممکن است Maintenance، Upgrade یا خطای تعارض نسخه رخ دهد. نصب‌های قبلی را در Pilot تست کنید."
+          >
+            The result depends on the installed product identity, version,
+            installation context and MSI upgrade rules. It may enter
+            maintenance, upgrade or fail with a version conflict. Test existing
+            installations in the pilot.
+          </p>
+        </div>
+        <div class="article-faq-item">
+          <h3
+            data-en="Does an applied GPO prove that installation succeeded?"
+            data-fa="آیا Applied بودن GPO موفقیت نصب را ثابت می‌کند؟"
+          >
+            Does an applied GPO prove that installation succeeded?
+          </h3>
+          <p
+            data-en="No. Verify the application version, launch it as a standard user and correlate MsiInstaller events with the deployment attempt."
+            data-fa="خیر. نسخه برنامه را بررسی کنید، آن را با کاربر معمولی اجرا و Eventهای MsiInstaller را با تلاش نصب تطبیق دهید."
+          >
+            No. Verify the application version, launch it as a standard user and
+            correlate MsiInstaller events with the deployment attempt.
+          </p>
+        </div>
+      </section>
+      <section id="modern-tools">
+        <h2
+          data-en="When to consider modern management tools"
+          data-fa="چه زمانی ابزارهای مدیریتی جدیدتر مناسب‌اند"
+        >
+          When to consider modern management tools
+        </h2>
+        <p
+          data-en="GPSI remains practical for simple MSI assignments on computers with startup access to the domain network. It provides neither a complete inventory nor a rich deployment reporting and compliance workflow. If the requirement grows to application lifecycle management, remote Internet clients or cloud management, evaluate Microsoft Intune or Microsoft Configuration Manager against the environment, licensing and operational needs."
+          data-fa="GPSI برای تخصیص ساده MSI به کامپیوترهای دارای دسترسی شبکه دامین هنگام Startup کاربردی است. Inventory کامل یا گردش کار گسترده Reporting و Compliance فراهم نمی‌کند. اگر نیاز به مدیریت چرخه عمر برنامه، کلاینت‌های اینترنتی راه‌دور یا Cloud Management افزایش یافت، Microsoft Intune یا Microsoft Configuration Manager را متناسب با محیط، مجوزها و نیاز عملیاتی ارزیابی کنید."
+        >
+          GPSI remains practical for simple MSI assignments on computers with
+          startup access to the domain network. It provides neither a complete
+          inventory nor a rich deployment reporting and compliance workflow. If
+          the requirement grows to application lifecycle management, remote
+          Internet clients or cloud management, evaluate Microsoft Intune or
+          Microsoft Configuration Manager against the environment, licensing and
+          operational needs.
+        </p>
+        <p
+          data-en="Keep the choice proportional to the task: a small local deployment can stay with GPO, while a distributed fleet may need a platform that measures installation state and retries delivery without relying on a domain-connected boot."
+          data-fa="انتخاب را متناسب با نیاز نگه دارید: نصب محدود محلی می‌تواند با GPO انجام شود، اما مجموعه توزیع‌شده ممکن است به بستری نیاز داشته باشد که وضعیت نصب را اندازه بگیرد و بدون وابستگی به Boot متصل به دامین، تحویل را تکرار کند."
+        >
+          Keep the choice proportional to the task: a small local deployment can
+          stay with GPO, while a distributed fleet may need a platform that
+          measures installation state and retries delivery without relying on a
+          domain-connected boot.
+        </p>
+      </section>
+      <section id="references">
+        <h2
+          data-en="Official references and validation scope"
+          data-fa="مراجع رسمی و دامنه اعتبارسنجی"
+        >
+          Official references and validation scope
+        </h2>
+        <p
+          data-en="The procedures and command syntax were checked against the Microsoft references below. The scenario is a reproducible administration plan, not a report of a deployment executed on corp.local. Before production, validate the actual MSI, OS builds, ACL inheritance, network at boot, removal and upgrade in your own Test OU."
+          data-fa="روش‌ها و Syntax دستورها با مراجع Microsoft زیر تطبیق داده شده‌اند. سناریو یک برنامه اجرایی قابل تکرار است، نه گزارش نصب اجراشده روی corp.local. پیش از Production، MSI واقعی، Build سیستم‌عامل، ارث‌بری ACL، شبکه هنگام Boot، حذف و Upgrade را در Test OU خود بررسی کنید."
+        >
+          The procedures and command syntax were checked against the Microsoft
+          references below. The scenario is a reproducible administration plan,
+          not a report of a deployment executed on corp.local. Before
+          production, validate the actual MSI, OS builds, ACL inheritance,
+          network at boot, removal and upgrade in your own Test OU.
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/troubleshoot/windows-server/group-policy/use-group-policy-to-install-software"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft Learn: MSI distribution</a
+          >
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/dn789187(v=ws.11)"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft Learn: Software Settings, upgrades and removal</a
+          >
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-policy/group-policy-scope"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft Learn: GPO scope and security filtering</a
+          >
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/windows/win32/ad/the-localsystem-account"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft Learn: LocalSystem computer identity</a
+          >
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/gpupdate"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft Learn: gpupdate</a
+          >
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/gpresult"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft Learn: gpresult</a
+          >
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/powershell/module/grouppolicy/get-gpresultantsetofpolicy?view=windowsserver2025-ps"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft Learn: Get-GPResultantSetOfPolicy</a
+          >
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/previous-versions/windows/desktop/policy/logon-optimization"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft Learn: Logon optimization</a
+          >
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/troubleshoot/windows-server/group-policy/applying-group-policy-troubleshooting-guidance"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft Learn: Group Policy troubleshooting</a
+          >
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/windows/win32/msi/error-codes"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft Learn: Windows Installer return codes</a
+          >
+        </p>
+      </section>
+    </article>
+  </body>
+</html>

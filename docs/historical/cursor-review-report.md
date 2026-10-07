@@ -1,9 +1,11 @@
 > **HISTORICAL.** Read-only `/docs` review snapshot (2026-09-16) taken before this documentation rebuild. Current status: [PROJECT-STATUS.md](../current/PROJECT-STATUS.md). Index: [DOCUMENTATION-INDEX.md](DOCUMENTATION-INDEX.md).
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 # Meet AJ Portfolio — Cursor Migration Documentation Review
 
-**Review type:** Read-only audit of `/docs` plus cross-check against the current workspace (no code or documentation fixes).  
-**Review date:** 2026-09-16  
+**Review type:** Read-only audit of `/docs` plus cross-check against the current workspace (no code or documentation fixes).
+**Review date:** 2026-09-16
 **Scope:** All files under `/docs`, including phase reports, inventories, and the baseline hash set.
 
 Documents reviewed:
@@ -311,201 +313,201 @@ Overall planned security is **directionally right** for a small CMS and **not im
 
 ## 1. Workspace is not a Git repository
 
-**Severity:** Critical  
+**Severity:** Critical
 
-**Description:** Plans repeatedly cite branch `feature/laravel-migration` and `main` commit `a9b23d5`. This workspace has no `.git` directory. User environment metadata also reports the directory is not a Git repo.  
+**Description:** Plans repeatedly cite branch `feature/laravel-migration` and `main` commit `a9b23d5`. This workspace has no `.git` directory. User environment metadata also reports the directory is not a Git repo.
 
-**Impact:** No verifiable baseline, no branch protection, no way to commit, diff, or roll back. SHA-256 file baselines cannot be tied to a commit.  
+**Impact:** No verifiable baseline, no branch protection, no way to commit, diff, or roll back. SHA-256 file baselines cannot be tied to a commit.
 
 **Recommendation:** After reconciling docs and making Phase 1 bootable, `git init` (or clone the real remote), recreate `main` from the original static site if it still exists elsewhere, then branch. Do not invent `a9b23d5` in this tree.
 
 ## 2. Planning documents contradict the approved stack and still forbid implementation
 
-**Severity:** Critical  
+**Severity:** Critical
 
-**Description:** `laravel-migration-plan.md` and `laravel-implementation-plan.md` still say Laravel 11 / PHP 8.2 / Filament 3, “awaiting approval”, and “do not start coding”. `framework-version-decision.md` and Phase 1/2 say Laravel 13 / PHP 8.4 / Filament 5 and that implementation has started. Table names (`requests` vs `contact_requests`), `pages`, Users, notifications, and public `/de` routes also disagree.  
+**Description:** `laravel-migration-plan.md` and `laravel-implementation-plan.md` still say Laravel 11 / PHP 8.2 / Filament 3, “awaiting approval”, and “do not start coding”. `framework-version-decision.md` and Phase 1/2 say Laravel 13 / PHP 8.4 / Filament 5 and that implementation has started. Table names (`requests` vs `contact_requests`), `pages`, Users, notifications, and public `/de` routes also disagree.
 
-**Impact:** Implementers, reviewers, and future Git history will not know which schema or framework is approved. Duplicate tables or an unsupported Laravel 11 deploy are plausible.  
+**Impact:** Implementers, reviewers, and future Git history will not know which schema or framework is approved. Duplicate tables or an unsupported Laravel 11 deploy are plausible.
 
 **Recommendation:** Mark one document as the living plan. Stamp the others “superseded”. Explicitly approve: Laravel 13, PHP 8.4, Filament 5, `requests` (not `contact_requests`), no `pages` in core, DE draft-only / no public DE routes.
 
 ## 3. Phase 1 is not actually complete — Laravel cannot boot
 
-**Severity:** Critical  
+**Severity:** Critical
 
-**Description:** `vendor/` is absent. `routes/web.php` has no routes. Phase 1 correctly says PHP execution, Composer audit, and application boot are pending, yet `composer.lock` already pins `laravel/framework` v13.31.0. That lockfile is not evidence of a running app.  
+**Description:** `vendor/` is absent. `routes/web.php` has no routes. Phase 1 correctly says PHP execution, Composer audit, and application boot are pending, yet `composer.lock` already pins `laravel/framework` v13.31.0. That lockfile is not evidence of a running app.
 
-**Impact:** Migrations, Filament, importer, and tests cannot be executed. Any “phase complete” claim would be false.  
+**Impact:** Migrations, Filament, importer, and tests cannot be executed. Any “phase complete” claim would be false.
 
 **Recommendation:** Install PHP 8.4 locally, `composer install`, run `php artisan --version`, `composer audit`, and `composer check-platform-reqs`. Record exact versions in the Phase 1 report as the decision document already requires.
 
 ## 4. DirectAdmin PHP 8.4, public root, and Composer are unverified
 
-**Severity:** Critical  
+**Severity:** Critical
 
-**Description:** Production is specified as DirectAdmin + PHP 8.4 + document root `public/` + Composer. None of this has been inspected on `meetaj.ir` hosting. Composer platform is 8.4.0; Laravel 13 would allow 8.3, but this project would not.  
+**Description:** Production is specified as DirectAdmin + PHP 8.4 + document root `public/` + Composer. None of this has been inspected on `meetaj.ir` hosting. Composer platform is 8.4.0; Laravel 13 would allow 8.3, but this project would not.
 
-**Impact:** Cutover can fail completely (wrong PHP), or succeed dangerously (repo served from `public_html`, credentials and legacy PHP exposed, `.html` files bypassing 301s).  
+**Impact:** Cutover can fail completely (wrong PHP), or succeed dangerously (repo served from `public_html`, credentials and legacy PHP exposed, `.html` files bypassing 301s).
 
 **Recommendation:** Before more application work, collect host facts: PHP selector versions, CLI vs FPM, Composer presence, symlink permission, ability to point the domain at `public/`. If 8.4 is unavailable, either upgrade the host or consciously lower the platform to 8.3 (still valid for Laravel 13).
 
 ## 5. Physical files in `public/` can bypass SEO redirects
 
-**Severity:** High  
+**Severity:** High
 
-**Description:** Plans correctly require that original article/service HTML and `sitemap.xml` never sit in the Laravel public directory. `public/.htaccess` routes only when the request is not an existing file.  
+**Description:** Plans correctly require that original article/service HTML and `sitemap.xml` never sit in the Laravel public directory. `public/.htaccess` routes only when the request is not an existing file.
 
-**Impact:** Google keeps indexing `.html` 200s; clean URLs never become canonical; ranking splits or drops.  
+**Impact:** Google keeps indexing `.html` 200s; clean URLs never become canonical; ranking splits or drops.
 
 **Recommendation:** Public allowlist + publish command + a release checklist that fails if `public/articles/*.html` or `public/sitemap.xml` exist.
 
 ## 6. Bilingual unprefixed pages plus `/fa` records can duplicate Persian content
 
-**Severity:** High  
+**Severity:** High
 
-**Description:** The live site has one URL per article with `data-en`/`data-fa`. The importer intends both to preserve bilingual HTML and to create separate language rows with `/fa/articles/{slug}`.  
+**Description:** The live site has one URL per article with `data-en`/`data-fa`. The importer intends both to preserve bilingual HTML and to create separate language rows with `/fa/articles/{slug}`.
 
-**Impact:** Duplicate content, mixed canonicals, and hreflang pointing at near-copies. Client JS can also overwrite server-rendered FA/DE.  
+**Impact:** Duplicate content, mixed canonicals, and hreflang pointing at near-copies. Client JS can also overwrite server-rendered FA/DE.
 
 **Recommendation:** Choose one public model before import: (A) keep unprefixed bilingual pages and do not publish FA-prefixed duplicates, or (B) split locales and strip opposite-language bodies from each URL. Document the choice in the living plan. Keep DE unpublished and out of hreflang.
 
 ## 7. `public/sw.js` is the network-only worker the plan forbids deploying
 
-**Severity:** High  
+**Severity:** High
 
-**Description:** Original `sw.js` provides offline caching. `public/sw.js` uninstalls `meet-aj-*` caches and does not recache public documents. The implementation plan says this worker is unsuitable and must be replaced after approval. It is already in `public/`.  
+**Description:** Original `sw.js` provides offline caching. `public/sw.js` uninstalls `meet-aj-*` caches and does not recache public documents. The implementation plan says this worker is unsuitable and must be replaced after approval. It is already in `public/`.
 
-**Impact:** The moment `public/` becomes the document root, installed PWAs lose offline behavior. Conversely, shipping the *original* worker unchanged would cache `/admin` and Livewire.  
+**Impact:** The moment `public/` becomes the document root, installed PWAs lose offline behavior. Conversely, shipping the *original* worker unchanged would cache `/admin` and Livewire.
 
 **Recommendation:** Do not point production at `public/` until a reviewed replacement worker exists: public network-first + offline fallback, explicit exclusions for `/admin`, `/livewire`, tokens, forms, and `no-store`.
 
 ## 8. Filament sources exist without the Filament package or panel registration
 
-**Severity:** High  
+**Severity:** High
 
-**Description:** Article/Category/Request resources and `AdminPanelProvider` are in `app/`, but `composer.json` does not require `filament/filament`, and the provider is not listed in `bootstrap/providers.php`. Phase 1 said Filament waits until phase 3.  
+**Description:** Article/Category/Request resources and `AdminPanelProvider` are in `app/`, but `composer.json` does not require `filament/filament`, and the provider is not listed in `bootstrap/providers.php`. Phase 1 said Filament waits until phase 3.
 
-**Impact:** `php artisan` after a future naive provider registration will fatal. Code review cannot validate admin auth. Windows `composer require filament/filament:"^5.0"` must keep the caret so Laravel 13-capable 5.x is resolved.  
+**Impact:** `php artisan` after a future naive provider registration will fatal. Code review cannot validate admin auth. Windows `composer require filament/filament:"^5.0"` must keep the caret so Laravel 13-capable 5.x is resolved.
 
 **Recommendation:** Either remove the stubs until Phase 3, or add Filament 5, register the panel, implement `FilamentUser`, and install with a quoted `^5.0` constraint.
 
 ## 9. Article preservation fields cannot be mass-assigned
 
-**Severity:** High  
+**Severity:** High
 
-**Description:** Migration includes `seo_data`, `presentation`, `sort_order`. `Article::$fillable` does not. Featured image is a single field; 24 PNG + 23 JPEG thumbnail paths need presentation metadata. Canonical validation rejects anything except the clean self-URL.  
+**Description:** Migration includes `seo_data`, `presentation`, `sort_order`. `Article::$fillable` does not. Featured image is a single field; 24 PNG + 23 JPEG thumbnail paths need presentation metadata. Canonical validation rejects anything except the clean self-URL.
 
-**Impact:** A normal importer `create()` will silently drop SEO JSON, layout/TOC/card context, and sort order. CMS edits can destroy thumbnail vs gallery distinction.  
+**Impact:** A normal importer `create()` will silently drop SEO JSON, layout/TOC/card context, and sort order. CMS edits can destroy thumbnail vs gallery distinction.
 
 **Recommendation:** Add the preservation fields to fillable or forceFill in a dedicated importer API. Store thumbnail and gallery paths separately in `presentation`. Normalize canonicals in the importer, not by losing `seo_data`.
 
 ## 10. Contact contract and rate limit are not specified to match production
 
-**Severity:** High  
+**Severity:** High
 
-**Description:** Live `forms/contact.php` requires subject, tight length limits, honeypot fake-`OK` without storage, CSRF consume, and **5 requests/hour/IP** with fail-closed 503. Laravel plan says “throttling” and nullable subject without numbers. Mail is currently the only persistence.  
+**Description:** Live `forms/contact.php` requires subject, tight length limits, honeypot fake-`OK` without storage, CSRF consume, and **5 requests/hour/IP** with fail-closed 503. Laravel plan says “throttling” and nullable subject without numbers. Mail is currently the only persistence.
 
-**Impact:** Front-end JS can break; spam capacity can increase; users can see `OK` when mail fails if DB save succeeds (or the reverse).  
+**Impact:** Front-end JS can break; spam capacity can increase; users can see `OK` when mail fails if DB save succeeds (or the reverse).
 
 **Recommendation:** Copy the live validation table into the living plan. Keep honeypot fake-OK. Persist first, then send mail; define whether mail failure still returns `OK`. Keep fail-closed throttling at 5/hour unless a change is approved.
 
 ## 11. Shared-host `storage:link` has no fallback
 
-**Severity:** High  
+**Severity:** High
 
-**Description:** Filament uploads target the `public` disk and URLs under `/storage`. DirectAdmin often disables symlinks.  
+**Description:** Filament uploads target the `public` disk and URLs under `/storage`. DirectAdmin often disables symlinks.
 
-**Impact:** Admin image uploads appear to work and then 404 publicly.  
+**Impact:** Admin image uploads appear to work and then 404 publicly.
 
 **Recommendation:** Document a non-symlink fallback (alias/rewrite from `/storage` to `storage/app/public`, or deploy-time copy). Test it on staging.
 
 ## 12. CSRF alias and Laravel 13 forgery middleware are unimplemented
 
-**Severity:** High  
+**Severity:** High
 
-**Description:** Forms post `csrf_token`, not `_token`. Plans mention `ValidateCsrfToken`; Laravel 13 uses `PreventRequestForgery`. Public middleware is empty.  
+**Description:** Forms post `csrf_token`, not `_token`. Plans mention `ValidateCsrfToken`; Laravel 13 uses `PreventRequestForgery`. Public middleware is empty.
 
-**Impact:** All seven forms will 419 after cutover unless the legacy field is accepted. Exempting the route would be worse.  
+**Impact:** All seven forms will 419 after cutover unless the legacy field is accepted. Exempting the route would be worse.
 
 **Recommendation:** Implement the alias without exemption. Add feature tests that use real HTTP sessions.
 
 ## 13. Redirect cascade on article delete with no 410
 
-**Severity:** Medium  
+**Severity:** Medium
 
-**Description:** Deleting an article deletes `article_redirects`. Old `.html` and prior slugs 404. Tests even assert redirect count goes to 0.  
+**Description:** Deleting an article deletes `article_redirects`. Old `.html` and prior slugs 404. Tests even assert redirect count goes to 0.
 
-**Impact:** Accidental delete drops all equity for that URL set.  
+**Impact:** Accidental delete drops all equity for that URL set.
 
 **Recommendation:** Soft delete, or keep redirects pointing at a 410 response. Never redirect deleted articles to `/`.
 
 ## 14. HTML sanitizer / rich editor can strip code, TOC, and `data-fa`
 
-**Severity:** Medium  
+**Severity:** Medium
 
-**Description:** Articles contain escaped code, copy buttons, section IDs, and bilingual attributes. The plan is aware; sanitizer config and source-slice extraction are not yet code. Filament uses a plain Textarea for imported `presentation` records (good) and RichEditor for new ones.  
+**Description:** Articles contain escaped code, copy buttons, section IDs, and bilingual attributes. The plan is aware; sanitizer config and source-slice extraction are not yet code. Filament uses a plain Textarea for imported `presentation` records (good) and RichEditor for new ones.
 
-**Impact:** Silent content loss, broken TOCs, Persian attribute loss, XSS if the allowlist is too wide.  
+**Impact:** Silent content loss, broken TOCs, Persian attribute loss, XSS if the allowlist is too wide.
 
 **Recommendation:** Fail import on unexplained sanitizer removals, as planned. Round-trip fixtures for a code-heavy article (for example Linux CLI) and a schema-rich article.
 
 ## 15. Phase reports omit required evidence and miss later files
 
-**Severity:** Medium  
+**Severity:** Medium
 
-**Description:** Phase 1 does not record the lockfile version even though `v13.31.0` exists. Phase 2 claims syntax checks on “35 PHP files” while Filament stubs already exist. No `DEPLOYMENT.md`. Inventory mixes site pages with `.claude` skills.  
+**Description:** Phase 1 does not record the lockfile version even though `v13.31.0` exists. Phase 2 claims syntax checks on “35 PHP files” while Filament stubs already exist. No `DEPLOYMENT.md`. Inventory mixes site pages with `.claude` skills.
 
-**Impact:** False confidence; reviewers cannot tell pass from pending.  
+**Impact:** False confidence; reviewers cannot tell pass from pending.
 
 **Recommendation:** Update phase reports with executed commands only. Keep a separate public-URL inventory from the whole-tree hash list.
 
 ## 16. Admin authorization holes in the stubs
 
-**Severity:** Medium  
+**Severity:** Medium
 
-**Description:** No `canAccessPanel()`, no last-admin protection, Request policy untested, category select not language-filtered, `RequestResource` searches full message bodies.  
+**Description:** No `canAccessPanel()`, no last-admin protection, Request policy untested, category select not language-filtered, `RequestResource` searches full message bodies.
 
-**Impact:** Editor privilege escalation or contact-data exposure once Filament is wired.  
+**Impact:** Editor privilege escalation or contact-data exposure once Filament is wired.
 
 **Recommendation:** Implement FilamentUser, register policies, hide RequestResource from editors, filter categories by article language, add last-admin guards before any User UI.
 
 ## 17. `/up` health route and missing security headers
 
-**Severity:** Medium  
+**Severity:** Medium
 
-**Description:** Laravel health is enabled. Planned `ResponseHeaders` middleware is absent. Robots still allow all paths.  
+**Description:** Laravel health is enabled. Planned `ResponseHeaders` middleware is absent. Robots still allow all paths.
 
-**Impact:** Fingerprinting; admin URL discovery; missing HSTS/nosniff on the HTML site after PHP forms are retired.  
+**Impact:** Fingerprinting; admin URL discovery; missing HSTS/nosniff on the HTML site after PHP forms are retired.
 
 **Recommendation:** Disallow `/up`, `/admin`, `/livewire`, and `/forms/` in robots; protect `/up` if it must stay; restore the current form security headers on Laravel responses.
 
 ## 18. Trailing-slash 301 plus article 301 can chain
 
-**Severity:** Low  
+**Severity:** Low
 
-**Description:** `public/.htaccess` 301-strips trailing slashes before Laravel. A request to `/articles/slug.html/` becomes `/articles/slug.html` then another 301 to `/articles/slug`.  
+**Description:** `public/.htaccess` 301-strips trailing slashes before Laravel. A request to `/articles/slug.html/` becomes `/articles/slug.html` then another 301 to `/articles/slug`.
 
-**Impact:** Minor crawl waste.  
+**Impact:** Minor crawl waste.
 
 **Recommendation:** Serve the `.html/` case in one hop if logs show it; otherwise accept as low.
 
 ## 19. `requests` model/table naming
 
-**Severity:** Low  
+**Severity:** Low
 
-**Description:** Table `requests` and model `Request` collide with HTTP Request. Documented, not yet coded around.  
+**Description:** Table `requests` and model `Request` collide with HTTP Request. Documented, not yet coded around.
 
-**Impact:** Import bugs and confusing stack traces.  
+**Impact:** Import bugs and confusing stack traces.
 
 **Recommendation:** Keep the approved table name if required, but alias `HttpRequest` everywhere. Do not also create `contact_requests`.
 
 ## 20. Collation and search limits
 
-**Severity:** Low  
+**Severity:** Low
 
-**Description:** `utf8mb4_unicode_ci` stores Persian correctly but is not the best Persian sort/search collation. No FULLTEXT on contacts/articles.  
+**Description:** `utf8mb4_unicode_ci` stores Persian correctly but is not the best Persian sort/search collation. No FULLTEXT on contacts/articles.
 
-**Impact:** Irrelevant at 23 articles; minor admin search weakness later.  
+**Impact:** Irrelevant at 23 articles; minor admin search weakness later.
 
 **Recommendation:** Stay on unicode_ci unless Persian sorting bugs appear. Revisit FULLTEXT when contact volume grows.
 

@@ -1,4 +1,6 @@
 > **HISTORICAL / SUPERSEDED.**
+
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
 > **Original date:** 2026-09-16.
 > **Original purpose:** report the first documentation cleanup pass against the running Laravel CMS.
 > **Superseded by:** [../qa/DOCUMENTATION-QA.md](../qa/DOCUMENTATION-QA.md) (2026-09-17 reorganisation) and [../README.md](../README.md).
@@ -6,7 +8,7 @@
 
 # Documentation cleanup report
 
-Date: 2026-09-16  
+Date: 2026-09-16
 Scope: every project Markdown file vs the running Laravel CMS. Application logic was **not** redesigned.
 
 ## 1. Markdown files reviewed

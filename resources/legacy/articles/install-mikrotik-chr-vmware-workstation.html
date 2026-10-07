@@ -1,26 +1,35 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-article-language="en">
   <head>
     <title>Install MikroTik CHR on VMware Workstation | Meet AJ</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Guide to deploy and configure Cloud Hosted Router (CHR) as a VM on Workstation"
+      content="Build NAT and host-only networks, boot the official VMDK, configure routing and firewall rules, and check license limits."
     />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
     <link
       rel="canonical"
-      href="https://meetaj.ir/articles/install-mikrotik-chr-vmware-workstation.html"
+      href="https://meetaj.ir/articles/install-mikrotik-chr-vmware-workstation"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Install MikroTik CHR on VMware Workstation | Meet AJ" />
-    <meta property="og:description" content="Guide to deploy and configure Cloud Hosted Router (CHR) as a VM on Workstation" />
-    <meta property="og:url" content="https://meetaj.ir/articles/install-mikrotik-chr-vmware-workstation.html" />
+    <meta
+      property="og:title"
+      content="Install MikroTik CHR on VMware Workstation"
+    />
+    <meta
+      property="og:description"
+      content="Build NAT and host-only networks, boot the official VMDK, configure routing and firewall rules, and check license limits."
+    />
+    <meta
+      property="og:url"
+      content="https://meetaj.ir/articles/install-mikrotik-chr-vmware-workstation"
+    />
     <meta property="og:site_name" content="Meet AJ" />
     <meta name="twitter:card" content="summary" />
-    <link href="../assets/img/favicon.png" rel="icon" />
+    <link href="../assets/img/icons/favicon.png" rel="icon" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -54,13 +63,96 @@
       rel="stylesheet"
       disabled
     />
+    <meta
+      name="keywords"
+      content="MikroTik CHR Lab on VMware Workstation, install mikrotik chr vmware workstation, infrastructure operations, production operations, troubleshooting"
+    />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Install MikroTik CHR on VMware Workstation",
+        "description": "Build NAT and host-only networks, boot the official VMDK, configure routing and firewall rules, and check license limits.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/install-mikrotik-chr-vmware-workstation",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/install-mikrotik-chr-vmware-workstation"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Can a Workstation lab replace a production router?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. It validates configuration. HA, support and capacity require separate design."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is throughput low?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Check both the CHR license tier and host resources."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "نصب MikroTik CHR روی VMware Workstation",
+          "meta_title": "نصب MikroTik CHR روی VMware Workstation | Meet AJ",
+          "description": "ساخت شبکه NAT و Host-only، نصب VMDK رسمی، تنظیم Routing و Firewall و بررسی محدودیت License.",
+          "keywords": [
+            "نصب MikroTik CHR روی VMware Workstation",
+            "عیب‌یابی",
+            "بازیابی",
+            "install mikrotik chr vmware workstation"
+          ],
+          "faq": [
+            [
+              "آیا lab Workstation جای روتر Production است؟",
+              "خیر. هدف آزمون configuration است و HA، پشتیبانی و ظرفیت جدا باید طراحی شوند."
+            ],
+            [
+              "چرا throughput پایین است؟",
+              "سطح license CHR و resource میزبان را هم‌زمان بررسی کنید."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Install MikroTik CHR on VMware Workstation",
+          "meta_title": "Install MikroTik CHR on VMware Workstation | Meet AJ",
+          "description": "Build NAT and host-only networks, boot the official VMDK, configure routing and firewall rules, and check license limits.",
+          "keywords": [
+            "Install MikroTik CHR on VMware Workstation",
+            "install mikrotik chr vmware workstation",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Can a Workstation lab replace a production router?",
+              "No. It validates configuration. HA, support and capacity require separate design."
+            ],
+            [
+              "Why is throughput low?",
+              "Check both the CHR license tier and host resources."
+            ]
+          ]
+        }
+      }
+    </script>
   </head>
   <body class="article-page theme-mikrotik">
-    <a href="#main-content" class="skip-link sr-only sr-only-focusable"
-      ><span data-en="Skip to main content" data-fa="رفتن به محتوای اصلی"
-        >Skip to main content</span
-      ></a
-    >
     <button
       id="menu-toggle"
       class="menu-toggle d-xl-none"
@@ -78,7 +170,7 @@
       =============================================== -->
       <div class="profile-img">
         <img
-          src="../assets/img/my-profile-img.jpg"
+          src="../assets/img/avatars/profile/my-profile-img.jpg"
           loading="lazy"
           alt="AmirHossein Jalalian Profile Picture"
           class="img-fluid rounded-circle"
@@ -93,7 +185,7 @@
       >
         <!-- Site Logo & Name -->
         <a href="../index.html#hero" class="logo d-flex align-items-center">
-          <img src="../assets/img/logo.png" alt="Aj-Network" loading="lazy" />
+          <img src="../assets/img/brand/logo.png" alt="Aj-Network" loading="lazy" />
           <p class="sitename">Meet AJ</p>
         </a>
       </div>
@@ -209,81 +301,91 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#overview"
-              ><i class="bi bi-info-circle navicon" aria-hidden="true"></i
-              ><span data-en="Introduction" data-fa="مقدمه">Introduction</span></a
+            <a href="#enterprise-intro"
+              ><span
+                data-fa="CHR برای آزمایش RouterOS"
+                data-en="CHR for RouterOS testing"
+                >CHR for RouterOS testing</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#article-status"
-              ><i class="bi bi-clipboard-check navicon" aria-hidden="true"></i
-              ><span data-en="Prerequisites" data-fa="پیش‌نیازها">Prerequisites</span></a
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="تطبیق vNIC با Interface روتر"
+                data-en="Map vNICs to router interfaces"
+                >Map vNICs to router interfaces</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#planned-sections"
-              ><i class="bi bi-download navicon" aria-hidden="true"></i
-              ><span data-en="Download image" data-fa="۰۱ — دانلود Image رسمی">Download image</span></a
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="Image و منابع ماشین مجازی"
+                data-en="Image and VM resources"
+                >Image and VM resources</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#vm"
-              ><i class="bi bi-pc-display navicon" aria-hidden="true"></i
-              ><span data-en="Create VM" data-fa="۰۲ — ساخت VM و اتصال Disk">Create VM</span></a
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="ساخت VM و تنظیم IPv4 Lab"
+                data-en="Create the VM and configure the IPv4 lab"
+                >Create the VM and configure the IPv4 lab</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#network"
-              ><i class="bi bi-ethernet navicon" aria-hidden="true"></i
-              ><span data-en="NIC mapping and boot" data-fa="۰۳ — نگاشت NIC و Boot">NIC mapping and boot</span></a
+            <a href="#enterprise-security"
+              ><span
+                data-fa="جلوگیری از اتصال Lab به شبکه شرکت"
+                data-en="Keep the lab isolated"
+                >Keep the lab isolated</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#configuration"
-              ><i class="bi bi-sliders navicon" aria-hidden="true"></i
-              ><span data-en="Network configuration" data-fa="۰۴ — پیکربندی اولیه شبکه">Network configuration</span></a
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="اندازه‌گیری سرعت و مصرف منابع"
+                data-en="Measure throughput and resource use"
+                >Measure throughput and resource use</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#license"
-              ><i class="bi bi-award navicon" aria-hidden="true"></i
-              ><span data-en="CHR licenses" data-fa="۰۵ — سطح‌های License در CHR">CHR licenses</span></a
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="قطع Gateway یا سرعت کم"
+                data-en="Unreachable gateways or low throughput"
+                >Unreachable gateways or low throughput</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#test"
-              ><i class="bi bi-activity navicon" aria-hidden="true"></i
-              ><span data-en="Test" data-fa="۰۶ — تست">Test</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#troubleshooting"
-              ><i class="bi bi-wrench-adjustable navicon" aria-hidden="true"></i
-              ><span data-en="Troubleshooting" data-fa="رفع اشکال">Troubleshooting</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#best-practices"
-              ><i class="bi bi-check2-square navicon" aria-hidden="true"></i
-              ><span data-en="Best Practices" data-fa="بهترین روش‌ها">Best Practices</span></a
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="Snapshot و Export خارج VM"
+                data-en="Snapshots and off-VM exports"
+                >Snapshots and off-VM exports</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
             <a href="#faq"
-              ><i class="bi bi-question-circle navicon" aria-hidden="true"></i
-              ><span data-en="Frequently Asked Questions" data-fa="سوالات متداول">Frequently Asked Questions</span></a
+              ><span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#conclusion"
-              ><i class="bi bi-flag navicon" aria-hidden="true"></i
-              ><span data-en="Conclusion" data-fa="جمع‌بندی">Conclusion</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#references"
-              ><i class="bi bi-book navicon" aria-hidden="true"></i
-              ><span data-en="Official references" data-fa="منابع رسمی">Official references</span></a
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
+              ></a
             >
           </li>
         </ul>
@@ -314,24 +416,24 @@
               </div>
               <h1
                 class="article-title hero-title"
-                data-en="Install MikroTik CHR on VMware Workstation"
                 data-fa="نصب MikroTik CHR روی VMware Workstation"
+                data-en="Install MikroTik CHR on VMware Workstation"
               >
                 Install MikroTik CHR on VMware Workstation
               </h1>
               <p
                 class="article-excerpt hero-subtitle"
-                data-en="Guide to deploy and configure Cloud Hosted Router (CHR) as a VM on Workstation"
-                data-fa="راهنمای نصب و پیکربندی Cloud Hosted Router (CHR) به‌عنوان VM در VMware Workstation"
+                data-fa="ساخت شبکه NAT و Host-only، نصب VMDK رسمی، تنظیم Routing و Firewall و بررسی محدودیت License."
+                data-en="Build NAT and host-only networks, boot the official VMDK, configure routing and firewall rules, and check license limits."
               >
-                Guide to deploy and configure Cloud Hosted Router (CHR) as a VM
-                on Workstation
+                Build NAT and host-only networks, boot the official VMDK,
+                configure routing and firewall rules, and check license limits.
               </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
                     class="article-hero-thumbnail"
-                    src="../assets/img/portfolio/mikrotik-6.png"
+                    src="../assets/img/articles/banners/install-mikrotik-chr-vmware-workstation.png"
                     alt="Install MikroTik CHR on VMware Workstation"
                   />
                   <div class="banner-content">
@@ -375,115 +477,300 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body">
-                <section id="overview" class="article-section"><h2 data-en="Introduction" data-fa="مقدمه">Introduction</h2><p data-en="Cloud Hosted Router (CHR) is the RouterOS edition designed to run as a virtual machine. In VMware Workstation, the official VMDK image can be attached as the virtual disk and then configured as a lab router." data-fa="Cloud Hosted Router یا CHR نسخه‌ای از RouterOS است که برای اجرا به‌صورت Virtual Machine طراحی شده است. در VMware Workstation می‌توانید VMDK رسمی را به‌عنوان Virtual Disk متصل و آن را به‌عنوان Router آزمایشگاهی پیکربندی کنید.">Cloud Hosted Router (CHR) is the RouterOS edition designed to run as a virtual machine. In VMware Workstation, the official VMDK image can be attached as the virtual disk and then configured as a lab router.</p></section>
-                <section id="article-status" class="article-section"><h2 data-en="Prerequisites" data-fa="پیش‌نیازها">Prerequisites</h2><ul><li data-en="VMware Workstation and a 64-bit host with virtualization support." data-fa="VMware Workstation و یک Host ۶۴بیتی با پشتیبانی Virtualization.">VMware Workstation and a 64-bit host with virtualization support.</li><li data-en="The official CHR image for VMware (VMDK), downloaded from MikroTik." data-fa="Image رسمی CHR برای VMware با فرمت VMDK که از MikroTik دانلود شده است.">The official CHR image for VMware (VMDK), downloaded from MikroTik.</li><li data-en="A planned lab network, IP address, gateway, DNS servers, and access to the Workstation virtual-network settings." data-fa="یک شبکهٔ Lab برنامه‌ریزی‌شده، IP Address، Gateway، DNS Server و دسترسی به تنظیمات Virtual Network در Workstation.">A planned lab network, IP address, gateway, DNS servers, and access to the Workstation virtual-network settings.</li></ul></section>
-                <section id="planned-sections" class="article-section"><h2 data-en="01 — Download the official image" data-fa="۰۱ — دانلود Image رسمی">01 — Download the official image</h2><p data-en="Download the CHR VMware disk image from the official MikroTik download area. CHR images are virtual disks, not ready-made VMs; create a new guest VM and attach the downloaded VMDK as its disk." data-fa="Image دیسک VMware مربوط به CHR را از بخش دانلود رسمی MikroTik دریافت کنید. Imageهای CHR Virtual Disk هستند، نه VM آماده؛ یک Guest VM جدید بسازید و VMDK دانلودشده را به‌عنوان Disk آن متصل کنید.">Download the CHR VMware disk image from the official MikroTik download area. CHR images are virtual disks, not ready-made VMs; create a new guest VM and attach the downloaded VMDK as its disk.</p></section>
-                <section id="vm" class="article-section"><h2 data-en="02 — Create the VM and attach the disk" data-fa="۰۲ — ساخت VM و اتصال Disk">02 — Create the VM and attach the disk</h2><ol><li data-en="Create a new virtual machine in VMware Workstation and select an appropriate 64-bit guest type." data-fa="یک Virtual Machine جدید در VMware Workstation بسازید و Guest Type ۶۴بیتی مناسب را انتخاب کنید.">Create a new virtual machine in VMware Workstation and select an appropriate 64-bit guest type.</li><li data-en="Remove the automatically created empty disk if needed, then add the official CHR VMDK as an existing virtual disk." data-fa="در صورت نیاز Disk خالی خودکار را حذف و سپس VMDK رسمی CHR را به‌عنوان Existing Virtual Disk اضافه کنید.">Remove the automatically created empty disk if needed, then add the official CHR VMDK as an existing virtual disk.</li><li data-en="Allocate CPU and RAM appropriate to the lab; MikroTik documents 256 MB as a minimum and recommends at least 1024 MiB for CHR instances." data-fa="CPU و RAM را متناسب با Lab اختصاص دهید؛ MikroTik مقدار حداقل ۲۵۶ MB و پیشنهاد حداقل ۱۰۲۴ MiB را برای Instanceهای CHR منتشر کرده است.">Allocate CPU and RAM appropriate to the lab; MikroTik documents 256 MB as a minimum and recommends at least 1024 MiB for CHR instances.</li></ol></section>
-                <section id="network" class="article-section"><h2 data-en="03 — NIC mapping and boot" data-fa="۰۳ — نگاشت NIC و Boot">03 — NIC mapping and boot</h2><p data-en="Add the required virtual NICs before starting the VM. In Workstation, NAT normally gives the lab guest outbound access through the host; Bridged connects the guest to the selected physical network. Choose intentionally and avoid connecting an untrusted lab router to a production network." data-fa="پیش از روشن‌کردن VM، تعداد لازم Virtual NIC اضافه کنید. در Workstation، NAT معمولاً از طریق Host به Guest آزمایشگاهی دسترسی خروجی می‌دهد و Bridged Guest را به شبکهٔ فیزیکی انتخاب‌شده متصل می‌کند. آگاهانه انتخاب کنید و Router آزمایشگاهی غیرمورداعتماد را به شبکهٔ Production وصل نکنید.">Add the required virtual NICs before starting the VM. In Workstation, NAT normally gives the lab guest outbound access through the host; Bridged connects the guest to the selected physical network. Choose intentionally and avoid connecting an untrusted lab router to a production network.</p><p data-en="Boot the VM, sign in as the default admin user, and set a strong password immediately. Check interface names with /interface print; interface order can change when adapters are added, removed, or reordered in the hypervisor." data-fa="VM را Boot کنید، با کاربر پیش‌فرض admin وارد شوید و بلافاصله Password قوی بگذارید. نام Interfaceها را با /interface print بررسی کنید؛ Interface Order ممکن است با افزودن، حذف یا جابه‌جایی Adapterها در Hypervisor تغییر کند.">Boot the VM, sign in as the default admin user, and set a strong password immediately. Check interface names with /interface print; interface order can change when adapters are added, removed, or reordered in the hypervisor.</p></section>
-                <section id="configuration" class="article-section"><h2 data-en="04 — Configure basic network settings" data-fa="۰۴ — پیکربندی اولیهٔ شبکه">04 — Configure basic network settings</h2><p data-en="Replace the example address, gateway, DNS servers, and interface name with values for the actual lab network. Confirm the correct interface before adding the address." data-fa="Address، Gateway، DNS Server و Interface Name نمونه را با مقادیر شبکهٔ واقعی Lab جایگزین کنید. قبل از افزودن Address، درست‌بودن Interface را تأیید کنید.">Replace the example address, gateway, DNS servers, and interface name with values for the actual lab network. Confirm the correct interface before adding the address.</p><div class="article-code"><div class="article-code-header"><span class="article-code-label" data-en="RouterOS" data-fa="RouterOS">RouterOS</span><button type="button" class="article-copy-button" data-en="Copy" data-fa="کپی">Copy</button></div><pre><code class="language-bash">/system identity set name=CHR-LAB
-/ip address add address=192.168.1.10/24 interface=ether1
-/ip route add dst-address=0.0.0.0/0 gateway=192.168.1.1
-/ip dns set servers=1.1.1.1,8.8.8.8
-/ping 8.8.8.8</code></pre></div></section>
-                <section id="license" class="article-section"><h2 data-en="05 — CHR license levels" data-fa="۰۵ — سطح‌های License در CHR">05 — CHR license levels</h2><div class="article-table-wrap"><table class="article-table"><thead><tr><th data-en="Level" data-fa="سطح">Level</th><th data-en="Upload limit per interface" data-fa="محدودیت Upload هر Interface">Upload limit per interface</th><th data-en="Use" data-fa="کاربرد">Use</th></tr></thead><tbody><tr><td>Free</td><td>1 Mbit</td><td data-en="Permanent lab use with limited speed." data-fa="استفادهٔ دائمی Lab با سرعت محدود.">Permanent lab use with limited speed.</td></tr><tr><td>P1</td><td>1 Gbit</td><td data-en="Perpetual paid license." data-fa="License دائمیِ پولی.">Perpetual paid license.</td></tr><tr><td>P10</td><td>10 Gbit</td><td data-en="Perpetual paid license." data-fa="License دائمیِ پولی.">Perpetual paid license.</td></tr><tr><td>P-Unlimited</td><td data-en="Unlimited" data-fa="بدون محدودیت">Unlimited</td><td data-en="Highest perpetual tier." data-fa="بالاترین سطح دائمی.">Highest perpetual tier.</td></tr></tbody></table></div><p data-en="MikroTik also documents a 60-day trial for paid levels. Check the current official licensing page before purchasing or changing a license." data-fa="MikroTik برای سطح‌های پولی Trial شصت‌روزه نیز مستند کرده است. قبل از خرید یا تغییر License، صفحهٔ رسمی فعلی Licensing را بررسی کنید.">MikroTik also documents a 60-day trial for paid levels. Check the current official licensing page before purchasing or changing a license.</p></section>
-                <section id="test" class="article-section"><h2 data-en="06 — Test" data-fa="۰۶ — تست">06 — Test</h2><ol><li data-en="Verify the address and default route with /ip address print and /ip route print." data-fa="Address و Default Route را با /ip address print و /ip route print بررسی کنید.">Verify the address and default route with /ip address print and /ip route print.</li><li data-en="Ping the gateway first, then test an external IP address. Test DNS separately with a name lookup after enabling the required RouterOS DNS behavior for the lab." data-fa="ابتدا Gateway و سپس یک IP خارجی را Ping کنید. DNS را پس از فعال‌کردن رفتار لازم RouterOS DNS برای Lab، جداگانه با Name Lookup تست کنید.">Ping the gateway first, then test an external IP address. Test DNS separately with a name lookup after enabling the required RouterOS DNS behavior for the lab.</li><li data-en="Open WinBox or WebFig only from the management network and confirm the identity and interface mapping." data-fa="WinBox یا WebFig را فقط از Management Network باز و Identity و Interface Mapping را تأیید کنید.">Open WinBox or WebFig only from the management network and confirm the identity and interface mapping.</li></ol></section>
-                <section id="troubleshooting" class="article-section"><h2 data-en="Troubleshooting" data-fa="رفع اشکال">Troubleshooting</h2><ul><li data-en="No network: verify the selected NAT or Bridged network, adapter connection state, and the corresponding RouterOS interface name." data-fa="نبود شبکه: شبکهٔ NAT یا Bridged انتخاب‌شده، وضعیت اتصال Adapter و نام Interface متناظر در RouterOS را بررسی کنید.">No network: verify the selected NAT or Bridged network, adapter connection state, and the corresponding RouterOS interface name.</li><li data-en="No route: confirm the gateway is reachable from the configured subnet and that only the intended default route is active." data-fa="نبود Route: دسترسی Gateway از Subnet پیکربندی‌شده و فعال‌بودن فقط Default Route موردنظر را بررسی کنید.">No route: confirm the gateway is reachable from the configured subnet and that only the intended default route is active.</li><li data-en="Unexpected traffic behavior: inspect Workstation virtual-network settings and RouterOS firewall/NAT configuration; do not assume NAT or Bridged creates RouterOS firewall rules automatically." data-fa="رفتار غیرمنتظرهٔ ترافیک: تنظیمات Virtual Network در Workstation و Firewall/NAT در RouterOS را بررسی کنید؛ فرض نکنید NAT یا Bridged به‌طور خودکار RouterOS Firewall Rule می‌سازد.">Unexpected traffic behavior: inspect Workstation virtual-network settings and RouterOS firewall/NAT configuration; do not assume NAT or Bridged creates RouterOS firewall rules automatically.</li></ul></section>
-                <section id="best-practices" class="article-section"><h2 data-en="Best Practices" data-fa="بهترین روش‌ها">Best Practices</h2><ul><li data-en="Use an isolated NAT or host-only lab network unless Bridged access is explicitly required." data-fa="مگر در صورت نیاز صریح به Bridged، از شبکهٔ Lab ایزولهٔ NAT یا Host-only استفاده کنید.">Use an isolated NAT or host-only lab network unless Bridged access is explicitly required.</li><li data-en="Label VM NICs and RouterOS interfaces consistently, record the mapping, and take snapshots only with a clear rollback plan." data-fa="NICهای VM و Interfaceهای RouterOS را یکسان نام‌گذاری، Mapping را ثبت و Snapshot را فقط با Rollback Plan روشن بگیرید.">Label VM NICs and RouterOS interfaces consistently, record the mapping, and take snapshots only with a clear rollback plan.</li><li data-en="Change the default password, restrict management access, and keep RouterOS updated according to the supported release plan." data-fa="Password پیش‌فرض را تغییر دهید، Management Access را محدود و RouterOS را مطابق Release Plan پشتیبانی‌شده به‌روز نگه دارید.">Change the default password, restrict management access, and keep RouterOS updated according to the supported release plan.</li></ul></section>
-                <section id="faq" class="article-section"><h2 data-en="Frequently Asked Questions" data-fa="سوالات متداول">Frequently Asked Questions</h2><div class="article-faq"><div class="article-faq-item"><h3 class="article-faq-question"><span data-en="Which CHR disk format should VMware Workstation use?" data-fa="VMware Workstation از کدام Disk Format برای CHR استفاده کند؟">Which CHR disk format should VMware Workstation use?</span><i class="bi bi-chevron-down" aria-hidden="true"></i></h3><div class="article-faq-answer"><p data-en="Use the VMware VMDK image supplied by MikroTik for VMware environments." data-fa="برای محیط VMware از Image با فرمت VMDK که MikroTik ارائه می‌کند استفاده کنید.">Use the VMware VMDK image supplied by MikroTik for VMware environments.</p></div></div><div class="article-faq-item"><h3 class="article-faq-question"><span data-en="Does the Free license expire?" data-fa="آیا License رایگان منقضی می‌شود؟">Does the Free license expire?</span><i class="bi bi-chevron-down" aria-hidden="true"></i></h3><div class="article-faq-answer"><p data-en="MikroTik documents the Free level as permanent with a 1 Mbit upload limit per interface." data-fa="MikroTik سطح Free را دائمی با محدودیت Upload برابر ۱ Mbit برای هر Interface مستند کرده است.">MikroTik documents the Free level as permanent with a 1 Mbit upload limit per interface.</p></div></div></div></section>
-                <section id="conclusion" class="article-section"><h2 data-en="Conclusion" data-fa="جمع‌بندی">Conclusion</h2><p data-en="Attach the official CHR VMDK to a deliberately networked Workstation VM, confirm interface order, then apply and test the correct address, route, and DNS settings. Use the license tier and virtual network mode that match the lab objective." data-fa="VMDK رسمی CHR را به VM در VMware Workstation با Network طراحی‌شده متصل کنید، Interface Order را تأیید و سپس Address، Route و DNS درست را اعمال و تست کنید. License Tier و Virtual Network Mode را مطابق هدف Lab انتخاب کنید.">Attach the official CHR VMDK to a deliberately networked Workstation VM, confirm interface order, then apply and test the correct address, route, and DNS settings. Use the license tier and virtual network mode that match the lab objective.</p></section>
-                <section id="references" class="article-section"><h2 data-en="Official references" data-fa="منابع رسمی">Official references</h2><ul><li><a href="https://help.mikrotik.com/docs/spaces/ROS/pages/18350234/Cloud%2BHosted%2BRouter%2BCHR" target="_blank" rel="noopener noreferrer" data-en="MikroTik Documentation — Cloud Hosted Router (CHR)" data-fa="مستندات MikroTik — Cloud Hosted Router (CHR)">MikroTik Documentation — Cloud Hosted Router (CHR)</a></li><li><a href="https://mikrotik.com/download" target="_blank" rel="noopener noreferrer" data-en="MikroTik — Official downloads" data-fa="MikroTik — دانلودهای رسمی">MikroTik — Official downloads</a></li></ul></section>
-                <footer class="article-footer" aria-label="Article footer">
-                  <section
-                    id="author"
-                    class="article-author"
-                    role="complementary"
-                    aria-labelledby="author-title"
-                  >
-                    <div class="article-author-card">
-                      <img
-                        class="article-author-avatar"
-                        src="../assets/img/my-profile-img.jpg"
-                        alt="AmirHossein Jalalian"
-                        loading="lazy"
-                        width="120"
-                        height="120"
-                        decoding="async"
-                      />
-                      <div class="article-author-content">
-                        <p
-                          class="article-author-kicker"
-                          id="author-title"
-                          data-en="About the author"
-                          data-fa="درباره نویسنده"
-                        >
-                          About the author
-                        </p>
-                        <h2
-                          data-en="AmirHossein Jalalian"
-                          data-fa="امیرحسین جلالیان"
-                        >
-                          AmirHossein Jalalian
-                        </h2>
-                        <p
-                          class="article-author-role"
-                          data-en="Infrastructure & DevOps Engineer"
-                          data-fa="مهندس زیرساخت و DevOps"
-                        >
-                          Infrastructure & DevOps Engineer
-                        </p>
-                        <p
-                          class="article-author-description"
-                          data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
-                          data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-                        >
-                          Delivering reliable, secure, and scalable IT solutions
-                          for your business success.
-                        </p>
-                        <div
-                          class="article-author-social"
-                          role="group"
-                          aria-label="Author links"
-                        >
-                          <a
-                            href="https://linkedin.com/in/amirhossein-jalalian"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="LinkedIn Profile"
-                            ><i class="bi bi-linkedin" aria-hidden="true"></i
-                          ></a>
-                          <a
-                            href="https://github.com/amirhossein-jalalian"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="GitHub Profile"
-                            ><i class="bi bi-github" aria-hidden="true"></i
-                          ></a>
-                          <a
-                            href="https://twitter.com/amirhossein_j"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Twitter Profile"
-                            ><i class="bi bi-twitter-x" aria-hidden="true"></i
-                          ></a>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                  <nav
-                    class="article-footer-nav"
-                    aria-label="Article footer navigation"
-                  >
-                    <a class="article-back" href="../index.html#portfolio"
-                      ><i class="bi bi-arrow-left" aria-hidden="true"></i
-                      ><span
-                        data-en="Back to portfolio"
-                        data-fa="بازگشت به مقالات"
-                        >Back to portfolio</span
-                      ></a
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="CHR برای آزمایش RouterOS"
+                      data-en="CHR for RouterOS testing"
                     >
-                  </nav>
-                </footer>
+                      CHR for RouterOS testing
+                    </h2>
+                    <p
+                      data-fa="CHR نسخه RouterOS برای ماشین مجازی است. روی Workstation، یک WAN از نوع NAT و یک LAN از نوع Host-only بسازید تا تنظیم Routing و Firewall را بدون واردکردن DHCP یا Route آزمایشی به شبکه شرکت بررسی کنید."
+                      data-en="CHR runs RouterOS as a virtual machine. On Workstation, use a NAT WAN and host-only LAN to test routing and firewall behavior without injecting lab DHCP or routes into the company network."
+                    >
+                      CHR runs RouterOS as a virtual machine. On Workstation,
+                      use a NAT WAN and host-only LAN to test routing and
+                      firewall behavior without injecting lab DHCP or routes
+                      into the company network.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="تطبیق vNIC با Interface روتر"
+                      data-en="Map vNICs to router interfaces"
+                    >
+                      Map vNICs to router interfaces
+                    </h2>
+                    <p
+                      data-fa="نام VMnet و MAC هر vNIC را ثبت کنید و با خروجی Interface روتر تطبیق دهید. فرض نکنید ترتیب Adapter در Workstation همیشه با ether1 و ether2 یکسان است. Client از CHR به‌عنوان Gateway استفاده می‌کند و NAT روتر آن را به WAN Lab می‌فرستد."
+                      data-en="Record each VMnet and vNIC MAC, then match them to router interfaces. Do not assume Workstation adapter order always matches ether1 and ether2. Clients use CHR as their gateway, with router NAT sending permitted traffic to the lab WAN."
+                    >
+                      Record each VMnet and vNIC MAC, then match them to router
+                      interfaces. Do not assume Workstation adapter order always
+                      matches ether1 and ether2. Clients use CHR as their
+                      gateway, with router NAT sending permitted traffic to the
+                      lab WAN.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="توپولوژی WAN و LAN آزمایشگاه"
+                      data-en="Lab WAN and LAN topology"
+                    >
+                      Lab WAN and LAN topology
+                    </h3>
+                    <p
+                      data-fa="ether1 به VMnet NAT و ether2 به Host-only وصل می‌شود. یک VM کلاینت در LAN قرار دارد. DHCP داخلی VMware را در شبکه LAN خاموش کنید اگر قرار است CHR یا سرویس دیگری همان شبکه را مدیریت کند."
+                      data-en="Connect ether1 to NAT and ether2 to host-only, with a client VM on the LAN. Disable VMware DHCP on that LAN when CHR or another service will manage it."
+                    >
+                      Connect ether1 to NAT and ether2 to host-only, with a
+                      client VM on the LAN. Disable VMware DHCP on that LAN when
+                      CHR or another service will manage it.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="Image و منابع ماشین مجازی"
+                      data-en="Image and VM resources"
+                    >
+                      Image and VM resources
+                    </h2>
+                    <p
+                      data-fa="از CHR v7 و Workstation سازگار با میزبان استفاده کنید. Build دقیق هر دو را ثبت کنید تا نتیجه آزمون قابل تکرار باشد."
+                      data-en="Use CHR v7 and a Workstation build compatible with the host. Record both builds for reproducible tests."
+                    >
+                      Use CHR v7 and a Workstation build compatible with the
+                      host. Record both builds for reproducible tests.
+                    </p>
+                    <p
+                      data-fa="برای این Lab، ۲ vCPU، یک GiB RAM، دیسک حداقل یک GiB و دو vNIC در نظر گرفته شده است. Throughput واقعی به منابع میزبان و License وابسته است."
+                      data-en="This lab allocates 2 vCPUs, 1 GiB RAM, at least 1 GiB disk and two vNICs. Actual throughput depends on host resources and licensing."
+                    >
+                      This lab allocates 2 vCPUs, 1 GiB RAM, at least 1 GiB disk
+                      and two vNICs. Actual throughput depends on host resources
+                      and licensing.
+                    </p>
+                    <p
+                      data-fa="VMDK رسمی MikroTik و دسترسی Virtual Network Editor لازم است. اولین تنظیم را از Console انجام دهید و پیش از اتصال شبکه، رمز مدیر را عوض کنید."
+                      data-en="Obtain the official MikroTik VMDK and access to Virtual Network Editor. Perform initial configuration through the console and change the administrator password before network access."
+                    >
+                      Obtain the official MikroTik VMDK and access to Virtual
+                      Network Editor. Perform initial configuration through the
+                      console and change the administrator password before
+                      network access.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="License و محدودیت Throughput"
+                      data-en="License throughput limits"
+                    >
+                      License throughput limits
+                    </h3>
+                    <p
+                      data-fa="License Free سرعت ارسال هر Interface را به 1 Mbps محدود می‌کند. سطوح P1، P10 و P-Unlimited محدودیت متفاوت دارند. Workstation دسکتاپ، طرح HA برای روتر سرویس نیست."
+                      data-en="Free licensing limits upload to 1 Mbps per interface. P1, P10 and P-Unlimited have different limits. Desktop Workstation is not an HA router design."
+                    >
+                      Free licensing limits upload to 1 Mbps per interface. P1,
+                      P10 and P-Unlimited have different limits. Desktop
+                      Workstation is not an HA router design.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="ساخت VM و تنظیم IPv4 Lab"
+                      data-en="Create the VM and configure the IPv4 lab"
+                    >
+                      Create the VM and configure the IPv4 lab
+                    </h2>
+                    <p
+                      data-fa="VMDK رسمی CHR را دانلود کنید. اگر Checksum رسمی عرضه شده است آن را تطبیق دهید و Hash محلی را نیز ثبت کنید. در VM تازه، Existing Virtual Disk را انتخاب کنید و vNICها را در Console با MAC تطبیق دهید."
+                      data-en="Download the official CHR VMDK. Match any publisher-provided checksum and record a local hash. Use Existing Virtual Disk in the new VM and match vNIC MACs through its console."
+                    >
+                      Download the official CHR VMDK. Match any
+                      publisher-provided checksum and record a local hash. Use
+                      Existing Virtual Disk in the new VM and match vNIC MACs
+                      through its console.
+                    </p>
+                    <p
+                      data-fa="مثال WAN برابر 192.168.100.10/24 با Gateway برابر 192.168.100.2 و LAN برابر 10.99.0.1/24 است. Subnet و Gateway و DNS را از Virtual Network Editor واقعی بگیرید و آدرس‌های مثال را عوض کنید."
+                      data-en="Sample WAN is 192.168.100.10/24 via 192.168.100.2, with LAN 10.99.0.1/24. Obtain actual subnet, gateway and DNS from Virtual Network Editor and replace example values."
+                    >
+                      Sample WAN is 192.168.100.10/24 via 192.168.100.2, with
+                      LAN 10.99.0.1/24. Obtain actual subnet, gateway and DNS
+                      from Virtual Network Editor and replace example values.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-routeros">/interface ethernet print detail
+/user set [find name=admin] password=&quot;REPLACE_WITH_UNIQUE_ADMIN_SECRET&quot;
+/system identity set name=CHR-STAGING
+/ip address add address=192.168.100.10/24 interface=ether1 comment=&quot;LAB WAN&quot;
+/ip address add address=10.99.0.1/24 interface=ether2 comment=&quot;LAB LAN&quot;
+/ip route add dst-address=0.0.0.0/0 gateway=192.168.100.2
+/ip dns set servers=192.168.100.2 allow-remote-requests=no
+/ip firewall filter add chain=input connection-state=established,related action=accept
+/ip firewall filter add chain=input in-interface=ether2 src-address=10.99.0.0/24 action=accept
+/ip firewall filter add chain=input action=drop
+/ip firewall filter add chain=forward connection-state=established,related action=accept
+/ip firewall filter add chain=forward in-interface=ether2 out-interface=ether1 action=accept
+/ip firewall filter add chain=forward action=drop
+/ip firewall nat add chain=srcnat src-address=10.99.0.0/24 out-interface=ether1 action=masquerade
+/ping 192.168.100.2 count=3
+/system license print</code></pre>
+                    <p
+                      data-fa="Ruleها برای IPv4 یک Lab تازه‌اند. IPv6 را جدا محدود کنید. Gateway باید پاسخ بدهد و Client با Gateway برابر 10.99.0.1 و DNS معتبر به مسیر مجاز برسد. SSH و WinBox از WAN نباید باز باشند."
+                      data-en="Rules target a fresh IPv4 lab. Restrict IPv6 separately. Test the gateway and a client using 10.99.0.1 plus valid DNS. SSH/WinBox must remain inaccessible from WAN."
+                    >
+                      Rules target a fresh IPv4 lab. Restrict IPv6 separately.
+                      Test the gateway and a client using 10.99.0.1 plus valid
+                      DNS. SSH/WinBox must remain inaccessible from WAN.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="جلوگیری از اتصال Lab به شبکه شرکت"
+                      data-en="Keep the lab isolated"
+                    >
+                      Keep the lab isolated
+                    </h2>
+                    <p
+                      data-fa="VMnet آزمایشی را به NIC شرکت Bridge نکنید. رمز یکتا و حساب مشخص داشته باشید و سرویس مدیریتی اضافی را ببندید. Snapshot شامل Credential است و باید مثل Backup حساس محافظت شود. Firewall نمونه فقط IPv4 را پوشش می‌دهد."
+                      data-en="Do not bridge lab VMnets to the company NIC. Use unique credentials and disable unused management services. Snapshots contain credentials and require sensitive-backup controls. The example firewall covers IPv4 only."
+                    >
+                      Do not bridge lab VMnets to the company NIC. Use unique
+                      credentials and disable unused management services.
+                      Snapshots contain credentials and require sensitive-backup
+                      controls. The example firewall covers IPv4 only.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="اندازه‌گیری سرعت و مصرف منابع"
+                      data-en="Measure throughput and resource use"
+                    >
+                      Measure throughput and resource use
+                    </h2>
+                    <p
+                      data-fa="برای آزمون سرعت، CPU میزبان و CHR و Counterهای Drop را ثبت کنید. سطح License را کنار نتیجه بنویسید. محدودیت License Free را با کمبود CPU اشتباه نگیرید."
+                      data-en="During throughput tests, record host/CHR CPU and drop counters. Attach the license tier to the result. Distinguish Free-license limits from CPU shortages."
+                    >
+                      During throughput tests, record host/CHR CPU and drop
+                      counters. Attach the license tier to the result.
+                      Distinguish Free-license limits from CPU shortages.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="قطع Gateway یا سرعت کم"
+                      data-en="Unreachable gateways or low throughput"
+                    >
+                      Unreachable gateways or low throughput
+                    </h2>
+                    <p
+                      data-fa="اگر Gateway پاسخ نمی‌دهد، Connected at power on، MAC، VMnet و Subnet را بررسی کنید. در تنظیم Static، DHCP انتظار نداشته باشید. Client باید Gateway برابر 10.99.0.1 و DNS معتبر داشته باشد. برای سرعت پایین، License و Load میزبان را بررسی کنید. Default Route باید به Gateway شبکه NAT اشاره کند، نه IP خود CHR."
+                      data-en="For an unreachable gateway, check connection-at-power-on, MAC, VMnet and subnet. Static configuration does not imply DHCP. Clients need 10.99.0.1 as gateway and a valid DNS server. For low throughput, inspect licensing and host load. The default route points to the NAT gateway, not CHR itself."
+                    >
+                      For an unreachable gateway, check connection-at-power-on,
+                      MAC, VMnet and subnet. Static configuration does not imply
+                      DHCP. Clients need 10.99.0.1 as gateway and a valid DNS
+                      server. For low throughput, inspect licensing and host
+                      load. The default route points to the NAT gateway, not CHR
+                      itself.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="Snapshot و Export خارج VM"
+                      data-en="Snapshots and off-VM exports"
+                    >
+                      Snapshots and off-VM exports
+                    </h2>
+                    <p
+                      data-fa="پیش از آزمون Snapshot بگیرید و Export را خارج VM نگه دارید. Snapshot مستقل از دیسک میزبان نیست. پس از Clone، IP و System ID و شرایط License را بررسی کنید و دو VM با IP یکسان را هم‌زمان روشن نکنید."
+                      data-en="Take a pre-test snapshot and keep exports outside the VM. A snapshot does not survive host-storage loss independently. After cloning, check IP, system ID and license requirements. Never start duplicate-IP VMs together."
+                    >
+                      Take a pre-test snapshot and keep exports outside the VM.
+                      A snapshot does not survive host-storage loss
+                      independently. After cloning, check IP, system ID and
+                      license requirements. Never start duplicate-IP VMs
+                      together.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="حدود نتیجه آزمایشگاه"
+                      data-en="What the lab establishes"
+                    >
+                      What the lab establishes
+                    </h3>
+                    <p
+                      data-fa="این Lab برای بررسی Syntax و رفتار تنظیمات مناسب است. نتیجه سرعت یا پایداری Workstation را به RouterBOARD یا Hypervisor محیط Production تعمیم ندهید."
+                      data-en="Use the lab to check syntax and configuration behavior. Do not generalize Workstation throughput or reliability to RouterBOARD or production hypervisors."
+                    >
+                      Use the lab to check syntax and configuration behavior. Do
+                      not generalize Workstation throughput or reliability to
+                      RouterBOARD or production hypervisors.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا lab Workstation جای روتر Production است؟"
+                      data-en="Can a Workstation lab replace a production router?"
+                    >
+                      Can a Workstation lab replace a production router?
+                    </h3>
+                    <p
+                      data-fa="خیر. هدف آزمون configuration است و HA، پشتیبانی و ظرفیت جدا باید طراحی شوند."
+                      data-en="No. It validates configuration. HA, support and capacity require separate design."
+                    >
+                      No. It validates configuration. HA, support and capacity
+                      require separate design.
+                    </p>
+                    <h3
+                      data-fa="چرا throughput پایین است؟"
+                      data-en="Why is throughput low?"
+                    >
+                      Why is throughput low?
+                    </h3>
+                    <p
+                      data-fa="سطح license CHR و resource میزبان را هم‌زمان بررسی کنید."
+                      data-en="Check both the CHR license tier and host resources."
+                    >
+                      Check both the CHR license tier and host resources.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://help.mikrotik.com/docs/spaces/ROS/pages/18350234/Cloud+Hosted+Router+CHR"
+                          rel="noopener"
+                          >MikroTik: CHR</a
+                        >
+                      </li>
+                      <li>
+                        <a href="https://mikrotik.com/download" rel="noopener"
+                          >MikroTik: Downloads</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
               </article>
             </div>
           </div>
@@ -507,10 +794,10 @@
               </h3>
               <p
                 class="brand-title"
-                data-en="Infrastructure & DevOps Engineer"
+                data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
               >
-                Infrastructure & DevOps Engineer
+                Infrastructure &amp; DevOps Engineer
               </p>
               <p
                 class="brand-description"

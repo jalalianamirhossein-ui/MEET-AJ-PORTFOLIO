@@ -1,4 +1,6 @@
 > **HISTORICAL / SUPERSEDED.**
+
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
 > **Original date:** 2026-09-16.
 > **Original purpose:** UI report for the homepage “Get to Know Me” section, with screenshot evidence (now in `screenshots/get-to-know-me/`).
 > **Superseded by:** [../qa/VISUAL-QA.md](../qa/VISUAL-QA.md) and [../qa/DESIGN-AUDIT.md](../qa/DESIGN-AUDIT.md).
@@ -6,10 +8,10 @@
 
 # Get to Know Me — UI report
 
-**Date:** 2026-09-16  
-**Origin:** `http://127.0.0.1:8000`  
-**Scope:** Homepage `#about` only, plus required overlay CSS / existing `main.js`.  
-**Git:** not modified (no commit, no push).  
+**Date:** 2026-09-16
+**Origin:** `http://127.0.0.1:8000`
+**Scope:** Homepage `#about` only, plus required overlay CSS / existing `main.js`.
+**Git:** not modified (no commit, no push).
 **Overlay:** `assets/css/visual-upgrade.css?v=1114`
 
 `php artisan site:compare-content`: **Failures: 0**

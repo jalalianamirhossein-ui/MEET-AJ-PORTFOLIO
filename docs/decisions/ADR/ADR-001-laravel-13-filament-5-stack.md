@@ -2,8 +2,8 @@
 
 # ADR-001 — Laravel 13 + PHP 8.4 + Filament 5 + Blade + MySQL
 
-Status: **Accepted**  
-Date: 2026-09-16  
+Status: **Accepted**
+Date: 2026-09-16
 Supersedes: Laravel 11 / PHP 8.2 / Filament 3 / public `/de` routes / `pages` table / `contact_requests` table as described in older planning documents.
 
 This is the canonical architecture for implementation and DirectAdmin production. Historical documents are retained. They are not the source of truth when they conflict with this record.

@@ -1,5 +1,7 @@
 # Admin panel — Meet AJ
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 **Authority:** AUTHORITATIVE Filament description.
 **Verified:** 2026-09-18 against `app/Filament/**`, `app/Policies/**`, `app/Providers/Filament/AdminPanelProvider.php`, `resources/css/filament-admin.css`, `php artisan route:list` (after `optimize:clear`), PHPUnit (`CmsOperationsTest`, `ServiceCatalogTest`, `RequestWorkflowTest`, `PublicSiteTest`, `ProductionAuditTest`, `FormCsrfAndAdminRequestsTest`), and a live contact POST that appears at `/admin/requests`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
@@ -76,7 +78,7 @@ CRUD on `tags` for admins and editors (`TagPolicy`). `name` and `slug` are uniqu
 **Admin only** (`ServicePolicy`). Editors receive an authorization failure, asserted in PHPUnit.
 
 Form sections: General, Content (repeaters for features, process, FAQ), Pricing, Media, SEO, Publishing.
-Table: title, language, status, formatted price, currency, sort order, published at, updated at. Filters: language, status, price type. Actions: preview, edit, replicate as draft, publish, unpublish, delete with confirmation; bulk publish skips German rows. Prices live here and nowhere else ([SERVICES.md](SERVICES.md)).
+Table: title, language, status, formatted price, currency, sort order, published at, updated at. Filters: language, status, price type. Actions: preview, edit, replicate as draft, publish, unpublish, delete with confirmation; bulk publish skips German rows. Prices live here and nowhere else ([SERVICES.md](../../current/SERVICES.md)).
 
 ## Requests (`RequestResource`) — Communications
 
@@ -133,4 +135,4 @@ Admin branding is loaded **once**: `AdminPanelProvider` registers `Css::make('me
 | Interactive login and editing in a browser | — | BLOCKED (no CMS user) |
 | Admin responsive layout on small screens | code + overlay CSS; no authenticated session | NOT TESTED |
 
-Evidence: [../qa/ADMIN-QA.md](../qa/ADMIN-QA.md).
+Evidence: [../qa/ADMIN-QA.md](../../qa/ADMIN-QA.md).

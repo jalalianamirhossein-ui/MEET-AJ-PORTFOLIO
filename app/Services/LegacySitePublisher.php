@@ -8,11 +8,23 @@ class LegacySitePublisher
     {
         $copied = [];
         $this->copyDirectory(resource_path('assets'), public_path('assets'), $copied);
+        // New paths are published first; retire known moved outputs whose
+        // source no longer exists. Old URLs use the allowlisted redirect route.
+        foreach (config('image-paths.legacy', []) as $old => $new) {
+            $previous = public_path('assets/img/'.$old);
+            $current = public_path('assets/img/'.$new);
+            if (is_file($previous) && is_file($current)
+                && ! is_file(resource_path('assets/img/'.$old))) {
+                unlink($previous);
+            }
+        }
         foreach (['manifest.json' => 'manifest.json', 'preloader.html' => 'preloader.html', 'preloader.css' => 'preloader.css'] as $from => $to) {
             $this->copyFile(resource_path('static/'.$from), public_path($to), $copied);
         }
         $this->copyFile(resource_path('static/partials/lang-toggle.html'), public_path('partials/lang-toggle.html'), $copied);
         $this->copyFile(resource_path('downloads/netbox_installation_guide_v2.pdf'), public_path('docs/netbox_installation_guide_v2.pdf'), $copied);
+        $this->copyFile(resource_path('content/articles/linux-security-auditor-bash/security-audit.sh'), public_path('docs/linux-security-auditor/security-audit.sh'), $copied);
+        $this->copyFile(resource_path('content/articles/mikrotik-pbr-client/MikroTikPBRClient-Setup-1.0.2-x64.msi'), public_path('downloads/mikrotik-pbr-client/MikroTikPBRClient-Setup-1.0.2-x64.msi'), $copied);
         $this->writeServiceWorker();
         $copied[] = 'public/sw.js';
 
@@ -37,8 +49,8 @@ class LegacySitePublisher
     {
         $written = [];
         // The homepage is now a first-class Blade view backed by homepage_contents.
-        // Legacy publishing still builds the article listing, but must never
-        // overwrite the CMS-driven homepage with the old static export.
+        // Tracked Blade views are maintained directly. Only bootstrap the
+        // article listing from the legacy export when its view is missing.
         $written[] = resource_path('views/home.blade.php');
         $written[] = $this->writeArticleIndex();
 
@@ -71,6 +83,11 @@ class LegacySitePublisher
 
     private function writeArticleIndex(): string
     {
+        $target = resource_path('views/articles/index.blade.php');
+        if (is_file($target)) {
+            return $target;
+        }
+
         $html = file_get_contents(resource_path('legacy/index.html'));
         if ($html === false) {
             throw new \RuntimeException('Unable to read index.html');
@@ -85,6 +102,7 @@ class LegacySitePublisher
         $footer = $this->sliceInclusive($html, '<footer id="footer"', '</footer>');
         $assembled = $chrome."\n    <main id=\"main-content\" class=\"main\" role=\"main\">\n".$section."\n    </main>\n".$footer;
         $assembled = $this->toBlade($assembled);
+        $assembled = preg_replace('/<span data-current-year>[^<]*<\/span>/', "@endverbatim\n<x-localized-year />\n@verbatim", $assembled) ?? $assembled;
         $assembled = $this->replacePortfolioGrid($assembled);
         $assembled = $this->injectArticleLibrary($assembled, true);
         $assembled = $this->replaceSidebarChrome($assembled, '/#hero');
@@ -99,7 +117,7 @@ class LegacySitePublisher
     <link rel="canonical" href="{{ rtrim(config('app.url'), '/') }}/articles" />
     <meta property="og:title" content="Articles | Meet AJ" />
     <meta property="og:url" content="{{ rtrim(config('app.url'), '/') }}/articles" />
-    <link href="/assets/img/favicon.png" rel="icon" />
+    <link href="/assets/img/icons/favicon.png" rel="icon" />
     <link rel="manifest" href="/manifest.json" />
     <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
@@ -109,21 +127,26 @@ class LegacySitePublisher
     <link href="/assets/css/lang-toggle.css?v=1403" rel="stylesheet" />
     <link id="rtl-style" href="/assets/css/rtl.css?v=1405" rel="stylesheet" disabled />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1852" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
+    <link href="/assets/css/glass-system.css?v=18" rel="stylesheet" />
+    <link href="/preloader.css?v=devops-2" rel="stylesheet" />
+    <noscript><style>#preloader { display: none !important; }</style></noscript>
   </head>
   <body class="index-page articles-index-page">
 BLADE;
         $page .= $assembled;
         $page .= <<<'BLADE'
+    @include('partials.devops-preloader')
     <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
     <script src="/assets/vendor/aos/aos.js" defer></script>
     <script src="/assets/vendor/glightbox/js/glightbox.min.js" defer></script>
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
-    <script src="/assets/js/main.js?v=1414" defer></script>
+    <script src="/assets/js/main.js?v=1420" defer></script>
+    <script src="/assets/js/scroll-reveal.js?v=1" defer></script>
     <script src="/assets/js/service-catalog.js?v=1813" defer></script>
-    <script src="/assets/js/i18n.js?v=1403" defer></script>
+    <script src="/assets/js/i18n.js?v=1407" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {
@@ -145,7 +168,7 @@ BLADE;
 
     private function articleListingChrome(string $html): string
     {
-        $start = strpos($html, '<a class="skip-link"');
+        $start = strpos($html, '<header id="header"');
         $toggle = strpos($html, 'id="menu-toggle"');
         $endBtn = $toggle === false ? false : strpos($html, '</button>', $toggle);
         if ($start === false || $endBtn === false) {
@@ -164,8 +187,6 @@ BLADE;
             'href="/articles" class="active" aria-current="page"',
             $chrome
         );
-        $chrome = str_replace('href="#main-content"', 'href="#portfolio"', $chrome);
-
         return $chrome;
     }
 
@@ -582,6 +603,11 @@ HTML;
     private function copyFile(string $from, string $to, array &$copied): void
     {
         if (! is_file($from)) {
+            return;
+        }
+        if (is_file($to) && hash_file('sha256', $from) === hash_file('sha256', $to)) {
+            $copied[] = $to;
+
             return;
         }
         if (! is_dir(dirname($to))) {

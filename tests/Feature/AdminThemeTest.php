@@ -87,7 +87,7 @@ class AdminThemeTest extends TestCase
 
         $home = $this->get('/')->assertOk()->getContent();
         $this->assertStringContainsString('--topic: #0ea5e9', $home);
-        $this->assertStringContainsString("style=\"--topic: #0ea5e9;\"", $this->get('/articles')->assertOk()->getContent());
+        $this->assertStringContainsString('--topic: #0ea5e9;', $this->get('/articles')->assertOk()->getContent());
 
         $source = (string) file_get_contents(app_path('Filament/Resources/CategoryResource.php'));
         $this->assertStringContainsString("ColorPicker::make('accent_color')", $source);

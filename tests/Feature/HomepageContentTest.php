@@ -19,7 +19,7 @@ class HomepageContentTest extends TestCase
             ->assertSee('Skills', false)
             ->assertSee('Professional Experience', false)
             ->assertSee('Configured load balancing across 5 Internet connections for stability', false)
-            ->assertSee("Let&#039;s Work Together", false);
+            ->assertSee('Let’s connect for IT consulting or your next project.', false);
 
         $this->assertSame(7, HomepageContent::query()->count());
         $resume = HomepageContent::query()->where('key', 'resume')->firstOrFail();
@@ -44,5 +44,28 @@ class HomepageContentTest extends TestCase
         \Livewire\Livewire::actingAs($admin)
             ->test(HomepageContentResource\Pages\ListHomepageContents::class)
             ->assertOk();
+    }
+
+    public function test_older_site_records_render_default_navigation_without_overwriting_custom_links(): void
+    {
+        $this->get('/')->assertOk();
+        $site = HomepageContent::query()->where('key', 'site')->firstOrFail();
+        $content = $site->content;
+        unset($content['navigation']);
+        $site->update(['content' => $content]);
+
+        $this->get('/')->assertOk()
+            ->assertSee('data-en="Home"', false)
+            ->assertSee('data-en="Services"', false)
+            ->assertSee('data-en="Contact"', false);
+
+        $site->update(['content' => array_merge($content, ['navigation' => []])]);
+        $this->get('/')->assertOk()->assertSee('data-en="Home"', false);
+
+        $site->update(['content' => array_merge($content, ['navigation' => [
+            ['href' => '#contact', 'label_en' => 'Talk to AJ', 'label_fa' => 'تماس'],
+        ]])]);
+        $this->get('/')->assertOk()->assertSee('data-en="Talk to AJ"', false);
+        $this->assertSame('Talk to AJ', data_get($site->fresh()->content, 'navigation.0.label_en'));
     }
 }

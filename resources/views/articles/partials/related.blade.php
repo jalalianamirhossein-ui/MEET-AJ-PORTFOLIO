@@ -3,7 +3,7 @@
                     <h2 id="related-heading" data-en="Related Articles" data-fa="مقالات مرتبط">Related Articles</h2>
                     <div class="article-related-grid">
                       @foreach ($related as $item)
-                        @include('components.article-card', ['article' => $item, 'variant' => 'related'])
+                        @include('components.article-card', ['article' => $item, 'variant' => 'related', 'pageLocale' => data_get($article->presentation, 'localizations') ? data_get($article->presentation, 'content_language') : null])
                       @endforeach
                     </div>
                   </section>

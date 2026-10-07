@@ -1,7 +1,7 @@
 /**
  * Language switch — one clickable EN/FA control. No dropdown.
  * DE is included only when the page actually has data-de copy.
- * Switching language rewrites on-page strings and does not navigate away.
+ * Bilingual articles switch existing prose and SEO without reloading the page.
  */
 
 (() => {
@@ -27,6 +27,9 @@
 
     const cookieMatch = document.cookie.match(/(?:^|;\s*)lang=(en|fa|de)\b/);
     if (cookieMatch && langs.includes(cookieMatch[1])) return cookieMatch[1];
+
+    const articleLanguage = document.documentElement.dataset.articleLanguage;
+    if (langs.includes(articleLanguage)) return articleLanguage;
 
     const browserLang = navigator.language || navigator.userLanguage || "";
     if (browserLang.startsWith("fa") && langs.includes("fa")) return "fa";
@@ -110,14 +113,63 @@
     return langs[(index + 1) % langs.length];
   };
 
+  const updateArticleSeo = (lang) => {
+    const payload = document.getElementById("article-language-seo");
+    if (!payload) return;
+    const seo = JSON.parse(payload.textContent)[lang];
+    if (!seo) return;
+    document.title = seo.title;
+    const attributes = {
+      'meta[name="description"]': seo.description,
+      'meta[name="keywords"]': seo.keywords,
+      'meta[property="og:title"]': seo.og_title,
+      'meta[property="og:description"]': seo.og_description,
+      'meta[property="og:url"]': seo.og_url,
+      'meta[name="twitter:title"]': seo.twitter_title,
+      'meta[name="twitter:description"]': seo.twitter_description,
+    };
+    Object.entries(attributes).forEach(([selector, value]) => {
+      const element = document.querySelector(selector);
+      if (element && value != null) element.setAttribute("content", value);
+    });
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href", seo.canonical);
+    Object.entries({
+      "article-schema": seo.schema,
+      "article-faq-schema": seo.faq_schema,
+      "article-breadcrumb-schema": seo.breadcrumb,
+    }).forEach(([id, value]) => {
+      const element = document.getElementById(id);
+      if (element && value) element.textContent = JSON.stringify(value);
+    });
+    document.querySelectorAll("[data-share-channel]").forEach((el) => {
+      const href = seo.share?.[el.dataset.shareChannel];
+      if (href) el.href = href;
+    });
+    document.querySelector("[data-copy-link]")?.setAttribute("data-copy-link", seo.canonical);
+  };
+
   const apply = (lang) => {
     const langs = availableLanguages();
     const next = langs.includes(lang) ? lang : "en";
+    const articleLanguage = document.documentElement.dataset.articleLanguage;
     const isPersian = next === "fa";
     const html = document.documentElement;
 
     html.lang = next;
     html.dir = isPersian ? "rtl" : "ltr";
+    if (articleLanguage) {
+      html.dataset.articleLanguage = next;
+      document.querySelectorAll(".article-body, .article-toc-nav, .enterprise-runbook, .article-body [lang][dir]").forEach((el) => {
+        if (el.closest("#legacy-history, pre")) return;
+        el.lang = next;
+        el.dir = isPersian ? "rtl" : "ltr";
+      });
+      updateArticleSeo(next);
+      // Retire old language parameters without changing filters or the anchor.
+      const url = new URL(window.location.href);
+      url.searchParams.delete("lang");
+      if (url.href !== window.location.href) window.history.replaceState(null, "", url);
+    }
 
     const rtlStyle = getRtlStyle();
     if (rtlStyle) {
@@ -131,6 +183,7 @@
     }
 
     document.querySelectorAll("[data-en]").forEach((el) => {
+      if (articleLanguage && el.closest("#legacy-history") && el.tagName !== "SUMMARY") return;
       if (isLockedEnglish(el)) {
         const english = el.getAttribute("data-en");
         if (english != null) setElementText(el, english);
@@ -140,6 +193,13 @@
       if (translation != null) {
         setElementText(el, translation);
       }
+    });
+
+    ["alt", "title"].forEach((attribute) => {
+      document.querySelectorAll(`[data-en-${attribute}]`).forEach((el) => {
+        const value = el.getAttribute(`data-${next}-${attribute}`) || el.getAttribute(`data-en-${attribute}`);
+        if (value) el.setAttribute(attribute, value);
+      });
     });
 
     document.querySelectorAll("[data-en-placeholder]").forEach((el) => {
@@ -270,6 +330,10 @@
     const langs = availableLanguages();
     injectLanguageToggle(langs);
     apply(init(langs));
+    // Back/forward may restore an older page after the preference changed elsewhere.
+    window.addEventListener("pageshow", (event) => {
+      if (event.persisted) apply(init(availableLanguages()));
+    });
   };
 
   if (document.readyState === "loading") {

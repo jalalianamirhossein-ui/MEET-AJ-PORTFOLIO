@@ -67,7 +67,7 @@
     <meta property="og:url" content="https://meetaj.ir/" />
     <meta
       property="og:image"
-      content="https://meetaj.irassets/img/hero-bg.jpg"
+      content="https://meetaj.ir/assets/img/banners/site/hero-bg.jpg"
     />
     <meta
       property="og:image:alt"
@@ -86,7 +86,7 @@
     />
     <meta
       name="twitter:image"
-      content="https://meetaj.irassets/img/hero-bg.jpg"
+      content="https://meetaj.ir/assets/img/banners/site/hero-bg.jpg"
     />
     <script type="application/ld+json">
       {
@@ -95,7 +95,7 @@
         "name": "AmirHossein Jalalian",
         "url": "https://meetaj.ir/",
         "jobTitle": "Infrastructure & DevOps Engineer",
-        "image": "https://meetaj.irassets/img/my-profile-img-2.jpg",
+        "image": "https://meetaj.ir/assets/img/avatars/profile/my-profile-img-2.jpg",
         "sameAs": [
           "https://www.linkedin.com/in/amirhosseinjalalian",
           "https://github.com/amirhosseinjalalian",
@@ -143,14 +143,14 @@
           {
             "@@type": "ListItem",
             "position": 4,
-            "name": "Services",
-            "item": "https://meetaj.ir/#services"
+            "name": "Articles",
+            "item": "https://meetaj.ir/#portfolio"
           },
           {
             "@@type": "ListItem",
             "position": 5,
-            "name": "Articles",
-            "item": "https://meetaj.ir/#portfolio"
+            "name": "Services",
+            "item": "https://meetaj.ir/#services"
           },
           {
             "@@type": "ListItem",
@@ -171,8 +171,8 @@
     <!-- ===============================================
     FAVICONS & APP ICONS
     =============================================== -->
-    <link href="/assets/img/favicon.png" rel="icon" />
-    <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+    <link href="/assets/img/icons/favicon.png" rel="icon" />
+    <link href="/assets/img/icons/apple-touch-icon.png" rel="apple-touch-icon" />
 
     <!-- ===============================================
     PROGRESSIVE WEB APP (PWA) CONFIGURATION
@@ -191,7 +191,7 @@
       content="default-src 'self'; img-src 'self' data: https://meetaj.ir; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'self'; frame-src 'self' https://www.google.com https://maps.gstatic.com;"
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <link rel="preload" as="image" href="/assets/img/hero-bg.jpg" />
+    <link rel="preload" as="image" href="/assets/img/banners/site/hero-bg.jpg" />
 
     <!-- ===============================================
     GOOGLE FONTS & TYPOGRAPHY
@@ -251,7 +251,10 @@
       disabled
     />
     <link href="/assets/css/visual-upgrade.css?v=1713" rel="stylesheet" />
-    <link href="/assets/css/site-modules.css?v=1853" rel="stylesheet" />
+    <link href="/assets/css/site-modules.css?v=1854" rel="stylesheet" />
+    <link href="/assets/css/glass-system.css?v=36" rel="stylesheet" />
+    <link href="/assets/css/contact-soft-ui.css?v=8" rel="stylesheet" />
+    <link href="/assets/css/service-colors.css?v=2" rel="stylesheet" />
 
     <!-- ===============================================
     ==================== CRITICAL CSS ==================
@@ -295,25 +298,6 @@
       .btn-primary {
         background: #0ea5e9;
         color: white;
-      }
-
-      .skip-link {
-        position: absolute;
-        top: -999px;
-        left: -999px;
-        padding: 10px 14px;
-        background: #0ea5e9;
-        color: #fff;
-        border-radius: 8px;
-        z-index: 10000;
-        transition:
-          top 0.2s ease,
-          left 0.2s ease;
-      }
-
-      .skip-link:focus-visible {
-        top: 16px;
-        left: 16px;
       }
 
       .btn-outline-light {
@@ -377,6 +361,7 @@
         }
       }
     </style>
+    <link href="/preloader.css?v=devops-2" rel="stylesheet" />
     <noscript>
       <style>
         #preloader {
@@ -391,7 +376,6 @@
   =============================================== -->
 
   <body class="index-page">
-    <a class="skip-link" href="#main-content" data-en="Skip to main content" data-fa="رفتن به محتوای اصلی">Skip to main content</a>
     <!-- ===============================================
     ==================== HEADER SECTION ================
     =============================================== -->
@@ -405,7 +389,21 @@
       =============================================== -->
       <nav id="navmenu" class="navmenu" role="navigation" aria-label="Primary" data-en-aria-label="Primary" data-fa-aria-label="ناوبری اصلی">
         <ul>
-          @foreach (data_get($siteContent, 'navigation', []) as $item)
+          @php
+            // Older CMS records may predate the navigation field.
+            $navigation = data_get($siteContent, 'navigation');
+            if (!is_array($navigation) || $navigation === []) {
+                $siteDefaults = collect(app(\App\Services\HomepageContentCatalog::class)->definitions())->firstWhere('key', 'site');
+                $navigation = data_get($siteDefaults, 'content.navigation', []);
+            }
+            $navigation = array_values($navigation);
+            $servicesIndex = array_search('services', array_column($navigation, 'key'), true);
+            $articlesIndex = array_search('articles', array_column($navigation, 'key'), true);
+            if ($servicesIndex !== false && $articlesIndex !== false && $servicesIndex < $articlesIndex) {
+                [$navigation[$servicesIndex], $navigation[$articlesIndex]] = [$navigation[$articlesIndex], $navigation[$servicesIndex]];
+            }
+          @endphp
+          @foreach ($navigation as $item)
             <li>
               <a href="{{ $item['href'] ?? '#' }}" @class(['active' => $loop->first]) @if ($loop->first) aria-current="page" @endif>
                 <i class="{{ $item['icon'] ?? 'bi bi-link-45deg' }} navicon"></i>
@@ -444,7 +442,7 @@
       <section id="hero" class="hero section dark-background">
         <!-- Hero Background Image -->
         <img
-          src="{{ data_get($heroContent, 'image', '/assets/img/hero-bg.jpg') }}"
+          src="{{ data_get($heroContent, 'image', '/assets/img/banners/site/hero-bg.jpg') }}"
           alt="{{ data_get($heroContent, 'title_en', 'Meet AJ') }}"
           class="hero-bg"
           width="1920"
@@ -582,7 +580,7 @@
             <p class="about-headline" data-en="{{ data_get($aboutContent, 'headline_en', 'Designing, managing, and optimizing enterprise systems.') }}" data-fa="{{ data_get($aboutContent, 'headline_fa', 'طراحی، مدیریت و بهینه‌سازی سیستم‌های سازمانی.') }}">{{ data_get($aboutContent, 'headline_en', 'Designing, managing, and optimizing enterprise systems.') }}</p>
             <div class="about-profile">
               <div class="about-photo">
-                <img src="{{ data_get($aboutContent, 'image', '/assets/img/my-profile-img-2.jpg') }}" alt="{{ data_get($aboutContent, 'name_en', 'Amirhossein Jalalian') }}" width="200" height="200" loading="lazy" sizes="120px" />
+                <img src="{{ data_get($aboutContent, 'image', '/assets/img/avatars/profile/my-profile-img-2.jpg') }}" alt="{{ data_get($aboutContent, 'name_en', 'Amirhossein Jalalian') }}" width="200" height="200" loading="lazy" sizes="120px" />
               </div>
               <div class="about-profile-meta">
                 <p class="about-name" data-en="{{ data_get($aboutContent, 'name_en', 'Amirhossein Jalalian') }}" data-fa="{{ data_get($aboutContent, 'name_fa', 'امیرحسین جلالیان') }}">{{ data_get($aboutContent, 'name_en', 'Amirhossein Jalalian') }}</p>
@@ -744,21 +742,6 @@
         </div>
 
         <div class="container about-secondary">
-          <div class="about-values">
-            <h3 data-en="Core Values" data-fa="ارزش‌های اصلی">Core Values</h3>
-            <ul class="about-value-list">
-              @foreach (data_get($aboutContent, 'values', []) as $value)
-                <li>
-                  <h4 data-en="{{ $value['title_en'] ?? '' }}" data-fa="{{ $value['title_fa'] ?? ($value['title_en'] ?? '') }}">{{ $value['title_en'] ?? '' }}</h4>
-                  <p data-en="{{ $value['body_en'] ?? '' }}" data-fa="{{ $value['body_fa'] ?? ($value['body_en'] ?? '') }}">{{ $value['body_en'] ?? '' }}</p>
-                </li>
-              @endforeach
-            </ul>
-          </div>
-          <blockquote class="about-quote">
-            <p data-en="{{ data_get($aboutContent, 'motto_en', '') }}" data-fa="{{ data_get($aboutContent, 'motto_fa', '') }}">{{ data_get($aboutContent, 'motto_en', '') }}</p>
-            <footer data-en="? My Personal Motto" data-fa="شعار شخصی من">? My Personal Motto</footer>
-          </blockquote>
           <div class="about-philosophy">
             <h3 data-en="{{ data_get($aboutContent, 'philosophy_title_en', 'My Philosophy') }}" data-fa="{{ data_get($aboutContent, 'philosophy_title_fa', 'فلسفه من') }}">{{ data_get($aboutContent, 'philosophy_title_en', 'My Philosophy') }}</h3>
             <p data-en="{{ data_get($aboutContent, 'philosophy_en', '') }}" data-fa="{{ data_get($aboutContent, 'philosophy_fa', '') }}">
@@ -895,9 +878,10 @@
           <p data-en="{{ data_get($resumeContent, 'intro_en', '') }}" data-fa="{{ data_get($resumeContent, 'intro_fa', '') }}">{{ data_get($resumeContent, 'intro_en', '') }}</p>
         </div>
         <div class="container">
-          <div class="row">
+          <div class="row resume-tree">
             <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
               <h3 class="resume-title" data-en="Education" data-fa="تحصیلات">Education</h3>
+              <div class="resume-branches">
               @foreach (data_get($resumeContent, 'education', []) as $item)
                 <div class="resume-item" data-resume-kind="{{ $item['kind'] ?? 'education' }}">
                   <h4 data-en="{{ $item['title_en'] ?? '' }}" data-fa="{{ $item['title_fa'] ?? ($item['title_en'] ?? '') }}">{{ $item['title_en'] ?? '' }}</h4>
@@ -905,14 +889,19 @@
                   <p><em><a href="{{ $item['url'] ?? '#' }}" target="_blank" rel="noopener" data-en="{{ $item['org_en'] ?? '' }}" data-fa="{{ $item['org_fa'] ?? ($item['org_en'] ?? '') }}">{{ $item['org_en'] ?? '' }}</a></em></p>
                 </div>
               @endforeach
+              </div>
             </div>
             <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
               <h3 class="resume-title" data-en="Professional Experience" data-fa="تجربه کاری">Professional Experience</h3>
+              <div class="resume-branches">
               @foreach (data_get($resumeContent, 'experience', []) as $item)
                 <div class="resume-item" data-resume-kind="experience">
                   <h4 data-en="{{ $item['title_en'] ?? '' }}" data-fa="{{ $item['title_fa'] ?? ($item['title_en'] ?? '') }}">{{ $item['title_en'] ?? '' }}</h4>
                   <h5 data-en="{{ $item['period'] ?? '' }}" data-fa="{{ $item['period_fa'] ?? ($item['period'] ?? '') }}">{{ $item['period'] ?? '' }}</h5>
                   <p><em><a href="{{ $item['url'] ?? '#' }}" target="_blank" rel="noopener" data-en="{{ $item['org_en'] ?? '' }}" data-fa="{{ $item['org_fa'] ?? ($item['org_en'] ?? '') }}">{{ $item['org_en'] ?? '' }}</a></em></p>
+                  @if (! empty($item['body_en']) || ! empty($item['body_fa']) || ! empty($item['highlights']))
+                    <details class="resume-details">
+                      <summary><span data-en="Experience details" data-fa="جزئیات تجربه کاری">Experience details</span><i class="bi bi-chevron-down" aria-hidden="true"></i></summary>
                   @if (! empty($item['body_en']) || ! empty($item['body_fa']))
                     <p data-en="{{ $item['body_en'] ?? '' }}" data-fa="{{ $item['body_fa'] ?? ($item['body_en'] ?? '') }}">{{ $item['body_en'] ?? '' }}</p>
                   @endif
@@ -923,51 +912,16 @@
                       @endforeach
                     </ul>
                   @endif
+                    </details>
+                  @endif
                 </div>
               @endforeach
+              </div>
             </div>
           </div>
         </div>
       </section>
       <!-- /Resume Section -->
-
-      <!-- ===============================================
-      ==================== SERVICES SECTION ===============
-      =============================================== -->
-                  <section id="services" class="services section">
-        <!-- Section Title -->
-        <div class="container section-title" data-aos="fade-up">
-          <h2 data-en="Services" data-fa="خدمات">Services</h2>
-          <p
-            data-en="What I actually implement and support: enterprise networks, servers, virtualization, SQL, Jira, monitoring, DevOps, VoIP, CCTV, and security."
-            data-fa="آنچه واقعاً پیاده‌سازی و پشتیبانی می‌کنم: شبکه سازمانی، سرور، مجازی‌سازی، SQL، Jira، مانیتورینگ، DevOps، VoIP، دوربین مداربسته و امنیت."
-          >
-            What I actually implement and support: enterprise networks, servers,
-            virtualization, SQL, Jira, monitoring, DevOps, VoIP, CCTV, and
-            security.
-          </p>
-        </div>
-        <!-- End Section Title -->
-
-        <!-- ===============================================
-        ==================== SERVICES CONTENT ================
-        =============================================== -->
-        <div class="container">
-          
-          <div class="row gy-4" id="service-catalog">
-            @forelse ($services as $service)
-              @include('components.service-card', ['service' => $service])
-            @empty
-            @endforelse
-          </div>
-                    @include('partials.service-drawer')
-          <!-- End Service Catalog -->
-
-          <!-- End Services Row -->
-        </div>
-        <!-- End Services Container -->
-      </section>
-      <!-- /Services Section -->
 
       <!-- ===============================================
       ==================== ARTICLES SECTION ===============
@@ -1045,6 +999,44 @@
       </section>
       <!-- End Articles Section -->
 
+      <!-- ===============================================
+      ==================== SERVICES SECTION ===============
+      =============================================== -->
+                  <section id="services" class="services section">
+        <!-- Section Title -->
+        <div class="container section-title" data-aos="fade-up">
+          <h2 data-en="Services" data-fa="خدمات">Services</h2>
+          <p
+            data-en="What I actually implement and support: enterprise networks, servers, virtualization, SQL, Jira, monitoring, DevOps, VoIP, CCTV, and security."
+            data-fa="آنچه واقعاً پیاده‌سازی و پشتیبانی می‌کنم: شبکه سازمانی، سرور، مجازی‌سازی، SQL، Jira، مانیتورینگ، DevOps، VoIP، دوربین مداربسته و امنیت."
+          >
+            What I actually implement and support: enterprise networks, servers,
+            virtualization, SQL, Jira, monitoring, DevOps, VoIP, CCTV, and
+            security.
+          </p>
+        </div>
+        <!-- End Section Title -->
+
+        <!-- ===============================================
+        ==================== SERVICES CONTENT ================
+        =============================================== -->
+        <div class="container">
+
+          <div class="row gy-4" id="service-catalog">
+            @forelse ($services as $service)
+              @include('components.service-card', ['service' => $service])
+            @empty
+            @endforelse
+          </div>
+                    @include('partials.service-drawer')
+          <!-- End Service Catalog -->
+
+          <!-- End Services Row -->
+        </div>
+        <!-- End Services Container -->
+      </section>
+      <!-- /Services Section -->
+
       
       @include('partials.testimonials')
 
@@ -1067,27 +1059,6 @@
         =============================================== -->
         <div class="container" data-aos="fade-up" data-aos-delay="100">
           <div class="contact-wrapper">
-            <!-- Contact Header -->
-            <div class="contact-header" data-aos="fade-up" data-aos-delay="150">
-              <div class="contact-intro">
-                <h3 class="contact-intro-title">
-                  <span
-                    data-en="{{ data_get($contactContent, 'heading_en', "Let's Work Together") }}"
-                    data-fa="{{ data_get($contactContent, 'heading_fa', 'بیایید با هم کار کنیم') }}"
-                    >{{ data_get($contactContent, 'heading_en', "Let's Work Together") }}</span
-                  >
-                      <i class="bi bi-people-fill title-accent" aria-hidden="true"></i>
-                </h3>
-                <p
-                  class="contact-intro-text"
-                  data-en="{{ data_get($contactContent, 'body_en', '') }}"
-                  data-fa="{{ data_get($contactContent, 'body_fa', '') }}"
-                >
-                  {{ data_get($contactContent, 'body_en', '') }}
-                </p>
-              </div>
-            </div>
-
             <!-- Contact Main Grid -->
             <div class="contact-main-grid">
               <!-- Left Column - Contact Methods -->
@@ -1157,7 +1128,12 @@
                       <span data-en="Send a Message" data-fa="ارسال پیام"
                         >Send a Message</span
                       >
-                      <i class="bi bi-chat-dots-fill title-accent" aria-hidden="true"></i>
+                      <svg class="form-infinity" viewBox="0 0 320 160" aria-hidden="true">
+                        <path class="form-infinity-track" d="M160 80 C125 30 105 28 80 28 C12 28 12 132 80 132 C105 132 125 130 160 80 C195 30 215 28 240 28 C308 28 308 132 240 132 C215 132 195 130 160 80Z" />
+                        <path class="form-infinity-flow" pathLength="100" d="M160 80 C125 30 105 28 80 28 C12 28 12 132 80 132 C105 132 125 130 160 80 C195 30 215 28 240 28 C308 28 308 132 240 132 C215 132 195 130 160 80Z" />
+                        <path class="form-infinity-flow" pathLength="100" d="M160 80 C125 30 105 28 80 28 C12 28 12 132 80 132 C105 132 125 130 160 80 C195 30 215 28 240 28 C308 28 308 132 240 132 C215 132 195 130 160 80Z" />
+                        <path class="form-infinity-flow" pathLength="100" d="M160 80 C125 30 105 28 80 28 C12 28 12 132 80 132 C105 132 125 130 160 80 C195 30 215 28 240 28 C308 28 308 132 240 132 C215 132 195 130 160 80Z" />
+                      </svg>
                     </h3>
                     <p
                       class="form-subtitle"
@@ -1437,7 +1413,7 @@
             <div class="footer-bottom-content">
               <div class="copyright">
                 <p>
-                  © <span data-current-year>2026</span>
+                  © <x-localized-year />
                   <strong
                     data-en="{{ data_get($aboutContent, 'name_en', 'AmirHossein Jalalian') }}"
                     data-fa="{{ data_get($aboutContent, 'name_fa', 'امیرحسین جلالیان') }}"
@@ -1465,33 +1441,9 @@
     <!-- End Footer Section -->
 
     <!-- ===============================================
-    PAGE PRELOADER - Meet AJ Ambient Reveal
+    PAGE PRELOADER - DevOps Infinity
     =============================================== -->
-    <div id="preloader" class="preloader-overlay visible" role="status" aria-live="polite" aria-busy="true">
-      <div id="preloader-container" class="preloader-container ltr">
-        <div class="preloader-ambient preloader-ambient-a" aria-hidden="true"></div>
-        <div class="preloader-ambient preloader-ambient-b" aria-hidden="true"></div>
-
-        <div class="preloader-brandmark" aria-hidden="true">
-          <div class="preloader-brandmark-core"><span>AJ</span></div>
-          <span class="preloader-orbit-dot preloader-orbit-dot-a"></span>
-          <span class="preloader-orbit-dot preloader-orbit-dot-b"></span>
-        </div>
-
-        <div class="preloader-wordmark">
-          <strong>{{ data_get($siteContent, 'site_name', 'Meet AJ') }}</strong>
-          <span data-en="{{ data_get($heroContent, 'role_en', 'Infrastructure & DevOps') }}" data-fa="{{ data_get($heroContent, 'role_fa', 'Infrastructure و DevOps') }}">{{ data_get($heroContent, 'role_en', 'Infrastructure & DevOps') }}</span>
-        </div>
-
-        <div class="preloader-status-line">
-          <span id="loading-text" class="loading-text" data-en="Preparing your experience" data-fa="در حال آماده‌سازی تجربه شما">Preparing your experience</span>
-          <span class="preloader-status-dot" aria-hidden="true"></span>
-        </div>
-        <div class="preloader-progress" role="progressbar" aria-label="Loading">
-          <span class="progress-line"></span>
-        </div>
-      </div>
-    </div>
+    @include('partials.devops-preloader')
 
     <!-- ===============================================
     JAVASCRIPT LIBRARIES & SCRIPTS
@@ -1545,12 +1497,13 @@
 
     <!-- Main Application JavaScript -->
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
-    <script src="/assets/js/main.js?v=1414" defer></script>
-    <script src="/assets/js/service-catalog.js?v=1813" defer></script>
+    <script src="/assets/js/main.js?v=1421" defer></script>
+    <script src="/assets/js/service-catalog.js?v=1816" defer></script>
+    <script src="/assets/js/scroll-reveal.js?v=5" defer></script>
 
     <!-- Internationalization (i18n) Support -->
     <!-- Language Toggle JavaScript -->
-    <script src="/assets/js/i18n.js?v=1403" defer></script>
+    <script src="/assets/js/i18n.js?v=1407" defer></script>
 
     <!-- Progressive image loading for non-critical media -->
     <script>

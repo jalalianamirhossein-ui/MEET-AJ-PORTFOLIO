@@ -1,11 +1,13 @@
 # Final project QA report — Meet AJ master audit
 
-**Date:** 2026-09-17  
-**Overlay:** `visual-upgrade.css?v=1405`  
-**Scripts:** `i18n.js?v=1201`, `main.js?v=1201`, `lang-toggle.css?v=1202`  
-**Latest visual pass:** [VISUAL-UX-FINAL-REPORT.md](VISUAL-UX-FINAL-REPORT.md)  
-**Git:** no git command was run in this pass — no add, no commit, no push. (A `.git` directory already exists in the repository; it was not touched.)  
-**Current status:** [../current/PROJECT-STATUS.md](../current/PROJECT-STATUS.md) · **Detail:** [VISUAL-QA.md](VISUAL-QA.md), [RESPONSIVE-QA.md](RESPONSIVE-QA.md), [ACCESSIBILITY-QA.md](ACCESSIBILITY-QA.md), [ADMIN-QA.md](ADMIN-QA.md), [CONTENT-INTEGRITY.md](CONTENT-INTEGRITY.md), [QA-MATRIX.md](QA-MATRIX.md)
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
+**Date:** 2026-09-17
+**Overlay:** `visual-upgrade.css?v=1405`
+**Scripts:** `i18n.js?v=1201`, `main.js?v=1201`, `lang-toggle.css?v=1202`
+**Latest visual pass:** [VISUAL-UX-FINAL-REPORT.md](VISUAL-UX-FINAL-REPORT.md)
+**Git:** no git command was run in this pass — no add, no commit, no push. (A `.git` directory already exists in the repository; it was not touched.)
+**Current status:** [../current/PROJECT-STATUS.md](../../current/PROJECT-STATUS.md) · **Detail:** [VISUAL-QA.md](VISUAL-QA.md), [RESPONSIVE-QA.md](RESPONSIVE-QA.md), [ACCESSIBILITY-QA.md](../../qa/ACCESSIBILITY-QA.md), [ADMIN-QA.md](ADMIN-QA.md), [CONTENT-INTEGRITY.md](../../qa/CONTENT-INTEGRITY.md), [QA-MATRIX.md](QA-MATRIX.md)
 
 This is **not** a claim that every viewport screenshot and every authenticated admin screen was proven. PASS below means verified with the evidence named. BLOCKED means not tested. FAIL would mean a proven defect still open.
 
@@ -15,8 +17,8 @@ Meet AJ remains Laravel 13 + PHP 8.4 + Filament 5 + Livewire 4 + Blade. Article 
 
 This pass fixed: FA search placeholders (`i18n.js`), article teaser heading skip (H4→H3), mobile menu background `inert` when open.
 
-`php artisan site:compare-content` → **Failures: 0** (23 articles, 6 services, home).  
-`php artisan test` → **40 tests, 708 assertions, 1 skipped (`MysqlSchemaTest`), 0 failures**.  
+`php artisan site:compare-content` → **Failures: 0** (23 articles, 6 services, home).
+`php artisan test` → **40 tests, 708 assertions, 1 skipped (`MysqlSchemaTest`), 0 failures**.
 HTTP: 68 URL checks, **0 unexpected** statuses.
 
 ## Architecture

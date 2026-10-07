@@ -8,3 +8,5 @@ Decisions that shaped the Meet AJ Laravel CMS. An ADR records **why** a choice w
 | [ADR-002](ADR-002-framework-version-selection.md) | Framework version selection: Laravel 13 over Laravel 11 / 12 | Accepted, in force (pre-install evidence) |
 
 Both ADRs explicitly reject Laravel 11, PHP 8.2 as the floor, Filament 3, a `pages` table, a `contact_requests` table, and public `/de` routes. Documents that still describe those choices are historical.
+
+Documentation reviewed 2026-10-06. Current structure and verification: [project status](../../current/PROJECT-STATUS.md).

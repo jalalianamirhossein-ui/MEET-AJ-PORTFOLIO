@@ -1,18 +1,18 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-article-language="en">
   <head>
     <title>
-      Complete Guide to OpenVPN Setup in MikroTik RouterOS v7 - Meet AJ
+      Set Up OpenVPN on RouterOS v7 with Restricted Access | Meet AJ
     </title>
     <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      content="راهنمای کامل پیاده‌سازی OpenVPN روی میکروتیک RouterOS v7 شامل ایجاد Certificate، پیکربندی سرور و کلاینت، نکات امنیتی و رفع اشکال"
       name="description"
+      content="Configure a named server, certificates and an OpenVPN 2.6 client, then verify return routing and service ACLs."
     />
     <meta
-      content="OpenVPN, MikroTik, RouterOS v7, VPN, Network Security, Certificate, TLS, AES-256-GCM, آموزش میکروتیک, راه‌اندازی VPN"
       name="keywords"
+      content="RouterOS v7 OpenVPN, mikrotik openvpn setup v7, infrastructure operations, production operations, troubleshooting"
     />
     <meta name="author" content="AmirHossein Jalalian" />
     <meta name="robots" content="index, follow" />
@@ -30,33 +30,33 @@
     <meta name="msapplication-navbutton-color" content="#ff8d19" />
     <meta
       name="msapplication-TileImage"
-      content="../assets/img/apple-touch-icon.png"
+      content="../assets/img/icons/apple-touch-icon.png"
     />
     <meta property="og:type" content="article" />
     <meta
       property="og:title"
-      content="آموزش جامع راه‌اندازی OpenVPN در میکروتیک RouterOS v7"
+      content="Set Up OpenVPN on RouterOS v7 with Restricted Access"
     />
     <meta
       property="og:description"
-      content="راهنمای کامل پیاده‌سازی OpenVPN روی میکروتیک RouterOS v7 شامل ایجاد Certificate، پیکربندی سرور و کلاینت، نکات امنیتی و رفع اشکال"
+      content="Configure a named server, certificates and an OpenVPN 2.6 client, then verify return routing and service ACLs."
     />
-    <meta property="og:image" content="../assets/img/my-profile-img.jpg" />
+    <meta property="og:image" content="../assets/img/avatars/profile/my-profile-img.jpg" />
     <meta
       property="og:url"
-      content="https://meetaj.ir/articles/mikrotik-openvpn-setup-v7.html"
+      content="https://meetaj.ir/articles/mikrotik-openvpn-setup-v7"
     />
     <meta property="og:site_name" content="Meet AJ - Technical Articles" />
     <meta property="twitter:card" content="summary_large_image" />
     <meta
       property="twitter:title"
-      content="آموزش جامع راه‌اندازی OpenVPN در میکروتیک RouterOS v7"
+      content="Set Up OpenVPN on RouterOS v7 with Restricted Access"
     />
     <meta
       property="twitter:description"
-      content="راهنمای کامل پیاده‌سازی OpenVPN روی میکروتیک RouterOS v7 شامل ایجاد Certificate، پیکربندی سرور و کلاینت، نکات امنیتی و رفع اشکال"
+      content="Configure a named server, certificates and an OpenVPN 2.6 client, then verify return routing and service ACLs."
     />
-    <meta property="twitter:image" content="../assets/img/my-profile-img.jpg" />
+    <meta property="twitter:image" content="../assets/img/avatars/profile/my-profile-img.jpg" />
     <meta property="article:author" content="AmirHossein Jalalian" />
     <meta
       property="article:published_time"
@@ -75,88 +75,10 @@
     <meta name="apple-mobile-web-app-title" content="Meet AJ" />
     <link
       rel="canonical"
-      href="https://meetaj.ir/articles/mikrotik-openvpn-setup-v7.html"
+      href="https://meetaj.ir/articles/mikrotik-openvpn-setup-v7"
     />
-    <link
-      rel="alternate"
-      hreflang="fa"
-      href="https://meetaj.ir/articles/mikrotik-openvpn-setup-v7.html"
-    />
-    <link
-      rel="alternate"
-      hreflang="en"
-      href="https://meetaj.ir/articles/mikrotik-openvpn-setup-v7.html"
-    />
-    <link
-      rel="alternate"
-      hreflang="x-default"
-      href="https://meetaj.ir/articles/mikrotik-openvpn-setup-v7.html"
-    />
-    <link href="../assets/img/favicon.png" rel="icon" />
-    <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "آموزش جامع راه‌اندازی OpenVPN در میکروتیک RouterOS v7",
-        "description": "راهنمای کامل پیاده‌سازی OpenVPN روی میکروتیک RouterOS v7 شامل ایجاد Certificate، پیکربندی سرور و کلاینت، نکات امنیتی و رفع اشکال",
-        "image": "../assets/img/my-profile-img.jpg",
-        "author": {
-          "@type": "Person",
-          "name": "AmirHossein Jalalian",
-          "url": "https://meetaj.ir"
-        },
-        "publisher": {
-          "@type": "Organization",
-          "name": "Meet AJ",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "../assets/img/logo.png"
-          }
-        },
-        "datePublished": "2024-01-15T00:00:00+03:30",
-        "dateModified": "2024-01-15T00:00:00+03:30",
-        "mainEntityOfPage": {
-          "@type": "WebPage",
-          "@id": "https://meetaj.ir/articles/mikrotik-openvpn-setup-v7.html"
-        },
-        "articleSection": "Network Security",
-        "keywords": [
-          "OpenVPN",
-          "MikroTik",
-          "RouterOS v7",
-          "VPN",
-          "Network Security",
-          "Certificate",
-          "TLS",
-          "AES-256-GCM",
-          "آموزش میکروتیک",
-          "راه‌اندازی VPN"
-        ],
-        "inLanguage": ["fa", "en"],
-        "wordCount": "4000",
-        "timeRequired": "PT15M",
-        "educationalLevel": "Expert",
-        "learningResourceType": "Tutorial",
-        "about": {
-          "@type": "Thing",
-          "name": "MikroTik RouterOS",
-          "description": "Network operating system for MikroTik routers"
-        },
-        "mentions": [
-          {
-            "@type": "Thing",
-            "name": "OpenVPN",
-            "description": "Open source VPN solution"
-          },
-          {
-            "@type": "Thing",
-            "name": "Network Security",
-            "description": "Security measures for computer networks"
-          }
-        ]
-      }
-    </script>
+    <link href="../assets/img/icons/favicon.png" rel="icon" />
+    <link href="../assets/img/icons/apple-touch-icon.png" rel="apple-touch-icon" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -190,13 +112,92 @@
       rel="stylesheet"
       disabled
     />
+    <meta name="article:content-language" content="en" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Set Up OpenVPN on RouterOS v7 with Restricted Access",
+        "description": "Configure a named server, certificates and an OpenVPN 2.6 client, then verify return routing and service ACLs.",
+        "inLanguage": "en",
+        "url": "https://meetaj.ir/articles/mikrotik-openvpn-setup-v7",
+        "dateModified": "2026-09-30",
+        "author": { "@type": "Person", "name": "AmirHossein Jalalian" },
+        "mainEntityOfPage": "https://meetaj.ir/articles/mikrotik-openvpn-setup-v7"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Why can the tunnel connect while SSH fails?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Return routing and forward ACLs are independent of authentication."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do all v7 patches use identical configuration?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Named-server configuration changed in 7.17. Pin and validate the target patch."
+            }
+          }
+        ],
+        "inLanguage": "en"
+      }
+    </script>
+    <script id="article-localizations" type="application/json">
+      {
+        "fa": {
+          "title": "راه‌اندازی OpenVPN در RouterOS v7 با دسترسی محدود",
+          "meta_title": "راه‌اندازی OpenVPN در RouterOS v7 با دسترسی محدود | Meet AJ",
+          "description": "تنظیم Named Server، Certificate و کلاینت OpenVPN 2.6، Route برگشت و آزمون ACL سرویس.",
+          "keywords": [
+            "راه‌اندازی OpenVPN در RouterOS v7 با دسترسی محدود",
+            "عیب‌یابی",
+            "بازیابی",
+            "mikrotik openvpn setup v7"
+          ],
+          "faq": [
+            [
+              "چرا tunnel برقرار است ولی سرور باز نمی‌شود؟",
+              "مسیر برگشت و forward ACL مستقل از authentication هستند و باید بررسی شوند."
+            ],
+            [
+              "آیا تنظیم v7 روی همه patchها یکسان است؟",
+              "خیر. از 7.17 ساختار named server تغییر کرده و باید patch هدف تثبیت شود."
+            ]
+          ]
+        },
+        "en": {
+          "title": "Set Up OpenVPN on RouterOS v7 with Restricted Access",
+          "meta_title": "Set Up OpenVPN on RouterOS v7 with Restricted Access | Meet AJ",
+          "description": "Configure a named server, certificates and an OpenVPN 2.6 client, then verify return routing and service ACLs.",
+          "keywords": [
+            "Set Up OpenVPN on RouterOS v7 with Restricted Access",
+            "mikrotik openvpn setup v7",
+            "troubleshooting"
+          ],
+          "faq": [
+            [
+              "Why can the tunnel connect while SSH fails?",
+              "Return routing and forward ACLs are independent of authentication."
+            ],
+            [
+              "Do all v7 patches use identical configuration?",
+              "No. Named-server configuration changed in 7.17. Pin and validate the target patch."
+            ]
+          ]
+        }
+      }
+    </script>
   </head>
   <body class="article-page theme-mikrotik">
-    <a href="#main-content" class="skip-link sr-only sr-only-focusable"
-      ><span data-en="Skip to main content" data-fa="رفتن به محتوای اصلی"
-        >Skip to main content</span
-      ></a
-    >
     <button
       id="menu-toggle"
       class="menu-toggle d-xl-none"
@@ -214,7 +215,7 @@
       =============================================== -->
       <div class="profile-img">
         <img
-          src="../assets/img/my-profile-img.jpg"
+          src="../assets/img/avatars/profile/my-profile-img.jpg"
           loading="lazy"
           alt="AmirHossein Jalalian Profile Picture"
           class="img-fluid rounded-circle"
@@ -229,7 +230,7 @@
       >
         <!-- Site Logo & Name -->
         <a href="../index.html#hero" class="logo d-flex align-items-center">
-          <img src="../assets/img/logo.png" alt="Aj-Network" loading="lazy" />
+          <img src="../assets/img/brand/logo.png" alt="Aj-Network" loading="lazy" />
           <p class="sitename">Meet AJ</p>
         </a>
       </div>
@@ -345,72 +346,90 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#introduction"
-              ><i class="bi bi-info-circle navicon" aria-hidden="true"></i
-              ><span data-en="Introduction" data-fa="مقدمه">Introduction</span></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#advantages"
-              ><i class="bi bi-award navicon" aria-hidden="true"></i
+            <a href="#enterprise-intro"
               ><span
-                data-en="1. OpenVPN Advantages in MikroTik"
-                data-fa="1. مزایای OpenVPN در میکروتیک"
-                >1. OpenVPN Advantages in MikroTik</span
+                data-fa="Tunnel با دسترسی مجاز فرق دارد"
+                data-en="A tunnel is not an access policy"
+                >A tunnel is not an access policy</span
               ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#routeros-changes"
-              ><i class="bi bi-arrow-repeat navicon" aria-hidden="true"></i
+            <a href="#enterprise-architecture"
               ><span
-                data-en="2. Key Changes in RouterOS v7"
-                data-fa="2. تغییرات کلیدی OpenVPN در RouterOS v7"
-                >2. Key Changes in RouterOS v7</span
+                data-fa="مسیر رفت و برگشت VPN"
+                data-en="VPN forward and return paths"
+                >VPN forward and return paths</span
               ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#prerequisites"
-              ><i class="bi bi-clipboard-check navicon" aria-hidden="true"></i
-              ><span data-en="3. Prerequisites" data-fa="3. پیش‌نیازها"
-                >3. Prerequisites</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#setup-steps"
-              ><i class="bi bi-list-check navicon" aria-hidden="true"></i
+            <a href="#enterprise-prerequisites"
               ><span
-                data-en="4. OpenVPN Setup Steps"
-                data-fa="4. مراحل راه‌اندازی OpenVPN"
-                >4. OpenVPN Setup Steps</span
+                data-fa="نسخه، PKI و دسترسی مدیریت"
+                data-en="Version, PKI and management access"
+                >Version, PKI and management access</span
               ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#security-tips"
-              ><i class="bi bi-shield-check navicon" aria-hidden="true"></i
+            <a href="#enterprise-security"
               ><span
-                data-en="5. Security Tips and Optimization"
-                data-fa="5. نکات امنیتی و بهینه‌سازی"
-                >5. Security Tips and Optimization</span
+                data-fa="گواهی فردی و لغو دسترسی"
+                data-en="Individual certificates and revocation"
+                >Individual certificates and revocation</span
               ></a
             >
           </li>
           <li class="article-nav-item">
-            <a href="#conclusion"
-              ><i class="bi bi-flag navicon" aria-hidden="true"></i
-              ><span data-en="Conclusion" data-fa="نتیجه‌گیری">Conclusion</span></a
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="واردکردن گواهی و تنظیم Server و Client"
+                data-en="Import certificates and configure server/client"
+                >Import certificates and configure server/client</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="از TLS Error تا SSH Timeout"
+                data-en="From TLS errors to SSH timeouts"
+                >From TLS errors to SSH timeouts</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-monitoring"
+              ><span
+                data-fa="Pool، Session و انقضای گواهی"
+                data-en="Pool, sessions and certificate expiry"
+                >Pool, sessions and certificate expiry</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-recovery"
+              ><span
+                data-fa="لغو گواهی و برگشت تنظیم"
+                data-en="Revocation and configuration rollback"
+                >Revocation and configuration rollback</span
+              ></a
             >
           </li>
           <li class="article-nav-item">
             <a href="#faq"
-              ><i class="bi bi-question-circle navicon" aria-hidden="true"></i
               ><span
-                data-en="6. Frequently Asked Questions"
-                data-fa="6. پرسش‌های متداول"
-                >6. Frequently Asked Questions</span
+                data-fa="پرسش‌های متداول"
+                data-en="Frequently Asked Questions"
+                >Frequently Asked Questions</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-sources"
+              ><span data-fa="منابع رسمی" data-en="Official Sources"
+                >Official Sources</span
               ></a
             >
           </li>
@@ -442,24 +461,24 @@
               </div>
               <h1
                 class="article-title hero-title"
-                data-en="OpenVPN on MikroTik RouterOS v7"
-                data-fa="پیکربندی OpenVPN در MikroTik RouterOS v7"
+                data-fa="راه‌اندازی OpenVPN در RouterOS v7 با دسترسی محدود"
+                data-en="Set Up OpenVPN on RouterOS v7 with Restricted Access"
               >
-                OpenVPN on MikroTik RouterOS v7
+                Set Up OpenVPN on RouterOS v7 with Restricted Access
               </h1>
               <p
                 class="article-excerpt hero-subtitle"
-                data-en="Step-by-step OpenVPN server/client setup with certificates, firewall, and routing"
-                data-fa="راه‌اندازی گام‌به‌گام سرور و کلاینت OpenVPN با Certificate، Firewall و Routing"
+                data-fa="تنظیم Named Server، Certificate و کلاینت OpenVPN 2.6، Route برگشت و آزمون ACL سرویس."
+                data-en="Configure a named server, certificates and an OpenVPN 2.6 client, then verify return routing and service ACLs."
               >
-                Step-by-step OpenVPN server/client setup with certificates,
-                firewall, and routing
+                Configure a named server, certificates and an OpenVPN 2.6
+                client, then verify return routing and service ACLs.
               </p>
               <div class="article-banner">
                 <div class="banner-card">
                   <img
                     class="article-hero-thumbnail"
-                    src="../assets/img/portfolio/mikrotik-4.png"
+                    src="../assets/img/articles/banners/mikrotik-openvpn-setup-v7.png"
                     alt="OpenVPN on MikroTik RouterOS v7"
                   />
                   <div class="banner-content">
@@ -503,1267 +522,347 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <article class="article-body">
-                <!-- Introduction -->
-                <section id="introduction" class="article-section">
-                  <h2 data-en="Introduction" data-fa="مقدمه">Introduction</h2>
-                  <p
-                    data-en="In organizational and home networks, the need for secure and stable communication for users to access internal resources is very important. OpenVPN is considered a popular choice for network administrators due to its high flexibility, strong security, and support for modern algorithms. MikroTik has also removed past limitations in version 7 and provided the possibility of complete OpenVPN implementation."
-                    data-fa="در شبکه‌های سازمانی و خانگی، نیاز به برقراری ارتباط ایمن و پایدار برای دسترسی کاربران به منابع داخلی بسیار مهم است. OpenVPN به‌دلیل انعطاف‌پذیری بالا، امنیت قوی و پشتیبانی از الگوریتم‌های مدرن، گزینه‌ای محبوب برای مدیران شبکه محسوب می‌شود. میکروتیک نیز در نسخه 7، محدودیت‌های گذشته را رفع کرده و امکان پیاده‌سازی کامل OpenVPN را فراهم کرده است."
-                  >
-                    In organizational and home networks, the need for secure and
-                    stable communication for users to access internal resources
-                    is very important. OpenVPN is considered a popular choice
-                    for network administrators due to its high flexibility,
-                    strong security, and support for modern algorithms. MikroTik
-                    has also removed past limitations in version 7 and provided
-                    the possibility of complete OpenVPN implementation.
-                  </p>
-                </section>
-
-                <!-- Table of Contents -->
-                <section id="article-toc" class="article-section">
-                  <h2 data-en="Table of Contents" data-fa="فهرست مطالب">
-                    Table of Contents
-                  </h2>
-                  <nav class="article-toc">
-                    <ul>
-                      <li>
-                        <a
-                          href="#advantages"
-                          data-en="1. OpenVPN Advantages in MikroTik"
-                          data-fa="1. مزایای OpenVPN در میکروتیک"
-                          >1. مزایای OpenVPN در میکروتیک</a
-                        >
-                      </li>
-                      <li>
-                        <a
-                          href="#routeros-changes"
-                          data-en="2. Key Changes in RouterOS v7"
-                          data-fa="2. تغییرات کلیدی OpenVPN در RouterOS v7"
-                          >2. تغییرات کلیدی OpenVPN در RouterOS v7</a
-                        >
-                      </li>
-                      <li>
-                        <a
-                          href="#prerequisites"
-                          data-en="3. Prerequisites"
-                          data-fa="3. پیش‌نیازها"
-                          >3. پیش‌نیازها</a
-                        >
-                      </li>
-                      <li>
-                        <a
-                          href="#setup-steps"
-                          data-en="4. OpenVPN Setup Steps"
-                          data-fa="4. مراحل راه‌اندازی OpenVPN"
-                          >4. مراحل راه‌اندازی OpenVPN</a
-                        >
-                      </li>
-                      <li>
-                        <a
-                          href="#security-tips"
-                          data-en="5. Security Tips and Optimization"
-                          data-fa="5. نکات امنیتی و بهینه‌سازی"
-                          >5. نکات امنیتی و بهینه‌سازی</a
-                        >
-                      </li>
-                      <li>
-                        <a
-                          href="#faq"
-                          data-en="6. Frequently Asked Questions"
-                          data-fa="6. پرسش‌های متداول"
-                          >6. پرسش‌های متداول</a
-                        >
-                      </li>
-                    </ul>
-                  </nav>
-                </section>
-
-                <!-- OpenVPN Advantages -->
-                <section id="advantages" class="article-section">
-                  <h2
-                    data-en="1. OpenVPN Advantages in MikroTik"
-                    data-fa="1. مزایای OpenVPN در میکروتیک"
-                  >
-                    1. مزایای OpenVPN در میکروتیک
-                  </h2>
-
-                  <div class="article-callout article-callout--info">
-                    <h3
-                      class="article-callout-title"
-                      data-en="Key Advantages"
-                      data-fa="مزایای کلیدی"
-                    >
-                      مزایای کلیدی
-                    </h3>
-                    <ul>
-                      <li
-                        data-en="TCP and UDP Support"
-                        data-fa="پشتیبانی از TCP و UDP"
-                      >
-                        پشتیبانی از TCP و UDP
-                      </li>
-                      <li
-                        data-en="Strong Encryption with AES-256-GCM/CBC"
-                        data-fa="رمزنگاری قوی با AES-256-GCM/CBC"
-                      >
-                        رمزنگاری قوی با AES-256-GCM/CBC
-                      </li>
-                      <li
-                        data-en="Certificate-based and User/Password Authentication"
-                        data-fa="احراز هویت مبتنی بر گواهی دیجیتال و کاربر/رمز عبور"
-                      >
-                        احراز هویت مبتنی بر گواهی دیجیتال و کاربر/رمز عبور
-                      </li>
-                      <li
-                        data-en="High Stability and Performance"
-                        data-fa="پایداری و کارایی بالا در شبکه‌های عمومی و خصوصی"
-                      >
-                        پایداری و کارایی بالا در شبکه‌های عمومی و خصوصی
-                      </li>
-                    </ul>
-                  </div>
-                </section>
-
-                <!-- RouterOS v7 Changes -->
-                <section id="routeros-changes" class="article-section">
-                  <h2
-                    data-en="2. Key Changes in RouterOS v7"
-                    data-fa="2. تغییرات کلیدی OpenVPN در RouterOS v7"
-                  >
-                    2. تغییرات کلیدی OpenVPN در RouterOS v7
-                  </h2>
-
-                  <div class="article-callout article-callout--info">
-                    <h3
-                      class="article-callout-title"
-                      data-en="Major Improvements"
-                      data-fa="بهبودهای عمده"
-                    >
-                      بهبودهای عمده
-                    </h3>
-                    <ul>
-                      <li
-                        data-en="UDP Support (Previously only TCP was supported)"
-                        data-fa="پشتیبانی از UDP (در نسخه‌های قدیمی فقط TCP بود)"
-                      >
-                        پشتیبانی از UDP (در نسخه‌های قدیمی فقط TCP بود)
-                      </li>
-                      <li
-                        data-en="Modern TLS and New Algorithm Support"
-                        data-fa="پشتیبانی از TLS مدرن و الگوریتم‌های جدید"
-                      >
-                        پشتیبانی از TLS مدرن و الگوریتم‌های جدید
-                      </li>
-                      <li
-                        data-en="Improved Certificate Management"
-                        data-fa="بهبود مدیریت Certificateها"
-                      >
-                        بهبود مدیریت Certificateها
-                      </li>
-                      <li
-                        data-en="Increased Connection Speed and Reduced Latency"
-                        data-fa="افزایش سرعت اتصال و کاهش Latency"
-                      >
-                        افزایش سرعت اتصال و کاهش Latency
-                      </li>
-                    </ul>
-                  </div>
-                </section>
-
-                <!-- Prerequisites -->
-                <section id="prerequisites" class="article-section">
-                  <h2 data-en="3. Prerequisites" data-fa="3. پیش‌نیازها">
-                    3. پیش‌نیازها
-                  </h2>
-
-                  <div class="article-callout article-callout--info">
-                    <h3
-                      class="article-callout-title"
-                      data-en="Required Items"
-                      data-fa="موارد مورد نیاز"
-                    >
-                      موارد مورد نیاز
-                    </h3>
-                    <ul>
-                      <li
-                        data-en="RouterOS v7 Latest Version"
-                        data-fa="RouterOS v7 آخرین نسخه"
-                      >
-                        RouterOS v7 آخرین نسخه
-                      </li>
-                      <li
-                        data-en="Public IP Address or FQDN for Server"
-                        data-fa="یک آدرس Public IP یا FQDN برای سرور"
-                      >
-                        یک آدرس Public IP یا FQDN برای سرور
-                      </li>
-                      <li
-                        data-en="Access to WinBox or SSH"
-                        data-fa="دسترسی به WinBox یا SSH"
-                      >
-                        دسترسی به WinBox یا SSH
-                      </li>
-                      <li
-                        data-en="Accurate Time and Date on Router (Important for Certificates)"
-                        data-fa="ساعت و تاریخ دقیق روی روتر (برای Certificateها مهم است)"
-                      >
-                        ساعت و تاریخ دقیق روی روتر (برای Certificateها مهم است)
-                      </li>
-                    </ul>
-                  </div>
-                </section>
-
-                <!-- OpenVPN Setup Steps -->
-                <!-- OpenVPN Setup Steps - Redesigned -->
-                <section id="setup-steps" class="article-section">
-                  <div class="article-section-intro">
+              <article class="article-body" data-article-bilingual="true">
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
                     <h2
-                      data-en="4. OpenVPN Setup Steps"
-                      data-fa="4. مراحل راه‌اندازی OpenVPN"
+                      data-fa="Tunnel با دسترسی مجاز فرق دارد"
+                      data-en="A tunnel is not an access policy"
                     >
-                      4. مراحل راه‌اندازی OpenVPN
+                      A tunnel is not an access policy
                     </h2>
                     <p
-                      class="article-section-description"
-                      data-en="Follow these 7 comprehensive steps to set up OpenVPN on your MikroTik RouterOS v7 device. Each step includes detailed commands and explanations."
-                      data-fa="این 7 مرحله جامع را برای راه‌اندازی OpenVPN روی دستگاه MikroTik RouterOS v7 خود دنبال کنید. هر مرحله شامل دستورات و توضیحات کامل است."
+                      data-fa="OpenVPN کلاینت را به شبکه خصوصی وصل می‌کند، اما برقراری Tunnel به‌تنهایی محدوده دسترسی را تعیین نمی‌کند. این نمونه برای یک حساب پشتیبانی، فقط SSH یک سرور را مجاز می‌کند. Certificate، PPP، Route برگشت و Forward ACL همگی باید آزموده شوند."
+                      data-en="OpenVPN connects a client to a private network, but a working tunnel does not define its authorization scope. This example permits support access to one server’s SSH only. Test certificates, PPP authentication, return routing and forward ACLs together."
                     >
-                      این 7 مرحله جامع را برای راه‌اندازی OpenVPN روی دستگاه
-                      MikroTik RouterOS v7 خود دنبال کنید. هر مرحله شامل دستورات
-                      و توضیحات کامل است.
+                      OpenVPN connects a client to a private network, but a
+                      working tunnel does not define its authorization scope.
+                      This example permits support access to one server’s SSH
+                      only. Test certificates, PPP authentication, return
+                      routing and forward ACLs together.
                     </p>
-                  </div>
-
-                  <!-- ===============================================
-                  INTERACTIVE PROGRESS INDICATOR
-                  ===============================================
-                  Visual progress tracking system that:
-                  - Shows current step completion percentage
-                  - Updates automatically based on scroll position
-                  - Provides clickable step navigation
-                  - Uses Intersection Observer for performance
-                  =============================================== -->
-                  <div
-                    class="article-progress"
-                    role="progressbar"
-                    aria-label="Setup progress"
-                    aria-valuenow="0"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="مسیر رفت و برگشت VPN"
+                      data-en="VPN forward and return paths"
+                    >
+                      VPN forward and return paths
+                    </h2>
+                    <p
+                      data-fa="پس از تأیید Certificate و PPP، ترافیک Pool از Forward ACL عبور می‌کند. شبکه مقصد باید Route برگشت Pool را به همین روتر داشته باشد. اگر Firewall سمت سرور مبداهای محدود دارد، Pool را نیز برای SSH مجاز کنید. NAT پنهان‌کننده مشکل Route، انتخاب پیش‌فرض نیست."
+                      data-en="After certificate and PPP checks, pool traffic passes through forward ACLs. Destination routing must return the pool through this router. Include the pool in any source-restricted server SSH policy. NAT that hides missing routes is not the default design."
+                    >
+                      After certificate and PPP checks, pool traffic passes
+                      through forward ACLs. Destination routing must return the
+                      pool through this router. Include the pool in any
+                      source-restricted server SSH policy. NAT that hides
+                      missing routes is not the default design.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: SSH یک سرور با Split Tunnel"
+                      data-en="Example: split-tunnel SSH to one server"
+                    >
+                      Example: split-tunnel SSH to one server
+                    </h3>
+                    <p
+                      data-fa="Pool برابر 10.250.0.0/24 و مقصد مجاز 10.20.30.10 است. کلاینت فقط Route همان سرور را می‌گیرد. برای هر فرد حساب و گواهی جدا داشته باشید و آدرس‌ها را با IP Plan خود جایگزین کنید."
+                      data-en="The pool is 10.250.0.0/24 and the permitted destination is 10.20.30.10. The client receives only that host route. Allocate individual accounts/certificates and replace addresses with your IP plan."
+                    >
+                      The pool is 10.250.0.0/24 and the permitted destination is
+                      10.20.30.10. The client receives only that host route.
+                      Allocate individual accounts/certificates and replace
+                      addresses with your IP plan.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
                   >
-                    <div class="article-progress-track">
-                      <div
-                        class="article-progress-fill"
-                        aria-hidden="true"
-                      ></div>
-                    </div>
-                    <div
-                      class="article-progress-steps"
-                      role="tablist"
-                      aria-label="Setup steps navigation"
+                    <h2
+                      data-fa="نسخه، PKI و دسترسی مدیریت"
+                      data-en="Version, PKI and management access"
                     >
-                      <div
-                        class="article-progress-step active"
-                        data-step="1"
-                        role="tab"
-                        aria-selected="true"
-                        aria-label="Step 1: Network Configuration"
-                        tabindex="0"
-                      >
-                        <span class="article-progress-number" aria-hidden="true"
-                          >1</span
-                        >
-                        <span
-                          class="article-progress-label"
-                          data-en="Network"
-                          data-fa="شبکه"
-                          >شبکه</span
-                        >
-                      </div>
-                      <div
-                        class="article-progress-step"
-                        data-step="2"
-                        role="tab"
-                        aria-selected="false"
-                        aria-label="Step 2: Certificate Creation"
-                        tabindex="-1"
-                      >
-                        <span class="article-progress-number" aria-hidden="true"
-                          >2</span
-                        >
-                        <span
-                          class="article-progress-label"
-                          data-en="Certificates"
-                          data-fa="گواهی‌ها"
-                          >گواهی‌ها</span
-                        >
-                      </div>
-                      <div
-                        class="article-progress-step"
-                        data-step="3"
-                        role="tab"
-                        aria-selected="false"
-                        aria-label="Step 3: Server Configuration"
-                        tabindex="-1"
-                      >
-                        <span class="article-progress-number" aria-hidden="true"
-                          >3</span
-                        >
-                        <span
-                          class="article-progress-label"
-                          data-en="Server"
-                          data-fa="سرور"
-                          >سرور</span
-                        >
-                      </div>
-                      <div
-                        class="article-progress-step"
-                        data-step="4"
-                        role="tab"
-                        aria-selected="false"
-                        aria-label="Step 4: User Management"
-                        tabindex="-1"
-                      >
-                        <span class="article-progress-number" aria-hidden="true"
-                          >4</span
-                        >
-                        <span
-                          class="article-progress-label"
-                          data-en="Users"
-                          data-fa="کاربران"
-                          >کاربران</span
-                        >
-                      </div>
-                      <div
-                        class="article-progress-step"
-                        data-step="5"
-                        role="tab"
-                        aria-selected="false"
-                        aria-label="Step 5: Firewall Configuration"
-                        tabindex="-1"
-                      >
-                        <span class="article-progress-number" aria-hidden="true"
-                          >5</span
-                        >
-                        <span
-                          class="article-progress-label"
-                          data-en="Firewall"
-                          data-fa="فایروال"
-                          >فایروال</span
-                        >
-                      </div>
-                      <div
-                        class="article-progress-step"
-                        data-step="6"
-                        role="tab"
-                        aria-selected="false"
-                        aria-label="Step 6: Client Files Preparation"
-                        tabindex="-1"
-                      >
-                        <span class="article-progress-number" aria-hidden="true"
-                          >6</span
-                        >
-                        <span
-                          class="article-progress-label"
-                          data-en="Client Files"
-                          data-fa="فایل‌ها"
-                          >فایل‌ها</span
-                        >
-                      </div>
-                      <div
-                        class="article-progress-step"
-                        data-step="7"
-                        role="tab"
-                        aria-selected="false"
-                        aria-label="Step 7: Testing and Verification"
-                        tabindex="-1"
-                      >
-                        <span class="article-progress-number" aria-hidden="true"
-                          >7</span
-                        >
-                        <span
-                          class="article-progress-label"
-                          data-en="Testing"
-                          data-fa="تست"
-                          >تست</span
-                        >
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- ===============================================
-                  STEP-BY-STEP IMPLEMENTATION CARDS
-                  ===============================================
-                  Interactive step cards containing:
-                  - Visual step numbering with badges
-                  - Icon-based step identification
-                  - Detailed command blocks with copy functionality
-                  - Important notes and tips for each step
-                  - Responsive design for all screen sizes
-                  =============================================== -->
-                  <div class="article-grid article-grid--steps">
-                    <!-- Step 1: Network Configuration -->
-                    <div
-                      class="article-card article-card--step"
-                      data-step="1"
-                      role="tabpanel"
-                      aria-labelledby="step-1"
-                      aria-hidden="false"
+                      Version, PKI and management access
+                    </h2>
+                    <p
+                      data-fa="Syntax Named Server برای RouterOS 7.17 و جدیدتر است. کلاینت این مثال OpenVPN Community 2.6 است. Patch روتر و کلاینت را پیش از استقرار در Lab آزموده و ثبت کنید."
+                      data-en="Named-server syntax targets RouterOS 7.17 onward. The client example uses OpenVPN Community 2.6. Test and record the selected router/client patches before deployment."
                     >
-                      <div class="article-card-index" aria-hidden="true">
-                        01
-                      </div>
-                      <div class="article-card-header">
-                        <div class="article-card-icon" aria-hidden="true">
-                          <i class="bi bi-router"></i>
-                        </div>
-                        <div class="article-card-info">
-                          <h3
-                            class="article-card-title"
-                            data-en="Step 1: Initial Network Settings"
-                            data-fa="مرحله اول: تنظیمات اولیه شبکه"
-                          >
-                            مرحله اول: تنظیمات اولیه شبکه
-                          </h3>
-                          <p
-                            class="article-card-description"
-                            data-en="Configure basic network settings including IP address, gateway, and DNS servers."
-                            data-fa="تنظیمات اولیه شبکه شامل آدرس IP، گیت‌وی و سرورهای DNS."
-                          >
-                            تنظیمات اولیه شبکه شامل آدرس IP، گیت‌وی و سرورهای
-                            DNS.
-                          </p>
-                        </div>
-                      </div>
-                      <div class="article-card-content">
-                        <!-- Interactive Code Block with Copy Functionality -->
-                        <div
-                          class="article-code"
-                          role="region"
-                          aria-label="Code block"
-                        >
-                          <div class="article-code-header">
-                            <span
-                              class="article-code-label"
-                              aria-label="Programming language"
-                              >MikroTik RouterOS</span
-                            >
-                            <button
-                              type="button"
-                              class="article-copy-button"
-                              data-en="Copy"
-                              data-fa="کپی"
-                              aria-label="Copy code to clipboard"
-                              title="Copy code to clipboard"
-                            >
-                              Copy
-                            </button>
-                          </div>
-                          <pre><code class="language-bash">/ip address add address=192.168.88.1/24 interface=bridge
-/ip route add gateway=192.168.88.1
-/ip dns set servers=8.8.8.8</code></pre>
-                        </div>
-                        <!-- Important Tips and Notes Section -->
-                        <div class="article-card-note">
-                          <h4 data-en="Important Notes" data-fa="نکات مهم">
-                            نکات مهم
-                          </h4>
-                          <ul>
-                            <li
-                              data-en="Replace 192.168.88.1 with your router's IP address"
-                              data-fa="192.168.88.1 را با آدرس IP روتر خود جایگزین کنید"
-                            >
-                              192.168.88.1 را با آدرس IP روتر خود جایگزین کنید
-                            </li>
-                            <li
-                              data-en="Ensure the interface name matches your bridge interface"
-                              data-fa="اطمینان حاصل کنید که نام interface با bridge interface شما مطابقت دارد"
-                            >
-                              اطمینان حاصل کنید که نام interface با bridge
-                              interface شما مطابقت دارد
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Step 2: Certificate Creation -->
-                    <div class="article-card article-card--step" data-step="2">
-                      <div class="article-card-index">02</div>
-                      <div class="article-card-header">
-                        <div class="article-card-icon">
-                          <i class="bi bi-shield-check"></i>
-                        </div>
-                        <div class="article-card-info">
-                          <h3
-                            class="article-card-title"
-                            data-en="Step 2: Creating and Signing Certificates"
-                            data-fa="مرحله دوم: ایجاد و ساین کردن Certificateها"
-                          >
-                            مرحله دوم: ایجاد و ساین کردن Certificateها
-                          </h3>
-                          <p
-                            class="article-card-description"
-                            data-en="Create CA, server, and client certificates for secure authentication."
-                            data-fa="ایجاد گواهی‌های CA، سرور و کلاینت برای احراز هویت امن."
-                          >
-                            ایجاد گواهی‌های CA، سرور و کلاینت برای احراز هویت
-                            امن.
-                          </p>
-                        </div>
-                      </div>
-                      <div class="article-card-content">
-                        <div class="article-code">
-                          <div class="article-code-header">
-                            <span class="article-code-label"
-                              >MikroTik RouterOS</span
-                            >
-                            <button
-                              type="button"
-                              class="article-copy-button"
-                              data-en="Copy"
-                              data-fa="کپی"
-                            >
-                              Copy
-                            </button>
-                          </div>
-                          <pre><code class="language-bash">/certificate
-add name=ca common-name=myca key-usage=key-cert-sign,crl-sign
-add name=server common-name=vpn.meetaj.ir key-usage=tls-server
-add name=client common-name=client1.meetaj.ir key-usage=tls-client
-
-/certificate sign ca name=ca
-/certificate sign server ca=ca name=server
-/certificate sign client ca=ca name=client</code></pre>
-                        </div>
-                        <div class="article-card-note">
-                          <h4 data-en="Important Notes" data-fa="نکات مهم">
-                            نکات مهم
-                          </h4>
-                          <ul>
-                            <li
-                              data-en="Replace 'vpn.meetaj.ir' with your domain or public IP"
-                              data-fa="'vpn.meetaj.ir' را با دامنه یا IP عمومی خود جایگزین کنید"
-                            >
-                              'vpn.meetaj.ir' را با دامنه یا IP عمومی خود
-                              جایگزین کنید
-                            </li>
-                            <li
-                              data-en="Wait for certificates to be signed before proceeding"
-                              data-fa="قبل از ادامه، منتظر بمانید تا گواهی‌ها ساین شوند"
-                            >
-                              قبل از ادامه، منتظر بمانید تا گواهی‌ها ساین شوند
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Step 3: OVPN Server Configuration -->
-                    <div class="article-card article-card--step" data-step="3">
-                      <div class="article-card-index">03</div>
-                      <div class="article-card-header">
-                        <div class="article-card-icon">
-                          <i class="bi bi-server"></i>
-                        </div>
-                        <div class="article-card-info">
-                          <h3
-                            class="article-card-title"
-                            data-en="Step 3: Enabling and Configuring OVPN Server"
-                            data-fa="مرحله سوم: فعال‌سازی و پیکربندی OVPN Server"
-                          >
-                            مرحله سوم: فعال‌سازی و پیکربندی OVPN Server
-                          </h3>
-                          <p
-                            class="article-card-description"
-                            data-en="Configure the OpenVPN server with encryption settings and authentication methods."
-                            data-fa="پیکربندی سرور OpenVPN با تنظیمات رمزنگاری و روش‌های احراز هویت."
-                          >
-                            پیکربندی سرور OpenVPN با تنظیمات رمزنگاری و روش‌های
-                            احراز هویت.
-                          </p>
-                        </div>
-                      </div>
-                      <div class="article-card-content">
-                        <div class="article-code">
-                          <div class="article-code-header">
-                            <span class="article-code-label"
-                              >MikroTik RouterOS</span
-                            >
-                            <button
-                              type="button"
-                              class="article-copy-button"
-                              data-en="Copy"
-                              data-fa="کپی"
-                            >
-                              Copy
-                            </button>
-                          </div>
-                          <pre><code class="language-bash">/interface ovpn-server server
-set enabled=yes port=1194 protocol=udp mode=ip \
-   netmask=24 certificate=server require-client-certificate=yes \
-   auth=sha1 cipher=aes128,aes192,aes256</code></pre>
-                        </div>
-                        <div class="article-card-note">
-                          <h4
-                            data-en="Configuration Details"
-                            data-fa="جزئیات پیکربندی"
-                          >
-                            جزئیات پیکربندی
-                          </h4>
-                          <ul>
-                            <li
-                              data-en="Port 1194 is the default OpenVPN port"
-                              data-fa="پورت 1194 پورت پیش‌فرض OpenVPN است"
-                            >
-                              پورت 1194 پورت پیش‌فرض OpenVPN است
-                            </li>
-                            <li
-                              data-en="UDP protocol provides better performance"
-                              data-fa="پروتکل UDP عملکرد بهتری ارائه می‌دهد"
-                            >
-                              پروتکل UDP عملکرد بهتری ارائه می‌دهد
-                            </li>
-                            <li
-                              data-en="AES-256-GCM is recommended for best security"
-                              data-fa="AES-256-GCM برای بهترین امنیت توصیه می‌شود"
-                            >
-                              AES-256-GCM برای بهترین امنیت توصیه می‌شود
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Step 4: User Profile Configuration -->
-                    <div class="article-card article-card--step" data-step="4">
-                      <div class="article-card-index">04</div>
-                      <div class="article-card-header">
-                        <div class="article-card-icon">
-                          <i class="bi bi-people"></i>
-                        </div>
-                        <div class="article-card-info">
-                          <h3
-                            class="article-card-title"
-                            data-en="Step 4: Creating Profiles and VPN Users"
-                            data-fa="مرحله چهارم: ایجاد پروفایل و کاربران VPN"
-                          >
-                            مرحله چهارم: ایجاد پروفایل و کاربران VPN
-                          </h3>
-                          <p
-                            class="article-card-description"
-                            data-en="Create IP pools, PPP profiles, and user accounts for VPN access."
-                            data-fa="ایجاد IP pool، پروفایل‌های PPP و حساب‌های کاربری برای دسترسی VPN."
-                          >
-                            ایجاد IP pool، پروفایل‌های PPP و حساب‌های کاربری
-                            برای دسترسی VPN.
-                          </p>
-                        </div>
-                      </div>
-                      <div class="article-card-content">
-                        <div class="article-code">
-                          <div class="article-code-header">
-                            <span class="article-code-label"
-                              >MikroTik RouterOS</span
-                            >
-                            <button
-                              type="button"
-                              class="article-copy-button"
-                              data-en="Copy"
-                              data-fa="کپی"
-                            >
-                              Copy
-                            </button>
-                          </div>
-                          <pre><code class="language-bash">/ip pool add name=ovpn-pool ranges=192.168.250.10-192.168.250.100
-/ppp profile add name=ovpn-profile local-address=192.168.250.1 \
-   remote-address=ovpn-pool use-encryption=yes
-/ppp secret add name=testuser password=StrongPass profile=ovpn-profile</code></pre>
-                        </div>
-                        <div class="article-card-note">
-                          <h4
-                            data-en="User Management"
-                            data-fa="مدیریت کاربران"
-                          >
-                            مدیریت کاربران
-                          </h4>
-                          <ul>
-                            <li
-                              data-en="IP range 192.168.250.10-100 provides 90 IP addresses"
-                              data-fa="محدوده IP 192.168.250.10-100، 90 آدرس IP ارائه می‌دهد"
-                            >
-                              محدوده IP 192.168.250.10-100، 90 آدرس IP ارائه
-                              می‌دهد
-                            </li>
-                            <li
-                              data-en="Use strong passwords for all VPN users"
-                              data-fa="از رمزهای عبور قوی برای همه کاربران VPN استفاده کنید"
-                            >
-                              از رمزهای عبور قوی برای همه کاربران VPN استفاده
-                              کنید
-                            </li>
-                            <li
-                              data-en="You can add more users with the same profile"
-                              data-fa="می‌توانید کاربران بیشتری با همان پروفایل اضافه کنید"
-                            >
-                              می‌توانید کاربران بیشتری با همان پروفایل اضافه
-                              کنید
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Step 5: Firewall Configuration -->
-                    <div class="article-card article-card--step" data-step="5">
-                      <div class="article-card-index">05</div>
-                      <div class="article-card-header">
-                        <div class="article-card-icon">
-                          <i class="bi bi-shield-lock"></i>
-                        </div>
-                        <div class="article-card-info">
-                          <h3
-                            class="article-card-title"
-                            data-en="Step 5: Firewall and NAT Settings"
-                            data-fa="مرحله پنجم: تنظیمات Firewall و NAT"
-                          >
-                            مرحله پنجم: تنظیمات Firewall و NAT
-                          </h3>
-                          <p
-                            class="article-card-description"
-                            data-en="Configure firewall rules and NAT for secure VPN traffic routing."
-                            data-fa="پیکربندی قوانین فایروال و NAT برای مسیریابی امن ترافیک VPN."
-                          >
-                            پیکربندی قوانین فایروال و NAT برای مسیریابی امن
-                            ترافیک VPN.
-                          </p>
-                        </div>
-                      </div>
-                      <div class="article-card-content">
-                        <div class="article-code">
-                          <div class="article-code-header">
-                            <span class="article-code-label"
-                              >MikroTik RouterOS</span
-                            >
-                            <button
-                              type="button"
-                              class="article-copy-button"
-                              data-en="Copy"
-                              data-fa="کپی"
-                            >
-                              Copy
-                            </button>
-                          </div>
-                          <pre><code class="language-bash">/ip firewall nat add chain=srcnat action=masquerade out-interface=ether1
-/ip firewall filter add chain=input action=accept protocol=udp dst-port=1194</code></pre>
-                        </div>
-                        <div class="article-card-note">
-                          <h4
-                            data-en="Security Configuration"
-                            data-fa="پیکربندی امنیتی"
-                          >
-                            پیکربندی امنیتی
-                          </h4>
-                          <ul>
-                            <li
-                              data-en="Masquerade allows VPN clients to access internet"
-                              data-fa="Masquerade به کلاینت‌های VPN اجازه دسترسی به اینترنت می‌دهد"
-                            >
-                              Masquerade به کلاینت‌های VPN اجازه دسترسی به
-                              اینترنت می‌دهد
-                            </li>
-                            <li
-                              data-en="Firewall rule allows OpenVPN traffic on port 1194"
-                              data-fa="قانون فایروال ترافیک OpenVPN روی پورت 1194 را مجاز می‌کند"
-                            >
-                              قانون فایروال ترافیک OpenVPN روی پورت 1194 را مجاز
-                              می‌کند
-                            </li>
-                            <li
-                              data-en="Replace 'ether1' with your WAN interface name"
-                              data-fa="'ether1' را با نام interface WAN خود جایگزین کنید"
-                            >
-                              'ether1' را با نام interface WAN خود جایگزین کنید
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Step 6: Client Files Preparation -->
-                    <div class="article-card article-card--step" data-step="6">
-                      <div class="article-card-index">06</div>
-                      <div class="article-card-header">
-                        <div class="article-card-icon">
-                          <i class="bi bi-file-earmark-code"></i>
-                        </div>
-                        <div class="article-card-info">
-                          <h3
-                            class="article-card-title"
-                            data-en="Step 6: Preparing Client Files"
-                            data-fa="مرحله ششم: آماده‌سازی فایل‌های کلاینت"
-                          >
-                            مرحله ششم: آماده‌سازی فایل‌های کلاینت
-                          </h3>
-                          <p
-                            class="article-card-description"
-                            data-en="Export certificates and create client configuration files."
-                            data-fa="خروجی گرفتن از گواهی‌ها و ایجاد فایل‌های پیکربندی کلاینت."
-                          >
-                            خروجی گرفتن از گواهی‌ها و ایجاد فایل‌های پیکربندی
-                            کلاینت.
-                          </p>
-                        </div>
-                      </div>
-                      <div class="article-card-content">
-                        <div class="article-code">
-                          <div class="article-code-header">
-                            <span class="article-code-label"
-                              >MikroTik RouterOS</span
-                            >
-                            <button
-                              type="button"
-                              class="article-copy-button"
-                              data-en="Copy"
-                              data-fa="کپی"
-                            >
-                              Copy
-                            </button>
-                          </div>
-                          <pre><code class="language-bash">/certificate export-certificate ca export-passphrase=""
-/certificate export-certificate client export-passphrase=123456</code></pre>
-                        </div>
-
-                        <div class="article-code">
-                          <div class="article-code-header">
-                            <span class="article-code-label"
-                              >OpenVPN Config</span
-                            >
-                            <button
-                              type="button"
-                              class="article-copy-button"
-                              data-en="Copy"
-                              data-fa="کپی"
-                            >
-                              Copy
-                            </button>
-                          </div>
-                          <pre><code class="language-bash">client
+                      Named-server syntax targets RouterOS 7.17 onward. The
+                      client example uses OpenVPN Community 2.6. Test and record
+                      the selected router/client patches before deployment.
+                    </p>
+                    <p
+                      data-fa="CPU روتر و تعداد Tunnel و Throughput را زیر بار واقعی بسنجید. Pool با شبکه LAN یا VPN دیگر تداخل نداشته باشد. این نمونه TCP/1194 را استفاده می‌کند."
+                      data-en="Measure router CPU, tunnel count and throughput under load. Avoid overlap with LAN or other VPN pools. This example uses TCP/1194."
+                    >
+                      Measure router CPU, tunnel count and throughput under
+                      load. Avoid overlap with LAN or other VPN pools. This
+                      example uses TCP/1194.
+                    </p>
+                    <p
+                      data-fa="PKI موجود باید CA، گواهی سرور و گواهی Client را تأمین کند. نام واقعی سرور در SAN و در این نمونه در CN نیز یکسان باشد، چون verify-x509-name نام Subject را بررسی می‌کند. ساعت صحیح، Console و Backup خارج روتر لازم‌اند."
+                      data-en="Existing PKI supplies CA, server and client certificates. Match the real server name in SAN and, for this example, CN as well, because verify-x509-name checks the subject name. Keep correct clocks, console access and off-router backups."
+                    >
+                      Existing PKI supplies CA, server and client certificates.
+                      Match the real server name in SAN and, for this example,
+                      CN as well, because verify-x509-name checks the subject
+                      name. Keep correct clocks, console access and off-router
+                      backups.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="تفاوت نسخه‌های RouterOS و Transport"
+                      data-en="RouterOS versions and transport differences"
+                    >
+                      RouterOS versions and transport differences
+                    </h3>
+                    <p
+                      data-fa="پیش از 7.17، Server ساختار Singleton متفاوت داشت. UDP و Cipherها به نسخه وابسته‌اند. TCP این مثال برای سازگاری است، اما TCP-over-TCP هنگام Loss افت کارایی دارد. انتخاب UDP را با پشتیبانی دو طرف و Firewall جدا آزمایش کنید."
+                      data-en="Before 7.17, servers used different singleton syntax. UDP and cipher support depend on release. TCP here targets compatibility, but TCP-over-TCP suffers under loss. Validate UDP against both peers and firewall policy before selecting it."
+                    >
+                      Before 7.17, servers used different singleton syntax. UDP
+                      and cipher support depend on release. TCP here targets
+                      compatibility, but TCP-over-TCP suffers under loss.
+                      Validate UDP against both peers and firewall policy before
+                      selecting it.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="گواهی فردی و لغو دسترسی"
+                      data-en="Individual certificates and revocation"
+                    >
+                      Individual certificates and revocation
+                    </h2>
+                    <p
+                      data-fa="Compression را فعال نکنید. برای هر فرد Credential مستقل داشته باشید. require-client-certificate به‌تنهایی گواهی را به Username مشخص Bind نمی‌کند. نگاشت هویت را آزمون منفی کنید. در خروج فرد، PPP و گواهی و Session را لغو کنید. MFA به طرح Identity یا RADIUS سازگار نیاز دارد و در این نمونه پیاده نشده است."
+                      data-en="Leave compression disabled and assign individual credentials. Require-client-certificate alone does not bind a certificate to a specific username. Negatively test identity mapping. Revoke PPP access, certificates and sessions during offboarding. MFA requires a compatible identity/RADIUS design beyond this example."
+                    >
+                      Leave compression disabled and assign individual
+                      credentials. Require-client-certificate alone does not
+                      bind a certificate to a specific username. Negatively test
+                      identity mapping. Revoke PPP access, certificates and
+                      sessions during offboarding. MFA requires a compatible
+                      identity/RADIUS design beyond this example.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="واردکردن گواهی و تنظیم Server و Client"
+                      data-en="Import certificates and configure server/client"
+                    >
+                      Import certificates and configure server/client
+                    </h2>
+                    <p
+                      data-fa="گواهی‌ها را با نام‌های ca.crt و server.p12 از PKI به Files بارگذاری کنید. private key از طریق فایل passwordدار وارد شود. CA private key روی edge نگهداری نمی‌شود."
+                      data-en="Upload ca.crt and server.p12 from the PKI to Files. Import the private key from a password-protected file. Do not keep the CA private key on the edge router."
+                    >
+                      Upload ca.crt and server.p12 from the PKI to Files. Import
+                      the private key from a password-protected file. Do not
+                      keep the CA private key on the edge router.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-routeros">/system clock print
+/certificate import file-name=ca.crt passphrase=&quot;&quot;
+/certificate import file-name=server.p12 passphrase=&quot;REPLACE_WITH_P12_SECRET&quot;
+/certificate print detail</code></pre>
+                    <p
+                      data-fa="نام certificate واردشده را با CLI بررسی کنید و در دستور بعد REPLACE_SERVER_CERT را با نام واقعی جایگزین کنید. certificate باید private key و chain معتبر داشته باشد."
+                      data-en="Inspect imported names and replace REPLACE_SERVER_CERT with the actual certificate name. Confirm its private key and valid chain."
+                    >
+                      Inspect imported names and replace REPLACE_SERVER_CERT
+                      with the actual certificate name. Confirm its private key
+                      and valid chain.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-routeros">/ip pool add name=ent-ovpn-pool ranges=10.250.0.10-10.250.0.100
+/ppp profile add name=ent-ovpn local-address=10.250.0.1 remote-address=ent-ovpn-pool
+/ppp secret add name=opsvpn service=ovpn password=&quot;REPLACE_WITH_UNIQUE_USER_SECRET&quot; profile=ent-ovpn
+/interface ovpn-server server add name=ent-ovpn-server disabled=no protocol=tcp port=1194 mode=ip certificate=REPLACE_SERVER_CERT require-client-certificate=yes auth=sha256 cipher=aes256-cbc tls-version=only-1.2 default-profile=ent-ovpn
+/ip firewall filter add chain=input in-interface-list=WAN protocol=tcp dst-port=1194 action=accept comment=&quot;ENT-OVPN listener&quot;
+/ip firewall filter add chain=forward src-address=10.250.0.0/24 dst-address=10.20.30.10 protocol=tcp dst-port=22 action=accept comment=&quot;ENT-OVPN SSH grant&quot;
+/ip firewall filter add chain=forward src-address=10.250.0.0/24 action=drop comment=&quot;ENT-OVPN deny other&quot;</code></pre>
+                    <p
+                      data-fa="ruleها قبل از drop نهایی و پیش از accept عمومی LAN قرار گیرند. established/related موجود برای پاسخ باید درست باشد. نمونه روی firewall آماده اجرا می‌شود، نه روتر خالی بدون default deny."
+                      data-en="Place rules before the final drop and before broad LAN accepts. Existing established/related handling must permit responses. This example assumes an already secured Firewall with default deny."
+                    >
+                      Place rules before the final drop and before broad LAN
+                      accepts. Existing established/related handling must permit
+                      responses. This example assumes an already secured
+                      Firewall with default deny.
+                    </p>
+                    <p
+                      data-fa="فایل client.ovpn کامل زیر کنار ca.crt، client.crt و client.key قرار گیرد. vpn.example.com placeholder است. گواهی باید همین نام واقعی را پوشش دهد. کلید client passphraseدار باشد."
+                      data-en="Save the complete client.ovpn beside ca.crt, client.crt and client.key. Replace vpn.example.com with the real name covered by the certificate. Protect the client key with a passphrase."
+                    >
+                      Save the complete client.ovpn beside ca.crt, client.crt
+                      and client.key. Replace vpn.example.com with the real name
+                      covered by the certificate. Protect the client key with a
+                      passphrase.
+                    </p>
+                    <pre dir="ltr"><code class="language-openvpn">client
 dev tun
-proto udp
-remote vpn.meetaj.ir 1194
-resolv-retry infinite
+proto tcp-client
+remote vpn.example.com 1194
 nobind
 persist-key
 persist-tun
-auth SHA1
-cipher AES-256-GCM
 ca ca.crt
 cert client.crt
 key client.key
+auth-user-pass
 remote-cert-tls server
+verify-x509-name vpn.example.com name
+tls-version-min 1.2
+auth SHA256
+cipher AES-256-CBC
+data-ciphers AES-256-CBC
+route 10.20.30.10 255.255.255.255
 verb 3</code></pre>
-                        </div>
-
-                        <div class="article-card-note">
-                          <h4
-                            data-en="File Management"
-                            data-fa="مدیریت فایل‌ها"
-                          >
-                            مدیریت فایل‌ها
-                          </h4>
-                          <ul>
-                            <li
-                              data-en="Transfer ca.crt, client.crt, and client.key to client device"
-                              data-fa="فایل‌های ca.crt، client.crt و client.key را به دستگاه کلاینت منتقل کنید"
-                            >
-                              فایل‌های ca.crt، client.crt و client.key را به
-                              دستگاه کلاینت منتقل کنید
-                            </li>
-                            <li
-                              data-en="Save the config as 'client.ovpn' file"
-                              data-fa="پیکربندی را به عنوان فایل 'client.ovpn' ذخیره کنید"
-                            >
-                              پیکربندی را به عنوان فایل 'client.ovpn' ذخیره کنید
-                            </li>
-                            <li
-                              data-en="Update 'vpn.meetaj.ir' with your server's public IP or domain"
-                              data-fa="'vpn.meetaj.ir' را با IP عمومی یا دامنه سرور خود به‌روزرسانی کنید"
-                            >
-                              'vpn.meetaj.ir' را با IP عمومی یا دامنه سرور خود
-                              به‌روزرسانی کنید
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Step 7: Testing -->
-                    <div class="article-card article-card--step" data-step="7">
-                      <div class="article-card-index">07</div>
-                      <div class="article-card-header">
-                        <div class="article-card-icon">
-                          <i class="bi bi-check-circle"></i>
-                        </div>
-                        <div class="article-card-info">
-                          <h3
-                            class="article-card-title"
-                            data-en="Step 7: Testing Client Connection"
-                            data-fa="مرحله هفتم: تست اتصال کلاینت"
-                          >
-                            مرحله هفتم: تست اتصال کلاینت
-                          </h3>
-                          <p
-                            class="article-card-description"
-                            data-en="Test the VPN connection and verify successful setup."
-                            data-fa="تست اتصال VPN و تأیید راه‌اندازی موفق."
-                          >
-                            تست اتصال VPN و تأیید راه‌اندازی موفق.
-                          </p>
-                        </div>
-                      </div>
-                      <div class="article-card-content">
-                        <div class="article-grid">
-                          <div class="article-card article-card--test">
-                            <div class="article-card-icon">
-                              <i class="bi bi-windows"></i>
-                            </div>
-                            <div class="article-card-info">
-                              <h4
-                                data-en="Windows Testing"
-                                data-fa="تست در ویندوز"
-                              >
-                                تست در ویندوز
-                              </h4>
-                              <p
-                                data-en="Run OpenVPN GUI and import the client.ovpn file"
-                                data-fa="OpenVPN GUI را اجرا کنید و فایل client.ovpn را import کنید"
-                              >
-                                OpenVPN GUI را اجرا کنید و فایل client.ovpn را
-                                import کنید
-                              </p>
-                            </div>
-                          </div>
-
-                          <div class="article-card article-card--test">
-                            <div class="article-card-icon">
-                              <i class="bi bi-terminal"></i>
-                            </div>
-                            <div class="article-card-info">
-                              <h4
-                                data-en="Linux Testing"
-                                data-fa="تست در لینوکس"
-                              >
-                                تست در لینوکس
-                              </h4>
-                              <p
-                                data-en="Run: openvpn --config client.ovpn"
-                                data-fa="اجرا کنید: openvpn --config client.ovpn"
-                              >
-                                اجرا کنید: openvpn --config client.ovpn
-                              </p>
-                            </div>
-                          </div>
-
-                          <div class="article-card article-card--test">
-                            <div class="article-card-icon">
-                              <i class="bi bi-search"></i>
-                            </div>
-                            <div class="article-card-info">
-                              <h4 data-en="Verification" data-fa="تأیید">
-                                تأیید
-                              </h4>
-                              <p
-                                data-en="Check logs for 'Initialization Sequence Completed' message"
-                                data-fa="بررسی Log برای پیام 'Initialization Sequence Completed'"
-                              >
-                                بررسی Log برای پیام 'Initialization Sequence
-                                Completed'
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="article-card-note">
-                          <h4 data-en="Troubleshooting" data-fa="عیب‌یابی">
-                            عیب‌یابی
-                          </h4>
-                          <ul>
-                            <li
-                              data-en="Check firewall rules if connection fails"
-                              data-fa="اگر اتصال ناموفق است، قوانین فایروال را بررسی کنید"
-                            >
-                              اگر اتصال ناموفق است، قوانین فایروال را بررسی کنید
-                            </li>
-                            <li
-                              data-en="Verify certificate files are in the same directory"
-                              data-fa="اطمینان حاصل کنید که فایل‌های گواهی در همان پوشه هستند"
-                            >
-                              اطمینان حاصل کنید که فایل‌های گواهی در همان پوشه
-                              هستند
-                            </li>
-                            <li
-                              data-en="Check server logs for any error messages"
-                              data-fa="برای هر پیام خطا، log های سرور را بررسی کنید"
-                            >
-                              برای هر پیام خطا، log های سرور را بررسی کنید
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <!-- Security Tips and Optimization -->
-                <section id="security-tips" class="article-section">
-                  <h2
-                    data-en="5. Security Tips and Optimization"
-                    data-fa="5. نکات امنیتی و بهینه‌سازی"
-                  >
-                    5. نکات امنیتی و بهینه‌سازی
-                  </h2>
-
-                  <div class="article-callout article-callout--tip">
-                    <h3
-                      class="article-callout-title"
-                      data-en="Security Recommendations"
-                      data-fa="توصیه‌های امنیتی"
+                    <p
+                      data-fa="اجرای sudo openvpn --config client.ovpn روی Linux باید Initialization Sequence Completed نشان دهد. login و key password به‌صورت تعاملی وارد شوند. در فایل ذخیره نشوند. SSH مجاز و دسترسی به مقصد غیرمجاز هر دو تست شوند."
+                      data-en="On Linux, sudo openvpn --config client.ovpn should report Initialization Sequence Completed. Enter login and key passwords interactively. Test both permitted SSH and denied destinations."
                     >
-                      Security Recommendations
+                      On Linux, sudo openvpn --config client.ovpn should report
+                      Initialization Sequence Completed. Enter login and key
+                      passwords interactively. Test both permitted SSH and
+                      denied destinations.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="از TLS Error تا SSH Timeout"
+                      data-en="From TLS errors to SSH timeouts"
+                    >
+                      From TLS errors to SSH timeouts
+                    </h2>
+                    <p
+                      data-fa="برای TLS Error، ساعت، CA، CN/SAN و Key Usage را بررسی کنید. AUTH_FAILED به PPP Service و Password و Policy مربوط است. Tunnel سالم با SSH Timeout به Route برگشت و Counter Forward و Firewall سرور نیاز دارد. Cipher و SHA256 را در دو طرف یکسان نگه دارید. افزودن GCM بدون تطبیق نسخه و Auth، اصلاح عمومی نیست."
+                      data-en="For TLS errors, inspect clocks, CA, CN/SAN and key usage. AUTH_FAILED points to PPP service, password or policy. Healthy tunnels with SSH timeouts require return-route, forward-counter and server-firewall checks. Match cipher/SHA256 settings on both sides. Adding GCM without version/auth validation is not a generic repair."
+                    >
+                      For TLS errors, inspect clocks, CA, CN/SAN and key usage.
+                      AUTH_FAILED points to PPP service, password or policy.
+                      Healthy tunnels with SSH timeouts require return-route,
+                      forward-counter and server-firewall checks. Match
+                      cipher/SHA256 settings on both sides. Adding GCM without
+                      version/auth validation is not a generic repair.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="Pool، Session و انقضای گواهی"
+                      data-en="Pool, sessions and certificate expiry"
+                    >
+                      Pool, sessions and certificate expiry
+                    </h2>
+                    <p
+                      data-fa="PPP Active، مصرف Pool و خطای ورود و انقضای گواهی را پایش کنید. قطع یک کاربر را از قطع Listener جدا کنید. هشدار انقضا را زودتر از زمان لازم برای صدور و استقرار گواهی تنظیم کنید."
+                      data-en="Monitor active PPP sessions, pool use, authentication failures and certificate expiry. Distinguish one user’s disconnect from listener failure. Allow enough expiry-warning time for issuance and deployment."
+                    >
+                      Monitor active PPP sessions, pool use, authentication
+                      failures and certificate expiry. Distinguish one user’s
+                      disconnect from listener failure. Allow enough
+                      expiry-warning time for issuance and deployment.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="لغو گواهی و برگشت تنظیم"
+                      data-en="Revocation and configuration rollback"
+                    >
+                      Revocation and configuration rollback
+                    </h2>
+                    <p
+                      data-fa="Export بدون Secret و Backup رمزنگاری‌شده و مواد PKI را در مخزن امن نگه دارید. رفتار CRL را روی Patch هدف با گواهی لغوشده امتحان کنید. برای برگشت، Named Server و Ruleهای ENT-OVPN و Route Client مربوط را غیرفعال کنید. برای یک Rule، Restore کل روتر لازم نیست."
+                      data-en="Protect secret-free exports, encrypted backups and PKI material. Test CRL enforcement on the selected patch using a revoked certificate. Rollback disables the named server, ENT-OVPN rules and associated client routes. A single-rule change does not require whole-router restore."
+                    >
+                      Protect secret-free exports, encrypted backups and PKI
+                      material. Test CRL enforcement on the selected patch using
+                      a revoked certificate. Rollback disables the named server,
+                      ENT-OVPN rules and associated client routes. A single-rule
+                      change does not require whole-router restore.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="آزمون دسترسی ممنوع"
+                      data-en="Test forbidden access too"
+                    >
+                      Test forbidden access too
                     </h3>
+                    <p
+                      data-fa="علاوه بر SSH مجاز، مقصد و Port ممنوع را هم از VPN امتحان کنید. روی روتر، Counterهای Rule باید با نتیجه سازگار باشند. Cipher این نمونه برای سازگاری انتخاب شده و باید با سیاست رمزنگاری سازمان تطبیق داده شود."
+                      data-en="Test forbidden destinations and ports alongside permitted SSH. Router counters must agree with the results. This compatibility-oriented cipher choice requires organizational cryptographic-policy review."
+                    >
+                      Test forbidden destinations and ports alongside permitted
+                      SSH. Router counters must agree with the results. This
+                      compatibility-oriented cipher choice requires
+                      organizational cryptographic-policy review.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="چرا tunnel برقرار است ولی سرور باز نمی‌شود؟"
+                      data-en="Why can the tunnel connect while SSH fails?"
+                    >
+                      Why can the tunnel connect while SSH fails?
+                    </h3>
+                    <p
+                      data-fa="مسیر برگشت و forward ACL مستقل از authentication هستند و باید بررسی شوند."
+                      data-en="Return routing and forward ACLs are independent of authentication."
+                    >
+                      Return routing and forward ACLs are independent of
+                      authentication.
+                    </p>
+                    <h3
+                      data-fa="آیا تنظیم v7 روی همه patchها یکسان است؟"
+                      data-en="Do all v7 patches use identical configuration?"
+                    >
+                      Do all v7 patches use identical configuration?
+                    </h3>
+                    <p
+                      data-fa="خیر. از 7.17 ساختار named server تغییر کرده و باید patch هدف تثبیت شود."
+                      data-en="No. Named-server configuration changed in 7.17. Pin and validate the target patch."
+                    >
+                      No. Named-server configuration changed in 7.17. Pin and
+                      validate the target patch.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
                     <ul>
-                      <li
-                        data-en="Always use AES-256-GCM (Better than CBC)"
-                        data-fa="همیشه از AES-256-GCM استفاده کنید (بهتر از CBC)"
-                      >
-                        همیشه از AES-256-GCM استفاده کنید (بهتر از CBC)
+                      <li>
+                        <a
+                          href="https://help.mikrotik.com/docs/spaces/ROS/pages/2031655/OpenVPN"
+                          rel="noopener"
+                          >MikroTik: OpenVPN</a
+                        >
                       </li>
-                      <li
-                        data-en="Change default port 1194 (For better security)"
-                        data-fa="پورت پیش‌فرض 1194 را تغییر دهید (برای امنیت بیشتر)"
-                      >
-                        پورت پیش‌فرض 1194 را تغییر دهید (برای امنیت بیشتر)
-                      </li>
-                      <li
-                        data-en="Use strong and unique passwords"
-                        data-fa="از پسوردهای قوی و غیرتکراری استفاده کنید"
-                      >
-                        از پسوردهای قوی و غیرتکراری استفاده کنید
-                      </li>
-                      <li
-                        data-en="Limit connections with Firewall Address-List to specific IPs"
-                        data-fa="اتصال را با Firewall Address-List به آی‌پی‌های مشخص محدود کنید"
-                      >
-                        اتصال را با Firewall Address-List به آی‌پی‌های مشخص
-                        محدود کنید
-                      </li>
-                      <li
-                        data-en="Perform monitoring with /log print or tools like Zabbix"
-                        data-fa="مانیتورینگ را با /log print یا ابزارهایی مانند Zabbix انجام دهید"
-                      >
-                        مانیتورینگ را با /log print یا ابزارهایی مانند Zabbix
-                        انجام دهید
+                      <li>
+                        <a
+                          href="https://openvpn.net/community-resources/reference-manual-for-openvpn-2-6/"
+                          rel="noopener"
+                          >OpenVPN 2.6 manual</a
+                        >
                       </li>
                     </ul>
-                  </div>
-                </section>
-
-                <!-- FAQ -->
-                <section id="faq" class="article-section">
-                  <h2
-                    data-en="6. Frequently Asked Questions"
-                    data-fa="6. پرسش‌های متداول"
-                  >
-                    6. پرسش‌های متداول
-                  </h2>
-
-                  <div class="article-faq-item">
-                    <h3
-                      class="article-faq-question"
-                      data-en="Q: What is the main difference between OpenVPN in RouterOS v6 and v7?"
-                      data-fa="س: تفاوت اصلی OpenVPN در RouterOS v6 و v7 چیست؟"
-                    >
-                      س: تفاوت اصلی OpenVPN در RouterOS v6 و v7 چیست؟
-                    </h3>
-                    <div class="article-faq-answer">
-                      <p
-                        data-en="A: In v6 only TCP and limited algorithms were supported; in v7 complete support for UDP, TLS and new algorithms has been added."
-                        data-fa="ج: در v6 فقط TCP و الگوریتم‌های محدود پشتیبانی می‌شد؛ در v7 پشتیبانی کامل از UDP، TLS و الگوریتم‌های جدید اضافه شده است."
-                      >
-                        ج: در v6 فقط TCP و الگوریتم‌های محدود پشتیبانی می‌شد؛ در
-                        v7 پشتیبانی کامل از UDP، TLS و الگوریتم‌های جدید اضافه
-                        شده است.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="article-faq-item">
-                    <h3
-                      class="article-faq-question"
-                      data-en="Q: Can authentication be done only with Certificate?"
-                      data-fa="س: آیا می‌توان فقط با Certificate احراز هویت کرد؟"
-                    >
-                      س: آیا می‌توان فقط با Certificate احراز هویت کرد؟
-                    </h3>
-                    <div class="article-faq-answer">
-                      <p
-                        data-en="A: Yes, in v7 it is possible to authenticate only with Certificate."
-                        data-fa="ج: بله، در v7 امکان احراز هویت فقط با Certificate وجود دارد."
-                      >
-                        ج: بله، در v7 امکان احراز هویت فقط با Certificate وجود
-                        دارد.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="article-faq-item">
-                    <h3
-                      class="article-faq-question"
-                      data-en="Q: What is the best encryption algorithm?"
-                      data-fa="س: بهترین الگوریتم رمزنگاری چیست؟"
-                    >
-                      س: بهترین الگوریتم رمزنگاری چیست؟
-                    </h3>
-                    <div class="article-faq-answer">
-                      <p
-                        data-en="A: AES-256-GCM is recommended due to its high security and speed."
-                        data-fa="ج: AES-256-GCM به‌دلیل امنیت و سرعت بالا توصیه می‌شود."
-                      >
-                        ج: AES-256-GCM به‌دلیل امنیت و سرعت بالا توصیه می‌شود.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="article-faq-item">
-                    <h3
-                      class="article-faq-question"
-                      data-en="Q: How can I limit user connections?"
-                      data-fa="س: چگونه اتصال کاربران را محدود کنم؟"
-                    >
-                      س: چگونه اتصال کاربران را محدود کنم؟
-                    </h3>
-                    <div class="article-faq-answer">
-                      <p
-                        data-en="A: Using Firewall and Address-List, you can control users' access to internal network or internet."
-                        data-fa="ج: با استفاده از Firewall و Address-List می‌توانید دسترسی کاربران به شبکه داخلی یا اینترنت را کنترل کنید."
-                      >
-                        ج: با استفاده از Firewall و Address-List می‌توانید
-                        دسترسی کاربران به شبکه داخلی یا اینترنت را کنترل کنید.
-                      </p>
-                    </div>
-                  </div>
-                </section>
-
-                <!-- Conclusion -->
-                <section id="conclusion" class="article-section">
-                  <h2 data-en="Conclusion" data-fa="نتیجه‌گیری">Conclusion</h2>
-                  <p
-                    data-en="OpenVPN in RouterOS v7 is a secure, fast and stable solution for remote access to the network. With proper implementation of the above steps, you can significantly increase the security and efficiency of your network."
-                    data-fa="OpenVPN در RouterOS v7 یک راهکار ایمن، سریع و پایدار برای دسترسی از راه دور به شبکه محسوب می‌شود. با پیاده‌سازی صحیح مراحل فوق، می‌توانید امنیت و کارایی شبکه خود را به‌طور چشمگیری افزایش دهید."
-                  >
-                    OpenVPN در RouterOS v7 یک راهکار ایمن، سریع و پایدار برای
-                    دسترسی از راه دور به شبکه محسوب می‌شود. با پیاده‌سازی صحیح
-                    مراحل فوق، می‌توانید امنیت و کارایی شبکه خود را به‌طور
-                    چشمگیری افزایش دهید.
-                  </p>
-                </section>
-
-                <!-- Enhanced Author Bio Section -->
-
-                <footer class="article-footer" aria-label="Article footer">
-                  <section
-                    id="author"
-                    class="article-author"
-                    role="complementary"
-                    aria-labelledby="author-title"
-                  >
-                    <div class="article-author-card">
-                      <img
-                        class="article-author-avatar"
-                        src="../assets/img/my-profile-img.jpg"
-                        alt="AmirHossein Jalalian"
-                        loading="lazy"
-                        width="120"
-                        height="120"
-                        decoding="async"
-                      />
-                      <div class="article-author-content">
-                        <p
-                          class="article-author-kicker"
-                          id="author-title"
-                          data-en="About the author"
-                          data-fa="درباره نویسنده"
-                        >
-                          About the author
-                        </p>
-                        <h2
-                          data-en="AmirHossein Jalalian"
-                          data-fa="امیرحسین جلالیان"
-                        >
-                          AmirHossein Jalalian
-                        </h2>
-                        <p
-                          class="article-author-role"
-                          data-en="Infrastructure & DevOps Engineer"
-                          data-fa="مهندس زیرساخت و DevOps"
-                        >
-                          Infrastructure & DevOps Engineer
-                        </p>
-                        <p
-                          class="article-author-description"
-                          data-en="Delivering reliable, secure, and scalable IT solutions for your business success."
-                          data-fa="ارائه راهکارهای IT پایدار، امن و مقیاس‌پذیر برای موفقیت کسب‌وکار شما."
-                        >
-                          Delivering reliable, secure, and scalable IT solutions
-                          for your business success.
-                        </p>
-                        <div
-                          class="article-author-social"
-                          role="group"
-                          aria-label="Author links"
-                        >
-                          <a
-                            href="https://linkedin.com/in/amirhossein-jalalian"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="LinkedIn Profile"
-                            ><i class="bi bi-linkedin" aria-hidden="true"></i
-                          ></a>
-                          <a
-                            href="https://github.com/amirhossein-jalalian"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="GitHub Profile"
-                            ><i class="bi bi-github" aria-hidden="true"></i
-                          ></a>
-                          <a
-                            href="https://twitter.com/amirhossein_j"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Twitter Profile"
-                            ><i class="bi bi-twitter-x" aria-hidden="true"></i
-                          ></a>
-                        </div>
-                      </div>
-                    </div>
                   </section>
-                  <nav
-                    class="article-footer-nav"
-                    aria-label="Article footer navigation"
-                  >
-                    <a class="article-back" href="../index.html#portfolio"
-                      ><i class="bi bi-arrow-left" aria-hidden="true"></i
-                      ><span
-                        data-en="Back to portfolio"
-                        data-fa="بازگشت به مقالات"
-                        >Back to portfolio</span
-                      ></a
-                    >
-                  </nav>
-                </footer>
+                </div>
               </article>
             </div>
           </div>
@@ -1787,10 +886,10 @@ verb 3</code></pre>
               </h3>
               <p
                 class="brand-title"
-                data-en="Infrastructure & DevOps Engineer"
+                data-en="Infrastructure &amp; DevOps Engineer"
                 data-fa="مهندس زیرساخت و DevOps"
               >
-                Infrastructure & DevOps Engineer
+                Infrastructure &amp; DevOps Engineer
               </p>
               <p
                 class="brand-description"

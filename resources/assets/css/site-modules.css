@@ -3300,9 +3300,9 @@ body.index-page #hero::after {
     transform: none !important;
   }
 
-  /* Physical left remains the photo's negative space in either language. */
+  /* Anchor the copy to the reading edge of the selected language. */
   html[dir="rtl"] body.index-page #hero .hero-wrapper {
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 
   body.index-page #hero .hero-title {
@@ -3360,9 +3360,7 @@ body.index-page #hero .hero-title .title-line-2 {
   }
 }
 
-/* Persian Hero copy stays in the safe physical column, but its reading edge
-   is the right edge of that column. This keeps RTL typography natural without
-   moving the copy over the portrait. */
+/* Hero content follows the selected language direction. */
 html[dir="rtl"] body.index-page #hero .hero-content {
   direction: rtl;
   text-align: right;
@@ -3397,4 +3395,28 @@ html[dir="rtl"] body.index-page #hero .hero-actions {
   html[dir="rtl"] body.index-page #hero .hero-badge {
     align-self: flex-start;
   }
+}
+
+html[dir="ltr"] body.index-page #hero .hero-content {
+  direction: ltr;
+  text-align: left;
+  align-items: flex-start;
+}
+
+html[dir="ltr"] body.index-page #hero .hero-badge,
+html[dir="ltr"] body.index-page #hero .hero-title,
+html[dir="ltr"] body.index-page #hero .title-line-1,
+html[dir="ltr"] body.index-page #hero .title-line-2,
+html[dir="ltr"] body.index-page #hero .hero-role,
+html[dir="ltr"] body.index-page #hero .hero-subtitle {
+  text-align: left;
+}
+
+html[dir="ltr"] body.index-page #hero .hero-badge {
+  align-self: flex-start;
+}
+
+html[dir="ltr"] body.index-page #hero .hero-actions {
+  direction: ltr;
+  justify-content: flex-start;
 }

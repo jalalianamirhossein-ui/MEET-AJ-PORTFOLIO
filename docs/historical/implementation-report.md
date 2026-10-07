@@ -1,5 +1,7 @@
 > **SUPERSEDED (HISTORICAL).** Point-in-time implementation report. Authoritative current status is [PROJECT-STATUS.md](../current/PROJECT-STATUS.md). Authoritative QA is [QA-MATRIX.md](../qa/QA-MATRIX.md). Historical measurements below are not rewritten.
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 # Implementation report — Meet AJ Laravel CMS
 
 Date: 2026-09-16
@@ -46,8 +48,8 @@ Laravel 13.31.0, PHP 8.4.25, Filament 5.8.2, Livewire 4.4.5, Composer 2.10.3, Bl
 
 ## Database validation
 
-Local portable MariaDB 11.4.13, utf8mb4, FKs, unique indexes, 23 imported articles.  
-`phpunit.mysql.xml`: **OK (23 tests, 517 assertions)**.  
+Local portable MariaDB 11.4.13, utf8mb4, FKs, unique indexes, 23 imported articles.
+`phpunit.mysql.xml`: **OK (23 tests, 517 assertions)**.
 Production DirectAdmin: **BLOCKED**.
 
 ## Article import

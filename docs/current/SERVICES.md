@@ -1,12 +1,14 @@
 # Services — Meet AJ
 
+> Maintenance review: 2026-10-06. Local counts are 13 service rows and 12 visible catalog entries. `HomepageServiceCatalog` is the maintained catalog; `resources/legacy/services/` is empty in this checkout. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+
 **Authority:** AUTHORITATIVE service catalog document.
-**Verified:** 2026-09-20 against the live `services` table, `app/Models/Service.php`, `app/Filament/Resources/ServiceResource.php`, `app/Policies/ServicePolicy.php`, and `resources/views/components/service-card.blade.php`.
+**Verified:** 2026-09-21 against the live `services` table, `app/Models/Service.php`, `app/Filament/Resources/ServiceResource.php`, `app/Policies/ServicePolicy.php`, and `resources/views/components/service-card.blade.php`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
 ## Current catalog
 
-The 2026-09-20 local recheck found **13 published English service records, 12 visible in the homepage catalog**. The six legacy records below retain fixed AED prices. Technical Consulting has `show_in_catalog = false`; the other five and seven custom-quote records are visible. The custom-quote slugs are `mikrotik-routing-multi-wan`, `hp-enterprise-server`, `sql-server-high-availability`, `jira-implementation`, `voip-infrastructure`, `cctv-surveillance`, and `network-security`.
+The 2026-09-21 local recheck found **13 published English service records, 12 visible in the homepage catalog**. The six legacy records below retain fixed AED prices. Technical Consulting has `show_in_catalog = false`; the other five and seven custom-quote records are visible. The custom-quote slugs are `mikrotik-routing-multi-wan`, `hp-enterprise-server`, `sql-server-high-availability`, `jira-implementation`, `voip-infrastructure`, `cctv-surveillance`, and `network-security`.
 
 | Legacy # | Slug | Title | Price |
 |---|------|-------|-------|

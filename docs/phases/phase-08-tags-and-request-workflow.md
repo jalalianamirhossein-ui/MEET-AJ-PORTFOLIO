@@ -1,5 +1,7 @@
 > **HISTORICAL phase log.** Current behaviour: [../current/ARTICLES.md](../current/ARTICLES.md), [../current/REQUESTS.md](../current/REQUESTS.md), [../current/ADMIN.md](../current/ADMIN.md).
 
+> Documentation maintenance: 2026-10-06. This document retains its original evidence date and scope; recorded tests and counts were not rerun as part of updating its navigation. Use [current project status](../current/PROJECT-STATUS.md) for current counts, failures and limitations.
+
 # Phase 08 — Tags and request workflow
 
 **Phase:** 08
