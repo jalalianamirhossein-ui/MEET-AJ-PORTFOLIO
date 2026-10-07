@@ -11,8 +11,10 @@
     $filterGroups = $brandFilters
         ->map(function ($tag) use ($brandCategories): array {
             $category = $brandCategories->get($tag->slug === 'other' ? 'others' : $tag->slug);
+            $labelEn = $tag->slug === 'qnap' ? 'Storage' : $tag->displayName();
+            $labelFa = $tag->slug === 'qnap' ? 'استوریج' : $tag->displayName();
 
-            return ['slug' => $tag->slug, 'en' => $tag->displayName(), 'fa' => $tag->displayName(), 'color' => $category?->accentColor() ?? $tag->accentColor(), 'topic' => $tag->slug, 'sort_order' => 0, 'id' => $tag->id];
+            return ['slug' => $tag->slug, 'en' => $labelEn, 'fa' => $labelFa, 'color' => $category?->accentColor() ?? $tag->accentColor(), 'topic' => $tag->slug, 'sort_order' => 0, 'id' => $tag->id];
         })
         ->sortBy(fn ($filter) => array_search($filter['slug'], \App\Models\Tag::BRAND_FILTERS, true))->values();
     $legacyFilterGroups = collect($filterCategories ?? [])
