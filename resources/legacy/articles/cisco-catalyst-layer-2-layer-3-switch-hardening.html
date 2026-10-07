@@ -1,0 +1,684 @@
+<!doctype html><html lang="en" dir="ltr" data-article-language="en"><head><meta charset="UTF-8"><title>Cisco Layer 2 &amp; Layer 3 Switch Hardening Best Practices</title><meta name="article:content-language" content="en"><meta name="description" content="Enterprise Cisco Catalyst IOS/IOS XE hardening: AAA, SSH, SNMPv3, DHCP Snooping, DAI, STP, management ACLs and independent L2/L3 configurations."><meta name="keywords" content="Cisco Catalyst, Switch Hardening, Cisco IOS, IOS XE, Layer 2 Security, Layer 3 ACL, DHCP Snooping, Dynamic ARP Inspection, SNMPv3"><meta property="og:title" content="Cisco Layer 2 &amp; Layer 3 Switch Hardening Best Practices"><meta property="og:description" content="Enterprise Cisco Catalyst IOS/IOS XE hardening: AAA, SSH, SNMPv3, DHCP Snooping, DAI, STP, management ACLs and independent L2/L3 configurations."><meta property="og:type" content="article"><link rel="canonical" href="https://meetaj.ir/articles/cisco-catalyst-layer-2-layer-3-switch-hardening"><script id="article-localizations" type="application/json">{"en":{"title":"Cisco Layer 2 & Layer 3 Switch Hardening Best Practices","meta_title":"Cisco Layer 2 & Layer 3 Switch Hardening Best Practices","description":"Enterprise Cisco Catalyst IOS/IOS XE hardening: AAA, SSH, SNMPv3, DHCP Snooping, DAI, STP, management ACLs and independent L2/L3 configurations.","keywords":["Cisco Catalyst","Switch Hardening","Cisco IOS","IOS XE","Layer 2 Security","Layer 3 ACL","DHCP Snooping","Dynamic ARP Inspection","SNMPv3"],"faq":[]},"fa":{"title":"هاردنینگ امنیتی سوئیچ‌های Cisco لایه 2 و لایه 3","meta_title":"هاردنینگ امنیتی سوئیچ‌های Cisco لایه 2 و لایه 3","description":"راهنمای عملیاتی هاردنینگ Cisco Catalyst در IOS و IOS XE؛ امنیت مدیریت، DHCP Snooping، DAI، STP، ACL و پیکربندی مستقل سوئیچ لایه ۲ و لایه ۳.","keywords":["Cisco Catalyst","Switch Hardening","Cisco IOS","IOS XE","Layer 2 Security","Layer 3 ACL","DHCP Snooping","Dynamic ARP Inspection","SNMPv3"],"faq":[]}}</script><meta property="og:image" content="/assets/img/articles/banners/Cisco Switch Hardening Best Practices.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Cisco Layer 2 & Layer 3 Switch Hardening Best Practices","description":"Enterprise Cisco Catalyst IOS/IOS XE hardening: AAA, SSH, SNMPv3, DHCP Snooping, DAI, STP, management ACLs and independent L2/L3 configurations.","inLanguage":"en","datePublished":"2026-10-07T00:00:00+03:30","dateModified":"2026-10-07","author":{"@type":"Person","name":"AmirHossein Jalalian"},"image":"/assets/img/articles/banners/Cisco Switch Hardening Best Practices.png"}</script></head><body class="article-page theme-other"><header><nav><ul><li class="article-nav-item"><a href="#architecture" data-en="Architecture and deployment contract" data-fa="معماری و الزامات استقرار">Architecture and deployment contract</a></li><li class="article-nav-item"><a href="#prechecks" data-en="1. Pre-Hardening Checks" data-fa="۱. بررسی پیش از هاردنینگ">1. Pre-Hardening Checks</a></li><li class="article-nav-item"><a href="#baseline" data-en="2. Common Hardening Baseline: Identity and AAA" data-fa="۲. تنظیمات مشترک: Identity و AAA">2. Common Hardening Baseline: Identity and AAA</a></li><li class="article-nav-item"><a href="#ssh" data-en="3. SSH Hardening" data-fa="۳. امنیت SSH">3. SSH Hardening</a></li><li class="article-nav-item"><a href="#services" data-en="4. Disable Unnecessary Services" data-fa="۴. غیرفعال‌سازی سرویس غیرضروری">4. Disable Unnecessary Services</a></li><li class="article-nav-item"><a href="#l2" data-en="5. Layer 2 Switch Hardening" data-fa="۵. هاردنینگ سوئیچ لایه ۲">5. Layer 2 Switch Hardening</a></li><li class="article-nav-item"><a href="#dhcp" data-en="6. DHCP Snooping" data-fa="۶. DHCP Snooping">6. DHCP Snooping</a></li><li class="article-nav-item"><a href="#dai" data-en="7. Dynamic ARP Inspection" data-fa="۷. Dynamic ARP Inspection">7. Dynamic ARP Inspection</a></li><li class="article-nav-item"><a href="#ipsg" data-en="8. IP Source Guard" data-fa="۸. IP Source Guard">8. IP Source Guard</a></li><li class="article-nav-item"><a href="#stp" data-en="9. STP Hardening" data-fa="۹. هاردنینگ STP">9. STP Hardening</a></li><li class="article-nav-item"><a href="#port-security" data-en="10. Port Security" data-fa="۱۰. Port Security">10. Port Security</a></li><li class="article-nav-item"><a href="#storm" data-en="11. Storm Control" data-fa="۱۱. Storm Control">11. Storm Control</a></li><li class="article-nav-item"><a href="#trunk" data-en="12. Trunk Hardening" data-fa="۱۲. هاردنینگ Trunk">12. Trunk Hardening</a></li><li class="article-nav-item"><a href="#unused" data-en="13. Unused Ports" data-fa="۱۳. پورت بلااستفاده">13. Unused Ports</a></li><li class="article-nav-item"><a href="#l3" data-en="14. Layer 3 Switch Hardening" data-fa="۱۴. هاردنینگ سوئیچ لایه ۳">14. Layer 3 Switch Hardening</a></li><li class="article-nav-item"><a href="#svi-acl" data-en="15. Layer 3 ACL Hardening" data-fa="۱۵. هاردنینگ ACL لایه ۳">15. Layer 3 ACL Hardening</a></li><li class="article-nav-item"><a href="#routing" data-en="16. Routing Protocol Security — OSPF" data-fa="۱۶. امنیت پروتکل Routing — OSPF">16. Routing Protocol Security — OSPF</a></li><li class="article-nav-item"><a href="#ntp" data-en="17. NTP Hardening" data-fa="۱۷. امنیت NTP">17. NTP Hardening</a></li><li class="article-nav-item"><a href="#syslog" data-en="18. Syslog" data-fa="۱۸. Syslog">18. Syslog</a></li><li class="article-nav-item"><a href="#snmp" data-en="19. SNMP — AuthPriv First" data-fa="۱۹. SNMP با اولویت AuthPriv">19. SNMP — AuthPriv First</a></li><li class="article-nav-item"><a href="#login" data-en="20. Login Attack Protection" data-fa="۲۰. حفاظت در برابر حمله Login">20. Login Attack Protection</a></li><li class="article-nav-item"><a href="#verification" data-en="21. Verification and Acceptance" data-fa="۲۱. اعتبارسنجی و پذیرش">21. Verification and Acceptance</a></li><li class="article-nav-item"><a href="#final-configs" data-en="22. Final Independent Configurations" data-fa="۲۲. پیکربندی‌های نهایی مستقل">22. Final Independent Configurations</a></li><li class="article-nav-item"><a href="#warnings" data-en="23. Important Warnings" data-fa="۲۳. هشدارهای مهم">23. Important Warnings</a></li><li class="article-nav-item"><a href="#checklist" data-en="24. Final Hardening Checklist" data-fa="۲۴. چک‌لیست نهایی">24. Final Hardening Checklist</a></li><li class="article-nav-item"><a href="#references" data-en="Official Cisco References" data-fa="منابع رسمی Cisco">Official Cisco References</a></li></ul></nav></header><main><section class="article-hero article-header hero"><span class="article-category" data-en="Networking" data-fa="شبکه">Networking</span><h1 class="article-title hero-title" data-en="Cisco Layer 2 &amp; Layer 3 Switch Hardening Best Practices" data-fa="هاردنینگ امنیتی سوئیچ‌های Cisco لایه 2 و لایه 3">Cisco Layer 2 &amp; Layer 3 Switch Hardening Best Practices</h1><p class="article-excerpt hero-subtitle" data-en="Enterprise Cisco Catalyst IOS/IOS XE hardening: AAA, SSH, SNMPv3, DHCP Snooping, DAI, STP, management ACLs and independent L2/L3 configurations." data-fa="راهنمای عملیاتی هاردنینگ Cisco Catalyst در IOS و IOS XE؛ امنیت مدیریت، DHCP Snooping، DAI، STP، ACL و پیکربندی مستقل سوئیچ لایه ۲ و لایه ۳.">Enterprise Cisco Catalyst IOS/IOS XE hardening: AAA, SSH, SNMPv3, DHCP Snooping, DAI, STP, management ACLs and independent L2/L3 configurations.</p><img class="article-hero-thumbnail" src="/assets/img/articles/banners/Cisco Switch Hardening Best Practices.png" alt="Cisco Catalyst L2 and L3 switch hardening"></section><article class="article-body" lang="en" dir="ltr"><section id="architecture"><h2  data-en="Architecture and deployment contract" data-fa="معماری و الزامات استقرار">Architecture and deployment contract</h2>
+<figure><img src="/assets/img/articles/content/Modern Network Switch Hardening Topology.png" alt="Cisco Catalyst hardening topology and separate management network" width="1672" height="941" loading="lazy" decoding="async"><figcaption><span  data-en="Cisco Catalyst hardening topology and separate management network" data-fa="توپولوژی هاردنینگ Cisco Catalyst و شبکهٔ مدیریت مجزا">Cisco Catalyst hardening topology and separate management network</span></figcaption></figure>
+<p  data-en="This runbook is for Network Administrators, Network Engineers and Infrastructure Engineers operating Cisco Catalyst Layer 2 and Layer 3 switches with Cisco IOS or IOS XE. Management Plane protects administrative access and telemetry; Control Plane protects STP, routing adjacencies and CPU resources; Data Plane / Layer 2 Security protects endpoint traffic and trust boundaries." data-fa="این راهنما برای Network Administrator، Network Engineer و Infrastructure Engineer و صرفاً سوئیچ‌های Cisco Catalyst لایه ۲ و ۳ با IOS یا IOS XE است. Management Plane دسترسی مدیریتی و Telemetry، Control Plane پروتکل STP و همسایگی Routing و منابع CPU، و Data Plane / Layer 2 Security ترافیک کاربران و مرزهای اعتماد را محافظت می‌کند.">This runbook is for Network Administrators, Network Engineers and Infrastructure Engineers operating Cisco Catalyst Layer 2 and Layer 3 switches with Cisco IOS or IOS XE. Management Plane protects administrative access and telemetry; Control Plane protects STP, routing adjacencies and CPU resources; Data Plane / Layer 2 Security protects endpoint traffic and trust boundaries.</p>
+<pre dir="ltr"><code class="language-cisco">Internet / WAN
+      |
+Firewall
+      |
+Core / L3 Switch
+      |
+Distribution
+      |
+Access L2 Switches
+      |
+Users / Phones / AP / Printers
+
+VLAN 99 - Management
+NMS / Zabbix / Syslog / NTP</code></pre>
+<p  data-en="The firewall is only an architectural boundary; this article configures Catalyst switches exclusively. VLAN 99 is a separate management broadcast domain, not an authorization mechanism. Restrict its routing and physical access. Examples use RFC1918 networks: users 10.10.10.0/24, management 10.99.99.0/24, transit 10.255.255.0/30. These are invented examples, not organization addresses." data-fa="Firewall فقط مرز معماری است و پیکربندی مقاله منحصراً مربوط به Catalyst است. VLAN 99 یک Broadcast Domain جدا برای مدیریت است و به‌تنهایی کنترل دسترسی ایجاد نمی‌کند؛ Routing و دسترسی فیزیکی آن را محدود کنید. شبکه‌های نمونه RFC1918 عبارت‌اند از کاربران 10.10.10.0/24، مدیریت 10.99.99.0/24 و Transit برابر 10.255.255.0/30؛ همگی مثال ساختگی‌اند.">The firewall is only an architectural boundary; this article configures Catalyst switches exclusively. VLAN 99 is a separate management broadcast domain, not an authorization mechanism. Restrict its routing and physical access. Examples use RFC1918 networks: users 10.10.10.0/24, management 10.99.99.0/24, transit 10.255.255.0/30. These are invented examples, not organization addresses.</p>
+<p  data-en="The baseline assumes IPv4, a global routing table, classic interface syntax and a tested Rapid-PVST design. Dedicated management ports in a VRF need VRF-specific routes and service syntax. Licenses, ASIC resources, interface types, VTY counts, crypto policies and release behavior differ; validate each block with CLI help and the matching command reference. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="فرض نمونه‌ها IPv4، جدول Routing عمومی، Syntax کلاسیک اینترفیس و طراحی آزموده‌شده Rapid-PVST است. پورت مدیریت داخل VRF به Route و Syntax سرویس مخصوص VRF نیاز دارد. License، منابع ASIC، نوع پورت، تعداد VTY، سیاست رمزنگاری و رفتار نسخه‌ها متفاوت است؛ هر بلوک را با CLI Help و Command Reference متناظر بررسی کنید. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">The baseline assumes IPv4, a global routing table, classic interface syntax and a tested Rapid-PVST design. Dedicated management ports in a VRF need VRF-specific routes and service syntax. Licenses, ASIC resources, interface types, VTY counts, crypto policies and release behavior differ; validate each block with CLI help and the matching command reference. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+<div class="article-callout article-callout--warning" role="note"><p  data-en="Production-ready means a reviewed deployment template, not blind paste. Preserve existing configuration, use console/out-of-band access, stage changes on one port/VLAN, test a new SSH session, and save only after validation. These IPv4 controls do not secure IPv6: separately assess IPv6 management ACLs, RA Guard and DHCPv6 Guard on supported Catalyst releases." data-fa="Production-Ready یعنی Template قابل بازبینی و استقرار، نه اجرای کورکورانه. تنظیمات فعلی را حفظ کنید، Console یا Out-of-Band در دسترس داشته باشید، ابتدا یک پورت/VLAN را تست کنید، SSH جدید باز کنید و فقط پس از اعتبارسنجی Save کنید. کنترل‌های IPv4 این مقاله IPv6 را امن نمی‌کنند؛ ACL مدیریتی IPv6، RA Guard و DHCPv6 Guard را جداگانه در نسخه پشتیبانی‌شده بررسی کنید.">Production-ready means a reviewed deployment template, not blind paste. Preserve existing configuration, use console/out-of-band access, stage changes on one port/VLAN, test a new SSH session, and save only after validation. These IPv4 controls do not secure IPv6: separately assess IPv6 management ACLs, RA Guard and DHCPv6 Guard on supported Catalyst releases.</p></div>
+</section>
+<section id="prechecks"><h2  data-en="1. Pre-Hardening Checks" data-fa="۱. بررسی پیش از هاردنینگ">1. Pre-Hardening Checks</h2>
+<pre dir="ltr"><code class="language-cisco">show version
+show inventory
+show running-config
+show vlan brief
+show interfaces status
+show interfaces trunk
+show spanning-tree
+show ip interface brief
+show ip route
+show users
+show logging</code></pre>
+<table><thead><tr><th  data-en="Command" data-fa="فرمان">Command</th><th  data-en="Check before change" data-fa="بررسی پیش از تغییر">Check before change</th></tr></thead><tbody><tr><td  data-en="show version" data-fa="show version">show version</td><td  data-en="Image, release, uptime and capabilities" data-fa="Image، نسخه، Uptime و قابلیت‌ها">Image, release, uptime and capabilities</td></tr><tr><td  data-en="show inventory" data-fa="show inventory">show inventory</td><td  data-en="PID, modules and stack members" data-fa="PID، ماژول‌ها و اعضای Stack">PID, modules and stack members</td></tr><tr><td  data-en="show running-config" data-fa="show running-config">show running-config</td><td  data-en="AAA, ACLs, services and existing dependencies" data-fa="AAA، ACL، سرویس‌ها و وابستگی موجود">AAA, ACLs, services and existing dependencies</td></tr><tr><td  data-en="show vlan brief" data-fa="show vlan brief">show vlan brief</td><td  data-en="User, voice, management and unused VLANs" data-fa="VLAN کاربر، Voice، مدیریت و پورت بلااستفاده">User, voice, management and unused VLANs</td></tr><tr><td  data-en="show interfaces status" data-fa="show interfaces status">show interfaces status</td><td  data-en="Port roles, speed and err-disabled ports" data-fa="نقش پورت، سرعت و وضعیت err-disabled">Port roles, speed and err-disabled ports</td></tr><tr><td  data-en="show interfaces trunk" data-fa="show interfaces trunk">show interfaces trunk</td><td  data-en="Allowed/native VLANs and uplinks" data-fa="VLANهای Allowed و Native و Uplink">Allowed/native VLANs and uplinks</td></tr><tr><td  data-en="show spanning-tree" data-fa="show spanning-tree">show spanning-tree</td><td  data-en="Root, blocked ports and STP mode" data-fa="Root، پورت مسدود و Mode پروتکل">Root, blocked ports and STP mode</td></tr><tr><td  data-en="show ip interface brief" data-fa="show ip interface brief">show ip interface brief</td><td  data-en="SVI addresses and up/up state" data-fa="IP و وضعیت up/up در SVI">SVI addresses and up/up state</td></tr><tr><td  data-en="show ip route" data-fa="show ip route">show ip route</td><td  data-en="L3 routes and default route; limited on L2" data-fa="Routeهای L3 و Default؛ خروجی محدود در L2">L3 routes and default route; limited on L2</td></tr><tr><td  data-en="show users" data-fa="show users">show users</td><td  data-en="Active sessions and their source addresses" data-fa="Session فعال و آدرس مبدأ">Active sessions and their source addresses</td></tr><tr><td  data-en="show logging" data-fa="show logging">show logging</td><td  data-en="Existing faults and security events" data-fa="خطاهای موجود و رخداد امنیتی">Existing faults and security events</td></tr></tbody></table>
+<p  data-en="Back up running and startup configurations to an approved encrypted repository before changes. A local flash copy is convenient but does not protect against device loss. Do not overwrite a known-good startup configuration just to take a backup. Record VLAN/port maps, root placement, DHCP paths, static hosts, phone/AP behavior and telemetry baselines." data-fa="پیش از تغییر، Running و Startup Configuration را در Repository رمزنگاری‌شده مجاز Backup بگیرید. کپی Flash مفید است اما از خرابی یا از دست‌رفتن دستگاه محافظت نمی‌کند. برای Backup، Startup سالم را با Running تأییدنشده جایگزین نکنید. نقشه پورت/VLAN، محل Root، مسیر DHCP، میزبان ثابت، رفتار Phone/AP و Baseline ترافیک را ثبت کنید.">Back up running and startup configurations to an approved encrypted repository before changes. A local flash copy is convenient but does not protect against device loss. Do not overwrite a known-good startup configuration just to take a backup. Record VLAN/port maps, root placement, DHCP paths, static hosts, phone/AP behavior and telemetry baselines.</p>
+<pre dir="ltr"><code class="language-cisco">copy running-config flash:pre-hardening-running.cfg
+copy startup-config flash:pre-hardening-startup.cfg</code></pre>
+<p  data-en="Confirm the filesystem name and available space; protect and retire backups because they can contain secrets. Prepare the exact inverse commands or a platform-tested configuration restore procedure; merging a backup does not necessarily remove newly added commands. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="نام Filesystem و فضای آزاد را بررسی کنید؛ Backup می‌تواند Secret داشته باشد و باید محافظت و پس از دوره نگهداری حذف شود. فرمان معکوس یا روش Restore آزموده‌شده تهیه کنید؛ Merge کردن Backup الزاماً فرمان‌های جدید را حذف نمی‌کند. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">Confirm the filesystem name and available space; protect and retire backups because they can contain secrets. Prepare the exact inverse commands or a platform-tested configuration restore procedure; merging a backup does not necessarily remove newly added commands. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+</section>
+<section id="baseline"><h2  data-en="2. Common Hardening Baseline: Identity and AAA" data-fa="۲. تنظیمات مشترک: Identity و AAA">2. Common Hardening Baseline: Identity and AAA</h2>
+<figure><img src="/assets/img/articles/content/Cisco Secure Network Management Infographic.png" alt="Secure switch management: AAA, SSH, ACLs and monitoring" width="1672" height="941" loading="lazy" decoding="async"><figcaption><span  data-en="Secure switch management: AAA, SSH, ACLs and monitoring" data-fa="مدیریت امن سوئیچ: AAA، SSH، ACL و مانیتورینگ">Secure switch management: AAA, SSH, ACLs and monitoring</span></figcaption></figure>
+<p  data-en="Goal: Identify the switch and authenticate every administrator." data-fa="هدف: شناسایی سوئیچ و احراز هویت تمام مدیران.">Goal: Identify the switch and authenticate every administrator.</p>
+<p  data-en="Security risk: Shared passwords and anonymous privileged access prevent accountability." data-fa="ریسک امنیتی: رمز مشترک و دسترسی ممتاز بدون هویت، پاسخ‌گویی را از بین می‌برد.">Security risk: Shared passwords and anonymous privileged access prevent accountability.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">hostname &lt;HOSTNAME&gt;
+no ip domain-lookup
+ip domain-name &lt;DOMAIN.LOCAL&gt;
+username &lt;ADMIN&gt; privilege 15 secret &lt;STRONG-PASSWORD&gt;
+aaa new-model
+aaa authentication login default local
+aaa authorization exec default local</code></pre>
+<p  data-en="Operation: hostname and domain identify the device; no ip domain-lookup prevents unintended DNS lookups. AAA uses the local user database for login and exec authorization." data-fa="نحوه عملکرد: hostname و Domain هویت دستگاه‌اند؛ no ip domain-lookup از DNS Lookup ناخواسته جلوگیری می‌کند. AAA احراز هویت Login و مجوز Exec را از دیتابیس محلی می‌گیرد.">Operation: hostname and domain identify the device; no ip domain-lookup prevents unintended DNS lookups. AAA uses the local user database for login and exec authorization.</p>
+<p  data-en="Verification: Open a second SSH session and confirm the expected privilege with show privilege; inspect show running-config and show users." data-fa="اعتبارسنجی: SSH دوم باز کنید؛ با show privilege سطح دسترسی و با show running-config و show users تنظیمات و Session را بررسی کنید.">Verification: Open a second SSH session and confirm the expected privilege with show privilege; inspect show running-config and show users.</p>
+<p  data-en="Production: Create and test the emergency local account before enabling AAA. Enterprise environments should use TACACS+ or RADIUS with centralized policy and accounting; keep the local account in a vault and test fallback during server outage. A local method after a server group normally runs on server error/unavailability, not a deliberate authentication rejection." data-fa="نکات Production: پیش از فعال‌سازی AAA حساب Emergency محلی را بسازید و تست کنید. در Enterprise از TACACS+ یا RADIUS با Policy و Accounting مرکزی استفاده کنید؛ حساب محلی در Vault باقی بماند و Fallback هنگام قطعی سرور تست شود. Local بعد از Server Group معمولاً در خطا یا عدم دسترسی سرور اجرا می‌شود، نه Reject عمدی احراز هویت.">Production: Create and test the emergency local account before enabling AAA. Enterprise environments should use TACACS+ or RADIUS with centralized policy and accounting; keep the local account in a vault and test fallback during server outage. A local method after a server group normally runs on server error/unavailability, not a deliberate authentication rejection.</p>
+<pre dir="ltr"><code class="language-cisco">! Prefer Type 9 if supported; use instead of the generic username above
+username &lt;ADMIN&gt; privilege 15 algorithm-type scrypt secret &lt;STRONG-PASSWORD&gt;
+! Type 8 alternative: choose one algorithm, not both
+! username &lt;ADMIN&gt; privilege 15 algorithm-type sha256 secret &lt;STRONG-PASSWORD&gt;</code></pre>
+<p  data-en="Type 8 is PBKDF2-SHA-256; Type 9 uses scrypt. Never put plaintext after secret 8 or secret 9: those forms expect an encoded hash. The generic secret command may produce a weaker type on old IOS; inspect the stored type. service password-encryption Type 7 is reversible and is not a substitute. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="Type 8 از PBKDF2-SHA-256 و Type 9 از scrypt استفاده می‌کند. بعد از secret 8 یا secret 9 متن ساده وارد نکنید؛ این Syntax نیازمند Hash آماده است. secret عمومی در IOS قدیمی ممکن است Type ضعیف‌تر تولید کند؛ Type ذخیره‌شده را بررسی کنید. Type 7 در service password-encryption برگشت‌پذیر است و جایگزین Hash امن نیست. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">Type 8 is PBKDF2-SHA-256; Type 9 uses scrypt. Never put plaintext after secret 8 or secret 9: those forms expect an encoded hash. The generic secret command may produce a weaker type on old IOS; inspect the stored type. service password-encryption Type 7 is reversible and is not a substitute. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+</section>
+<section id="ssh"><h2  data-en="3. SSH Hardening" data-fa="۳. امنیت SSH">3. SSH Hardening</h2>
+<p  data-en="Goal: Permit SSHv2 administration from approved source networks only." data-fa="هدف: مدیریت SSHv2 فقط از مبدأ مجاز.">Goal: Permit SSHv2 administration from approved source networks only.</p>
+<p  data-en="Security risk: Telnet exposes credentials; an unrestricted VTY permits remote guessing." data-fa="ریسک امنیتی: Telnet رمز را افشا می‌کند و VTY بدون محدودیت امکان حدس رمز را می‌دهد.">Security risk: Telnet exposes credentials; an unrestricted VTY permits remote guessing.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">crypto key generate rsa modulus 2048
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+ip access-list standard MGMT-SSH
+ permit &lt;ADMIN-SUBNET&gt; &lt;WILDCARD&gt;
+ deny any log
+exit
+line vty 0 15
+ login authentication default
+ transport input ssh
+ exec-timeout 10 0
+ access-class MGMT-SSH in
+exit
+line console 0
+ login authentication default
+ exec-timeout 10 0
+ logging synchronous
+exit</code></pre>
+<p  data-en="Operation: transport input ssh excludes Telnet on the covered VTY lines. The access-class checks the actual source IP seen by the switch; exec-timeout closes idle sessions. Console logging synchronous improves usability, not security." data-fa="نحوه عملکرد: transport input ssh روی VTYهای تحت پوشش Telnet را حذف می‌کند. access-class مبدأ واقعی مشاهده‌شده را کنترل می‌کند؛ exec-timeout نشست بی‌کار را می‌بندد. logging synchronous روی Console صرفاً خوانایی را بهتر می‌کند.">Operation: transport input ssh excludes Telnet on the covered VTY lines. The access-class checks the actual source IP seen by the switch; exec-timeout closes idle sessions. Console logging synchronous improves usability, not security.</p>
+<p  data-en="Verification: show ip ssh must report version 2. Test SSH from permitted and denied hosts and confirm Telnet fails; inspect all VTY ranges." data-fa="اعتبارسنجی: show ip ssh باید نسخه ۲ نشان دهد. SSH را از میزبان مجاز و غیرمجاز تست کنید؛ Telnet باید رد شود و همه Rangeهای VTY بررسی شوند.">Verification: show ip ssh must report version 2. Test SSH from permitted and denied hosts and confirm Telnet fails; inspect all VTY ranges.</p>
+<p  data-en="Production: Keep the current session and console open while testing a fresh login. Add jump-host/NAT sources before applying the ACL. Do not regenerate working RSA keys without scheduling host-key changes. A 2048-bit key is the example minimum; use the approved supported key size and SSH algorithms." data-fa="نکات Production: تا زمان تست Login جدید، Session فعلی و Console باز بماند. مبدأ Jump Host یا NAT را پیش از اعمال ACL مجاز کنید. کلید RSA موجود را بدون برنامه تغییر Host Key دوباره نسازید. ۲۰۴۸ بیت حداقل نمونه است؛ اندازه کلید و الگوریتم SSH مصوب و پشتیبانی‌شده را انتخاب کنید.">Production: Keep the current session and console open while testing a fresh login. Add jump-host/NAT sources before applying the ACL. Do not regenerate working RSA keys without scheduling host-key changes. A 2048-bit key is the example minimum; use the approved supported key size and SSH algorithms.</p>
+<p  data-en="Some switches expose only VTY 0–4, others more than 15. Apply policy to every existing VTY. RSA generation and SSH cipher/MAC controls vary by crypto image and release; modern policy may need additional algorithm restrictions. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="بعضی سوئیچ‌ها فقط VTY 0 تا 4 و بعضی بیش از 15 دارند؛ Policy باید همه VTYهای موجود را پوشش دهد. ساخت RSA و کنترل Cipher/MAC به Crypto Image و نسخه وابسته است؛ Policy جدید ممکن است محدودیت الگوریتم بیشتری بخواهد. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">Some switches expose only VTY 0–4, others more than 15. Apply policy to every existing VTY. RSA generation and SSH cipher/MAC controls vary by crypto image and release; modern policy may need additional algorithm restrictions. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+</section>
+<section id="services"><h2  data-en="4. Disable Unnecessary Services" data-fa="۴. غیرفعال‌سازی سرویس غیرضروری">4. Disable Unnecessary Services</h2>
+<p  data-en="Goal: Reduce unused management and packet-processing exposure." data-fa="هدف: کاهش سطح حمله سرویس مدیریت و پردازش غیرضروری.">Goal: Reduce unused management and packet-processing exposure.</p>
+<p  data-en="Security risk: Unused HTTP interfaces and legacy functions add attack surface." data-fa="ریسک امنیتی: HTTP بلااستفاده و قابلیت Legacy سطح حمله اضافه می‌کنند.">Security risk: Unused HTTP interfaces and legacy functions add attack surface.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">no ip http server
+no ip http secure-server
+no service pad
+no ip source-route</code></pre>
+<p  data-en="Operation: The first two commands disable HTTP and HTTPS management servers. no service pad disables legacy X.25 PAD; no ip source-route rejects IPv4 source-route processing." data-fa="نحوه عملکرد: دو فرمان اول HTTP و HTTPS مدیریتی را غیرفعال می‌کنند. no service pad قابلیت قدیمی X.25 PAD را می‌بندد؛ no ip source-route پردازش Source Routing در IPv4 را منع می‌کند.">Operation: The first two commands disable HTTP and HTTPS management servers. no service pad disables legacy X.25 PAD; no ip source-route rejects IPv4 source-route processing.</p>
+<p  data-en="Verification: Inspect show running-config and, if supported, show ip http server status. Verify the switch no longer accepts web-management connections." data-fa="اعتبارسنجی: show running-config و در صورت پشتیبانی show ip http server status را بررسی کنید؛ اتصال وب مدیریتی باید بسته باشد.">Verification: Inspect show running-config and, if supported, show ip http server status. Verify the switch no longer accepts web-management connections.</p>
+<p  data-en="Production: Disabling HTTPS can interrupt WebUI and HTTP-based automation such as RESTCONF. Inventory those dependencies first. Missing no commands in show running-config can indicate defaults; verify operational state." data-fa="نکات Production: بستن HTTPS می‌تواند WebUI و Automation وابسته به HTTP مانند RESTCONF را قطع کند؛ ابتدا وابستگی‌ها را بررسی کنید. نبودن فرمان no در Running ممکن است به معنی Default باشد؛ وضعیت عملیاتی را تست کنید.">Production: Disabling HTTPS can interrupt WebUI and HTTP-based automation such as RESTCONF. Inventory those dependencies first. Missing no commands in show running-config can indicate defaults; verify operational state.</p>
+<p  data-en="PAD is a legacy/obsolete feature, unavailable or deprecated in some Catalyst images. Source-route and HTTP commands also require matching platform documentation; do not assume every old IOS knob exists in current IOS XE. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="PAD قابلیت منسوخ عملیاتی است و در بعضی Imageهای Catalyst موجود نیست یا Deprecated است. فرمان Source Route و HTTP نیز باید با مستندات پلتفرم تطبیق داده شود؛ همه تنظیمات قدیمی IOS در IOS XE جدید وجود ندارند. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">PAD is a legacy/obsolete feature, unavailable or deprecated in some Catalyst images. Source-route and HTTP commands also require matching platform documentation; do not assume every old IOS knob exists in current IOS XE. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+</section>
+<section id="l2"><h2  data-en="5. Layer 2 Switch Hardening" data-fa="۵. هاردنینگ سوئیچ لایه ۲">5. Layer 2 Switch Hardening</h2>
+<figure><img src="/assets/img/articles/content/Layer 2 Switch Security Infographic.png" alt="Layer 2 security controls for Cisco Catalyst access switches" width="1672" height="941" loading="lazy" decoding="async"><figcaption><span  data-en="Layer 2 security controls for Cisco Catalyst access switches" data-fa="کنترل‌های امنیت لایهٔ ۲ برای سوئیچ‌های Access در Cisco Catalyst">Layer 2 security controls for Cisco Catalyst access switches</span></figcaption></figure>
+<p  data-en="Goal: Provide a management endpoint without inter-VLAN routing on the access switch." data-fa="هدف: ایجاد Endpoint مدیریتی بدون Routing بین VLANها در Access.">Goal: Provide a management endpoint without inter-VLAN routing on the access switch.</p>
+<p  data-en="Security risk: Accidental routing changes the security boundary; an unreachable SVI prevents management." data-fa="ریسک امنیتی: Routing ناخواسته مرز امنیت را تغییر می‌دهد و SVI قطع، مدیریت را متوقف می‌کند.">Security risk: Accidental routing changes the security boundary; an unreachable SVI prevents management.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">vlan &lt;MGMT-VLAN&gt;
+ name MANAGEMENT
+exit
+interface Vlan&lt;MGMT-VLAN&gt;
+ ip address &lt;MGMT-IP&gt; &lt;MASK&gt;
+ no shutdown
+exit
+no ip routing
+ip default-gateway &lt;GATEWAY&gt;</code></pre>
+<p  data-en="Operation: The SVI terminates management traffic. ip default-gateway serves locally originated off-subnet traffic while routing is disabled." data-fa="نحوه عملکرد: SVI ترافیک مدیریتی دستگاه را خاتمه می‌دهد. در حالت Routing غیرفعال، ip default-gateway مسیر ترافیک تولیدشده دستگاه به خارج Subnet است.">Operation: The SVI terminates management traffic. ip default-gateway serves locally originated off-subnet traffic while routing is disabled.</p>
+<p  data-en="Verification: show ip interface brief should show management up/up; test same-subnet and routed administrator access." data-fa="اعتبارسنجی: SVI مدیریت در show ip interface brief باید up/up باشد؛ دسترسی مدیر داخل و خارج Subnet را تست کنید.">Verification: show ip interface brief should show management up/up; test same-subnet and routed administrator access.</p>
+<p  data-en="Production: The VLAN must exist and normally have an active forwarding member/trunk. no ip routing belongs only to the L2 role. The complete standalone access template is in section 22." data-fa="نکات Production: VLAN باید وجود داشته و معمولاً Member یا Trunk فعال در حالت Forwarding داشته باشد. no ip routing فقط متعلق به نقش L2 است. قالب کامل مستقل Access در بخش ۲۲ قرار دارد.">Production: The VLAN must exist and normally have an active forwarding member/trunk. no ip routing belongs only to the L2 role. The complete standalone access template is in section 22.</p>
+</section>
+<section id="dhcp"><h2  data-en="6. DHCP Snooping" data-fa="۶. DHCP Snooping">6. DHCP Snooping</h2>
+<p  data-en="Goal: Accept DHCP server messages only across the approved boundary." data-fa="هدف: پذیرش پیام DHCP Server فقط از مرز مجاز.">Goal: Accept DHCP server messages only across the approved boundary.</p>
+<p  data-en="Security risk: A rogue server can assign a malicious gateway or DNS server." data-fa="ریسک امنیتی: DHCP Rogue می‌تواند Gateway یا DNS مخرب تحویل دهد.">Security risk: A rogue server can assign a malicious gateway or DNS server.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">ip dhcp snooping
+ip dhcp snooping vlan &lt;USER-VLANS&gt;
+no ip dhcp snooping information option
+interface &lt;UPLINK&gt;
+ ip dhcp snooping trust
+exit
+interface range &lt;ACCESS-PORTS&gt;
+ ip dhcp snooping limit rate &lt;RATE&gt;
+exit</code></pre>
+<p  data-en="Operation: Untrusted endpoint ports cannot originate accepted server replies. Snooping builds IP/MAC/VLAN/port lease bindings for downstream controls. trust applies to ingress, not a port label." data-fa="نحوه عملکرد: پاسخ Server از پورت کاربر Untrusted پذیرفته نمی‌شود. Snooping نگاشت Lease شامل IP/MAC/VLAN/Port را برای کنترل‌های بعدی می‌سازد. trust به ترافیک ورودی مربوط است، نه نام پورت.">Operation: Untrusted endpoint ports cannot originate accepted server replies. Snooping builds IP/MAC/VLAN/port lease bindings for downstream controls. trust applies to ingress, not a port label.</p>
+<p  data-en="Verification: show ip dhcp snooping: correct VLANs and only approved trusted interfaces; show ip dhcp snooping binding: leases for DHCP endpoints after renew." data-fa="اعتبارسنجی: در show ip dhcp snooping فقط VLAN و پورت Trusted مجاز دیده شود؛ پس از Renew، جدول show ip dhcp snooping binding باید Lease کاربران را داشته باشد.">Verification: show ip dhcp snooping: correct VLANs and only approved trusted interfaces; show ip dhcp snooping binding: leases for DHCP endpoints after renew.</p>
+<p  data-en="Production: Never trust an endpoint port merely to fix DHCP. Choose rate from boot storms, phone+PC and downstream fan-out; a low limit can err-disable a port. Disabling Option 82 is a compatibility choice here, not a universal security requirement; preserve it where relay/server policy relies on it." data-fa="نکات Production: برای رفع DHCP، پورت کاربر را Trusted نکنید. Rate را با Boot Storm، Phone+PC و تعداد میزبان پایین‌دست تعیین کنید؛ حد پایین می‌تواند پورت را err-disable کند. حذف Option 82 در این مثال انتخاب سازگاری است، نه الزام عمومی؛ اگر Policy سرور/Relay به آن وابسته است حفظ شود.">Production: Never trust an endpoint port merely to fix DHCP. Choose rate from boot storms, phone+PC and downstream fan-out; a low limit can err-disable a port. Disabling Option 82 is a compatibility choice here, not a universal security requirement; preserve it where relay/server policy relies on it.</p>
+<p  data-en="Validate rate units and EtherChannel behavior. Plan supported DHCP snooping database persistence and reload/stack failover recovery before DAI/IPSG; dynamic bindings may be lost on reload. Verify database agent status and test renew before enforcing dependent filters. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="واحد Rate و رفتار EtherChannel را بررسی کنید. پیش از DAI/IPSG برای ذخیره پایدار دیتابیس و بازیابی Reload یا Stack Failover برنامه داشته باشید؛ Binding پویا ممکن است پس از Reload از دست برود. وضعیت Database Agent و Renew را پیش از اعمال فیلتر وابسته تست کنید. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">Validate rate units and EtherChannel behavior. Plan supported DHCP snooping database persistence and reload/stack failover recovery before DAI/IPSG; dynamic bindings may be lost on reload. Verify database agent status and test renew before enforcing dependent filters. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+</section>
+<section id="dai"><h2  data-en="7. Dynamic ARP Inspection" data-fa="۷. Dynamic ARP Inspection">7. Dynamic ARP Inspection</h2>
+<p  data-en="Goal: Validate ARP on user-facing VLANs." data-fa="هدف: اعتبارسنجی ARP در VLAN کاربر.">Goal: Validate ARP on user-facing VLANs.</p>
+<p  data-en="Security risk: ARP spoofing redirects or intercepts local traffic." data-fa="ریسک امنیتی: ARP Spoofing ترافیک محلی را منحرف یا شنود می‌کند.">Security risk: ARP spoofing redirects or intercepts local traffic.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">ip arp inspection vlan &lt;USER-VLANS&gt;
+interface &lt;UPLINK&gt;
+ ip arp inspection trust
+exit</code></pre>
+<p  data-en="Operation: Untrusted ingress ARP is checked against DHCP snooping bindings or configured ARP ACLs. Trusted ingress bypasses inspection; select that boundary separately from DHCP trust." data-fa="نحوه عملکرد: ARP ورودی Untrusted با Binding DHCP یا ARP ACL بررسی می‌شود. ورودی Trusted از Inspection عبور می‌کند؛ این مرز را مستقل از DHCP Trust انتخاب کنید.">Operation: Untrusted ingress ARP is checked against DHCP snooping bindings or configured ARP ACLs. Trusted ingress bypasses inspection; select that boundary separately from DHCP trust.</p>
+<p  data-en="Verification: show ip arp inspection and show ip arp inspection interfaces: enabled VLANs, trust and rates; test ARP and inspect drop counters." data-fa="اعتبارسنجی: show ip arp inspection و show ip arp inspection interfaces باید VLAN فعال، Trust و Rate صحیح نشان دهند؛ ARP و شمارنده Drop را تست کنید.">Verification: show ip arp inspection and show ip arp inspection interfaces: enabled VLANs, trust and rates; test ARP and inspect drop counters.</p>
+<p  data-en="Production: Static hosts require explicit allowances before enabling DAI. Do not trust every inter-switch link: a downstream switch may carry attackers. ARP bursts and aggregated links require measured limits and error-disable monitoring." data-fa="نکات Production: میزبان Static پیش از فعال‌سازی DAI به مجوز صریح نیاز دارد. هر لینک بین سوئیچی را Trusted نکنید؛ سوئیچ پایین‌دست ممکن است مهاجم داشته باشد. Burst ARP و لینک تجمیعی نیازمند Rate اندازه‌گیری‌شده و مانیتور err-disable است.">Production: Static hosts require explicit allowances before enabling DAI. Do not trust every inter-switch link: a downstream switch may carry attackers. ARP bursts and aggregated links require measured limits and error-disable monitoring.</p>
+<pre dir="ltr"><code class="language-cisco">arp access-list STATIC-HOSTS
+ permit ip host 10.10.10.50 mac host 0011.2233.4455
+exit
+ip arp inspection filter STATIC-HOSTS vlan 10</code></pre>
+<p  data-en="The ARP ACL above is illustrative: replace the IP/MAC with inventory. Without the static keyword, unmatched ARP can fall back to DHCP bindings; with static, unmatched hosts are denied rather than checked against bindings. Explicit deny entries also override bindings. Test mixed static/DHCP populations. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="ARP ACL نمونه است؛ IP/MAC را از Inventory جایگزین کنید. بدون کلیدواژه static، ARP تطبیق‌نیافته می‌تواند با Binding DHCP بررسی شود؛ با static، میزبان تطبیق‌نیافته به جای بررسی Binding رد می‌شود. Deny صریح بر Binding نیز تقدم دارد. ترکیب Static و DHCP را تست کنید. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">The ARP ACL above is illustrative: replace the IP/MAC with inventory. Without the static keyword, unmatched ARP can fall back to DHCP bindings; with static, unmatched hosts are denied rather than checked against bindings. Explicit deny entries also override bindings. Test mixed static/DHCP populations. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+</section>
+<section id="ipsg"><h2  data-en="8. IP Source Guard" data-fa="۸. IP Source Guard">8. IP Source Guard</h2>
+<p  data-en="Goal: Bind endpoint IPv4 source addresses to access ports." data-fa="هدف: محدودسازی IP مبدأ کاربر به پورت مجاز.">Goal: Bind endpoint IPv4 source addresses to access ports.</p>
+<p  data-en="Security risk: Source spoofing bypasses address-based policy." data-fa="ریسک امنیتی: جعل IP مبدأ Policy مبتنی بر آدرس را دور می‌زند.">Security risk: Source spoofing bypasses address-based policy.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">interface range &lt;ACCESS-PORTS&gt;
+ ip verify source
+exit</code></pre>
+<p  data-en="Operation: This IP-only example programs source filters from DHCP snooping or manual bindings on suitable Layer 2 switchports; it is not a routed-SVI ACL." data-fa="نحوه عملکرد: این نمونه IP-only روی Switchport لایه ۲ مناسب از Binding DHCP یا نگاشت دستی فیلتر مبدأ می‌سازد؛ ACL روی SVI Routed نیست.">Operation: This IP-only example programs source filters from DHCP snooping or manual bindings on suitable Layer 2 switchports; it is not a routed-SVI ACL.</p>
+<p  data-en="Verification: show ip verify source and show ip dhcp snooping binding: the expected IP/VLAN/interface appears; verify legitimate traffic and controlled spoofed traffic in a lab." data-fa="اعتبارسنجی: show ip verify source و show ip dhcp snooping binding باید IP/VLAN/Port صحیح نشان دهند؛ ترافیک مجاز و جعل کنترل‌شده را در Lab تست کنید.">Verification: show ip verify source and show ip dhcp snooping binding: the expected IP/VLAN/interface appears; verify legitimate traffic and controlled spoofed traffic in a lab.</p>
+<p  data-en="Production: Do not enable this block on static servers, printers, AP uplinks or infrastructure ports without a supported binding design. An empty table can block legitimate IP traffic." data-fa="نکات Production: این بلوک را بدون طراحی Binding پشتیبانی‌شده روی Server، Printer، AP Uplink یا پورت زیرساخت Static فعال نکنید. جدول خالی می‌تواند IP مجاز را مسدود کند.">Production: Do not enable this block on static servers, printers, AP uplinks or infrastructure ports without a supported binding design. An empty table can block legitimate IP traffic.</p>
+<pre dir="ltr"><code class="language-cisco">ip source binding &lt;STATIC-MAC&gt; vlan &lt;STATIC-VLAN&gt; &lt;STATIC-IP&gt; interface &lt;STATIC-PORT&gt;</code></pre>
+<p  data-en="Static binding and device-tracking-based IPSG are platform-specific alternatives; static ARP allowances alone do not automatically provide an IPSG binding. Check TCAM capacity and voice/data behavior. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="Binding دستی و IPSG مبتنی بر Device Tracking گزینه‌های وابسته به پلتفرم‌اند؛ ARP ACL به‌تنهایی Binding برای IPSG ایجاد نمی‌کند. ظرفیت TCAM و رفتار Voice/Data بررسی شود. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">Static binding and device-tracking-based IPSG are platform-specific alternatives; static ARP allowances alone do not automatically provide an IPSG binding. Check TCAM capacity and voice/data behavior. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+</section>
+<section id="stp"><h2  data-en="9. STP Hardening" data-fa="۹. هاردنینگ STP">9. STP Hardening</h2>
+<p  data-en="Goal: Preserve the intended root and block accidental edge switches." data-fa="هدف: حفظ Root طراحی‌شده و جلوگیری از سوئیچ ناخواسته در Edge.">Goal: Preserve the intended root and block accidental edge switches.</p>
+<p  data-en="Security risk: Unexpected BPDUs or missing BPDUs can create topology changes and loops." data-fa="ریسک امنیتی: BPDU غیرمنتظره یا قطع BPDU می‌تواند تغییر توپولوژی یا Loop ایجاد کند.">Security risk: Unexpected BPDUs or missing BPDUs can create topology changes and loops.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">spanning-tree mode rapid-pvst
+spanning-tree portfast bpduguard default
+interface range &lt;ACCESS-PORTS&gt;
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+exit
+! Only on a reviewed downstream boundary
+! interface &lt;ROOT-GUARD-PORT&gt;
+!  spanning-tree guard root</code></pre>
+<p  data-en="Operation: Global BPDU Guard protects operational PortFast ports; explicit interface BPDU Guard rejects any received BPDU on that edge port. Root Guard blocks superior BPDUs on reviewed designated boundaries." data-fa="نحوه عملکرد: BPDU Guard سراسری پورت PortFast عملیاتی را حفاظت می‌کند؛ تنظیم صریح اینترفیس هر BPDU ورودی آن Edge را رد می‌کند. Root Guard روی مرز Designated بررسی‌شده Superior BPDU را مسدود می‌کند.">Operation: Global BPDU Guard protects operational PortFast ports; explicit interface BPDU Guard rejects any received BPDU on that edge port. Root Guard blocks superior BPDUs on reviewed designated boundaries.</p>
+<p  data-en="Verification: show spanning-tree and show spanning-tree inconsistentports: expected root and no unexplained inconsistent ports; inspect err-disabled interfaces for BPDU Guard." data-fa="اعتبارسنجی: show spanning-tree و show spanning-tree inconsistentports باید Root مورد انتظار و نبود Inconsistent غیرعادی را نشان دهند؛ err-disabled ناشی از BPDU Guard را بررسی کنید.">Verification: show spanning-tree and show spanning-tree inconsistentports: expected root and no unexplained inconsistent ports; inspect err-disabled interfaces for BPDU Guard.</p>
+<p  data-en="Production: Changing STP mode is a topology change; preserve MST where designed. Never enable PortFast/BPDU Guard blindly on switch uplinks. Place root priorities deliberately on the core/distribution. Root Guard is not an all-trunk default." data-fa="نکات Production: تغییر STP Mode تغییر توپولوژی است؛ در طراحی MST آن را حفظ کنید. PortFast/BPDU Guard را کورکورانه روی Uplink سوئیچ فعال نکنید. Priority Root در Core/Distribution آگاهانه تعیین شود. Root Guard تنظیم پیش‌فرض همه Trunkها نیست.">Production: Changing STP mode is a topology change; preserve MST where designed. Never enable PortFast/BPDU Guard blindly on switch uplinks. Place root priorities deliberately on the core/distribution. Root Guard is not an all-trunk default.</p>
+<table><thead><tr><th  data-en="Guard" data-fa="محافظ">Guard</th><th  data-en="Placement / trigger" data-fa="محل / محرک">Placement / trigger</th><th  data-en="Result / recovery" data-fa="نتیجه / بازیابی">Result / recovery</th></tr></thead><tbody><tr><td  data-en="BPDU Guard" data-fa="BPDU Guard">BPDU Guard</td><td  data-en="Endpoint edge; any BPDU" data-fa="Edge کاربر؛ هر BPDU">Endpoint edge; any BPDU</td><td  data-en="Err-disable; investigate then recover" data-fa="Err-disable؛ بررسی علت و بازیابی">Err-disable; investigate then recover</td></tr><tr><td  data-en="Root Guard" data-fa="Root Guard">Root Guard</td><td  data-en="Designated downstream boundary; superior BPDU" data-fa="مرز پایین‌دست Designated؛ BPDU برتر">Designated downstream boundary; superior BPDU</td><td  data-en="Root-inconsistent; automatic recovery after superior BPDUs stop" data-fa="Root-inconsistent؛ بازیابی خودکار پس از توقف BPDU برتر">Root-inconsistent; automatic recovery after superior BPDUs stop</td></tr><tr><td  data-en="Loop Guard" data-fa="Loop Guard">Loop Guard</td><td  data-en="Non-edge root/alternate ports; expected BPDUs disappear" data-fa="Root/Alternate غیر Edge؛ توقف BPDU مورد انتظار">Non-edge root/alternate ports; expected BPDUs disappear</td><td  data-en="Loop-inconsistent; recovery when BPDUs resume" data-fa="Loop-inconsistent؛ بازیابی با بازگشت BPDU">Loop-inconsistent; recovery when BPDUs resume</td></tr></tbody></table>
+<p  data-en="Loop Guard uses spanning-tree guard loop on selected ports; Root Guard and Loop Guard must not be combined on the same interface. PortFast edge syntax varies by release; match the existing STP design. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="Loop Guard با spanning-tree guard loop روی پورت منتخب اعمال می‌شود؛ Root Guard و Loop Guard را روی یک اینترفیس ترکیب نکنید. Syntax PortFast edge به نسخه وابسته است؛ طراحی موجود را رعایت کنید. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">Loop Guard uses spanning-tree guard loop on selected ports; Root Guard and Loop Guard must not be combined on the same interface. PortFast edge syntax varies by release; match the existing STP design. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+</section>
+<section id="port-security"><h2  data-en="10. Port Security" data-fa="۱۰. Port Security">10. Port Security</h2>
+<p  data-en="Goal: Limit learned endpoint MAC identities on selected access ports." data-fa="هدف: محدودسازی MACهای یادگرفته‌شده روی Access منتخب.">Goal: Limit learned endpoint MAC identities on selected access ports.</p>
+<p  data-en="Security risk: Uncontrolled MAC learning permits unauthorized attachment and table pressure." data-fa="ریسک امنیتی: یادگیری نامحدود MAC اتصال غیرمجاز و فشار جدول ایجاد می‌کند.">Security risk: Uncontrolled MAC learning permits unauthorized attachment and table pressure.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">interface range &lt;ACCESS-PORTS&gt;
+ switchport mode access
+ switchport port-security
+ switchport port-security maximum 3
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+exit</code></pre>
+<p  data-en="Operation: Sticky MACs are learned into running configuration. They persist after reboot only when saved. This limits attachment, but MAC addresses can be spoofed; it is not user authentication." data-fa="نحوه عملکرد: Sticky MAC در Running ثبت می‌شود و فقط با Save پس از Reboot باقی می‌ماند. این کنترل اتصال را محدود می‌کند اما MAC قابل جعل است و احراز هویت کاربر نیست.">Operation: Sticky MACs are learned into running configuration. They persist after reboot only when saved. This limits attachment, but MAC addresses can be spoofed; it is not user authentication.</p>
+<p  data-en="Verification: show port-security and show port-security interface &lt;INTERFACE&gt;: expected maximum, secure MACs and violation count." data-fa="اعتبارسنجی: show port-security و show port-security interface &lt;INTERFACE&gt; باید Maximum، MAC مجاز و شمارنده Violation صحیح داشته باشند.">Verification: show port-security and show port-security interface &lt;INTERFACE&gt;: expected maximum, secure MACs and violation count.</p>
+<p  data-en="Production: Maximum 3 is an example, not a phone policy. Count phone, attached PC and voice/data VLAN learning; test boot and replacement. APs, hypervisors, downstream switches, EtherChannels and 802.1X/MAB designs require separate support/design review. Remove stale sticky entries through a controlled replacement process." data-fa="نکات Production: Maximum برابر ۳ فقط مثال است. MAC تلفن، PC متصل و یادگیری Voice/Data را شمارش و Boot و تعویض را تست کنید. AP، Hypervisor، سوئیچ پایین‌دست، EtherChannel و طراحی 802.1X/MAB نیازمند بررسی جداگانه است. Sticky قدیمی را در فرایند تعویض کنترل‌شده پاک کنید.">Production: Maximum 3 is an example, not a phone policy. Count phone, attached PC and voice/data VLAN learning; test boot and replacement. APs, hypervisors, downstream switches, EtherChannels and 802.1X/MAB designs require separate support/design review. Remove stale sticky entries through a controlled replacement process.</p>
+<table><thead><tr><th  data-en="Mode" data-fa="حالت">Mode</th><th  data-en="Effect" data-fa="عملکرد">Effect</th></tr></thead><tbody><tr><td  data-en="Protect" data-fa="Protect">Protect</td><td  data-en="Drops violating traffic without normal violation notifications" data-fa="Drop ترافیک متخلف بدون اعلان معمول Violation">Drops violating traffic without normal violation notifications</td></tr><tr><td  data-en="Restrict" data-fa="Restrict">Restrict</td><td  data-en="Drops violating traffic; increments counters and generates notifications" data-fa="Drop همراه شمارنده و اعلان">Drops violating traffic; increments counters and generates notifications</td></tr><tr><td  data-en="Shutdown" data-fa="Shutdown">Shutdown</td><td  data-en="Err-disables the port; restore only after investigating" data-fa="پورت را err-disable می‌کند؛ بازیابی پس از بررسی علت">Err-disables the port; restore only after investigating</td></tr></tbody></table>
+<p  data-en="Port Security support and interactions differ across Catalyst interface types, authentication modes and software releases. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="پشتیبانی Port Security و تعامل آن با نوع پورت، حالت احراز هویت و نسخه متفاوت است. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">Port Security support and interactions differ across Catalyst interface types, authentication modes and software releases. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+</section>
+<section id="storm"><h2  data-en="11. Storm Control" data-fa="۱۱. Storm Control">11. Storm Control</h2>
+<p  data-en="Goal: Contain broadcast and multicast storms at the edge." data-fa="هدف: مهار Storm پخش همگانی و Multicast در Edge.">Goal: Contain broadcast and multicast storms at the edge.</p>
+<p  data-en="Security risk: A loop or faulty endpoint can exhaust link and switch resources." data-fa="ریسک امنیتی: Loop یا Endpoint معیوب می‌تواند لینک و منابع سوئیچ را اشباع کند.">Security risk: A loop or faulty endpoint can exhaust link and switch resources.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">interface range &lt;ACCESS-PORTS&gt;
+ storm-control broadcast level 1.00 0.50
+ storm-control multicast level 2.00 1.00
+ storm-control action trap
+exit</code></pre>
+<p  data-en="Operation: The sample uses rising/falling percentages of interface bandwidth: 1%/0.5% broadcast and 2%/1% multicast. Suppression drops the affected traffic; action trap adds notification, not trap-only monitoring." data-fa="نحوه عملکرد: مثال از درصد پهنای باند برای آستانه صعود/نزول استفاده می‌کند: Broadcast برابر ۱٪/۰٫۵٪ و Multicast برابر ۲٪/۱٪. Suppression ترافیک مربوط را Drop می‌کند؛ action trap اعلان اضافه می‌کند و به معنی صرفاً مانیتورینگ نیست.">Operation: The sample uses rising/falling percentages of interface bandwidth: 1%/0.5% broadcast and 2%/1% multicast. Suppression drops the affected traffic; action trap adds notification, not trap-only monitoring.</p>
+<p  data-en="Verification: show storm-control, counters and receiver telemetry should agree with measured traffic. Confirm the release-specific SNMP storm trap enablement and delivery." data-fa="اعتبارسنجی: show storm-control، شمارنده و Telemetry مقصد باید با ترافیک اندازه‌گیری‌شده سازگار باشند. فعال‌سازی و تحویل SNMP Trap مخصوص Storm را برای نسخه بررسی کنید.">Verification: show storm-control, counters and receiver telemetry should agree with measured traffic. Confirm the release-specific SNMP storm trap enablement and delivery.</p>
+<p  data-en="Production: Fixed thresholds are not suitable for every port. Baseline multicast video, discovery, backups and phone boots; start with a small pilot. Percentage on a 10G link permits much more traffic than on 1G." data-fa="نکات Production: آستانه ثابت برای همه پورت‌ها مناسب نیست. Multicast Video، Discovery، Backup و Boot تلفن را Baseline بگیرید و Pilot کوچک اجرا کنید. درصد یکسان روی 10G ترافیک بسیار بیشتری از 1G اجازه می‌دهد.">Production: Fixed thresholds are not suitable for every port. Baseline multicast video, discovery, backups and phone boots; start with a small pilot. Percentage on a 10G link permits much more traffic than on 1G.</p>
+<p  data-en="Supported traffic types, pps/bps units and EtherChannel measurement vary by platform. Verify storm-control action and trap behavior before relying on alerts. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="نوع ترافیک پشتیبانی‌شده، واحد pps/bps و اندازه‌گیری EtherChannel به پلتفرم وابسته است؛ رفتار Action و Trap پیش از اتکا به هشدار تست شود. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">Supported traffic types, pps/bps units and EtherChannel measurement vary by platform. Verify storm-control action and trap behavior before relying on alerts. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+</section>
+<section id="trunk"><h2  data-en="12. Trunk Hardening" data-fa="۱۲. هاردنینگ Trunk">12. Trunk Hardening</h2>
+<p  data-en="Goal: Make VLAN transport explicit between switches." data-fa="هدف: تعریف صریح VLAN مجاز بین سوئیچ‌ها.">Goal: Make VLAN transport explicit between switches.</p>
+<p  data-en="Security risk: DTP negotiation, excess allowed VLANs and native mismatches expand exposure." data-fa="ریسک امنیتی: DTP، VLAN اضافی و Native Mismatch سطح دسترسی را افزایش می‌دهند.">Security risk: DTP negotiation, excess allowed VLANs and native mismatches expand exposure.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">interface &lt;UPLINK&gt;
+ switchport mode trunk
+ switchport trunk native vlan &lt;NATIVE-VLAN&gt;
+ switchport trunk allowed vlan &lt;VLAN-LIST&gt;
+ switchport nonegotiate
+exit</code></pre>
+<p  data-en="Operation: Static trunk plus nonegotiate suppresses DTP. The allowed list limits data VLAN transport; match the native VLAN on both ends." data-fa="نحوه عملکرد: Trunk ثابت با nonegotiate مذاکره DTP را متوقف می‌کند. Allowed List انتقال Data VLAN را محدود می‌کند و Native باید دو سمت یکسان باشد.">Operation: Static trunk plus nonegotiate suppresses DTP. The allowed list limits data VLAN transport; match the native VLAN on both ends.</p>
+<p  data-en="Verification: show interfaces trunk: static trunk, matching native and only intended allowed/active/forwarding VLANs." data-fa="اعتبارسنجی: show interfaces trunk باید Trunk ثابت، Native یکسان و VLANهای Allowed/Active/Forwarding مورد انتظار را نشان دهد.">Verification: show interfaces trunk: static trunk, matching native and only intended allowed/active/forwarding VLANs.</p>
+<p  data-en="Production: Use an unused native VLAN such as 998 with no SVI or endpoint ports, separate from management and parking VLAN 999. Exclude VLAN 1 and unnecessary VLANs from user transport, and do not use VLAN 1 for management. Removing VLAN 1 from an allowed list does not necessarily stop all control protocols. Audit the trunk peer before changing the list because the command replaces the existing list." data-fa="نکات Production: از Native بلااستفاده مانند 998 بدون SVI یا Endpoint، جدا از مدیریت و Parking 999 استفاده کنید. VLAN 1 و VLAN اضافی از انتقال Data حذف شوند و مدیریت در VLAN 1 نباشد. حذف VLAN 1 از Allowed الزاماً همه Control Protocolها را متوقف نمی‌کند. پیش از تغییر، Peer را بررسی کنید چون فرمان Allowed List لیست موجود را جایگزین می‌کند.">Production: Use an unused native VLAN such as 998 with no SVI or endpoint ports, separate from management and parking VLAN 999. Exclude VLAN 1 and unnecessary VLANs from user transport, and do not use VLAN 1 for management. Removing VLAN 1 from an allowed list does not necessarily stop all control protocols. Audit the trunk peer before changing the list because the command replaces the existing list.</p>
+<p  data-en="Native VLAN tagging, DTP and trunk encapsulation options vary. Fixed 802.1Q Catalyst platforms do not need switchport trunk encapsulation dot1q. Native tagging changes require matching peer behavior and a planned migration. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="Native Tagging، DTP و گزینه Encapsulation وابسته‌اند. Catalyst با 802.1Q ثابت به switchport trunk encapsulation dot1q نیاز ندارد. تغییر Native Tagging باید با Peer و برنامه مهاجرت سازگار باشد. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">Native VLAN tagging, DTP and trunk encapsulation options vary. Fixed 802.1Q Catalyst platforms do not need switchport trunk encapsulation dot1q. Native tagging changes require matching peer behavior and a planned migration. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+</section>
+<section id="unused"><h2  data-en="13. Unused Ports" data-fa="۱۳. پورت بلااستفاده">13. Unused Ports</h2>
+<p  data-en="Goal: Park and administratively disable unused switchports." data-fa="هدف: انتقال پورت بلااستفاده به VLAN Parking و خاموشی اداری.">Goal: Park and administratively disable unused switchports.</p>
+<p  data-en="Security risk: An unused live port permits unauthorized attachment." data-fa="ریسک امنیتی: پورت روشن بلااستفاده امکان اتصال غیرمجاز می‌دهد.">Security risk: An unused live port permits unauthorized attachment.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">vlan 999
+ name UNUSED-PORTS
+exit
+interface range &lt;UNUSED-PORTS&gt;
+ switchport mode access
+ switchport access vlan 999
+ shutdown
+exit</code></pre>
+<p  data-en="Operation: VLAN 999 has no SVI or routed access; shutdown is the actual port-disabling control." data-fa="نحوه عملکرد: VLAN 999 بدون SVI و دسترسی Routed است؛ shutdown کنترل واقعی قطع پورت است.">Operation: VLAN 999 has no SVI or routed access; shutdown is the actual port-disabling control.</p>
+<p  data-en="Verification: show interfaces status: unused ports disabled; show vlan brief: parking membership matches inventory." data-fa="اعتبارسنجی: در show interfaces status پورت Disabled و در show vlan brief عضویت Parking مطابق Inventory باشد.">Verification: show interfaces status: unused ports disabled; show vlan brief: parking membership matches inventory.</p>
+<p  data-en="Production: Do not include uplinks, stack links, APs, phones or reserve infrastructure interfaces in this range. Remove parking VLAN from trunk allowed lists." data-fa="نکات Production: Uplink، Stack Link، AP، Phone یا پورت رزرو زیرساخت در این Range نباشد. VLAN Parking را در Trunk Allow نکنید.">Production: Do not include uplinks, stack links, APs, phones or reserve infrastructure interfaces in this range. Remove parking VLAN from trunk allowed lists.</p>
+</section>
+<section id="l3"><h2  data-en="14. Layer 3 Switch Hardening" data-fa="۱۴. هاردنینگ سوئیچ لایه ۳">14. Layer 3 Switch Hardening</h2>
+<figure><img src="/assets/img/articles/content/Cisco Layer 2 vs Layer 3 Hardening Guide.png" alt="Comparing Layer 2 access security and Layer 3 routing hardening" width="1672" height="941" loading="lazy" decoding="async"><figcaption><span  data-en="Comparing Layer 2 access security and Layer 3 routing hardening" data-fa="مقایسهٔ امنیت Access لایهٔ ۲ و هاردنینگ Routing لایهٔ ۳">Comparing Layer 2 access security and Layer 3 routing hardening</span></figcaption></figure>
+<p  data-en="Goal: Route deliberately and separate user and management policy." data-fa="هدف: Routing آگاهانه و جداسازی Policy کاربر و مدیریت.">Goal: Route deliberately and separate user and management policy.</p>
+<p  data-en="Security risk: Incorrect routing or SVI behavior bypasses segmentation and interrupts services." data-fa="ریسک امنیتی: Routing یا رفتار SVI نادرست Segmentation را دور می‌زند و سرویس را قطع می‌کند.">Security risk: Incorrect routing or SVI behavior bypasses segmentation and interrupts services.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">ip routing
+interface Vlan&lt;MGMT-VLAN&gt;
+ ip address &lt;MGMT-IP&gt; &lt;MASK&gt;
+ no shutdown
+exit
+interface Vlan10
+ description USERS-GATEWAY
+ ip address 10.10.10.1 255.255.255.0
+ no ip redirects
+ no ip proxy-arp
+ no shutdown
+exit</code></pre>
+<p  data-en="Operation: ip routing enables inter-VLAN forwarding. no ip redirects stops sending ICMP redirects; no ip proxy-arp stops answering ARP on behalf of other addresses on that SVI. Neither replaces an ACL." data-fa="نحوه عملکرد: ip routing انتقال بین VLANها را فعال می‌کند. no ip redirects ارسال ICMP Redirect و no ip proxy-arp پاسخ ARP به نمایندگی آدرس دیگر در آن SVI را می‌بندد. هیچ‌کدام جای ACL نیستند.">Operation: ip routing enables inter-VLAN forwarding. no ip redirects stops sending ICMP redirects; no ip proxy-arp stops answering ARP on behalf of other addresses on that SVI. Neither replaces an ACL.</p>
+<p  data-en="Verification: show ip route should show connected SVIs and a valid default or intended dynamic routes; inspect show ip interface Vlan10 for redirects/proxy ARP state." data-fa="اعتبارسنجی: show ip route باید SVIهای Connected و Default یا Dynamic Route مورد انتظار را نشان دهد؛ وضعیت Redirect/Proxy ARP در show ip interface Vlan10 بررسی شود.">Verification: show ip route should show connected SVIs and a valid default or intended dynamic routes; inspect show ip interface Vlan10 for redirects/proxy ARP state.</p>
+<p  data-en="Production: Check dependencies on redirects and proxy ARP before disabling them. Use an explicit route or a designed dynamic protocol, not ip default-gateway, when routing is active. The standalone section 22 example uses a routed /30 uplink and static default route." data-fa="نکات Production: پیش از غیرفعال‌سازی وابستگی Redirect و Proxy ARP را بررسی کنید. در Routing فعال از Route صریح یا Dynamic Protocol طراحی‌شده استفاده کنید، نه ip default-gateway. نمونه مستقل بخش ۲۲ یک Uplink Routed با /30 و Static Default Route دارد.">Production: Check dependencies on redirects and proxy ARP before disabling them. Use an explicit route or a designed dynamic protocol, not ip default-gateway, when routing is active. The standalone section 22 example uses a routed /30 uplink and static default route.</p>
+<p  data-en="Routing license, SVI count and routed-port support differ between Catalyst models; a Layer 2-only image cannot implement this template. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="License Routing، تعداد SVI و پشتیبانی Routed Port بین مدل‌ها متفاوت است؛ Image صرفاً لایه ۲ نمی‌تواند این Template را اجرا کند. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">Routing license, SVI count and routed-port support differ between Catalyst models; a Layer 2-only image cannot implement this template. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+</section>
+<section id="svi-acl"><h2  data-en="15. Layer 3 ACL Hardening" data-fa="۱۵. هاردنینگ ACL لایه ۳">15. Layer 3 ACL Hardening</h2>
+<p  data-en="Goal: Block users from the management subnet while preserving approved dependencies." data-fa="هدف: مسدودسازی دسترسی کاربر به مدیریت همراه حفظ وابستگی مجاز.">Goal: Block users from the management subnet while preserving approved dependencies.</p>
+<p  data-en="Security risk: User-originated lateral access can compromise switches and monitoring systems." data-fa="ریسک امنیتی: حرکت جانبی از VLAN کاربر می‌تواند سوئیچ و مانیتورینگ را آلوده کند.">Security risk: User-originated lateral access can compromise switches and monitoring systems.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">ip access-list extended USERS-TO-MGMT
+ remark Approved shared infrastructure exceptions
+ permit udp 10.10.10.0 0.0.0.255 host 10.99.99.10 eq domain
+ permit tcp 10.10.10.0 0.0.0.255 host 10.99.99.10 eq domain
+ permit udp 10.10.10.0 0.0.0.255 host 10.99.99.20 eq ntp
+ deny ip 10.10.10.0 0.0.0.255 10.99.99.0 0.0.0.255
+ permit ip any any
+exit
+interface Vlan10
+ ip access-group USERS-TO-MGMT in
+exit</code></pre>
+<p  data-en="Operation: Ingress on Vlan10 filters packets arriving from Users 10.10.10.0/24 toward routed destinations. DNS 10.99.99.10 and NTP 10.99.99.20 are explicit illustrative exceptions; the final permit preserves other IPv4 traffic and prevents an accidental implicit-deny outage." data-fa="نحوه عملکرد: ACL ورودی Vlan10 ترافیک کاربران 10.10.10.0/24 به مقصد Routed را کنترل می‌کند. DNS برابر 10.99.99.10 و NTP برابر 10.99.99.20 استثناهای نمونه‌اند. Permit نهایی ترافیک دیگر IPv4 را حفظ و از قطعی ناشی از Implicit Deny جلوگیری می‌کند.">Operation: Ingress on Vlan10 filters packets arriving from Users 10.10.10.0/24 toward routed destinations. DNS 10.99.99.10 and NTP 10.99.99.20 are explicit illustrative exceptions; the final permit preserves other IPv4 traffic and prevents an accidental implicit-deny outage.</p>
+<p  data-en="Verification: show access-lists and show ip interface Vlan10 must show placement and matching counters. Test DNS over UDP/TCP, NTP, normal business traffic, denied management SSH and permitted admin SSH from a separate subnet." data-fa="اعتبارسنجی: show access-lists و show ip interface Vlan10 باید محل اعمال و Counter تطبیق نشان دهند. DNS روی UDP/TCP، NTP، ترافیک کاری، SSH مدیریتی ممنوع کاربر و SSH مجاز مدیر از Subnet جدا تست شود.">Verification: show access-lists and show ip interface Vlan10 must show placement and matching counters. Test DNS over UDP/TCP, NTP, normal business traffic, denied management SSH and permitted admin SSH from a separate subnet.</p>
+<p  data-en="Production: Inventory DHCP relay/server, directory, monitoring probes and application flows before deployment; add narrow exceptions above the deny or place shared services outside management. This ACL is stateless: it also blocks user replies to management-initiated sessions unless explicitly permitted. It does not filter same-VLAN bridging, IPv6, or substitute for VTY/SNMP ACLs. Do not apply it to the management SVI blindly." data-fa="نکات Production: پیش از استقرار DHCP Relay/Server، Directory، Probe مانیتورینگ و Application را بررسی و استثنای محدود قبل از Deny اضافه کنید یا Shared Service را خارج مدیریت قرار دهید. ACL بدون State است؛ پاسخ کاربر به Session آغازشده از مدیریت نیز بدون Permit صریح مسدود می‌شود. Bridging همان VLAN و IPv6 را فیلتر نمی‌کند و جای ACL مربوط به VTY/SNMP نیست. آن را کورکورانه روی SVI مدیریت اعمال نکنید.">Production: Inventory DHCP relay/server, directory, monitoring probes and application flows before deployment; add narrow exceptions above the deny or place shared services outside management. This ACL is stateless: it also blocks user replies to management-initiated sessions unless explicitly permitted. It does not filter same-VLAN bridging, IPv6, or substitute for VTY/SNMP ACLs. Do not apply it to the management SVI blindly.</p>
+<div class="article-callout article-callout--warning" role="note"><p  data-en="Lockout risk: apply from console or a separate approved administrator path. Test ACL order and actual source addresses, retain the previous policy, and use an exact rollback such as removing the new ip access-group before restoring the previous ACL." data-fa="خطر Lockout: از Console یا مسیر جدا و مجاز مدیر اعمال کنید. ترتیب ACL و آدرس مبدأ واقعی تست شود؛ Policy قبلی حفظ و Rollback دقیق مانند حذف ip access-group جدید و بازیابی ACL قبلی آماده باشد.">Lockout risk: apply from console or a separate approved administrator path. Test ACL order and actual source addresses, retain the previous policy, and use an exact rollback such as removing the new ip access-group before restoring the previous ACL.</p></div>
+</section>
+<section id="routing"><h2  data-en="16. Routing Protocol Security — OSPF" data-fa="۱۶. امنیت پروتکل Routing — OSPF">16. Routing Protocol Security — OSPF</h2>
+<p  data-en="Goal: Form routing adjacencies only on intended transit interfaces." data-fa="هدف: تشکیل Neighbor فقط روی Transit مجاز.">Goal: Form routing adjacencies only on intended transit interfaces.</p>
+<p  data-en="Security risk: An unintended neighbor can inject routes or disturb convergence." data-fa="ریسک امنیتی: Neighbor ناخواسته می‌تواند Route تزریق یا Convergence را مختل کند.">Security risk: An unintended neighbor can inject routes or disturb convergence.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">router ospf &lt;PROCESS-ID&gt;
+ passive-interface default
+ no passive-interface &lt;OSPF-TRANSIT&gt;
+exit</code></pre>
+<p  data-en="Operation: Passive interfaces do not send OSPF hellos or form neighbors; advertise only reviewed prefixes using the existing interface/area design. Configure supported authentication consistently at both ends and restrict OSPF protocol 89 at appropriate routed boundaries." data-fa="نحوه عملکرد: Passive Interface پیام Hello ارسال نمی‌کند و Neighbor نمی‌سازد؛ فقط Prefix بررسی‌شده با طراحی موجود Interface/Area اعلان شود. Authentication پشتیبانی‌شده دو سمت یکسان تنظیم و پروتکل 89 در مرز Routed مناسب محدود شود.">Operation: Passive interfaces do not send OSPF hellos or form neighbors; advertise only reviewed prefixes using the existing interface/area design. Configure supported authentication consistently at both ends and restrict OSPF protocol 89 at appropriate routed boundaries.</p>
+<p  data-en="Verification: show ip ospf neighbor: only approved peers; show ip ospf interface and show ip protocols: correct passive interfaces and authentication; show ip route ospf: intended routes." data-fa="اعتبارسنجی: show ip ospf neighbor فقط Peer مجاز؛ show ip ospf interface و show ip protocols وضعیت Passive و Authentication صحیح؛ show ip route ospf مسیر مورد انتظار را نشان دهد.">Verification: show ip ospf neighbor: only approved peers; show ip ospf interface and show ip protocols: correct passive interfaces and authentication; show ip route ospf: intended routes.</p>
+<p  data-en="Production: Apply only when dynamic routing is already part of the design. Prefer supported cryptographic authentication and coordinated key rollover. Route filtering must match OSPF behavior: an inbound distribute-list affects local route installation and does not generally suppress LSA flooding. Use supported ABR/ASBR policies for the appropriate LSA type." data-fa="نکات Production: فقط وقتی Dynamic Routing بخشی از طراحی است اعمال شود. Authentication رمزنگاری‌شده پشتیبانی‌شده با Key Rollover هماهنگ انتخاب کنید. Route Filtering باید با OSPF سازگار باشد؛ distribute-list ورودی بر نصب Route محلی اثر می‌گذارد و معمولاً LSA Flooding را متوقف نمی‌کند. Policy پشتیبانی‌شده ABR/ASBR برای نوع LSA مناسب استفاده شود.">Production: Apply only when dynamic routing is already part of the design. Prefer supported cryptographic authentication and coordinated key rollover. Route filtering must match OSPF behavior: an inbound distribute-list affects local route installation and does not generally suppress LSA flooding. Use supported ABR/ASBR policies for the appropriate LSA type.</p>
+<p  data-en="OSPFv2 and OSPFv3 authentication syntax, SHA/HMAC support and licenses vary. Do not copy an OSPFv3 authentication trailer example into OSPFv2. No universal authentication stanza is included in the static-routing final template. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="Syntax احراز هویت OSPFv2 و OSPFv3، پشتیبانی SHA/HMAC و License متفاوت است. مثال Authentication Trailer پروتکل OSPFv3 را در OSPFv2 کپی نکنید. در Template نهایی Static Routing بلوک Authentication عمومی قرار نگرفته است. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">OSPFv2 and OSPFv3 authentication syntax, SHA/HMAC support and licenses vary. Do not copy an OSPFv3 authentication trailer example into OSPFv2. No universal authentication stanza is included in the static-routing final template. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+<p  data-en="Control-plane protection: review the platform’s existing system CoPP/CPP policy with show policy-map control-plane where supported. Baseline CPU, punt drops and protocol counters before adjusting policing; preserve STP, DHCP, ARP, routing and management requirements. Do not replace a Catalyst system policy with a generic policy from another platform." data-fa="حفاظت Control Plane: Policy فعلی CoPP/CPP سیستم را در صورت پشتیبانی با show policy-map control-plane بررسی کنید. پیش از تغییر Policing، CPU، Punt Drop و Counter پروتکل را Baseline بگیرید؛ نیاز STP، DHCP، ARP، Routing و مدیریت حفظ شود. Policy سیستم Catalyst را با Policy عمومی پلتفرم دیگر جایگزین نکنید.">Control-plane protection: review the platform’s existing system CoPP/CPP policy with show policy-map control-plane where supported. Baseline CPU, punt drops and protocol counters before adjusting policing; preserve STP, DHCP, ARP, routing and management requirements. Do not replace a Catalyst system policy with a generic policy from another platform.</p>
+</section>
+<section id="ntp"><h2  data-en="17. NTP Hardening" data-fa="۱۷. امنیت NTP">17. NTP Hardening</h2>
+<p  data-en="Goal: Keep reliable timestamps from approved time servers." data-fa="هدف: حفظ Timestamp معتبر از Time Server مجاز.">Goal: Keep reliable timestamps from approved time servers.</p>
+<p  data-en="Security risk: Incorrect time breaks event correlation and authentication troubleshooting." data-fa="ریسک امنیتی: زمان نادرست Correlation رخداد و عیب‌یابی احراز هویت را مختل می‌کند.">Security risk: Incorrect time breaks event correlation and authentication troubleshooting.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">clock timezone &lt;TZ-NAME&gt; &lt;OFFSET&gt;
+ntp source Vlan&lt;MGMT-VLAN&gt;
+ntp server &lt;NTP-IP&gt; prefer</code></pre>
+<p  data-en="Operation: ntp source fixes the source interface. prefer favors a configured server among acceptable sources; it does not authenticate it. Timezone changes display, not NTP UTC synchronization." data-fa="نحوه عملکرد: ntp source اینترفیس مبدأ را تعیین می‌کند. prefer سرور را میان منابع قابل‌قبول ترجیح می‌دهد و احراز هویت نیست. Timezone نمایش زمان را تغییر می‌دهد، نه همگام‌سازی UTC در NTP.">Operation: ntp source fixes the source interface. prefer favors a configured server among acceptable sources; it does not authenticate it. Timezone changes display, not NTP UTC synchronization.</p>
+<p  data-en="Verification: show clock and show ntp associations: correct time and a selected synchronized peer; also inspect show ntp status where supported." data-fa="اعتبارسنجی: show clock و show ntp associations باید زمان صحیح و Peer منتخب همگام نشان دهند؛ در صورت پشتیبانی show ntp status نیز بررسی شود.">Verification: show clock and show ntp associations: correct time and a selected synchronized peer; also inspect show ntp status where supported.</p>
+<p  data-en="Production: Provide redundant approved sources and restrict NTP exposure through supported NTP ACLs and upstream policy. For Iran, a display example is clock timezone IRST 3 30. Replace OFFSET with hours and optional minutes." data-fa="نکات Production: منابع مجاز Redundant و محدودیت NTP با ACL پشتیبانی‌شده و Policy بالادست فراهم کنید. مثال نمایش ایران clock timezone IRST 3 30 است؛ OFFSET را با ساعت و در صورت نیاز دقیقه جایگزین کنید.">Production: Provide redundant approved sources and restrict NTP exposure through supported NTP ACLs and upstream policy. For Iran, a display example is clock timezone IRST 3 30. Replace OFFSET with hours and optional minutes.</p>
+<pre dir="ltr"><code class="language-cisco">! Optional legacy symmetric authentication; server must use the same key
+ntp authenticate
+ntp authentication-key &lt;KEY-ID&gt; md5 &lt;NTP-SHARED-KEY&gt;
+ntp trusted-key &lt;KEY-ID&gt;
+ntp server &lt;NTP-IP&gt; key &lt;KEY-ID&gt; prefer</code></pre>
+<p  data-en="The MD5 syntax above is a legacy compatibility example, not a claim of modern cryptographic strength. Use stronger supported authentication if both ends implement it; protect keys and test matching server behavior. Authentication algorithms, access-group syntax and VRF support vary. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="Syntax MD5 مثال سازگاری Legacy است و ادعای قدرت رمزنگاری مدرن ندارد. اگر دو سمت پشتیبانی می‌کنند الگوریتم قوی‌تر انتخاب کنید؛ کلید محافظت و سازگاری سرور تست شود. الگوریتم، access-group و VRF وابسته به نسخه است. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">The MD5 syntax above is a legacy compatibility example, not a claim of modern cryptographic strength. Use stronger supported authentication if both ends implement it; protect keys and test matching server behavior. Authentication algorithms, access-group syntax and VRF support vary. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+</section>
+<section id="syslog"><h2  data-en="18. Syslog" data-fa="۱۸. Syslog">18. Syslog</h2>
+<p  data-en="Goal: Export actionable events with stable identity and timestamps." data-fa="هدف: ارسال رخداد قابل اقدام با هویت و زمان ثابت.">Goal: Export actionable events with stable identity and timestamps.</p>
+<p  data-en="Security risk: Without centralized logs, security incidents and port faults are missed." data-fa="ریسک امنیتی: بدون Log مرکزی رخداد امنیتی و خطای پورت دیده نمی‌شود.">Security risk: Without centralized logs, security incidents and port faults are missed.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">service timestamps log datetime msec localtime show-timezone
+logging host &lt;SYSLOG-IP&gt;
+logging source-interface Vlan&lt;MGMT-VLAN&gt;
+logging trap warnings
+logging buffered 16384 informational</code></pre>
+<p  data-en="Operation: warnings exports severity 0–4; informational in the 16384-byte ring buffer keeps 0–6 locally. Lower severity numbers are more urgent. The source SVI must be reachable." data-fa="نحوه عملکرد: warnings سطح ۰ تا ۴ را Export و informational سطح ۰ تا ۶ را در Ring Buffer محلی ۱۶۳۸۴ بایتی نگهداری می‌کند. عدد پایین‌تر فوری‌تر است؛ SVI مبدأ باید قابل دسترسی باشد.">Operation: warnings exports severity 0–4; informational in the 16384-byte ring buffer keeps 0–6 locally. Lower severity numbers are more urgent. The source SVI must be reachable.</p>
+<p  data-en="Verification: show logging and collector search: expected source, timestamps and a known test event; watch dropped messages and buffer rollover." data-fa="اعتبارسنجی: show logging و جست‌وجو در Collector باید مبدأ، Timestamp و رخداد تست مشخص را نشان دهند؛ Drop و چرخش Buffer بررسی شود.">Verification: show logging and collector search: expected source, timestamps and a known test event; watch dropped messages and buffer rollover.</p>
+<p  data-en="Production: Warning-only remote logging can omit severity-5 login, link or configuration events. Use notifications or informational centrally when those are required, with capacity and retention planning. Default UDP syslog is not encrypted or delivery-guaranteed; select supported secure transport when required. Avoid continuous debugging and high-volume ACL logging." data-fa="نکات Production: ارسال فقط Warning می‌تواند Login، Link یا تغییر تنظیمات Severity 5 را حذف کند. در صورت نیاز سطح notifications یا informational مرکزی با برنامه Capacity و Retention انتخاب کنید. Syslog پیش‌فرض UDP رمزنگاری و تضمین تحویل ندارد؛ در صورت الزام از Transport امن پشتیبانی‌شده استفاده کنید. Debug دائم و ACL Log پرتعداد مناسب نیست.">Production: Warning-only remote logging can omit severity-5 login, link or configuration events. Use notifications or informational centrally when those are required, with capacity and retention planning. Default UDP syslog is not encrypted or delivery-guaranteed; select supported secure transport when required. Avoid continuous debugging and high-volume ACL logging.</p>
+</section>
+<section id="snmp"><h2  data-en="19. SNMP — AuthPriv First" data-fa="۱۹. SNMP با اولویت AuthPriv">19. SNMP — AuthPriv First</h2>
+<p  data-en="Goal: Provide authenticated, encrypted and source-restricted read-only monitoring." data-fa="هدف: مانیتورینگ فقط خواندنی با احراز هویت، رمزنگاری و مبدأ محدود.">Goal: Provide authenticated, encrypted and source-restricted read-only monitoring.</p>
+<p  data-en="Security risk: Communities and unauthenticated SNMP expose data and credentials." data-fa="ریسک امنیتی: Community و SNMP بدون احراز هویت، داده و Credential را افشا می‌کند.">Security risk: Communities and unauthenticated SNMP expose data and credentials.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">ip access-list standard SNMP-ACL
+ permit host &lt;MONITORING-IP&gt;
+ deny any log
+exit
+snmp-server view NMS-READ iso included
+snmp-server group NMS-GROUP v3 priv read NMS-READ access SNMP-ACL
+snmp-server user &lt;SNMP-USER&gt; NMS-GROUP v3 auth sha &lt;SNMP-AUTH-PASSWORD&gt; priv aes 128 &lt;SNMP-PRIV-PASSWORD&gt;</code></pre>
+<p  data-en="Operation: v3 priv requires authentication and encryption; the group has a read view and no write view. SNMP-ACL restricts polling sources. The broad iso view is a working baseline; narrow it to required OIDs after testing." data-fa="نحوه عملکرد: v3 priv احراز هویت و رمزنگاری الزام می‌کند؛ Group دارای Read View و بدون Write View است. SNMP-ACL مبدأ Poll را محدود می‌کند. View گسترده iso Baseline قابل کار است؛ پس از تست آن را به OID لازم محدود کنید.">Operation: v3 priv requires authentication and encryption; the group has a read view and no write view. SNMP-ACL restricts polling sources. The broad iso view is a working baseline; narrow it to required OIDs after testing.</p>
+<p  data-en="Verification: show snmp, show snmp group and show snmp user; poll from the approved NMS with authPriv and verify an unauthorized source fails. SNMPv3 user secrets may not appear in running-config." data-fa="اعتبارسنجی: show snmp، show snmp group و show snmp user را بررسی کنید؛ Poll از NMS مجاز با authPriv موفق و مبدأ غیرمجاز ناموفق باشد. Secret کاربر SNMPv3 ممکن است در Running نمایش داده نشود.">Verification: show snmp, show snmp group and show snmp user; poll from the approved NMS with authPriv and verify an unauthorized source fails. SNMPv3 user secrets may not appear in running-config.</p>
+<p  data-en="Production: Use separate vault-managed auth/privacy passwords. The sha keyword in this compatibility example is SHA-1, not SHA-256; prefer SHA-2 where switch and NMS support it. Remove existing v1/v2c communities after migration. Traps require separate destination/notification enablement and must be tested; polling alone does not guarantee storm alerts." data-fa="نکات Production: رمز Auth و Privacy جدا و تحت Vault انتخاب شود. sha در این مثال سازگاری SHA-1 است نه SHA-256؛ اگر Switch و NMS پشتیبانی می‌کنند SHA-2 ترجیح دارد. پس از مهاجرت Community نسخه ۱/۲ حذف شود. Trap نیازمند مقصد و Enable Notification جدا و تست است؛ Poll به‌تنهایی هشدار Storm را تضمین نمی‌کند.">Production: Use separate vault-managed auth/privacy passwords. The sha keyword in this compatibility example is SHA-1, not SHA-256; prefer SHA-2 where switch and NMS support it. Remove existing v1/v2c communities after migration. Traps require separate destination/notification enablement and must be tested; polling alone does not guarantee storm alerts.</p>
+<p  data-en="SHA-2 keywords, AES variants, SNMP ACL types, engine-ID behavior and notification syntax vary. Changing engine ID can require user recreation. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="کلیدواژه SHA-2، گونه AES، نوع ACL، رفتار Engine ID و Syntax Notification متفاوت است؛ تغییر Engine ID ممکن است ساخت مجدد User را لازم کند. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">SHA-2 keywords, AES variants, SNMP ACL types, engine-ID behavior and notification syntax vary. Changing engine ID can require user recreation. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+<p  data-en="Legacy only: SNMPv2c below is unencrypted. Keep it only for a documented migration exception; never add it alongside v3 merely for convenience. Primary recommendation: SNMPv3 + Authentication + Encryption + ACL." data-fa="فقط Legacy: SNMPv2c زیر رمزنگاری ندارد. صرفاً در استثنای مهاجرت مستند نگه دارید؛ برای سهولت آن را کنار v3 اضافه نکنید. توصیه اصلی: SNMPv3 + Authentication + Encryption + ACL.">Legacy only: SNMPv2c below is unencrypted. Keep it only for a documented migration exception; never add it alongside v3 merely for convenience. Primary recommendation: SNMPv3 + Authentication + Encryption + ACL.</p>
+<pre dir="ltr"><code class="language-cisco">ip access-list standard SNMP-ACL
+ permit host &lt;MONITORING-IP&gt;
+ deny any log
+exit
+snmp-server community &lt;COMMUNITY&gt; RO SNMP-ACL</code></pre>
+</section>
+<section id="login"><h2  data-en="20. Login Attack Protection" data-fa="۲۰. حفاظت در برابر حمله Login">20. Login Attack Protection</h2>
+<p  data-en="Goal: Throttle repeated failed remote logins." data-fa="هدف: مهار Login ناموفق تکراری.">Goal: Throttle repeated failed remote logins.</p>
+<p  data-en="Security risk: Password guessing consumes resources and threatens admin accounts." data-fa="ریسک امنیتی: حدس رمز منابع را مصرف و حساب مدیر را تهدید می‌کند.">Security risk: Password guessing consumes resources and threatens admin accounts.</p>
+<p  data-en="Configuration — global configuration mode unless an interface or line context is shown." data-fa="پیکربندی — در حالت Global Configuration اجرا کنید مگر آنکه Context اینترفیس یا Line مشخص شده باشد.">Configuration — global configuration mode unless an interface or line context is shown.</p>
+<pre dir="ltr"><code class="language-cisco">login block-for 120 attempts 5 within 60</code></pre>
+<p  data-en="Operation: Five failed attempts within 60 seconds trigger a 120-second quiet period for remote login access. This is device-wide protection, not simply a per-user lockout." data-fa="نحوه عملکرد: پنج تلاش ناموفق در ۶۰ ثانیه، Quiet Period برابر ۱۲۰ ثانیه برای Login راه دور ایجاد می‌کند. این حفاظت در سطح دستگاه است و صرفاً Lockout یک User نیست.">Operation: Five failed attempts within 60 seconds trigger a 120-second quiet period for remote login access. This is device-wide protection, not simply a per-user lockout.</p>
+<p  data-en="Verification: show login should report configured thresholds and quiet-mode status. Test failures in a maintenance window using console recovery." data-fa="اعتبارسنجی: show login باید Threshold و وضعیت Quiet Mode صحیح نشان دهد. تست شکست Login در Maintenance Window با Console آماده انجام شود.">Verification: show login should report configured thresholds and quiet-mode status. Test failures in a maintenance window using console recovery.</p>
+<p  data-en="Production: An attacker can deliberately trigger quiet mode. Consider a narrowly scoped login quiet-mode access-class &lt;BREAKGLASS-ACL&gt; if supported and approved; never exempt a broad user subnet." data-fa="نکات Production: مهاجم می‌تواند عمدی Quiet Mode ایجاد کند. در صورت پشتیبانی و تأیید Policy، login quiet-mode access-class &lt;BREAKGLASS-ACL&gt; با Scope محدود بررسی شود؛ User Subnet گسترده معاف نشود.">Production: An attacker can deliberately trigger quiet mode. Consider a narrowly scoped login quiet-mode access-class &lt;BREAKGLASS-ACL&gt; if supported and approved; never exempt a broad user subnet.</p>
+<p  data-en="Login enhancement support and interaction with AAA differ; inspect show login on the actual image. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="پشتیبانی Login Enhancement و تعامل AAA متفاوت است؛ show login روی Image واقعی بررسی شود. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">Login enhancement support and interaction with AAA differ; inspect show login on the actual image. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+</section>
+<section id="verification"><h2  data-en="21. Verification and Acceptance" data-fa="۲۱. اعتبارسنجی و پذیرش">21. Verification and Acceptance</h2>
+<pre dir="ltr"><code class="language-cisco">show running-config
+show users
+show ip ssh
+show login
+show access-lists
+show spanning-tree
+show spanning-tree inconsistentports
+show port-security
+show port-security interface &lt;INTERFACE&gt;
+show ip dhcp snooping
+show ip dhcp snooping binding
+show ip arp inspection
+show ip arp inspection interfaces
+show logging
+show clock
+show ntp associations
+show snmp
+show ip interface brief
+show ip route</code></pre>
+<table><thead><tr><th  data-en="Group" data-fa="گروه">Group</th><th  data-en="Expected result" data-fa="نتیجه مورد انتظار">Expected result</th></tr></thead><tbody><tr><td  data-en="Management / AAA / SSH / ACL" data-fa="مدیریت / AAA / SSH / ACL">Management / AAA / SSH / ACL</td><td  data-en="Fresh approved SSH login succeeds; denied source/Telnet fails; privilege and counters match" data-fa="SSH جدید مجاز موفق، مبدأ غیرمجاز و Telnet ناموفق؛ Privilege و Counter صحیح">Fresh approved SSH login succeeds; denied source/Telnet fails; privilege and counters match</td></tr><tr><td  data-en="STP / Port Security" data-fa="STP / Port Security">STP / Port Security</td><td  data-en="Planned root, no unexpected inconsistent/err-disabled ports, correct learned MACs" data-fa="Root طراحی‌شده، نبود Inconsistent/err-disabled غیرمنتظره و MAC درست">Planned root, no unexpected inconsistent/err-disabled ports, correct learned MACs</td></tr><tr><td  data-en="DHCP / DAI / IPSG" data-fa="DHCP / DAI / IPSG">DHCP / DAI / IPSG</td><td  data-en="DHCP renew succeeds, bindings match inventory, only selected ingress trusted, static hosts work" data-fa="Renew موفق، Binding مطابق Inventory، Trust محدود ورودی و Static Host سالم">DHCP renew succeeds, bindings match inventory, only selected ingress trusted, static hosts work</td></tr><tr><td  data-en="Telemetry" data-fa="Telemetry">Telemetry</td><td  data-en="Collector receives chosen severities; NTP selected peer; authorized authPriv polling succeeds" data-fa="Collector سطح انتخاب‌شده را دریافت کند؛ Peer NTP منتخب؛ Poll مجاز authPriv موفق">Collector receives chosen severities; NTP selected peer; authorized authPriv polling succeeds</td></tr><tr><td  data-en="SVI / Routing" data-fa="SVI / Routing">SVI / Routing</td><td  data-en="Management up/up; L3 connected/default routes and service exceptions valid; L2 management gateway reachable" data-fa="مدیریت up/up؛ Route متصل/Default و استثنای سرویس در L3 صحیح؛ Gateway مدیریتی L2 قابل دسترسی">Management up/up; L3 connected/default routes and service exceptions valid; L2 management gateway reachable</td></tr></tbody></table>
+<p  data-en="Command output alone is insufficient: test permitted and denied traffic, DHCP renewal, phone reboot, static printer access, NMS polling, failover and reload binding recovery. Use show ip verify source and show storm-control where supported. Save with copy running-config startup-config only after acceptance and capture a post-change backup. Retain an operational rollback procedure." data-fa="خروجی Show کافی نیست؛ ترافیک مجاز و غیرمجاز، DHCP Renew، Reboot تلفن، Printer Static، Poll NMS، Failover و بازیابی Binding پس از Reload تست شود. در صورت پشتیبانی show ip verify source و show storm-control استفاده کنید. فقط پس از پذیرش copy running-config startup-config و Backup بعد از تغییر انجام شود. Rollback عملیاتی حفظ شود.">Command output alone is insufficient: test permitted and denied traffic, DHCP renewal, phone reboot, static printer access, NMS polling, failover and reload binding recovery. Use show ip verify source and show storm-control where supported. Save with copy running-config startup-config only after acceptance and capture a post-change backup. Retain an operational rollback procedure.</p>
+</section>
+<section id="final-configs"><h2  data-en="22. Final Independent Configurations" data-fa="۲۲. پیکربندی‌های نهایی مستقل">22. Final Independent Configurations</h2>
+<p  data-en="Each file includes its own management baseline; no earlier block must be pasted to complete it. Replace every placeholder. The L2 role has an upstream trunk; the L3 role has a routed uplink to the upstream boundary and a downstream trunk to inspected access switches. ACCESS-PORTS means reviewed DHCP endpoint ports only. Static devices, AP trunks and infrastructure ports require their own profiles. USER-VLANS must include all intended DHCP user/voice VLANs, and each VLAN must be created; VLAN10 is the shown data example." data-fa="هر فایل Baseline مدیریت خودش را دارد و برای تکمیل نیازمند کپی بلوک قبلی نیست. تمام Placeholderها جایگزین شوند. نقش L2 دارای Trunk بالادست و نقش L3 دارای Uplink Routed به مرز بالادست و Trunk پایین‌دست به Accessهای دارای Inspection است. ACCESS-PORTS فقط پورت Endpoint DHCP بررسی‌شده است. Static Device، AP Trunk و Infrastructure به Profile جدا نیاز دارند. USER-VLANS شامل VLANهای DHCP کاربر/Voice لازم باشد و همه VLANها ساخته شوند؛ VLAN10 مثال Data است.">Each file includes its own management baseline; no earlier block must be pasted to complete it. Replace every placeholder. The L2 role has an upstream trunk; the L3 role has a routed uplink to the upstream boundary and a downstream trunk to inspected access switches. ACCESS-PORTS means reviewed DHCP endpoint ports only. Static devices, AP trunks and infrastructure ports require their own profiles. USER-VLANS must include all intended DHCP user/voice VLANs, and each VLAN must be created; VLAN10 is the shown data example.</p>
+<table><thead><tr><th  data-en="Placeholder" data-fa="Placeholder">Placeholder</th><th  data-en="Meaning / example" data-fa="معنی / مثال">Meaning / example</th></tr></thead><tbody><tr><td  data-en="&lt;HOSTNAME&gt; / &lt;SWITCH-NAME&gt;" data-fa="&lt;HOSTNAME&gt; / &lt;SWITCH-NAME&gt;">&lt;HOSTNAME&gt; / &lt;SWITCH-NAME&gt;</td><td  data-en="Unique switch identity" data-fa="نام یکتای سوئیچ">Unique switch identity</td></tr><tr><td  data-en="&lt;MGMT-VLAN&gt; / &lt;MGMT-IP&gt; / &lt;MASK&gt;" data-fa="&lt;MGMT-VLAN&gt; / &lt;MGMT-IP&gt; / &lt;MASK&gt;">&lt;MGMT-VLAN&gt; / &lt;MGMT-IP&gt; / &lt;MASK&gt;</td><td  data-en="99; L2 10.99.99.2 or L3 10.99.99.1; 255.255.255.0" data-fa="99؛ L2 برابر 10.99.99.2 یا L3 برابر 10.99.99.1؛ Mask برابر 255.255.255.0">99; L2 10.99.99.2 or L3 10.99.99.1; 255.255.255.0</td></tr><tr><td  data-en="&lt;ADMIN-SUBNET&gt; / &lt;WILDCARD&gt;" data-fa="&lt;ADMIN-SUBNET&gt; / &lt;WILDCARD&gt;">&lt;ADMIN-SUBNET&gt; / &lt;WILDCARD&gt;</td><td  data-en="Approved admin sources, e.g. 10.99.99.128 / 0.0.0.31; not all management by default" data-fa="مبدأ مدیر مجاز؛ مثال 10.99.99.128 / 0.0.0.31؛ نه کل مدیریت به‌صورت پیش‌فرض">Approved admin sources, e.g. 10.99.99.128 / 0.0.0.31; not all management by default</td></tr><tr><td  data-en="&lt;SYSLOG-IP&gt; / &lt;NTP-IP&gt; / &lt;MONITORING-IP&gt;" data-fa="&lt;SYSLOG-IP&gt; / &lt;NTP-IP&gt; / &lt;MONITORING-IP&gt;">&lt;SYSLOG-IP&gt; / &lt;NTP-IP&gt; / &lt;MONITORING-IP&gt;</td><td  data-en="Example: 10.99.99.30 / 10.99.99.20 / 10.99.99.40" data-fa="مثال: 10.99.99.30 / 10.99.99.20 / 10.99.99.40">Example: 10.99.99.30 / 10.99.99.20 / 10.99.99.40</td></tr><tr><td  data-en="&lt;UPLINK&gt; / &lt;DOWNLINK-TRUNK&gt;" data-fa="&lt;UPLINK&gt; / &lt;DOWNLINK-TRUNK&gt;">&lt;UPLINK&gt; / &lt;DOWNLINK-TRUNK&gt;</td><td  data-en="Reviewed physical interface or supported port-channel; ranges must not overlap" data-fa="اینترفیس یا Port-channel پشتیبانی‌شده و بررسی‌شده؛ Rangeها هم‌پوشانی نداشته باشند">Reviewed physical interface or supported port-channel; ranges must not overlap</td></tr><tr><td  data-en="&lt;ACCESS-PORTS&gt; / &lt;UNUSED-PORTS&gt;" data-fa="&lt;ACCESS-PORTS&gt; / &lt;UNUSED-PORTS&gt;">&lt;ACCESS-PORTS&gt; / &lt;UNUSED-PORTS&gt;</td><td  data-en="Disjoint tested interface ranges" data-fa="Rangeهای تست‌شده و بدون اشتراک">Disjoint tested interface ranges</td></tr><tr><td  data-en="&lt;USER-VLANS&gt; / &lt;VLAN-LIST&gt;" data-fa="&lt;USER-VLANS&gt; / &lt;VLAN-LIST&gt;">&lt;USER-VLANS&gt; / &lt;VLAN-LIST&gt;</td><td  data-en="10 (plus reviewed voice VLANs); 10,99 and required VLANs only" data-fa="10 و Voice بررسی‌شده؛ 10,99 و فقط VLAN لازم">10 (plus reviewed voice VLANs); 10,99 and required VLANs only</td></tr><tr><td  data-en="&lt;GATEWAY&gt;" data-fa="&lt;GATEWAY&gt;">&lt;GATEWAY&gt;</td><td  data-en="L2 management gateway: 10.99.99.1" data-fa="Gateway مدیریت L2: 10.99.99.1">L2 management gateway: 10.99.99.1</td></tr><tr><td  data-en="&lt;TRANSIT-IP&gt; / &lt;TRANSIT-MASK&gt; / &lt;UPSTREAM-NEXT-HOP&gt;" data-fa="&lt;TRANSIT-IP&gt; / &lt;TRANSIT-MASK&gt; / &lt;UPSTREAM-NEXT-HOP&gt;">&lt;TRANSIT-IP&gt; / &lt;TRANSIT-MASK&gt; / &lt;UPSTREAM-NEXT-HOP&gt;</td><td  data-en="10.255.255.2 / 255.255.255.252 / 10.255.255.1" data-fa="10.255.255.2 / 255.255.255.252 / 10.255.255.1">10.255.255.2 / 255.255.255.252 / 10.255.255.1</td></tr><tr><td  data-en="&lt;RATE&gt; / &lt;ARP-RATE&gt;" data-fa="&lt;RATE&gt; / &lt;ARP-RATE&gt;">&lt;RATE&gt; / &lt;ARP-RATE&gt;</td><td  data-en="Measured DHCP/ARP packets per second, not universal defaults" data-fa="Packet/s اندازه‌گیری‌شده DHCP/ARP؛ Default عمومی نیست">Measured DHCP/ARP packets per second, not universal defaults</td></tr><tr><td  data-en="&lt;BCAST-RISE&gt; / &lt;BCAST-FALL&gt; / &lt;MCAST-RISE&gt; / &lt;MCAST-FALL&gt;" data-fa="&lt;BCAST-RISE&gt; / &lt;BCAST-FALL&gt; / &lt;MCAST-RISE&gt; / &lt;MCAST-FALL&gt;">&lt;BCAST-RISE&gt; / &lt;BCAST-FALL&gt; / &lt;MCAST-RISE&gt; / &lt;MCAST-FALL&gt;</td><td  data-en="Measured percentages; earlier 1/0.5 and 2/1 are illustrative" data-fa="درصد اندازه‌گیری‌شده؛ 1/0.5 و 2/1 قبلی صرفاً مثال">Measured percentages; earlier 1/0.5 and 2/1 are illustrative</td></tr><tr><td  data-en="&lt;ADMIN&gt; / &lt;STRONG-PASSWORD&gt; / &lt;DOMAIN.LOCAL&gt;" data-fa="&lt;ADMIN&gt; / &lt;STRONG-PASSWORD&gt; / &lt;DOMAIN.LOCAL&gt;">&lt;ADMIN&gt; / &lt;STRONG-PASSWORD&gt; / &lt;DOMAIN.LOCAL&gt;</td><td  data-en="Vault-managed credentials and organization domain" data-fa="Credential در Vault و Domain سازمان">Vault-managed credentials and organization domain</td></tr><tr><td  data-en="&lt;SNMP-USER&gt; / &lt;SNMP-AUTH-PASSWORD&gt; / &lt;SNMP-PRIV-PASSWORD&gt;" data-fa="&lt;SNMP-USER&gt; / &lt;SNMP-AUTH-PASSWORD&gt; / &lt;SNMP-PRIV-PASSWORD&gt;">&lt;SNMP-USER&gt; / &lt;SNMP-AUTH-PASSWORD&gt; / &lt;SNMP-PRIV-PASSWORD&gt;</td><td  data-en="NMS account and two independent secrets" data-fa="حساب NMS و دو Secret مستقل">NMS account and two independent secrets</td></tr><tr><td  data-en="&lt;TZ-NAME&gt; / &lt;OFFSET&gt;" data-fa="&lt;TZ-NAME&gt; / &lt;OFFSET&gt;">&lt;TZ-NAME&gt; / &lt;OFFSET&gt;</td><td  data-en="Display timezone; IRST / 3 30 is an example" data-fa="Timezone نمایش؛ مثال IRST / 3 30">Display timezone; IRST / 3 30 is an example</td></tr></tbody></table>
+<div class="article-callout article-callout--warning" role="note"><p  data-en="Template prerequisites: Type 9, VTY 0–15 and feature syntax must be supported. DHCP service or relay is existing infrastructure, not created here; verify the full request/reply path on the L3 platform. The downstream L3 trunk stays DHCP-untrusted because servers are local/upstream, but DAI-trusted only when downstream enforcement is verified. Aggregation switches do not necessarily learn bindings for all remote endpoints. Change these boundaries to match the real topology. The L3 edge Port Security block is optional; remove it if no directly connected endpoint ports exist." data-fa="پیش‌نیاز Template: Type 9، VTY 0 تا 15 و Syntax قابلیت‌ها باید پشتیبانی شوند. سرویس یا Relay DHCP از قبل وجود دارد و اینجا ساخته نمی‌شود؛ کل مسیر درخواست/پاسخ روی L3 بررسی شود. Trunk پایین‌دست L3 برای DHCP همچنان Untrusted است چون سرور Local/Upstream است؛ فقط با تأیید Inspection پایین‌دست برای DAI Trusted می‌شود. سوئیچ تجمیع الزاماً Binding همه کاربران دور را یاد نمی‌گیرد. مرزها را با توپولوژی واقعی تطبیق دهید. بلوک Port Security پورت Edge در L3 اختیاری است؛ اگر Endpoint مستقیم ندارید آن را حذف کنید.">Template prerequisites: Type 9, VTY 0–15 and feature syntax must be supported. DHCP service or relay is existing infrastructure, not created here; verify the full request/reply path on the L3 platform. The downstream L3 trunk stays DHCP-untrusted because servers are local/upstream, but DAI-trusted only when downstream enforcement is verified. Aggregation switches do not necessarily learn bindings for all remote endpoints. Change these boundaries to match the real topology. The L3 edge Port Security block is optional; remove it if no directly connected endpoint ports exist.</p></div>
+<p  data-en="The final templates are complete role-specific baselines, not replacements for live routing, voice, authentication, CoPP or DHCP infrastructure configuration. Merge deliberately. Root Guard and Loop Guard are excluded until port roles are reviewed; authenticated NTP and centralized AAA use the separately reviewed deployment choices above. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment." data-fa="قالب نهایی Baseline کامل مخصوص نقش است، نه جایگزین Routing، Voice، Authentication، CoPP یا زیرساخت DHCP موجود. با بررسی Merge کنید. Root Guard و Loop Guard تا تعیین نقش پورت اضافه نشده‌اند؛ NTP احرازشده و AAA مرکزی به انتخاب استقرار بررسی‌شده بخش‌های قبلی نیاز دارند. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.">The final templates are complete role-specific baselines, not replacements for live routing, voice, authentication, CoPP or DHCP infrastructure configuration. Merge deliberately. Root Guard and Loop Guard are excluded until port roles are reviewed; authenticated NTP and centralized AAA use the separately reviewed deployment choices above. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment.</p>
+<p  data-en="Cisco Layer 2 Access Switch Hardened Configuration" data-fa="پیکربندی امن مستقل Cisco Layer 2 Access Switch">Cisco Layer 2 Access Switch Hardened Configuration</p>
+<pre dir="ltr"><code class="language-cisco">! Cisco Layer 2 Access Switch Hardened Configuration
+! Replace placeholders; apply in reviewed stages, not as a blind paste.
+configure terminal
+vlan 10
+ name USERS
+exit
+vlan &lt;MGMT-VLAN&gt;
+ name MANAGEMENT
+exit
+vlan 998
+ name UNUSED-NATIVE
+exit
+vlan 999
+ name UNUSED-PORTS
+exit
+hostname &lt;HOSTNAME&gt;
+no ip domain-lookup
+ip domain-name &lt;DOMAIN.LOCAL&gt;
+username &lt;ADMIN&gt; privilege 15 algorithm-type scrypt secret &lt;STRONG-PASSWORD&gt;
+aaa new-model
+aaa authentication login default local
+aaa authorization exec default local
+no ip http server
+no ip http secure-server
+no service pad
+no ip source-route
+login block-for 120 attempts 5 within 60
+crypto key generate rsa modulus 2048
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+ip access-list standard MGMT-SSH
+ permit &lt;ADMIN-SUBNET&gt; &lt;WILDCARD&gt;
+ deny any log
+exit
+line vty 0 15
+ login authentication default
+ transport input ssh
+ exec-timeout 10 0
+ access-class MGMT-SSH in
+exit
+line console 0
+ login authentication default
+ exec-timeout 10 0
+ logging synchronous
+exit
+clock timezone &lt;TZ-NAME&gt; &lt;OFFSET&gt;
+ntp source Vlan&lt;MGMT-VLAN&gt;
+ntp server &lt;NTP-IP&gt; prefer
+service timestamps log datetime msec localtime show-timezone
+logging host &lt;SYSLOG-IP&gt;
+logging source-interface Vlan&lt;MGMT-VLAN&gt;
+logging trap warnings
+logging buffered 16384 informational
+ip access-list standard SNMP-ACL
+ permit host &lt;MONITORING-IP&gt;
+ deny any log
+exit
+snmp-server view NMS-READ iso included
+snmp-server group NMS-GROUP v3 priv read NMS-READ access SNMP-ACL
+snmp-server user &lt;SNMP-USER&gt; NMS-GROUP v3 auth sha &lt;SNMP-AUTH-PASSWORD&gt; priv aes 128 &lt;SNMP-PRIV-PASSWORD&gt;
+no ip routing
+ip default-gateway &lt;GATEWAY&gt;
+interface Vlan&lt;MGMT-VLAN&gt;
+ description MANAGEMENT
+ ip address &lt;MGMT-IP&gt; &lt;MASK&gt;
+ no shutdown
+exit
+spanning-tree mode rapid-pvst
+spanning-tree portfast bpduguard default
+ip dhcp snooping
+ip dhcp snooping vlan &lt;USER-VLANS&gt;
+no ip dhcp snooping information option
+ip arp inspection vlan &lt;USER-VLANS&gt;
+interface &lt;UPLINK&gt;
+ description TRUSTED-UPSTREAM-TO-CORE
+ switchport mode trunk
+ switchport trunk native vlan 998
+ switchport trunk allowed vlan &lt;VLAN-LIST&gt;
+ switchport nonegotiate
+ ip dhcp snooping trust
+ ip arp inspection trust
+ no shutdown
+exit
+interface range &lt;ACCESS-PORTS&gt;
+ description REVIEWED-DHCP-ENDPOINTS
+ switchport mode access
+ switchport access vlan 10
+ switchport nonegotiate
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate &lt;RATE&gt;
+ ip arp inspection limit rate &lt;ARP-RATE&gt;
+ ip verify source
+ switchport port-security
+ switchport port-security maximum 3
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ storm-control broadcast level &lt;BCAST-RISE&gt; &lt;BCAST-FALL&gt;
+ storm-control multicast level &lt;MCAST-RISE&gt; &lt;MCAST-FALL&gt;
+ storm-control action trap
+ no shutdown
+exit
+interface range &lt;UNUSED-PORTS&gt;
+ switchport mode access
+ switchport access vlan 999
+ shutdown
+exit
+end
+! Validate, then separately run: copy running-config startup-config</code></pre>
+<p  data-en="Cisco Layer 3 Switch Hardened Configuration" data-fa="پیکربندی امن مستقل Cisco Layer 3 Switch">Cisco Layer 3 Switch Hardened Configuration</p>
+<pre dir="ltr"><code class="language-cisco">! Cisco Layer 3 Switch Hardened Configuration
+! Routed upstream; inspected access switches on downstream trunk.
+! Ensure DHCP service/relay and upstream return routes already exist.
+configure terminal
+vlan 10
+ name USERS
+exit
+vlan &lt;MGMT-VLAN&gt;
+ name MANAGEMENT
+exit
+vlan 998
+ name UNUSED-NATIVE
+exit
+vlan 999
+ name UNUSED-PORTS
+exit
+hostname &lt;HOSTNAME&gt;
+no ip domain-lookup
+ip domain-name &lt;DOMAIN.LOCAL&gt;
+username &lt;ADMIN&gt; privilege 15 algorithm-type scrypt secret &lt;STRONG-PASSWORD&gt;
+aaa new-model
+aaa authentication login default local
+aaa authorization exec default local
+no ip http server
+no ip http secure-server
+no service pad
+no ip source-route
+login block-for 120 attempts 5 within 60
+crypto key generate rsa modulus 2048
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+ip access-list standard MGMT-SSH
+ permit &lt;ADMIN-SUBNET&gt; &lt;WILDCARD&gt;
+ deny any log
+exit
+line vty 0 15
+ login authentication default
+ transport input ssh
+ exec-timeout 10 0
+ access-class MGMT-SSH in
+exit
+line console 0
+ login authentication default
+ exec-timeout 10 0
+ logging synchronous
+exit
+clock timezone &lt;TZ-NAME&gt; &lt;OFFSET&gt;
+ntp source Vlan&lt;MGMT-VLAN&gt;
+ntp server &lt;NTP-IP&gt; prefer
+service timestamps log datetime msec localtime show-timezone
+logging host &lt;SYSLOG-IP&gt;
+logging source-interface Vlan&lt;MGMT-VLAN&gt;
+logging trap warnings
+logging buffered 16384 informational
+ip access-list standard SNMP-ACL
+ permit host &lt;MONITORING-IP&gt;
+ deny any log
+exit
+snmp-server view NMS-READ iso included
+snmp-server group NMS-GROUP v3 priv read NMS-READ access SNMP-ACL
+snmp-server user &lt;SNMP-USER&gt; NMS-GROUP v3 auth sha &lt;SNMP-AUTH-PASSWORD&gt; priv aes 128 &lt;SNMP-PRIV-PASSWORD&gt;
+ip routing
+interface Vlan&lt;MGMT-VLAN&gt;
+ description MANAGEMENT
+ ip address &lt;MGMT-IP&gt; &lt;MASK&gt;
+ no ip redirects
+ no ip proxy-arp
+ no shutdown
+exit
+interface Vlan10
+ description USERS-GATEWAY
+ ip address 10.10.10.1 255.255.255.0
+ no ip redirects
+ no ip proxy-arp
+ no shutdown
+exit
+interface &lt;UPLINK&gt;
+ description ROUTED-UPSTREAM
+ no switchport
+ ip address &lt;TRANSIT-IP&gt; &lt;TRANSIT-MASK&gt;
+ no ip redirects
+ no ip proxy-arp
+ no shutdown
+exit
+ip route 0.0.0.0 0.0.0.0 &lt;UPSTREAM-NEXT-HOP&gt;
+ip access-list extended USERS-TO-MGMT
+ remark Approved shared infrastructure exceptions
+ permit udp 10.10.10.0 0.0.0.255 host 10.99.99.10 eq domain
+ permit tcp 10.10.10.0 0.0.0.255 host 10.99.99.10 eq domain
+ permit udp 10.10.10.0 0.0.0.255 host 10.99.99.20 eq ntp
+ deny ip 10.10.10.0 0.0.0.255 10.99.99.0 0.0.0.255
+ permit ip any any
+exit
+interface Vlan10
+ ip access-group USERS-TO-MGMT in
+exit
+spanning-tree mode rapid-pvst
+spanning-tree portfast bpduguard default
+ip dhcp snooping
+ip dhcp snooping vlan &lt;USER-VLANS&gt;
+no ip dhcp snooping information option
+ip arp inspection vlan &lt;USER-VLANS&gt;
+interface &lt;DOWNLINK-TRUNK&gt;
+ description TO-INSPECTED-ACCESS-SWITCH
+ switchport mode trunk
+ switchport trunk native vlan 998
+ switchport trunk allowed vlan &lt;VLAN-LIST&gt;
+ switchport nonegotiate
+ ! DHCP replies originate locally/upstream: this downstream ingress is untrusted.
+ ! ARP trust only because downstream Catalyst enforces DAI on every endpoint port.
+ ip arp inspection trust
+ no shutdown
+exit
+interface range &lt;ACCESS-PORTS&gt;
+ description REVIEWED-DHCP-ENDPOINTS
+ switchport mode access
+ switchport access vlan 10
+ switchport nonegotiate
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate &lt;RATE&gt;
+ ip arp inspection limit rate &lt;ARP-RATE&gt;
+ ip verify source
+ switchport port-security
+ switchport port-security maximum 3
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ storm-control broadcast level &lt;BCAST-RISE&gt; &lt;BCAST-FALL&gt;
+ storm-control multicast level &lt;MCAST-RISE&gt; &lt;MCAST-FALL&gt;
+ storm-control action trap
+ no shutdown
+exit
+interface range &lt;UNUSED-PORTS&gt;
+ switchport mode access
+ switchport access vlan 999
+ shutdown
+exit
+end
+! Validate, then separately run: copy running-config startup-config</code></pre>
+<a href="/downloads/cisco-catalyst-layer-2-layer-3-switch-hardening/l2-access.cfg" data-en="Download the L2 access template" data-fa="دانلود پیکربندی L2 Access">Download the L2 access template</a>
+<a href="/downloads/cisco-catalyst-layer-2-layer-3-switch-hardening/l3-switch.cfg" data-en="Download the L3 switch template" data-fa="دانلود پیکربندی L3">Download the L3 switch template</a>
+</section>
+<section id="warnings"><h2  data-en="23. Important Warnings" data-fa="۲۳. هشدارهای مهم">23. Important Warnings</h2>
+<div class="article-callout article-callout--warning" role="note"><p  data-en="SSH lockout: keep console/OOB access and a tested local account; validate a fresh session before closing the current one." data-fa="SSH Lockout: Console/OOB و حساب Local تست‌شده در دسترس باشد؛ پیش از بستن نشست فعلی SSH جدید را تست کنید.">SSH lockout: keep console/OOB access and a tested local account; validate a fresh session before closing the current one.</p></div>
+<div class="article-callout article-callout--warning" role="note"><p  data-en="DHCP trust: trusting an access endpoint allows rogue server replies. Trust only approved ingress from legitimate server paths." data-fa="DHCP Trust: Trust کردن Endpoint پاسخ Rogue را مجاز می‌کند؛ فقط ورودی مسیر سرور معتبر Trusted باشد.">DHCP trust: trusting an access endpoint allows rogue server replies. Trust only approved ingress from legitimate server paths.</p></div>
+<div class="article-callout article-callout--warning" role="note"><p  data-en="DAI and static hosts: install reviewed ARP ACLs before enforcement; otherwise legitimate ARP may be dropped." data-fa="DAI و Static Host: ARP ACL بررسی‌شده قبل از Enforcement اعمال شود؛ وگرنه ARP مجاز Drop می‌شود.">DAI and static hosts: install reviewed ARP ACLs before enforcement; otherwise legitimate ARP may be dropped.</p></div>
+<div class="article-callout article-callout--warning" role="note"><p  data-en="IPSG and static hosts: DHCP bindings may be absent; use supported manual bindings or a reviewed static-host design." data-fa="IPSG و Static Host: ممکن است Binding DHCP وجود نداشته باشد؛ Binding دستی پشتیبانی‌شده یا طراحی Static بررسی‌شده لازم است.">IPSG and static hosts: DHCP bindings may be absent; use supported manual bindings or a reviewed static-host design.</p></div>
+<div class="article-callout article-callout--warning" role="note"><p  data-en="Phone plus PC: maximum MAC and voice/data behavior must be tested; a generic maximum can reject a legitimate phone or replacement device." data-fa="Phone و PC: Maximum MAC و رفتار Voice/Data تست شود؛ Maximum عمومی می‌تواند تلفن یا دستگاه جایگزین مجاز را رد کند.">Phone plus PC: maximum MAC and voice/data behavior must be tested; a generic maximum can reject a legitimate phone or replacement device.</p></div>
+<div class="article-callout article-callout--warning" role="note"><p  data-en="BPDU Guard on uplinks: received BPDUs can err-disable the link and isolate the switch. Use only on intended endpoint edges." data-fa="BPDU Guard روی Uplink: BPDU می‌تواند لینک را err-disable و سوئیچ را جدا کند؛ فقط روی Edge Endpoint مورد نظر استفاده شود.">BPDU Guard on uplinks: received BPDUs can err-disable the link and isolate the switch. Use only on intended endpoint edges.</p></div>
+<div class="article-callout article-callout--warning" role="note"><p  data-en="Root Guard on the wrong link: a legitimate upstream root can become root-inconsistent and disconnect service." data-fa="Root Guard روی لینک نادرست: Root معتبر بالادست می‌تواند Root-inconsistent و سرویس قطع شود.">Root Guard on the wrong link: a legitimate upstream root can become root-inconsistent and disconnect service.</p></div>
+<div class="article-callout article-callout--warning" role="note"><p  data-en="Management ACL: wrong wildcard, NAT source or ordering can deny every administrator. Check actual source and every VTY range." data-fa="Management ACL: Wildcard، مبدأ NAT یا ترتیب اشتباه می‌تواند همه مدیران را رد کند؛ مبدأ واقعی و تمام VTYها بررسی شود.">Management ACL: wrong wildcard, NAT source or ordering can deny every administrator. Check actual source and every VTY range.</p></div>
+<div class="article-callout article-callout--warning" role="note"><p  data-en="no ip routing on an L3 switch disables routed forwarding and can stop inter-VLAN service immediately. Never use the L2 template on the L3 role." data-fa="no ip routing روی سوئیچ L3 انتقال Routed را غیرفعال و سرویس بین VLANها را فوراً قطع می‌کند؛ Template لایه ۲ روی نقش لایه ۳ اجرا نشود.">no ip routing on an L3 switch disables routed forwarding and can stop inter-VLAN service immediately. Never use the L2 template on the L3 role.</p></div>
+</section>
+<section id="checklist"><h2  data-en="24. Final Hardening Checklist" data-fa="۲۴. چک‌لیست نهایی">24. Final Hardening Checklist</h2>
+<p  data-en="Mark Status only after verification. L3 checks for Layer 2 protections refer to Layer 2 switchports/VLANs present on that L3 Catalyst, not routed interfaces; pure transit cores may not need those controls locally." data-fa="Status فقط پس از تست تکمیل شود. کنترل‌های Layer 2 در ستون L3 مربوط به Switchport/VLAN لایه ۲ موجود در آن Catalyst است، نه اینترفیس Routed؛ Core صرفاً Transit ممکن است محلی به آن‌ها نیاز نداشته باشد.">Mark Status only after verification. L3 checks for Layer 2 protections refer to Layer 2 switchports/VLANs present on that L3 Catalyst, not routed interfaces; pure transit cores may not need those controls locally.</p>
+<table><thead><tr><th  data-en="Security Control" data-fa="کنترل امنیتی">Security Control</th><th  data-en="L2" data-fa="L2">L2</th><th  data-en="L3" data-fa="L3">L3</th><th  data-en="Status" data-fa="وضعیت">Status</th></tr></thead><tbody><tr><td  data-en="AAA" data-fa="AAA">AAA</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="" data-fa=""></td></tr><tr><td  data-en="SSHv2" data-fa="SSHv2">SSHv2</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="" data-fa=""></td></tr><tr><td  data-en="Management ACL" data-fa="Management ACL">Management ACL</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="" data-fa=""></td></tr><tr><td  data-en="SNMPv3" data-fa="SNMPv3">SNMPv3</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="" data-fa=""></td></tr><tr><td  data-en="Syslog" data-fa="Syslog">Syslog</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="" data-fa=""></td></tr><tr><td  data-en="NTP" data-fa="NTP">NTP</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="" data-fa=""></td></tr><tr><td  data-en="DHCP Snooping" data-fa="DHCP Snooping">DHCP Snooping</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="" data-fa=""></td></tr><tr><td  data-en="DAI" data-fa="DAI">DAI</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="" data-fa=""></td></tr><tr><td  data-en="IP Source Guard" data-fa="IP Source Guard">IP Source Guard</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="Optional" data-fa="اختیاری">Optional</td><td  data-en="" data-fa=""></td></tr><tr><td  data-en="BPDU Guard" data-fa="BPDU Guard">BPDU Guard</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="" data-fa=""></td></tr><tr><td  data-en="Port Security" data-fa="Port Security">Port Security</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="Optional" data-fa="اختیاری">Optional</td><td  data-en="" data-fa=""></td></tr><tr><td  data-en="Storm Control" data-fa="Storm Control">Storm Control</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="" data-fa=""></td></tr><tr><td  data-en="Routing Hardening" data-fa="Routing Hardening">Routing Hardening</td><td  data-en="N/A" data-fa="N/A">N/A</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="" data-fa=""></td></tr><tr><td  data-en="SVI ACL" data-fa="SVI ACL">SVI ACL</td><td  data-en="N/A" data-fa="N/A">N/A</td><td  data-en="✓" data-fa="✓">✓</td><td  data-en="" data-fa=""></td></tr></tbody></table>
+</section>
+<section id="references"><h2  data-en="Official Cisco References" data-fa="منابع رسمی Cisco">Official Cisco References</h2>
+<p  data-en="Reviewed on 2026-10-07. References describe particular Catalyst releases or software families; consult the matching guide, release notes and security advisories for the deployed PID/image. Examples are editorially reviewed against Cisco documentation; they have not been executed on your switches." data-fa="بررسی منابع: 2026-10-07. منابع مربوط به نسخه یا خانواده نرم‌افزاری مشخص‌اند؛ راهنمای منطبق، Release Note و Security Advisory مربوط به PID/Image واقعی بررسی شود. مثال‌ها با مستندات Cisco بازبینی شده‌اند؛ روی سوئیچ شما اجرا نشده‌اند.">Reviewed on 2026-10-07. References describe particular Catalyst releases or software families; consult the matching guide, release notes and security advisories for the deployed PID/image. Examples are editorially reviewed against Cisco documentation; they have not been executed on your switches.</p>
+<p><a href="https://sec.cloudapps.cisco.com/security/center/resources/IOS_XE_hardening" rel="noopener" data-en="Cisco IOS XE Software Hardening Guide" data-fa="مرجع رسمی: Cisco IOS XE Software Hardening Guide">Cisco IOS XE Software Hardening Guide</a></p>
+<p><a href="https://www.cisco.com/c/en/us/support/docs/ip/access-lists/13608-21.html" rel="noopener" data-en="Cisco IOS device hardening guidance" data-fa="مرجع رسمی: Cisco IOS device hardening guidance">Cisco IOS device hardening guidance</a></p>
+<p><a href="https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-11/command_reference/b_1711_9300_cr/security_commands.html" rel="noopener" data-en="Catalyst 9300 security command reference: passwords, AAA and controls" data-fa="مرجع رسمی: Catalyst 9300 security command reference: passwords, AAA and controls">Catalyst 9300 security command reference: passwords, AAA and controls</a></p>
+<p><a href="https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-7/configuration_guide/sec/b_177_sec_9300_cg/configuring_secure_shell__ssh_.html" rel="noopener" data-en="Catalyst 9300: Secure Shell" data-fa="مرجع رسمی: Catalyst 9300: Secure Shell">Catalyst 9300: Secure Shell</a></p>
+<p><a href="https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-12/configuration_guide/ip/b_1712_ip_9300_cg/configuring_dhcp.html" rel="noopener" data-en="Catalyst 9300: DHCP and snooping" data-fa="مرجع رسمی: Catalyst 9300: DHCP and snooping">Catalyst 9300: DHCP and snooping</a></p>
+<p><a href="https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-18/configuration_guide/sec/b_1718_sec_9300_cg/configuring_dynamic_arp_inspection.html" rel="noopener" data-en="Catalyst 9300: Dynamic ARP Inspection" data-fa="مرجع رسمی: Catalyst 9300: Dynamic ARP Inspection">Catalyst 9300: Dynamic ARP Inspection</a></p>
+<p><a href="https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-12/configuration_guide/sec/b_1712_sec_9300_cg/configuring_ip_source_guard.html" rel="noopener" data-en="Catalyst 9300: IP Source Guard" data-fa="مرجع رسمی: Catalyst 9300: IP Source Guard">Catalyst 9300: IP Source Guard</a></p>
+<p><a href="https://www.cisco.com/c/en/us/support/docs/switches/lan-switch-software/222274-troubleshoot-dynamic-arp-inspection-dai.html" rel="noopener" data-en="Catalyst: troubleshooting DAI and IPSG" data-fa="مرجع رسمی: Catalyst: troubleshooting DAI and IPSG">Catalyst: troubleshooting DAI and IPSG</a></p>
+<p><a href="https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-14/configuration_guide/lyr2/b_1714_lyr2_9300_cg/configuring_optional_spanning_tree_features.html" rel="noopener" data-en="Catalyst 9300: PortFast, BPDU Guard, Root Guard and Loop Guard" data-fa="مرجع رسمی: Catalyst 9300: PortFast, BPDU Guard, Root Guard and Loop Guard">Catalyst 9300: PortFast, BPDU Guard, Root Guard and Loop Guard</a></p>
+<p><a href="https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-12/command_reference/b_1712_9300_cr/security_commands.html" rel="noopener" data-en="Catalyst 9300: Port Security and Storm Control commands" data-fa="مرجع رسمی: Catalyst 9300: Port Security and Storm Control commands">Catalyst 9300: Port Security and Storm Control commands</a></p>
+<p><a href="https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-6/configuration_guide/nmgmt/b_166_nmgmt_9300_cg/b_166_nmgmt_9300_cg_chapter_010.html" rel="noopener" data-en="Catalyst 9300: SNMP groups, views and users" data-fa="مرجع رسمی: Catalyst 9300: SNMP groups, views and users">Catalyst 9300: SNMP groups, views and users</a></p>
+<p><a href="https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sys_mgmt/b_1612_sys_mgmt_9300_cg.pdf" rel="noopener" data-en="Catalyst 9300: system management, NTP and logging" data-fa="مرجع رسمی: Catalyst 9300: system management, NTP and logging">Catalyst 9300: system management, NTP and logging</a></p>
+<p><a href="https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/rtng/b_1612_rtng_9300_cg.pdf" rel="noopener" data-en="Catalyst 9300: IP routing and authentication variants" data-fa="مرجع رسمی: Catalyst 9300: IP routing and authentication variants">Catalyst 9300: IP routing and authentication variants</a></p>
+<p><a href="https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-3/configuration_guide/vlan/b_173_vlan_9300_cg/configuring_vlan_trunks.html" rel="noopener" data-en="Catalyst 9300: VLAN trunks and DTP" data-fa="مرجع رسمی: Catalyst 9300: VLAN trunks and DTP">Catalyst 9300: VLAN trunks and DTP</a></p>
+<p><a href="https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-8/configuration_guide/sec/b_168_sec_9300_cg/configuring_ipv4_acls.html" rel="noopener" data-en="Catalyst 9300: IPv4 ACLs" data-fa="مرجع رسمی: Catalyst 9300: IPv4 ACLs">Catalyst 9300: IPv4 ACLs</a></p>
+<p><a href="https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/sec/b_176_sec_9300_cg/configuring_control_plane_policing.html" rel="noopener" data-en="Catalyst 9300: Control Plane Policing" data-fa="مرجع رسمی: Catalyst 9300: Control Plane Policing">Catalyst 9300: Control Plane Policing</a></p>
+<p><a href="https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-7/configuration_guide/rtng/b_177_rtng_9300_cg/configuring_ip_unicast_routing.html" rel="noopener" data-en="Catalyst 9300: unicast routing and Proxy ARP" data-fa="مرجع رسمی: Catalyst 9300: unicast routing and Proxy ARP">Catalyst 9300: unicast routing and Proxy ARP</a></p>
+</section></article></main></body></html>
