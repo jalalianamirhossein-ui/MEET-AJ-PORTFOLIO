@@ -144,7 +144,6 @@
       </section>
       <section id="article-content" class="article-content article-container" aria-label="Article content" data-en-aria-label="Article content" data-fa-aria-label="متن مقاله">
         <div class="container">
-          @php $tocHtml = data_get($article->presentation, 'toc_html'); @endphp
           @php
             $articleContent = str_replace('my-profile-img.jpg', 'my-profile-img-2.jpg', $article->displayContent());
             $articleContent = str_replace(
@@ -152,21 +151,20 @@
                 [route('articles.index', [], false), route('articles.index', [], false), 'Back to articles', 'بازگشت به فهرست مقاله‌ها'],
                 $articleContent
             );
-            $standardToc = [
-                ['introduction', 'Introduction', 'مقدمه'],
-                ['architecture', 'Architecture and Core Concepts', 'معماری و مفاهیم اصلی'],
-                ['prerequisites', 'Prerequisites', 'پیش‌نیازها'],
-                ['configuration', 'Configuration and Validation', 'Configuration و اعتبارسنجی'],
-                ['best-practices', 'Best Practices', 'Best Practiceها'],
-                ['security', 'Security Considerations', 'ملاحظات امنیتی'],
-                ['troubleshooting', 'Troubleshooting', 'عیب‌یابی'],
-                ['conclusion', 'Conclusion', 'جمع‌بندی'],
-                ['faq', 'Frequently Asked Questions', 'پرسش‌های متداول'],
-                ['official-references', 'Official References', 'منابع رسمی و مرجع'],
-            ];
-            foreach ($standardToc as [$id, $en, $fa]) {
-                if (str_contains($articleContent, 'id="'.$id.'"') && ! str_contains((string) $tocHtml, 'href="#'.$id.'"')) {
-                    $tocHtml .= '<li class="article-nav-item"><a href="#'.$id.'"><span data-en="'.$en.'" data-fa="'.$fa.'">'.$en.'</span></a></li>';
+            // Build the TOC from the final rendered sections, not the legacy
+            // toc_html stored during import. Legacy TOCs were often stale or
+            // contained only the FAQ link after article repairs.
+            $tocHtml = '';
+            if (preg_match_all('~<section\\b[^>]*\\bid=["\\']([^"\\']+)["\\'][^>]*>.*?<h2\\b([^>]*)>(.*?)</h2>~is', $articleContent, $tocSections, PREG_SET_ORDER)) {
+                foreach ($tocSections as $tocSection) {
+                    $id = $tocSection[1];
+                    $attributes = $tocSection[2];
+                    $heading = trim(strip_tags($tocSection[3]));
+                    preg_match('/\\bdata-en=["\\']([^"\\']*)["\\']/i', $attributes, $enMatch);
+                    preg_match('/\\bdata-fa=["\\']([^"\\']*)["\\']/i', $attributes, $faMatch);
+                    $en = html_entity_decode($enMatch[1] ?? $heading, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                    $fa = html_entity_decode($faMatch[1] ?? $en, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                    $tocHtml .= '<li class="article-nav-item"><a href="#'.e($id).'" data-en-aria-label="'.e($en).'" data-fa-aria-label="'.e($fa).'" aria-label="'.e($en).'"><span data-en="'.e($en).'" data-fa="'.e($fa).'">'.e($en).'</span></a></li>';
                 }
             }
                 $articleContent = preg_replace('~<footer\b[^>]*class=["\'][^"\']*article-footer[^"\']*["\'][^>]*>.*?</footer>~is', '', $articleContent) ?? $articleContent;
