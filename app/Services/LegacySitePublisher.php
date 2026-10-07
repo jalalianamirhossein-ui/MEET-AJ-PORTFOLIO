@@ -580,7 +580,8 @@ self.addEventListener("fetch", (event) => {
   }
 });
 JS;
-        file_put_contents(public_path('sw.js'), $js);
+        // Keep generated output byte-for-byte stable with the tracked worker.
+        file_put_contents(public_path('sw.js'), rtrim($js, "\r\n").PHP_EOL);
         $offline = <<<'HTML'
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Offline | Meet AJ</title>
