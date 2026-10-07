@@ -78,6 +78,7 @@ class ArticleTagAssigner
     public function slugsFor(Article $article): array
     {
         $specific = [
+            'fortigate-sd-wan-load-balancing-failover' => ['fortinet'],
             'ubiquiti-unifi-wireless-mesh-network' => ['ubiquiti'],
             'cisco-catalyst-layer-2-layer-3-switch-hardening' => ['cisco'],
             'netbox-installation-setup-ubuntu' => ['netbox', 'ubuntu', 'linux'],
