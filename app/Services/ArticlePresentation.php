@@ -44,7 +44,13 @@ class ArticlePresentation
             }
         }
 
-        foreach (iterator_to_array($xp->query('.//section[@id="faq"]//h3[not(ancestor::details)]', $root)) as $question) {
+        // Normalize both current h3 questions and older FAQ question nodes
+        // that use a different heading level or only the shared CSS class.
+        $faqQuestions = $xp->query(
+            './/section[@id="faq"]//*[self::h3 or self::h4 or contains(concat(" ", normalize-space(@class), " "), " article-faq-question ")][not(ancestor::details)]',
+            $root
+        );
+        foreach (iterator_to_array($faqQuestions) as $question) {
             if (! $question->parentNode) {
                 continue;
             }
