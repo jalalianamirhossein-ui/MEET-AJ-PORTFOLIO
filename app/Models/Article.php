@@ -76,14 +76,16 @@ class Article extends Model
             return $query;
         }
 
-        $like = '%'.addcslashes($term, '%_\\').'%';
+        // Explicit ESCAPE works identically on SQLite and MySQL; backslash
+        // escaping without an ESCAPE clause is not portable to SQLite.
+        $like = '%'.str_replace(['!', '%', '_'], ['!!', '!%', '!_'], $term).'%';
 
         return $query->where(function (Builder $inner) use ($like): void {
-            $inner->where('title', 'like', $like)
-                ->orWhere('excerpt', 'like', $like)
-                ->orWhere('content', 'like', $like)
-                ->orWhereHas('category', fn (Builder $category) => $category->where('name', 'like', $like))
-                ->orWhereHas('tags', fn (Builder $tag) => $tag->where('name', 'like', $like)->orWhere('slug', 'like', $like));
+            $inner->whereRaw("title LIKE ? ESCAPE '!'", [$like])
+                ->orWhereRaw("excerpt LIKE ? ESCAPE '!'", [$like])
+                ->orWhereRaw("content LIKE ? ESCAPE '!'", [$like])
+                ->orWhereHas('category', fn (Builder $category) => $category->whereRaw("name LIKE ? ESCAPE '!'", [$like]))
+                ->orWhereHas('tags', fn (Builder $tag) => $tag->whereRaw("name LIKE ? ESCAPE '!'", [$like])->orWhereRaw("slug LIKE ? ESCAPE '!'", [$like]));
         });
     }
 
@@ -102,7 +104,10 @@ class Article extends Model
      */
     public function relatedArticles(int $limit = 3)
     {
-        $limit = 3;
+        $limit = max(0, min($limit, 12));
+        if ($limit === 0) {
+            return collect();
+        }
         $tagIds = $this->relationLoaded('tags')
             ? $this->tags->pluck('id')->map(fn ($id) => (int) $id)->all()
             : $this->tags()->pluck('tags.id')->map(fn ($id) => (int) $id)->all();
@@ -112,6 +117,7 @@ class Article extends Model
             ->values();
 
         return static::published()
+            ->forListing()
             ->where('language', $this->language)
             ->whereKeyNot([$this->id])
             ->with(['category', 'tags'])

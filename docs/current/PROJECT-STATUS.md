@@ -1,10 +1,10 @@
 # Project status — Meet AJ
 
-**Current local verification: 2026-10-08.** Evidence: [security and bug audit](../qa/SECURITY-BUG-AUDIT-2026-10-08.md). Full suite: 150 tests, 21,840 assertions, zero errors/failures and one MySQL skip. Five frontend tests pass. Historical reports describe their own dates.
+**Current local verification: 2026-10-08.** Evidence: [enterprise security audit](../SECURITY-AUDIT-REPORT.md) and [refactoring inventory](../PROJECT-REFACTORING-REPORT.md). Full suite: 158 tests, 21,919 assertions, zero errors/failures and one MySQL skip. Six frontend tests pass. Historical reports describe their own dates.
 
 ## Application
 
-Laravel 13.31.0, Filament 5.8.3, Livewire 4.4.5 and PHPUnit 11.5.56 are locked dependencies. CommonMark is patched to 2.10.2. PHP 8.4.25 runs locally. Blade and CSS/JavaScript serve the public site; Filament serves `/admin`. No frontend build, Redis, worker or scheduler is required. Node is optional for frontend and documentation checks. SQLite is local; deployment targets MySQL/MariaDB. Production was not inspected.
+Laravel 13.31.0, Filament 5.8.3, Livewire 4.4.5 and PHPUnit 11.5.56 are locked dependencies. CommonMark is 2.10.2 and vendored Swiper is patched to 12.1.2. PHP 8.4.25 runs locally. Blade and CSS/JavaScript serve the public site; Filament serves `/admin`. No frontend build, Redis, worker or scheduler is required. Node is optional for frontend and documentation checks. SQLite is local; deployment targets MySQL/MariaDB. Production received limited read-only HEAD checks; HTTP currently returned 200 without a redirect. No server configuration or data was changed.
 
 ## Historical local snapshot (2026-10-06)
 
@@ -32,7 +32,7 @@ Recent content migrations update testimonial attribution, contact headings and i
 
 `site:compare-content` reported **27 failures** on 2026-10-06, primarily source/database drift; the earlier zero-failure result is historical. Updating stored article bodies is a separate editorial operation: preview `articles:import-legacy --update-existing --dry-run`, back up and review CMS edits before applying. This documentation task did not replace database content.
 
-On 2026-10-08, the complete SQLite suite passed and frontend scroll-reveal/service-worker checks passed (5/5). Security fixes, dependency checks and local filesystem bootstrap limitations are recorded in the security audit. Remote deployment, SMTP, real MySQL, infrastructure examples, Lighthouse/load tests and browser PWA installation/offline behavior were not checked in this review. No local CMS user was created for interactive login.
+On 2026-10-08, the complete SQLite suite and six frontend checks passed. Headless Chrome checked Laravel-rendered homepage/library/article fixtures at desktop and mobile sizes, EN/FA toggling, local resources and Swiper interactions. Loopback HTTP access was unavailable, so these fixture checks do not verify a live server or authenticated Livewire browser requests. Security fixes, production observations and dependency checks are recorded in the security audit. Deployment, SMTP, real MySQL, nginx configuration execution, hosted CI, Lighthouse/load tests and browser PWA installation/offline behavior remain unverified. No local CMS user was created for interactive login.
 
 Start with [the documentation index](../README.md), [directory map](PROJECT-STRUCTURE.md), [articles](ARTICLES.md), [testing](TESTING.md) and [deployment](DEPLOYMENT.md).
 

@@ -15,11 +15,16 @@ class SecurityHeaders
         $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
+        // These directives preserve existing inline scripts, styles and embeds.
+        $response->headers->set('Content-Security-Policy', "base-uri 'self'; object-src 'none'; frame-ancestors 'self'");
+        $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
 
         $path = '/'.ltrim($request->path(), '/');
         $private = str_starts_with($path, '/admin')
             || str_starts_with($path, '/livewire')
-            || str_starts_with($path, '/forms');
+            || str_starts_with($path, '/forms')
+            || str_starts_with($path, '/filament')
+            || $request->query->has('signature');
 
         if ($private || $request->isMethod('POST') || $request->routeIs('home')) {
             $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
@@ -35,7 +40,7 @@ class SecurityHeaders
         }
 
         if ($request->secure()) {
-            $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+            $response->headers->set('Strict-Transport-Security', 'max-age=31536000');
         }
 
         return $response;

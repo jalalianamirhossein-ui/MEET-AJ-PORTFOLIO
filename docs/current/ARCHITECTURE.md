@@ -8,6 +8,8 @@
 
 ## Request flow
 
+The [2026-10-08 architecture entry point](../../ARCHITECTURE.md) and [audit](../SECURITY-AUDIT-REPORT.md) document HTTPS enforcement, conservative security headers, image validation, sanitizer ordering, vendored dependency maintenance and pinned CI. Web hosting may use Apache/DirectAdmin or the reviewed nginx example; only `public/` is exposed.
+
 ```
 Browser
    │
@@ -139,6 +141,7 @@ Detail: [ADMIN.md](ADMIN.md).
 | Middleware | Effect |
 |------------|--------|
 | `SecurityHeaders` | `nosniff`, `Referrer-Policy`, `SAMEORIGIN`, HSTS on HTTPS, `no-store` on `/admin`, `/livewire`, `/forms` and POST responses |
+| `EnforceHttps` | Production-default HTTPS enforcement; configured-origin 308 for safe methods, 400 for insecure unsafe methods; trusted proxies determine the original scheme |
 | `AcceptLegacyCsrfToken` | Maps the legacy `csrf_token` field onto Laravel's CSRF check |
 
 ## Assets and document root

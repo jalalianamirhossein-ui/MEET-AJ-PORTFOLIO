@@ -1,0 +1,44 @@
+# Review certificate paths, PHP socket and CDN topology before installation.
+# This file is a template; no production configuration is changed automatically.
+server {
+    listen 80;
+    listen [::]:80;
+    server_name meetaj.ir;
+    return 308 https://meetaj.ir$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name meetaj.ir;
+    root /var/www/meetaj/public;
+    index index.php;
+    charset utf-8;
+    server_tokens off;
+    autoindex off;
+    client_max_body_size 8m;
+
+    ssl_certificate /etc/letsencrypt/live/meetaj.ir/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/meetaj.ir/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+    location = /index.php {
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $realpath_root/index.php;
+        fastcgi_pass unix:/run/php/php8.4-fpm.sock;
+        fastcgi_hide_header X-Powered-By;
+    }
+    # Legacy public endpoint names are Laravel routes, not PHP files.
+    location = /forms/contact.php { rewrite ^ /index.php last; }
+    location = /forms/get-csrf-token.php { rewrite ^ /index.php last; }
+    # No uploaded or downloaded PHP may execute.
+    location ~ \.php(?:/|$) { return 404; }
+    location ~ /\.(?!well-known(?:/|$)) { deny all; }
+    location = /sw.js {
+        add_header Cache-Control "no-cache, no-store, must-revalidate" always;
+        add_header Service-Worker-Allowed "/" always;
+    }
+}

@@ -1,8 +1,8 @@
 const fs=require('fs'),path=require('path');
 const root=path.resolve(__dirname,'..');
-const folders=['docs','deploy','resources'];
+const folders=['docs','deploy','resources','scripts'];
 function walk(dir){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);}
-const files=[path.join(root,'README.md'),...folders.flatMap(f=>walk(path.join(root,f)))].filter(f=>/\.md$/i.test(f)).sort();
+const files=[...fs.readdirSync(root).filter(f=>/\.md$/i.test(f)).map(f=>path.join(root,f)),...folders.flatMap(f=>walk(path.join(root,f)))].filter(f=>/\.md$/i.test(f)).sort();
 const rel=f=>path.relative(root,f).replaceAll('\\','/');
 const index=path.join(root,'docs','DOCUMENTATION-INDEX.md');
 if(process.argv.includes('--write-index')){

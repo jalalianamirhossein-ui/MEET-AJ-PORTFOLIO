@@ -1,6 +1,6 @@
 # Maintenance scripts
 
-Reviewed 2026-10-06. Run scripts from the repository root. PHP tools require PHP 8.4 and Composer dependencies; Python builders require Python 3. Node is optional for documentation/frontend checks. The site needs no frontend build.
+Reviewed 2026-10-08. Run scripts from the repository root. PHP tools require PHP 8.4 and Composer dependencies; Python builders require Python 3. Node is optional for documentation/frontend checks. The site needs no frontend build.
 
 | Tools | Purpose |
 |---|---|
@@ -15,13 +15,15 @@ Reviewed 2026-10-06. Run scripts from the repository root. PHP tools require PHP
 | `prepare-enterprise-runbooks.py`, `prepare-english-runbooks.py`, `upgrade-enterprise-articles.py`, `build-bilingual-articles.py`, `article_comparisons.py` | Historical enterprise editorial pipeline; read inventories before rebuilding |
 | `verify-enterprise-articles.py` | Enterprise source validation against its archived inputs |
 | `check-documentation.cjs` | Check local Markdown file targets; `--write-index` refreshes the complete inventory |
+| `check-repository-security.cjs` | Check tracked/nonignored files, case collisions and high-confidence secret patterns; `--history` also scans available Git history without printing matches |
 
 SQL English generator input is in `resources/content/articles/sql-server-automatic-backup-job/english-source.txt`. Article-specific builders and executable examples belong in [content packages](../resources/content/README.md). Bulk pipelines do not automatically acquire newer packages.
 
 ```bash
 node scripts/check-documentation.cjs
 node scripts/check-documentation.cjs --write-index
-node --test tests/Frontend/scroll-reveal.test.cjs
+node --test tests/Frontend/scroll-reveal.test.cjs tests/Frontend/service-worker-security.test.cjs tests/Frontend/swiper-security.test.cjs
+node scripts/check-repository-security.cjs --history
 ```
 
 These checks validate file targets and frontend behavior, not external websites or Markdown heading anchors. For database replacement, preview the import, back up and review CMS edits. Current source/database differences are documented in [project status](../docs/current/PROJECT-STATUS.md).

@@ -25,8 +25,8 @@ class LegacySitePublisher
         $this->copyFile(resource_path('downloads/netbox_installation_guide_v2.pdf'), public_path('docs/netbox_installation_guide_v2.pdf'), $copied);
         $this->copyFile(resource_path('content/articles/linux-security-auditor-bash/security-audit.sh'), public_path('docs/linux-security-auditor/security-audit.sh'), $copied);
         $this->copyFile(resource_path('content/articles/mikrotik-pbr-client/MikroTikPBRClient-Setup-1.0.2-x64.msi'), public_path('downloads/mikrotik-pbr-client/MikroTikPBRClient-Setup-1.0.2-x64.msi'), $copied);
-        $this->writeServiceWorker();
-        $copied[] = 'public/sw.js';
+        $this->copyFile(resource_path('static/sw.js'), public_path('sw.js'), $copied);
+        $this->copyFile(resource_path('static/offline.html'), public_path('offline.html'), $copied);
 
         $forbidden = [
             public_path('articles'),
@@ -55,30 +55,6 @@ class LegacySitePublisher
         $written[] = $this->writeArticleIndex();
 
         return $written;
-    }
-
-    private function writeHome(): string
-    {
-        $target = resource_path('views/home.blade.php');
-        $existing = is_file($target) ? file_get_contents($target) : false;
-        if (is_string($existing) && str_contains($existing, '$homepageContent')) {
-            return $target;
-        }
-
-        $html = file_get_contents(resource_path('legacy/index.html'));
-        if ($html === false) {
-            throw new \RuntimeException('Unable to read index.html');
-        }
-        $html = $this->toBlade($html);
-        $html = $this->injectCsrfTokens($html);
-        $html = $this->replacePortfolioGrid($html);
-        $html = $this->replaceServicesGrid($html);
-        $html = $this->replaceTestimonials($html);
-        $html = $this->injectArticleLibrary($html, false);
-        $html = $this->replaceSidebarChrome($html, '#hero');
-        file_put_contents($target, $html);
-
-        return $target;
     }
 
     private function writeArticleIndex(): string
@@ -199,64 +175,6 @@ BLADE;
         }
 
         return substr($html, $from, $to + strlen($endNeedle) - $from);
-    }
-
-    private function replaceServicesGrid(string $html): string
-    {
-        if (str_contains($html, '@forelse ($services as $service)')) {
-            return $html;
-        }
-
-        $end = strpos($html, '<!-- End Service Catalog -->');
-        $marker = strpos($html, 'id="service-catalog"');
-        if ($end === false || $marker === false) {
-            throw new \RuntimeException('Unable to locate homepage service catalog');
-        }
-        $open = strrpos(substr($html, 0, $marker), '<div');
-        if ($open === false) {
-            throw new \RuntimeException('Unable to locate service catalog opening tag');
-        }
-        $loop = <<<'BLADE'
-@endverbatim
-          <div class="row gy-4" id="service-catalog">
-            @forelse ($services as $service)
-              @include('components.service-card', ['service' => $service])
-            @empty
-            @endforelse
-          </div>
-          @include('partials.service-drawer')
-          <!-- End Service Catalog -->
-@verbatim
-BLADE;
-
-        return substr($html, 0, $open).$loop.substr($html, $end + strlen('<!-- End Service Catalog -->'));
-    }
-
-    private function replaceTestimonials(string $html): string
-    {
-        $include = <<<'BLADE'
-@endverbatim
-      @include('partials.testimonials')
-@verbatim
-      <!-- /Testimonials Section -->
-BLADE;
-
-        if (str_contains($html, "@include('partials.testimonials')")) {
-            if (! str_contains($html, "@endverbatim\n      @include('partials.testimonials')")
-                && ! str_contains($html, "@endverbatim\r\n      @include('partials.testimonials')")) {
-                return str_replace("@include('partials.testimonials')", $include, $html);
-            }
-
-            return $html;
-        }
-
-        $start = strpos($html, '<section id="testimonials"');
-        $end = strpos($html, '<!-- /Testimonials Section -->');
-        if ($start === false || $end === false) {
-            throw new \RuntimeException('Unable to locate testimonials section');
-        }
-
-        return substr($html, 0, $start).$include.substr($html, $end + strlen('<!-- /Testimonials Section -->'));
     }
 
     private function replacePortfolioGrid(string $html): string
@@ -460,135 +378,6 @@ BLADE;
         // mailto: addresses as @@gmail in the compiled HTML because Blade
         // treats @gmail as a directive. @verbatim preserves JSON-LD @type too.
         return "@verbatim\n".$html."\n@endverbatim";
-    }
-
-    private function injectCsrfTokens(string $html): string
-    {
-        if (! str_contains($html, 'content="{{ csrf_token() }}"')) {
-            $meta = <<<'BLADE'
-@endverbatim
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-@verbatim
-BLADE;
-            $html = preg_replace('/<meta charset="utf-8"\s*\/?>/i', '$0'.$meta, $html, 1, $metaCount);
-            if (! is_string($html) || $metaCount !== 1) {
-                throw new \RuntimeException('Unable to inject CSRF meta tag');
-            }
-        }
-
-        $input = <<<'BLADE'
-@endverbatim
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
-@verbatim
-BLADE;
-
-        if (str_contains($html, 'name="_token"') && str_contains($html, 'value="{{ csrf_token() }}"')) {
-            return $html;
-        }
-
-        $html = preg_replace(
-            '/<input\s+type="hidden"\s+name="csrf_token"[^>]*>/s',
-            $input,
-            $html,
-            1,
-            $replaced
-        );
-        if (! is_string($html) || $replaced !== 1) {
-            throw new \RuntimeException('Unable to inject CSRF form fields');
-        }
-
-        return $html;
-    }
-
-    private function writeServiceWorker(): void
-    {
-        $js = <<<'JS'
-const ASSET_VERSION = "cms-5";
-const CACHE_NAME = `meet-aj-v2.0.0-${ASSET_VERSION}`;
-const PRIVATE_PREFIXES = ["/admin", "/livewire", "/forms", "/storage/livewire-tmp"];
-
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(["/manifest.json", "/offline.html"])).then(() => self.skipWaiting())
-  );
-});
-
-self.addEventListener("activate", (event) => {
-  event.waitUntil((async () => {
-    const keys = await caches.keys();
-    await Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)));
-    if (self.registration.navigationPreload) {
-      await self.registration.navigationPreload.enable();
-    }
-    await self.clients.claim();
-  })());
-});
-
-function isPrivate(url) {
-  const parsed = new URL(url);
-  const path = parsed.pathname;
-  return PRIVATE_PREFIXES.some((prefix) => path === prefix || path.startsWith(prefix + "/") || path.startsWith(prefix + "-"))
-    || path.endsWith(".php")
-    || parsed.searchParams.has("signature");
-}
-
-self.addEventListener("fetch", (event) => {
-  const request = event.request;
-  if (request.method !== "GET" || new URL(request.url).origin !== self.location.origin || isPrivate(request.url) || request.headers.get("authorization")) {
-    return;
-  }
-  const destination = request.destination;
-  const isDocument = destination === "document";
-  const isAsset = /\.(css|js|png|jpg|jpeg|gif|webp|svg|woff|woff2|ico)$/i.test(new URL(request.url).pathname);
-
-  if (isDocument) {
-    event.respondWith((async () => {
-      try {
-        const response = await fetch(request);
-        const cacheControl = response.headers.get("cache-control") || "";
-        if (response.ok && !cacheControl.includes("no-store") && !isPrivate(response.url)) {
-          const cache = await caches.open(CACHE_NAME);
-          cache.put(request, response.clone());
-        }
-        if (response.status === 404 || response.status === 410) {
-          const cache = await caches.open(CACHE_NAME);
-          await cache.delete(request);
-        }
-        return response;
-      } catch (error) {
-        return (await caches.match(request)) || (await caches.match("/")) || (await caches.match("/offline.html"));
-      }
-    })());
-    return;
-  }
-
-  if (isAsset) {
-    event.respondWith((async () => {
-      const cache = await caches.open(CACHE_NAME);
-      const cached = await cache.match(request);
-      try {
-        const response = await fetch(request);
-        if (response.ok && !(response.headers.get("cache-control") || "").includes("no-store") && !isPrivate(response.url)) {
-          await cache.put(request, response.clone());
-        }
-        return response;
-      } catch (error) {
-        return cached || Response.error();
-      }
-    })());
-  }
-});
-JS;
-        // Keep generated output byte-for-byte stable with the tracked worker.
-        file_put_contents(public_path('sw.js'), rtrim($js, "\r\n").PHP_EOL);
-        $offline = <<<'HTML'
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><title>Offline | Meet AJ</title>
-<meta name="robots" content="noindex"></head>
-<body><h1>You are offline</h1><p>Reconnect to load the latest Meet AJ pages.</p></body></html>
-HTML;
-        file_put_contents(public_path('offline.html'), $offline);
     }
 
     private function copyDirectory(string $from, string $to, array &$copied): void

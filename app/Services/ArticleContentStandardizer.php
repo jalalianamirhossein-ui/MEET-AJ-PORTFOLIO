@@ -12,7 +12,8 @@ class ArticleContentStandardizer
 {
     public function standardize(Article $article, string $content): string
     {
-        $content = Article::normalizeContentMarkup($content);
+        // Input has already been normalized and sanitized by Article::displayContent.
+        // Decoding entities here would turn inert text back into executable markup.
         $content = $this->removeArticleBackButton($content);
         $content = $this->wrapFlatSections($content);
         $content = $this->removeSeoSections($content);

@@ -1,5 +1,7 @@
 # اسکریپت‌های Deploy پروژه Meet AJ
 
+Security update, 2026-10-08: use [the deployment checklist](../DEPLOYMENT.md) for `/var/www/meetaj` and review [the nginx example](nginx.conf.example) before adapting certificate and PHP-FPM paths. Set `FORCE_HTTPS=true`, an HTTPS `APP_URL`, and actual `TRUSTED_PROXIES`; preserve the existing environment and key. The example has not been run through nginx on this Windows host. Deployment and database changes remain operator actions.
+
 اسکریپت‌ها را از ریشه پروژه اجرا کنید:
 
 ```bash

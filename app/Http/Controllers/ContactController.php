@@ -76,7 +76,8 @@ class ContactController extends Controller
         } catch (\Throwable $exception) {
             Log::error('Contact notification email failed after the request was stored.', [
                 'request_id' => $record->id,
-                'error' => $exception->getMessage(),
+                // Transport messages may contain SMTP credentials or submitted PII.
+                'exception_class' => $exception::class,
             ]);
         }
     }

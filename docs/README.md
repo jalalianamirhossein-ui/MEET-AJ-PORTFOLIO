@@ -1,6 +1,8 @@
 # Meet AJ — documentation
 
-Navigation map for every document in this repository. Last updated **2026-10-06** after the full structural, documentation and test audit.
+Navigation map for every document in this repository. Last updated **2026-10-08** after the enterprise security implementation and verification.
+
+Current evidence: [security audit](SECURITY-AUDIT-REPORT.md), [refactoring and modified files](PROJECT-REFACTORING-REPORT.md), [development setup](../DEVELOPMENT.md), [production deployment and rollback](../DEPLOYMENT.md), and [security policy](../SECURITY.md). Older dated reports retain their original observations.
 
 **Start here:** [current/README.md](current/README.md), then [current/PROJECT-STATUS.md](current/PROJECT-STATUS.md) — the single authoritative statement of what exists today.
 

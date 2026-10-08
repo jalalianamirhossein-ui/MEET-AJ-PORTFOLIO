@@ -2,7 +2,7 @@
 
 Personal portfolio and technical article site for **AmirHossein Jalalian** (infrastructure, networking, virtualization and DevOps), running as a Laravel application with a Filament admin panel.
 
-Application overview and directory layout verified on **2026-10-06**. Single source of truth for project state: [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).
+Enterprise hardening reviewed on **2026-10-08**. See the [security audit](docs/SECURITY-AUDIT-REPORT.md), [refactoring report](docs/PROJECT-REFACTORING-REPORT.md), [deployment/rollback](DEPLOYMENT.md), and [development](DEVELOPMENT.md). Current project state: [docs/current/PROJECT-STATUS.md](docs/current/PROJECT-STATUS.md).
 
 ## Overview
 
@@ -30,11 +30,12 @@ No SPA, no Node build step, no queue worker, no Redis, no scheduler. Detail: [do
 |-----------|---------|
 | Laravel | 13.31.0 |
 | PHP | 8.4.25 |
-| Filament | 5.8.2 |
+| Filament | 5.8.3 |
 | Livewire | 4.4.5 |
 | PHPUnit | 11.5.56 |
 | Database | SQLite locally, MySQL/MariaDB intended in production |
 | Front end | Blade with the original CSS/JS; no Tailwind, no Vite, no npm |
+| Vendored slider | Swiper 12.1.2; [frontend dependency inventory](resources/assets/vendor/DEPENDENCIES.md) |
 
 ## Requirements
 
@@ -72,6 +73,8 @@ On a machine where `php` is not on PATH, prefix commands with the interpreter yo
 | `SESSION_DRIVER`, `CACHE_STORE` | `file` | `file` |
 | `QUEUE_CONNECTION` | `sync` | `sync` |
 | `SESSION_SECURE_COOKIE` | — | `true` |
+| `FORCE_HTTPS` | `false` by default | `true` by default; verify proxy scheme forwarding |
+| `TRUSTED_PROXIES` | empty | actual proxy IPs/CIDRs, or empty for direct hosting |
 | `CONTACT_NOTIFICATION_EMAIL` | optional | optional; empty disables notification mail |
 
 Never commit `.env`. Deleting `.env.production.example` does not remove a configured application environment; restore that template from Git if needed. For an existing installation, recover `.env` and its original `APP_KEY` from a protected backup. Generate a key only for a new installation; see [environment recovery](docs/current/DEPLOYMENT.md#6-environment).
@@ -173,7 +176,7 @@ Current verification is recorded in [the structure and documentation audit](docs
 
 The full procedure — PHP 8.4 selector, Composer or a pre-built `vendor/`, MySQL creation, file layout above the web root, document root set to `.../laravel/public`, `.env`, permissions, `storage:link`, migrate, import, caches, SSL, post-deploy checks and rollback — is in [docs/current/DEPLOYMENT.md](docs/current/DEPLOYMENT.md).
 
-**Production was reported as deployed by the owner.** This audit ran locally; the remote release, database, SMTP and TLS configuration were not inspected.
+**Production was reported as deployed by the owner.** Read-only public HTTP checks on 2026-10-08 observed HTTP 200 without an HTTPS redirect, broad HSTS on HTTPS, and secure session attributes. Server configuration, remote release, database and SMTP remain unverified. Deploy the reviewed HTTPS/proxy/header fixes using [the deployment guide](DEPLOYMENT.md).
 
 ### Scheduler
 
@@ -181,7 +184,7 @@ Laravel's scheduler is **not used** and no cron entry is required. If a future f
 
 ## Security
 
-CSRF (including the legacy field contract), a honeypot, two layers of rate limiting, centralised validation in `StoreContactRequest`, hashed passwords with a 12-character minimum, Filament session auth, eight policies, and a `SecurityHeaders` middleware (`nosniff`, `Referrer-Policy`, `SAMEORIGIN`, HSTS on HTTPS, `no-store` on admin/Livewire/forms). `APP_DEBUG` must be `false` in production. No penetration test has been performed. Detail: [docs/current/SECURITY.md](docs/current/SECURITY.md).
+CSRF, a honeypot, two layers of rate limiting, request validation, hashed passwords, Filament session auth, and eight policies protect application entry points. Global middleware enforces production HTTPS, adds compatible CSP/permissions restrictions and host-only HSTS, and prevents caching of private/signed responses. Article text is normalized once before HTML sanitization. All CMS image fields use safe upload storage. `APP_DEBUG` must be `false` in production. No production penetration test was performed. Detail: [security architecture](docs/current/SECURITY.md) and [findings](docs/SECURITY-AUDIT-REPORT.md).
 
 ## Project structure
 
@@ -221,14 +224,14 @@ Full navigation map: [docs/README.md](docs/README.md).
 
 ## Known limitations
 
-1. **Remote deployment unverified in this audit.** The owner reports deployment; production database, SMTP and HTTPS checks need the server environment.
+1. **Remote application release/configuration unverified.** Public HTTP behavior was checked read-only; server/database/SMTP validation and deploying these fixes remain operator work.
 2. **No CMS user exists locally**, so interactive admin QA is blocked until `php artisan cms:create-user` is run.
 3. **No performance measurement** of any kind has been made — no Lighthouse, no load test.
 4. **PWA install and offline behaviour** have never been exercised in a browser.
 5. **Article upgrades require an explicit database update.** Pulling source files alone does not replace already-imported content.
 6. **German is draft-only** and no German content exists.
 7. **Scheduled publishing is query-based**: a future `published_at` simply stays hidden, with nothing to flip it later.
-8. **`/admin/users` and `/admin/cms-users`** resolve to the same Users screen; that is one feature at two paths.
+8. **Admin route aliases must follow the current route list.** The inspected checkout registers `/admin/users`; it does not register `/admin/cms-users`.
 9. **Standalone service detail pages** were removed; service records remain for the homepage catalog and are synchronized from `HomepageServiceCatalog`.
 10. **Imported article images** still point at `/assets/...` unless an editor uploads a replacement.
 

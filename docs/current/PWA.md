@@ -1,6 +1,6 @@
 # PWA — Meet AJ
 
-> Maintenance review: 2026-10-06. The service-worker generator is `LegacySitePublisher::writeServiceWorker()`; `resources/legacy/sw.js` is historical. Browser install/offline evidence was not refreshed. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+> Enterprise review: 2026-10-08. Maintained sources are `resources/static/sw.js` and `resources/static/offline.html`, copied by `LegacySitePublisher`. `resources/legacy/sw.js` is historical. Worker source/output parity and private URL exclusions are tested; browser installation/offline behavior remains unverified. See [the audit](../SECURITY-AUDIT-REPORT.md).
 
 **Authority:** AUTHORITATIVE PWA document.
 **Verified:** 2026-09-16 against `public/sw.js`, `public/manifest.json`, `public/offline.html`.
@@ -18,9 +18,9 @@ Registration is in homepage (and rebuilt Blade) markup pointing at `/sw.js` and 
 ## Cache name / version
 
 ```javascript
-const ASSET_VERSION = "cms-5";
+const ASSET_VERSION = "cms-6";
 const CACHE_NAME = `meet-aj-v2.0.0-${ASSET_VERSION}`;
-// → meet-aj-v2.0.0-cms-5
+// → meet-aj-v2.0.0-cms-6
 ```
 
 On activate, caches whose names are not `CACHE_NAME` are deleted. Navigation preload is enabled when the browser supports it.
@@ -50,7 +50,7 @@ The fetch handler **returns without responding** (browser default) when:
 ### Private prefixes
 
 ```javascript
-const PRIVATE_PREFIXES = ["/admin", "/livewire", "/forms", "/storage/livewire-tmp"];
+const PRIVATE_PREFIXES = ["/admin", "/livewire", "/filament", "/forms", "/storage/livewire-tmp"];
 ```
 
 Match: exact prefix, `prefix/…`, or `prefix-…`.

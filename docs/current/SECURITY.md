@@ -1,6 +1,6 @@
 # Security — Meet AJ
 
-> Security and bug review: 2026-10-08. Stored article HTML and homepage URLs are sanitized, proxy trust is explicit, private widgets authorize Livewire requests, and private responses bypass browser caches. Filament is 5.8.3 and CommonMark is 2.10.2. See [the security audit](../qa/SECURITY-BUG-AUDIT-2026-10-08.md) for reproductions, verification and limits.
+> Enterprise review: 2026-10-08. Numeric-entity stored XSS and service upload path validation are fixed; Swiper is patched to 12.1.2. Production HTTPS enforcement, scoped HSTS, conservative CSP, private-response caching and safe mail logging are implemented locally. See [the current security audit](../SECURITY-AUDIT-REPORT.md) for evidence, deployment actions and remaining risks.
 
 > Maintenance review: 2026-10-06. Eight policy files exist, including homepage content and testimonials. Selected MSI/Bash files are public downloads; the MikroTik source ZIP remains outside the document root. Environment recovery preserves existing APP_KEY. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
 
@@ -51,15 +51,17 @@ Standard Laravel hasher (bcrypt/argon as configured). No plaintext passwords in 
 | `X-Content-Type-Options` | `nosniff` |
 | `Referrer-Policy` | `strict-origin-when-cross-origin` |
 | `X-Frame-Options` | `SAMEORIGIN` |
-| `Strict-Transport-Security` | `max-age=31536000; includeSubDomains` **only if** `$request->secure()` |
-| Cache-Control | `no-store` on the session-bearing homepage, `/admin`, `/livewire`, `/forms`, and all POST |
+| `Strict-Transport-Security` | `max-age=31536000` **only if** `$request->secure()`; no subdomain policy |
+| `Content-Security-Policy` | `base-uri 'self'; object-src 'none'; frame-ancestors 'self'` |
+| `Permissions-Policy` | `camera=(), microphone=(), geolocation=()` |
+| Cache-Control | `no-store` on the session-bearing homepage, `/admin`, `/livewire`, `/filament`, `/forms`, signed URLs and all POST |
 | Article caching | `private, max-age=0, must-revalidate`; HTML depends on the language preference cookie |
 
-Not a full CSP. Clickjacking protection is SAMEORIGIN, not DENY.
+The CSP deliberately leaves script/style sources unrestricted to preserve current Blade, Livewire and frontend behavior. A stricter nonce/hash policy remains future work. Frame protection permits same-origin frames.
 
 The middleware is global, including Filament login pages and guest redirects. `TRUSTED_PROXIES` is a comma-separated list of actual proxy IPs/CIDRs, empty by default. Forwarded client IP, scheme and port are accepted only from that list; forwarded host is ignored. Set the actual addresses before caching production configuration if a reverse proxy is present. Do not use `*`.
 
-Article HTML passes through `ArticleHtmlSanitizer` at display time, including existing database records. Safe code blocks retain exact whitespace; executable tags, event handlers and unsafe URL schemes are removed. FA/EN attributes remain available. Homepage structured URLs are validated at display time without rewriting stored editorial content. The requests widget authorizes both mount and subsequent Livewire hydration. Demoting the final administrator is rejected inside a transaction.
+Article HTML is normalized once before `ArticleHtmlSanitizer` at display time, including existing database records. The standardizer does not decode sanitized entities afterward. Safe code blocks retain exact whitespace; executable tags, event handlers and unsafe URL schemes are removed. FA/EN attributes remain available. Homepage structured URLs are validated at display time without rewriting stored editorial content. The requests widget authorizes both mount and subsequent Livewire hydration. Demoting the final administrator is rejected inside a transaction; concurrent changes across different users remain a database-specific review item.
 
 ## Environment
 
@@ -69,6 +71,7 @@ Article HTML passes through `ArticleHtmlSanitizer` at display time, including ex
 | `APP_ENV` | `production` |
 | `APP_KEY` | unique, generated on the server |
 | `APP_URL` | `https://meetaj.ir` |
+| `FORCE_HTTPS` | `true`; defaults on when `APP_ENV=production` |
 | `SESSION_SECURE_COOKIE` | `true` (requires HTTPS) |
 
 Local `php artisan about` on 2026-09-16 showed **debug ENABLED**. That is a local `.env` setting, not production.
@@ -79,7 +82,7 @@ Local `php artisan about` on 2026-09-16 showed **debug ENABLED**. That is a loca
 
 Article featured image: JPEG/PNG/WebP, max **5120** KB (Filament field). Do not treat this as a full malware scan.
 
-Testimonial avatars use the same formats, max **2048** KB. Both fields use `SafeImageUpload`: random filenames with MIME-derived extensions and authorization of existing file paths. Livewire temporary uploads already block PHP extensions through Laravel validation; the new naming rule also prevents other client-supplied extensions from reaching public storage. Rich-editor attachments use Laravel's MIME-derived hashed storage filenames.
+Testimonial avatars use the same formats, max **2048** KB. Article, testimonial and service image fields use `SafeImageUpload`: random filenames with MIME-derived extensions and validation of existing file paths and content. Livewire temporary uploads already block PHP extensions through Laravel validation; the naming rule also prevents other client-supplied extensions from reaching public storage. Rich-editor attachments use Laravel's MIME-derived hashed storage filenames.
 
 ## Private routes
 
@@ -87,11 +90,11 @@ Testimonial avatars use the same formats, max **2048** KB. Both fields use `Safe
 
 ## Mail
 
-If `CONTACT_NOTIFICATION_EMAIL` is set and SMTP throws, the contact **row is kept** and the error is logged. Mail failure is not a 500 to the visitor.
+If `CONTACT_NOTIFICATION_EMAIL` is set and SMTP throws, the contact **row is kept**. The error log includes only the request ID and exception class; exception messages and contact details are excluded. Mail failure is not a 500 to the visitor.
 
 ## What was not done
 
 - Penetration testing
-- An automated dependency audit as a continuing release gate (a one-time OSV check of 135 locked packages was completed on 2026-10-08 with no advisories remaining after updates)
-- Production HTTPS / HSTS observation on meetaj.ir
+- Hosted execution of the new pinned CI workflow (local Composer audit passed)
+- Production deployment of these fixes: read-only HEAD observations found HTTP 200 without an HTTPS redirect and inconsistent admin security headers
 - WAF / DirectAdmin ModSecurity tuning

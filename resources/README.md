@@ -6,13 +6,13 @@
 | `css/` | Filament admin stylesheet, published with `filament:assets` |
 | `content/articles/` | Article generators, editorial input, SQL/PowerShell/RouterOS/Bash examples and selected download sources |
 | `downloads/` (currently absent) | Optional legacy NetBox PDF source; restore the actual guide before publishing its `/docs/` URL |
-| `static/` | Manifest, preloaders, and static language-toggle fragment |
+| `static/` | Manifest, preloaders, language-toggle fragment, active service worker and offline fallback sources |
 | `legacy/` | Maintained HTML used for content import, comparison, and view generation; original articles are archived in `docs/enterprise-articles/originals.zip`; former endpoints and templates are retained as references |
 | `views/` | Active Blade views and partials; `home.blade.php` is CMS-backed |
 
 Run `php artisan site:publish-assets` after editing public asset sources and `php artisan filament:assets` after editing the admin CSS. The optional `--views` flag rebuilds the article listing view from `legacy/index.html` through `App\Services\LegacySitePublisher`. The homepage `views/home.blade.php` is maintained directly and reads its copy from the `homepage_contents` table; the publisher intentionally does not overwrite it. Other Blade views are maintained directly.
 
-`legacy/views/` is outside Laravel's configured view path. The old `legacy/forms/` PHP files are not live endpoints. `/forms/*` routes use Laravel controllers. The old `legacy/sw.js`, `legacy/robots.txt`, and `legacy/sitemap.xml` are reference files; the application generates their current public equivalents.
+`legacy/views/` is outside Laravel's configured view path. The old `legacy/forms/` PHP files are not live endpoints. `/forms/*` routes use Laravel controllers. The old `legacy/sw.js`, `legacy/robots.txt`, and `legacy/sitemap.xml` are reference files. The active worker/offline sources are in `static/` and copied to `public/`; Laravel controllers render the current robots and sitemap responses.
 
 See [the project directory map](../docs/current/PROJECT-STRUCTURE.md) for placement and deployment rules.
 

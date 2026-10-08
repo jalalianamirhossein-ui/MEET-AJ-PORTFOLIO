@@ -938,6 +938,8 @@
     config.nested = false;
     config.keyboard = { enabled: true, onlyInViewport: true };
     if (!config.navigation) config.navigation = {};
+    // Preserve the existing Bootstrap icons after the Swiper 12 security upgrade.
+    config.navigation.addIcons = false;
     config.navigation.nextEl = ".testimonials-next";
     config.navigation.prevEl = ".testimonials-prev";
     const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;

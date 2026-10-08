@@ -1,8 +1,8 @@
 # Testing — Meet AJ
 
-> Security and bug review: 2026-10-08. Full SQLite suite: 150 tests, 21,840 assertions, zero failures/errors, one MySQL skip. Five Node tests pass. A subsequent 23-test/834-assertion focused run verifies legacy-image cleanup and public-page regressions. See [current status](PROJECT-STATUS.md) and [the security audit](../qa/SECURITY-BUG-AUDIT-2026-10-08.md).
+> Enterprise verification: 2026-10-08. Full SQLite suite: 158 tests, 21,919 assertions, zero failures/errors, one MySQL skip. Six Node tests pass; 225 PHP files pass syntax checks. Composer audit, asset publication, routes and view/route caches pass. See [current status](PROJECT-STATUS.md) and [the execution ledger](../SECURITY-AUDIT-REPORT.md).
 
-Documentation reviewed **2026-10-08**. Older results (including the 2026-10-06 failing suite) remain historical in their dated reports. Current evidence: [security and bug audit](../qa/SECURITY-BUG-AUDIT-2026-10-08.md).
+Documentation reviewed **2026-10-08**. Older results (including the 2026-10-06 failing suite) remain historical in their dated reports. Current evidence: [enterprise security audit](../SECURITY-AUDIT-REPORT.md).
 
 ## Commands
 
@@ -18,7 +18,7 @@ php artisan route:list
 python scripts/verify-enterprise-articles.py
 ```
 
-On this Windows workstation PHP is `.runtime/php84/php.exe`. `composer test` also invokes PHPUnit. The custom `php artisan test` wrapper exists, but does not accept PHPUnit options such as `--filter`; invoke PHPUnit directly for filtering or reports.
+On this Windows workstation PHP is `.runtime/php84/php.exe`. `composer test` also invokes PHPUnit. The custom `php artisan test` wrapper accepts PHPUnit options after `--`, for example `php artisan test -- --filter=EnterpriseHardeningTest`; direct PHPUnit invocation also supports filtering and reports.
 
 ## Isolation and coverage
 
@@ -45,7 +45,8 @@ This pass does not validate remote deployment, SMTP delivery, real MySQL/MariaDB
 ## Optional frontend and documentation checks
 
 ```bash
-node --test tests/Frontend/scroll-reveal.test.cjs tests/Frontend/ServiceWorkerSecurityTest.cjs
+node --test tests/Frontend/scroll-reveal.test.cjs tests/Frontend/service-worker-security.test.cjs tests/Frontend/swiper-security.test.cjs
+node scripts/check-repository-security.cjs --history
 node scripts/check-documentation.cjs
 node scripts/check-documentation.cjs --write-index
 ```

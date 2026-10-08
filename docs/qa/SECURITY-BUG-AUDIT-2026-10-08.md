@@ -41,7 +41,7 @@ The full SQLite suite passed: **150 tests, 21,840 assertions, zero failures/erro
 
 The Markdown inventory checker passes with no broken local links. Image verification passes for **101 maintained source images and 286 references**, with no missing, mismatched or obsolete public images remaining.
 
-Frontend checks: `node --test tests/Frontend/scroll-reveal.test.cjs tests/Frontend/ServiceWorkerSecurityTest.cjs` passed all five Node tests. The worker check covers origin spoofing, private paths, no-store documents/assets, private redirects, homepage precaching and public asset caching.
+Frontend checks at this earlier checkpoint: `node --test tests/Frontend/scroll-reveal.test.cjs tests/Frontend/service-worker-security.test.cjs` passed all five Node tests. The worker test was subsequently renamed from `ServiceWorkerSecurityTest.cjs`; this command uses its current path. The worker check covers origin spoofing, private paths, no-store documents/assets, private redirects, homepage precaching and public asset caching. Later implementation and six-test evidence are in [the enterprise audit](../SECURITY-AUDIT-REPORT.md).
 
 ## Deployment and limits
 

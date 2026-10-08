@@ -6,6 +6,8 @@
 
 ## Repository layout
 
+The [2026-10-08 refactoring report](../PROJECT-REFACTORING-REPORT.md) records the worker/offline extraction, frontend test rename, removed unreachable publisher methods, CI and final modified-file inventory. Laravel directories and public URLs are preserved.
+
 ```text
 MEET AJ PORTFOLIO/
 ├── app/                       Laravel application code
@@ -41,7 +43,7 @@ MEET AJ PORTFOLIO/
 │   │   ├── forms/             Former PHP endpoints, reference only
 │   │   ├── views/services/    Six retired Blade templates, reference only
 │   │   └── robots.txt, sitemap.xml, sw.js  Former static versions
-│   ├── static/                Manifest, preloaders, language-toggle fragment
+│   ├── static/                Manifest, worker, offline fallback, preloaders, language-toggle fragment
 │   └── views/                 Active Blade views and reusable partials
 ├── routes/                    Web and console routes
 ├── scripts/                   PHP/Python maintenance, generators and documentation verification
@@ -70,7 +72,7 @@ MEET AJ PORTFOLIO/
 | `resources/legacy/articles/` | Article and redirect records | `php artisan articles:import-legacy` |
 | `HomepageServiceCatalog` | Homepage service records and ordering | `php artisan services:import-legacy` |
 | `HomepageContentCatalog` + `homepage_contents` | `resources/views/home.blade.php` | Homepage request; admin sync |
-| `LegacySitePublisher::writeServiceWorker()` | `public/sw.js`, `public/offline.html` | `php artisan site:publish-assets` |
+| `resources/static/sw.js`, `resources/static/offline.html` | `public/sw.js`, `public/offline.html` | `php artisan site:publish-assets` |
 
 Public URLs remain `/assets/...`, `/docs/netbox_installation_guide_v2.pdf`, `/manifest.json`, `/sw.js`, and the existing page routes. Filesystem moves do not change stored article source identifiers (`articles/*.html`) or legacy redirect URLs.
 

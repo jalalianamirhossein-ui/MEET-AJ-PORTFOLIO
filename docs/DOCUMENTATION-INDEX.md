@@ -4,9 +4,16 @@ Generated from the checkout with `node scripts/check-documentation.cjs --write-i
 
 | File | Title |
 |---|---|
+| [ARCHITECTURE.md](../ARCHITECTURE.md) | Application architecture |
+| [CHANGELOG.md](../CHANGELOG.md) | Changelog |
+| [DEPLOYMENT.md](../DEPLOYMENT.md) | Production deployment and rollback |
+| [DEVELOPMENT.md](../DEVELOPMENT.md) | Development and verification |
 | [README.md](../README.md) | Meet AJ |
+| [SECURITY.md](../SECURITY.md) | Security policy |
 | [deploy/README.md](../deploy/README.md) | اسکریپت‌های Deploy پروژه Meet AJ |
+| [docs/PROJECT-REFACTORING-REPORT.md](PROJECT-REFACTORING-REPORT.md) | Project refactoring report — 2026-10-08 |
 | [docs/README.md](README.md) | Meet AJ — documentation |
+| [docs/SECURITY-AUDIT-REPORT.md](SECURITY-AUDIT-REPORT.md) | Enterprise security audit — 2026-10-08 |
 | [docs/archive/2026-09-18/ADMIN-QA-blue-theme.md](archive/2026-09-18/ADMIN-QA-blue-theme.md) | Admin UI QA — Meet AJ Filament 5 |
 | [docs/archive/2026-09-18/ADMIN-QA-white-red-pre-contrast-fix.md](archive/2026-09-18/ADMIN-QA-white-red-pre-contrast-fix.md) | ADMIN-QA (superseded) — White/Red pass before the contrast regression fix |
 | [docs/archive/2026-09-18/ADMIN-QA.md](archive/2026-09-18/ADMIN-QA.md) | Admin UI QA — Meet AJ Filament 5 |
@@ -121,6 +128,7 @@ Generated from the checkout with `node scripts/check-documentation.cjs --write-i
 | [docs/qa/redis-article-2026-10-07.md](qa/redis-article-2026-10-07.md) | Redis production deployment article — QA, 7 October 2026 |
 | [docs/qa/unifi-mesh-article-2026-10-07.md](qa/unifi-mesh-article-2026-10-07.md) | UniFi wireless mesh article |
 | [resources/README.md](../resources/README.md) | Frontend and content sources |
+| [resources/assets/vendor/DEPENDENCIES.md](../resources/assets/vendor/DEPENDENCIES.md) | Vendored frontend dependencies |
 | [resources/content/README.md](../resources/content/README.md) | Article content packages |
 | [resources/content/articles/10-essential-group-policies-windows-domain/README.md](../resources/content/articles/10-essential-group-policies-windows-domain/README.md) | Essential Enterprise Group Policies |
 | [resources/content/articles/fortigate-sd-wan-load-balancing-failover/README.md](../resources/content/articles/fortigate-sd-wan-load-balancing-failover/README.md) | FortiGate SD-WAN article package |
@@ -137,3 +145,4 @@ Generated from the checkout with `node scripts/check-documentation.cjs --write-i
 | [resources/content/articles/redis-installation-configuration-replication/article.fa.md](../resources/content/articles/redis-installation-configuration-replication/article.fa.md) | راه‌اندازی Redis در محیط Production؛ نصب، Hardening، Persistence و Replication |
 | [resources/content/articles/sql-server-automatic-backup-job/README.md](../resources/content/articles/sql-server-automatic-backup-job/README.md) | SQL Server Automatic Backup Job — editorial package |
 | [resources/content/articles/truenas-zfs-enterprise-nas/article.fa.md](../resources/content/articles/truenas-zfs-enterprise-nas/article.fa.md) | راه‌اندازی TrueNAS از صفر؛ ساخت NAS سازمانی با ZFS |
+| [scripts/README.md](../scripts/README.md) | Maintenance scripts |

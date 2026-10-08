@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\AcceptLegacyCsrfToken;
 use App\Http\Middleware\EnforceCsrfToken;
+use App\Http\Middleware\EnforceHttps;
 use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\TrustProxies;
 use Illuminate\Foundation\Application;
@@ -31,6 +32,8 @@ return Application::configure(basePath: $basePath)
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->replace(\Illuminate\Http\Middleware\TrustProxies::class, TrustProxies::class);
         $middleware->prepend(SecurityHeaders::class);
+        // Resolve trusted proxy scheme before enforcing transport.
+        $middleware->append(EnforceHttps::class);
         // The shared language switch writes this non-sensitive preference in JavaScript.
         $middleware->encryptCookies(except: ['lang']);
         $middleware->web(prepend: [

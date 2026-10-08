@@ -47,6 +47,10 @@ async function run() {
   assert.equal(await request('https://meetaj.ir.attacker.example/asset.js'), false);
   assert.equal(await request('https://meetaj.ir/admin/login', '', undefined, 'document'), false);
   assert.equal(await request('https://meetaj.ir/livewire/update'), false);
+  assert.equal(await request('https://meetaj.ir/livewire-abcd/preview-file/private.png'), false);
+  assert.equal(await request('https://meetaj.ir/filament/exports/1/download'), false);
+  assert.equal(await request('https://meetaj.ir/file.png?signature=private'), false);
+  assert.equal(fs.readFileSync('public/sw.js', 'utf8'), fs.readFileSync('resources/static/sw.js', 'utf8'));
   assert.equal(await request('https://meetaj.ir/assets/no-cache.js', 'no-store'), true);
   assert.equal(cached.length, 0);
   await request('https://meetaj.ir/', 'no-store', undefined, 'document');

@@ -89,7 +89,7 @@ DirectAdmin → Domain Setup → document root:
 
 ## 6. Environment
 
-Security update (2026-10-08): install the updated lockfile (CommonMark 2.10.2 / Filament 5.8.3), run `php artisan package:discover` and `php artisan filament:assets`, and deploy `public/sw.js` with cache version `cms-5`. If a reverse proxy terminates HTTPS, set `TRUSTED_PROXIES` to its actual comma-separated IPs/CIDRs before `php artisan config:cache`; direct hosting keeps it empty. Forwarded host headers are not trusted. The workstation environment and remote server were not changed by this audit. See [findings](../qa/SECURITY-BUG-AUDIT-2026-10-08.md).
+Security update (2026-10-08): retain the current lockfile (CommonMark 2.10.2 / Filament 5.8.3), publish patched Swiper 12.1.2 and `public/sw.js` with cache version `cms-6`, and regenerate Filament assets. Set `FORCE_HTTPS=true` and an HTTPS `APP_URL`. If a reverse proxy terminates HTTPS, set `TRUSTED_PROXIES` to its actual comma-separated IPs/CIDRs before caching configuration; direct hosting keeps it empty. Forwarded host headers are not trusted. Incorrect proxy configuration can cause redirect loops, so verify staging first. Limited production HEAD checks found HTTP 200 without redirection and inconsistent admin security headers; no server/environment changes were made. See [findings](../SECURITY-AUDIT-REPORT.md) and [the `/var/www/meetaj` deployment checklist](../../DEPLOYMENT.md).
 
 For a **new installation only**, copy the template if no environment exists and generate the initial key:
 
