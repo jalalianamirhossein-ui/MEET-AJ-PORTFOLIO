@@ -21,7 +21,7 @@ class SecurityHeaders
             || str_starts_with($path, '/livewire')
             || str_starts_with($path, '/forms');
 
-        if ($private || $request->isMethod('POST')) {
+        if ($private || $request->isMethod('POST') || $request->routeIs('home')) {
             $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
             $response->headers->set('Pragma', 'no-cache');
         } elseif ($request->isMethod('GET') && str_contains((string) $response->headers->get('Content-Type'), 'text/html')) {

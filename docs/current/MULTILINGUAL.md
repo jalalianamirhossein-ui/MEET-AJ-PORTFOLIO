@@ -26,6 +26,8 @@ The inline FA/EN row above the article date is removed. Historical article editi
 
 Homepage and article-library UI translation still uses the saved preference and `data-fa` / `data-en`. Article card titles remain English. The English sidebar name uses `white-space: nowrap` in `glass-system.css`.
 
+Category filters and tag links read their Persian labels from the matching category row (`slug` and `language=fa`). The `other` tag maps to the `others` category. Translations are loaded together with tags, so rendering labels does not query the database for each tag. English technical names are preserved; missing translations use the existing technical name, with Storage / استوریج as the storage fallback. The `tags` table itself has one name per tag and no separate Persian-name column.
+
 ## SEO and CMS
 
 Both languages use one clean canonical. No language-specific `hreflang` URLs are emitted because there are no distinct translation URLs. The sitemap lists each article once. Article responses use private, revalidated HTTP caching so shared caches do not mix cookie-selected languages. See [SEO.md](SEO.md).

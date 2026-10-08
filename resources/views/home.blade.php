@@ -1071,7 +1071,7 @@
                       <div class="card-content">
                         <h4 data-en="{{ $card['title_en'] ?? '' }}" data-fa="{{ $card['title_fa'] ?? ($card['title_en'] ?? '') }}">{{ $card['title_en'] ?? '' }}</h4>
                         <p data-en="{{ $card['body_en'] ?? '' }}" data-fa="{{ $card['body_fa'] ?? ($card['body_en'] ?? '') }}">{{ $card['body_en'] ?? '' }}</p>
-                        <a href="{{ $card['href'] ?? ($card['value'] ?? '#') }}" class="contact-link" @if (str_starts_with((string) ($card['href'] ?? ''), 'http')) target="_blank" rel="noopener" @endif>
+                        <a href="{{ \App\Services\PublicUrl::link($card['href'] ?? ($card['value'] ?? '#')) }}" class="contact-link" @if (str_starts_with((string) ($card['href'] ?? ''), 'http')) target="_blank" rel="noopener" @endif>
                           <span data-en="{{ $card['cta_en'] ?? ($card['value'] ?? '') }}" data-fa="{{ $card['cta_fa'] ?? ($card['cta_en'] ?? ($card['value'] ?? '')) }}">{{ $card['cta_en'] ?? ($card['value'] ?? '') }}</span>
                           <i class="bi bi-arrow-right"></i>
                         </a>
@@ -1385,7 +1385,7 @@
                 @foreach (array_slice($contactItems, 0, 3) as $card)
                   <div class="contact-item">
                     <i class="{{ $card['icon'] ?? 'bi bi-link-45deg' }}"></i>
-                    <a href="{{ $card['href'] ?? ($card['value'] ?? '#') }}" @if (str_starts_with((string) ($card['href'] ?? ''), 'http')) target="_blank" rel="noopener" @endif data-en="{{ $card['cta_en'] ?? ($card['value'] ?? '') }}" data-fa="{{ $card['cta_fa'] ?? ($card['value'] ?? '') }}">{{ $card['cta_en'] ?? ($card['value'] ?? '') }}</a>
+                    <a href="{{ \App\Services\PublicUrl::link($card['href'] ?? ($card['value'] ?? '#')) }}" @if (str_starts_with((string) ($card['href'] ?? ''), 'http')) target="_blank" rel="noopener" @endif data-en="{{ $card['cta_en'] ?? ($card['value'] ?? '') }}" data-fa="{{ $card['cta_fa'] ?? ($card['value'] ?? '') }}">{{ $card['cta_en'] ?? ($card['value'] ?? '') }}</a>
                   </div>
                 @endforeach
               </div>

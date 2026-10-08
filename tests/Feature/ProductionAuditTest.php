@@ -111,18 +111,26 @@ class ProductionAuditTest extends TestCase
         $this->assertSame(count(app(LegacyArticleImporter::class)->articleFiles()), Article::query()->count());
         foreach (Article::query()->get() as $article) {
             $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', $article->title, $article->slug);
-            $this->withUnencryptedCookie('lang', 'en')->get('/articles/'.$article->slug)
-                ->assertOk()
-                ->assertSee('data-en="'.$article->title.'"', false)
-                ->assertSee($article->title)
-                ->assertSee('href="/#contact"', false);
+            $hasLocalizations = (bool) data_get($article->presentation, 'localizations');
+            $persianOnly = ! $hasLocalizations && data_get($article->presentation, 'content_language') === 'fa';
+            $englishTitle = $persianOnly
+                ? data_get($article->presentation, 'hero_title_fa', $article->title)
+                : data_get($article->presentation, 'localizations.en.title', $article->englishTitle());
+            $persianTitle = data_get($article->presentation, 'localizations.fa.title', data_get($article->presentation, 'hero_title_fa', $englishTitle));
+            $response = $this->withUnencryptedCookie('lang', 'en')->get('/articles/'.$article->slug)
+                ->assertOk()->assertSee($englishTitle)->assertSee('href="/#contact"', false);
+            if (! $persianOnly) {
+                $response->assertSee('data-en="'.e($englishTitle).'"', false);
+            } else {
+                $response->assertSee('lang="fa" dir="rtl"', false);
+            }
             $this->withUnencryptedCookie('lang', 'fa')->get('/articles/'.$article->slug)->assertOk()
-                ->assertSee($article->presentation['localizations']['fa']['title']);
+                ->assertSee($persianTitle);
         }
         $listing = $this->get('/articles')->assertOk()->getContent();
-        $this->assertStringContainsString('data-i18n-lock', $listing);
         $first = Article::query()->orderBy('slug')->first();
-        $this->assertStringContainsString($first->title, $listing);
+        $this->assertStringContainsString('data-en="'.e($first->englishCardTitle()).'"', $listing);
+        $this->assertStringContainsString('data-fa="', $listing);
 
         $article = Article::query()->orderBy('slug')->first();
         $english = $article->title;

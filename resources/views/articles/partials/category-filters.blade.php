@@ -17,24 +17,6 @@
             return ['slug' => $tag->slug, 'en' => $labelEn, 'fa' => $labelFa, 'color' => $category?->accentColor() ?? $tag->accentColor(), 'topic' => $tag->slug, 'sort_order' => 0, 'id' => $tag->id];
         })
         ->sortBy(fn ($filter) => array_search($filter['slug'], \App\Models\Tag::BRAND_FILTERS, true))->values();
-    $legacyFilterGroups = collect($filterCategories ?? [])
-        ->groupBy(fn ($category) => strtolower((string) $category->slug))
-        ->map(function ($group): array {
-            $english = $group->firstWhere('language', 'en') ?? $group->first();
-            $persian = $group->firstWhere('language', 'fa');
-
-            return [
-                'slug' => strtolower((string) $english->slug),
-                'en' => (string) $english->name,
-                'fa' => (string) ($persian?->name ?? $english->name),
-                'color' => $english->accentColor(),
-                'topic' => $english->topicKey(),
-                'sort_order' => (int) $group->min('sort_order'),
-                'id' => (int) $group->min('id'),
-            ];
-        })
-        ->sortBy(fn (array $filter): array => [$filter['sort_order'], $filter['id']])
-        ->values();
 @endphp
             <div class="article-filter-bar">
               <span

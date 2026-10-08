@@ -11,6 +11,16 @@ use Illuminate\Database\Eloquent\Builder;
 
 class RecentRequests extends TableWidget
 {
+    public function mount(): void
+    {
+        \Illuminate\Support\Facades\Gate::authorize('viewAny', ContactRequest::class);
+    }
+
+    public function hydrate(): void
+    {
+        \Illuminate\Support\Facades\Gate::authorize('viewAny', ContactRequest::class);
+    }
+
     protected static ?int $sort = 3;
 
     protected int | string | array $columnSpan = 1;

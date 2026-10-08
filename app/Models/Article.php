@@ -163,8 +163,10 @@ class Article extends Model
 
     public function displayContent(): string
     {
+        $safeContent = app(\App\Services\ArticleHtmlSanitizer::class)
+            ->sanitize(self::normalizeContentMarkup((string) $this->content));
         $content = app(\App\Services\ArticleContentStandardizer::class)
-            ->standardize($this, (string) $this->content);
+            ->standardize($this, $safeContent);
 
         if (! data_get($this->presentation, 'localizations') && data_get($this->presentation, 'content_language') === 'fa') {
             $content = app(\App\Services\ArticleLocalization::class)->html($content, 'fa');

@@ -14,7 +14,8 @@ class ImageOrganizationTest extends TestCase
 
     public function test_every_source_article_has_one_named_banner_and_old_duplicate_folders_are_gone(): void
     {
-        $sources = array_map(fn ($file) => basename($file, '.html').'.png', glob(resource_path('legacy/articles/*.html')));
+        app(\App\Services\LegacyArticleImporter::class)->import(false);
+        $sources = Article::all()->map(fn ($article) => basename(rawurldecode($article->thumbnailUrl())))->all();
         $banners = array_map('basename', glob(resource_path('assets/img/articles/banners/*.png')));
         sort($sources);
         sort($banners);
@@ -52,6 +53,19 @@ class ImageOrganizationTest extends TestCase
         $this->get('/assets/img/portfolio/other-1.png')->assertStatus(301)->assertRedirect('/assets/img/articles/banners/creating-a-bootable-usb.png');
         $this->get('/assets/img/logo.png')->assertStatus(301)->assertRedirect('/assets/img/brand/logo.png');
         $this->get('/assets/img/unknown.png')->assertNotFound();
+    }
+
+    public function test_retired_fortigate_copies_are_replaced_by_redirects_to_maintained_images(): void
+    {
+        app(\App\Services\LegacySitePublisher::class)->publishAssets();
+        foreach (config('image-paths.legacy') as $old => $new) {
+            if (! str_contains($old, 'fortigate-sd-wan-load-balancing-failover')) {
+                continue;
+            }
+            $this->assertFileDoesNotExist(public_path('assets/img/'.$old));
+            $this->assertFileExists(resource_path('assets/img/'.$new));
+            $this->get('/assets/img/'.$old)->assertStatus(301)->assertRedirect('/assets/img/'.$new);
+        }
     }
 
     public function test_migration_changes_paths_without_replacing_editorial_data_and_is_repeatable(): void

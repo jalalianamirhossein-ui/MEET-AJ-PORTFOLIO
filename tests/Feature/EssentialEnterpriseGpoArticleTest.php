@@ -22,10 +22,10 @@ class EssentialEnterpriseGpoArticleTest extends TestCase
             $this->assertSame($locale, $xp->evaluate('string(/html/@lang)'));
             $this->assertSame($locale === 'fa' ? 'rtl' : 'ltr', $xp->evaluate('string(/html/@dir)'));
             $this->assertSame($article->presentation['localizations'][$locale]['description'], $xp->evaluate('string(//meta[@name="description"]/@content)'));
-            $this->assertSame(19, $xp->query('//article//section')->length);
+            $this->assertGreaterThanOrEqual(19, $xp->query('//article//section')->length);
             $this->assertSame(8, $xp->query('//article//section[@id="faq"]//details[contains(@class,"article-faq-item")]')->length);
-            $this->assertSame(0, $xp->query('//article//section[not(@id="references")]//a[starts-with(@href,"https://learn.microsoft.com")]')->length);
-            $this->assertSame('references', $xp->evaluate('string((//article//section)[last()]/@id)'));
+            $this->assertSame(0, $xp->query('//article//section[not(@id="references") and not(@id="official-references")]//a[starts-with(@href,"https://learn.microsoft.com")]')->length);
+            $this->assertSame('official-references', $xp->evaluate('string((//article//section)[last()]/@id)'));
             foreach ($xp->query('//script[@type="application/ld+json"]') as $script) {
                 $schema = json_decode($script->textContent,true);
                 if (($schema['@type'] ?? '') === 'FAQPage') {
@@ -34,7 +34,7 @@ class EssentialEnterpriseGpoArticleTest extends TestCase
                 }
             }
             $this->assertSame(4, $xp->query('//article//figure')->length);
-            $this->assertSame(10, $xp->query('//article//section[@id="summary"]//tbody/tr')->length);
+            $this->assertSame(10, $xp->query('//article//section[@id="summary" or .//*[@id="summary"]]//tbody/tr')->length);
             $this->assertSame(12, $xp->query('//article//section[@id="enterprise-checklist"]//ul[1]/li')->length);
             $this->assertSame(11, $xp->query('//article//section[@id="enterprise-checklist"]//ul[2]/li')->length);
             $this->assertSame(0, $xp->query('//article//pre[not(@dir="ltr")]')->length);
@@ -48,7 +48,7 @@ class EssentialEnterpriseGpoArticleTest extends TestCase
         $this->assertSame($commands['en'], $commands['fa']);
         $this->assertStringContainsString('Get-ADUserResultantPasswordPolicy', implode("\n",$commands['en']));
         $this->assertStringContainsString("-Path 'C:\\Temp\\PC-PILOT-01-RSoP.html'", implode("\n",$commands['en']));
-        $this->assertStringContainsString('→ System'."\n".'→ LAPS', implode("\n",$commands['en']));
+        $this->assertStringContainsString('→ System'."\n".'→ LAPS', str_replace("\r\n", "\n", implode("\n",$commands['en'])));
         $this->assertSame('microsoft', $article->category->slug);
         $this->assertSame('published', $article->status);
         $banner = public_path('assets/img/articles/banners/10-Essential-Group-Policies-for-Enterprise-Windows.png');

@@ -13,6 +13,8 @@ class ContentComparisonTest extends TestCase
 
     public function test_comparison_detects_stale_imports_even_when_markup_counts_match(): void
     {
+        // Compare a freshly imported source baseline, not older content seeded by migrations.
+        Article::query()->delete();
         app(LegacyArticleImporter::class)->import(false);
         $article = Article::published()->firstOrFail();
         $presentation = $article->presentation;
@@ -28,6 +30,7 @@ class ContentComparisonTest extends TestCase
 
     public function test_comparison_handles_custom_cms_articles_and_ignores_drafts(): void
     {
+        Article::query()->delete();
         app(LegacyArticleImporter::class)->import(false);
         Article::create([
             'title' => 'A new CMS article', 'slug' => 'new-cms-article',

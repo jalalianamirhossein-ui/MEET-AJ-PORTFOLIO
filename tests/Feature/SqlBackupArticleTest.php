@@ -22,10 +22,11 @@ class SqlBackupArticleTest extends TestCase
         $xpath = new \DOMXPath($dom);
         $codeBlocks = [];
         foreach ($xpath->query('//pre/code') as $code) {
-            $codeBlocks[] = $code->textContent;
+            $codeBlocks[] = str_replace("\r\n", "\n", $code->textContent);
         }
         foreach (glob($directory.'/*.{sql,ps1}', GLOB_BRACE) as $file) {
-            $this->assertContains(file_get_contents($file), $codeBlocks, basename($file).' changed during HTML sanitization');
+            // HTML parsers normalize CRLF to LF even when the raw <pre> is intact.
+            $this->assertContains(str_replace("\r\n", "\n", file_get_contents($file)), $codeBlocks, basename($file).' changed during HTML sanitization');
         }
         preg_match_all('/href="#([^"]+)"/', $package['presentation']['toc_html'], $targets);
         $this->assertGreaterThanOrEqual(14, count($targets[1]));

@@ -264,6 +264,9 @@ class HomepageContentCatalog
     {
         $this->sync();
 
-        return HomepageContent::query()->published()->orderBy('sort_order')->get()->keyBy('key')->all();
+        return HomepageContent::query()->published()->orderBy('sort_order')->get()
+            ->each(function (HomepageContent $section): void {
+                $section->content = PublicUrl::content($section->content ?? []);
+            })->keyBy('key')->all();
     }
 }

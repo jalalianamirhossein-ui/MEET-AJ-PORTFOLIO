@@ -102,17 +102,38 @@ Generated from the checkout with `node scripts/check-documentation.cjs --write-i
 | [docs/qa/IMAGE-ORGANIZATION-2026-10-06.md](qa/IMAGE-ORGANIZATION-2026-10-06.md) | Image organization audit — 2026-10-06 |
 | [docs/qa/IMAGE-UNIFICATION-2026-10-06.md](qa/IMAGE-UNIFICATION-2026-10-06.md) | Article image unification — 2026-10-06 |
 | [docs/qa/LOCAL-ENVIRONMENT-REPAIR.md](qa/LOCAL-ENVIRONMENT-REPAIR.md) | Local environment repair — 2026-09-20 |
+| [docs/qa/MSI-GROUP-POLICY-ARTICLE-2026-10-06.md](qa/MSI-GROUP-POLICY-ARTICLE-2026-10-06.md) | MSI Group Policy article integration |
 | [docs/qa/PROJECT-REORGANIZATION.md](qa/PROJECT-REORGANIZATION.md) | Project reorganization — 2026-09-19 |
 | [docs/qa/QA-MATRIX.md](qa/QA-MATRIX.md) | QA matrix — Meet AJ |
 | [docs/qa/RESPONSIVE-QA.md](qa/RESPONSIVE-QA.md) | Responsive QA — Meet AJ |
+| [docs/qa/SECURITY-BUG-AUDIT-2026-10-08.md](qa/SECURITY-BUG-AUDIT-2026-10-08.md) | Security and bug audit — 2026-10-08 |
 | [docs/qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md](qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md) | Structure and documentation audit — 2026-10-06 |
 | [docs/qa/VISUAL-QA.md](qa/VISUAL-QA.md) | Visual QA — Meet AJ |
+| [docs/qa/article-content-review-2026-10-07.md](qa/article-content-review-2026-10-07.md) | Article content review — 2026-10-07 |
 | [docs/qa/article-images-and-mobile-polish-2026-09-19.md](qa/article-images-and-mobile-polish-2026-09-19.md) | Article images and mobile polish |
+| [docs/qa/article-layout-and-truenas-2026-10-07.md](qa/article-layout-and-truenas-2026-10-07.md) | Article layout and TrueNAS repair — 2026-10-07 |
+| [docs/qa/cisco-catalyst-hardening-2026-10-07.md](qa/cisco-catalyst-hardening-2026-10-07.md) | Cisco Catalyst hardening article — 2026-10-07 |
+| [docs/qa/essential-enterprise-gpo-article-2026-10-07.md](qa/essential-enterprise-gpo-article-2026-10-07.md) | Essential enterprise Group Policy article — 2026-10-07 |
+| [docs/qa/fortigate-sdwan-publication-2026-10-07.md](qa/fortigate-sdwan-publication-2026-10-07.md) | FortiGate article publication |
 | [docs/qa/hero-responsive-2026-09-19.md](qa/hero-responsive-2026-09-19.md) | Hero visual verification — 2026-09-19 |
+| [docs/qa/mongodb-article-2026-10-07.md](qa/mongodb-article-2026-10-07.md) | MongoDB production article — 2026-10-07 |
+| [docs/qa/nginx-sni-article-2026-10-07.md](qa/nginx-sni-article-2026-10-07.md) | Nginx SNI reverse-proxy article |
+| [docs/qa/redis-article-2026-10-07.md](qa/redis-article-2026-10-07.md) | Redis production deployment article — QA, 7 October 2026 |
+| [docs/qa/unifi-mesh-article-2026-10-07.md](qa/unifi-mesh-article-2026-10-07.md) | UniFi wireless mesh article |
 | [resources/README.md](../resources/README.md) | Frontend and content sources |
 | [resources/content/README.md](../resources/content/README.md) | Article content packages |
+| [resources/content/articles/10-essential-group-policies-windows-domain/README.md](../resources/content/articles/10-essential-group-policies-windows-domain/README.md) | Essential Enterprise Group Policies |
+| [resources/content/articles/fortigate-sd-wan-load-balancing-failover/README.md](../resources/content/articles/fortigate-sd-wan-load-balancing-failover/README.md) | FortiGate SD-WAN article package |
+| [resources/content/articles/fortigate-sd-wan-load-balancing-failover/VALIDATION.md](../resources/content/articles/fortigate-sd-wan-load-balancing-failover/VALIDATION.md) | Validation |
+| [resources/content/articles/fortigate-sd-wan-load-balancing-failover/article.fa.md](../resources/content/articles/fortigate-sd-wan-load-balancing-failover/article.fa.md) | راه‌اندازی Load Balancing و Failover اینترنت در FortiGate با SD-WAN و Performance SLA |
 | [resources/content/articles/linux-security-auditor-bash/README.md](../resources/content/articles/linux-security-auditor-bash/README.md) | Linux Security Auditor article package |
 | [resources/content/articles/linux-security-auditor-bash/VALIDATION.md](../resources/content/articles/linux-security-auditor-bash/VALIDATION.md) | Validation and support matrix |
 | [resources/content/articles/mikrotik-pbr-client/README.md](../resources/content/articles/mikrotik-pbr-client/README.md) | MikroTik PBR Client package |
 | [resources/content/articles/mikrotik-ping-triggered-policy-routing/README.md](../resources/content/articles/mikrotik-ping-triggered-policy-routing/README.md) | MikroTik Ping-Triggered Policy Routing |
+| [resources/content/articles/mongodb-installation-configuration-production-deployment/README.md](../resources/content/articles/mongodb-installation-configuration-production-deployment/README.md) | MongoDB Community production runbook |
+| [resources/content/articles/mongodb-installation-configuration-production-deployment/article.en.md](../resources/content/articles/mongodb-installation-configuration-production-deployment/article.en.md) | MongoDB Installation, Configuration & Production Deployment Guide |
+| [resources/content/articles/mongodb-installation-configuration-production-deployment/article.fa.md](../resources/content/articles/mongodb-installation-configuration-production-deployment/article.fa.md) | آموزش نصب، راه‌اندازی و پیکربندی MongoDB در محیط Production |
+| [resources/content/articles/redis-installation-configuration-replication/article.en.md](../resources/content/articles/redis-installation-configuration-replication/article.en.md) | Redis Installation, Configuration and Replication – Production Deployment Guide |
+| [resources/content/articles/redis-installation-configuration-replication/article.fa.md](../resources/content/articles/redis-installation-configuration-replication/article.fa.md) | راه‌اندازی Redis در محیط Production؛ نصب، Hardening، Persistence و Replication |
 | [resources/content/articles/sql-server-automatic-backup-job/README.md](../resources/content/articles/sql-server-automatic-backup-job/README.md) | SQL Server Automatic Backup Job — editorial package |
+| [resources/content/articles/truenas-zfs-enterprise-nas/article.fa.md](../resources/content/articles/truenas-zfs-enterprise-nas/article.fa.md) | راه‌اندازی TrueNAS از صفر؛ ساخت NAS سازمانی با ZFS |

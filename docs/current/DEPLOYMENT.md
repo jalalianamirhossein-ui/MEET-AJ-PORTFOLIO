@@ -7,7 +7,7 @@
 **Deployment status:** the owner reports a deployed server. This local audit did not inspect or modify that server; remote configuration remains unverified.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md)
 
-Stack: **Laravel 13.31.0**, **PHP 8.4**, **Filament 5.8.2**, **Blade**, **MySQL/MariaDB in production**.
+Stack: **Laravel 13.31.0**, **PHP 8.4**, **Filament 5.8.3**, **Blade**, **MySQL/MariaDB in production**.
 Do not select PHP 8.2. Do not install Redis, Supervisor, Node, or a queue worker: this application uses file cache, file sessions and `QUEUE_CONNECTION=sync`.
 
 ## Environments
@@ -88,6 +88,8 @@ DirectAdmin → Domain Setup → document root:
 `public/.htaccess` must remain in place (Laravel front controller).
 
 ## 6. Environment
+
+Security update (2026-10-08): install the updated lockfile (CommonMark 2.10.2 / Filament 5.8.3), run `php artisan package:discover` and `php artisan filament:assets`, and deploy `public/sw.js` with cache version `cms-5`. If a reverse proxy terminates HTTPS, set `TRUSTED_PROXIES` to its actual comma-separated IPs/CIDRs before `php artisan config:cache`; direct hosting keeps it empty. Forwarded host headers are not trusted. The workstation environment and remote server were not changed by this audit. See [findings](../qa/SECURITY-BUG-AUDIT-2026-10-08.md).
 
 For a **new installation only**, copy the template if no environment exists and generate the initial key:
 

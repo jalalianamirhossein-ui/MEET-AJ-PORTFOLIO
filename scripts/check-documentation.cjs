@@ -18,7 +18,9 @@ for(const file of files){
     if(!target||/^[a-z][a-z0-9+.-]*:/i.test(target))continue;
     try{target=decodeURIComponent(target)}catch{broken.push(`${rel(file)}: invalid encoded link ${target}`);continue;}
     count++;
-    if(!fs.existsSync(path.resolve(path.dirname(file),target)))broken.push(`${rel(file)}: missing ${target}`);
+    // Root-relative links in article Markdown address the public website.
+    const localPath=target.startsWith('/')?path.join(root,'public',target):path.resolve(path.dirname(file),target);
+    if(!fs.existsSync(localPath))broken.push(`${rel(file)}: missing ${target}`);
   }
 }
 for(const issue of broken)console.error(issue);

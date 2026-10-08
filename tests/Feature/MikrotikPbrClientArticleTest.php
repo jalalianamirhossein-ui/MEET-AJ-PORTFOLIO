@@ -17,9 +17,14 @@ class MikrotikPbrClientArticleTest extends TestCase
         $article = Article::where('slug', 'mikrotik-pbr-client')->firstOrFail();
         $this->assertSame('mikrotik', $article->category->slug);
         $this->assertSame('fa', data_get($article->presentation, 'content_language'));
-        $this->assertSame('mikrotik-pbr-client', Article::published()->inDisplayOrder()->first()->slug);
+        $curated = Article::published()->whereIn('slug', config('article-order.enterprise'))->inDisplayOrder()->pluck('slug')->all();
+        $this->assertContains('mikrotik-pbr-client', $curated);
+        $expected = array_values(array_intersect(config('article-order.enterprise'), $curated));
+        $this->assertSame($expected, $curated);
         $this->assertSame(1, substr_count($article->content, 'href="/downloads/mikrotik-pbr-client/'));
-        $this->assertGreaterThan(strpos($article->content, 'id="faq"'), strpos($article->content, 'href="/downloads/mikrotik-pbr-client/'));
+        $dom = new \DOMDocument;
+        @$dom->loadHTML('<?xml encoding="UTF-8">'.$article->content, LIBXML_NONET);
+        $this->assertSame(1, (new \DOMXPath($dom))->query('//section[@id="download"]//a[starts-with(@href,"/downloads/mikrotik-pbr-client/")]')->length);
         $this->get('/')->assertOk()->assertSee('/articles/mikrotik-pbr-client', false);
         $this->get('/articles/mikrotik-pbr-client')->assertOk()
             ->assertSee('EnableTriggerIp')->assertSee('Send disconnect')

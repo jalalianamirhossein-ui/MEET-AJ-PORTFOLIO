@@ -1,10 +1,10 @@
-const ASSET_VERSION = "cms-4";
+const ASSET_VERSION = "cms-5";
 const CACHE_NAME = `meet-aj-v2.0.0-${ASSET_VERSION}`;
 const PRIVATE_PREFIXES = ["/admin", "/livewire", "/forms", "/storage/livewire-tmp"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(["/", "/manifest.json", "/offline.html"])).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(["/manifest.json", "/offline.html"])).then(() => self.skipWaiting())
   );
 });
 
@@ -29,7 +29,7 @@ function isPrivate(url) {
 
 self.addEventListener("fetch", (event) => {
   const request = event.request;
-  if (request.method !== "GET" || !request.url.startsWith(self.location.origin) || isPrivate(request.url) || request.headers.get("authorization")) {
+  if (request.method !== "GET" || new URL(request.url).origin !== self.location.origin || isPrivate(request.url) || request.headers.get("authorization")) {
     return;
   }
   const destination = request.destination;
@@ -41,7 +41,7 @@ self.addEventListener("fetch", (event) => {
       try {
         const response = await fetch(request);
         const cacheControl = response.headers.get("cache-control") || "";
-        if (response.ok && !cacheControl.includes("no-store")) {
+        if (response.ok && !cacheControl.includes("no-store") && !isPrivate(response.url)) {
           const cache = await caches.open(CACHE_NAME);
           cache.put(request, response.clone());
         }
@@ -63,7 +63,7 @@ self.addEventListener("fetch", (event) => {
       const cached = await cache.match(request);
       try {
         const response = await fetch(request);
-        if (response.ok) {
+        if (response.ok && !(response.headers.get("cache-control") || "").includes("no-store") && !isPrivate(response.url)) {
           await cache.put(request, response.clone());
         }
         return response;

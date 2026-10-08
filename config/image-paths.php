@@ -3,6 +3,11 @@
 // Historical image URLs resolve directly to the current organized asset.
 return [
     'legacy' => [
+        'articles/banners/fortigate-sd-wan-load-balancing-failover.png' => 'articles/content/fortigate-generated-banner.png',
+        'articles/content/fortigate-sd-wan-load-balancing-failover/02-dual-wan-topology.png' => 'articles/content/fortigate-generated-dual-wan-topology.png',
+        'articles/content/fortigate-sd-wan-load-balancing-failover/03-sla-architecture.png' => 'articles/content/fortigate-generated-sla-architecture.png',
+        'articles/content/fortigate-sd-wan-load-balancing-failover/04-methods-comparison.png' => 'articles/content/fortigate-generated-methods-comparison.png',
+        'articles/content/fortigate-sd-wan-load-balancing-failover/05-troubleshooting-flow.png' => 'articles/content/fortigate-generated-troubleshooting-flow.png',
         'articles/mongodb/mongodb-installation-production-banner.png' => 'articles/banners/mongodb-installation-production-banner.png',
         'articles/mongodb/mongodb-architecture.png' => 'articles/content/mongodb-architecture.png',
         'articles/mongodb/mongodb-security-architecture.png' => 'articles/content/mongodb-security-architecture.png',

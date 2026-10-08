@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -25,6 +26,18 @@ class Tag extends Model
         'openvpn' => '#EA7E20', 'ssh' => '#222222',
     ];
     protected $fillable = ['name', 'slug'];
+    protected $with = ['categoryTranslations'];
+
+    public function getCategorySlugAttribute(): string
+    {
+        return $this->slug === 'other' ? 'others' : (string) $this->slug;
+    }
+
+    public function categoryTranslations(): HasMany
+    {
+        // Tags share their category's localized label, including other / others.
+        return $this->hasMany(Category::class, 'slug', 'category_slug');
+    }
 
     public function articles(): BelongsToMany
     {
@@ -38,6 +51,13 @@ class Tag extends Model
 
     public function displayName(string $locale = 'en'): string
     {
+        if ($locale !== 'en') {
+            $translated = trim((string) $this->categoryTranslations->firstWhere('language', $locale)?->name);
+            if ($translated !== '') {
+                return $translated;
+            }
+        }
+
         return match (strtolower((string) $this->slug)) {
             'qnap' => $locale === 'fa' ? 'استوریج' : 'Storage',
             'vmware' => 'VMware',

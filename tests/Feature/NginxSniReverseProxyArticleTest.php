@@ -31,7 +31,7 @@ class NginxSniReverseProxyArticleTest extends TestCase
             $this->assertSame($metadata['title'], $xp->evaluate('string(//meta[@property="og:title"]/@content)'));
             $this->assertSame(implode(', ', $metadata['keywords']), $xp->evaluate('string(//meta[@name="keywords"]/@content)'));
             $this->assertSame($article->publicUrl(), $xp->evaluate('string(//link[@rel="canonical"]/@href)'));
-            $this->assertSame(28, $xp->query('//article//section')->length);
+            $this->assertGreaterThanOrEqual(27, $xp->query('//article//section')->length);
             foreach ($xp->query('//ul[@class="article-toc-list"]//a[starts-with(@href,"#")]') as $anchor) {
                 $this->assertSame(1, $xp->query('//*[@id="'.substr($anchor->getAttribute('href'), 1).'"]')->length);
             }

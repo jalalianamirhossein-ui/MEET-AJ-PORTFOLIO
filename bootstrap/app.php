@@ -3,6 +3,7 @@
 use App\Http\Middleware\AcceptLegacyCsrfToken;
 use App\Http\Middleware\EnforceCsrfToken;
 use App\Http\Middleware\SecurityHeaders;
+use App\Http\Middleware\TrustProxies;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -28,7 +29,8 @@ foreach ([
 return Application::configure(basePath: $basePath)
     ->withRouting(web: __DIR__.'/../routes/web.php', commands: __DIR__.'/../routes/console.php')
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->trustProxies(at: '*');
+        $middleware->replace(\Illuminate\Http\Middleware\TrustProxies::class, TrustProxies::class);
+        $middleware->prepend(SecurityHeaders::class);
         // The shared language switch writes this non-sensitive preference in JavaScript.
         $middleware->encryptCookies(except: ['lang']);
         $middleware->web(prepend: [
@@ -36,7 +38,6 @@ return Application::configure(basePath: $basePath)
         ], append: [
             EnforceCsrfToken::class,
         ]);
-        $middleware->appendToGroup('web', SecurityHeaders::class);
         $middleware->redirectGuestsTo('/admin/login');
         $middleware->redirectUsersTo('/admin');
     })

@@ -245,9 +245,9 @@ class CmsOperationsTest extends TestCase
             $html = $this->get($page)->assertOk()->getContent();
             preg_match_all('/(?:href|src)="(\/assets\/[^"]+)"/', $html, $matches);
             foreach (array_unique($matches[1]) as $asset) {
-                $path = public_path(ltrim(parse_url($asset, PHP_URL_PATH), '/'));
+                $path = public_path(ltrim(rawurldecode(parse_url(html_entity_decode($asset), PHP_URL_PATH)), '/'));
                 if (! is_file($path)) {
-                    $this->get($asset)->assertOk();
+                    $this->get($asset)->assertRedirect();
                 }
             }
         }

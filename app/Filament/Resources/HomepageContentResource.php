@@ -65,7 +65,13 @@ class HomepageContentResource extends Resource
             Section::make('Advanced structured data')
                 ->description('Edit repeatable facts, skills, education, experience, contact cards, links and other section-specific values as JSON. The default content is already populated.')
                 ->schema([
-                    Textarea::make('content_json')->label('Section JSON')->rows(22)->required()->formatStateUsing(fn ($state, ?HomepageContent $record): string => json_encode($record?->content ?? $state ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))->dehydrated(true)->helperText('Valid JSON is required. Use the existing structure as a template; values can be bilingual with *_en and *_fa keys.'),
+                    Textarea::make('content_json')->label('Section JSON')->rows(22)->required()
+                        ->rules(['json', fn () => function (string $attribute, mixed $value, \Closure $fail): void {
+                            if (! is_array(json_decode((string) $value, true))) {
+                                $fail('Section content must be a JSON object or array.');
+                            }
+                        }])
+                        ->formatStateUsing(fn ($state, ?HomepageContent $record): string => json_encode($record?->content ?? $state ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))->dehydrated(true)->helperText('Valid JSON is required. Use the existing structure as a template; values can be bilingual with *_en and *_fa keys.'),
                 ]),
         ]);
     }

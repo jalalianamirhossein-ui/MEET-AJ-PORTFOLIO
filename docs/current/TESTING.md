@@ -1,14 +1,16 @@
 # Testing — Meet AJ
 
-> Maintenance review: 2026-10-06. Current suite outcome: 96 tests, 1,369 assertions, 2 errors, 16 failures, 1 skipped using the sandbox bootstrap workaround. This is not a passing release gate. Four frontend tests pass. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+> Security and bug review: 2026-10-08. Full SQLite suite: 150 tests, 21,840 assertions, zero failures/errors, one MySQL skip. Five Node tests pass. A subsequent 23-test/834-assertion focused run verifies legacy-image cleanup and public-page regressions. See [current status](PROJECT-STATUS.md) and [the security audit](../qa/SECURITY-BUG-AUDIT-2026-10-08.md).
 
-Documentation reviewed **2026-10-06**. The 2026-10-01 result (85 tests, 5,453 assertions, 1 skipped) is historical. Current evidence: [structure/documentation audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+Documentation reviewed **2026-10-08**. Older results (including the 2026-10-06 failing suite) remain historical in their dated reports. Current evidence: [security and bug audit](../qa/SECURITY-BUG-AUDIT-2026-10-08.md).
 
 ## Commands
 
 ```bash
 php vendor/phpunit/phpunit/phpunit
 php vendor/phpunit/phpunit/phpunit --filter BilingualEnterpriseArticleTest
+php vendor/phpunit/phpunit/phpunit --filter SecurityRegressionTest
+php vendor/phpunit/phpunit/phpunit --filter TagLocalizationTest
 php vendor/phpunit/phpunit/phpunit -c phpunit.mysql.xml --filter MysqlSchemaTest
 php artisan site:compare-content
 php artisan migrate:status
@@ -43,11 +45,11 @@ This pass does not validate remote deployment, SMTP delivery, real MySQL/MariaDB
 ## Optional frontend and documentation checks
 
 ```bash
-node --test tests/Frontend/scroll-reveal.test.cjs
+node --test tests/Frontend/scroll-reveal.test.cjs tests/Frontend/ServiceWorkerSecurityTest.cjs
 node scripts/check-documentation.cjs
 node scripts/check-documentation.cjs --write-index
 ```
 
-Node is needed only for these checks, not to build or serve the site. The documentation check validates local Markdown file links and regenerates the complete inventory when requested. On this Windows sandbox, PHPUnit sees `vendor/autoload.php` as unreadable even though PHP can require it; see the audit for the temporary wrapper used to run the suite without changing tracked PHPUnit configuration.
+Node is needed only for these checks, not to build or serve the site. The documentation check validates relative Markdown file links and root-relative website links under `public/`, and regenerates the complete inventory when requested. On this Windows sandbox, PHPUnit sees `vendor/autoload.php` as unreadable even though PHP can require it. The 2026-10-08 suite used the approved host runtime outside that filesystem restriction with unchanged tracked PHPUnit configuration and SQLite `:memory:`.
 
 Image organization (2026-10-06): [banner, article-body and upload folder guide](IMAGES.md). Run `node scripts/check-images.cjs` after publishing images.

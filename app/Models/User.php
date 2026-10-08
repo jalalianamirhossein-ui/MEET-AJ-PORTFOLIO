@@ -6,6 +6,8 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -14,6 +16,21 @@ class User extends Authenticatable implements FilamentUser
     protected $fillable = ['name', 'email', 'password', 'role'];
 
     protected $hidden = ['password', 'remember_token'];
+
+    public function save(array $options = []): bool
+    {
+        return DB::transaction(fn () => parent::save($options));
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (User $user): void {
+            if ($user->exists && $user->isDirty('role') && $user->getOriginal('role') === 'admin'
+                && $user->role !== 'admin' && ! static::where('role', 'admin')->lockForUpdate()->get()->contains(fn (User $admin) => ! $admin->is($user))) {
+                throw ValidationException::withMessages(['role' => 'Keep at least one administrator account.']);
+            }
+        });
+    }
 
     protected function casts(): array
     {

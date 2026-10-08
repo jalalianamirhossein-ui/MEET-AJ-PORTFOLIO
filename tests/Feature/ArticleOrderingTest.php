@@ -25,13 +25,15 @@ class ArticleOrderingTest extends TestCase
     public function test_new_articles_are_accepted_sorted_by_recency_and_keep_dates_and_content(): void
     {
         app(LegacyArticleImporter::class)->import(false);
+        // Isolate the configured library from newer articles added by later migrations.
+        Article::whereNotIn('slug', array_merge(config('article-order.enterprise'), config('article-order.guides')))->delete();
         $old = $this->newArticle('new-guide-older', 3);
         $new = $this->newArticle('new-guide-newer');
         $translated = $this->newArticle('new-guide-newer', 0, 'fa');
         $before = DB::table('articles')->orderBy('id')->get()->map(fn ($row) => (array) $row)->all();
         $ordering = app(ArticleOrdering::class);
         $result = $ordering->synchronize();
-        $this->assertCount(count(app(LegacyArticleImporter::class)->articleFiles()) + 3, $result);
+        $this->assertCount(count(config('article-order.enterprise')) + count(config('article-order.guides')) + 3, $result);
         $ordered = Article::where('language', 'en')->inDisplayOrder()->pluck('slug')->all();
         $priorityCount = count(config('article-order.enterprise'));
         $this->assertSame([$new->slug, $old->slug], array_slice($ordered, 0, 2));
@@ -47,7 +49,7 @@ class ArticleOrderingTest extends TestCase
         $this->assertSame($result, $ordering->synchronize());
 
         // A repeat import must not reject or reset CMS-only additions.
-        app(LegacyArticleImporter::class)->import(false, true);
+        app(LegacyArticleImporter::class)->import(false, true, array_merge(config('article-order.enterprise'), config('article-order.guides')));
         $this->assertSame($ordered, Article::where('language', 'en')->inDisplayOrder()->pluck('slug')->all());
         foreach (['/', '/articles', '/articles?q=networking'] as $path) {
             $response = $this->get($path)->assertOk();

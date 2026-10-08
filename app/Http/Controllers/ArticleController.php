@@ -12,11 +12,16 @@ use App\Services\ArticleShareLinks;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends Controller
 {
     public function index(Request $request): View
     {
+        abort_if(Validator::make($request->query(), [
+            'q' => ['nullable', 'string', 'max:200'],
+            'tag' => ['nullable', 'string', 'max:180', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/'],
+        ])->fails(), 400);
         $q = trim((string) $request->query('q', ''));
         $tagSlug = trim((string) $request->query('tag', ''));
         $searching = $q !== '' || $tagSlug !== '';
@@ -67,7 +72,13 @@ class ArticleController extends Controller
             ->where('slug', $slug)
             ->where('language', 'en')
             ->first();
-        abort_if($article === null, 404);
+        if ($article === null) {
+            $redirect = ArticleRedirect::where('old_path', '/articles/'.$slug)->first();
+            $target = $redirect?->article;
+            abort_unless($target && Article::published()->where('language', 'en')->whereKey($target->id)->exists(), 404);
+
+            return redirect()->to($this->cleanArticleTarget($request, $target), 301);
+        }
         if ($request->query->has('lang')) {
             return redirect()->to($this->cleanArticleTarget($request, $article), 301);
         }

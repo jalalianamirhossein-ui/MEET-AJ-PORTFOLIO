@@ -1,12 +1,12 @@
 # Project status — Meet AJ
 
-**Current local verification: 2026-10-06.** Evidence: [structure and documentation audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md). Historical reports describe their own dates.
+**Current local verification: 2026-10-08.** Evidence: [security and bug audit](../qa/SECURITY-BUG-AUDIT-2026-10-08.md). Full suite: 150 tests, 21,840 assertions, zero errors/failures and one MySQL skip. Five frontend tests pass. Historical reports describe their own dates.
 
 ## Application
 
-Laravel 13.31.0, Filament 5.8.2, Livewire 4.4.5 and PHPUnit 11.5.56 are locked dependencies. PHP 8.4.25 runs locally. Blade and CSS/JavaScript serve the public site; Filament serves `/admin`. No frontend build, Redis, worker or scheduler is required. Node is optional for frontend and documentation checks. SQLite is local; deployment targets MySQL/MariaDB. Production was not inspected.
+Laravel 13.31.0, Filament 5.8.3, Livewire 4.4.5 and PHPUnit 11.5.56 are locked dependencies. CommonMark is patched to 2.10.2. PHP 8.4.25 runs locally. Blade and CSS/JavaScript serve the public site; Filament serves `/admin`. No frontend build, Redis, worker or scheduler is required. Node is optional for frontend and documentation checks. SQLite is local; deployment targets MySQL/MariaDB. Production was not inspected.
 
-## Local snapshot
+## Historical local snapshot (2026-10-06)
 
 | Item | Count |
 |---|---|
@@ -32,7 +32,7 @@ Recent content migrations update testimonial attribution, contact headings and i
 
 `site:compare-content` reported **27 failures** on 2026-10-06, primarily source/database drift; the earlier zero-failure result is historical. Updating stored article bodies is a separate editorial operation: preview `articles:import-legacy --update-existing --dry-run`, back up and review CMS edits before applying. This documentation task did not replace database content.
 
-Frontend scroll-reveal tests passed (4/4). Current PHPUnit evidence and local filesystem bootstrap limitations are recorded in the dated audit. Remote deployment, SMTP, real MySQL, infrastructure examples, Lighthouse/load tests and browser PWA installation/offline behavior were not checked in this review. No local CMS user exists for interactive login.
+On 2026-10-08, the complete SQLite suite passed and frontend scroll-reveal/service-worker checks passed (5/5). Security fixes, dependency checks and local filesystem bootstrap limitations are recorded in the security audit. Remote deployment, SMTP, real MySQL, infrastructure examples, Lighthouse/load tests and browser PWA installation/offline behavior were not checked in this review. No local CMS user was created for interactive login.
 
 Start with [the documentation index](../README.md), [directory map](PROJECT-STRUCTURE.md), [articles](ARTICLES.md), [testing](TESTING.md) and [deployment](DEPLOYMENT.md).
 

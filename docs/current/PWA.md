@@ -18,21 +18,23 @@ Registration is in homepage (and rebuilt Blade) markup pointing at `/sw.js` and 
 ## Cache name / version
 
 ```javascript
-const ASSET_VERSION = "cms-3";
+const ASSET_VERSION = "cms-5";
 const CACHE_NAME = `meet-aj-v2.0.0-${ASSET_VERSION}`;
-// → meet-aj-v2.0.0-cms-3
+// → meet-aj-v2.0.0-cms-5
 ```
 
 On activate, caches whose names are not `CACHE_NAME` are deleted. Navigation preload is enabled when the browser supports it.
 
 ## Precached on install
 
-`cache.addAll(["/", "/manifest.json", "/offline.html"])`.
+`cache.addAll(["/manifest.json", "/offline.html"])`. The homepage contains a session CSRF token and is never precached. Its HTTP response is `no-store`.
 
 ## Runtime caching
 
 - **Documents** (navigation): network first; successful GET without `Cache-Control: no-store` is stored; 404/410 deletes the cached URL; on network failure: match request, else `/`, else `/offline.html`
-- **Assets** matching `css|js|png|jpg|jpeg|gif|webp|svg|woff|woff2|ico`: cache-then-network update
+- **Assets** matching `css|js|png|jpg|jpeg|gif|webp|svg|woff|woff2|ico`: network first, cached fallback when offline
+
+Both paths respect `no-store` and exclude responses redirected to private URLs. Origin checks compare parsed origins exactly. Node regression checks cover these rules; browser installation/offline behavior remains unverified. See [the 2026-10-08 audit](../qa/SECURITY-BUG-AUDIT-2026-10-08.md).
 
 ## Excluded from the worker
 

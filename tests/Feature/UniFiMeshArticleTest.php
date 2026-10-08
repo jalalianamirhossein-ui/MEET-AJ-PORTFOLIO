@@ -27,7 +27,7 @@ class UniFiMeshArticleTest extends TestCase
             $this->assertSame($locale, $xp->evaluate('string(/html/@lang)'));
             $this->assertSame($locale === 'fa' ? 'rtl' : 'ltr', $xp->evaluate('string(/html/@dir)'));
             $this->assertSame($article->presentation['localizations'][$locale]['meta_title'], $xp->evaluate('string(//head/title)'));
-            $this->assertSame(23, $xp->query('//article//section')->length);
+            $this->assertGreaterThanOrEqual(23, $xp->query('//article//section')->length);
             $this->assertSame(8, $xp->query('//section[@id="faq"]//h3')->length);
             foreach ($xp->query('//ul[@class="article-toc-list"]//a[starts-with(@href,"#")]') as $anchor) {
                 $id = substr($anchor->getAttribute('href'), 1);

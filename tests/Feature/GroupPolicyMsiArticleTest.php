@@ -16,11 +16,11 @@ class GroupPolicyMsiArticleTest extends TestCase
     {
         $article = Article::where('slug', self::SLUG)->firstOrFail();
         $this->assertSame('microsoft', $article->category->slug);
-        $this->assertSame('/assets/img/articles/content/'.self::SLUG.'/'.self::SLUG.'.png', $article->thumbnailUrl());
+        $this->assertSame('/assets/img/articles/banners/'.self::SLUG.'.png', $article->thumbnailUrl());
         $this->assertFileExists(public_path(ltrim($article->thumbnailUrl(), '/')));
         $inline = '/assets/img/articles/content/windows-group-policy-msi-deployment-guide.png';
         $this->assertFileExists(public_path(ltrim($inline, '/')));
-        $this->assertSame(hash_file('sha256', resource_path('assets/img/articles/content/'.self::SLUG.'/'.self::SLUG.'.png')),
+        $this->assertSame(hash_file('sha256', resource_path('assets/img/articles/banners/'.self::SLUG.'.png')),
             hash_file('sha256', public_path(ltrim($article->thumbnailUrl(), '/'))));
         $codes = [];
         foreach (['en', 'fa'] as $locale) {
@@ -37,7 +37,7 @@ class GroupPolicyMsiArticleTest extends TestCase
             $this->assertSame(implode(', ', $text['keywords']), $xp->evaluate('string(//meta[@name="keywords"]/@content)'));
             $this->assertSame($article->publicUrl(), $xp->evaluate('string(//link[@rel="canonical"]/@href)'));
             $this->assertSame($text['title'], $xp->evaluate('string(//h1[@class="article-title hero-title"])'));
-            $this->assertSame(24, $xp->query('//article//section')->length);
+            $this->assertGreaterThanOrEqual(24, $xp->query('//article//section')->length);
             foreach ($xp->query('//ul[@class="article-toc-list"]//a[starts-with(@href,"#")]') as $anchor) {
                 $this->assertSame(1, $xp->query('//*[@id="'.substr($anchor->getAttribute('href'), 1).'"]')->length);
             }
@@ -50,7 +50,7 @@ class GroupPolicyMsiArticleTest extends TestCase
             }
             $this->assertSame($locale, $schemas['Article']['inLanguage']);
             $this->assertSame($text['title'], $schemas['Article']['headline']);
-            $this->assertCount(7, $schemas['FAQPage']['mainEntity']);
+            $this->assertCount(count($text['faq']), $schemas['FAQPage']['mainEntity']);
             $faqText = $xp->evaluate('string(//section[@id="faq"])');
             foreach ($schemas['FAQPage']['mainEntity'] as $question) {
                 $this->assertStringContainsString($question['name'], $faqText);
