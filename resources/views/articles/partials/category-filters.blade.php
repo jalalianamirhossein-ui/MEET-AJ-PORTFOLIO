@@ -11,8 +11,11 @@
     $filterGroups = $brandFilters
         ->map(function ($tag) use ($brandCategories): array {
             $category = $brandCategories->get($tag->slug === 'other' ? 'others' : $tag->slug);
-            $labelEn = $tag->displayName('en');
-            $labelFa = $tag->displayName('fa');
+            $labels = \App\Models\Category::DISPLAY_NAMES[$tag->category_slug] ?? [];
+            $labelEn = trim((string) $tag->categoryTranslations->firstWhere('language', 'en')?->name)
+                ?: ($labels['en'] ?? $tag->displayName());
+            $labelFa = trim((string) $tag->categoryTranslations->firstWhere('language', 'fa')?->name)
+                ?: ($labels['fa'] ?? $labelEn);
 
             return ['slug' => $tag->slug, 'en' => $labelEn, 'fa' => $labelFa, 'color' => $category?->accentColor() ?? $tag->accentColor(), 'topic' => $tag->slug, 'sort_order' => 0, 'id' => $tag->id];
         })

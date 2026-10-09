@@ -35,7 +35,7 @@ class Tag extends Model
 
     public function categoryTranslations(): HasMany
     {
-        // Tags share their category's localized label, including other / others.
+        // Category filters use localized category labels; tag labels stay English.
         return $this->hasMany(Category::class, 'slug', 'category_slug');
     }
 
@@ -51,15 +51,9 @@ class Tag extends Model
 
     public function displayName(string $locale = 'en'): string
     {
-        if ($locale !== 'en') {
-            $translated = trim((string) $this->categoryTranslations->firstWhere('language', $locale)?->name);
-            if ($translated !== '') {
-                return $translated;
-            }
-        }
-
+        // Keep the locale argument for existing callers, but never translate tags.
         return match (strtolower((string) $this->slug)) {
-            'qnap' => $locale === 'fa' ? 'استوریج' : 'Storage',
+            'qnap' => 'Storage',
             'vmware' => 'VMware',
             'mikrotik' => 'MikroTik',
             'devops' => 'DevOps',

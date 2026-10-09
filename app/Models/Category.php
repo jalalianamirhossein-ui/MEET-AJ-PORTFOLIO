@@ -11,6 +11,23 @@ use Illuminate\Validation\ValidationException;
 class Category extends Model
 {
     public const ACCENT_PATTERN = '/^#[0-9A-Fa-f]{6}$/';
+    public const DISPLAY_NAMES = [
+        'microsoft' => ['en' => 'Microsoft', 'fa' => 'مایکروسافت'],
+        'cisco' => ['en' => 'Cisco', 'fa' => 'سیسکو'],
+        'vmware' => ['en' => 'VMware', 'fa' => 'مجازی‌سازی'],
+        'mikrotik' => ['en' => 'MikroTik', 'fa' => 'میکروتیک'],
+        'fortinet' => ['en' => 'Fortinet', 'fa' => 'فورتی‌نت'],
+        'linux' => ['en' => 'Linux', 'fa' => 'لینوکس'],
+        'supermicro' => ['en' => 'Supermicro', 'fa' => 'سوپرمیکرو'],
+        'hpe' => ['en' => 'HPE', 'fa' => 'اچ‌پی‌ای'],
+        'ubiquiti' => ['en' => 'Ubiquiti', 'fa' => 'یوبیکیوتی'],
+        'juniper' => ['en' => 'Juniper', 'fa' => 'جونیپر'],
+        'avaya' => ['en' => 'AVAYA', 'fa' => 'آوایا'],
+        'qnap' => ['en' => 'Storage', 'fa' => 'استوریج'],
+        'dell' => ['en' => 'DELL', 'fa' => 'دل'],
+        'other' => ['en' => 'Other', 'fa' => 'سایر'],
+        'others' => ['en' => 'Others', 'fa' => 'سایر'],
+    ];
 
     protected $fillable = ['name', 'slug', 'language', 'translation_key', 'accent_color', 'sort_order'];
     protected $attributes = ['language' => 'en', 'sort_order' => 0];

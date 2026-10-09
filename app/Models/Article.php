@@ -344,14 +344,7 @@ class Article extends Model
         $slug = strtolower((string) ($this->category?->slug ?? ''));
         $filter = strtolower(str_replace('filter-', '', $this->filterClass()));
         $key = $slug !== '' ? $slug : $filter;
-        $map = [
-            'microsoft' => ['en' => 'Microsoft', 'fa' => 'مایکروسافت'],
-            'linux' => ['en' => 'Linux', 'fa' => 'لینوکس'],
-            'mikrotik' => ['en' => 'MikroTik', 'fa' => 'میکروتیک'],
-            'vmware' => ['en' => 'VMware', 'fa' => 'مجازی‌سازی'],
-            'other' => ['en' => 'Other', 'fa' => 'سایر'],
-            'others' => ['en' => 'Other', 'fa' => 'سایر'],
-        ];
+        $map = Category::DISPLAY_NAMES;
 
         foreach ($map as $needle => $labels) {
             if ($key === $needle || str_contains($key, $needle) || strcasecmp($name, $labels['en']) === 0) {
