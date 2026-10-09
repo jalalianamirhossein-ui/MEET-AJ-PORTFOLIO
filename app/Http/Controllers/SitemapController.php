@@ -15,7 +15,7 @@ class SitemapController extends Controller
             ['loc' => $origin.'/articles'],
         ];
 
-        $articles = Article::published()->where('language', 'en')->orderByDesc('published_at')->orderBy('sort_order')->get();
+        $articles = Article::published()->where('language', 'en')->inDisplayOrder()->get();
         foreach ($articles as $article) {
             // Match the robots metadata rendered by ArticleSeo. "none"
             // includes noindex, so neither directive belongs in the sitemap.

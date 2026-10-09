@@ -9,46 +9,12 @@ use RuntimeException;
 
 class ArticleOrdering
 {
-    private function priorities(): array
-    {
-        $enterprise = config('article-order.enterprise', []);
-        $guides = config('article-order.guides', []);
-        $slugs = array_merge($enterprise, $guides);
-        if (count($slugs) !== count(array_unique($slugs))) {
-            throw new RuntimeException('Duplicate slug in config/article-order.php.');
-        }
-
-        // Rank explicit editorial priorities after the automatic new-article
-        // bucket. Any slug not yet listed in this file therefore appears first
-        // by publication date, while established articles keep their curated order.
-        $priorities = [];
-        foreach ($enterprise as $index => $slug) {
-            $priorities[$slug] = $index + 1;
-        }
-        $newArticlePriority = count($enterprise) + 1;
-        foreach ($guides as $index => $slug) {
-            $priorities[$slug] = $newArticlePriority + $index;
-        }
-
-        return [$priorities, $newArticlePriority];
-    }
-
     public function apply(Builder $query): Builder
     {
-        [$priorities, $default] = $this->priorities();
-        $sql = 'CASE articles.slug';
-        $bindings = [];
-        foreach ($priorities as $slug => $rank) {
-            $sql .= ' WHEN ? THEN ?';
-            array_push($bindings, $slug, $rank);
-        }
-        $sql .= ' ELSE ? END';
-        $bindings[] = 0;
-
-        return $query->orderByRaw($sql, $bindings)
-            ->orderByDesc('articles.published_at')
-            ->orderBy('articles.sort_order')
-            ->orderBy('articles.id');
+        // Publication time leads every list. A later insertion wins an exact
+        // timestamp tie, including articles published on the same calendar day.
+        return $query->orderByDesc('articles.published_at')
+            ->orderByDesc('articles.id');
     }
 
     /** Persist the same public order, independently for each content language. */

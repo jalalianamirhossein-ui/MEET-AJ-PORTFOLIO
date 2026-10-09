@@ -1,7 +1,7 @@
 <?php
 
-// Editorial priority, not publication dates. Missing slugs are harmless.
-// Add a new enterprise article here when it should lead the library.
+// Historical article classifications retained for existing integrations.
+// Public ordering is chronological in ArticleOrdering, independent of these lists.
 return [
     'enterprise' => [
         'deploy-msi-active-directory-group-policy',
@@ -21,8 +21,7 @@ return [
         'vsphere-standard-switch-vs-distributed-switch',
         'mikrotik-openvpn-setup-v7',
     ],
-    // New articles not explicitly classified appear between these two groups,
-    // newest first. Promote an enterprise article into the list above as needed.
+    // Classification does not affect publication dates or public placement.
     'guides' => [
         'enable-ssh-linux-complete-guide',
         'set-static-ip-ubuntu-server-netplan',

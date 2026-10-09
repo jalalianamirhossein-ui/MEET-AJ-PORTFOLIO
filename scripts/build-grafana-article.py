@@ -644,7 +644,7 @@ localizations={lang:{'title':TITLE[lang],'meta_title':TITLE[lang],'description':
 banner='/assets/img/articles/banners/grafana-zabbix-enterprise-monitoring-banner.png'
 url='https://meetaj.ir/articles/'+SLUG
 schema={'@context':'https://schema.org','@type':'Article','headline':TITLE['en'],'description':DESC['en'],
- 'inLanguage':'en','datePublished':'2026-10-09T00:00:00+03:30','dateModified':'2026-10-09',
+ 'inLanguage':'en','datePublished':'2026-10-10T00:00:00+03:30','dateModified':'2026-10-10',
  'image':banner,'mainEntityOfPage':url,'author':{'@type':'Person','name':'AmirHossein Jalalian'}}
 faq_schema={'@context':'https://schema.org','@type':'FAQPage','mainEntity':[{'@type':'Question','name':q,'acceptedAnswer':{'@type':'Answer','text':a}} for q,a,fq,fa in FAQ]}
 nav=''.join('<li class="article-nav-item">'+dual('a',en,fa,f'href="#{id}"')+'</li>' for id,en,fa in toc)
@@ -699,7 +699,7 @@ Data source UID: zabbix-enterprise. If using another data source, change every d
 Runtime acceptance needs a real authorized Zabbix API, live OS items, Grafana rendering, approved notification transport and a restored database. Static checks cannot establish these. Read [restore instructions](restore-runbook.md). Edited credential files and backup archives must never be copied into public downloads or Git.
 '''
 (SOURCE/'README.md').write_text(readme,encoding='utf-8',newline='\n')
-metadata={'slug':SLUG,'canonical_route':'/articles/'+SLUG,'canonical_url':url,'reviewed_at':'2026-10-09',
+metadata={'slug':SLUG,'canonical_route':'/articles/'+SLUG,'canonical_url':url,'reviewed_at':'2026-10-09','published_at':'2026-10-10T00:00:00+03:30',
  'category':'linux','tags':['Grafana','Zabbix','Monitoring','Linux','DevOps','Infrastructure','Observability'],
  'grafana_oss_version':'13.2.3','zabbix_plugin_version':'6.9.1','plugin_grafana_minimum':'11.6.0',
  'zabbix_branch':'7.0 LTS','os':'Ubuntu Server 24.04 LTS','localizations':localizations,

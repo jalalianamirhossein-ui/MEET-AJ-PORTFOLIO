@@ -84,9 +84,9 @@ class GrafanaZabbixArticleTest extends TestCase
         $this->get('/sitemap.xml')->assertOk()->assertSee($article->publicUrl());
         $this->assertStringContainsString('/articles/zabbix-server-linux-windows-agents-backup', $article->content);
         $this->assertNotEmpty($article->relatedArticles(3));
-        $priority = config('article-order.enterprise');
-        $this->assertSame(array_search('zabbix-server-linux-windows-agents-backup', $priority, true) + 1, array_search(self::SLUG, $priority, true));
         $zabbix = Article::where('slug', 'zabbix-server-linux-windows-agents-backup')->firstOrFail();
+        $this->assertGreaterThan($zabbix->published_at->timestamp, $article->published_at->timestamp);
+        $this->assertSame('2026-10-10', $article->published_at->toDateString());
         $this->assertStringContainsString($article->path(), $zabbix->content);
     }
 

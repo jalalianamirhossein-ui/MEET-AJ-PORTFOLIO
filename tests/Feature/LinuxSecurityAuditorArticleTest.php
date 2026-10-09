@@ -19,7 +19,7 @@ class LinuxSecurityAuditorArticleTest extends TestCase
         app(LegacyArticleImporter::class)->import(false);
         $article = Article::where('slug', $slug)->firstOrFail();
         $curated = Article::whereIn('slug', config('article-order.enterprise'))->inDisplayOrder()->pluck('slug')->all();
-        $this->assertSame(array_search($slug, config('article-order.enterprise'), true), array_search($slug, $curated, true));
+        $this->assertContains($slug, $curated);
         $this->assertSame('linux', $article->category->slug);
         $this->assertSame(['linux', 'ssh', 'ubuntu'], $article->tags()->orderBy('slug')->pluck('slug')->all());
         $this->assertSame('/assets/img/articles/banners/linux-security-auditor-bash.png', $article->thumbnailUrl());
@@ -77,11 +77,10 @@ class LinuxSecurityAuditorArticleTest extends TestCase
         $this->get('/sitemap.xml')->assertOk()->assertSee('/articles/'.$slug);
     }
 
-    public function test_auditor_stays_first_in_linux_and_follows_editorial_priority_in_the_full_library(): void
+    public function test_newer_linux_articles_precede_the_auditor_across_public_lists(): void
     {
         app(LegacyArticleImporter::class)->import(false);
-        // Keep this scenario focused on curated order, within one search-results page.
-        Article::whereNotIn('slug', array_merge(config('article-order.enterprise'), config('article-order.guides')))->update(['status' => 'draft']);
+        Article::whereNotIn('slug', ['linux-security-auditor-bash', 'enable-ssh-linux-complete-guide'])->update(['status' => 'draft']);
         $auditor = Article::where('slug', 'linux-security-auditor-bash')->firstOrFail();
         $auditor->update(['published_at' => now()->subDays(10)]);
         Article::where('slug', 'enable-ssh-linux-complete-guide')->update(['published_at' => now()->subDay(), 'sort_order' => 0]);
@@ -89,12 +88,7 @@ class LinuxSecurityAuditorArticleTest extends TestCase
         foreach (['/', '/articles', '/articles?tag=linux'] as $path) {
             $response = $this->get($path)->assertOk();
             $items = $response->viewData($path === '/articles?tag=linux' ? 'results' : 'articles');
-            $priority = config('article-order.enterprise');
-            $curated = collect($items->all())->whereIn('slug', $priority)->values();
-            $this->assertSame($path === '/articles?tag=linux' ? $auditor->slug : $priority[0], $curated->first()->slug, $path);
-            if ($path !== '/articles?tag=linux') {
-                $this->assertSame($auditor->slug, $curated->get(array_search($auditor->slug, $priority, true))->slug);
-            }
+            $this->assertSame(['enable-ssh-linux-complete-guide', $auditor->slug], collect($items->all())->pluck('slug')->all(), $path);
         }
     }
 }

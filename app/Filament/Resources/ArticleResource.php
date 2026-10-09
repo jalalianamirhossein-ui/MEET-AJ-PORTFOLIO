@@ -26,6 +26,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
@@ -150,7 +151,7 @@ class ArticleResource extends Resource
                         ->minValue(0)
                         ->default(fn (): int => ((int) Article::query()->max('sort_order')) + 1)
                         ->required()
-                        ->helperText('Display order. Lower numbers appear first.'),
+                        ->helperText('Legacy numeric index. Public articles appear newest first by publication time.'),
                     Select::make('status')->options(['draft' => 'Draft', 'published' => 'Published'])->default('draft')->required(),
                     DateTimePicker::make('published_at')->default(now())->timezone(config('cms.display_timezone'))->seconds(false)->helperText('Used when the article is published. German must remain draft.'),
                 ]),
@@ -245,7 +246,7 @@ class ArticleResource extends Resource
             ->emptyStateDescription('Import the original 23 HTML articles or create a draft. Published English and Persian URLs stay public.')
             ->emptyStateIcon(Heroicon::OutlinedDocumentText)
             ->emptyStateActions([CreateAction::make()])
-            ->defaultSort('sort_order');
+            ->defaultSort(fn (Builder $query): Builder => $query->inDisplayOrder());
     }
 
     public static function getPages(): array

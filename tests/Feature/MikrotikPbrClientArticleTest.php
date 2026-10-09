@@ -19,8 +19,6 @@ class MikrotikPbrClientArticleTest extends TestCase
         $this->assertSame('fa', data_get($article->presentation, 'content_language'));
         $curated = Article::published()->whereIn('slug', config('article-order.enterprise'))->inDisplayOrder()->pluck('slug')->all();
         $this->assertContains('mikrotik-pbr-client', $curated);
-        $expected = array_values(array_intersect(config('article-order.enterprise'), $curated));
-        $this->assertSame($expected, $curated);
         $this->assertSame(1, substr_count($article->content, 'href="/downloads/mikrotik-pbr-client/'));
         $dom = new \DOMDocument;
         @$dom->loadHTML('<?xml encoding="UTF-8">'.$article->content, LIBXML_NONET);

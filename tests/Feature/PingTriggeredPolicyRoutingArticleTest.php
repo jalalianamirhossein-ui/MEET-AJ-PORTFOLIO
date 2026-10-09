@@ -11,22 +11,19 @@ class PingTriggeredPolicyRoutingArticleTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_router_guide_follows_client_on_home_library_and_matching_search_regardless_of_date(): void
+    public function test_router_guides_follow_publication_time_on_home_library_search_and_tag(): void
     {
         app(LegacyArticleImporter::class)->import(false);
-        Article::whereNotIn('slug', array_merge(config('article-order.enterprise'), config('article-order.guides')))->update(['status' => 'draft']);
+        Article::whereNotIn('slug', ['mikrotik-pbr-client', 'mikrotik-ping-triggered-policy-routing', 'mikrotik-openvpn-setup-v7'])->update(['status' => 'draft']);
         $pbr = Article::where('slug', 'mikrotik-ping-triggered-policy-routing')->firstOrFail();
         $pbr->update(['published_at' => now()->subYears(2)]);
-        Article::where('slug', 'linux-security-auditor-bash')->update(['published_at' => now()->subDay()]);
+        Article::where('slug', 'mikrotik-pbr-client')->update(['published_at' => now()->subDay()]);
         Article::where('slug', 'mikrotik-openvpn-setup-v7')->update(['published_at' => now()->subHour()]);
 
         foreach (['/', '/articles', '/articles?q=mikrotik', '/articles?tag=mikrotik'] as $path) {
             $response = $this->get($path)->assertOk();
             $items = $response->viewData(str_contains($path, '?') ? 'results' : 'articles');
-            $curated = collect($items->all())->whereIn('slug', config('article-order.enterprise'))->values();
-            $clientIndex = $curated->search(fn ($article) => $article->slug === 'mikrotik-pbr-client');
-            $this->assertNotFalse($clientIndex, $path);
-            $this->assertSame($pbr->slug, $curated->get($clientIndex + 1)->slug, $path);
+            $this->assertSame(['mikrotik-openvpn-setup-v7', 'mikrotik-pbr-client', $pbr->slug], collect($items->all())->pluck('slug')->all(), $path);
         }
 
         $this->assertSame('mikrotik', $pbr->category->slug);

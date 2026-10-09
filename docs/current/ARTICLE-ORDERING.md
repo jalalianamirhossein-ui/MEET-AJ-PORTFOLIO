@@ -1,45 +1,51 @@
 # Article ordering
 
-> Maintenance review: 2026-10-06. Current leading Enterprise slugs are MikroTik PBR Client, ping-triggered PBR and Linux Auditor, in that order. See [current status](PROJECT-STATUS.md) and [the dated audit](../qa/STRUCTURE-DOCUMENTATION-AUDIT-2026-10-06.md).
+> Maintenance review: 2026-10-10. Public lists and the default admin list show the newest publication first.
 
-The homepage, article library and matching search/tag results share
-`Article::inDisplayOrder()` and `config/article-order.php`.
+The homepage, article library, matching search/tag results and default admin
+article table use `Article::inDisplayOrder()` through `ArticleOrdering`.
 
-1. Reviewed Enterprise articles follow the `enterprise` list in its exact order:
-   MikroTik PBR Client, ping-triggered MikroTik PBR, Linux Auditor, NetBox, Oxidized, NGINX, Linux security, MikroTik
-   ECMP, SQL Server backup, vSphere switching and MikroTik OpenVPN.
-2. New articles absent from either configured list appear next, newest first.
-3. Existing basic guides follow the `guides` list in its original order.
+1. Publication time (`published_at`) descending determines placement.
+2. If publication timestamps are identical, the article inserted later (higher ID) appears first.
 
-New slugs never cause an article-set mismatch. Missing configured slugs are
-skipped. Drafts and future publications remain subject to existing visibility
-rules. Priority does not make private content public. Languages are ordered
-independently when numeric `sort_order` values are synchronized.
+Historical classifications in `config/article-order.php` do not affect placement.
+New articles need no priority-list change. Editing content or changing `updated_at`
+does not promote an older article. Numeric `sort_order` remains a synchronized
+legacy index and cannot override publication time. Drafts and future publications
+remain hidden on public pages; publication scheduling still applies.
 
-To place a new Enterprise article first, add its slug at the beginning of the
-`enterprise` array. Put a basic guide in `guides` when it should stay below new
-articles. Classification is an editorial decision, not guessed from keywords.
-Do not list a slug in both arrays. If neither is edited, new articles still work.
+Publication dates are editorial facts, not spacing controls. Multiple articles
+can legitimately be published on the same day. Oracle, Tomcat and Zabbix were
+added to the repository on 2026-10-09; Grafana was added on 2026-10-10. Grafana's
+original source incorrectly copied the 2026-10-09 technical review date into its
+publication date. The source now publishes on 2026-10-10 and metadata records
+review and publication separately. The historical version-review date stays unchanged.
 
-After deploying the updated files to an existing server:
+Migration `2026_10_10_000054_use_chronological_article_order.php` repairs only the
+known original Grafana import date, with source-file, date-provenance and schema
+guards. It preserves manual publication dates, article content, status and
+`updated_at`. It also synchronizes the legacy numeric index. Repeating it is safe.
+It does not fabricate publication dates for other articles. Older imports without
+schema dates use source-file modification time, recorded as `source_file_mtime`
+in `seo_data.date_provenance`; those dates require an editorial record or backup
+before correction. Dates previously changed by the retired random-date script
+also require a known record or backup.
+
+After deploying these files to an existing server:
 
 ```bash
+php artisan migrate --force
 php artisan optimize:clear
-php artisan articles:import-legacy --update-existing
-php scripts/update-article-order.php
 php artisan optimize
 ```
 
-Import now synchronizes numeric order automatically; the standalone script is
-useful after changing editorial priority or adding articles through the CMS.
-It updates **only `sort_order`**, preserves publication dates/content/SEO and
-`updated_at`, and is safe to repeat. It verifies unrelated fields inside a
-transaction. The previous script changed dates randomly and rejected new slugs;
-both behaviors have been removed. Dates already changed by that old script can
-only be restored from known publication records or a backup.
+No bulk overwrite import is needed. To synchronize the legacy numeric index
+after CMS additions, optionally run:
 
-Configured editorial priority controls public placement. Publication dates sort
-unclassified articles; `sort_order` and ID resolve remaining ties. The admin's
-numeric ordering is synchronized by the script and does not override a configured
-priority. Inspect the printed list after synchronization; no fixed article count
-is required.
+```bash
+php scripts/update-article-order.php
+```
+
+That script changes only `sort_order`, checks all other fields inside a
+transaction, and is safe to repeat. Public lists already read publication time
+directly and do not depend on running it. Languages remain independently indexed.

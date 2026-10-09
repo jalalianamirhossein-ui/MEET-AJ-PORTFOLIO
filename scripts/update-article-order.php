@@ -1,7 +1,7 @@
 <?php
 
 // php scripts/update-article-order.php
-// Synchronize editorial order; never rewrite publication dates or article content.
+// Synchronize chronological order; never rewrite publication dates or article content.
 require __DIR__.'/../vendor/autoload.php';
 $app = require __DIR__.'/../bootstrap/app.php';
 $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();

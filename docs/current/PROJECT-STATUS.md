@@ -24,7 +24,7 @@ All 25 current migration files report Ran. The ledger contains a historical reco
 
 ## Current behavior and maintenance
 
-Homepage copy, service catalog, testimonials and articles are CMS-backed. Search/tag filtering, related articles, shared FA/EN preference, clean canonicals, contact CSRF/honeypot/throttling and admin policies remain implemented. German is draft-only; retired service detail routes return 404. Editorial ordering comes from `config/article-order.php`: MikroTik PBR Client, ping-triggered PBR, then Linux Auditor lead the Enterprise list.
+Homepage copy, service catalog, testimonials and articles are CMS-backed. Search/tag filtering, related articles, shared FA/EN preference, clean canonicals, contact CSRF/honeypot/throttling and admin policies remain implemented. German is draft-only; retired service detail routes return 404. Article lists use publication time descending, then article ID descending for identical timestamps; historical classifications do not override chronological order. See [Article ordering](ARTICLE-ORDERING.md) for the guarded Grafana publication-date correction and deployment migration.
 
 Recent content migrations update testimonial attribution, contact headings and intro, add the MikroTik PBR Client article and move its download to the article end. Article packages contain builders and runbooks outside the document root; selected Bash/MSI downloads are published explicitly. The NetBox PDF source is absent from this checkout.
 

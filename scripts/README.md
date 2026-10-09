@@ -10,7 +10,7 @@ Reviewed 2026-10-08. Run scripts from the repository root. PHP tools require PHP
 | `write-production-env.php` | New environment writer used by deployment setup; preserve existing `.env` and APP_KEY |
 | `refresh-project.sh` | Local/deployment refresh; inspect its optional destructive reset branch before use |
 | `verify-originals.php` | Historical hash comparison, not a current release regression test |
-| `update-article-order.php` | Synchronize editorial order; preserves content and publication dates |
+| `update-article-order.php` | Synchronize chronological order; preserves content and publication dates |
 | `install-pbr-article.php` | Preview ping-triggered PBR import; `--apply` backs up and updates local content |
 | `update-sql-backup-article.php` | Preview SQL article update; `--apply` saves a revision before changing the row |
 | `audit-article-content.php` | Review every stored article in both locales for duplicate headings/IDs/references, broken contents links, empty sections, unanswered FAQs and prose that does not match its requested language; writes a JSON report in `storage/app` and exits nonzero for structural or localization problems |

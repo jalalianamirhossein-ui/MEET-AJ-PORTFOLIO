@@ -2,6 +2,31 @@
 
 Implementation date: 10 October 2026. Official version review: 9 October 2026. Repository: `jalalianamirhossein-ui/MEET-AJ-PORTFOLIO`.
 
+## Publication-order correction (10 October 2026)
+
+The original configured placement below Zabbix has been superseded. Public lists,
+the sitemap and the default admin table now use publication time descending,
+then article ID descending for identical timestamps. Grafana's publication date
+was incorrectly copied from its technical review date; source schema and package
+metadata now publish on 10 October, while the version review remains 9 October.
+Both public/source ZIPs contain the corrected metadata. Same-day publication
+dates for Oracle, Tomcat and Zabbix agree with their first repository additions
+on 9 October and have been preserved.
+
+[Guarded migration](../../database/migrations/2026_10_10_000054_use_chronological_article_order.php)
+repairs only the known original Grafana import, preserving CMS edits, manual
+publication dates, visibility and timestamps. The configured local CMS database
+is still missing, so no real database or deployed site has been changed.
+See [current ordering and deployment instructions](../current/ARTICLE-ORDERING.md).
+
+Regression checks cover chronological home/library/search/tag results, same-day
+and identical timestamps, unpublished/future visibility, admin ordering, migration
+idempotence and manual date protection. [Feature tests](../../tests/Feature/ArticleOrderingTest.php)
+and existing Persian date tests pass. Documentation links, image references,
+repository security and Grafana package/syntax checks pass. No commit, push or
+deployment was performed for this correction. The implementation record below
+retains the original article work and its dated validation evidence.
+
 Implemented the complete bilingual article directly in the existing Laravel website. The Zabbix, Oracle, Apache Tomcat, Redis, MongoDB and Linux Security Auditor articles informed the importer, localization, image, SEO, navigation and download conventions. Shared website components retain their existing layout.
 
 English title: **Install Grafana on Ubuntu and Integrate with Zabbix – Complete Enterprise Monitoring Guide**.
