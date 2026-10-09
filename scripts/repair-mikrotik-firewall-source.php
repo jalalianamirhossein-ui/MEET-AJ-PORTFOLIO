@@ -20,5 +20,6 @@ $html = str_replace($body[0], '<article class="article-body">'.$repaired.'</arti
 if (! str_contains($html, 'id="article-localizations"')) {
     $html = str_replace('</head>', '<script type="application/json" id="article-localizations">'.json_encode($localizations, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG).'</script></head>', $html);
 }
+$html = (new App\Services\ArticleStructure)->repair($html, 'mikrotik-firewall-hardening-input-forward-chain');
 file_put_contents($path, $html);
 echo "Firewall article source repaired.\n";

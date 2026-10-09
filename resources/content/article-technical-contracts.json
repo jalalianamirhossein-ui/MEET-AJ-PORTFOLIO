@@ -1,0 +1,4336 @@
+{
+  "description": "Reviewed complete artifacts associated with their actual procedure sections. Update only after technical review; a hash is preservation evidence, not proof of platform execution.",
+  "articles": {
+    "10-essential-group-policies-windows-domain": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "production-scope",
+          "artifacts": [
+            {
+              "sha256": "9e4b1b7a34980d9eb22b0790bcc26fdf07e62b95af9a03344c5699e2bf8bd41d",
+              "description": "\\\\<domain-fqdn>\\SYSVOL\\<domain-fqdn>\\Policies\\PolicyDefinitions"
+            }
+          ]
+        },
+        {
+          "section": "architecture",
+          "artifacts": [
+            {
+              "sha256": "2b5f5d158bb8d43fc5b907bdfda2220fcbd33158311a58ffdc17f6e213fe9a36",
+              "description": "GPO-SEC-Password-Policy"
+            }
+          ]
+        },
+        {
+          "section": "password-lockout",
+          "artifacts": [
+            {
+              "sha256": "6371cac33a8e6ea69637a10498dc48ea928376e865ed539e7f5c95fe8602f5d6",
+              "description": "Computer Configuration"
+            },
+            {
+              "sha256": "64e117b7336968e0eeb072b03eaa9eb2e91deb3f4823aa9f215d6739fc3ed92a",
+              "description": "Get-ADDefaultDomainPasswordPolicy"
+            }
+          ]
+        },
+        {
+          "section": "defender",
+          "artifacts": [
+            {
+              "sha256": "1813d7a0c2fa75ecb9c31a5481eb526a0aa1670d058c47533dc6b7e654f41c32",
+              "description": "Computer Configuration"
+            },
+            {
+              "sha256": "e68431b3d6a454a0ffdb5f0014a8824a6f312ccfc1e2049b4ec016e7f2cbac9f",
+              "description": "Get-MpComputerStatus | Select-Object AMRunningMode, AntivirusEnabled,"
+            }
+          ]
+        },
+        {
+          "section": "firewall",
+          "artifacts": [
+            {
+              "sha256": "bb8b09512ef6ef81c38b260e1039bae8b39ac3ac883bc4666533046e6f4a5bbe",
+              "description": "Computer Configuration"
+            },
+            {
+              "sha256": "df347395b588c9718340c619644f793c551f8f42bf36005ca99b37a121c3132f",
+              "description": "Windows Defender Firewall with Advanced Security → Inbound Rules → New Rule → Custom"
+            },
+            {
+              "sha256": "332ce543095b7e2d9c4eda105763bb81290a3461281864f39379dd0d9b5a124c",
+              "description": "Get-NetFirewallProfile -PolicyStore ActiveStore |"
+            }
+          ]
+        },
+        {
+          "section": "windows-update",
+          "artifacts": [
+            {
+              "sha256": "6e55ca928183f75b249e575e12227dc77f2454d5535ade8123c9f6310bccca4c",
+              "description": "GPO-OPS-WindowsUpdate-Clients"
+            },
+            {
+              "sha256": "56b786383eac19c8425859b60607e8d72a012d2b59528704833d6f493c4bbf2f",
+              "description": "https://wsus.corp.example:8531"
+            },
+            {
+              "sha256": "37dba26507e801998284e625006174b9fa64897bc135e363262f9391006cab8e",
+              "description": "Windows Update → Manage end user experience"
+            },
+            {
+              "sha256": "8feaafc2892b9ac014e45185f2e67fd15f548c6c7e3b9f68b5a8082714adfa84",
+              "description": "Get-ItemProperty 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate'"
+            }
+          ]
+        },
+        {
+          "section": "usb-control",
+          "artifacts": [
+            {
+              "sha256": "fef6315d3826d25e2296238b42ed8aa7faa308f42954854e3ee5ae69e884e691",
+              "description": "Computer Configuration"
+            },
+            {
+              "sha256": "d5d61d8407a4411de5e8d5b1417903fe1e041eca215bcab0a3e83de97082f22e",
+              "description": "Computer Configuration"
+            }
+          ]
+        },
+        {
+          "section": "screen-lock",
+          "artifacts": [
+            {
+              "sha256": "f6e42c3b020c30d19f21ccd9ccfeadb2a87de94eebc0a01517b2209bf65191a5",
+              "description": "Computer Configuration"
+            },
+            {
+              "sha256": "aaffd1e68cce0fa20b450068164d1ca09009e66b2b15383bb2d140bb7377ca10",
+              "description": "User Configuration"
+            },
+            {
+              "sha256": "a1196e20564ea50616969bd451026eed508d38c47934727ed373c42419f7e9b1",
+              "description": "Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System' -Name InactivityTimeoutSecs"
+            }
+          ]
+        },
+        {
+          "section": "local-admin-laps",
+          "artifacts": [
+            {
+              "sha256": "7bcd107ff7d61bb52c2038df27ee79933d25bb830831ed2670918a3168b40a9a",
+              "description": "GG-Workstation-LocalAdmins"
+            },
+            {
+              "sha256": "4f089b27f8a373f4dac725444ae40274a352f6cec5a5420a8be3d1f67ddb6421",
+              "description": "Computer Configuration"
+            },
+            {
+              "sha256": "230039d9baf498a9062050cc1270ce79d4d234dbac1fac2e67da2c5c5c403702",
+              "description": "# Approved schema extension; run with appropriate rights"
+            }
+          ]
+        },
+        {
+          "section": "rdp-hardening",
+          "artifacts": [
+            {
+              "sha256": "c6fffdbefa14b0e1a6e95ce3bbd66b6a94823da1ebc331d9c07cd0afd1b28916",
+              "description": "Computer Configuration"
+            },
+            {
+              "sha256": "4954ae7b9576e3e9ebb0cb8fe8427887e30d5236f07dc46f3f92d6ee2dfded61",
+              "description": "Remote Desktop Session Host"
+            },
+            {
+              "sha256": "61fffda988da45dd89ecf0800ad9f4014d5bbe33b4f4e7118efb6c0f3dfbaa2f",
+              "description": "Get-CimInstance -Namespace 'root\\cimv2\\terminalservices' `"
+            }
+          ]
+        },
+        {
+          "section": "advanced-audit",
+          "artifacts": [
+            {
+              "sha256": "5a5144c8dc5ef205e6f2e93943bea1083c689afc40718c5e063e7293b28a886f",
+              "description": "Computer Configuration"
+            },
+            {
+              "sha256": "a8f2f7024249201fb7cf7ba79407d3c529153aad9566ea5ebaccaa16602606a7",
+              "description": "Computer Configuration"
+            },
+            {
+              "sha256": "89ad83986dba183eeb1d027163c842005591e516bee72684cf5961b2b2ed9c1a",
+              "description": "auditpol /get /category:*"
+            }
+          ]
+        },
+        {
+          "section": "application-hardening",
+          "artifacts": [
+            {
+              "sha256": "ab6bcdd815f11cff2699a6e355d49b729dd1fdd29cae93c224662a355790a43e",
+              "description": "User Configuration"
+            },
+            {
+              "sha256": "8667273a7c3766931531dbf05ffc32090407f16d44ccbd5358f31a8ff84cf2a1",
+              "description": "Computer Configuration"
+            },
+            {
+              "sha256": "d90153aaab9cd5cd30072ec4beca13ef0a7d25561aa96c2964ff644be940fbf0",
+              "description": "Computer Configuration"
+            },
+            {
+              "sha256": "7c0b5076a1d096e12e75ef828fa41b68ad7c4ddb27ac04fce244fa4a2b266d85",
+              "description": "Get-WinEvent -FilterHashtable @{"
+            }
+          ]
+        },
+        {
+          "section": "deployment",
+          "artifacts": [
+            {
+              "sha256": "42d2c93217e772b69319715916d72124c5a3828df57f3428b53cd5c356737765",
+              "description": "Create GPO → Link to Test OU → Add Pilot Computers → gpupdate → Validation → Production Rollout"
+            }
+          ]
+        },
+        {
+          "section": "troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "38a91a7d2dc3e37e4f2f1bf0488fec52eb2425277b45dad10868b7ac108b1454",
+              "description": "gpupdate /force"
+            },
+            {
+              "sha256": "8a698744322769fec413f3ef4b30f4dd5272afc7be056e433160d70c641e7ed4",
+              "description": "New-Item -Path 'C:\\Temp' -ItemType Directory -Force"
+            },
+            {
+              "sha256": "1263bcc5812ef916bf66901e4521c2c8f4359822a74ad7e7404c8fb3a331ed04",
+              "description": "nltest /dsgetdc:corp.example"
+            }
+          ]
+        },
+        {
+          "section": "best-practices",
+          "artifacts": [
+            {
+              "sha256": "52cb24072ef6b6e4d7f717a1915f4f714884a6c2c2739241dfcce030852e8562",
+              "description": "Import-Module GroupPolicy"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "apache-tomcat-linux-installation-security-hardening": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "prerequisites",
+          "artifacts": [
+            {
+              "sha256": "4496ae2aeb5331acca6b9e8bd7d7d2da3bf34194dfdb791370408fe09143ae3d",
+              "description": "hostnamectl"
+            }
+          ]
+        },
+        {
+          "section": "architecture",
+          "artifacts": [
+            {
+              "sha256": "4792f2cd182f507e0829c03ca9437c501a6666837c1580cf3634a560db020180",
+              "description": "Internet -> Firewall -> Nginx HTTPS :443"
+            }
+          ]
+        },
+        {
+          "section": "java",
+          "artifacts": [
+            {
+              "sha256": "e27c56c4b1741f5875f747c7436f3ec8317db46a9f75d21a6a3f2e39c7ec9973",
+              "description": "sudo apt update"
+            },
+            {
+              "sha256": "85da7dd82570003141908f98fdb609d2733f815d2db2cab1949a0cc6107c6801",
+              "description": "sudo dnf upgrade"
+            },
+            {
+              "sha256": "05170a4975bf98c54a19b86d495cd7d5a73b0d5ba2ab64713d6ef9ccd2f8f05d",
+              "description": "JAVA_INSTALL_HOME=\"$(dirname \"$(dirname \"$(readlink -f \"$(command -v java)\")\")\")\""
+            }
+          ]
+        },
+        {
+          "section": "configuration",
+          "artifacts": [
+            {
+              "sha256": "1e1fef7356b576d7f0e23d25bba13b96f65ea43b3cef3380bf0d102cc1f4e892",
+              "description": "sudo groupadd --system tomcat"
+            },
+            {
+              "sha256": "fd85cd2fe8fcf0ea35d0ba8a7aa696d69919c9e3df9ff6010b59e9bc66912546",
+              "description": "set -euo pipefail"
+            },
+            {
+              "sha256": "984c341da510e513e925b3b395cc804de35ef4b2d832ef551ae3ea510192c483",
+              "description": "JAVA_INSTALL_HOME=\"$(dirname \"$(dirname \"$(readlink -f \"$(command -v java)\")\")\")\""
+            }
+          ]
+        },
+        {
+          "section": "systemd",
+          "artifacts": [
+            {
+              "sha256": "0386d46ca5f87d8d9a2b48eff2b0af0e0cef652c97d8475d680f2d6efde50dc3",
+              "description": "sudoedit /etc/systemd/system/tomcat.service"
+            },
+            {
+              "sha256": "fb408927f1c42c508f74992dc4c57519b95bbcf2665b248efd21150f86de1c01",
+              "description": "[Unit]"
+            },
+            {
+              "sha256": "c06a643a77086d814973356a336a8830c98bbdd4d75194673fff5fa934d9e666",
+              "description": "sudoedit /var/lib/tomcat/conf/logging.properties"
+            },
+            {
+              "sha256": "d0aa20f03aed28013033c9bf35eb9c2d1a402ad19d3702d73794b6497df38de2",
+              "description": "handlers = java.util.logging.ConsoleHandler"
+            },
+            {
+              "sha256": "85ed8606216cfe89db380aed488d972a68b78e2b84b0d33c2c56a10c9839c12f",
+              "description": "sudo systemd-analyze verify /etc/systemd/system/tomcat.service"
+            }
+          ]
+        },
+        {
+          "section": "security",
+          "artifacts": [
+            {
+              "sha256": "67887c9ce7ae15e39463011d87f8d9a4121875ff85b0a187d3459a397da00689",
+              "description": "sudo ls -la /var/lib/tomcat/webapps /var/lib/tomcat/conf/Catalina/localhost"
+            },
+            {
+              "sha256": "292030dbf179b61a8ea7ae793e1ae72f6331f572a1688846225ef165d0024ea7",
+              "description": "sudoedit /var/lib/tomcat/conf/server.xml"
+            },
+            {
+              "sha256": "27912ef4b9bee4d85d80d81e937f27e19df9875a02a2c994d0130fa3e7b320d9",
+              "description": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+            },
+            {
+              "sha256": "a1792931cf27ad8e55fcadf02e4bb565da99f70a228268aa1e3e5643dedc0143",
+              "description": "sudo systemctl daemon-reload"
+            }
+          ]
+        },
+        {
+          "section": "nginx-https",
+          "artifacts": [
+            {
+              "sha256": "d3abd04c98ec2cdb7834d52ed59a0a4b08af825be9c474ea5f64ccf1c0e52738",
+              "description": "sudo apt install -y nginx certbot"
+            },
+            {
+              "sha256": "d444e366e37a4ba318752f21803b5691dcadc53a257a3b41641d2806669fc172",
+              "description": "server {"
+            },
+            {
+              "sha256": "f4110bec07197ca1e491fdcab92e6691e555aa181497c648e4f6aaff5a55c205",
+              "description": "sudo nginx -t"
+            },
+            {
+              "sha256": "8807a034c7ec1aee0b6920a5ee1000ae3ccbfaec638ddcd50b80b086891e1c44",
+              "description": "# Included inside the http context; requires existing certificate files."
+            },
+            {
+              "sha256": "6cf313b94baf6f5f28a491d99d39b148656994c9f7b30f84f0d9e1821b9c33ed",
+              "description": "sudo nginx -t"
+            },
+            {
+              "sha256": "d867dbc14d7cf8e0be787175130974b58f26c5b2fda4223b8cf11646726be887",
+              "description": "sudo install -d -m 0755 /etc/letsencrypt/renewal-hooks/deploy"
+            }
+          ]
+        },
+        {
+          "section": "firewall",
+          "artifacts": [
+            {
+              "sha256": "7cabd294c162766d1d3d5f1a4c2f5c0e16fb3d8ac46094c4adce0a60489b4f59",
+              "description": "sudo apt install -y ufw"
+            },
+            {
+              "sha256": "80dae4fab68c6070966b2f85bb410f0cdd6ad94aceed4739e7ee2a4a1ddc645f",
+              "description": "sudo dnf install -y firewalld"
+            },
+            {
+              "sha256": "2c3f89b37573556055fb3400a6242edec3e4a070c955af11147e4dbe92aba8e1",
+              "description": "sudo ss -lntp | grep -E \":(22|80|443|8080|8005|8009)\\b\""
+            }
+          ]
+        },
+        {
+          "section": "deployment",
+          "artifacts": [
+            {
+              "sha256": "4498c690d0eec2d1b731babfb63680aed81b4ecb9c8246f4553fc5cff32f364c",
+              "description": "cd ~"
+            }
+          ]
+        },
+        {
+          "section": "troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "9f6fca756b5afcee41002dfcc7d92f32b32c8ccb1e2686edac051d1c23e8f560",
+              "description": "systemctl status tomcat --no-pager"
+            },
+            {
+              "sha256": "4071460a6f37dc76b82a57442c6aa25421461629131a2101d82eaa46103196ec",
+              "description": "sudo journalctl -u tomcat -b -n 150 --no-pager"
+            },
+            {
+              "sha256": "5955560e648c4f3c7edd3946b547926f3b34defd99c9da17087452cfb8f9d35e",
+              "description": "java -version"
+            },
+            {
+              "sha256": "982d6da0ab263f99f6eaa4f1f616f3c82ab94768034dc897796fc7546a6ab8b4",
+              "description": "namei -l /var/lib/tomcat/data"
+            },
+            {
+              "sha256": "3a55ceb8d35359e9cc96bec365039c5daf2fa03011ac3bb96f23931e0c36efb4",
+              "description": "sudo ss -lntp \"sport = :8080\""
+            },
+            {
+              "sha256": "639bdaa50dee5628aef246ebee6aa96afb450f956b3f3279e0343236ed65305b",
+              "description": "curl -i http://127.0.0.1:8080/app/"
+            },
+            {
+              "sha256": "2a18dd9f4d5ed7e62f633cfc0e5aa477a9af91cbf076183fe0954977211916e0",
+              "description": "sudo tail -n 100 /var/log/nginx/tomcat.error.log"
+            },
+            {
+              "sha256": "512693660429d491f433033623d396f366bfb1b78e7f17c723fe51129d575eb0",
+              "description": "sudo journalctl -k --since '1 hour ago' | grep -Ei 'oom|killed process'"
+            },
+            {
+              "sha256": "bea4760039a32f53d51f510fc8103687396c0d6d36072f6c355dfac8b80e6349",
+              "description": "# RHEL family:"
+            },
+            {
+              "sha256": "d3dc2b377468e316f06507e2c021ecfe1ec52cf9f8d2143d096aee7591d0c86e",
+              "description": "sudo journalctl -u tomcat -b -n 100 --no-pager"
+            }
+          ]
+        },
+        {
+          "section": "upgrades",
+          "artifacts": [
+            {
+              "sha256": "8d426daeeebd327c93de3fe24371395f5f6f5645abd879378213a42da0a51d0e",
+              "description": "set -euo pipefail"
+            },
+            {
+              "sha256": "05a6da570d38fb0c8face3e39f0e9624b85c41f5fd1ae757bcd72e699a182626",
+              "description": "# Set this to the REAL release directory you already verified and installed."
+            },
+            {
+              "sha256": "3c0f61f348b3c60a6c33f6c42779255bb5663ee0f4c284f46a83831bd5eaa830",
+              "description": "sudo systemctl stop tomcat"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "cisco-catalyst-layer-2-layer-3-switch-hardening": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "prechecks",
+          "artifacts": [
+            {
+              "sha256": "5fd92272bdfc0c195b91ff5126d8b6f07145db60d6cd5e91b83e3c42e9931721",
+              "description": "show version"
+            },
+            {
+              "sha256": "fd85206fbe5838501327f086b52da261134fef4f44c99d27e2baf56108d2cc7e",
+              "description": "copy running-config flash:pre-hardening-running.cfg"
+            }
+          ]
+        },
+        {
+          "section": "architecture",
+          "artifacts": [
+            {
+              "sha256": "47073c6a1ab7d6959679fbd801835fd23734c33364db9ecb1cd02b47f9e7d825",
+              "description": "Internet / WAN"
+            }
+          ]
+        },
+        {
+          "section": "baseline",
+          "artifacts": [
+            {
+              "sha256": "faa78fcaee99e538739f2cab32ac6ddf2a9b73eed9c379b0c896a5729c90242c",
+              "description": "hostname <HOSTNAME>"
+            },
+            {
+              "sha256": "30ce02e8519caafec15c4e0b03addbd5620624360705cc8713c76dd84e1a985b",
+              "description": "! Prefer Type 9 if supported; use instead of the generic username above"
+            }
+          ]
+        },
+        {
+          "section": "ssh",
+          "artifacts": [
+            {
+              "sha256": "5f7cbd925943ddb9b86a0b2a5efc235cafc0e581eb92104a68a898e5f401e6e7",
+              "description": "crypto key generate rsa modulus 2048"
+            }
+          ]
+        },
+        {
+          "section": "services",
+          "artifacts": [
+            {
+              "sha256": "7f8766e4e6322e3520e2cdac62629689dc4801e8711a8bc3f63b22f38ae20b21",
+              "description": "no ip http server"
+            }
+          ]
+        },
+        {
+          "section": "l2",
+          "artifacts": [
+            {
+              "sha256": "3abc704654b3ea38ef75b78c944b2a63f1d0832a9f196928dbeb0b97435ad670",
+              "description": "vlan <MGMT-VLAN>"
+            }
+          ]
+        },
+        {
+          "section": "dhcp",
+          "artifacts": [
+            {
+              "sha256": "b7ca9e753c0c639a664fa6b24876b39a124f5df8209a0964ff4e1aeb25c93dc6",
+              "description": "ip dhcp snooping"
+            }
+          ]
+        },
+        {
+          "section": "dai",
+          "artifacts": [
+            {
+              "sha256": "85288e4bff9abe1e8effda213d2d7810478c0e7b29bf683d5cce235d5a0e9408",
+              "description": "ip arp inspection vlan <USER-VLANS>"
+            },
+            {
+              "sha256": "fa391760008f19a23581e7b684afb922c5d874b0b96bc822a20a1c7cd79a9c0b",
+              "description": "arp access-list STATIC-HOSTS"
+            }
+          ]
+        },
+        {
+          "section": "ipsg",
+          "artifacts": [
+            {
+              "sha256": "f19b51ddfd9e01f0526f569267f0fcc581c0495674a17f5620605fef80cc1b98",
+              "description": "interface range <ACCESS-PORTS>"
+            },
+            {
+              "sha256": "50f0b5bbe835dee943c9b90e27758fd6a19fe73387282f6577394988d85db73f",
+              "description": "ip source binding <STATIC-MAC> vlan <STATIC-VLAN> <STATIC-IP> interface <STATIC-PORT>"
+            }
+          ]
+        },
+        {
+          "section": "stp",
+          "artifacts": [
+            {
+              "sha256": "0c88f948993be165f9e6638fe62ee658c9a3697b446148db561a3eb05973ad92",
+              "description": "spanning-tree mode rapid-pvst"
+            }
+          ]
+        },
+        {
+          "section": "port-security",
+          "artifacts": [
+            {
+              "sha256": "c06b9c577e56637f5c8247107eea9e8b635826ac66b73e42a2b4c793503e7bca",
+              "description": "interface range <ACCESS-PORTS>"
+            }
+          ]
+        },
+        {
+          "section": "storm",
+          "artifacts": [
+            {
+              "sha256": "2c474594c4d62b5eef587c3966c65af8fcc9f453f5b9de380fca31c56b602655",
+              "description": "interface range <ACCESS-PORTS>"
+            }
+          ]
+        },
+        {
+          "section": "trunk",
+          "artifacts": [
+            {
+              "sha256": "c71fe6e2c2b04d58a6cfbec3c9cfd52b1d24311e3410f1d0c1c7243de35a1a89",
+              "description": "interface <UPLINK>"
+            }
+          ]
+        },
+        {
+          "section": "unused",
+          "artifacts": [
+            {
+              "sha256": "28caea88db4a285ac634bdf804977fcde2a6d9c0519ac2b8dfb81725d6002e3c",
+              "description": "vlan 999"
+            }
+          ]
+        },
+        {
+          "section": "l3",
+          "artifacts": [
+            {
+              "sha256": "3b44a7e6b55cf92bdddf4bb586ca99d572459af8c72b0ba87ef6899a61d0e64e",
+              "description": "ip routing"
+            }
+          ]
+        },
+        {
+          "section": "svi-acl",
+          "artifacts": [
+            {
+              "sha256": "1e159a19900009561b70f635cf018dac020c7630f0769bf519f9013279b24f52",
+              "description": "ip access-list extended USERS-TO-MGMT"
+            }
+          ]
+        },
+        {
+          "section": "routing",
+          "artifacts": [
+            {
+              "sha256": "b69d34ea85cb9e92c3fac07f3d1fae7f7b684ddf9253459f7e4208bac1f3e0b6",
+              "description": "router ospf <PROCESS-ID>"
+            }
+          ]
+        },
+        {
+          "section": "ntp",
+          "artifacts": [
+            {
+              "sha256": "e3e612c04ae775a7d142cb6ab7bd2518122ed0608d25c22dfd6d8e09e93cf17f",
+              "description": "clock timezone <TZ-NAME> <OFFSET>"
+            },
+            {
+              "sha256": "473a600cd4169d0ccdaa76f9441ac30419beefec6401b9d4f1a88ef1b688ee68",
+              "description": "! Optional legacy symmetric authentication; server must use the same key"
+            }
+          ]
+        },
+        {
+          "section": "syslog",
+          "artifacts": [
+            {
+              "sha256": "af96bc66c99b22cdce2e5a1884e159454a9efb58da68c2594f49f58d1c6e09c7",
+              "description": "service timestamps log datetime msec localtime show-timezone"
+            }
+          ]
+        },
+        {
+          "section": "snmp",
+          "artifacts": [
+            {
+              "sha256": "6b70641c81d1ea34da53a564bf3567b4f3f4fe9d5673ce3547d6af3a7afecfea",
+              "description": "ip access-list standard SNMP-ACL"
+            },
+            {
+              "sha256": "0b285204fca8974f4a345a9a3194f46c6ff6428e9464c15124b78942e21efc53",
+              "description": "ip access-list standard SNMP-ACL"
+            }
+          ]
+        },
+        {
+          "section": "login",
+          "artifacts": [
+            {
+              "sha256": "35a302c52464262e4632399cc166ea24ddbfd3a4c58637d7dbd8c09fe2e59b98",
+              "description": "login block-for 120 attempts 5 within 60"
+            }
+          ]
+        },
+        {
+          "section": "final-configs",
+          "artifacts": [
+            {
+              "sha256": "ce8662cd1feeb4b5a696c9298068d44b417f78c19278c6074bd08ca1a0a2e94b",
+              "description": "! Cisco Layer 2 Access Switch Hardened Configuration"
+            },
+            {
+              "sha256": "a0ecae6cecec5719580d63e6207d8466bd14f8c8af3752b5b87048c8478e5b1f",
+              "description": "! Cisco Layer 3 Switch Hardened Configuration"
+            }
+          ]
+        },
+        {
+          "section": "verification",
+          "artifacts": [
+            {
+              "sha256": "b7bcab0be77a6117435f7c019259dabc2b2449e840cfab9ce55f75630f92bace",
+              "description": "show running-config"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "creating-a-bootable-usb": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "62f8196785d03d0e81bdd600b3d77f161273037e1d2dba8e951d14da38ef44e3",
+              "description": "$IsoPath = 'C:\\InstallMedia\\ubuntu-24.04-live-server-amd64.iso'"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "deploy-msi-active-directory-group-policy": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "lab",
+          "artifacts": [
+            {
+              "sha256": "50fc384d91d2339d87dcc353445ce69995824bd18411ffeb16ac018432a186f6",
+              "description": "Domain:             corp.local"
+            },
+            {
+              "sha256": "1055a1a22bb5c3acc258f55fdab9987b94e5161280158a46265aa6ee672eeec1",
+              "description": "Active Directory"
+            }
+          ]
+        },
+        {
+          "section": "architecture",
+          "artifacts": [
+            {
+              "sha256": "8aaafba0efb51dfa1ed7aa1405239f34fc4cf694894d4062ef1d5cb6998b96f1",
+              "description": "Active Directory"
+            }
+          ]
+        },
+        {
+          "section": "share",
+          "artifacts": [
+            {
+              "sha256": "0ad7e620956c0dacf01f453a18d584b07f9d986186b851d7f03e0aaf6bf1f8f6",
+              "description": "Local folder:  D:\\SoftwareDistribution\\7Zip"
+            }
+          ]
+        },
+        {
+          "section": "permissions",
+          "artifacts": [
+            {
+              "sha256": "54e8ca5d3f73ebe59921988a35709c85c0540236a38207b5761c61a371b1f692",
+              "description": "Share permissions on Software$:"
+            }
+          ]
+        },
+        {
+          "section": "unc",
+          "artifacts": [
+            {
+              "sha256": "5f15f3ca9c475fb311541fed7a84b736c3a1eb80bc6da3bf97831ba671e2cbcd",
+              "description": "dir \\\\FS01\\Software$\\7Zip"
+            },
+            {
+              "sha256": "7389cca0f06c3432f7a2d673a5e123e382fd5482076ea60db745531945312581",
+              "description": "Correct package location:"
+            }
+          ]
+        },
+        {
+          "section": "test-ou",
+          "artifacts": [
+            {
+              "sha256": "4fe087d60fe00ec2bddf674f97dd1f2e664807fa81dc32728ffd5e996970acd5",
+              "description": "corp.local"
+            }
+          ]
+        },
+        {
+          "section": "gpo",
+          "artifacts": [
+            {
+              "sha256": "0458eca883db447b04a746f1054c8c2cd7ff766007ffb861183d220d457d58f9",
+              "description": "gpmc.msc"
+            },
+            {
+              "sha256": "17cbe8ecc950f9db8b7cbe30c033571d31768a16958f14c3e9af4acebff53d76",
+              "description": "corp.local"
+            }
+          ]
+        },
+        {
+          "section": "installation",
+          "artifacts": [
+            {
+              "sha256": "5098deead22253a6362ae048e326b9b89b7151e8bebe95c00ff0660bc1e2b1f2",
+              "description": "Computer Configuration"
+            }
+          ]
+        },
+        {
+          "section": "startup-network",
+          "artifacts": [
+            {
+              "sha256": "50538747c9fb2d963474c2e7a466548e1e2a02c101e2440ee63b96bc353a785e",
+              "description": "Computer Configuration"
+            }
+          ]
+        },
+        {
+          "section": "apply",
+          "artifacts": [
+            {
+              "sha256": "c5f217c8c267b763d4ad24ac63d5b153ede0e4c4f20c2a59445f3f604aa0a7b9",
+              "description": "gpupdate /force"
+            },
+            {
+              "sha256": "43819a3b752eb9f6d9d2ccfa8f22c03d5d21ccbe747d9eba962bf2cece569d90",
+              "description": "shutdown /r /t 0"
+            }
+          ]
+        },
+        {
+          "section": "security-filtering",
+          "artifacts": [
+            {
+              "sha256": "9ef26e81867f558d9688c023a7cf2aa6a294c6e8bb38084b579ac8f7d59ed8d3",
+              "description": "Security group: GG-Deploy-7Zip"
+            }
+          ]
+        },
+        {
+          "section": "verification",
+          "artifacts": [
+            {
+              "sha256": "e5d3af0208e8d400639747c8249d92d95a6affe3999badd2e63c1f39f84af6aa",
+              "description": "gpresult /r /scope computer"
+            },
+            {
+              "sha256": "24ce7c5260bca475f23e0e04548f128a803b427bd88b66160e3061095182e264",
+              "description": "mkdir C:\\Temp"
+            },
+            {
+              "sha256": "0615202747c93b56c64123fdc7c6e33c061144a9f891926fe539bd50b1eaa058",
+              "description": "dir \"C:\\Program Files\\7-Zip\\7z.exe\""
+            }
+          ]
+        },
+        {
+          "section": "dns",
+          "artifacts": [
+            {
+              "sha256": "4531220b81fafd1ce3dff8d6d6d76012905f92dcf13bc8741eeacdd662f0af37",
+              "description": "nslookup DC01.corp.local"
+            },
+            {
+              "sha256": "2c5c8a71d521565d2793e6a903a82afd73c1ac0b246f41bd94ceff50c7cd07dc",
+              "description": "ipconfig /all"
+            },
+            {
+              "sha256": "d859d03c29d33225b7709707426b216a59ff03a4dfdbbd3ee190bb49d7177c87",
+              "description": "Test-NetConnection FS01.corp.local -Port 445"
+            }
+          ]
+        },
+        {
+          "section": "rsop",
+          "artifacts": [
+            {
+              "sha256": "776531ab3b6cad8f8d996097b51abee67f6b9aae442152d7db564e2ef8634a94",
+              "description": "gpupdate /force"
+            },
+            {
+              "sha256": "a7956187a0af6db596d9300f55e96a889fbbb54aad2ff881a19a2ee466b302b5",
+              "description": "Get-GPResultantSetOfPolicy -ReportType Html -Path C:\\Temp\\RSoP.html"
+            }
+          ]
+        },
+        {
+          "section": "events",
+          "artifacts": [
+            {
+              "sha256": "f1786655cc31d21fc264d5440e42b4f3cb5273693c687d860774649765f3516e",
+              "description": "Event Viewer"
+            }
+          ]
+        },
+        {
+          "section": "root-cause",
+          "artifacts": [
+            {
+              "sha256": "b611a981e7fad24604ea84b520ea630705e2833711ccd8f7c3c83b4a6f6eff25",
+              "description": "repadmin /replsummary"
+            }
+          ]
+        },
+        {
+          "section": "uninstall",
+          "artifacts": [
+            {
+              "sha256": "9f2ea8d2cd52d7dfde69dda8badd1c899367fba7931f14465995e038b1987b7a",
+              "description": "Package → Properties → Deployment"
+            },
+            {
+              "sha256": "312ef908127cefda00e0a63d2f866780a014bb0cfebba182644c699a9e366cf0",
+              "description": "Software installation"
+            }
+          ]
+        },
+        {
+          "section": "upgrade",
+          "artifacts": [
+            {
+              "sha256": "314804dd2e5670289132485a0217f8930b007359d1051cd129f2d357367f548d",
+              "description": "7-Zip 24.x"
+            },
+            {
+              "sha256": "3067cc72716c1644911ec9a8f055a30a901c146bc16ddaf18f962a3cdf52395e",
+              "description": "New package → Properties → Upgrades → Add"
+            }
+          ]
+        },
+        {
+          "section": "best-practices",
+          "artifacts": [
+            {
+              "sha256": "537a48c56dd1399d6d1cc6981ff4468bf745bb5a94860a29c10bb200b130ca8b",
+              "description": "\\\\FS01\\Software$"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "downgrade-mikrotik-routeros-firmware-safely": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "1c907e1cde3d2ed5148d6c939b80399261fada11c47f20ff6a728b72a7a23036",
+              "description": "/system resource print"
+            },
+            {
+              "sha256": "84d66d64f51f22a524ec1e3ac7516b076b86e47743cc269f80b609c74118de34",
+              "description": "/file print detail"
+            },
+            {
+              "sha256": "0d5329f83cc789abc6808f380939d473dcb2886b64fb15fde72f90efcdc0edb9",
+              "description": "/system resource print"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "enable-ssh-linux-complete-guide": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "c70cd466931fd872b8af102239d113c9b0e37509797c065d50f347ed9ce75aea",
+              "description": "sudo apt-get update"
+            },
+            {
+              "sha256": "d228d4398a968042f5c0b38d891dc87577a9a46b4f72999a83d2f7b2160fe549",
+              "description": "ssh-keygen -t ed25519 -f \"$HOME/.ssh/ops_ed25519\""
+            },
+            {
+              "sha256": "9194ad31b29d1a742c169f8497bd658b8d4e73c7174400854c39bb0558d04416",
+              "description": "chmod 700 \"$HOME/.ssh\""
+            }
+          ]
+        },
+        {
+          "section": "enterprise-troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "0193805851c42309e7502631e0461a8e71debe548b6bf87786c0eefe3359436f",
+              "description": "sudo journalctl -u ssh.service -n 100 --no-pager"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-recovery",
+          "artifacts": [
+            {
+              "sha256": "2ef47b4fd8e91e086740f21fae1ecb754e0d31735930dcc8406da8b01bf85031",
+              "description": "sudo mv /etc/ssh/sshd_config.d/00-enterprise.conf /root/00-enterprise.conf.failed"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "fortigate-sd-wan-load-balancing-failover": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "section-6",
+          "artifacts": [
+            {
+              "sha256": "5e014a9c2e3a3c97982dba6bf2ba64248c12058dca026a475820313b42f95f99",
+              "description": "10.10.10.25 → 8.8.8.8 → Hash pair A → WAN1"
+            }
+          ]
+        },
+        {
+          "section": "section-8",
+          "artifacts": [
+            {
+              "sha256": "84cc8d5f71974b0cb51049119eb25b3db704fedf3ce692198daf99ef50089ed9",
+              "description": "Internet"
+            }
+          ]
+        },
+        {
+          "section": "section-10",
+          "artifacts": [
+            {
+              "sha256": "fbfc4c8f3a30a674cc833090c2e583011a92316a98054b31c00361007ddb91ce",
+              "description": "Network → SD-WAN → SD-WAN Zones"
+            }
+          ]
+        },
+        {
+          "section": "section-11",
+          "artifacts": [
+            {
+              "sha256": "55baa4a62bc2fd79dcfaec5d2c0c38cd38053f0e7bf8a6cc4ae9aea129d9c0b9",
+              "description": "config system interface"
+            },
+            {
+              "sha256": "f0f54b64dc1495cd5e5dfa299124784419a38097d5fd86c8e3cfc3ca945839f0",
+              "description": "config firewall address"
+            },
+            {
+              "sha256": "427b68f8e7468bd8cabca5c806f9cc5525f843fa6071df54d791bfa0c9bcc57e",
+              "description": "config system sdwan"
+            },
+            {
+              "sha256": "5f291c07e6fa7663647a0c787e00725c306923192d98eafa63139624a40a0e40",
+              "description": "config system sdwan"
+            },
+            {
+              "sha256": "7de9d64b9ee94f855fedf7dbca485aec73ffc4691644233aa2596f9303f0dd49",
+              "description": "config system sdwan"
+            },
+            {
+              "sha256": "aae2fc182fd03cca2b074eebf0155877481327a4b9d00d1651cc924a3b335568",
+              "description": "config router static"
+            }
+          ]
+        },
+        {
+          "section": "section-12",
+          "artifacts": [
+            {
+              "sha256": "347c3d06c507572ccbde8e53af9f9c80ab1264e2c06e4c1d80d74fb20d8edf2f",
+              "description": "200 : 100 = 2 : 1"
+            },
+            {
+              "sha256": "59f364e8925f268a5c97d89de100599c69dbffd84a61a7f709a838fef9ca5307",
+              "description": "config system sdwan"
+            }
+          ]
+        },
+        {
+          "section": "section-13",
+          "artifacts": [
+            {
+              "sha256": "a82969dc89055240812d5750539a9b945f5b6233b50604915913b5ba8883946d",
+              "description": "config firewall address"
+            }
+          ]
+        },
+        {
+          "section": "section-14",
+          "artifacts": [
+            {
+              "sha256": "8fdec9fb7b09ddd5b5819a7dd17c7693fcb43a61656dcf620903f8fbc99394ad",
+              "description": "WAN1 alive + SLA pass; WAN2 alive + SLA pass"
+            }
+          ]
+        },
+        {
+          "section": "section-15",
+          "artifacts": [
+            {
+              "sha256": "78ef21014ecb5510315be01fd395cfc516e11df883a153e5208ed4eed928d6a3",
+              "description": "Internet Problem"
+            },
+            {
+              "sha256": "e981d79cf17607fe001c4e24b3d4c236316cc182deceb7f0e7208ef7e07a9024",
+              "description": "get system status"
+            },
+            {
+              "sha256": "f5d39bb347cc17a6bc11d1f13ec61a55cf5df61d206381101b3fed86def73625",
+              "description": "diagnose sys sdwan member"
+            },
+            {
+              "sha256": "3c9b5705c57d4f7455ef5c9e7f8abd28bea7a30b475cbee59084d3ebab640de9",
+              "description": "execute ping-options reset"
+            },
+            {
+              "sha256": "85b5eb4284dbafc4f3737be7182b651a1e4228c381da4a94913cb15e74c9a768",
+              "description": "diagnose sys sdwan health-check Internet-Probe"
+            },
+            {
+              "sha256": "10bde4c8fe26acbd7dbd26fe0c5cc792204332e498c95decebbc5432520fff16",
+              "description": "Health Check(Internet-Probe):"
+            },
+            {
+              "sha256": "8c9371acfd2c3a7ac4066ba938f82c9b56ade50dcfb0c4f5ee35b9f9c8e34e90",
+              "description": "diagnose sys sdwan service4 10"
+            },
+            {
+              "sha256": "a4a49b8a041f0562f6ac213b5ad41cb83eda28b0c534d1f15a7b1d61640028d0",
+              "description": "get router info routing-table all"
+            },
+            {
+              "sha256": "0b39f30012b4f65b3b111a2fd287810051da49afc4ca671eb127e1b321a7a1fb",
+              "description": "diagnose sys session filter clear"
+            },
+            {
+              "sha256": "8fb4767f95b0dcdfda785e95afa061d8f71c03487bcc3f18ab2f614aa1f26133",
+              "description": "show firewall policy"
+            },
+            {
+              "sha256": "d7dd8401b6395e2aa8124b4d4750430f13d22c406a336f7c962449d52626edac",
+              "description": "diagnose sniffer packet any 'host 10.10.10.25 or host 8.8.8.8' 4 50 l"
+            },
+            {
+              "sha256": "188905ad70455f56204c3ea1830377e39fd3889997f4798d0fbcce4737e04d85",
+              "description": "diagnose debug reset"
+            },
+            {
+              "sha256": "a4b63952afda1db9ef6587ad11b8fa57d7488e24edf62da9854160b54eab78a6",
+              "description": "diagnose debug disable"
+            }
+          ]
+        },
+        {
+          "section": "section-19",
+          "artifacts": [
+            {
+              "sha256": "ca52cf30f9e51decbe4ef308cff3dafc1e5c63848953d02f1bb7490f4bcc3fbb",
+              "description": "FortiGate SD-WAN"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "http-vs-https-ssl-certificate-impact": {
+      "kind": "conceptual-with-operations",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "aa18b7eae6dcde16098bdcedfe48ab96bc7e74ca557238eda79eb24d03e53def",
+              "description": "HOST='app.example.com'"
+            },
+            {
+              "sha256": "dce6bd4b89859f2acc47d3a5153b2560b375ece65275da3c7e9f2b185c37b1ac",
+              "description": "add_header Strict-Transport-Security \"max-age=300\" always;"
+            },
+            {
+              "sha256": "02e0fbbe96118f88979f10fd6ef966d65d32e6f5184da0c9fde9c0307941b9f6",
+              "description": "sudo nginx -t"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "imap-vs-pop3-email-protocol-comparison": {
+      "kind": "conceptual-with-operations",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "136c5ae079fc56849b7e35eba005ced96800ac1ae85e2e72d65daf4396e084b6",
+              "description": "MAILHOST='mail.example.com'"
+            },
+            {
+              "sha256": "d33caf201f5d70f4d3a3a603a878ca0657c4efa3cd588854445175ac0ce7048e",
+              "description": "a001 CAPABILITY"
+            },
+            {
+              "sha256": "f3363a41ac81405c57eaec8a2991cdd17f57628382f80ad10e2b0e495f752520",
+              "description": "openssl s_client -connect \"$MAILHOST:995\" -servername \"$MAILHOST\" -verify_hostname \"$MAILHOST\" -verify_return_"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "install-dfs-server-windows-server": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "dfc0a3575a41039c108d0179c8fa219aec1b263f071ac97409c3faab527b9266",
+              "description": "Install-WindowsFeature FS-DFS-Namespace,FS-DFS-Replication -IncludeManagementTools"
+            },
+            {
+              "sha256": "f2ac0b48cd5d546f50b3af1fc8f62534a4fd70c72f3532eb7b7e9bc6ca820bc1",
+              "description": "Import-Module DFSN"
+            },
+            {
+              "sha256": "beacb4a4f1dc6d2fe4e276da3139017833e70127ba2eac87ea187c14610c354c",
+              "description": "Set-DfsnFolderTarget -Path '\\\\corp.example.com\\Company\\Data' -TargetPath '\\\\FS02\\Data' -State Online"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-monitoring",
+          "artifacts": [
+            {
+              "sha256": "8a65dfb655bf7143f7737dc8b533bed69bc6688f20102c8ba7d8ead3c0bc1a81",
+              "description": "$CanaryName = 'dfsr-canary-' + [guid]::NewGuid().ToString('N') + '.txt'"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "c63e91c6491b1fc7b8ee7e65486d31638e1d485f231172ec6c7f102e25b893d2",
+              "description": "Get-DfsrConnection -GroupName 'Company-Data'"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": [
+        {
+          "id": "technical-enterprise-monitoring"
+        },
+        {
+          "id": "technical-enterprise-sources"
+        }
+      ]
+    },
+    "install-mikrotik-chr-vmware-workstation": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "20e6c9721d0bc5225357d22db94e14e73ede32cd7a452b13d85d488aa88b5596",
+              "description": "/interface ethernet print detail"
+            },
+            {
+              "sha256": "bc10a0e2f96daa08d38ec939ea187aecff92c62e89cd1316358c3ae9b6583be9",
+              "description": "/ip service set ssh address=10.99.0.0/24"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-monitoring",
+          "artifacts": [
+            {
+              "sha256": "06871ba3214d03bcb545b6617adf54d6df05df47eaaeb29a41f370c444a057a5",
+              "description": "/ip address print detail"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": [
+        {
+          "id": "technical-enterprise-installation"
+        },
+        {
+          "id": "technical-enterprise-monitoring"
+        },
+        {
+          "id": "technical-enterprise-sources"
+        }
+      ]
+    },
+    "install-vmware-esxi-vmware-workstation-vmcisr": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "cfc99862a27474df05e7a396e7cd54c683ac216e68d93950a97adc219941e68f",
+              "description": "Test-NetConnection -ComputerName 10.99.0.11 -Port 443"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "448bb0066360fae7af6c578ddc041b556afebd7b41a0cfd48f86701cfa6b13ec",
+              "description": "$VmFolder = 'D:\\LabVMs\\NestedESXi'"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": [
+        {
+          "id": "technical-enterprise-troubleshooting"
+        }
+      ]
+    },
+    "linux-cli-common-commands": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-prerequisites",
+          "artifacts": [
+            {
+              "sha256": "218a00e9e4016926ad28895357cb93bda3b0f8ce16ae944d2dcb023c58c3bf5d",
+              "description": "sudo apt-get update"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "f94777d5004e6a39da487efb87a1546767a0628defedb204b0f01395bd74495b",
+              "description": "date -u --iso-8601=seconds"
+            },
+            {
+              "sha256": "f2592dc3ece12547c347ab4df1b29bf1698d789cd13dfc8a06410409a7252694",
+              "description": "systemctl status nginx --no-pager"
+            },
+            {
+              "sha256": "4e62d167bf16ef7cb4fcc280164b2d331971253cb2c840475f376f14b3e3720b",
+              "description": "LabDir=$(mktemp -d)"
+            },
+            {
+              "sha256": "2a0d2f2c5ac01795494838b040305b368f47fd6f9b9c4438b5314a9f3f109f3d",
+              "description": "nproc"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "6cdc6feb1fefeb27db24b83890d72a0fe15f993eda9fb87525feae968d317ecd",
+              "description": "sudo lsof +L1"
+            },
+            {
+              "sha256": "03a565f9658e5161f958f078dedbfc756e265f681abe6481889a243077e34dba",
+              "description": "dig +time=2 +tries=1 app.example.com A"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": [
+        {
+          "id": "technical-enterprise-prerequisites"
+        },
+        {
+          "id": "technical-enterprise-installation"
+        },
+        {
+          "id": "technical-enterprise-troubleshooting"
+        },
+        {
+          "id": "technical-enterprise-sources"
+        }
+      ]
+    },
+    "linux-security-account-access-management": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "478a08d5ecb78bddbce026b8fb58432c792a5ec69ef876029014ddb7dcabc4ec",
+              "description": "getent passwd opsreader"
+            },
+            {
+              "sha256": "9a39cfdb4180d35eb72245d68f033489472c577eb41dab9b5404fd58925a65e4",
+              "description": "opsreader ALL=(root) /usr/bin/systemctl --no-pager status nginx.service"
+            },
+            {
+              "sha256": "d6983cbab87c25eba1822ad1d1c79b8323d0a6dae2f57d0dbcdd14f553c26680",
+              "description": "sudo chmod 440 /etc/sudoers.d/opsreader-nginx"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "3907f6879f13df62f122e7c7467cb9685669eae4d22d2f115c0707a6738ed172",
+              "description": "sudo -l -U opsreader"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "linux-security-auditor-bash": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "scoring",
+          "artifacts": [
+            {
+              "sha256": "9c07a56feecb4b959d563acc39aeb1aec59e5eee4164628d589c2bf88c625563",
+              "description": "raw_score = floor(100 * (PASS_weight + 0.5 * WARN_weight) / known_weight)"
+            }
+          ]
+        },
+        {
+          "section": "installation",
+          "artifacts": [
+            {
+              "sha256": "b6769c658117eb77c24887f4c0c2d6b5b7421d0ac3322733d25267ae080f30a1",
+              "description": "chmod +x security-audit.sh"
+            }
+          ]
+        },
+        {
+          "section": "cli",
+          "artifacts": [
+            {
+              "sha256": "0048bb6c27fe39a98dc740a6daad09bd53537952e7f681f1b10769dd993616a4",
+              "description": "sudo ./security-audit.sh --standard --full --no-color"
+            }
+          ]
+        },
+        {
+          "section": "ssh",
+          "artifacts": [
+            {
+              "sha256": "7ff8c0480b1bfea476e62b198754dcb458df43f5c5a70b31eb88062870b91fbb",
+              "description": "sudo ./security-audit.sh --ssh-context 'user=admin,host=admin.example,addr=192.0.2.10' \\"
+            }
+          ]
+        },
+        {
+          "section": "validation",
+          "artifacts": [
+            {
+              "sha256": "147e11a197dc90d9d3386bbcfbbebbdeaaed667f33b7bca131621d8390d66719",
+              "description": "bash -n security-audit.sh"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "mikrotik-block-port-scanners": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "41e7a62ed61848d4f48bd13af0440b86b9edd5ab6808b5798b25f907dabf1704",
+              "description": "/interface list member print"
+            },
+            {
+              "sha256": "23d2a44cd2f485fb5bccda9662941c603c035c44bef6d703da771ad974a61b81",
+              "description": "/ip firewall filter add chain=input in-interface-list=WAN protocol=tcp connection-state=new src-address-list=!"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "85d453f38e5bf4db1ee542d38807f079ced03f2ab057d876f515597dc545ee4b",
+              "description": "/ip firewall filter print detail where comment~\"ENT-SCAN\""
+            }
+          ]
+        },
+        {
+          "section": "enterprise-recovery",
+          "artifacts": [
+            {
+              "sha256": "22b8464249fa4c92c37a51333fbf5996a6d953a354d44ea322b29c75f70b32ae",
+              "description": "/ip firewall filter disable [find where comment~\"ENT-SCAN\"]"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": [
+        {
+          "id": "technical-enterprise-troubleshooting"
+        }
+      ]
+    },
+    "mikrotik-block-website": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "e757cf27d145dbad2c069a7ca319aa3f3c840aae534bbf3fd3145871719a6b1c",
+              "description": "/ip dns print"
+            },
+            {
+              "sha256": "db26f6b9457e1a7d5532de5bc2622dabc80f1ab8a3b08a657fce72dc619ac922",
+              "description": "/ip firewall filter print stats where comment~\"ENT-WEB\""
+            },
+            {
+              "sha256": "25250f01bc0ccf1e16f0caa50b2866b7bd1a5351c5bf8670c9a75932fc786827",
+              "description": "dig @10.20.30.1 example.com"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "ecd21238f8f2bfc8e5c0aa3a0fed5af0cbd64d1d2906630d2cfa8801a303c936",
+              "description": "# Replace documentation hostname/address with the authorized lab endpoint."
+            }
+          ]
+        },
+        {
+          "section": "enterprise-recovery",
+          "artifacts": [
+            {
+              "sha256": "fc72a99e64bdff75efee14e3db1ea6244cd84338578ce7f43717017d101d1b04",
+              "description": "/ip firewall filter disable [find where comment~\"ENT-WEB\"]"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": [
+        {
+          "id": "technical-enterprise-troubleshooting"
+        },
+        {
+          "id": "technical-enterprise-sources"
+        }
+      ]
+    },
+    "mikrotik-firewall-hardening-input-forward-chain": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "overview",
+          "artifacts": [
+            {
+              "sha256": "929ac4b0e7a59d317a1a236a9f18569e6a70d37ba38b9f9551f8818fc75fb0b6",
+              "description": "Internet"
+            },
+            {
+              "sha256": "9a6e79dfaad464cadcb97d33e57bec2cc0eecf37dc0fc7debf2cd80ad97b7e51",
+              "description": "/export file=before-firewall-hardening"
+            }
+          ]
+        },
+        {
+          "section": "interfaces-addresses",
+          "artifacts": [
+            {
+              "sha256": "f6c048fc18743d61cbd2209d60a4d82ed8a9ba684380bf8e363fe211a2fe7347",
+              "description": "/interface list"
+            }
+          ]
+        },
+        {
+          "section": "input-policy",
+          "artifacts": [
+            {
+              "sha256": "07465152984ea571f3573a396b95d69e84e14e24aa47110027370bb1e794ee9c",
+              "description": "/ip firewall filter"
+            }
+          ]
+        },
+        {
+          "section": "services-dns",
+          "artifacts": [
+            {
+              "sha256": "d4431694af0ee7098939ed6612522a2b4a5de8557f8a865d02513420036be9d7",
+              "description": "/ip service"
+            }
+          ]
+        },
+        {
+          "section": "forward-policy",
+          "artifacts": [
+            {
+              "sha256": "4ea06e8ebb4e49e0a3143c7afce9d4eca689360cbaf780004bbef5ffc96e79d7",
+              "description": "/ip firewall filter"
+            }
+          ]
+        },
+        {
+          "section": "troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "d2691de4e806b823f2d78042e33617afaf2c84c7698d0c1b823cb5a1d169270f",
+              "description": "/ip firewall filter print"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": [
+        {
+          "id": "technical-ordering"
+        }
+      ]
+    },
+    "mikrotik-openvpn-setup-v7": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "0ce6a93bf38bf547dace5ba29d002610fdb2274d2506a7e2d82bafbe142f9b88",
+              "description": "/system clock print"
+            },
+            {
+              "sha256": "cd7e4b16e9c054efd69d3afbd1f5fb0e91eb35bfe9426a70792b303f8c692869",
+              "description": "/ip pool add name=ent-ovpn-pool ranges=10.250.0.10-10.250.0.100"
+            },
+            {
+              "sha256": "3030418e50149153d6df9a156cce182080457c33ebf5189bc9709df0ee25ea2b",
+              "description": "client"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-monitoring",
+          "artifacts": [
+            {
+              "sha256": "212443f07e3732b981dfdde5f05c08431f6b74f059cd10806170f261403dadaa",
+              "description": "/interface ovpn-server server print detail"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-recovery",
+          "artifacts": [
+            {
+              "sha256": "648f6e8acaf6dc905b6e3cab7224d671672372bf5dc3258009201caf54e4ad21",
+              "description": "/interface ovpn-server server disable [find where name=\"ent-ovpn-server\"]"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": [
+        {
+          "id": "technical-enterprise-monitoring"
+        },
+        {
+          "id": "technical-enterprise-recovery"
+        }
+      ]
+    },
+    "mikrotik-pbr-client": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "settings",
+          "artifacts": [
+            {
+              "sha256": "0da11f760d974ddd3f72957a993da61d8b0fb76438b8d52a1152ea96ed6019a5",
+              "description": "%LOCALAPPDATA%\\Programs\\MikroTikPBRClient\\appsettings.json"
+            },
+            {
+              "sha256": "b5c98b8864b763dfa240e509c42f3b43d4071be0d95e0e87d98b1451412b0b9b",
+              "description": "{"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "mikrotik-ping-triggered-policy-routing": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "architecture",
+          "artifacts": [
+            {
+              "sha256": "a69afc1cf048c6d4cfc88749045a86391d18843a2491cc3e948636b121b2255a",
+              "description": "Normal:  Client -> main -> Default ISP"
+            }
+          ]
+        },
+        {
+          "section": "control-interface",
+          "artifacts": [
+            {
+              "sha256": "057f213391a4a165001a7a9efdb2e5eb916c7754aea7dd0036b0d4a2be74427e",
+              "description": "/interface bridge"
+            },
+            {
+              "sha256": "437d202528174241e8aa9a0fd622b131fef07a7c7f8083fc4b18ded59ec80128",
+              "description": "/interface bridge print detail where name=\"PBR-Control\""
+            }
+          ]
+        },
+        {
+          "section": "local-networks",
+          "artifacts": [
+            {
+              "sha256": "3fba77cac381de62702a4ff9fbb37761224c3596d3d47a77845b6a199d8b442b",
+              "description": "/ip firewall address-list"
+            },
+            {
+              "sha256": "ac5ee13cceeb12a4136b261be18095def3b07ddbeac6911f712656614f5d8fad",
+              "description": "/ip firewall address-list print where list=\"LOCAL-NETS\""
+            }
+          ]
+        },
+        {
+          "section": "enable-trigger",
+          "artifacts": [
+            {
+              "sha256": "63723725a374c896dd9c9a1f1de1d0833bf9d8b41d1c43c1896310f045593929",
+              "description": "/ip firewall mangle"
+            },
+            {
+              "sha256": "e65487c6559e2be4e5184f3a6fa7fa3e10ddc396fe5f5708d246231d6deeba4b",
+              "description": "/ip firewall address-list print where list=\"PBR-ACTIVE\""
+            }
+          ]
+        },
+        {
+          "section": "disable-trigger",
+          "artifacts": [
+            {
+              "sha256": "63a1fcf2080de2d8d7d040394cbe39a325034b761bbbf95fccdebbf82274e9ac",
+              "description": "/ip firewall mangle"
+            },
+            {
+              "sha256": "b37020c7dae28ffa2f7af5b3af634b76171c492fcd4ba8a80017bb255b5386b3",
+              "description": "/ip firewall mangle print stats where comment=\"Disable PBR request\""
+            }
+          ]
+        },
+        {
+          "section": "routing-table",
+          "artifacts": [
+            {
+              "sha256": "e5470c5d7c757774207438cd7928361e3456fc7c7eb8bab6bc4b862d06e70ab3",
+              "description": "/routing table"
+            },
+            {
+              "sha256": "dc4d404c0b057ba5d55b3e48674a7650e960e3fdddff7d12a1bc0e4bb9537b00",
+              "description": "/routing table print"
+            },
+            {
+              "sha256": "9e814873d1c48d3631b7eff210d3b0ee8a36dd3da09ac2c8748da676b23b3105",
+              "description": "/ip route add dst-address=0.0.0.0/0 gateway=192.0.2.1@main routing-table=VPN-ROUTE comment=\"Alternative second"
+            }
+          ]
+        },
+        {
+          "section": "mangle-policy",
+          "artifacts": [
+            {
+              "sha256": "46c774f7a7bfe759028b112e056b0b1cbd423e0bb2c49a283c960e1e9ad956d7",
+              "description": "/ip firewall mangle"
+            },
+            {
+              "sha256": "19bd0923fd789008f9e293cb3de2d162ed387f884a1bfbf33cd3090a6ad586e1",
+              "description": "/ip firewall mangle print stats where comment=\"Route PBR clients using VPN-ROUTE\""
+            }
+          ]
+        },
+        {
+          "section": "removal-script",
+          "artifacts": [
+            {
+              "sha256": "d91f3b5d4d3f07efea7d82f03388431225ead544c69c5c65c2f438a165c41fd3",
+              "description": "/system script"
+            },
+            {
+              "sha256": "5f4f268f32417f0f81c73287eaae92e894c44fd87fd78997df3ebafe754396ae",
+              "description": "/system script run PBR-Remove-Worker"
+            }
+          ]
+        },
+        {
+          "section": "scheduler",
+          "artifacts": [
+            {
+              "sha256": "00dc4cdde2262dce952bf7af0f209559513396763955bad5bf16edf3e5e84062",
+              "description": "/system scheduler"
+            },
+            {
+              "sha256": "43e8223a2b9cc79b5e84e2bac488d20bfe40beb2757c0d3bee6b8f410814d72c",
+              "description": "/system scheduler print detail where name=\"PBR-Remove-Scheduler\""
+            }
+          ]
+        },
+        {
+          "section": "fasttrack",
+          "artifacts": [
+            {
+              "sha256": "e9f11a51f47b0131f46743fe658976391d1e94c71e6fbcff99fc39ea3df018b6",
+              "description": "/ip firewall filter"
+            },
+            {
+              "sha256": "f84080ebb8d15d4761f1a243af6b85f34b59dbb474d95c56f8eceb3d82897040",
+              "description": "/ip firewall filter print detail where action=fasttrack-connection"
+            }
+          ]
+        },
+        {
+          "section": "nat",
+          "artifacts": [
+            {
+              "sha256": "e0e1d3be1398f62ed65018c978079a485a94c34e52ebcdacb439bd4dd8b1fcc9",
+              "description": "/ip firewall nat"
+            },
+            {
+              "sha256": "dd1bb6baeaf32b62a28037676c18753c415abd5561fe5aee41780197882dbe05",
+              "description": "/ip firewall nat print stats where comment=\"NAT PBR traffic\""
+            }
+          ]
+        },
+        {
+          "section": "connection-tracking",
+          "artifacts": [
+            {
+              "sha256": "8d38fc4152b8420051cbf87e34de5d20940af2af7a54a082be96cc47ce5ea28b",
+              "description": "/ip firewall connection print detail where src-address~\"^192[.]168[.]10[.]50(:|$)\""
+            }
+          ]
+        },
+        {
+          "section": "security",
+          "artifacts": [
+            {
+              "sha256": "7bac1a9ec8295617a00b71e29fad1ff2a8bd11a381ee6382dec317e55c7655eb",
+              "description": "/ip firewall address-list"
+            },
+            {
+              "sha256": "3b3a16c2cb13c77a3aace04bd0a959f5814bb17002a81e8cab52a3af1a6fccc1",
+              "description": "/ip firewall filter print detail where chain=\"input\""
+            }
+          ]
+        },
+        {
+          "section": "complete-configuration",
+          "artifacts": [
+            {
+              "sha256": "f8872b51787356975cf5e3bbb3963d3a9b50ce5ce28e9b872a1c1c01f011af80",
+              "description": "/interface bridge"
+            },
+            {
+              "sha256": "ef713edc25f50c461b5b68b9b3ad643ba6dc16e656b6c566444157e74873701a",
+              "description": "/ip firewall address-list print where list=\"PBR-ACTIVE\""
+            }
+          ]
+        },
+        {
+          "section": "testing",
+          "artifacts": [
+            {
+              "sha256": "ef713edc25f50c461b5b68b9b3ad643ba6dc16e656b6c566444157e74873701a",
+              "description": "/ip firewall address-list print where list=\"PBR-ACTIVE\""
+            },
+            {
+              "sha256": "a671a23e69e9b5bca8ced747fe3adca7cb99865e3655b7c9ae34bbe6fb3efd21",
+              "description": "# Windows client"
+            }
+          ]
+        },
+        {
+          "section": "troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "f1b5ce2618bef211feddde187d07bcd13399d1637169e9b211297886bfa1f66a",
+              "description": "/interface list member print where list=\"LAN\""
+            },
+            {
+              "sha256": "794868b638651a125739cb77e91e37f59caca3b769a9060e72d94b9ecb13293f",
+              "description": "/ip address print where interface=\"PBR-Control\""
+            },
+            {
+              "sha256": "bc4a677bd5daa50ff36c246b305ebe98726ddf539caa400e8c8eb28b97e31fba",
+              "description": "/ip firewall mangle print detail"
+            },
+            {
+              "sha256": "94d07f6ea2a2d39bc4aaa9fe9b810a96d4a59f9d114585afcbef56aa18746fc0",
+              "description": "/ip firewall address-list print where list=\"LOCAL-NETS\""
+            },
+            {
+              "sha256": "da68cd6a1476d4a4d745a9953eb5a6a02e087d59b318757ed6dd26a2f2622824",
+              "description": "/interface print detail where name=\"l2tp-vpn-example\""
+            },
+            {
+              "sha256": "f7d06709de252eca0cc93dff8af608b56468c85fd00f2afe6d5b19399802f396",
+              "description": "/ip route print detail where routing-table=\"VPN-ROUTE\""
+            },
+            {
+              "sha256": "ce982e1dc78014d947f8f4798d71949dfec73f44adce971dfe46c98b91773b86",
+              "description": "/ip firewall filter print detail where action=\"fasttrack-connection\""
+            },
+            {
+              "sha256": "5c9544c914fb92ccfdc6423fba7d256e462ab31bf9d9a5b983e41f9f4d92cf8c",
+              "description": "/ip firewall nat print stats"
+            },
+            {
+              "sha256": "56aeecc4260ae674e78142fb1b12ad6df7f7d5c356d3b931f272cf7b04d31065",
+              "description": "/ip firewall connection print detail where src-address~\"^192[.]168[.]10[.]50(:|$)\""
+            },
+            {
+              "sha256": "4e4ad39652273e47864567a4f267743988267b14b2ea4ef0408f8526adc079f7",
+              "description": "/routing table print"
+            },
+            {
+              "sha256": "e6d2b9683765e5ead2900b24bbbc4dc7ae4142ff5f906724659e3594f1377cbc",
+              "description": "/ip route print detail where routing-table=\"VPN-ROUTE\""
+            },
+            {
+              "sha256": "8e11828749a1c62d770624d8ca6716d1e02c46e292fc61961d419a208478d72d",
+              "description": "/system scheduler print detail where name=\"PBR-Remove-Scheduler\""
+            }
+          ]
+        },
+        {
+          "section": "best-practices",
+          "artifacts": [
+            {
+              "sha256": "a617400e556b391c7ba93cd12060c39fdda02d55a22767ef82f3c7d3174a2953",
+              "description": "/system backup save name=pbr-before-example"
+            },
+            {
+              "sha256": "e286a1649a19ebc243334fc1b305c6e38c38a723937c52dd57c40a07aa4c94e1",
+              "description": "/file print where name~\"pbr-before-example\""
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "mikrotik-unequal-dual-wan-load-balancing-ecmp": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "901f680bf73a05ed2f234c4872665339197fe626a352599adf95c7557581881f",
+              "description": "/ip address print"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-monitoring",
+          "artifacts": [
+            {
+              "sha256": "018cee5e794fb64c2a6ec6bf4180fca178addd71964eaad9adc9580d2998676e",
+              "description": "/routing table print"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-recovery",
+          "artifacts": [
+            {
+              "sha256": "2c9319ac4beacab9a0156bed65f3faf508444277d003a334306fe8af190cc1e3",
+              "description": "/ip firewall mangle disable [find where comment~\"ENT-PCC\"]"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": [
+        {
+          "id": "technical-enterprise-monitoring"
+        },
+        {
+          "id": "technical-enterprise-recovery"
+        }
+      ]
+    },
+    "mongodb-installation-configuration-production-deployment": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "prerequisites",
+          "artifacts": [
+            {
+              "sha256": "e8fc93d8214829aff9cb11f6ae8a8fb9e4d252fc955c654cb14dbb8f322e4005",
+              "description": "sudo systemctl edit mongod"
+            },
+            {
+              "sha256": "0fb465096245df82fc613b81deb690a0db5d834387f2ddece7e9ef779e504767",
+              "description": "[Unit]"
+            },
+            {
+              "sha256": "1d1e570c8ab00c3987bcaf68a796f4109959b7f986cc9fe14f097fa0f1038476",
+              "description": "sudo systemctl daemon-reload"
+            }
+          ]
+        },
+        {
+          "section": "architecture",
+          "artifacts": [
+            {
+              "sha256": "6d200dfe0b9e56e1166f5b8d07c95ba30a6fc48896f22ff1fa0ad94174d684d2",
+              "description": "Application"
+            }
+          ]
+        },
+        {
+          "section": "pre-installation",
+          "artifacts": [
+            {
+              "sha256": "d8c4aa27e03146538cdb2a4d836b865b9aa6ec6fac5585d6cb38702718dac1cb",
+              "description": "hostnamectl"
+            }
+          ]
+        },
+        {
+          "section": "ubuntu-install",
+          "artifacts": [
+            {
+              "sha256": "316cc0e062e189cc7abe2d50258845a6467a950b8b022e9fd70d35114dfccc70",
+              "description": "sudo apt update"
+            },
+            {
+              "sha256": "7e36f3169e4df6d717f6e67f6ae395292cb3f7adeea0df0dd55dbd3458c2ad11",
+              "description": "echo 'deb [arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-9.gpg] https://repo.mongodb.org/apt/u"
+            },
+            {
+              "sha256": "8e71ee5301e301551956a2133f9f34a384a4d4885306b1028e93b439d70c3ddc",
+              "description": "echo 'deb [arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-9.gpg] https://repo.mongodb.org/apt/u"
+            },
+            {
+              "sha256": "7f8125dccd9a263a812f324f351781e1474897ca54d0a696ebb61801bb8dbed7",
+              "description": "sudo apt update"
+            }
+          ]
+        },
+        {
+          "section": "debian-install",
+          "artifacts": [
+            {
+              "sha256": "4f5f6072e9fb23ea768b1901bbd0e9b5cbab2137ab6b9128bd9894b6d1574cdb",
+              "description": "sudo apt update"
+            }
+          ]
+        },
+        {
+          "section": "rhel-install",
+          "artifacts": [
+            {
+              "sha256": "78ba9d611bc19bf5a4cf73765d6e24fbad937214f249a1e98cfbe7d7178085af",
+              "description": "sudo tee /etc/yum.repos.d/mongodb-org.repo >/dev/null <<'EOF'"
+            },
+            {
+              "sha256": "0bd80a90ad0caebd07553819ba6f61877cbd2b191606b9635aaa728d924d96c8",
+              "description": "getenforce"
+            }
+          ]
+        },
+        {
+          "section": "configuration",
+          "artifacts": [
+            {
+              "sha256": "3b491da871073bf383c6daa059aeea0a8ecd135945ca66d17c926fee1fe834ad",
+              "description": "sudo cp -a /etc/mongod.conf /etc/mongod.conf.before-hardening"
+            },
+            {
+              "sha256": "0571648d35ad11667f3ee030a3df0a8025ecc06d89cb48b3c1d03c70f9a2e24a",
+              "description": "storage:"
+            }
+          ]
+        },
+        {
+          "section": "authentication",
+          "artifacts": [
+            {
+              "sha256": "5f55d1b5176da0615e46f8e8bcad795716cc740a31a1e6e6e6a2cb63a7600cce",
+              "description": "mongosh --host 127.0.0.1 --port 27017"
+            },
+            {
+              "sha256": "bda3e0fb755c0aa8e5e52ed64de3dbce78e1affc42b3f84aaf784f555acf38ce",
+              "description": "use admin"
+            },
+            {
+              "sha256": "06aafc6e7871f56155b8bddedaeb81319f9785e43d5df40aab6b64d65a932f7f",
+              "description": "security:"
+            },
+            {
+              "sha256": "3477c5801a2b4cbe200fe3a234211d58720ac3b77ff1a032474e7545b72d1ef9",
+              "description": "sudo systemctl restart mongod"
+            },
+            {
+              "sha256": "ce256eebb4545028ed610834b90f90f92b9bba702895d1d14de0b9dfe806e160",
+              "description": "use admin"
+            }
+          ]
+        },
+        {
+          "section": "application-user",
+          "artifacts": [
+            {
+              "sha256": "c2a6534939c755d6f14171ba3ab29e836a9237f128198535f0ef387dc8115b4b",
+              "description": "use appdb"
+            },
+            {
+              "sha256": "5e91d470cb9e49c4fac38025f867d5ae0846fce7d525bfec53adbab6f439ed16",
+              "description": "mongosh --host 127.0.0.1 --username appuser --password \\"
+            }
+          ]
+        },
+        {
+          "section": "firewall",
+          "artifacts": [
+            {
+              "sha256": "e695a49fc365fd7f0d76b46967f19384cd44182b09ac144ea946a08e76de4c0b",
+              "description": "sudo ufw allow OpenSSH"
+            },
+            {
+              "sha256": "55023b53decb77c940b94049e4bd2c0ec80ca2a3bf843b3db9ef4dc9228c5bf4",
+              "description": "sudo systemctl enable --now firewalld"
+            }
+          ]
+        },
+        {
+          "section": "security",
+          "artifacts": [
+            {
+              "sha256": "0979890a0fe884312e4dc6ffb4b188d8a2aab1ae367bd95eb0816fd7ac0d99e1",
+              "description": "ls -ld /var/lib/mongodb"
+            }
+          ]
+        },
+        {
+          "section": "tls",
+          "artifacts": [
+            {
+              "sha256": "117353a1969b87036b756887a2831865241e39e54fa1c3d0ae6090a28304a6f0",
+              "description": "# Set mongodb on Ubuntu/Debian; set mongod on RPM systems."
+            },
+            {
+              "sha256": "4798e85907821ffa1e91a8dde53a9e5b3721cb8e9d9788475b3f15826679d659",
+              "description": "net:"
+            },
+            {
+              "sha256": "5e418cba0997495f982eb20f05b6b7f3eb7ee60f74c3e69603e8a9cc3c017d80",
+              "description": "sudo systemctl restart mongod"
+            }
+          ]
+        },
+        {
+          "section": "remote-access",
+          "artifacts": [
+            {
+              "sha256": "a4a5e1ea19a4b67d3aafa530958f7f72312274882022be0ea5cb3b1fcda658eb",
+              "description": "net:"
+            }
+          ]
+        },
+        {
+          "section": "replica-security",
+          "artifacts": [
+            {
+              "sha256": "826d01f7793b3f5792eb0211ac235082f8d48f7ad06792d48674980215b3f9dc",
+              "description": "# Generate ONCE on mongo01. Use mongod for RPM installations."
+            },
+            {
+              "sha256": "6f6280e828595d1d857bd27b049caf8a319203f5ebce74b62802a418ea9dbcd2",
+              "description": "security:"
+            },
+            {
+              "sha256": "026d4e91734afa3a5ea0d1a34c6d0f5fbe01d2a4d16a88d28b121bb4319edfb2",
+              "description": "security:"
+            }
+          ]
+        },
+        {
+          "section": "replica-set",
+          "artifacts": [
+            {
+              "sha256": "652976d7bcf543c0df49fefca7da456efd32cb5c50c3e4175a743220abae1ac4",
+              "description": "mongo01 - 10.10.20.11"
+            },
+            {
+              "sha256": "391bef7f5093882707d37501d2f2a7d7da9d2e81e52439913b991cc66ae8a741",
+              "description": "sudo systemctl stop mongod"
+            },
+            {
+              "sha256": "1fff31dd4094a05c85f8c413e5e60658e824f307171aaf13f6d8c8745decb9fe",
+              "description": "storage:"
+            },
+            {
+              "sha256": "322b1dee7b69296f1f337dd15ffc03ba65b4808210bb9c35c7a0c77a5aeae3c7",
+              "description": "# Run on each node after certificates and shared keyfile exist."
+            },
+            {
+              "sha256": "a405b4215ca37ff3e7c84796e95f7e65c6825de5e0d5943fa25ce3bdc14d729c",
+              "description": "rs.initiate({"
+            },
+            {
+              "sha256": "3ad5a8d634af97ac95a265df60d47b4c8d7024e332e6caa7cc8eeb61698f9748",
+              "description": "use admin"
+            },
+            {
+              "sha256": "81fbdf7227931fde15af887c4c49a202564620e1ee9e4498db52a9530802476f",
+              "description": "mongosh 'mongodb://mongo01:27017,mongo02:27017,mongo03:27017/admin?replicaSet=rs0' \\"
+            },
+            {
+              "sha256": "2635f4fc81985bb2efc458710628fe53cee361e265b3efcd691fea15280105e8",
+              "description": "rs.status()"
+            }
+          ]
+        },
+        {
+          "section": "connection-string",
+          "artifacts": [
+            {
+              "sha256": "6a090c1ac20298238284d1b2ea3673c142aee616269d415494a1d2255edd6950",
+              "description": "mongodb://appuser:<STRONG-PASSWORD>@10.10.10.20:27017/appdb?authSource=appdb&tls=true"
+            },
+            {
+              "sha256": "b2fdb7142047409cdebf62fa3fc469b057a844b9f8b32670651de8d8c16b8e18",
+              "description": "mongodb://appuser:<STRONG-PASSWORD>@mongo01:27017,mongo02:27017,mongo03:27017/appdb?replicaSet=rs0&authSource="
+            }
+          ]
+        },
+        {
+          "section": "logging",
+          "artifacts": [
+            {
+              "sha256": "83b9485d39303394e9de1be71650c469308863f12681b7cb9962d107cb242a7b",
+              "description": "sudo tail -f /var/log/mongodb/mongod.log"
+            },
+            {
+              "sha256": "c9454622728f3257fcc7e7c6059d4acb7dd30b461f89e5f789e3f301f9d03f5e",
+              "description": "operationProfiling:"
+            }
+          ]
+        },
+        {
+          "section": "monitoring",
+          "artifacts": [
+            {
+              "sha256": "5a4ff1e051916397e7f93cda0e8bb30a4e147d0deb309b6fc1539753169dc03f",
+              "description": "use admin"
+            }
+          ]
+        },
+        {
+          "section": "backup",
+          "artifacts": [
+            {
+              "sha256": "41137cc30fb2fd89d579b74c01b814aa49628a2f8d5900d6a7c89e83638507f8",
+              "description": "mongodump --version"
+            },
+            {
+              "sha256": "36f56cf432841f50596d6d06adea6f7f323f3684aa505dad42484bfe1291c7e5",
+              "description": "use admin"
+            },
+            {
+              "sha256": "f93cf6422870e788945804a2fa6d732a18dc49a20ae7432552ae0a4f96ea66e0",
+              "description": "umask 077"
+            },
+            {
+              "sha256": "81dcb5e6d215deac0fb07e200dfd2d8ed09b2a472ae5ee1605227b270f997b40",
+              "description": "mongorestore \\"
+            },
+            {
+              "sha256": "543314a2b1a044eca51e8090527753ecfef0eaeb7a45a33ddda2848ca78f3045",
+              "description": "umask 077"
+            },
+            {
+              "sha256": "bebbe4b97f018ebf33a9ee98c5ea55afda76461ac903492ecc084d9e491d9831",
+              "description": "# Run only on an isolated clean recovery target with approved replay privileges."
+            }
+          ]
+        },
+        {
+          "section": "verification",
+          "artifacts": [
+            {
+              "sha256": "a1db46922f1381fa8fc3a69b8f182a21a7d09b398cb7ad623fb752035e981f6c",
+              "description": "systemctl is-active mongod"
+            },
+            {
+              "sha256": "ffca1bc6dde1c13058a8264624f0d624db5a5d1c5ee78f103bb5d3663d35c0cc",
+              "description": "db.runCommand({ ping: 1 })"
+            },
+            {
+              "sha256": "772c791cbe597783ace36034cfeffe3f2147b1aebea3fd4c734825c59d21fcb0",
+              "description": "// Authenticated mongoOps replica session:"
+            }
+          ]
+        },
+        {
+          "section": "performance",
+          "artifacts": [
+            {
+              "sha256": "b90a49d7b1343b851334457a83d67273972a3a1b844de209cbd834845ededbd5",
+              "description": "# Install the distribution sysstat package for iostat."
+            },
+            {
+              "sha256": "412ecb4c09bc2045bf0f0b44432992e02041abad785c889c3003e36f4432f11e",
+              "description": "// Run with a monitoring identity; replace users with your collection."
+            }
+          ]
+        },
+        {
+          "section": "indexing",
+          "artifacts": [
+            {
+              "sha256": "26fc3f562220c01e692c318a25e85dfca6879cf4567a5e6c727f8019c1de7ffb",
+              "description": "use appdb"
+            }
+          ]
+        },
+        {
+          "section": "troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "a127d0a1d574aba1851271a9d0dabfc05475f73cf05811f05f95f7af5752badf",
+              "description": "sudo systemctl status mongod --no-pager"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "netbox-installation-setup-ubuntu": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "317d31d8cc4a991b1bd76e7933bb0e6a555d1db0338c67df7a056bbb7309557a",
+              "description": "sudo apt-get update"
+            },
+            {
+              "sha256": "b40dc34014e316372d0cab6173b66ba2f7422c07c5ce95b8497af176e00d376c",
+              "description": "sudo python3 - <<'PY'"
+            },
+            {
+              "sha256": "a3e7e614b8575e22f4c9e006bea10e4a9c7baf9b3f3d60511a63487151766779",
+              "description": "server {"
+            },
+            {
+              "sha256": "a44eb83b28cd74c9ef8e19aafb408d250d382ea73e81f6c544890e92512cafac",
+              "description": "test -f /etc/nginx/sites-available/netbox || exit 1"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "40792e2b646fdb1da1d0b0db45d7b616f725801a7ed40c1f56c17795634f7d71",
+              "description": "systemctl is-active postgresql redis-server netbox netbox-rq nginx"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-recovery",
+          "artifacts": [
+            {
+              "sha256": "06cf44ab866837e691d71d73fab5c9082c6d99b1e8a97cd4385349b7faf6d2f5",
+              "description": "sudo bash <<'BASH'"
+            },
+            {
+              "sha256": "585e96d092bcd4499c47d5e6a16fc60360b042f06f6a8cef9bccf3a32dbc0f4b",
+              "description": "sudo -u postgres createdb -O netbox netbox_restore"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": [
+        {
+          "id": "technical-enterprise-installation"
+        },
+        {
+          "id": "technical-enterprise-recovery"
+        }
+      ]
+    },
+    "nginx-installation-configuration-ubuntu": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "cbf41d4d6189cb427996eded38a822b6c1e18f70ef2b29890bff50e0cf0be63c",
+              "description": "sudo apt-get update"
+            },
+            {
+              "sha256": "b6fd546b83f9c5dcb0e4d62999b45e39b95df3c1b8cbe072e1f706b704b71087",
+              "description": "sudo tee /etc/nginx/sites-available/enterprise-app >/dev/null <<'EOF'"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-monitoring",
+          "artifacts": [
+            {
+              "sha256": "9cbd5e1c27884a99854e65ec2c1cddd0539e173ad3c45e835f31a9d058839b9e",
+              "description": "log_format upstream_trace '$remote_addr $request_id $request_method $uri $status $request_time $upstream_respo"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "c8228eba02efc1b5b2a288cf2657cb9d00af1ad2090d183d76f5bb91828c2f26",
+              "description": "curl --verbose --max-time 5 http://127.0.0.1:8080/health"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "nginx-reverse-proxy-multiple-domains-single-ip-443": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "introduction",
+          "artifacts": [
+            {
+              "sha256": "879640e9207610b746bf238f34554a6e51e876aab9ce58340a1cd598e48ca96a",
+              "description": "Internet"
+            }
+          ]
+        },
+        {
+          "section": "scenario",
+          "artifacts": [
+            {
+              "sha256": "1e37059c3b7dc89f4d2343329d70b284aeba15b7d39198a412e0236b89906743",
+              "description": "app.example.com -> 10.10.10.11:8080"
+            }
+          ]
+        },
+        {
+          "section": "architecture",
+          "artifacts": [
+            {
+              "sha256": "c30c56e1e75d2b6ce41f62fe81f6a33bc6c441f4c74940397acd5fcaf17d79ca",
+              "description": "Client"
+            }
+          ]
+        },
+        {
+          "section": "nat",
+          "artifacts": [
+            {
+              "sha256": "7716012fdc03f23f96f9fc282a33004ddcb029655f43ee80c7ecc409345ecbb6",
+              "description": "203.0.113.10:443"
+            }
+          ]
+        },
+        {
+          "section": "enterprise",
+          "artifacts": [
+            {
+              "sha256": "5e7007759df5b599fb52e24834b026c0ad496aa9feeceb47c08849e273eb6b14",
+              "description": "Internet"
+            },
+            {
+              "sha256": "3af36264c709a3ab5767aff91cd8f1653c8372eccfa8c4dc248036ffee58485d",
+              "description": "Internet"
+            }
+          ]
+        },
+        {
+          "section": "installation",
+          "artifacts": [
+            {
+              "sha256": "98fc47cc33695af0eafacd98e9e2154842d0dcfb33c0bbe7dffd861e8f247838",
+              "description": "sudo apt update"
+            },
+            {
+              "sha256": "0affbcaab3f8b6f66c66a4f44f9c2b607a5f6caad64223650dd3e137674fdded",
+              "description": "nginx -v"
+            }
+          ]
+        },
+        {
+          "section": "dns",
+          "artifacts": [
+            {
+              "sha256": "b069e850f4ac169ceb63ad254d100131b4205fdc2fd2aad205abb2171fd26381",
+              "description": "app.example.com    A    203.0.113.10"
+            },
+            {
+              "sha256": "2da0959946c199051da49eab1859f586d8eae46151de95fd3f1b2636a50a7c10",
+              "description": "dig app.example.com +short"
+            },
+            {
+              "sha256": "631f08140b24b7274d12df3c37a1a80ce5876dafd7007d772e0114fddf88b682",
+              "description": "203.0.113.10"
+            }
+          ]
+        },
+        {
+          "section": "backend-connectivity",
+          "artifacts": [
+            {
+              "sha256": "8fc337da9a2d7c7cffcf8cd561398983b0d6ee40d1dca93b871495bf21649e54",
+              "description": "curl -I --connect-timeout 5 --max-time 15 http://10.10.10.11:8080"
+            },
+            {
+              "sha256": "328272644a8766055ffab7cfc04852fd4a9fdb3bd4790986aacc66de9d2cb073",
+              "description": "nc -zv 10.10.10.11 8080"
+            }
+          ]
+        },
+        {
+          "section": "certificates",
+          "artifacts": [
+            {
+              "sha256": "71b0374ce8549d5062596089183cd5dad773c475deee05d276ffb4f955bd5e01",
+              "description": "sudo apt install certbot python3-certbot-nginx -y"
+            },
+            {
+              "sha256": "9beb91087521d6891a458f95d561f91e521bcb13fe819ab392127a05b6810f50",
+              "description": "sudo cp -a /etc/nginx /etc/nginx.before-sni"
+            },
+            {
+              "sha256": "7f8bee3f85033d2883933efa7c969ffee5943417c3645bbd136017a951951f61",
+              "description": "server {"
+            },
+            {
+              "sha256": "1da1f4c6d970293ae4d8bbea054d74dcd9873cea5b0c28b30bf4330f6f7d6718",
+              "description": "sudo nginx -t"
+            },
+            {
+              "sha256": "ee6c8a9dc238ae208ccaa9fd6f50425b33ceab38363f9ad5e07254b8897a5bf5",
+              "description": "sudo certbot certonly --webroot -w /var/www/letsencrypt --cert-name app.example.com -d app.example.com"
+            },
+            {
+              "sha256": "036b4d6b887d3d3a0f83a528864d42b74608d9249acb1051c6b29e4c115969db",
+              "description": "sudo certbot certificates"
+            },
+            {
+              "sha256": "8b45d68bacc4213c571cad7f2659c6bd5340bf455fd06a3228bee7982d405150",
+              "description": "/etc/letsencrypt/live/app.example.com/fullchain.pem"
+            }
+          ]
+        },
+        {
+          "section": "complete-configuration",
+          "artifacts": [
+            {
+              "sha256": "7f0cad0a854d06824c650305a7cd816122f4bea99e2ae27d38dc82efc70249b1",
+              "description": "# Included in the http context. Requires Nginx >= 1.19.4."
+            }
+          ]
+        },
+        {
+          "section": "http-redirect",
+          "artifacts": [
+            {
+              "sha256": "15057b71799f775224914acd0b248a086c94e36f11bb8147b9f16cb67d32ae9d",
+              "description": "server {"
+            }
+          ]
+        },
+        {
+          "section": "default-server",
+          "artifacts": [
+            {
+              "sha256": "97bc029351dcb8a5126c995cd1aff46be47933f1fc0a2227341d48262ddf802b",
+              "description": "server {"
+            }
+          ]
+        },
+        {
+          "section": "websocket",
+          "artifacts": [
+            {
+              "sha256": "6cfa1664ee53813d7b8c7eae30ce059ffc987f53e9269ca0a35060c76eb2a146",
+              "description": "map $http_upgrade $connection_upgrade {"
+            },
+            {
+              "sha256": "6e3bb0e84fbf27278062e69fc4c96ab801e8b5d30ea6848f237c9867a4bb7b6e",
+              "description": "client_max_body_size 100M;"
+            }
+          ]
+        },
+        {
+          "section": "logging",
+          "artifacts": [
+            {
+              "sha256": "1865a2de4622ff7faa7fd414c9aa5076ca0365a569202bc9846399725169f4e2",
+              "description": "access_log /var/log/nginx/app.example.com.access.log sni_proxy;"
+            }
+          ]
+        },
+        {
+          "section": "hardening",
+          "artifacts": [
+            {
+              "sha256": "73ae8214d524a6007b41e643f5fb52d2ecf484fccba490bc089491cc720369b5",
+              "description": "server_tokens off;"
+            },
+            {
+              "sha256": "afe7b91bc4b7368935edf485ea92e210c23e4fb6331659a8abcaf4eb248a60ac",
+              "description": "# Optional trial in a reviewed HTTPS server, after HTTPS is stable:"
+            }
+          ]
+        },
+        {
+          "section": "testing",
+          "artifacts": [
+            {
+              "sha256": "3f033829c5240a13d5eb722f1c5c70b2335002a5c0e723a3d951e9eec6a006d0",
+              "description": "sudo nginx -t"
+            },
+            {
+              "sha256": "945c54f3569bf85a63b952cf506cd3b6fc349377f937cc23d91e58187a303d53",
+              "description": "nginx: the configuration file /etc/nginx/nginx.conf syntax is ok"
+            },
+            {
+              "sha256": "08694afc86e3e3679306167e5df40870dbeb6339fcbfe3412f4c96b138eb3aa4",
+              "description": "sudo systemctl reload nginx"
+            },
+            {
+              "sha256": "9ea98e7a1a6cbfb42914f7b08fe2c303002581e1965202e58026fb26843e672b",
+              "description": "sudo install -d -m 0755 /etc/letsencrypt/renewal-hooks/deploy"
+            }
+          ]
+        },
+        {
+          "section": "resolve",
+          "artifacts": [
+            {
+              "sha256": "5affd12939848d8e55464a05dd9000c096231cc89e70108a8962cdca10b3ef46",
+              "description": "curl -vk \\"
+            },
+            {
+              "sha256": "789483a5717338b0541ee1e5e4650238db8d0e5dfe45d24b3762af6ce6389c4d",
+              "description": "curl -v --resolve app.example.com:443:203.0.113.10 https://app.example.com/"
+            },
+            {
+              "sha256": "fe79a80a4dd8bb46a926d29038211fd011f8daa8072b41cc4a312cf6a79fa2f7",
+              "description": "curl -I --resolve app.example.com:80:203.0.113.10 http://app.example.com/"
+            }
+          ]
+        },
+        {
+          "section": "openssl",
+          "artifacts": [
+            {
+              "sha256": "fa0c96db810195eec9cc99e4b0425bc0de33df6d4c16bb99d3ca9ce8c1a516dc",
+              "description": "openssl s_client -connect 203.0.113.10:443 -servername app.example.com"
+            },
+            {
+              "sha256": "fe8a1213af82d499f2cca139c4175bd1efb4e355bc54724ff0a599ea514ad95f",
+              "description": "openssl s_client -connect 203.0.113.10:443 \\"
+            }
+          ]
+        },
+        {
+          "section": "troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "78747c127ff74596231488447e125058920834da1e6112a43bd0ba09dfdf8977",
+              "description": "curl -v http://10.10.10.11:8080"
+            },
+            {
+              "sha256": "cfa5af65700bdb885823571dfa4cf67c78f1e57fe12bfc2d5b896bd749565150",
+              "description": "sudo nginx -T"
+            }
+          ]
+        },
+        {
+          "section": "root-cause",
+          "artifacts": [
+            {
+              "sha256": "1a79adae1843a7d5f1bcd24c52c70049fd35388cc7d7e14cd90c009a666e928b",
+              "description": "DNS Resolution"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "oracle-database-26ai-installation-oracle-linux": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "prerequisites",
+          "artifacts": [
+            {
+              "sha256": "7b6ad1eb47d233f6eb5f86eff748b0a95dea3e5b03fe3b463124ce46ea29c28b",
+              "description": "# Database host: root/sudo diagnostics"
+            }
+          ]
+        },
+        {
+          "section": "configuration",
+          "artifacts": [
+            {
+              "sha256": "38ba97f505b34cedf66d67071b346f302be6e9150c23842249186d8cd7681e8b",
+              "description": "sudo dnf upgrade --refresh -y"
+            },
+            {
+              "sha256": "2e2f2faf6232ccdcaf5ca130cb4d19753a454157535bf47d7a13b49bb34510c2",
+              "description": "sudo install -d -m 0750 /var/tmp/oracle-media"
+            },
+            {
+              "sha256": "47e52f1f8f78b5e170044e4cddac80470e92581e2aa67b3b3491cf983bf48840",
+              "description": "sudo cat /etc/sysconfig/oracledb_ORCLCDB-26ai.conf"
+            },
+            {
+              "sha256": "86f3a3ef5a6472291c30188c9a9e0932ceabffc80ad880b3e43675e24b8f2512",
+              "description": "-- SQL*Plus as SYSDBA in CDB$ROOT:"
+            },
+            {
+              "sha256": "7c987c92bd814805da46ca25c1eaaa2165041d3d20a604a23adafe63cf3d059c",
+              "description": "# oracle shell: inventory only, no patch application"
+            },
+            {
+              "sha256": "00657efaa029d41900d66246f3be2d8da22c5fcc2477360d6dafc704d2703707",
+              "description": "# Authorized client, password is prompted:"
+            },
+            {
+              "sha256": "89b6cfcb2292f267daf80d0dc9fc1d7ba53e2a2e06d89d6ac3a0aa735fac0561",
+              "description": "SELECT sys_context('USERENV','CON_NAME') AS pdb,"
+            }
+          ]
+        },
+        {
+          "section": "system-service",
+          "artifacts": [
+            {
+              "sha256": "25a8d2b39bbabedfccce0cc4054986295fb92229afe081b82686d2a5cbb821aa",
+              "description": "# root/sudo; verify the official package owns the script first:"
+            },
+            {
+              "sha256": "59fd8a0f6d38493da2693d27476db65f0467946746d0735bcaab5e1566c2493a",
+              "description": "# Conditional SysV compatibility path only:"
+            },
+            {
+              "sha256": "5a0a27e52d294a746aa4b9d664cb3d0a2ee7d8da06ed395bb31beb4021bd44f2",
+              "description": "# Approved maintenance window, console access available:"
+            },
+            {
+              "sha256": "2e2c63c10098fcbf34ed1986e73d07cb0a24dcefc6389f45fa1b78f714b93efb",
+              "description": "SELECT status, database_status FROM v$instance;"
+            },
+            {
+              "sha256": "00c7556029101598a3565f5634cbf5d4fb2173500888b503dd1d23d2663e826e",
+              "description": "# Oracle Restart already configured; database unique name verified:"
+            }
+          ]
+        },
+        {
+          "section": "security",
+          "artifacts": [
+            {
+              "sha256": "ecbe9b041ac3dd14e1988bf15d06de14884ad1a3c9511f672b985ba047b38622",
+              "description": "-- SYSDBA, CDB$ROOT; password prompts do not expose a literal secret:"
+            },
+            {
+              "sha256": "43f1a3a36fd24d395e02b288efcfea2322a5800d72c09f476e3ef2f24c675cdf",
+              "description": "sudo firewall-cmd --get-active-zones"
+            },
+            {
+              "sha256": "20fcd1862c096934cfb3114f5d07559e122e811d291bfb052139b92b38d4a100",
+              "description": "# Fragment to merge into the EXISTING listener.ora:"
+            },
+            {
+              "sha256": "77057521167c4066b300b720c1465b5043cf4c920eb7a53a9155edfd45d15a3f",
+              "description": "lsnrctl reload LISTENER"
+            },
+            {
+              "sha256": "8e20f90d4a168eb63802d915937b27629260a520db92eb30f59e03cc1a86a600",
+              "description": "ALTER SYSTEM REGISTER;"
+            },
+            {
+              "sha256": "0339ad83e27c17ec1444d955442155ba28375c3030030c61807a3c9e457b806d",
+              "description": "getenforce"
+            },
+            {
+              "sha256": "b14ff02e0a82acf740db37fa88068144f7fb00805c1d15e7c8faae50098e9241",
+              "description": "-- SYSDBA: review root and each application PDB separately."
+            },
+            {
+              "sha256": "d7d329074f2249403965781de0958643c1f5523f04cbf985df2905fdf9efb387",
+              "description": "-- CDB$ROOT, planned restart required before TLS wallet use:"
+            },
+            {
+              "sha256": "f1ea491c3c1995c73ccba549789065f58d1fabc0b3b52cd18b00e18e24a32462",
+              "description": "# Merge into existing listener.ora; replace PDB_GUID with the actual GUID."
+            },
+            {
+              "sha256": "f36015284530a07adc3983ec191b6f8087062a93fec2fd5179a8d0afb23ed4ed",
+              "description": "-- CDB$ROOT: pair this with the loopback TCP registration address above."
+            },
+            {
+              "sha256": "1710e857c011c3c29f98fe1f461bc2cfdee960d54afa002926abe9acc688ffc0",
+              "description": "# After wallet provisioning, database restart, listener reload and service registration:"
+            },
+            {
+              "sha256": "51b16e778d39df564976e6e364df8c5b69d09db5435f8eb386fc1037aa798bb0",
+              "description": "# Read-only inventory as oracle:"
+            }
+          ]
+        },
+        {
+          "section": "rman-backup",
+          "artifacts": [
+            {
+              "sha256": "a73e171ca5d8e4ac144ae1c63a5ef221029c54cfc726ba9cb77d45324dfd0dbe",
+              "description": "-- SYSDBA in CDB$ROOT, approved outage:"
+            },
+            {
+              "sha256": "e3e148d2e209e7fe2e75f2d111ef26433ee0f1d580fd2c6d0df0dbed4c32e14c",
+              "description": "# Oracle OS account; local OSDBA authentication, no embedded password:"
+            },
+            {
+              "sha256": "a1c3b7403df1bc9ae5e1157311749b35c97ab0a8aa1d8966e53bf00e732b16ca",
+              "description": "CONFIGURE DEFAULT DEVICE TYPE TO DISK;"
+            },
+            {
+              "sha256": "3db5316c0e90c61509032a7adf52876ea3da89ee26f3622d83a820ac21c65fe8",
+              "description": "# Licensed Advanced Security plus configured/open keystore required:"
+            },
+            {
+              "sha256": "1e668341c91106b0779e77efbfe2a0ceb477b9a51b4a755c3da3033e9606c836",
+              "description": "# Read-only selection and backup-read checks:"
+            }
+          ]
+        },
+        {
+          "section": "automated-backup",
+          "artifacts": [
+            {
+              "sha256": "5b8ed23b6fb85dd08874cfe469dd4fb27445f77a2d410b9c89349202a8d02d33",
+              "description": "#!/usr/bin/env bash"
+            },
+            {
+              "sha256": "cd3052be008256a2e8ad3bd8408d46e23a2e3190128d781f11e94770fd63ed29",
+              "description": "# From the directory containing the downloaded/reviewed article templates:"
+            },
+            {
+              "sha256": "070f0cb96b4d6db258ff0132246bf3c04a33ad71fd0f205a0a0223642e372b56",
+              "description": "# Non-secret backup policy; approve licensing and usable keystore first."
+            },
+            {
+              "sha256": "4bc2b6d4a6d6fd7de189d7e94a2ef7e80d6295f01c60ea7fff16323d265f2793",
+              "description": "[Unit]"
+            },
+            {
+              "sha256": "53451c350de09bbe77d0a5597299a5071db37c67fb7212eae783966031761062",
+              "description": "[Unit]"
+            },
+            {
+              "sha256": "446996a5f7bb8f9e13b1542019b08a9f41e9a0f1d2864b89a8735d602818946a",
+              "description": "[Unit]"
+            },
+            {
+              "sha256": "a1515b225e9cb4e65d2b9d7dd09996a324401a07b3fa432de2396c9312a37dd4",
+              "description": "[Unit]"
+            },
+            {
+              "sha256": "70b19749f181f24dcf73275d2f68818c03ca65c278b755852e973a876c475edf",
+              "description": "/backup/oracle/logs/backup.log {"
+            },
+            {
+              "sha256": "f48c80989b3b152744445df8097df3a600bf1c642b42317a423112161feb98af",
+              "description": "systemd-analyze calendar 'Mon..Sat *-*-* 02:15:00'"
+            }
+          ]
+        },
+        {
+          "section": "restore-recovery",
+          "artifacts": [
+            {
+              "sha256": "da61839a5cc498ec7c82ccf00317d651212c43ff072efe3c63acdbec08631e49",
+              "description": "# Connect locally on the recovery target as authorized oracle:"
+            },
+            {
+              "sha256": "2f4603ecd619ab97bc387cc59f7346751ffbf7e2839157be227245dbdcd29d05",
+              "description": "# Outage; current controlfile and SPFILE survive, original paths exist:"
+            },
+            {
+              "sha256": "7cee000adf8e065722605373abd46baf85ba302568fb0fb44f4c4306ecb51119",
+              "description": "# MOUNTED recovery target; backups copied to the dedicated mount:"
+            },
+            {
+              "sha256": "0e8147e6ab93998387f54d9ef5405f6e6d518ec24fe848142a01a2592ac38949",
+              "description": "# MOUNTED recovery target, existing datafiles/controlfile valid:"
+            },
+            {
+              "sha256": "0e9e368c375f6c6930ca7ee1d0bcd052949bedc6062b4316ccc0ce6d396b0b9b",
+              "description": "# DESTRUCTIVE: sample time MUST be replaced by the approved database-local time."
+            },
+            {
+              "sha256": "a5b4d3e94523e966c0a11bcc6fd5afea915e7a9c27d3b464d77037deb3deb935",
+              "description": "# Recovery host only. Replace this EXAMPLE DBID before use."
+            },
+            {
+              "sha256": "84cd889c0987864ebba49f53cd894fc2c120a332faba249d706cf8b2503c38e1",
+              "description": "LIST BACKUP SUMMARY;"
+            }
+          ]
+        },
+        {
+          "section": "troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "8204208c210159c826b891fe9a1e94f3ac7b72d3e95a97a056997f876fa2c73f",
+              "description": "-- Authorized DBA in CDB$ROOT:"
+            },
+            {
+              "sha256": "16ecdc71e9d67508ebacc7ad0b4e0b1ea770cf6b343d0b3988fdec5cdce62179",
+              "description": "# Host, listener and boot diagnostics:"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "oxidized-network-device-configuration-backup": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-security",
+          "artifacts": [
+            {
+              "sha256": "375633c6dcd0b901108bf3328dc0667f51027c1355529b15d14d61202a117d52",
+              "description": "ssh-keyscan -T 5 core-sw01.corp.example.com > core-sw01.candidate"
+            },
+            {
+              "sha256": "b78b4aabad21b9d54f4a9f2eb40a5f16df56d854de29c3c8093456fa9d8eef7d",
+              "description": "sudo install -d -o oxidized -g oxidized -m 700 /var/lib/oxidized/.ssh"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "825a7bcd5f76acc9faaa0fb3f7d9929fa663e717bb4ed98290c500e464abae6e",
+              "description": "sudo apt-get update"
+            },
+            {
+              "sha256": "6e7206083d9afecf1c0c6dde03f5d0f25c72f59c543b9a16e160e7ca9226f757",
+              "description": "---"
+            },
+            {
+              "sha256": "90c9c2f34f8999245c5e8e3450504cb4cf05a031f884061b1ce3facf0425330c",
+              "description": "sudo -u oxidized env HOME=/var/lib/oxidized /usr/local/bin/oxidized"
+            },
+            {
+              "sha256": "de080ddbb8b9afdda5ea99ccd67c9b1dd7495b334eac476dd7a13898d6b862ea",
+              "description": "[Unit]"
+            },
+            {
+              "sha256": "0766e460fcb2dc97c6f980c0dfa321b9e876813dba8ce6983caf45d86c393809",
+              "description": "sudo systemctl daemon-reload"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-recovery",
+          "artifacts": [
+            {
+              "sha256": "0a7b942c35a54cb02ffdc420f0806f8151f81bf609cab668a452783cf1d2df11",
+              "description": "sudo -u oxidized git --git-dir=/var/lib/oxidized/configs.git ls-tree --name-only HEAD"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": [
+        {
+          "id": "technical-enterprise-security"
+        },
+        {
+          "id": "technical-enterprise-recovery"
+        },
+        {
+          "id": "technical-enterprise-sources"
+        }
+      ]
+    },
+    "redis-installation-configuration-replication": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-use",
+          "artifacts": [
+            {
+              "sha256": "30c2e01109711901099854fb872d451870016f8fd823ea3e686b7fbf8b22d126",
+              "description": "User -> Load Balancer -> Application Servers"
+            }
+          ]
+        },
+        {
+          "section": "prerequisites",
+          "artifacts": [
+            {
+              "sha256": "a2df2ac5065595c127c057a94ba6da2a5d3d0c31de5665498ff638f88176aa7c",
+              "description": "Application Servers: 10.10.30.21, 10.10.30.22"
+            }
+          ]
+        },
+        {
+          "section": "replication-architecture",
+          "artifacts": [
+            {
+              "sha256": "32f9593db1ba22def4feda02b4349299a5b9aa43a8c87d3c12112149c532a40d",
+              "description": "Applications"
+            }
+          ]
+        },
+        {
+          "section": "installation",
+          "artifacts": [
+            {
+              "sha256": "fae41b05876a7c75309e70971a2d8b5516535623a3de9ecc93547084d480e077",
+              "description": "sudo apt update"
+            },
+            {
+              "sha256": "aaf14819ca88c33a52bbc5eaf41e19d2fc4c747b3504fbfe6d644239f3e8fe56",
+              "description": "sudo apt-get update"
+            }
+          ]
+        },
+        {
+          "section": "service-diagnostics",
+          "artifacts": [
+            {
+              "sha256": "58129d7791156c64d329203b32f990f3895dd0747bf21ff7a49a313902bc63a7",
+              "description": "systemctl status redis-server --no-pager"
+            },
+            {
+              "sha256": "76f56ada8dfc8a501f75fd0dcf6ea8660d06f86b276b0b6c17f0cd15588d5fd4",
+              "description": "active (running)"
+            },
+            {
+              "sha256": "e25c4394dbb1c5d69e3343cb17c491955700b4698599f4d22978220d9c61bab1",
+              "description": "redis-cli -h 127.0.0.1 -p 6379 --user admin --askpass PING"
+            }
+          ]
+        },
+        {
+          "section": "configuration-files",
+          "artifacts": [
+            {
+              "sha256": "3e7386880f42ba3798466ec6de27e0d94408df8b3ab74dc6eb3b703368bcae11",
+              "description": "systemctl cat redis-server"
+            },
+            {
+              "sha256": "2f04ffdacf9d1a4d09cb9ce9f4fa44ebf8cb1cd5eebf688971ba6204b5386afa",
+              "description": "include /etc/redis/production.conf"
+            }
+          ]
+        },
+        {
+          "section": "primary-configuration",
+          "artifacts": [
+            {
+              "sha256": "51921e44384540b5131542424173d1b53fe90f9bbc06656a9e7f87823af4eaea",
+              "description": "# Final include for a NEW dedicated Redis deployment; preserve package redis.conf."
+            }
+          ]
+        },
+        {
+          "section": "security-hardening",
+          "artifacts": [
+            {
+              "sha256": "d8c3a95f550b84347c49f4db9e7f78ec699f1f9da043c90716b1723c8c06e6a4",
+              "description": "sudo apt-get install ufw"
+            },
+            {
+              "sha256": "28a2f9f0fb790ecff03b86470ef15b3b101a71a7baf3d4255a9af6bc897b713f",
+              "description": "port 0"
+            },
+            {
+              "sha256": "509f9f18e2e958e15c39fa0db5977d5bda95a23b09d3183b9cdb9dd8f8fb742b",
+              "description": "redis-cli --tls -h 10.10.20.10 -p 6379 --cacert /etc/redis/tls/ca.crt   --cert /etc/redis/tls/client.crt --key"
+            }
+          ]
+        },
+        {
+          "section": "authentication-acl",
+          "artifacts": [
+            {
+              "sha256": "55b76d079a0a2c442dd15c0d0fea59e39b3f43ec7ca03e509734d606c3461d81",
+              "description": "#!/usr/bin/env bash"
+            },
+            {
+              "sha256": "6d2c84b3a022797ca9a54b91f10e03bb2fe83a3d48c0a7797d821c3ee82c1733",
+              "description": "sudo systemctl restart redis-server"
+            },
+            {
+              "sha256": "a2e47879f44873b4e56d0b83a9b8f4b189a4ba24d50cfe43c61fffae9a2adec9",
+              "description": "active"
+            }
+          ]
+        },
+        {
+          "section": "persistence",
+          "artifacts": [
+            {
+              "sha256": "1b4a3c75a0f312a333261a960a1bf3e8bc6dbde5ad2baba657c8c164cf863265",
+              "description": "redis-cli --user admin --askpass BGSAVE"
+            },
+            {
+              "sha256": "e903e1cc0c0b6a8dfb9ad4e9de9c2142493e6c8540ecddd5fbd0245ba07622ab",
+              "description": "rdb_bgsave_in_progress:0"
+            },
+            {
+              "sha256": "36557db5d3f4c76000d54e2cddd39e112c688c6bd12cd30a941fe2d9d77c0dbd",
+              "description": "redis-cli --user admin --askpass INFO persistence"
+            },
+            {
+              "sha256": "c8006cdd495ddfac3184a4e0c2754fb3473456db83ef04b8510d35882ea33868",
+              "description": "aof_enabled:1"
+            },
+            {
+              "sha256": "b5c822434710cb554be0740cd3c89ea691f212d3fe0fa104ad869ecc1f99265a",
+              "description": "redis-cli --user admin --askpass CONFIG SET appendonly yes"
+            }
+          ]
+        },
+        {
+          "section": "replica-configuration",
+          "artifacts": [
+            {
+              "sha256": "a9ac12b59a1667696554c36fa3dc105dbecbacf53863bfffa86b29ab9972f8b2",
+              "description": "# Final include for a NEW dedicated Redis deployment; preserve package redis.conf."
+            },
+            {
+              "sha256": "25e187fa819f68e82aacf5130d19f55763d5b7805cf94cdc6280957dd8af7f34",
+              "description": "sudo chown root:redis /etc/redis/production.conf /etc/redis/users.acl"
+            },
+            {
+              "sha256": "4b3d2d7025a694443ce55409a4feb8e7a8a903578c40c18e80e9b13bb4eb8715",
+              "description": "redis-cli --user admin --askpass REPLICAOF 10.10.20.10 6379"
+            }
+          ]
+        },
+        {
+          "section": "verify-replication",
+          "artifacts": [
+            {
+              "sha256": "a3ee19800bb2fa5e579782fbb14802d534b0d4c599da4c2454d88bfba807fc16",
+              "description": "redis-cli -h 127.0.0.1 --user monitor --askpass INFO replication"
+            },
+            {
+              "sha256": "6409bdd047be627b65e1bb858eacb37fa4ccab6827a7b327935f3abb8aa0894b",
+              "description": "role:slave"
+            },
+            {
+              "sha256": "a3ee19800bb2fa5e579782fbb14802d534b0d4c599da4c2454d88bfba807fc16",
+              "description": "redis-cli -h 127.0.0.1 --user monitor --askpass INFO replication"
+            },
+            {
+              "sha256": "8c9c84dcadfd18f7b38cf1a839c4034138f4308d7586cb70e65ef40439ef704d",
+              "description": "role:master"
+            }
+          ]
+        },
+        {
+          "section": "replication-test",
+          "artifacts": [
+            {
+              "sha256": "43c685cda8e880f49ac95fd0c5d93350dc9c260467825579156b170d06a7b711",
+              "description": "redis-cli -h 127.0.0.1 -p 6379 --user admin --askpass"
+            },
+            {
+              "sha256": "64e07bb1cfb34f16adbb0ceb10556bd89ec130b80b2b0badecc356e8d791e218",
+              "description": "SET company \"MEET AJ\""
+            },
+            {
+              "sha256": "6e7f11e7663017250f579ea83ce0254398dc43fff7da48967fbc14edafe2d540",
+              "description": "OK"
+            },
+            {
+              "sha256": "43c685cda8e880f49ac95fd0c5d93350dc9c260467825579156b170d06a7b711",
+              "description": "redis-cli -h 127.0.0.1 -p 6379 --user admin --askpass"
+            },
+            {
+              "sha256": "8addcd18a359cd401b0e150989681aa2f4fd81ff38127eac44c78c2bca0f82bb",
+              "description": "GET company"
+            },
+            {
+              "sha256": "79ded6f9e9fdfd23a9811eeac0895a72e2f86251a86f5997809c2c5014c9b2c0",
+              "description": "\"MEET AJ\""
+            },
+            {
+              "sha256": "3be124b625dba920810757df760f836d8cc39cfd584c47b1f1e2218fa955490e",
+              "description": "SET cache:replica-write-probe \"blocked\" EX 60"
+            },
+            {
+              "sha256": "29b745c1783f1199121d567eca88cad239d5ce0c7b3b5d440ad93a2047724a3f",
+              "description": "READONLY You can't write against a read only replica."
+            },
+            {
+              "sha256": "7438f59a04dadaa9d3267b3b77b0a1a60c63144b4c8f5e4a0860c495e2b97379",
+              "description": "redis-cli --user admin --askpass DEL company"
+            }
+          ]
+        },
+        {
+          "section": "sentinel",
+          "artifacts": [
+            {
+              "sha256": "2e4fe059c40e027ccdcdd52af6ae53ce23bde6b0da760af987ce15eedb500cd0",
+              "description": "Application -- discovery --> Sentinel 1 / Sentinel 2 / Sentinel 3"
+            },
+            {
+              "sha256": "7c8850e98878149c32716e370733fcffc0b5df34fa8fe058b94971c70616ef4d",
+              "description": "# Template fragment: merge into each node-specific Sentinel configuration."
+            },
+            {
+              "sha256": "3b2c34063ddd9a1f65728e8edb19a2722a9a3a43e3479808e9bccc5ded4d7656",
+              "description": "# After provisioning a Sentinel observer user with these subcommands:"
+            }
+          ]
+        },
+        {
+          "section": "monitoring",
+          "artifacts": [
+            {
+              "sha256": "5e029e8c5e025003bd41c5e7f6079e6c139971d7da17790b3b5198de0db6759e",
+              "description": "redis-cli --user monitor --askpass INFO"
+            },
+            {
+              "sha256": "a3ab2c8568375e5964ed3da64b1ed6e5148513bd699c879eef4262bd59ed4af1",
+              "description": "Hit Rate  = delta(keyspace_hits) / (delta(keyspace_hits) + delta(keyspace_misses)) * 100"
+            }
+          ]
+        },
+        {
+          "section": "prometheus-grafana",
+          "artifacts": [
+            {
+              "sha256": "69422072265b8cbe9d3eac851b188b687851b62e95463ebfbd22c9267d584ec2",
+              "description": "# Merge with the existing Prometheus configuration."
+            },
+            {
+              "sha256": "2c437814f4b45a118331a0cd58db4aa4b880498ae4c58eec5156af4f686e7317",
+              "description": "# Run on each Redis node, with its own destination IP:"
+            },
+            {
+              "sha256": "c5fc25ae598b8919605fa21dc311e369ed45b57c701a4908d18bf33510501325",
+              "description": "# Commands per second (per scraped instance)"
+            }
+          ]
+        },
+        {
+          "section": "backup-restore",
+          "artifacts": [
+            {
+              "sha256": "67daf19ac80f7303e90673bc31c0e034fbe280f55f5126287683fee60006203f",
+              "description": "Redis Primary -> Redis Replica -> Completed RDB / Consistent AOF Backup"
+            },
+            {
+              "sha256": "3b62e4b75b4aa45b96b4978f799cd22fa7e3ec9718e74bd4744ab41d1d85a06b",
+              "description": "redis-cli --user monitor --askpass INFO replication"
+            }
+          ]
+        },
+        {
+          "section": "memory-management",
+          "artifacts": [
+            {
+              "sha256": "f327c05084c5b859bd486a786981d926e8b0d6d78e0710c404acf038066149d6",
+              "description": "maxmemory 4gb"
+            },
+            {
+              "sha256": "ef7bbf0dbeaff1985e31eb21b4d95c5d05f71eabe0ca7d97408ecb884e85c857",
+              "description": "sysctl vm.overcommit_memory net.core.somaxconn"
+            }
+          ]
+        },
+        {
+          "section": "troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "b56542c3a36da2ebeb3c91b3e499db9aa6915f817fc5c7ebb8c4d826c839a2ce",
+              "description": "systemctl status redis-server --no-pager"
+            },
+            {
+              "sha256": "4e0866565fa10d00b188ac21d750a99f14c9e01bd9444ed82a18ac1930426f77",
+              "description": "sudo ss -lntp | grep ':6379'"
+            },
+            {
+              "sha256": "b741152d4e15194aa9c106f4ea98cb07060d077c591e4a3b66141f461b6b6d28",
+              "description": "NOAUTH Authentication required."
+            },
+            {
+              "sha256": "fc30ad9a167b79426e82d6f20d77b4b322c6743f2972527d8809e9eaa20674b5",
+              "description": "redis-cli --user admin --askpass ACL WHOAMI"
+            },
+            {
+              "sha256": "995808c7c66da5588e07cdd6799ffe56c35b75657a38062e885106dde88c0a30",
+              "description": "redis-cli --user monitor --askpass INFO replication"
+            },
+            {
+              "sha256": "4461b67d5765c4e799b2d40b813a09f0cedbd30fbd92bd2dcc2c621c91078c5a",
+              "description": "redis-cli --user monitor --askpass INFO memory"
+            },
+            {
+              "sha256": "d10fd1c2b8cf27d17b1cf8b669302066098e1a1182cc18286ff430f1d7545db2",
+              "description": "redis-cli --user monitor --askpass SLOWLOG GET 20"
+            },
+            {
+              "sha256": "94e748050035e1f196d7b869400332defa6e860a14bd1b8679b567cdb538d921",
+              "description": "redis-cli --user monitor --askpass INFO persistence"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "set-static-ip-ubuntu-server-netplan": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "36758cb74b5d2aff50d9fb6d99e4a90c666de07ae3a3bd7424b725afbda1ac8e",
+              "description": "ip -br address"
+            },
+            {
+              "sha256": "f19db89f7ac58fa0904b5bc400d95e2564e5859399ae498c9afbc102136c7433",
+              "description": "sudo tee /etc/netplan/01-production.yaml >/dev/null <<'EOF'"
+            },
+            {
+              "sha256": "4375b858a5adceee67c321ea0e5da13ff7a59b1a797433eb233e4ab10effeeee",
+              "description": "ip -br address show ens160"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "d66e81827f1d76e44b0691315ae7a0f7b07f625c0651040a433b7f06b27ac31d",
+              "description": "sudo netplan --debug generate"
+            },
+            {
+              "sha256": "d0a02d753a09952c4442de343f2995e1db4730139a829bec2fa5452cebe27e96",
+              "description": "ip -br link show ens160"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-recovery",
+          "artifacts": [
+            {
+              "sha256": "17b0144675d8e734083170d61a7602aa1bb8cac45370c614d8bf1a7a01889450",
+              "description": "sudo mv /etc/netplan/01-production.yaml /root/01-production.yaml.failed"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": [
+        {
+          "id": "technical-enterprise-troubleshooting"
+        }
+      ]
+    },
+    "sql-server-automatic-backup-job": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "recovery-model",
+          "artifacts": [
+            {
+              "sha256": "10fc1740f878edf12f6c77c08895e8f0f94ed21d4c3b193b523c936c8857ff3e",
+              "description": "SELECT name,recovery_model_desc,log_reuse_wait_desc"
+            }
+          ]
+        },
+        {
+          "section": "backup-folders",
+          "artifacts": [
+            {
+              "sha256": "ae40351dc7ba0a6676fb4a8be572484af342e26f572bd98b3d5c21e5bd9f927a",
+              "description": "D:\\SQLBackup"
+            }
+          ]
+        },
+        {
+          "section": "configuration",
+          "artifacts": [
+            {
+              "sha256": "2efcbc4a506a70b5cb426a58ddaa26cc838393685c74a1886e5d7ae4f5310c55",
+              "description": "-- SQL Server 2019/2022 on Windows, Standard/Enterprise/Developer."
+            },
+            {
+              "sha256": "f03f7df993075a714665b74b1aad84e04dc80d9d6cd4dfef864274827a71d19e",
+              "description": "SELECT w.DatabaseName,w.Enabled,d.state_desc,d.recovery_model_desc"
+            },
+            {
+              "sha256": "5ef934d8d8e41a65f0e02407a760ec13e10a414cdb62bc6211d3d0745d850faa",
+              "description": "# Windows PowerShell 5.1. Provision folders without enabling xp_cmdshell."
+            },
+            {
+              "sha256": "11b4dd7da2ded27723a47eaaf051445059bcc1066fa33e0abcd8d84f80684b3e",
+              "description": "powershell.exe -NoProfile -NonInteractive -File \"C:\\DBA\\Prepare-SqlBackupFolders.ps1\" -ServerInstance \"localho"
+            }
+          ]
+        },
+        {
+          "section": "agent-jobs",
+          "artifacts": [
+            {
+              "sha256": "625eb4fb457a983cc5d301c5956641362c094b6dee56555ebd561fc4576db698",
+              "description": "-- Provision SQLBackupFiles CmdExec proxy first; see article prerequisites."
+            },
+            {
+              "sha256": "d66cbd47a730d05f9e60a5252917da44b1d5681f2f4bc20aaa46830be8078171",
+              "description": "-- Execute individually and wait for each job to finish before starting the next."
+            }
+          ]
+        },
+        {
+          "section": "cleanup",
+          "artifacts": [
+            {
+              "sha256": "da989ea7812b1042f928a94bb1fdb2adbda8f2f9c66445d62c1c41e9f2e10409",
+              "description": "# Windows PowerShell 5.1. Default is preview; -Delete authorizes actual cleanup."
+            },
+            {
+              "sha256": "0f92c8cf62baf67ffd0bc5d8cf3459f995c30cd01b75cc0410f8d766a9b28e88",
+              "description": "# Preview candidates; no deletion."
+            },
+            {
+              "sha256": "aae4a544392270e3f9f22c684280d4f937d7d55d46e131effa3e2f9493424398",
+              "description": "-- Save 04-cleanup.ps1 as C:\\DBA\\Cleanup-SqlBackups.ps1; preview before enabling."
+            }
+          ]
+        },
+        {
+          "section": "security",
+          "artifacts": [
+            {
+              "sha256": "c6f2ac8d77873f3a36f36df97218cb0bdd283da5b5b702599abedbcb2b88b3d8",
+              "description": "-- After provisioning and securely exporting the certificate/private key:"
+            }
+          ]
+        },
+        {
+          "section": "validation",
+          "artifacts": [
+            {
+              "sha256": "a402319dc84622e51429c2661e08bda6dff486bde5504ecbf5f22c2474491c93",
+              "description": "-- Run on the source instance. msdb timestamps use server local time;"
+            },
+            {
+              "sha256": "ed27238a84f30d711db3bfc58a2cf602b74658224f212770d5d8e1b33d4c5900",
+              "description": "RESTORE FILELISTONLY FROM DISK=N'D:\\RestoreLab\\DB-Jira_FULL.bak';"
+            },
+            {
+              "sha256": "9ebbf05cee20a527611dc48e48d3e581a588b83ced79268055615d363e51cad4",
+              "description": "IF DB_ID(N'DB_Jira_RestoreTest') IS NOT NULL"
+            }
+          ]
+        },
+        {
+          "section": "troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "fa599732e8cc099425388837e8aa57fcf5c68daba5b27462592df22fbb58e338",
+              "description": "SELECT name,state_desc,recovery_model_desc,log_reuse_wait_desc"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "truenas-zfs-enterprise": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "section-6",
+          "artifacts": [
+            {
+              "sha256": "6b4d897470eb82605fbad2e59c7edd4ae80937f3a9959a84f575e85dd16db12e",
+              "description": "tank/"
+            }
+          ]
+        },
+        {
+          "section": "section-8",
+          "artifacts": [
+            {
+              "sha256": "e1c5644860a9b31acdc133138422197da85b71abe0dc97b10d9e8baf4b1c937d",
+              "description": "Internet → Firewall → Core Switch"
+            }
+          ]
+        },
+        {
+          "section": "section-10",
+          "artifacts": [
+            {
+              "sha256": "7b40465a3959001f98a34d09894ad9ef15f8d9f920c4466f3c81112873706056",
+              "description": "https://<TRUENAS-IP>"
+            }
+          ]
+        },
+        {
+          "section": "section-11",
+          "artifacts": [
+            {
+              "sha256": "68b4d22e31d0b9a37f70dcb18ecd223d2ceb10161ccef3e75586b0423e04c74e",
+              "description": "Network → Interfaces"
+            },
+            {
+              "sha256": "ed855b0682e962fc958f0dc1230db64ac71f4f3cc0e663fc25dd0401c8d94995",
+              "description": "IPv4: 10.10.10.20/24"
+            }
+          ]
+        },
+        {
+          "section": "section-12",
+          "artifacts": [
+            {
+              "sha256": "aee37262ebc23ed721bed5819e53dfc9686642a48e338ae5ac6534f16627d4b8",
+              "description": "Storage → Pools → Create Pool"
+            }
+          ]
+        },
+        {
+          "section": "section-13",
+          "artifacts": [
+            {
+              "sha256": "c822d2db35552ad74e55ce87e8e9b3fb47dde00610c2522bd91a686c6183bd5f",
+              "description": "Datasets → Add Dataset"
+            }
+          ]
+        },
+        {
+          "section": "section-14",
+          "artifacts": [
+            {
+              "sha256": "e3b82c7425f3bd2a9332ca8c42e585268a0c0f6149ca79197f98bc7b52c4ac75",
+              "description": "Credentials → Local Users"
+            },
+            {
+              "sha256": "944fd496891241aacda7c539c9961f0fcb8e610f3bcd9d6d526f80960d06fdcb",
+              "description": "Credentials → Directory Services → Active Directory"
+            }
+          ]
+        },
+        {
+          "section": "section-15",
+          "artifacts": [
+            {
+              "sha256": "aaae3dbd7fec599485e7775c1116e4fde4047565b1b0815b125ca37f98abe718",
+              "description": "Name: projects"
+            },
+            {
+              "sha256": "325cf37b5941cfe3e14213ebac9b85a384da44ee90becc7d87c55c952894d3fb",
+              "description": "Shares → Windows Shares (SMB) → Add"
+            }
+          ]
+        },
+        {
+          "section": "section-16",
+          "artifacts": [
+            {
+              "sha256": "509265371a9a70abdb1f1015ccf47dcae70059ed26b246a7b7210d60088dc10b",
+              "description": "\\\\truenas01.example.local\\Projects"
+            },
+            {
+              "sha256": "a981b4ec728c6224f7b269d11c8bba06b22008ab51a0955202323485e2c24d49",
+              "description": "New-PSDrive -Name P -PSProvider FileSystem `"
+            }
+          ]
+        },
+        {
+          "section": "section-17",
+          "artifacts": [
+            {
+              "sha256": "281c9f32d9eaa72706dc79b19839d925856d90edc72f3b086e9f0b4aa94bebe6",
+              "description": "Shares → Unix Shares (NFS) → Add"
+            },
+            {
+              "sha256": "dfd0044a8794c812e356dd22a751a4826e27e184a52eb9d8f28b27ba04720e59",
+              "description": "sudo mkdir -p /mnt/truenas"
+            }
+          ]
+        },
+        {
+          "section": "section-19",
+          "artifacts": [
+            {
+              "sha256": "0bd711b7c7699bdbb0adbe075dce566d143a284180f015723fe5e2ba6f44a167",
+              "description": "Data Protection → Periodic Snapshot Tasks → Add"
+            },
+            {
+              "sha256": "7c9d4136a9f5b73551cbcd5877170dc9bde2f5fbce26e2b3be45f41b11e26dc8",
+              "description": "Hourly: 24 hours"
+            }
+          ]
+        },
+        {
+          "section": "section-20",
+          "artifacts": [
+            {
+              "sha256": "331c57090d0b284fda8331ca4cd5b38b436f3a218b42c959325a669c8c609e56",
+              "description": "Data Protection → Replication Tasks → Add"
+            }
+          ]
+        },
+        {
+          "section": "section-22",
+          "artifacts": [
+            {
+              "sha256": "ebff4a354eb1c74b8281f78340b62988828ab3d0ff1a3c092b7013f53c34c46b",
+              "description": "System Settings → General → Manage Configuration → Download File"
+            }
+          ]
+        },
+        {
+          "section": "section-26",
+          "artifacts": [
+            {
+              "sha256": "7fc41d81a06ffaa622f8e8ba516a0c1a1d7617ca97d36165283b9efea1add088",
+              "description": "TrueNAS-01: 8×12 TB, RAIDZ2, 64 GB ECC, 2×10 GbE, Boot SSD Mirror"
+            },
+            {
+              "sha256": "aa8d05e1c96d8a141d48b24638c0b1b2e6c4ceef4b26330489f9d061b122e941",
+              "description": "tank/shares/finance"
+            }
+          ]
+        },
+        {
+          "section": "section-21",
+          "artifacts": [
+            {
+              "sha256": "b5c43a1a116f052bc1a7421e73ecc470fe8169f00cf10cced3fd71dcc02e0c11",
+              "description": "Storage → Disks → S.M.A.R.T. Tests"
+            },
+            {
+              "sha256": "5fc14c757ff46b9342fab871952b9bdcf233b753c916ac8e50e4afeb56efae77",
+              "description": "Data Protection → Scrub Tasks → Add"
+            }
+          ]
+        },
+        {
+          "section": "section-24",
+          "artifacts": [
+            {
+              "sha256": "3ab4148849ade439203bfce821aea4dc0eea0f6304e129a72b2aa1d00fe14ea8",
+              "description": "Dashboard"
+            }
+          ]
+        },
+        {
+          "section": "section-27",
+          "artifacts": [
+            {
+              "sha256": "7f52e4c0ff7649a6a9e95b01509a81b4e01c2ade9ece5aed6223f80f6eb8d5b2",
+              "description": "zpool status"
+            },
+            {
+              "sha256": "ba3445d8fabff2cb5ec2e2b9460a3961eeaea351caa1ed8c9a2659efc3c04905",
+              "description": "Test-NetConnection truenas01 -Port 445"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "ubiquiti-unifi-wireless-mesh-network": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "architecture",
+          "artifacts": [
+            {
+              "sha256": "8f967bed7e8e1b1b5e99056b31b119fa936afb82ee7126c34b33c20887c32e9a",
+              "description": "UniFi Network Application: manages all three APs"
+            }
+          ]
+        },
+        {
+          "section": "enable-meshing",
+          "artifacts": [
+            {
+              "sha256": "45fbc8f5ea157f877522737da531f5b0c89f69fbcb4d1937c4e0ffe5797f3be8",
+              "description": "Settings → WiFi → Wireless Meshing → Enable"
+            }
+          ]
+        },
+        {
+          "section": "mesh-parent",
+          "artifacts": [
+            {
+              "sha256": "82db2a89d901c36df9c0d07ed30bb9a3e0c63a4ac6c37fdb4d4a3106ad69b162",
+              "description": "UniFi Devices → AP-PARENT → Settings → Mesh Parent → Enable"
+            }
+          ]
+        },
+        {
+          "section": "mesh-connect",
+          "artifacts": [
+            {
+              "sha256": "5abbd3e1388f699cfa70925a49263c03dbe0f1ac42e651d31756077ad4e74109",
+              "description": "UniFi Devices → AP-MESH-01 → Settings → Mesh Connect → Enable"
+            }
+          ]
+        },
+        {
+          "section": "performance",
+          "artifacts": [
+            {
+              "sha256": "5219af057080e94811e362119e1afa2fd63c64353fa9ce250a67fa8f50e4cdda",
+              "description": "# On the wired test server (iperf3 installed):"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "ubuntu-date-time-settings": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "d0350702d5e9e12746bfe4d514e0ed28e31cd9747fe19d8c912c5034078e19b2",
+              "description": "timedatectl status"
+            },
+            {
+              "sha256": "b5cd39b484f7cd469aedd6faba0e33a8b81055333f153a2380c2c5d2e226f3e3",
+              "description": "server 10.20.30.53 iburst"
+            },
+            {
+              "sha256": "b694fd127f297642fda461a1305f568f38c8a0e00952f570e1457195b27efa1e",
+              "description": "sudo chronyd -p -f /etc/chrony/chrony.conf"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "3c40dae1c687d1df621d4fd2ce773d13b0a0b97b09260700fdf68e089f8e6ddc",
+              "description": "chronyc sources -v"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": [
+        {
+          "id": "technical-enterprise-monitoring"
+        }
+      ]
+    },
+    "vmware-esxi-8-installation-basic-configuration": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "ea224b9c18859e71067f3ccb220c31696b8d26e6b0f604375939327294a2870f",
+              "description": "vmware -v"
+            },
+            {
+              "sha256": "a2116b50104e4751697562b8852337f14fdee7e98f36e827fde328b4ff9d50ec",
+              "description": "esxcli system ntp get"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "0865e36d4d16ff6fcfdce64ed07cb8720f4d53e8db2d46d70efd2d2cdf2a61c5",
+              "description": "esxcli storage core path list"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-recovery",
+          "artifacts": [
+            {
+              "sha256": "74206f70b0b39c4a2b62f3c1c30a2f2c02044cb45ae9788c33aa775f5b49cad5",
+              "description": "vim-cmd hostsvc/firmware/sync_config"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": [
+        {
+          "id": "technical-enterprise-installation"
+        },
+        {
+          "id": "technical-enterprise-sources"
+        }
+      ]
+    },
+    "vsphere-standard-switch-vs-distributed-switch": {
+      "kind": "conceptual-with-operations",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "9819c26468273dd0760fadf221ca2c3bbb5662fe394afaa427c027d070449330",
+              "description": "esxcli network vswitch standard list"
+            },
+            {
+              "sha256": "7472844354eb4599f4bd6f7f9d737ee88678b2d840eee814b17686367ccb23c0",
+              "description": "vmkping -I vmk0 -c 3 10.20.30.1"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": [
+        {
+          "id": "technical-enterprise-recovery"
+        }
+      ]
+    },
+    "windows-cmd-common-network-commands": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "5381bf261ff4ff72e3d10351197bd40f99956d8eabd88807decf1178dfb54832",
+              "description": "ipconfig"
+            },
+            {
+              "sha256": "701568a82617bc20f488bd8bc62f9fca030d5410bd729ca4397f2a3a5257c599",
+              "description": "Ethernet adapter Ethernet:"
+            },
+            {
+              "sha256": "59cb534e02a16fd3d21d1ba5d34ee15e665d7a955751171249563d1192aa33e4",
+              "description": "ipconfig /all"
+            },
+            {
+              "sha256": "5c260ab17e5bb012e0374b2b76bfe594340d13dcd496e0155114f275bebd6a41",
+              "description": "Host Name . . . . . . . . . . . . : BRANCH-PC01"
+            },
+            {
+              "sha256": "fad48f89232e5763c26bb5d9aadb0827b4f3c3379639a14a73dc468bdcb51d1d",
+              "description": "ipconfig /displaydns"
+            },
+            {
+              "sha256": "4c995495cfea456a4de184afd9bad90c18163f9f67395796c6bd257bd85cc035",
+              "description": "Successfully flushed the DNS Resolver Cache."
+            },
+            {
+              "sha256": "84fad8b87d5a01d00a0e5b5dfc895d2aa0764ec38bbd9b266c80b06c8776893c",
+              "description": "ipconfig /release \"Ethernet\""
+            },
+            {
+              "sha256": "ab9402639ffaa1317aa2d450111809cd82035c3168a3badc15daa4680d2e737d",
+              "description": "Ethernet adapter Ethernet:"
+            },
+            {
+              "sha256": "6cc66920f119b008371ffe53ae9976cbe38d0e750dd5ada001e702a739231f54",
+              "description": "ipconfig /renew \"Ethernet\""
+            },
+            {
+              "sha256": "a55d32172df54729d2bacb800d3b0b55358c6e12bc787b605bb48da16fb1ad8b",
+              "description": "IPv4 Address . . . . . . . . . . : 192.0.2.10"
+            },
+            {
+              "sha256": "71bd464ce03d364c7fd27dea7e10ee7ced66c6d7e74b728bdaf0938951c0019d",
+              "description": "ping /n 4 /w 1000 192.0.2.1"
+            },
+            {
+              "sha256": "9cfbf31709ffb34261944ab42c46970032af8b11fd79915c64f3dcdcbf631e5f",
+              "description": "Reply from 198.51.100.20: bytes=32 time=12ms TTL=124"
+            },
+            {
+              "sha256": "61b6ffa645aa766f93b9eb1a050ff0b263b5bc2dd515c7cd5c4d8d65d2a366a3",
+              "description": "tracert /d /h 15 /w 1000 198.51.100.20"
+            },
+            {
+              "sha256": "c7f7d136ece77a589a30bc393463160aa1539bf9a25bb7f38e6a588f533b036d",
+              "description": "1     1 ms     1 ms     1 ms  192.0.2.1"
+            },
+            {
+              "sha256": "b26a9e5d7408014a364da61a0f8f23abcb8f3dd366457858247b34a21cac902d",
+              "description": "pathping /n /q 20 /p 250 198.51.100.20"
+            },
+            {
+              "sha256": "35ac2456a57ef90db041012034bbe5c03549c2ad368a6db357617b06c1718dd5",
+              "description": "Hop  RTT   Lost/Sent = Pct   Address"
+            },
+            {
+              "sha256": "d4ceabd4cd5f3ed33438cd5671afedcab32620baafcf14ce47741ecf833b442f",
+              "description": "nslookup -type=A files01.corp.example.com 192.0.2.53"
+            },
+            {
+              "sha256": "e83aa9a405c52ef29cd88111c164d391e11c171cd2fd6eca249a73287bb49c3d",
+              "description": "Server:  dns01.corp.example.com"
+            },
+            {
+              "sha256": "b1508c9ca8826e8828b0ced9c7e60fa97f1f85361cd66aaa42eacf13cb4b723b",
+              "description": "netstat -ano"
+            },
+            {
+              "sha256": "8a46b86667596f166a035b94fc6921c4fe7704d7c9fb820de792cf302e257260",
+              "description": "Proto  Local Address    Foreign Address    State        PID"
+            },
+            {
+              "sha256": "caa3fa5ded2e680da39df76536e906dacba24cacc58e0000f2afe334a997c8d9",
+              "description": "ping /n 1 192.0.2.1"
+            },
+            {
+              "sha256": "b245c4524370717a16cc61992352b4aea21cc25dcfd8a0fc7721b0b0a303530d",
+              "description": "Interface: 192.0.2.10 --- 0xc"
+            },
+            {
+              "sha256": "8eac262b58a65987dfed15eeda818be9e00af39dfa666693705f55eb6d5ee7fe",
+              "description": "route print -4"
+            },
+            {
+              "sha256": "eb7bc3575f708bbd038611eae58fca739039784fc9f6f7b70483127664e9eac1",
+              "description": "Interface List"
+            },
+            {
+              "sha256": "407db690d769ba942fd26d15a68ba0911f68862bae42ad72dfdd2b22de64181d",
+              "description": "route add 203.0.113.0 mask 255.255.255.0 192.0.2.1 metric 20 if 12"
+            },
+            {
+              "sha256": "c79a4f748fb9d3b7d944cc1037977d40d3a3e56da9bbd6f6aa81f447b2cb7fc5",
+              "description": "OK!"
+            },
+            {
+              "sha256": "98c1cf3d2e06487f83b5d33511e682343c5cab79c6806f00e05281013f84cd4c",
+              "description": "route delete 203.0.113.0 mask 255.255.255.0 192.0.2.1 if 12"
+            },
+            {
+              "sha256": "c79a4f748fb9d3b7d944cc1037977d40d3a3e56da9bbd6f6aa81f447b2cb7fc5",
+              "description": "OK!"
+            },
+            {
+              "sha256": "24f61d7e548ed15c90720464d94b32c66805f412607ba2d7f807315b64b058ab",
+              "description": "getmac /v /fo list"
+            },
+            {
+              "sha256": "91044be0d4a7f64dd124f626d623beab656c39fd74cef4f0e0aeff970309a649",
+              "description": "Connection Name: Ethernet"
+            },
+            {
+              "sha256": "7063dece7cccf374d9fa1ee30ff23300fa42477e064e69be7bb6d01c0cfff682",
+              "description": "hostname"
+            },
+            {
+              "sha256": "b48454fec2fa38e09b0c5a314a6a46d1283ce877be736f1df9c20ecd0799fafa",
+              "description": "BRANCH-PC01"
+            },
+            {
+              "sha256": "5ce1ec791b4008b6c7f0eafc9c665cb884a33d3a7bffe6c5dd2408652c141757",
+              "description": "netsh interface ipv4 show config"
+            },
+            {
+              "sha256": "f31e9ad59b0c654548403d9cfaa91c9bc5eb2ef4129bd20a3a59cc25af9db62e",
+              "description": "Configuration for interface \"Ethernet\""
+            },
+            {
+              "sha256": "e1b5dd722fda6b7868c40b6561413e1dca6b3856acfd2f71f55fdfd5bcaf8135",
+              "description": "net use"
+            },
+            {
+              "sha256": "39e3b8ba6f3348ce2cec29fecf346a1a1cc7a12e584c4a11ad935ae8962a52c5",
+              "description": "Status  Local  Remote"
+            },
+            {
+              "sha256": "2ca1332dd40ee1f2b959dd922351e978622ab6aecf81e375a8ef605de04d3eb7",
+              "description": "net view \\\\files01.corp.example.com"
+            },
+            {
+              "sha256": "25c60a5f6c1d39b5f61e167f2c75b6efcfeb0738aa7fe7213b9ca3fe7d72190b",
+              "description": "Share name   Type   Remark"
+            },
+            {
+              "sha256": "011b0842d55c970b5f81950afb828d24aa290f009c45b70d850d3f62777dcec2",
+              "description": "$Target = 'files01.corp.example.com'"
+            },
+            {
+              "sha256": "589c24a4d2b49847d62eeba05e70f2cfd4ddd9d0f7d015fbb4aa16cafeda16cc",
+              "description": "ComputerName     : files01.corp.example.com"
+            },
+            {
+              "sha256": "dc27da612f60d998531807d62360cf37a015f8d755944ea5fc77caa9d5c43b85",
+              "description": "$Target = 'files01.corp.example.com'"
+            }
+          ]
+        },
+        {
+          "section": "enterprise-troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "65d2dcf6d5c96c87d60475be49fa9a0ce15b5df120451e8500cc04e3eaa4b04e",
+              "description": "Get-NetTCPConnection -State Listen | Select-Object LocalAddress,LocalPort,OwningProcess"
+            },
+            {
+              "sha256": "ecde5c91fe43f35321a23ee0e61531b7c0bc6e1d819e9d09290b04904b51d0be",
+              "description": "nslookup -type=A files01.corp.example.com 192.0.2.53"
+            },
+            {
+              "sha256": "b010a9e1451d8ccaa68e35709cbd3c2c98b5489e244e3bbde838ea5f802186b8",
+              "description": "ipconfig"
+            },
+            {
+              "sha256": "1f424cd980220dc32102f33579cc7e42f5fe543a648f35223ea0162d69308c72",
+              "description": "route print -4"
+            },
+            {
+              "sha256": "1530bff9be5d0e92afcf49197cd68c6aca32a8661e11b8f2077130a68520b074",
+              "description": "net view \\\\files01.corp.example.com"
+            },
+            {
+              "sha256": "eb7015a082bb4108a2fe9807dcc37ce08b748cf5214f95df50bcb8d6aceb53f9",
+              "description": "ping /n 20 /w 1000 198.51.100.20"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": [
+        {
+          "id": "technical-enterprise-intro"
+        },
+        {
+          "id": "technical-enterprise-prerequisites"
+        },
+        {
+          "id": "technical-enterprise-installation"
+        },
+        {
+          "id": "technical-enterprise-troubleshooting"
+        },
+        {
+          "id": "technical-enterprise-sources"
+        }
+      ]
+    },
+    "windows-hardware-info-cmd-vs-dxdiag": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "9fa6cc4264b791877229351918d94822f739ff94bd440db7e37f507455aead40",
+              "description": "$ErrorActionPreference = 'Stop'"
+            },
+            {
+              "sha256": "85a6aa4307e379c27b46ff3bccdbae11320857e4a9506163524e81ad0adb596d",
+              "description": "$DxReport = Join-Path $env:TEMP ('DxDiag-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '.txt')"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "windows-password-reset-secure-access-recovery": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "enterprise-installation",
+          "artifacts": [
+            {
+              "sha256": "0866e9ff8abbea12fbe932f45402eb8eed1495f5123b1fa85a1b1a074c4dcd9d",
+              "description": "Import-Module ActiveDirectory -ErrorAction Stop"
+            },
+            {
+              "sha256": "eba356a04ceb520e58abe0c2986499eee6658b826ee9c14fb93f0b3dfbdb2ac1",
+              "description": "$LocalAccountName = 'local.ops'"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    },
+    "zabbix-server-linux-windows-agents-backup": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "prerequisites",
+          "artifacts": [
+            {
+              "sha256": "edd8595a41da775182836eaad99b56f4959b80c7d867095fa8b1eca013d7f73e",
+              "description": "sudo apt update"
+            },
+            {
+              "sha256": "b4cb04b2c5d083303470c4114b05c2dbf32055ba111c71a38390679053706773",
+              "description": "# Confirm actual SSH port, VPN access and console recovery before enabling UFW."
+            }
+          ]
+        },
+        {
+          "section": "architecture",
+          "artifacts": [
+            {
+              "sha256": "75d2ace46436f90cec132030d83f8a9ecbb73757e6048d74956e2b86a7f4ec43",
+              "description": "Management VPN 192.0.2.0/24 -> HTTPS 443 -> zabbix.example.com 192.0.2.10"
+            }
+          ]
+        },
+        {
+          "section": "configuration",
+          "artifacts": [
+            {
+              "sha256": "b34df0b467e6238b67b1af64f4165cb31e295c7eed9e3d08951f2988c812262a",
+              "description": "cd /tmp"
+            },
+            {
+              "sha256": "89001200f19a610dc3de47abe7c65ff1eacf6146d5b358417e96260182652c64",
+              "description": "sudo -u postgres psql -X -v ON_ERROR_STOP=1 <<'SQL'"
+            },
+            {
+              "sha256": "ddbe08f3e1aed1dfaf6bdd8d120d3d416c11696e0b79d52f0372d6367922e81a",
+              "description": "# postgresql.conf"
+            },
+            {
+              "sha256": "3211c315d40f18fa4466a00606cfdd0207b01ceb84c475325a8e73e288c570a8",
+              "description": "sudo pg_ctlcluster 16 main restart"
+            },
+            {
+              "sha256": "94346049cda775b4459b8eb5481cb69b09ae8f1112626d2e55eb99eb7e3a735c",
+              "description": "# Merge into package file; avoid duplicate active parameters."
+            },
+            {
+              "sha256": "b0aa20cb1f01415385e61264f3e0df9d1fb046c7e73494d38f0b497e85decde9",
+              "description": "sudoedit /etc/zabbix/nginx.conf"
+            }
+          ]
+        },
+        {
+          "section": "linux-agent",
+          "artifacts": [
+            {
+              "sha256": "ffc8630c720e69d199693e2f43fe225ea15eff55038d5b817909d0b38c4c5659",
+              "description": "sudo apt update"
+            },
+            {
+              "sha256": "9dcb3a1efdadb64a3547bed71b60c73fec9e1691f090709590436e77bbe836bc",
+              "description": "# Ubuntu 24.04, Zabbix Agent 2 7.0 LTS. Replace documentation IP/name/identity."
+            },
+            {
+              "sha256": "527869c9a97bcf99c584fd23f09d2436eda625b72e7c57c001aaec27689c1a23",
+              "description": "sudo -u zabbix zabbix_agent2 -c /etc/zabbix/zabbix_agent2.conf -t 'system.uptime'"
+            }
+          ]
+        },
+        {
+          "section": "windows-agent",
+          "artifacts": [
+            {
+              "sha256": "05acc6a6a3aa21ec4459cfe06deabc8f44fce26da8a58142b1bf01ab10936380",
+              "description": "# Windows Server 2022/2025 x64, Agent 2 7.0 LTS; default MSI destination."
+            },
+            {
+              "sha256": "10362d00c32fc6f0dbc8cc3092d3d5495726d9adc4e0cdb996df73f606a2ef43",
+              "description": "# Elevated PowerShell; approved values come from the deployment record."
+            },
+            {
+              "sha256": "5827d12fb0b4c6f695fee6f351b2a6fb550bc1bdcad7230b12cb07f21dc4e575",
+              "description": "#requires -RunAsAdministrator"
+            },
+            {
+              "sha256": "fb36f1bc298ff84bc13216b3797ba9b03466143e230ded721fef994dec5eab32",
+              "description": "Get-Service -Name 'Zabbix Agent 2'"
+            }
+          ]
+        },
+        {
+          "section": "security",
+          "artifacts": [
+            {
+              "sha256": "2a5f1776de97c956408aa0864710f9f284f9ed8583f845b8be098bfdb654525b",
+              "description": "# Inside existing /etc/zabbix/nginx.conf server block:"
+            },
+            {
+              "sha256": "cd42244df84e5f869693011efde64dfc53baa20838c0a418d4010da2c4d89dad",
+              "description": "sudo install -d -o root -g root -m 0700 /etc/ssl/zabbix"
+            },
+            {
+              "sha256": "033fac33fd61a60d9f624c3ad21641b79e3aa5d86566146dc18ed424da29ddd4",
+              "description": "# Replace PSK settings for a reviewed certificate deployment:"
+            }
+          ]
+        },
+        {
+          "section": "monitoring",
+          "artifacts": [
+            {
+              "sha256": "768cab491a27aa01380f567eb3c89eb81e57fa557be97a16b6bd03b1084107c4",
+              "description": "# Data collection -> Hosts -> Triggers"
+            }
+          ]
+        },
+        {
+          "section": "database-backup",
+          "artifacts": [
+            {
+              "sha256": "cbd015948f82c0692bccd973fa5093c3ec30f47b18260807a920e2b447c60b17",
+              "description": "# Protected mounted /backup volume, on the database host."
+            },
+            {
+              "sha256": "570abef9a18988d6967ed59dbbfed18222ee518a6c5ef0da99a1d22c6f76a49b",
+              "description": "# DESIGN starting point for a separately reviewed pgBackRest deployment:"
+            }
+          ]
+        },
+        {
+          "section": "automated-backup",
+          "artifacts": [
+            {
+              "sha256": "1b47266a181d040f6e8fc7539a6c92bb384b7c7ec22d83e8b5a73bfce62d8311",
+              "description": "#!/usr/bin/env bash"
+            },
+            {
+              "sha256": "71fd96523d7becfa0691706351532c7a5f42460ce4d4de5e186a56dbf578c60c",
+              "description": "# Install as /etc/zabbix-backup/backup.env, root:root 0600."
+            },
+            {
+              "sha256": "c391ceab1105717a9312f14502268ba29683e4c5d5f15124e89689d3c3bfa77a",
+              "description": "[Unit]"
+            },
+            {
+              "sha256": "c34223cc1b00efe2f0868179736498a3bcf62dfefd45e931307f5b36b1b13d86",
+              "description": "[Unit]"
+            },
+            {
+              "sha256": "4b7659320398e64382438b240bb2089a0207d505b5c353f9472ec25e6b198532",
+              "description": "[Unit]"
+            },
+            {
+              "sha256": "30fe235b1f3d7f728064b5fce1c578edda8227dbc75e4e9deb1120dcb36d295c",
+              "description": "#!/usr/bin/env bash"
+            },
+            {
+              "sha256": "edf9e0633bd007f5e309e7dbc3451ced433bf394f2b7737dbdd2ba2bc30f7e49",
+              "description": "sudo apt install -y restic mailutils"
+            },
+            {
+              "sha256": "e1b5044c6f010b523a6d97a91f8925d0c04f0b2d93e13151bc256ff0ff6f710b",
+              "description": "# Protected root session; use the SAME non-secret settings as backup.env."
+            }
+          ]
+        },
+        {
+          "section": "recovery",
+          "artifacts": [
+            {
+              "sha256": "c8c41bb3af456b546c5c4348444e01e2a5328a8eadea3e0c2f04284b3c97bd26",
+              "description": "# ISOLATED REPLACEMENT ONLY; adapt selected-set to retrieved snapshot."
+            },
+            {
+              "sha256": "ba219270c54052d94135f44e165bf0ca94e0b86aac371e51245a883b4a04c12a",
+              "description": "# OVERWRITES REPLACEMENT CONFIG: review staged files and destination host first."
+            },
+            {
+              "sha256": "1401afa65461cd1e6f529fcfe8dd79b55073b9f8c3434490c3b2b140fcce014c",
+              "description": "# 7. Start required services only after configuration review."
+            },
+            {
+              "sha256": "825819eeb29100c9605b3ec9bf039d0e09fb816f3f64e2e5afb3b9c88007f98e",
+              "description": "# DESTRUCTIVE, intentionally commented: confirmed replacement host only."
+            }
+          ]
+        },
+        {
+          "section": "troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "526480104cb185a25bdfca110157859060ba477d6ec333ca1e85aa4563ec4065",
+              "description": "sudo systemctl status zabbix-server --no-pager"
+            },
+            {
+              "sha256": "ab0f1e068bbbc905e56fe5ff1cefdd1b7ab79f0fe37f1bbaf14c97b5400e58a2",
+              "description": "pg_lsclusters"
+            },
+            {
+              "sha256": "ed033af18c4040cdd1d7cfc859d58cdfb72bfae56e7d76a8ae8ccb099c072e41",
+              "description": "sudo systemctl status zabbix-agent2 --no-pager"
+            },
+            {
+              "sha256": "a6073a87e10f3f3852c40c55c1ad5081dc2beedbb8aedf500df71990f37342e8",
+              "description": "sudo grep '^Hostname=' /etc/zabbix/zabbix_agent2.conf"
+            },
+            {
+              "sha256": "ecc4b0da94badbc52b61f0145762206add7c950fff5d3e4eb18493c5dfd8f1c4",
+              "description": "sudo grep -E '^(ServerActive|Hostname|TLSConnect)=' /etc/zabbix/zabbix_agent2.conf"
+            },
+            {
+              "sha256": "66cfba7760050dd335074a319c623e35285662d5c5d75b3b1898793112d8ba95",
+              "description": "# On agent:"
+            },
+            {
+              "sha256": "654fb65219d68c3d0d54f544ab4acbefde64c0c2018f3e0522bc4614c321c0d2",
+              "description": "sudo ss -lntp | grep ':10051'"
+            },
+            {
+              "sha256": "ee74459a8ddeceb6420c17ab4ad61284e7356a116785b177422d3dd636dde7a7",
+              "description": "sudo grep -E '^(TLSConnect|TLSAccept|TLSPSKIdentity|TLSPSKFile)=' /etc/zabbix/zabbix_agent2.conf"
+            },
+            {
+              "sha256": "76ae2350228d8d89fee997f73c26467165a1ed2cb5bf08a3270aea83e895a683",
+              "description": "sudo -u zabbix zabbix_agent2 -c /etc/zabbix/zabbix_agent2.conf -t 'custom.service.nginx'"
+            },
+            {
+              "sha256": "78491ccc8b341a85bd93dc267ef14b2d916a337b9edff64a2c957913021a6cec",
+              "description": "sudo tail -n 100 /var/log/zabbix/zabbix_server.log"
+            },
+            {
+              "sha256": "b93970eb9c6652863a0de02856eae14d581cd5b3f436d9365037cd22bb692063",
+              "description": "df -hT"
+            },
+            {
+              "sha256": "2969f1344330672894845cc88ff37f77737d40b564a7c182cc899a3763cd8056",
+              "description": "sudo systemctl show zabbix-backup.service -p Result -p ExecMainStatus"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
+    }
+  }
+}

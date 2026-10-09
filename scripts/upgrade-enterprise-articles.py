@@ -1,11 +1,18 @@
 """Build curated Persian runbooks into the legacy HTML shell. No infrastructure commands run."""
 from pathlib import Path
+if __name__ == '__main__':
+    # The archive converter below is historical. Replacing maintained bodies from
+    # its 25-row inventory discarded commands and is no longer a supported build.
+    from article_technical_content import build as build_reviewed_content
+    build_reviewed_content()
+    raise SystemExit(0)
 import hashlib
 import html
 import json
 import re
 import zipfile
 from article_comparisons import render_sections
+from article_structure import normalize_html
 
 ROOT = Path(__file__).resolve().parents[1]
 DOC = ROOT / 'docs/enterprise-articles'
@@ -94,6 +101,7 @@ def build():
                     return ''
                 updated = re.sub(r'<li class="article-nav-item">.*?</li>',nav_replace,updated,flags=re.S)
             updated = updated.replace('\r\n','\n').replace('\r','')
+            updated = normalize_html(updated, file.stem)
             file.write_text(updated,encoding='utf-8',newline='')
             actual_title = html.unescape(re.search(r'<title>(.*?)</title>',updated,re.S)[1])
             actual_description = html.unescape(re.search(r'<meta\b[^>]*name="description"[^>]*content="([^"]*)"',updated,re.S)[1])

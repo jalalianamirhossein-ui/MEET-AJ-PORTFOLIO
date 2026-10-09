@@ -346,20 +346,20 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#port-groups-and-uplinks"
-              ><span
-                data-fa="Port Group، Uplink و VMkernel"
-                data-en="Port Groups, Uplinks and VMkernel"
-                >Port Groups, Uplinks and VMkernel</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#switch-selection"
               ><span
                 data-fa="چه زمانی vSS یا vDS انتخاب کنیم؟"
                 data-en="When to Choose vSS or vDS"
                 >When to Choose vSS or vDS</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="شرایط لازم فقط برای مهاجرت"
+                data-en="Requirements for migration"
+                >Requirements for migration</span
               ></a
             >
           </li>
@@ -373,11 +373,11 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-prerequisites"
+            <a href="#port-groups-and-uplinks"
               ><span
-                data-fa="شرایط لازم فقط برای مهاجرت"
-                data-en="Requirements for migration"
-                >Requirements for migration</span
+                data-fa="Port Group، Uplink و VMkernel"
+                data-en="Port Groups, Uplinks and VMkernel"
+                >Port Groups, Uplinks and VMkernel</span
               ></a
             >
           </li>
@@ -783,25 +783,6 @@
                       both switch types. Validate that design separately.
                     </p>
                   </section>
-                  <section id="port-groups-and-uplinks" class="article-section">
-                    <h2
-                      data-fa="Port Group، Uplink و VMkernel"
-                      data-en="Port Groups, Uplinks and VMkernel"
-                    >
-                      Port Groups, Uplinks and VMkernel
-                    </h2>
-                    <p
-                      data-fa="Port Group سیاست اتصال VMها یا VMkernel را مشخص می‌کند. Uplink اتصال Switch مجازی به NIC فیزیکی است. vmnic نام NIC فیزیکی و vmk نام VMkernel Adapter است. نام vmk0 به‌تنهایی نوع سرویس را تعیین نمی‌کند. برچسب Management، vMotion یا Storage را در Configuration همان Host بررسی کنید."
-                      data-en="Port groups define connection policies for VMs or VMkernel adapters. Uplinks connect virtual switches to physical NICs. ESXi names physical NICs vmnic and VMkernel adapters vmk. The name vmk0 alone does not identify a service. Inspect the actual Management, vMotion or storage configuration."
-                    >
-                      Port groups define connection policies for VMs or VMkernel
-                      adapters. Uplinks connect virtual switches to physical
-                      NICs. ESXi names physical NICs vmnic and VMkernel adapters
-                      vmk. The name vmk0 alone does not identify a service.
-                      Inspect the actual Management, vMotion or storage
-                      configuration.
-                    </p>
-                  </section>
                   <section id="switch-selection" class="article-section">
                     <h2
                       data-fa="چه زمانی vSS یا vDS انتخاب کنیم؟"
@@ -829,39 +810,6 @@
                       migration procedure below to a canary host. Migration
                       follows the architecture decision. It is not a
                       prerequisite for using VLANs or vMotion.
-                    </p>
-                  </section>
-                  <section id="enterprise-architecture" class="article-section">
-                    <h2
-                      data-fa="در قطعی vCenter چه چیزی باقی می‌ماند؟"
-                      data-en="What remains during a vCenter outage?"
-                    >
-                      What remains during a vCenter outage?
-                    </h2>
-                    <p
-                      data-fa="Forwarding موجود vDS روی Host ادامه دارد، اما تغییر Config و بعضی Recoveryها به vCenter وابسته‌اند. قبل از مهاجرت، روش دسترسی Console و برگشت VMkernel را بدون اتکا به شبکه در حال تغییر آماده کنید."
-                      data-en="Existing vDS forwarding remains on the host, while configuration changes and some recovery operations depend on vCenter. Before migration, prepare console access and VMkernel recovery independent of the changing network."
-                    >
-                      Existing vDS forwarding remains on the host, while
-                      configuration changes and some recovery operations depend
-                      on vCenter. Before migration, prepare console access and
-                      VMkernel recovery independent of the changing network.
-                    </p>
-                    <h3
-                      id="enterprise-scenario"
-                      data-fa="مثال: Cluster با Policy متفاوت"
-                      data-en="Example: inconsistent cluster policies"
-                    >
-                      Example: inconsistent cluster policies
-                    </h3>
-                    <p
-                      data-fa="در شش Host با VLAN مشترک ولی Policy متفاوت، vDS برای مدیریت یکسان بررسی می‌شود. Host مستقل با VLAN و Teaming ساده ممکن است روی vSS بماند. تعداد Host به‌تنهایی علت مهاجرت نیست."
-                      data-en="For six hosts sharing VLANs but differing in policy, evaluate vDS for consistent management. A standalone host with simple VLAN/teaming needs might remain on vSS. Host count alone does not justify migration."
-                    >
-                      For six hosts sharing VLANs but differing in policy,
-                      evaluate vDS for consistent management. A standalone host
-                      with simple VLAN/teaming needs might remain on vSS. Host
-                      count alone does not justify migration.
                     </p>
                   </section>
                   <section
@@ -913,6 +861,58 @@
                       NIOC/LACP against the actual release and contract. VSS
                       also supports VLANs and teaming, so those basic needs do
                       not mandate migration.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="در قطعی vCenter چه چیزی باقی می‌ماند؟"
+                      data-en="What remains during a vCenter outage?"
+                    >
+                      What remains during a vCenter outage?
+                    </h2>
+                    <p
+                      data-fa="Forwarding موجود vDS روی Host ادامه دارد، اما تغییر Config و بعضی Recoveryها به vCenter وابسته‌اند. قبل از مهاجرت، روش دسترسی Console و برگشت VMkernel را بدون اتکا به شبکه در حال تغییر آماده کنید."
+                      data-en="Existing vDS forwarding remains on the host, while configuration changes and some recovery operations depend on vCenter. Before migration, prepare console access and VMkernel recovery independent of the changing network."
+                    >
+                      Existing vDS forwarding remains on the host, while
+                      configuration changes and some recovery operations depend
+                      on vCenter. Before migration, prepare console access and
+                      VMkernel recovery independent of the changing network.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: Cluster با Policy متفاوت"
+                      data-en="Example: inconsistent cluster policies"
+                    >
+                      Example: inconsistent cluster policies
+                    </h3>
+                    <p
+                      data-fa="در شش Host با VLAN مشترک ولی Policy متفاوت، vDS برای مدیریت یکسان بررسی می‌شود. Host مستقل با VLAN و Teaming ساده ممکن است روی vSS بماند. تعداد Host به‌تنهایی علت مهاجرت نیست."
+                      data-en="For six hosts sharing VLANs but differing in policy, evaluate vDS for consistent management. A standalone host with simple VLAN/teaming needs might remain on vSS. Host count alone does not justify migration."
+                    >
+                      For six hosts sharing VLANs but differing in policy,
+                      evaluate vDS for consistent management. A standalone host
+                      with simple VLAN/teaming needs might remain on vSS. Host
+                      count alone does not justify migration.
+                    </p>
+                  </section>
+                  <section id="port-groups-and-uplinks" class="article-section">
+                    <h2
+                      data-fa="Port Group، Uplink و VMkernel"
+                      data-en="Port Groups, Uplinks and VMkernel"
+                    >
+                      Port Groups, Uplinks and VMkernel
+                    </h2>
+                    <p
+                      data-fa="Port Group سیاست اتصال VMها یا VMkernel را مشخص می‌کند. Uplink اتصال Switch مجازی به NIC فیزیکی است. vmnic نام NIC فیزیکی و vmk نام VMkernel Adapter است. نام vmk0 به‌تنهایی نوع سرویس را تعیین نمی‌کند. برچسب Management، vMotion یا Storage را در Configuration همان Host بررسی کنید."
+                      data-en="Port groups define connection policies for VMs or VMkernel adapters. Uplinks connect virtual switches to physical NICs. ESXi names physical NICs vmnic and VMkernel adapters vmk. The name vmk0 alone does not identify a service. Inspect the actual Management, vMotion or storage configuration."
+                    >
+                      Port groups define connection policies for VMs or VMkernel
+                      adapters. Uplinks connect virtual switches to physical
+                      NICs. ESXi names physical NICs vmnic and VMkernel adapters
+                      vmk. The name vmk0 alone does not identify a service.
+                      Inspect the actual Management, vMotion or storage
+                      configuration.
                     </p>
                   </section>
                   <section id="enterprise-installation" class="article-section">
@@ -1064,7 +1064,7 @@ esxcli network nic list</code></pre>
                       uplink, then proceed to another host. LACP alone is not
                       application HA.
                     </p>
-                  </section>
+                  <div id="technical-enterprise-recovery"><h3 data-en="A scoped management recovery path" data-fa="مسیر بازیابی محدود شبکهٔ مدیریت">A scoped management recovery path</h3><p data-en="For management on vDS in a supported stateful ESXi deployment, use the out-of-band DCUI: Network Restore Options → Restore vDS, enter the recorded correct VLAN/uplink/blocked properties and apply. This creates a local recovery port for management; it is not a general switch reset. For vSS, review Configure Management Network and the recorded adapter/VLAN/IP instead. Test gateway/DNS and reconnect vCenter before changing a second host. Avoid Restore Network Settings unless a separately planned full reset is required; it can remove workload/storage networking. NSX and stateless deployments require their own recovery procedure." data-fa="اگر مدیریت روی vDS در استقرار stateful پشتیبانی‌شدهٔ ESXi است، از DCUI خارج از شبکه به Network Restore Options → Restore vDS بروید، VLAN و uplink و blocked ثبت‌شدهٔ صحیح را وارد و اعمال کنید. این کار پورت محلی بازیابی مدیریت می‌سازد و reset کلی سوئیچ نیست. برای vSS، Configure Management Network و رابط، VLAN و IP ثبت‌شده را بررسی کنید. پیش از تغییر میزبان دوم، دروازه و DNS و اتصال vCenter را آزمایش کنید. Restore Network Settings را مگر در برنامهٔ مستقل reset کامل اجرا نکنید؛ ممکن است شبکهٔ workload و storage حذف شود. NSX و استقرار stateless روند بازیابی مستقل دارند.">For management on vDS in a supported stateful ESXi deployment, use the out-of-band DCUI: Network Restore Options → Restore vDS, enter the recorded correct VLAN/uplink/blocked properties and apply. This creates a local recovery port for management; it is not a general switch reset. For vSS, review Configure Management Network and the recorded adapter/VLAN/IP instead. Test gateway/DNS and reconnect vCenter before changing a second host. Avoid Restore Network Settings unless a separately planned full reset is required; it can remove workload/storage networking. NSX and stateless deployments require their own recovery procedure.</p><p><a href="https://knowledge.broadcom.com/external/article/311145" rel="noopener" data-en="Broadcom DCUI vDS recovery" data-fa="مستند رسمی: Broadcom DCUI vDS recovery">Broadcom DCUI vDS recovery</a></p></div></section>
                   <section id="faq" class="article-section">
                     <h2
                       data-fa="پرسش‌های متداول"

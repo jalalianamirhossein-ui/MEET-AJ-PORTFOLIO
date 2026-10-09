@@ -1,10 +1,17 @@
 """Pair reviewed prose with shared code; preserve historical sources and audit before writing."""
 from pathlib import Path
+if __name__ == '__main__':
+    # Maintained sources already contain complete paired prose. The old positional
+    # paragraph translator cannot safely rewrite enriched or newer articles.
+    from article_technical_content import build as build_reviewed_content
+    build_reviewed_content()
+    raise SystemExit(0)
 from html import escape, unescape
 import hashlib
 import json
 import re
 import time
+from article_structure import normalize_html
 
 ROOT=Path(__file__).resolve().parents[1]
 DOC=ROOT/'docs/enterprise-articles'
@@ -171,6 +178,7 @@ for f in files:
     # Trim shell indentation outside executable blocks without changing scripts.
     s=''.join(block if block.startswith('<pre') else re.sub(r'[ \t]+(?=\n)', '', block) for block in re.split(r'(<pre\b.*?</pre>)',s,flags=re.S))
     assert re.findall(r'<pre\b.*?</pre>',s,re.S)==codes_before,f.name+' code drift'
+    s = normalize_html(s, f.stem)
     # Windows file watchers can briefly hold a just-rewritten source file.
     for attempt in range(5):
         try:

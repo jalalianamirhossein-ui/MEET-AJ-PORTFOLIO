@@ -310,6 +310,15 @@
             >
           </li>
           <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="Interface و مالک فایل شبکه"
+                data-en="Interface and network-file ownership"
+                >Interface and network-file ownership</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
             <a href="#enterprise-architecture"
               ><span
                 data-fa="YAML، Renderer و Resolver"
@@ -319,11 +328,11 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-prerequisites"
+            <a href="#enterprise-security"
               ><span
-                data-fa="Interface و مالک فایل شبکه"
-                data-en="Interface and network-file ownership"
-                >Interface and network-file ownership</span
+                data-fa="فایل محدود و مسیر IPv6"
+                data-en="Restricted files and IPv6 paths"
+                >Restricted files and IPv6 paths</span
               ></a
             >
           </li>
@@ -351,15 +360,6 @@
                 data-fa="YAML سالم اما شبکه خراب"
                 data-en="Valid YAML with broken networking"
                 >Valid YAML with broken networking</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#enterprise-security"
-              ><span
-                data-fa="فایل محدود و مسیر IPv6"
-                data-en="Restricted files and IPv6 paths"
-                >Restricted files and IPv6 paths</span
               ></a
             >
           </li>
@@ -497,39 +497,6 @@
                       are part of the procedure.
                     </p>
                   </section>
-                  <section id="enterprise-architecture" class="article-section">
-                    <h2
-                      data-fa="YAML، Renderer و Resolver"
-                      data-en="YAML, renderer and resolver"
-                    >
-                      YAML, renderer and resolver
-                    </h2>
-                    <p
-                      data-fa="Netplan از YAML برای Renderer انتخاب‌شده تنظیم می‌سازد. در این نمونه networkd شبکه و resolved نام‌گذاری را مدیریت می‌کنند. نوشتن فایل تازه تنظیم قبلی Interface را لزوماً حذف نمی‌کند. نتیجه Merge را با netplan get ببینید."
-                      data-en="Netplan generates settings for the selected renderer. Here networkd manages interfaces and resolved handles DNS. A new file does not necessarily replace prior interface settings. Inspect the merged result with netplan get."
-                    >
-                      Netplan generates settings for the selected renderer. Here
-                      networkd manages interfaces and resolved handles DNS. A
-                      new file does not necessarily replace prior interface
-                      settings. Inspect the merged result with netplan get.
-                    </p>
-                    <h3
-                      id="enterprise-scenario"
-                      data-fa="مثال: VM در VLAN 30"
-                      data-en="Example: a VM in VLAN 30"
-                    >
-                      Example: a VM in VLAN 30
-                    </h3>
-                    <p
-                      data-fa="VM از DHCP به 10.20.30.10/24 با Gateway برابر 10.20.30.1 منتقل می‌شود. آدرس باید خارج DHCP Pool یا به‌درستی رزرو شده باشد. VLAN و ACL مسیر مدیریت را پیش از تغییر تأیید کنید."
-                      data-en="The VM moves from DHCP to 10.20.30.10/24 via 10.20.30.1. Exclude the address from DHCP allocation or reserve it correctly. Validate VLANs and management ACLs before changing it."
-                    >
-                      The VM moves from DHCP to 10.20.30.10/24 via 10.20.30.1.
-                      Exclude the address from DHCP allocation or reserve it
-                      correctly. Validate VLANs and management ACLs before
-                      changing it.
-                    </p>
-                  </section>
                   <section
                     id="enterprise-prerequisites"
                     class="article-section"
@@ -578,6 +545,56 @@
                       deprecated. Desktops might use NetworkManager. Try has
                       rollback limitations around virtual links. After timeout,
                       verify actual state and on-disk files.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="YAML، Renderer و Resolver"
+                      data-en="YAML, renderer and resolver"
+                    >
+                      YAML, renderer and resolver
+                    </h2>
+                    <p
+                      data-fa="Netplan از YAML برای Renderer انتخاب‌شده تنظیم می‌سازد. در این نمونه networkd شبکه و resolved نام‌گذاری را مدیریت می‌کنند. نوشتن فایل تازه تنظیم قبلی Interface را لزوماً حذف نمی‌کند. نتیجه Merge را با netplan get ببینید."
+                      data-en="Netplan generates settings for the selected renderer. Here networkd manages interfaces and resolved handles DNS. A new file does not necessarily replace prior interface settings. Inspect the merged result with netplan get."
+                    >
+                      Netplan generates settings for the selected renderer. Here
+                      networkd manages interfaces and resolved handles DNS. A
+                      new file does not necessarily replace prior interface
+                      settings. Inspect the merged result with netplan get.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: VM در VLAN 30"
+                      data-en="Example: a VM in VLAN 30"
+                    >
+                      Example: a VM in VLAN 30
+                    </h3>
+                    <p
+                      data-fa="VM از DHCP به 10.20.30.10/24 با Gateway برابر 10.20.30.1 منتقل می‌شود. آدرس باید خارج DHCP Pool یا به‌درستی رزرو شده باشد. VLAN و ACL مسیر مدیریت را پیش از تغییر تأیید کنید."
+                      data-en="The VM moves from DHCP to 10.20.30.10/24 via 10.20.30.1. Exclude the address from DHCP allocation or reserve it correctly. Validate VLANs and management ACLs before changing it."
+                    >
+                      The VM moves from DHCP to 10.20.30.10/24 via 10.20.30.1.
+                      Exclude the address from DHCP allocation or reserve it
+                      correctly. Validate VLANs and management ACLs before
+                      changing it.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="فایل محدود و مسیر IPv6"
+                      data-en="Restricted files and IPv6 paths"
+                    >
+                      Restricted files and IPv6 paths
+                    </h2>
+                    <p
+                      data-fa="YAML را با Mode 600 نگه دارید، چون بعضی تنظیمات شبکه Secret دارند. Static IP جای Firewall نیست. مسیر DNS و مدیریت و IPv6 را هم بررسی کنید. پاسخ Ping فقط همان ICMP را ثابت می‌کند."
+                      data-en="Use mode 600 because some network YAML contains secrets. Static IP does not replace a firewall. Check DNS, management and IPv6 paths too. A ping response establishes only that ICMP path."
+                    >
+                      Use mode 600 because some network YAML contains secrets.
+                      Static IP does not replace a firewall. Check DNS,
+                      management and IPv6 paths too. A ping response establishes
+                      only that ICMP path.
                     </p>
                   </section>
                   <section id="enterprise-installation" class="article-section">
@@ -705,24 +722,10 @@ resolvectl status ens160</code></pre>
                       for resolver and port-53 ACL checks. Settings reverting
                       after boot require file-ownership investigation.
                     </p>
-                  </section>
-                  <section id="enterprise-security" class="article-section">
-                    <h2
-                      data-fa="فایل محدود و مسیر IPv6"
-                      data-en="Restricted files and IPv6 paths"
-                    >
-                      Restricted files and IPv6 paths
-                    </h2>
-                    <p
-                      data-fa="YAML را با Mode 600 نگه دارید، چون بعضی تنظیمات شبکه Secret دارند. Static IP جای Firewall نیست. مسیر DNS و مدیریت و IPv6 را هم بررسی کنید. پاسخ Ping فقط همان ICMP را ثابت می‌کند."
-                      data-en="Use mode 600 because some network YAML contains secrets. Static IP does not replace a firewall. Check DNS, management and IPv6 paths too. A ping response establishes only that ICMP path."
-                    >
-                      Use mode 600 because some network YAML contains secrets.
-                      Static IP does not replace a firewall. Check DNS,
-                      management and IPv6 paths too. A ping response establishes
-                      only that ICMP path.
-                    </p>
-                  </section>
+                  <div id="technical-enterprise-troubleshooting"><h3 data-en="Verify link neighbor and address ownership" data-fa="بررسی همسایهٔ لینک و مالکیت نشانی">Verify link neighbor and address ownership</h3><pre dir="ltr"><code class="language-bash">ip -br link show ens160
+ip neigh show dev ens160
+networkctl status ens160
+sudo netplan get</code></pre><p data-en="Replace ens160 with the recorded interface. UP is link state, not proof of a correct VLAN. A gateway neighbor persistently FAILED/INCOMPLETE after traffic suggests unanswered neighbor resolution; inspect mask/VLAN/switch path before changing DNS. Compare netplan get with the on-disk authoritative YAML and renderer output. A static address working until reboot suggests another generator still owns the configuration." data-fa="ens160 را با رابط ثبت‌شده جایگزین کنید. UP وضعیت لینک است، نه صحت VLAN. همسایهٔ دروازه که پس از ترافیک دائماً FAILED یا INCOMPLETE است، به resolve بی‌پاسخ اشاره دارد؛ پیش از تغییر DNS، ماسک، VLAN و سوئیچ را بررسی کنید. netplan get را با YAML منبع و خروجی renderer مقایسه کنید. IP ثابت سالم تا reboot نشانهٔ احتمالی مالکیت تنظیمات توسط تولیدکنندهٔ دیگر است.">Replace ens160 with the recorded interface. UP is link state, not proof of a correct VLAN. A gateway neighbor persistently FAILED/INCOMPLETE after traffic suggests unanswered neighbor resolution; inspect mask/VLAN/switch path before changing DNS. Compare netplan get with the on-disk authoritative YAML and renderer output. A static address working until reboot suggests another generator still owns the configuration.</p></div></section>
                   <section id="enterprise-recovery" class="article-section">
                     <h2
                       data-fa="برگشت YAML از Console"

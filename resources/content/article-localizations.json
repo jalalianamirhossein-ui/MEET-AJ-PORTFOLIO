@@ -1,0 +1,244 @@
+{
+  "truenas-zfs-enterprise": {
+    "en": {
+      "title": "TrueNAS Enterprise NAS with ZFS",
+      "meta_title": "TrueNAS Enterprise NAS with ZFS | Meet AJ",
+      "description": "Build a TrueNAS storage server with ZFS pools, datasets, SMB, NFS, iSCSI, snapshots, replication and a tested backup plan.",
+      "keywords": [
+        "TrueNAS",
+        "ZFS",
+        "NAS سازمانی",
+        "RAIDZ",
+        "Dataset",
+        "Pool",
+        "VDEV",
+        "SMB",
+        "NFS",
+        "iSCSI",
+        "Snapshot",
+        "Replication",
+        "Backup"
+      ],
+      "faq": [
+        [
+          "Do RAIDZ and snapshots replace backups?",
+          "No. RAIDZ tolerates disk failures and snapshots return data to a point in time. Total pool failure, malicious deletion and site incidents require independent off-site copies."
+        ],
+        [
+          "What is the difference between a dataset and a ZVOL?",
+          "A dataset is a filesystem with independent quotas, ACLs and snapshots, used for SMB or NFS shares. A ZVOL is a block device, typically used behind an iSCSI extent."
+        ],
+        [
+          "Are mirrors or RAIDZ2 better for virtual machines?",
+          "The choice depends on IOPS, latency, capacity and workload. Mirror VDEVs usually suit random VM workloads; RAIDZ2 provides capacity and tolerance of two disk failures per VDEV. Test the final choice with a real workload."
+        ],
+        [
+          "Why should boot disks be separate from pool disks?",
+          "TrueNAS installation erases the selected disk. Separating boot and data reduces selection mistakes and role conflicts. Verify the destination disk model and serial number before installation."
+        ],
+        [
+          "How do we restrict SMB access?",
+          "Create a separate dataset, assign ACLs to required groups and restrict network access to the service. Test read, write and deletion using both authorized and unauthorized users."
+        ],
+        [
+          "Does deduplication always save more space?",
+          "No. Results depend on actual duplicate data and system resources. Memory and performance costs can exceed savings. Do not enable it without measurements and tests."
+        ],
+        [
+          "Is successful replication sufficient to prove recoverability?",
+          "No. Check the job and destination snapshots, then actually restore a file or dataset. Retain destination retention settings and encryption keys separately from the primary server."
+        ],
+        [
+          "What should we do when a pool becomes degraded?",
+          "Check the dashboard and zpool status, identify the failed disk by serial number, and confirm backup health. Replace it through a supported TrueNAS UI procedure and monitor resilver progress."
+        ]
+      ]
+    },
+    "fa": {
+      "title": "راه‌اندازی TrueNAS از صفر؛ ساخت NAS سازمانی با ZFS",
+      "meta_title": "راه‌اندازی TrueNAS از صفر؛ ساخت NAS سازمانی با ZFS",
+      "description": "راهنمای Production-Ready راه‌اندازی TrueNAS با ZFS، ساخت Pool و Dataset، SMB، NFS، iSCSI، Snapshot، Replication، امنیت و Backup سه-دو-یک.",
+      "keywords": [
+        "TrueNAS",
+        "ZFS",
+        "NAS سازمانی",
+        "RAIDZ",
+        "Dataset",
+        "Pool",
+        "VDEV",
+        "SMB",
+        "NFS",
+        "iSCSI",
+        "Snapshot",
+        "Replication",
+        "Backup"
+      ],
+      "faq": [
+        [
+          "آیا RAIDZ و Snapshot جای نسخهٔ پشتیبان را می‌گیرند؟",
+          "خیر. RAIDZ برای تحمل خرابی دیسک و Snapshot برای بازگشت به یک زمان مشخص است. برای خرابی کل Pool، حذف مخرب و حادثهٔ سایت، نسخهٔ مستقل و خارج از سایت لازم است."
+        ],
+        [
+          "تفاوت Dataset و ZVOL چیست؟",
+          "Dataset یک فایل‌سیستم با سهمیه، ACL و Snapshot مستقل است و برای اشتراک SMB یا NFS استفاده می‌شود. ZVOL یک دستگاه بلوکی است و معمولاً پشت Extent در iSCSI قرار می‌گیرد."
+        ],
+        [
+          "برای ماشین‌های مجازی Mirror مناسب‌تر است یا RAIDZ2؟",
+          "انتخاب به IOPS، تأخیر، ظرفیت و الگوی بار بستگی دارد. Mirror VDEVها معمولاً برای بار تصادفی ماشین‌های مجازی مناسب‌اند؛ RAIDZ2 ظرفیت و تحمل خرابی دو دیسک در هر VDEV را ارائه می‌کند. انتخاب نهایی را با بار واقعی آزمایش کنید."
+        ],
+        [
+          "چرا دیسک Boot باید از دیسک‌های Pool جدا باشد؟",
+          "نصب TrueNAS دیسک انتخاب‌شده را پاک می‌کند. جداسازی Boot از داده‌ها خطر انتخاب اشتباه و تداخل نقش دیسک‌ها را کم می‌کند. قبل از نصب، مدل و شمارهٔ سریال دیسک مقصد را بررسی کنید."
+        ],
+        [
+          "چگونه دسترسی به SMB را محدود کنیم؟",
+          "Dataset مستقل بسازید، ACL را به گروه‌های موردنیاز بدهید و دسترسی شبکه به سرویس را محدود کنید. با یک کاربر مجاز و یک کاربر غیرمجاز، خواندن، نوشتن و حذف را آزمایش کنید."
+        ],
+        [
+          "آیا فعال کردن Deduplication همیشه فضای بیشتری آزاد می‌کند؟",
+          "خیر. نتیجه به تکرار واقعی داده‌ها و منابع سیستم بستگی دارد و ممکن است هزینهٔ حافظه و کارایی از صرفه‌جویی بیشتر باشد. بدون اندازه‌گیری و آزمایش، آن را فعال نکنید."
+        ],
+        [
+          "موفق بودن Replication برای اطمینان از بازیابی کافی است؟",
+          "خیر. علاوه بر بررسی Job و Snapshotهای مقصد، بازیابی فایل یا Dataset را عملاً آزمایش کنید. Retention مقصد و کلیدهای رمزنگاری را جدا از سرور اصلی نگهداری کنید."
+        ],
+        [
+          "هنگام Degraded شدن Pool چه کاری انجام دهیم؟",
+          "از Dashboard و zpool status وضعیت را بررسی کنید، دیسک معیوب را با شمارهٔ سریال شناسایی و سلامت Backup را تأیید کنید. تعویض را از روش پشتیبانی‌شدهٔ رابط TrueNAS انجام دهید و پیشرفت Resilver را پایش کنید."
+        ]
+      ]
+    }
+  },
+  "fortigate-sd-wan-load-balancing-failover": {
+    "en": {
+      "title": "FortiGate SD-WAN Load Balancing and Failover",
+      "meta_title": "FortiGate SD-WAN Load Balancing and Failover | Meet AJ",
+      "description": "Practical FortiGate dual-WAN configuration with Performance SLA, source-destination hashing, CLI and GUI steps, security and troubleshooting.",
+      "keywords": [
+        "FortiGate Load Balancing",
+        "FortiGate SD-WAN",
+        "FortiGate Failover",
+        "FortiGate Performance SLA",
+        "FortiGate Dual WAN",
+        "FortiGate WAN Load Balancing",
+        "SD-WAN Load Balancing",
+        "FortiOS SD-WAN"
+      ],
+      "faq": [
+        [
+          "Can FortiGate use two Internet links simultaneously?",
+          "Yes. SD-WAN with a load-balancing rule lets different connections use both eligible WANs. Sensitive traffic can use dedicated rules."
+        ],
+        [
+          "Are the two Internet speeds added together?",
+          "Many independent connections can use aggregate capacity from both links; an ordinary session does not get their combined speed. Practical limits depend on load, destinations, quality, NAT and inspection capacity."
+        ],
+        [
+          "Can one download use both WANs simultaneously?",
+          "Not one normal TCP session. Multi-connection downloads may use several WANs with some methods; source-destination hashing usually keeps the same IP pair on one WAN."
+        ],
+        [
+          "How do source-IP and source-destination-IP methods differ?",
+          "Source-IP maps a client's destinations to one path. Source-destination maps each pair separately, allowing one client to use different WANs for different destinations."
+        ],
+        [
+          "What happens to sessions if the primary WAN fails?",
+          "New connections use a healthy path. Existing connections may fail, retry or reconnect; changed public SNAT addresses prevent a promise of uninterrupted TCP migration."
+        ],
+        [
+          "How does Performance SLA differ from a simple ping?",
+          "Simple ping usually checks immediate reachability. SLA adds continuous metric measurement, thresholds and WAN-selection integration. Health checks can use ping or another service-appropriate protocol."
+        ],
+        [
+          "Which method suits two links with different speeds?",
+          "For 200/100 Mbps, roughly 2:1 session weights can be a starting point, but implicit weighting and explicit SLA rules differ. For general persistence, combine hashing with steering/QoS; for capacity-based distribution, test a method compatible with the rule and release."
+        ],
+        [
+          "Is ECMP or SD-WAN better?",
+          "ECMP suits simple multipath routing. SD-WAN provides fuller policy tools when quality, applications, fallback and monitoring matter. SD-WAN still relies on valid routes and routing components; the concepts are related."
+        ],
+        [
+          "Does SLA failure always remove the default route?",
+          "No. Alive/dead differs from quality pass/fail. An alive, slow path may retain its route while a rule sends new traffic through another WAN."
+        ],
+        [
+          "What if both WANs fall outside SLA?",
+          "If both remain alive, this strategy's general rule may use both to preserve connectivity. Design and test fail-closed or other requirements separately."
+        ],
+        [
+          "Do two health-check probes mean simultaneous testing and majority voting?",
+          "No. This server model uses the first server, then the second when the first is unavailable. Independent destination monitoring needs separate health checks and clear rule logic."
+        ],
+        [
+          "Is session-based the same as packet-based load balancing?",
+          "No. Distributing new sessions does not split every packet of one TCP flow between ISPs. Ordinary session packets need compatible paths and state."
+        ]
+      ]
+    },
+    "fa": {
+      "title": "لود بالانس و Failover در FortiGate با SD-WAN و SLA",
+      "meta_title": "لود بالانس و Failover در FortiGate با SD-WAN و SLA",
+      "description": "آموزش عملی Load Balancing و Failover اینترنت در FortiGate با SD-WAN، Performance SLA، تنظیمات CLI و GUI، توزیع Source-Destination و عیب‌یابی Dual WAN.",
+      "keywords": [
+        "FortiGate Load Balancing",
+        "FortiGate SD-WAN",
+        "FortiGate Failover",
+        "FortiGate Performance SLA",
+        "FortiGate Dual WAN",
+        "FortiGate WAN Load Balancing",
+        "SD-WAN Load Balancing",
+        "FortiOS SD-WAN"
+      ],
+      "faq": [
+        [
+          "آیا FortiGate می‌تواند دو اینترنت را همزمان استفاده کند؟",
+          "بله. با SD-WAN و Rule دارای Load Balancing، اتصال‌های مختلف می‌توانند از هر دو WAN واجد شرایط استفاده کنند. برای ترافیک حساس می‌توان Rule اختصاصی داشت."
+        ],
+        [
+          "آیا سرعت دو اینترنت با هم جمع می‌شود؟",
+          "ظرفیت تجمعی برای تعداد زیادی اتصال مستقل می‌تواند از هر دو لینک استفاده کند، اما سرعت یک Session معمولی مجموع دو لینک نیست. سقف عملی به بار، مقصد، کیفیت، NAT و توان Inspection بستگی دارد."
+        ],
+        [
+          "آیا یک Download می‌تواند همزمان از دو WAN استفاده کند؟",
+          "یک TCP Session عادی خیر. دانلود چنداتصالی ممکن است در بعضی روش‌ها چند WAN را مصرف کند؛ در Source-Destination Hash، اتصال‌های همان زوج IP معمولاً روی یک WAN قرار می‌گیرند."
+        ],
+        [
+          "Source IP و Source-Destination IP چه تفاوتی دارند؟",
+          "در Source IP، همه مقصدهای یک Client به یک مسیر نگاشت می‌شوند. در Source-Destination، هر زوج مبدأ/مقصد نگاشت جدا دارد؛ یک Client می‌تواند برای مقصدهای مختلف WAN متفاوت استفاده کند."
+        ],
+        [
+          "اگر WAN اصلی قطع شود چه اتفاقی برای Sessionها می‌افتد؟",
+          "اتصال‌های جدید به مسیر سالم هدایت می‌شوند. اتصال‌های موجود ممکن است ادامه ندهند، Retry شوند یا نیاز به برقراری مجدد داشته باشند؛ تغییر IP عمومی SNAT مانع وعده جابه‌جایی بی‌وقفه TCP است."
+        ],
+        [
+          "Performance SLA چه تفاوتی با Ping ساده دارد؟",
+          "Ping ساده معمولاً برای بررسی لحظه‌ای Reachability استفاده می‌شود. SLA اندازه‌گیری پیوسته Metricها، Threshold و ارتباط نتیجه با انتخاب WAN را اضافه می‌کند. Health Check می‌تواند از Ping یا پروتکل دیگری متناسب با سرویس استفاده کند."
+        ],
+        [
+          "برای دو لینک با سرعت متفاوت چه روشی بهتر است؟",
+          "برای 200/100 Mbps، وزن Session حدود ۲:۱ می‌تواند نقطه شروع باشد، اما Weighted Implicit و SLA Explicit الگوریتم یکسانی ندارند. برای حفظ Persistence عمومی، Hash همراه Steering/QoS؛ برای توزیع مبتنی بر ظرفیت، روش سازگار با Rule و نسخه را پس از آزمون انتخاب کنید."
+        ],
+        [
+          "ECMP بهتر است یا SD-WAN؟",
+          "ECMP برای Routing چندمسیره ساده مناسب است. وقتی کیفیت، برنامه، Fallback و Monitoring موردنیاز است، SD-WAN ابزار سیاست‌گذاری کامل‌تری فراهم می‌کند. SD-WAN نیز از Routeهای معتبر و اجزای Routing استفاده می‌کند؛ این‌ها دو مفهوم کاملاً بی‌ارتباط نیستند."
+        ],
+        [
+          "آیا خرابی SLA همیشه باعث حذف Default Route می‌شود؟",
+          "خیر. Alive/Dead با Pass/Fail کیفیت متفاوت است. یک مسیر Alive و کند ممکن است Route داشته باشد ولی Rule ترافیک جدید را به WAN دیگر ببرد."
+        ],
+        [
+          "اگر هر دو WAN از SLA خارج شوند چه می‌شود؟",
+          "اگر هر دو هنوز Alive باشند، Rule عمومی این Strategy ممکن است برای حفظ Connectivity از هر دو استفاده کند. نیاز به Fail-closed یا رفتار دیگر باید جداگانه طراحی و تست شود."
+        ],
+        [
+          "آیا دو Probe در یک Health Check یعنی بررسی همزمان و رأی اکثریت؟",
+          "خیر. در مدل Serverهای این مثال، FortiOS ابتدا Server اول و پس از unavailable شدن، Server دوم را استفاده می‌کند. پایش مستقل چند مقصد به Health Checkهای مستقل و منطق Rule روشن نیاز دارد."
+        ],
+        [
+          "آیا Session Based همان Packet-based Load Balancing است؟",
+          "خیر. توزیع Sessionهای جدید، تقسیم تک‌تک Packetهای یک TCP Flow بین دو ISP نیست. Packetهای یک Session معمولی باید مسیر و وضعیت سازگار داشته باشند."
+        ]
+      ]
+    }
+  }
+}

@@ -711,9 +711,13 @@ html = f'''<!doctype html>
 </article></main></body></html>
 '''
 SOURCE.mkdir(parents=True, exist_ok=True)
+import sys
+sys.path.insert(0, str(ROOT / 'scripts'))
+from article_structure import normalize_html, normalize_markdown
+html = normalize_html(html, SLUG)
 (ROOT / 'resources/legacy/articles' / f'{SLUG}.html').write_text(html, encoding='utf-8')
 for locale, content in md.items():
-    (SOURCE / f'article.{locale}.md').write_text('\n'.join(content), encoding='utf-8')
+    (SOURCE / f'article.{locale}.md').write_text(normalize_markdown('\n'.join(content), SLUG), encoding='utf-8')
 (SOURCE / 'metadata.json').write_text(json.dumps({'slug': SLUG, 'reviewed_at': '2026-10-09', 'tomcat_version': '11.0.26', 'java_major': 21, 'example_os': 'Ubuntu Server 24.04 LTS', 'localizations': localizations}, ensure_ascii=False, indent=2), encoding='utf-8')
 downloads = ROOT / 'public/downloads' / SLUG
 downloads.mkdir(parents=True, exist_ok=True)

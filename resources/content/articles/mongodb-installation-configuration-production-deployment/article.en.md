@@ -1,6 +1,6 @@
 # MongoDB Installation, Configuration & Production Deployment Guide
 
-A deployment runbook for SysAdmins, DevOps, Backend and Infrastructure Engineers. Reviewed on 7 October 2026. The official current stable branch is 9.0; its release notes list 9.0.2 as released and 9.0.3 as upcoming. Install the latest signed patch actually available in your selected official repository; an upcoming release is not an installation target.
+A deployment runbook for SysAdmins, DevOps, Backend and Infrastructure Engineers. The official current stable branch is 9.0; its release notes list 9.0.2 as released and 9.0.3 as upcoming. Install the latest signed patch actually available in your selected official repository; an upcoming release is not an installation target.
 
 [Official stable release index](https://www.mongodb.com/docs/manual/release-notes/)
 
@@ -26,37 +26,7 @@ SQL systems commonly use tables, rows and joins; MongoDB encourages document mod
 
 [Databases and collections](https://www.mongodb.com/docs/manual/core/databases-and-collections/)
 
-## 2. Architecture Overview
-
-![MongoDB application, driver, TCP 27017 authentication and BSON document architecture](/assets/img/articles/content/mongodb-architecture.png)
-
-```text
-Application
-     |
-MongoDB Client / Driver
-     |
-MongoDB Server :27017
-     |
-Database
- +-- Collections
-     +-- Documents
-
-Production:
-Application
-     |
-Replica-aware MongoDB Driver / Connection Pool
-     |
-Replica Set: rs0
- +-----------+-----------+-----------+
- | Primary   | Secondary | Secondary |
- +-----------+-----------+-----------+
-```
-
-The driver discovers all members and routes operations according to read preference and topology. A generic HTTP or round-robin load balancer is not needed in front of a replica set and can hide its topology. Writes normally go to the primary; secondaries replicate and can serve explicitly selected reads, with consistency tradeoffs.
-
-[MongoDB replication architecture](https://www.mongodb.com/docs/manual/replication/)
-
-## 3. Server Requirements
+## 2. Server Requirements
 
 | Resource | Planning baseline |
 | --- | --- |
@@ -98,6 +68,36 @@ A shell ulimit affects that shell, not an already running systemd service. Confi
 [Official UNIX resource limits](https://www.mongodb.com/docs/manual/reference/ulimit/)
 
 [TCMalloc and THP settings for MongoDB 8.0 and later](https://www.mongodb.com/docs/manual/administration/tcmalloc-performance/)
+
+## 3. Architecture Overview
+
+![MongoDB application, driver, TCP 27017 authentication and BSON document architecture](/assets/img/articles/content/mongodb-architecture.png)
+
+```text
+Application
+     |
+MongoDB Client / Driver
+     |
+MongoDB Server :27017
+     |
+Database
+ +-- Collections
+     +-- Documents
+
+Production:
+Application
+     |
+Replica-aware MongoDB Driver / Connection Pool
+     |
+Replica Set: rs0
+ +-----------+-----------+-----------+
+ | Primary   | Secondary | Secondary |
+ +-----------+-----------+-----------+
+```
+
+The driver discovers all members and routes operations according to read preference and topology. A generic HTTP or round-robin load balancer is not needed in front of a replica set and can hide its topology. Writes normally go to the primary; secondaries replicate and can serve explicitly selected reads, with consistency tradeoffs.
+
+[MongoDB replication architecture](https://www.mongodb.com/docs/manual/replication/)
 
 ## 4. Pre-Installation Checks
 
@@ -255,21 +255,7 @@ WiredTiger is the default storage engine. Avoid obsolete journal.enabled tuning 
 
 [Official mongod configuration options](https://www.mongodb.com/docs/manual/reference/configuration-options/)
 
-## 9. Secure Remote Access
-
-```yaml
-net:
-  port: 27017
-  bindIp: 127.0.0.1,10.10.10.20
-```
-
-10.10.10.20 must be an address assigned to this server. bindIp chooses listening interfaces; the firewall restricts client sources. Prepare authentication, TLS and firewall rules before enabling the private listener in sections 10–14. Use a VPN or management network for administration and remove public NAT/port-forwarding rules.
-
-Security warning: 0.0.0.0 listens on every IPv4 interface, potentially including a public NIC. It is not the default in this guide. An exceptional use requires explicit network isolation, authenticated TLS and verified deny-by-default rules for IPv4 and IPv6; binding alone never authorizes a client.
-
-[IP binding and network configuration](https://www.mongodb.com/docs/manual/core/security-mongodb-configuration/)
-
-## 10. MongoDB Authentication
+## 9. MongoDB Authentication
 
 For the standalone bootstrap only, keep bindIp at 127.0.0.1 while authorization is still off. Connect locally and create the first administrator. passwordPrompt() asks for <STRONG-PASSWORD> without putting it in command history; a literal pwd: "<STRONG-PASSWORD>" illustrates a placeholder but is not suitable for secret handling.
 
@@ -309,13 +295,13 @@ db.runCommand({ connectionStatus: 1 })
 db.getSiblingDB("appdb").getCollectionNames()
 ```
 
-Verify that a new unauthenticated session cannot list appdb collections. ping is only a liveness check and can succeed without database authorization. After TLS is enabled use the TLS connection commands in section 14.
+Verify that a new unauthenticated session cannot list appdb collections. ping is only a liveness check and can succeed without database authorization. After TLS is enabled use the TLS connection commands in section 13.
 
 [Official access-control bootstrap](https://www.mongodb.com/docs/manual/tutorial/enable-authentication/)
 
 [Built-in roles and administrative privileges](https://www.mongodb.com/docs/manual/reference/built-in-roles/)
 
-## 11. Dedicated Application User
+## 10. Dedicated Application User
 
 In the authenticated administrator shell, create a user in appdb. This user authenticates against appdb and only reads/writes that database. Use separate identities for applications, environments and scheduled jobs. A read-only service should receive read, not readWrite.
 
@@ -335,7 +321,7 @@ mongosh --host 127.0.0.1 --username appuser --password \
 
 Test the application’s required operations and confirm privileged administration is denied. Least privilege includes database roles, network access and OS access. Rotate credentials through the secret store and update applications without recording passwords in source code.
 
-## 12. Firewall Hardening
+## 11. Firewall Hardening
 
 Allow 27017/TCP only from approved application/management hosts and the replica members. A CIDR is an example; /32 source rules are preferable when host addresses are fixed. An allow rule does not cancel an existing public allow-all rule: audit the complete ruleset and the cloud security group. Keep SSH access and console recovery available before enabling a firewall.
 
@@ -376,7 +362,7 @@ Confirm the zone target is not ACCEPT and that no broad mongodb service/27017 po
 
 [Red Hat official firewalld documentation](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_firewalls_and_packet_filters/using-and-configuring-firewalld_firewall-packet-filters)
 
-## 13. MongoDB Security Hardening
+## 12. MongoDB Security Hardening
 
 ![MongoDB defense in depth with TLS, authentication, firewall, least privilege and blocked public access](/assets/img/articles/content/mongodb-security-architecture.png)
 
@@ -400,7 +386,7 @@ MongoDB Community does not provide the Enterprise native database audit facility
 
 [MongoDB auditing availability](https://www.mongodb.com/docs/manual/core/auditing/)
 
-## 14. TLS Encryption
+## 13. TLS Encryption
 
 Issue a certificate from an internal or trusted CA for each server. mongodb.pem contains that server’s certificate chain and private key; ca.pem contains CA certificates only. SANs must match the DNS names or IPs used by clients and peers; include localhost/127.0.0.1 only if you will use those names for verified local bootstrap. Never reuse the same private key across nodes.
 
@@ -443,7 +429,73 @@ Confirm trusted CA, hostname matching, expiry and that plaintext connections are
 
 [Official TLS configuration](https://www.mongodb.com/docs/manual/tutorial/configure-ssl/)
 
-## 15. Production Replica Set
+## 14. Secure Remote Access
+
+```yaml
+net:
+  port: 27017
+  bindIp: 127.0.0.1,10.10.10.20
+```
+
+10.10.10.20 must be an address assigned to this server. bindIp chooses listening interfaces; the firewall restricts client sources. Prepare authentication, TLS and firewall rules before enabling the private listener in sections 9–13. Use a VPN or management network for administration and remove public NAT/port-forwarding rules.
+
+Security warning: 0.0.0.0 listens on every IPv4 interface, potentially including a public NIC. It is not the default in this guide. An exceptional use requires explicit network isolation, authenticated TLS and verified deny-by-default rules for IPv4 and IPv6; binding alone never authorizes a client.
+
+[IP binding and network configuration](https://www.mongodb.com/docs/manual/core/security-mongodb-configuration/)
+
+## 15. Replica Set Internal Authentication
+
+Internal authentication verifies member identity; client authorization is a separate layer. Prepare this section before starting the cluster in section 16. The requested keyfile example is supported, but current MongoDB guidance recommends X.509 membership authentication for production and keyfiles for development/testing. Treat keyfile+TLS as a constrained baseline requiring a documented security decision, not the strongest production profile.
+
+### Keyfile example: generate once
+
+```bash
+# Generate ONCE on mongo01. Use mongod for RPM installations.
+MONGO_SERVICE_USER=mongodb
+sudo install -d -m 750 -o "$MONGO_SERVICE_USER" -g "$MONGO_SERVICE_USER" /etc/mongodb
+sudo sh -c 'umask 077; openssl rand -base64 756 > /etc/mongodb/keyfile'
+sudo chmod 400 /etc/mongodb/keyfile
+sudo chown "$MONGO_SERVICE_USER:$MONGO_SERVICE_USER" /etc/mongodb/keyfile
+```
+
+Deliver exactly this file to /etc/mongodb/keyfile on mongo02 and mongo03 through your authenticated encrypted configuration/secret distribution channel. Apply owner mongodb:mongodb on Debian/Ubuntu or mongod:mongod on RPM, mode 400, on every member. Do not generate a new random key independently on each node and do not publish key bytes or hashes. Ensure the parent directory is traversable by the service user and SELinux permits reads.
+
+```yaml
+security:
+  keyFile: /etc/mongodb/keyfile
+  authorization: enabled
+replication:
+  replSetName: rs0
+```
+
+A keyfile enables membership authentication and access control but does not encrypt the wire: retain requireTLS. Plan key rotation with overlapping accepted keys and the official rolling procedure so peers continue to share a key. Store the keyfile outside Git and database backups in an access-controlled secret system.
+
+### Recommended production alternative: X.509 members
+
+```yaml
+security:
+  authorization: enabled
+  clusterAuthMode: x509
+net:
+  port: 27017
+  bindIp: 127.0.0.1,10.10.20.11
+  tls:
+    mode: requireTLS
+    certificateKeyFile: /etc/mongodb/mongodb.pem
+    clusterFile: /etc/mongodb/member.pem
+    CAFile: /etc/mongodb/ca.pem
+    allowConnectionsWithoutCertificates: true
+replication:
+  replSetName: rs0
+```
+
+For a new cluster, choose this alternative instead of keyFile on every member and use the same first-user bootstrap sequence. member.pem is a unique CA-issued member certificate plus key with clientAuth usage; the server certificate needs serverAuth. Membership O/OU/DC attributes must match across member certificates and differ from client identities. SANs must match advertised names. This still permits SCRAM application users over TLS; use dedicated X.509 client identities and mutual TLS if required by policy. Provision and validate the PKI before deployment.
+
+[Official production X.509 membership authentication](https://www.mongodb.com/docs/manual/tutorial/configure-x509-member-authentication/)
+
+[Replica-set key rotation](https://www.mongodb.com/docs/manual/tutorial/rotate-key-replica-set/)
+
+## 16. Production Replica Set
 
 ![Three-member MongoDB rs0 replica set with primary, secondaries, majority election and automatic failover](/assets/img/articles/content/mongodb-replica-set.png)
 
@@ -456,14 +508,14 @@ Replica Set: rs0
 
 Use three data-bearing voting members in independent failure domains with matching server versions. Use stable DNS names; mongo01/mongo02/mongo03 are short-name examples, and FQDNs are preferable in a real PKI. DNS must resolve from every member and application host and match certificate SANs. Do not configure member host fields as bare IP addresses.
 
-Fresh-cluster order: install on all nodes, stop mongod, prepare mounts and TLS certificates, configure the peer/application firewall rules, distribute the single shared keyfile from section 16, then configure and start every member. Never temporarily expose an unauthenticated replica listener. Existing standalone conversion requires backup, a separate migration plan and authenticating with existing users; the localhost exception is unavailable if users already exist.
+Fresh-cluster order: install on all nodes, stop mongod, prepare mounts and TLS certificates, configure the peer/application firewall rules, distribute the single shared keyfile from section 15, then configure and start every member. Never temporarily expose an unauthenticated replica listener. Existing standalone conversion requires backup, a separate migration plan and authenticating with existing users; the localhost exception is unavailable if users already exist.
 
 ```bash
 sudo systemctl stop mongod
 getent hosts mongo01 mongo02 mongo03
 ```
 
-After preparing section 16, merge the following on every node. Substitute that node’s private IP: .11, .12 or .13. Use /var/lib/mongo on RPM installations. This is the complete TLS+SCRAM/keyfile teaching profile, with access control enabled from first cluster startup.
+After preparing section 15, merge the following on every node. Substitute that node’s private IP: .11, .12 or .13. Use /var/lib/mongo on RPM installations. This is the complete TLS+SCRAM/keyfile teaching profile, with access control enabled from first cluster startup.
 
 ```yaml
 storage:
@@ -514,7 +566,7 @@ rs.status()
 db.hello().isWritablePrimary
 ```
 
-Wait for election. If mongo01 is not primary, connect locally on the elected primary using the same loopback TLS method. Create mongoAdmin there with the userAdminAnyDatabase role and the administrator example from section 10, then reconnect with credentials. The exception closes after the first user. Create appuser on the primary once; users replicate, so do not create them separately on every secondary.
+Wait for election. If mongo01 is not primary, connect locally on the elected primary using the same loopback TLS method. Create mongoAdmin there with the userAdminAnyDatabase role and the administrator example from section 9, then reconnect with credentials. The exception closes after the first user. Create appuser on the primary once; users replicate, so do not create them separately on every secondary.
 
 ### Dedicated cluster operations account
 
@@ -550,58 +602,6 @@ Use explicit majority write concern for writes that require majority acknowledgm
 
 [Write concern and majority acknowledgment](https://www.mongodb.com/docs/manual/reference/write-concern/)
 
-## 16. Replica Set Internal Authentication
-
-Internal authentication verifies member identity; client authorization is a separate layer. Prepare this section before starting the cluster in section 15. The requested keyfile example is supported, but current MongoDB guidance recommends X.509 membership authentication for production and keyfiles for development/testing. Treat keyfile+TLS as a constrained baseline requiring a documented security decision, not the strongest production profile.
-
-### Keyfile example: generate once
-
-```bash
-# Generate ONCE on mongo01. Use mongod for RPM installations.
-MONGO_SERVICE_USER=mongodb
-sudo install -d -m 750 -o "$MONGO_SERVICE_USER" -g "$MONGO_SERVICE_USER" /etc/mongodb
-sudo sh -c 'umask 077; openssl rand -base64 756 > /etc/mongodb/keyfile'
-sudo chmod 400 /etc/mongodb/keyfile
-sudo chown "$MONGO_SERVICE_USER:$MONGO_SERVICE_USER" /etc/mongodb/keyfile
-```
-
-Deliver exactly this file to /etc/mongodb/keyfile on mongo02 and mongo03 through your authenticated encrypted configuration/secret distribution channel. Apply owner mongodb:mongodb on Debian/Ubuntu or mongod:mongod on RPM, mode 400, on every member. Do not generate a new random key independently on each node and do not publish key bytes or hashes. Ensure the parent directory is traversable by the service user and SELinux permits reads.
-
-```yaml
-security:
-  keyFile: /etc/mongodb/keyfile
-  authorization: enabled
-replication:
-  replSetName: rs0
-```
-
-A keyfile enables membership authentication and access control but does not encrypt the wire: retain requireTLS. Plan key rotation with overlapping accepted keys and the official rolling procedure so peers continue to share a key. Store the keyfile outside Git and database backups in an access-controlled secret system.
-
-### Recommended production alternative: X.509 members
-
-```yaml
-security:
-  authorization: enabled
-  clusterAuthMode: x509
-net:
-  port: 27017
-  bindIp: 127.0.0.1,10.10.20.11
-  tls:
-    mode: requireTLS
-    certificateKeyFile: /etc/mongodb/mongodb.pem
-    clusterFile: /etc/mongodb/member.pem
-    CAFile: /etc/mongodb/ca.pem
-    allowConnectionsWithoutCertificates: true
-replication:
-  replSetName: rs0
-```
-
-For a new cluster, choose this alternative instead of keyFile on every member and use the same first-user bootstrap sequence. member.pem is a unique CA-issued member certificate plus key with clientAuth usage; the server certificate needs serverAuth. Membership O/OU/DC attributes must match across member certificates and differ from client identities. SANs must match advertised names. This still permits SCRAM application users over TLS; use dedicated X.509 client identities and mutual TLS if required by policy. Provision and validate the PKI before deployment.
-
-[Official production X.509 membership authentication](https://www.mongodb.com/docs/manual/tutorial/configure-x509-member-authentication/)
-
-[Replica-set key rotation](https://www.mongodb.com/docs/manual/tutorial/rotate-key-replica-set/)
-
 ## 17. MongoDB Connection Strings and Secrets
 
 ### Standalone URI
@@ -622,7 +622,59 @@ Keep real credentials out of Git, logs, shell history and process arguments. Use
 
 [Official MongoDB URI format](https://www.mongodb.com/docs/manual/reference/connection-string/)
 
-## 18. Backup and Tested Recovery
+## 18. Logging and Slow Queries
+
+```bash
+sudo tail -f /var/log/mongodb/mongod.log
+sudo journalctl -u mongod --no-pager
+sudo journalctl -u mongod -n 100 --no-pager
+```
+
+MongoDB writes structured diagnostic logs. Look for YAML parse failures, missing dbPath, permission denied, Address already in use, bad keyfile ownership, TLS handshake/certificate failures, WiredTiger errors and authentication failures. The first startup error usually explains subsequent service restarts; preserve logs before remediation.
+
+```yaml
+operationProfiling:
+  mode: off
+  slowOpThresholdMs: 100
+  slowOpSampleRate: 0.1
+```
+
+This example keeps the database profiler off and configures sampled slow diagnostic logging. Treat 100 ms and 10% as starting points tied to your SLO, not universal values. Profiling all operations can increase load and capture sensitive query data. Centralize logs with bounded retention and alerts for failed authentication, storage errors and elections.
+
+Configure rotation before disk exhaustion. With systemLog.logRotate: reopen, use an external rename/create policy that preserves the service owner, then request logRotate (or the documented SIGUSR1). Do not combine incompatible rename/reopen policies or assume copytruncate is safe. Test rotation and retention on a staging node.
+
+[Official MongoDB log rotation](https://www.mongodb.com/docs/manual/tutorial/rotate-log-files/)
+
+[Official database profiler and slow-operation settings](https://www.mongodb.com/docs/manual/tutorial/manage-the-database-profiler/)
+
+## 19. Monitoring and Alerting
+
+```javascript
+use admin
+db.createUser({
+  user: "mongoMonitor",
+  pwd: passwordPrompt(),
+  roles: [{ role: "clusterMonitor", db: "admin" }]
+})
+```
+
+Use a MongoDB Exporter compatible with your server, Prometheus for collection and Grafana for dashboards; Zabbix can independently monitor MongoDB and host health. These are external monitoring integrations, not bundled MongoDB Community components. Some exporter collectors need extra read privileges: enable only required collectors and grant narrowly scoped roles after reviewing the exact exporter documentation. Keep exporter endpoints and their secrets private.
+
+| Metric / event | Alert intent |
+| --- | --- |
+| Connections / operations | Pool saturation, connection churn and abnormal throughput versus baseline. |
+| Query latency | Sustained p95/p99 SLO breaches; separate reads/writes and timeouts. |
+| Replication lag / oplog window | Lag approaching recovery budget or oplog retention; failed sync. |
+| Disk / inodes / I/O latency | Capacity and growth forecasts, queue delays and full-volume risk. |
+| Memory / page faults / swap | Correlate OS major faults and swap with cache eviction and disk reads; minor faults alone are not an incident. |
+| Replica status / primary elections | No primary, unavailable member, repeated elections or unexpected topology changes. |
+| Backup / certificates / logs | Stale backup, failed restore drill, expiry approaching and security/storage log events. |
+
+Collect per-member metrics and OS telemetry; monitoring only the primary hides a failed secondary. Define actionable thresholds, owners and runbooks. Test an alert and notification path, then test loss of a node in staging and verify the application recovers and the new primary is detected.
+
+[Official self-managed monitoring metrics](https://www.mongodb.com/docs/manual/administration/monitoring/)
+
+## 20. Backup and Tested Recovery
 
 ![MongoDB backup server and parallel Prometheus Grafana Zabbix and syslog monitoring architecture](/assets/img/articles/content/mongodb-backup-monitoring.png)
 
@@ -709,7 +761,35 @@ Large databases need a measured replica/snapshot strategy with atomic data+journ
 
 [Official backup methods](https://www.mongodb.com/docs/manual/core/backups/)
 
-## 19. Performance Checks
+## 21. Verification Checklist
+
+```bash
+systemctl is-active mongod
+sudo ss -lntp | grep 27017
+# Bare mongosh is only for the initial non-TLS localhost bootstrap.
+# For the secured deployment use:
+mongosh --host '<HOSTNAME>' --port 27017 --tls \
+  --tlsCAFile /etc/mongodb/ca.pem \
+  --username appuser --password --authenticationDatabase appdb appdb
+```
+
+```javascript
+db.runCommand({ ping: 1 })
+db.runCommand({ connectionStatus: 1 })
+db.getCollectionNames()
+```
+
+Expect active, listeners only on approved interfaces, ping ok:1 and authenticatedUsers containing appuser in appdb. Test from an allowed application host and confirm a disallowed host cannot connect. Verify unauthenticated collection access and plaintext connections fail. For replicas connect as mongoOps and inspect rs.status(): one primary, two healthy secondaries and acceptable lag.
+
+```javascript
+// Authenticated mongoOps replica session:
+rs.status()
+rs.printSecondaryReplicationInfo()
+```
+
+Run a controlled failover drill in staging, exercise real application reads/writes with majority acknowledgment, verify alert delivery and restore a backup into a clean isolated target. These tests establish behavior beyond process liveness. Installation/configuration syntax was reviewed against documentation; the Linux deployment commands must still be executed and validated on your target servers.
+
+## 22. Performance Checks
 
 ```bash
 # Install the distribution sysstat package for iostat.
@@ -746,7 +826,7 @@ Use real collection names: db.collection.stats() is a template, not a scan of al
 
 [Collection statistics and deprecation notes](https://www.mongodb.com/docs/manual/reference/method/db.collection.stats/)
 
-## 20. Indexing and Query Plans
+## 23. Indexing and Query Plans
 
 ```javascript
 use appdb
@@ -763,59 +843,7 @@ Design compound indexes around filters and sort order; validate with representat
 
 [Official explain execution statistics](https://www.mongodb.com/docs/manual/reference/method/db.collection.explain/)
 
-## 21. Logging and Slow Queries
-
-```bash
-sudo tail -f /var/log/mongodb/mongod.log
-sudo journalctl -u mongod --no-pager
-sudo journalctl -u mongod -n 100 --no-pager
-```
-
-MongoDB writes structured diagnostic logs. Look for YAML parse failures, missing dbPath, permission denied, Address already in use, bad keyfile ownership, TLS handshake/certificate failures, WiredTiger errors and authentication failures. The first startup error usually explains subsequent service restarts; preserve logs before remediation.
-
-```yaml
-operationProfiling:
-  mode: off
-  slowOpThresholdMs: 100
-  slowOpSampleRate: 0.1
-```
-
-This example keeps the database profiler off and configures sampled slow diagnostic logging. Treat 100 ms and 10% as starting points tied to your SLO, not universal values. Profiling all operations can increase load and capture sensitive query data. Centralize logs with bounded retention and alerts for failed authentication, storage errors and elections.
-
-Configure rotation before disk exhaustion. With systemLog.logRotate: reopen, use an external rename/create policy that preserves the service owner, then request logRotate (or the documented SIGUSR1). Do not combine incompatible rename/reopen policies or assume copytruncate is safe. Test rotation and retention on a staging node.
-
-[Official MongoDB log rotation](https://www.mongodb.com/docs/manual/tutorial/rotate-log-files/)
-
-[Official database profiler and slow-operation settings](https://www.mongodb.com/docs/manual/tutorial/manage-the-database-profiler/)
-
-## 22. Monitoring and Alerting
-
-```javascript
-use admin
-db.createUser({
-  user: "mongoMonitor",
-  pwd: passwordPrompt(),
-  roles: [{ role: "clusterMonitor", db: "admin" }]
-})
-```
-
-Use a MongoDB Exporter compatible with your server, Prometheus for collection and Grafana for dashboards; Zabbix can independently monitor MongoDB and host health. These are external monitoring integrations, not bundled MongoDB Community components. Some exporter collectors need extra read privileges: enable only required collectors and grant narrowly scoped roles after reviewing the exact exporter documentation. Keep exporter endpoints and their secrets private.
-
-| Metric / event | Alert intent |
-| --- | --- |
-| Connections / operations | Pool saturation, connection churn and abnormal throughput versus baseline. |
-| Query latency | Sustained p95/p99 SLO breaches; separate reads/writes and timeouts. |
-| Replication lag / oplog window | Lag approaching recovery budget or oplog retention; failed sync. |
-| Disk / inodes / I/O latency | Capacity and growth forecasts, queue delays and full-volume risk. |
-| Memory / page faults / swap | Correlate OS major faults and swap with cache eviction and disk reads; minor faults alone are not an incident. |
-| Replica status / primary elections | No primary, unavailable member, repeated elections or unexpected topology changes. |
-| Backup / certificates / logs | Stale backup, failed restore drill, expiry approaching and security/storage log events. |
-
-Collect per-member metrics and OS telemetry; monitoring only the primary hides a failed secondary. Define actionable thresholds, owners and runbooks. Test an alert and notification path, then test loss of a node in staging and verify the application recovers and the new primary is detected.
-
-[Official self-managed monitoring metrics](https://www.mongodb.com/docs/manual/administration/monitoring/)
-
-## 23. Troubleshooting
+## 24. Troubleshooting
 
 ```bash
 sudo systemctl status mongod --no-pager
@@ -841,34 +869,6 @@ free -h
 | High disk I/O | Working set exceeds cache, slow storage, backup/resync contention | iostat -xz; vmstat; cache/lag/latency metrics | Reduce unnecessary scans, isolate backup load and provision measured RAM/IOPS. |
 
 Do not use mongod --repair, forced replica reconfiguration, deletion of data files or turning off authorization as generic repairs. Preserve evidence and the latest recoverable backup. A member that fell behind the oplog may need a planned resync; verify a healthy source and capacity first.
-
-## 24. Verification Checklist
-
-```bash
-systemctl is-active mongod
-sudo ss -lntp | grep 27017
-# Bare mongosh is only for the initial non-TLS localhost bootstrap.
-# For the secured deployment use:
-mongosh --host '<HOSTNAME>' --port 27017 --tls \
-  --tlsCAFile /etc/mongodb/ca.pem \
-  --username appuser --password --authenticationDatabase appdb appdb
-```
-
-```javascript
-db.runCommand({ ping: 1 })
-db.runCommand({ connectionStatus: 1 })
-db.getCollectionNames()
-```
-
-Expect active, listeners only on approved interfaces, ping ok:1 and authenticatedUsers containing appuser in appdb. Test from an allowed application host and confirm a disallowed host cannot connect. Verify unauthenticated collection access and plaintext connections fail. For replicas connect as mongoOps and inspect rs.status(): one primary, two healthy secondaries and acceptable lag.
-
-```javascript
-// Authenticated mongoOps replica session:
-rs.status()
-rs.printSecondaryReplicationInfo()
-```
-
-Run a controlled failover drill in staging, exercise real application reads/writes with majority acknowledgment, verify alert delivery and restore a backup into a clean isolated target. These tests establish behavior beyond process liveness. Installation/configuration syntax was reviewed against documentation; the Linux deployment commands must still be executed and validated on your target servers.
 
 ## 25. Production Checklist
 
@@ -937,7 +937,7 @@ No. Verify authorization, network restrictions, TLS, replica health, application
 
 ## Official References
 
-Reviewed on 7 October 2026 using MongoDB documentation and the distribution manuals below. Current Linux installation instructions use a distribution selector; select the matching distribution and package method. The 9.0 Community repository definitions were additionally checked in MongoDB’s official documentation source. The signing-key URL responded successfully; repository metadata requests from this authoring network returned HTTP 403, so live package availability must be verified with apt-cache policy or dnf on the deployment network.
+using MongoDB documentation and the distribution manuals below. Current Linux installation instructions use a distribution selector; select the matching distribution and package method. The 9.0 Community repository definitions were additionally checked in MongoDB’s official documentation source. The signing-key URL responded successfully; repository metadata requests from this authoring network returned HTTP 403, so live package availability must be verified with apt-cache policy or dnf on the deployment network.
 
 [Stable release index](https://www.mongodb.com/docs/manual/release-notes/)
 

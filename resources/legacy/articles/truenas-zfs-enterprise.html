@@ -48,7 +48,8 @@
         "author": { "@type": "Organization", "name": "Meet AJ" }
       }
     </script>
-  </head>
+  <script id="article-localizations" type="application/json">{"en": {"title": "TrueNAS Enterprise NAS with ZFS", "meta_title": "TrueNAS Enterprise NAS with ZFS | Meet AJ", "description": "Build a TrueNAS storage server with ZFS pools, datasets, SMB, NFS, iSCSI, snapshots, replication and a tested backup plan.", "keywords": ["TrueNAS", "ZFS", "NAS سازمانی", "RAIDZ", "Dataset", "Pool", "VDEV", "SMB", "NFS", "iSCSI", "Snapshot", "Replication", "Backup"], "faq": [["Do RAIDZ and snapshots replace backups?", "No. RAIDZ tolerates disk failures and snapshots return data to a point in time. Total pool failure, malicious deletion and site incidents require independent off-site copies."], ["What is the difference between a dataset and a ZVOL?", "A dataset is a filesystem with independent quotas, ACLs and snapshots, used for SMB or NFS shares. A ZVOL is a block device, typically used behind an iSCSI extent."], ["Are mirrors or RAIDZ2 better for virtual machines?", "The choice depends on IOPS, latency, capacity and workload. Mirror VDEVs usually suit random VM workloads; RAIDZ2 provides capacity and tolerance of two disk failures per VDEV. Test the final choice with a real workload."], ["Why should boot disks be separate from pool disks?", "TrueNAS installation erases the selected disk. Separating boot and data reduces selection mistakes and role conflicts. Verify the destination disk model and serial number before installation."], ["How do we restrict SMB access?", "Create a separate dataset, assign ACLs to required groups and restrict network access to the service. Test read, write and deletion using both authorized and unauthorized users."], ["Does deduplication always save more space?", "No. Results depend on actual duplicate data and system resources. Memory and performance costs can exceed savings. Do not enable it without measurements and tests."], ["Is successful replication sufficient to prove recoverability?", "No. Check the job and destination snapshots, then actually restore a file or dataset. Retain destination retention settings and encryption keys separately from the primary server."], ["What should we do when a pool becomes degraded?", "Check the dashboard and zpool status, identify the failed disk by serial number, and confirm backup health. Replace it through a supported TrueNAS UI procedure and monitor resilver progress."]]}, "fa": {"title": "راه‌اندازی TrueNAS از صفر؛ ساخت NAS سازمانی با ZFS", "meta_title": "راه‌اندازی TrueNAS از صفر؛ ساخت NAS سازمانی با ZFS", "description": "راهنمای Production-Ready راه‌اندازی TrueNAS با ZFS، ساخت Pool و Dataset، SMB، NFS، iSCSI، Snapshot، Replication، امنیت و Backup سه-دو-یک.", "keywords": ["TrueNAS", "ZFS", "NAS سازمانی", "RAIDZ", "Dataset", "Pool", "VDEV", "SMB", "NFS", "iSCSI", "Snapshot", "Replication", "Backup"], "faq": [["آیا RAIDZ و Snapshot جای نسخهٔ پشتیبان را می‌گیرند؟", "خیر. RAIDZ برای تحمل خرابی دیسک و Snapshot برای بازگشت به یک زمان مشخص است. برای خرابی کل Pool، حذف مخرب و حادثهٔ سایت، نسخهٔ مستقل و خارج از سایت لازم است."], ["تفاوت Dataset و ZVOL چیست؟", "Dataset یک فایل‌سیستم با سهمیه، ACL و Snapshot مستقل است و برای اشتراک SMB یا NFS استفاده می‌شود. ZVOL یک دستگاه بلوکی است و معمولاً پشت Extent در iSCSI قرار می‌گیرد."], ["برای ماشین‌های مجازی Mirror مناسب‌تر است یا RAIDZ2؟", "انتخاب به IOPS، تأخیر، ظرفیت و الگوی بار بستگی دارد. Mirror VDEVها معمولاً برای بار تصادفی ماشین‌های مجازی مناسب‌اند؛ RAIDZ2 ظرفیت و تحمل خرابی دو دیسک در هر VDEV را ارائه می‌کند. انتخاب نهایی را با بار واقعی آزمایش کنید."], ["چرا دیسک Boot باید از دیسک‌های Pool جدا باشد؟", "نصب TrueNAS دیسک انتخاب‌شده را پاک می‌کند. جداسازی Boot از داده‌ها خطر انتخاب اشتباه و تداخل نقش دیسک‌ها را کم می‌کند. قبل از نصب، مدل و شمارهٔ سریال دیسک مقصد را بررسی کنید."], ["چگونه دسترسی به SMB را محدود کنیم؟", "Dataset مستقل بسازید، ACL را به گروه‌های موردنیاز بدهید و دسترسی شبکه به سرویس را محدود کنید. با یک کاربر مجاز و یک کاربر غیرمجاز، خواندن، نوشتن و حذف را آزمایش کنید."], ["آیا فعال کردن Deduplication همیشه فضای بیشتری آزاد می‌کند؟", "خیر. نتیجه به تکرار واقعی داده‌ها و منابع سیستم بستگی دارد و ممکن است هزینهٔ حافظه و کارایی از صرفه‌جویی بیشتر باشد. بدون اندازه‌گیری و آزمایش، آن را فعال نکنید."], ["موفق بودن Replication برای اطمینان از بازیابی کافی است؟", "خیر. علاوه بر بررسی Job و Snapshotهای مقصد، بازیابی فایل یا Dataset را عملاً آزمایش کنید. Retention مقصد و کلیدهای رمزنگاری را جدا از سرور اصلی نگهداری کنید."], ["هنگام Degraded شدن Pool چه کاری انجام دهیم؟", "از Dashboard و zpool status وضعیت را بررسی کنید، دیسک معیوب را با شمارهٔ سریال شناسایی و سلامت Backup را تأیید کنید. تعویض را از روش پشتیبانی‌شدهٔ رابط TrueNAS انجام دهید و پیشرفت Resilver را پایش کنید."]]}}</script>
+</head>
   <body class="article-page theme-qnap">
     <section class="article-hero article-header hero">
       <div class="container">
@@ -90,11 +91,11 @@
       </div>
     </section>
     <article class="article-body" lang="fa">
-      <p>
+      <p data-en="Audience: infrastructure administrators, system administrators, DevOps and network engineers; intermediate to advanced level." data-fa="مخاطب: مدیران زیرساخت، System Administratorها، DevOps و Network Engineerها؛ سطح Intermediate تا Advanced.">
         <strong>مخاطب:</strong> مدیران زیرساخت، System Administratorها، DevOps و
         Network Engineerها؛ سطح Intermediate تا Advanced.
       </p>
-      <p>
+      <p data-en="Guide scope: this guide covers Linux-based TrueNAS. Example paths were matched to the 25.04 documentation. Menu names can vary slightly between stable releases; consult the documentation for your release and validate in a test environment before proceeding." data-fa="وضعیت راهنما: این راهنما برای TrueNAS مبتنی بر Linux نوشته شده است؛ مسیرهای نمونه با مستندات نسخهٔ 25.04 تطبیق داده شده‌اند. نام بعضی منوها ممکن است بین Releaseهای پایدار تغییر جزئی داشته باشد؛ قبل از اجرا، مستندات همان Release را بررسی و در محیط آزمایشی Validate کنید.">
         <strong>وضعیت راهنما:</strong> این راهنما برای TrueNAS مبتنی بر Linux
         نوشته شده است؛ مسیرهای نمونه با مستندات نسخهٔ 25.04 تطبیق داده شده‌اند.
         نام بعضی منوها ممکن است بین Releaseهای پایدار تغییر جزئی داشته باشد؛ قبل
@@ -107,50 +108,50 @@
           alt="راهکار Enterprise Storage با TrueNAS"
         />
       </p>
-      <p>
+      <p data-en="Figure 1 — TrueNAS as central storage for file sharing, virtualization, backup and replication." data-fa="تصویر ۱ — TrueNAS به‌عنوان Storage مرکزی برای File Sharing، Virtualization، Backup و Replication.">
         <em
           >تصویر ۱ — TrueNAS به‌عنوان Storage مرکزی برای File Sharing،
           Virtualization، Backup و Replication.</em
         >
       </p>
       <blockquote>
-        <p>
+        <p data-en="Operational warning: RAID and snapshots alone are not backups. For production data, combine the 3-2-1 rule, off-site copies and remote replication." data-fa="هشدار عملیاتی: RAID و Snapshot به‌تنهایی Backup نیستند. برای داده‌های Production، قانون 3-2-1، نسخه خارج از سایت و Remote Replication را هم‌زمان اجرا کنید.">
           <strong>هشدار عملیاتی:</strong> RAID و Snapshot به‌تنهایی Backup
           نیستند. برای داده‌های Production، قانون 3-2-1، نسخه خارج از سایت و
           Remote Replication را هم‌زمان اجرا کنید.
         </p>
       </blockquote>
       <section id="section-1">
-        <h2>مقدمه</h2>
-        <p>
+        <h2 data-en="Introduction" data-fa="مقدمه">مقدمه</h2>
+        <p data-en="TrueNAS is a ZFS-based storage platform that provides SMB, NFS, iSCSI, snapshots, replication, ACLs, monitoring and alerting in one management interface. Its value extends beyond a file server: it combines integrity, redundancy, observability and operational recovery." data-fa="TrueNAS یک پلتفرم Storage مبتنی بر ZFS است که SMB، NFS، iSCSI، Snapshot، Replication، ACL، مانیتورینگ و Alerting را در یک رابط مدیریتی ارائه می‌کند. قدرت TrueNAS فقط در ساختن یک File Server نیست؛ ارزش اصلی آن در ترکیب Integrity، Redundancy، مشاهده‌پذیری و Recovery عملیاتی است.">
           TrueNAS یک پلتفرم Storage مبتنی بر ZFS است که SMB، NFS، iSCSI،
           Snapshot، Replication، ACL، مانیتورینگ و Alerting را در یک رابط
           مدیریتی ارائه می‌کند. قدرت TrueNAS فقط در ساختن یک File Server نیست؛
           ارزش اصلی آن در ترکیب Integrity، Redundancy، مشاهده‌پذیری و Recovery
           عملیاتی است.
         </p>
-        <p>
+        <p data-en="This article is a complete runbook from design to operations and distinguishes home lab use from production at every stage." data-fa="این مقاله یک Runbook کامل از طراحی تا بهره‌برداری است و در تمام مراحل تفاوت Home Lab و Production را مشخص می‌کند.">
           این مقاله یک Runbook کامل از طراحی تا بهره‌برداری است و در تمام مراحل
           تفاوت <strong>Home Lab</strong> و <strong>Production</strong> را مشخص
           می‌کند.
         </p>
       </section>
       <section id="section-2">
-        <h2>1. TrueNAS چیست؟</h2>
-        <p>
+        <h2 data-en="1. What is TrueNAS?" data-fa="1. TrueNAS چیست؟">1. TrueNAS چیست؟</h2>
+        <p data-en="TrueNAS is a specialized operating system for NAS and storage servers. Current editions use ZFS/OpenZFS as the main pool-management and data-protection layer, with file and block services managed through the web UI." data-fa="TrueNAS سیستم‌عاملی تخصصی برای ساخت NAS و Storage Server است. در مدل‌های فعلی، ZFS/OpenZFS لایه اصلی مدیریت Pool و حفاظت داده است و سرویس‌های File و Block Storage از طریق Web UI مدیریت می‌شوند.">
           TrueNAS سیستم‌عاملی تخصصی برای ساخت NAS و Storage Server است. در
           مدل‌های فعلی، ZFS/OpenZFS لایه اصلی مدیریت Pool و حفاظت داده است و
           سرویس‌های File و Block Storage از طریق Web UI مدیریت می‌شوند.
         </p>
-        <p>
+        <p data-en="For production, consider bare-metal installation on server hardware, ECC RAM, mirrored boot SSDs, a suitable HBA, a UPS, separate networks and recoverable backups." data-fa="برای Production، نصب Bare Metal روی سخت‌افزار سروری، ECC RAM، Boot SSDهای Mirror، HBA مناسب، UPS، شبکه مجزا و Backup قابل‌بازیابی را در نظر بگیرید.">
           برای Production، نصب Bare Metal روی سخت‌افزار سروری، ECC RAM، Boot
           SSDهای Mirror، HBA مناسب، UPS، شبکه مجزا و Backup قابل‌بازیابی را در
           نظر بگیرید.
         </p>
       </section>
       <section id="section-3">
-        <h2>2. NAS چیست و TrueNAS چه مشکلی را حل می‌کند؟</h2>
-        <p>
+        <h2 data-en="2. What is NAS, and what problem does TrueNAS solve?" data-fa="2. NAS چیست و TrueNAS چه مشکلی را حل می‌کند؟">2. NAS چیست و TrueNAS چه مشکلی را حل می‌کند؟</h2>
+        <p data-en="NAS serves files to users and hosts through protocols such as SMB and NFS. TrueNAS also provides block storage through iSCSI; architecturally, that use belongs to SAN. A general file server typically needs separate RAID, backup, snapshot and monitoring tools and processes." data-fa="NAS فایل‌ها را از طریق پروتکل‌هایی مانند SMB و NFS در اختیار کاربران و میزبان‌ها قرار می‌دهد. TrueNAS علاوه بر قابلیت NAS، با iSCSI ذخیره‌سازی بلوکی نیز ارائه می‌کند؛ این کاربرد از نظر معماری در دستهٔ SAN قرار می‌گیرد. یک File Server عمومی معمولاً به RAID Controller، ابزار Backup، ابزار Snapshot، Monitoring و فرآیندهای جداگانه نیاز دارد.">
           NAS فایل‌ها را از طریق پروتکل‌هایی مانند SMB و NFS در اختیار کاربران و
           میزبان‌ها قرار می‌دهد. TrueNAS علاوه بر قابلیت NAS، با iSCSI
           ذخیره‌سازی بلوکی نیز ارائه می‌کند؛ این کاربرد از نظر معماری در دستهٔ
@@ -158,56 +159,56 @@
           ابزار Backup، ابزار Snapshot، Monitoring و فرآیندهای جداگانه نیاز
           دارد.
         </p>
-        <p>
+        <p data-en="TrueNAS integrates these capabilities but does not replace backup architecture, disaster recovery or a qualified team." data-fa="TrueNAS این قابلیت‌ها را به‌صورت یکپارچه ارائه می‌کند، اما جایگزین معماری Backup، Disaster Recovery یا تیم متخصص نیست.">
           TrueNAS این قابلیت‌ها را به‌صورت یکپارچه ارائه می‌کند، اما جایگزین
           معماری Backup، Disaster Recovery یا تیم متخصص نیست.
         </p>
       </section>
       <section id="section-4">
-        <h2>3. کاربردهای TrueNAS در سازمان</h2>
+        <h2 data-en="3. Enterprise uses for TrueNAS" data-fa="3. کاربردهای TrueNAS در سازمان">3. کاربردهای TrueNAS در سازمان</h2>
         <ul>
-          <li>
+          <li data-en="File server: departmental files, project shares and home directories through SMB." data-fa="File Server: فایل‌های واحدها، Project Share و Home Directory با SMB.">
             <strong>File Server:</strong> فایل‌های واحدها، Project Share و Home
             Directory با SMB.
           </li>
-          <li>
+          <li data-en="Central storage: independent datasets for teams, services and different security levels." data-fa="Central Storage: Datasetهای مستقل برای تیم‌ها، سرویس‌ها و سطح‌های امنیتی مختلف.">
             <strong>Central Storage:</strong> Datasetهای مستقل برای تیم‌ها،
             سرویس‌ها و سطح‌های امنیتی مختلف.
           </li>
-          <li>
+          <li data-en="Backup repository: a destination for software such as Veeam or native operating-system backup tools." data-fa="Backup Repository: مقصد Backup نرم‌افزارهایی مانند Veeam یا ابزارهای Native سیستم‌عامل.">
             <strong>Backup Repository:</strong> مقصد Backup نرم‌افزارهایی مانند
             Veeam یا ابزارهای Native سیستم‌عامل.
           </li>
-          <li>
+          <li data-en="VMware/Hyper-V storage: NFS or iSCSI on a separate storage VLAN." data-fa="VMware/Hyper-V Storage: ارائه NFS یا iSCSI با Storage VLAN مجزا.">
             <strong>VMware/Hyper-V Storage:</strong> ارائه NFS یا iSCSI با
             Storage VLAN مجزا.
           </li>
-          <li>
+          <li data-en="SMB: suitable for Windows with local or Active Directory authentication." data-fa="SMB: مناسب برای Windows و احراز هویت Local یا Active Directory.">
             <strong>SMB:</strong> مناسب برای Windows و احراز هویت Local یا
             Active Directory.
           </li>
-          <li><strong>NFS:</strong> مناسب برای Linux، Unix و VMware.</li>
-          <li>
+          <li data-en="NFS: suitable for Linux, Unix and VMware." data-fa="NFS: مناسب برای Linux، Unix و VMware."><strong>NFS:</strong> مناسب برای Linux، Unix و VMware.</li>
+          <li data-en="iSCSI: ZVOL-based block storage for virtualization and block workloads." data-fa="iSCSI: Block Storage مبتنی بر ZVOL برای Virtualization و Workloadهای Block-Level.">
             <strong>iSCSI:</strong> Block Storage مبتنی بر ZVOL برای
             Virtualization و Workloadهای Block-Level.
           </li>
-          <li>
+          <li data-en="Snapshot: quick file or dataset recovery to a point in time." data-fa="Snapshot: بازیابی سریع فایل یا Dataset به یک Point-in-Time.">
             <strong>Snapshot:</strong> بازیابی سریع فایل یا Dataset به یک
             Point-in-Time.
           </li>
-          <li>
+          <li data-en="Replication: transfer ZFS snapshots to a second TrueNAS server in a separate site or rack." data-fa="Replication: انتقال Snapshotهای ZFS به TrueNAS دوم در سایت یا Rack جدا.">
             <strong>Replication:</strong> انتقال Snapshotهای ZFS به TrueNAS دوم
             در سایت یا Rack جدا.
           </li>
         </ul>
       </section>
       <section id="section-5">
-        <h2>4. مزایای TrueNAS نسبت به File Server معمولی</h2>
+        <h2 data-en="4. TrueNAS advantages over a general file server" data-fa="4. مزایای TrueNAS نسبت به File Server معمولی">4. مزایای TrueNAS نسبت به File Server معمولی</h2>
         <div class="article-table-wrap">
           <table class="article-table">
             <thead>
               <tr>
-                <th scope="col">ویژگی</th>
+                <th scope="col" data-en="Feature" data-fa="ویژگی">ویژگی</th>
                 <th scope="col">TrueNAS</th>
                 <th scope="col">Windows File Server</th>
                 <th scope="col">Synology/QNAP</th>
@@ -215,82 +216,112 @@
             </thead>
             <tbody>
               <tr>
-                <td>مدل استقرار</td>
-                <td>
+                <td data-en="Deployment model" data-fa="مدل استقرار">مدل استقرار</td>
+                <td data-en="Bare metal or appliance; VMs for testing with support limitations reviewed" data-fa="Bare Metal یا Appliance؛ VM برای آزمایش و با بررسی محدودیت‌های پشتیبانی">
                   Bare Metal یا Appliance؛ VM برای آزمایش و با بررسی محدودیت‌های
                   پشتیبانی
                 </td>
-                <td>معمولاً VM یا Bare Metal</td>
-                <td>Appliance یکپارچه</td>
+                <td data-en="Usually VM or bare metal" data-fa="معمولاً VM یا Bare Metal">معمولاً VM یا Bare Metal</td>
+                <td data-en="Integrated appliance" data-fa="Appliance یکپارچه">Appliance یکپارچه</td>
               </tr>
               <tr>
                 <td>File Protocol</td>
-                <td>SMB، NFS، iSCSI</td>
-                <td>SMB، NFS با Role/Feature</td>
-                <td>SMB، NFS، iSCSI</td>
+                <td data-en="SMB, NFS, iSCSI" data-fa="SMB، NFS، iSCSI">SMB، NFS، iSCSI</td>
+                <td data-en="SMB, NFS through roles/features" data-fa="SMB، NFS با Role/Feature">SMB، NFS با Role/Feature</td>
+                <td data-en="SMB, NFS, iSCSI" data-fa="SMB، NFS، iSCSI">SMB، NFS، iSCSI</td>
               </tr>
               <tr>
                 <td>File Integrity</td>
-                <td>Checksum و Self-Healing با ZFS</td>
-                <td>وابسته به File System/Storage</td>
-                <td>وابسته به پلتفرم و File System</td>
+                <td data-en="Checksums and self-healing with ZFS" data-fa="Checksum و Self-Healing با ZFS">Checksum و Self-Healing با ZFS</td>
+                <td data-en="Depends on the filesystem/storage" data-fa="وابسته به File System/Storage">وابسته به File System/Storage</td>
+                <td data-en="Depends on the platform and filesystem" data-fa="وابسته به پلتفرم و File System">وابسته به پلتفرم و File System</td>
               </tr>
               <tr>
                 <td>Snapshot/Replication</td>
-                <td>Native با ZFS</td>
-                <td>نیازمند ابزار و Storage مناسب</td>
-                <td>معمولاً ساده‌تر و Vendor-specific</td>
+                <td data-en="Native with ZFS" data-fa="Native با ZFS">Native با ZFS</td>
+                <td data-en="Requires suitable tools and storage" data-fa="نیازمند ابزار و Storage مناسب">نیازمند ابزار و Storage مناسب</td>
+                <td data-en="Usually simpler and vendor-specific" data-fa="معمولاً ساده‌تر و Vendor-specific">معمولاً ساده‌تر و Vendor-specific</td>
               </tr>
               <tr>
-                <td>انعطاف Hardware</td>
-                <td>زیاد</td>
-                <td>زیاد</td>
-                <td>محدود به Appliance</td>
+                <td data-en="Hardware flexibility" data-fa="انعطاف Hardware">انعطاف Hardware</td>
+                <td data-en="High" data-fa="زیاد">زیاد</td>
+                <td data-en="High" data-fa="زیاد">زیاد</td>
+                <td data-en="Limited to the appliance" data-fa="محدود به Appliance">محدود به Appliance</td>
               </tr>
               <tr>
-                <td>مدیریت</td>
-                <td>عمیق و مناسب تیم فنی</td>
-                <td>آشنا برای تیم Microsoft</td>
-                <td>ساده‌تر برای تیم کوچک</td>
+                <td data-en="Management" data-fa="مدیریت">مدیریت</td>
+                <td data-en="Detailed control for technical teams" data-fa="عمیق و مناسب تیم فنی">عمیق و مناسب تیم فنی</td>
+                <td data-en="Familiar to Microsoft teams" data-fa="آشنا برای تیم Microsoft">آشنا برای تیم Microsoft</td>
+                <td data-en="Simpler for small teams" data-fa="ساده‌تر برای تیم کوچک">ساده‌تر برای تیم کوچک</td>
               </tr>
               <tr>
-                <td>پیچیدگی</td>
-                <td>بیشتر؛ نیازمند دانش ZFS</td>
-                <td>متوسط</td>
-                <td>کمتر در سناریوهای رایج</td>
+                <td data-en="Complexity" data-fa="پیچیدگی">پیچیدگی</td>
+                <td data-en="Higher; requires ZFS knowledge" data-fa="بیشتر؛ نیازمند دانش ZFS">بیشتر؛ نیازمند دانش ZFS</td>
+                <td data-en="Moderate" data-fa="متوسط">متوسط</td>
+                <td data-en="Lower for common scenarios" data-fa="کمتر در سناریوهای رایج">کمتر در سناریوهای رایج</td>
               </tr>
               <tr>
-                <td>هزینه</td>
-                <td>مناسب Self-Build؛ نسخه و Support را جدا بررسی کنید</td>
-                <td>License و CAL/Software</td>
-                <td>هزینه Appliance و Support</td>
+                <td data-en="Cost" data-fa="هزینه">هزینه</td>
+                <td data-en="Suitable for self-build; evaluate edition and support separately" data-fa="مناسب Self-Build؛ نسخه و Support را جدا بررسی کنید">مناسب Self-Build؛ نسخه و Support را جدا بررسی کنید</td>
+                <td data-en="Licensing and CAL/software costs" data-fa="License و CAL/Software">License و CAL/Software</td>
+                <td data-en="Appliance and support costs" data-fa="هزینه Appliance و Support">هزینه Appliance و Support</td>
               </tr>
               <tr>
-                <td>بهترین کاربرد</td>
-                <td>Storage مهندسی‌شده و قابل‌کنترل</td>
-                <td>Domain/File Services متمرکز</td>
-                <td>SMB سازمانی کوچک تا متوسط</td>
+                <td data-en="Best use" data-fa="بهترین کاربرد">بهترین کاربرد</td>
+                <td data-en="Engineered storage with detailed control" data-fa="Storage مهندسی‌شده و قابل‌کنترل">Storage مهندسی‌شده و قابل‌کنترل</td>
+                <td data-en="Central domain/file services" data-fa="Domain/File Services متمرکز">Domain/File Services متمرکز</td>
+                <td data-en="Small to medium enterprise SMB" data-fa="SMB سازمانی کوچک تا متوسط">SMB سازمانی کوچک تا متوسط</td>
               </tr>
             </tbody>
           </table>
         </div>
       </section>
+      <section id="section-7">
+        <h2 data-en="5. Minimum and recommended production hardware" data-fa="5. حداقل و Recommended Hardware برای Production">5. حداقل و Recommended Hardware برای Production</h2>
+        <h3 data-en="Official starting minimum" data-fa="حداقل رسمی برای شروع">حداقل رسمی برای شروع</h3>
+        <ul>
+          <li data-en="x86_64-compatible CPU" data-fa="CPU سازگار با x86_64">CPU سازگار با x86_64</li>
+          <li data-en="At least 8 GB RAM" data-fa="حداقل 8 GB RAM">حداقل 8 GB RAM</li>
+          <li data-en="Boot SSD of at least 20 GB according to the 25.04 installation guide; keep boot disks separate from pool disks" data-fa="SSD برای Boot با ظرفیت حداقل 20 GB مطابق راهنمای نصب 25.04؛ دیسک Boot از دیسک‌های Pool جدا باشد">
+            SSD برای Boot با ظرفیت حداقل 20 GB مطابق راهنمای نصب 25.04؛ دیسک
+            Boot از دیسک‌های Pool جدا باشد
+          </li>
+          <li data-en="At least two similar disks for a pool" data-fa="حداقل دو Disk مشابه برای یک Pool">حداقل دو Disk مشابه برای یک Pool</li>
+        </ul>
+        <h3 data-en="Production recommendation" data-fa="پیشنهاد Production">پیشنهاد Production</h3>
+        <ul>
+          <li data-en="32–64 GB or more ECC RAM, sized for disk count and workload" data-fa="32 تا 64 GB یا بیشتر ECC RAM، متناسب با تعداد Disk و Workload">32 تا 64 GB یا بیشتر ECC RAM، متناسب با تعداد Disk و Workload</li>
+          <li data-en="Two mirrored boot SSDs" data-fa="دو SSD برای Boot به‌صورت Mirror">دو SSD برای Boot به‌صورت Mirror</li>
+          <li data-en="HBA in IT/HBA mode without hardware RAID hiding the disks" data-fa="HBA در حالت IT/HBA و بدون Hardware RAID پنهان‌کننده Disk">HBA در حالت IT/HBA و بدون Hardware RAID پنهان‌کننده Disk</li>
+          <li data-en="Tested and burned-in NAS/enterprise disks" data-fa="Diskهای NAS/Enterprise تست‌شده و Burn-in شده">Diskهای NAS/Enterprise تست‌شده و Burn-in شده</li>
+          <li data-en="10 GbE for VMs, iSCSI and heavy backups" data-fa="10 GbE برای VM، iSCSI و Backup سنگین">10 GbE برای VM، iSCSI و Backup سنگین</li>
+          <li data-en="Redundant PSUs and power paths, UPS and IPMI/BMC" data-fa="PSU و مسیر برق Redundant، UPS و IPMI/BMC">PSU و مسیر برق Redundant، UPS و IPMI/BMC</li>
+          <li data-en="Hot-swap bays and enough capacity for rebuilds and growth" data-fa="Hot-Swap Bay و فضای کافی برای Rebuild و رشد">Hot-Swap Bay و فضای کافی برای Rebuild و رشد</li>
+        </ul>
+        <h3 data-en="Home lab versus production" data-fa="Home Lab در برابر Production">Home Lab در برابر Production</h3>
+        <p data-en="In a home lab, start learning with 8–16 GB RAM, one boot SSD and 1 GbE networking. In production, design for downtime, RPO/RTO, monitoring, disk replacement and real restores. Use USB flash for temporary installation media rather than a permanent production boot device." data-fa="در Home Lab می‌توان با 8 تا 16 GB RAM، یک Boot SSD و شبکه 1 GbE یادگیری را شروع کرد. در Production باید Downtime، RPO/RTO، Monitoring، Replace کردن Disk و Restore واقعی را طراحی کنید. USB Flash را برای نصب موقت استفاده کنید، نه Boot دائمی Production.">
+          در Home Lab می‌توان با 8 تا 16 GB RAM، یک Boot SSD و شبکه 1 GbE
+          یادگیری را شروع کرد. در Production باید Downtime، RPO/RTO، Monitoring،
+          Replace کردن Disk و Restore واقعی را طراحی کنید. USB Flash را برای نصب
+          موقت استفاده کنید، نه Boot دائمی Production.
+        </p>
+      </section>
       <section id="section-6">
-        <h2>5. معماری ZFS و مفاهیم کلیدی</h2>
-        <h3>Pool و VDEV</h3>
-        <p>
+        <h2 data-en="6. ZFS architecture and key concepts" data-fa="6. معماری ZFS و مفاهیم کلیدی">6. معماری ZFS و مفاهیم کلیدی</h2>
+        <h3 data-en="Pool and VDEV" data-fa="Pool و VDEV">Pool و VDEV</h3>
+        <p data-en="A pool is the main storage space and contains one or more VDEVs. VDEV type determines capacity, performance and failure tolerance. Fundamental layout changes are difficult after pool creation; calculate workload and future growth first." data-fa="Pool فضای ذخیره‌سازی اصلی است و از یک یا چند VDEV ساخته می‌شود. نوع VDEV میزان ظرفیت، Performance و تحمل خرابی را تعیین می‌کند. پس از ایجاد Pool، تغییر بنیادی Layout آسان نیست؛ قبل از Create کردن، Workload و رشد آینده را محاسبه کنید.">
           Pool فضای ذخیره‌سازی اصلی است و از یک یا چند VDEV ساخته می‌شود. نوع
           VDEV میزان ظرفیت، Performance و تحمل خرابی را تعیین می‌کند. پس از
           ایجاد Pool، تغییر بنیادی Layout آسان نیست؛ قبل از Create کردن،
           Workload و رشد آینده را محاسبه کنید.
         </p>
-        <h3>Dataset و ZVOL</h3>
-        <p>
+        <h3 data-en="Dataset and ZVOL" data-fa="Dataset و ZVOL">Dataset و ZVOL</h3>
+        <p data-en="A dataset is an independent filesystem with its own ACLs, quota, compression and snapshots. A ZVOL is a virtual block device, commonly used for iSCSI and some VMs." data-fa="Dataset یک File System مستقل با ACL، Quota، Compression و Snapshot جداگانه است. ZVOL یک Block Device مجازی است و عموماً برای iSCSI و بعضی VMها به‌کار می‌رود.">
           Dataset یک File System مستقل با ACL، Quota، Compression و Snapshot
           جداگانه است. ZVOL یک Block Device مجازی است و عموماً برای iSCSI و بعضی
           VMها به‌کار می‌رود.
         </p>
-        <p>ساختار پیشنهادی:</p>
+        <p data-en="Suggested structure:" data-fa="ساختار پیشنهادی:">ساختار پیشنهادی:</p>
         <pre><code class="language-text">tank/
 ├── shares/finance
 ├── shares/hr
@@ -299,34 +330,34 @@
 ├── vmstore
 └── replication
 </code></pre>
-        <h3>Mirror و RAIDZ1/2/3</h3>
+        <h3 data-en="Mirror and RAIDZ1/2/3" data-fa="Mirror و RAIDZ1/2/3">Mirror و RAIDZ1/2/3</h3>
         <ul>
-          <li>
+          <li data-en="Mirror: similar to RAID1; suitable for IOPS- and latency-sensitive workloads such as VMs and databases." data-fa="Mirror: شبیه RAID1؛ مناسب IOPS و Latency حساس مانند VM و Database.">
             <strong>Mirror:</strong> شبیه RAID1؛ مناسب IOPS و Latency حساس مانند
             VM و Database.
           </li>
-          <li>
+          <li data-en="RAIDZ1: tolerates one disk failure; use cautiously with large disks and important data." data-fa="RAIDZ1: تحمل خرابی یک Disk؛ برای Diskهای بزرگ و داده‌های مهم با احتیاط.">
             <strong>RAIDZ1:</strong> تحمل خرابی یک Disk؛ برای Diskهای بزرگ و
             داده‌های مهم با احتیاط.
           </li>
-          <li>
+          <li data-en="RAIDZ2: tolerates two disk failures; a balanced option for enterprise file servers." data-fa="RAIDZ2: تحمل خرابی دو Disk؛ انتخاب متعادل برای File Serverهای سازمانی.">
             <strong>RAIDZ2:</strong> تحمل خرابی دو Disk؛ انتخاب متعادل برای File
             Serverهای سازمانی.
           </li>
-          <li>
+          <li data-en="RAIDZ3: tolerates three disk failures; suitable for large or archival pools with long rebuilds." data-fa="RAIDZ3: تحمل خرابی سه Disk؛ مناسب Poolهای بزرگ یا آرشیوی با Rebuild طولانی.">
             <strong>RAIDZ3:</strong> تحمل خرابی سه Disk؛ مناسب Poolهای بزرگ یا
             آرشیوی با Rebuild طولانی.
           </li>
         </ul>
-        <h3>ARC، Compression، Scrub و Snapshot</h3>
-        <p>
+        <h3 data-en="ARC, compression, scrub and snapshots" data-fa="ARC، Compression، Scrub و Snapshot">ARC، Compression، Scrub و Snapshot</h3>
+        <p data-en="ARC is the main ZFS cache in RAM. Compression such as lz4 is usually a suitable choice. Scrubs check checksums and repair errors when redundancy exists. A snapshot is a point-in-time copy, but it remains on the same pool and is not an independent backup." data-fa="ARC Cache اصلی ZFS در RAM است. Compression مانند lz4 معمولاً انتخاب مناسبی است. Scrub Checksumها را بررسی و در صورت وجود Redundancy، خطا را اصلاح می‌کند. Snapshot نسخه Point-in-Time است، اما چون روی همان Pool ذخیره می‌شود، Backup مستقل محسوب نمی‌شود.">
           ARC Cache اصلی ZFS در RAM است. Compression مانند
           <code>lz4</code> معمولاً انتخاب مناسبی است. Scrub Checksumها را بررسی
           و در صورت وجود Redundancy، خطا را اصلاح می‌کند. Snapshot نسخه
           Point-in-Time است، اما چون روی همان Pool ذخیره می‌شود، Backup مستقل
           محسوب نمی‌شود.
         </p>
-        <p>
+        <p data-en="Do not enable deduplication without RAM calculations and real testing; its memory requirements can be substantial." data-fa="Deduplication را بدون محاسبه RAM و تست واقعی فعال نکنید؛ مصرف RAM آن می‌تواند بسیار زیاد باشد.">
           Deduplication را بدون محاسبه RAM و تست واقعی فعال نکنید؛ مصرف RAM آن
           می‌تواند بسیار زیاد باشد.
         </p>
@@ -337,45 +368,15 @@
             alt="معماری ZFS در TrueNAS"
           />
         </p>
-        <p>
+        <p data-en="Figure 2 — Pools, VDEVs, datasets, ZVOLs and ZFS protection features." data-fa="تصویر ۲ — رابطه Pool، VDEV، Dataset، ZVOL و قابلیت‌های حفاظتی ZFS.">
           <em
             >تصویر ۲ — رابطه Pool، VDEV، Dataset، ZVOL و قابلیت‌های حفاظتی
             ZFS.</em
           >
         </p>
       </section>
-      <section id="section-7">
-        <h2>6. حداقل و Recommended Hardware برای Production</h2>
-        <h3>حداقل رسمی برای شروع</h3>
-        <ul>
-          <li>CPU سازگار با x86_64</li>
-          <li>حداقل 8 GB RAM</li>
-          <li>
-            SSD برای Boot با ظرفیت حداقل 20 GB مطابق راهنمای نصب 25.04؛ دیسک
-            Boot از دیسک‌های Pool جدا باشد
-          </li>
-          <li>حداقل دو Disk مشابه برای یک Pool</li>
-        </ul>
-        <h3>پیشنهاد Production</h3>
-        <ul>
-          <li>32 تا 64 GB یا بیشتر ECC RAM، متناسب با تعداد Disk و Workload</li>
-          <li>دو SSD برای Boot به‌صورت Mirror</li>
-          <li>HBA در حالت IT/HBA و بدون Hardware RAID پنهان‌کننده Disk</li>
-          <li>Diskهای NAS/Enterprise تست‌شده و Burn-in شده</li>
-          <li>10 GbE برای VM، iSCSI و Backup سنگین</li>
-          <li>PSU و مسیر برق Redundant، UPS و IPMI/BMC</li>
-          <li>Hot-Swap Bay و فضای کافی برای Rebuild و رشد</li>
-        </ul>
-        <h3>Home Lab در برابر Production</h3>
-        <p>
-          در Home Lab می‌توان با 8 تا 16 GB RAM، یک Boot SSD و شبکه 1 GbE
-          یادگیری را شروع کرد. در Production باید Downtime، RPO/RTO، Monitoring،
-          Replace کردن Disk و Restore واقعی را طراحی کنید. USB Flash را برای نصب
-          موقت استفاده کنید، نه Boot دائمی Production.
-        </p>
-      </section>
       <section id="section-8">
-        <h2>7. طراحی شبکه سازمانی</h2>
+        <h2 data-en="7. Enterprise network design" data-fa="7. طراحی شبکه سازمانی">7. طراحی شبکه سازمانی</h2>
         <p>
           <img
             loading="lazy"
@@ -383,7 +384,7 @@
             alt="توپولوژی شبکه TrueNAS Enterprise"
           />
         </p>
-        <p>
+        <p data-en="Figure 3 — Separate management, user/LAN, storage and backup/replication networks." data-fa="تصویر ۳ — تفکیک Management، User/LAN، Storage و Backup/Replication.">
           <em
             >تصویر ۳ — تفکیک Management، User/LAN، Storage و
             Backup/Replication.</em
@@ -395,121 +396,141 @@
                          ├── Storage VLAN 10.10.30.0/24
                          └── Backup VLAN 10.10.40.0/24
 </code></pre>
-        <p>
+        <p data-en="Place the web UI only on the management VLAN. Use the LAN for SMB, the storage VLAN for NFS/iSCSI, and a backup VLAN or dedicated link for replication. Do not route the storage VLAN to the Internet." data-fa="Web UI را فقط روی Management VLAN قرار دهید. SMB روی LAN، NFS/iSCSI روی Storage VLAN و Replication روی Backup VLAN یا لینک اختصاصی قرار گیرد. Storage VLAN را به Internet Route نکنید.">
           Web UI را فقط روی Management VLAN قرار دهید. SMB روی LAN، NFS/iSCSI
           روی Storage VLAN و Replication روی Backup VLAN یا لینک اختصاصی قرار
           گیرد. Storage VLAN را به Internet Route نکنید.
         </p>
       </section>
       <section id="section-9">
-        <h2>8. دانلود ISO و ساخت Bootable USB</h2>
+        <h2 data-en="8. Download the ISO and create bootable USB media" data-fa="8. دانلود ISO و ساخت Bootable USB">8. دانلود ISO و ساخت Bootable USB</h2>
         <ol>
-          <li>ISO را فقط از صفحه رسمی TrueNAS دانلود کنید.</li>
-          <li>Checksum یا Signature را بررسی کنید.</li>
-          <li>با Rufus یا Etcher USB نصب بسازید.</li>
-          <li>برای سیستم‌های جدید از GPT/UEFI استفاده کنید.</li>
-          <li>USB را بعد از نصب جدا کنید.</li>
+          <li data-en="Download the ISO only from the official TrueNAS page." data-fa="ISO را فقط از صفحه رسمی TrueNAS دانلود کنید.">ISO را فقط از صفحه رسمی TrueNAS دانلود کنید.</li>
+          <li data-en="Verify its checksum or signature." data-fa="Checksum یا Signature را بررسی کنید.">Checksum یا Signature را بررسی کنید.</li>
+          <li data-en="Create installation USB media with Rufus or Etcher." data-fa="با Rufus یا Etcher USB نصب بسازید.">با Rufus یا Etcher USB نصب بسازید.</li>
+          <li data-en="Use GPT/UEFI for modern systems." data-fa="برای سیستم‌های جدید از GPT/UEFI استفاده کنید.">برای سیستم‌های جدید از GPT/UEFI استفاده کنید.</li>
+          <li data-en="Remove the USB after installation." data-fa="USB را بعد از نصب جدا کنید.">USB را بعد از نصب جدا کنید.</li>
         </ol>
-        <p>
+        <p data-en="Installation USB media differs from the permanent boot device; a production boot device should preferably be a quality internal SSD or M.2 drive." data-fa="USB نصب با Boot Device دائمی تفاوت دارد؛ Boot Device Production بهتر است SSD داخلی یا M.2 با کیفیت مناسب باشد.">
           USB نصب با Boot Device دائمی تفاوت دارد؛ Boot Device Production بهتر
           است SSD داخلی یا M.2 با کیفیت مناسب باشد.
         </p>
       </section>
       <section id="section-10">
-        <h2>9. نصب TrueNAS روی Bare Metal</h2>
+        <h2 data-en="9. Install TrueNAS on bare metal" data-fa="9. نصب TrueNAS روی Bare Metal">9. نصب TrueNAS روی Bare Metal</h2>
         <ol>
-          <li>از USB Boot کنید و Install/Upgrade را انتخاب کنید.</li>
-          <li>Boot SSD را انتخاب کنید؛ Diskهای دیتا را هرگز انتخاب نکنید.</li>
-          <li>در صورت وجود دو SSD، هر دو را برای Boot Pool انتخاب کنید.</li>
-          <li>هشدار پاک‌شدن Disk را تأیید کنید.</li>
-          <li>رمز Administrator را تنظیم کنید.</li>
-          <li>UEFI را انتخاب و نصب را کامل کنید.</li>
-          <li>پس از Restart، USB را جدا کنید.</li>
-          <li>IP نمایش‌داده‌شده در Console را در مرورگر باز کنید:</li>
+          <li data-en="Boot from USB and select Install/Upgrade." data-fa="از USB Boot کنید و Install/Upgrade را انتخاب کنید.">از USB Boot کنید و Install/Upgrade را انتخاب کنید.</li>
+          <li data-en="Select the boot SSD; never select data disks." data-fa="Boot SSD را انتخاب کنید؛ Diskهای دیتا را هرگز انتخاب نکنید.">Boot SSD را انتخاب کنید؛ Diskهای دیتا را هرگز انتخاب نکنید.</li>
+          <li data-en="If you have two SSDs, select both for the boot pool." data-fa="در صورت وجود دو SSD، هر دو را برای Boot Pool انتخاب کنید.">در صورت وجود دو SSD، هر دو را برای Boot Pool انتخاب کنید.</li>
+          <li data-en="Confirm the disk-erasure warning." data-fa="هشدار پاک‌شدن Disk را تأیید کنید.">هشدار پاک‌شدن Disk را تأیید کنید.</li>
+          <li data-en="Set the administrator password." data-fa="رمز Administrator را تنظیم کنید.">رمز Administrator را تنظیم کنید.</li>
+          <li data-en="Select UEFI and complete installation." data-fa="UEFI را انتخاب و نصب را کامل کنید.">UEFI را انتخاب و نصب را کامل کنید.</li>
+          <li data-en="After restart, remove the USB." data-fa="پس از Restart، USB را جدا کنید.">پس از Restart، USB را جدا کنید.</li>
+          <li data-en="Open the IP address shown in the console in a browser:" data-fa="IP نمایش‌داده‌شده در Console را در مرورگر باز کنید:">IP نمایش‌داده‌شده در Console را در مرورگر باز کنید:</li>
         </ol>
         <pre><code class="language-text">https://&lt;TRUENAS-IP&gt;
 </code></pre>
-        <p>
+        <p data-en="Official paths: Storage → Pools, Datasets and System Settings." data-fa="مسیرهای رسمی: Storage → Pools، Datasets و System Settings.">
           مسیرهای رسمی: <code>Storage → Pools</code>، <code>Datasets</code> و
           <code>System Settings</code>.
         </p>
       </section>
       <section id="section-11">
-        <h2>10. تنظیم Static IP، DNS، Gateway و NTP</h2>
-        <p>مسیر GUI:</p>
+        <h2 data-en="10. Configure static IP, DNS, gateway and NTP" data-fa="10. تنظیم Static IP، DNS، Gateway و NTP">10. تنظیم Static IP، DNS، Gateway و NTP</h2>
+        <p data-en="GUI path:" data-fa="مسیر GUI:">مسیر GUI:</p>
         <pre><code class="language-text">Network → Interfaces
 </code></pre>
-        <p>نمونه:</p>
+        <p data-en="Example:" data-fa="نمونه:">نمونه:</p>
         <pre><code class="language-text">IPv4: 10.10.10.20/24
 Gateway: 10.10.10.1
 DNS: 10.10.10.10, 10.10.10.11
 Hostname: truenas01.example.local
 </code></pre>
-        <p>
+        <p data-en="Configure NTP with the organization&#x27;s internal server through System Settings → Services → NTP. Correct DNS and NTP are essential for Active Directory, TLS and replication." data-fa="NTP را از مسیر System Settings → Services → NTP با NTP داخلی سازمان تنظیم کنید. DNS و NTP صحیح برای Active Directory، TLS و Replication ضروری‌اند.">
           NTP را از مسیر <code>System Settings → Services → NTP</code> با NTP
           داخلی سازمان تنظیم کنید. DNS و NTP صحیح برای Active Directory، TLS و
           Replication ضروری‌اند.
         </p>
       </section>
       <section id="section-12">
-        <h2>11. ساخت Storage Pool</h2>
-        <p>برای چهار Disk هشت ترابایتی File Server:</p>
+        <h2 data-en="11. Create a storage pool" data-fa="11. ساخت Storage Pool">11. ساخت Storage Pool</h2>
+        <p data-en="For a file server with four 8 TB disks:" data-fa="برای چهار Disk هشت ترابایتی File Server:">برای چهار Disk هشت ترابایتی File Server:</p>
         <pre><code class="language-text">Storage → Pools → Create Pool
 Pool: tank
 Layout: RAIDZ2
 Compression: lz4
 </code></pre>
-        <p>
+        <p data-en="Do not select boot disks. For transaction-heavy VMs, two mirror VDEVs usually provide better latency and IOPS than RAIDZ. Compare capacity, data type and rebuild time before creation." data-fa="Diskهای Boot را انتخاب نکنید. برای VMهای پرتراکنش، دو Mirror VDEV معمولاً Latency و IOPS بهتری از RAIDZ ارائه می‌دهد. Capacity، نوع داده و زمان Rebuild را پیش از Create مقایسه کنید.">
           Diskهای Boot را انتخاب نکنید. برای VMهای پرتراکنش، دو Mirror VDEV
           معمولاً Latency و IOPS بهتری از RAIDZ ارائه می‌دهد. Capacity، نوع داده
           و زمان Rebuild را پیش از Create مقایسه کنید.
         </p>
       </section>
       <section id="section-13">
-        <h2>12. ساخت Dataset</h2>
+        <h2 data-en="12. Create datasets" data-fa="12. ساخت Dataset">12. ساخت Dataset</h2>
         <pre><code class="language-text">Datasets → Add Dataset
 </code></pre>
-        <p>
+        <p data-en="Select the SMB preset for SMB, and Generic for NFS and iSCSI. Compression=lz4 and Deduplication=Off are suitable starting points. Keep Sync at its production default for critical data; do not disable it without testing." data-fa="برای SMB، Preset را SMB؛ برای NFS و iSCSI، Generic انتخاب کنید. Compression=lz4 و Deduplication=Off نقطه شروع مناسبی است. برای داده‌های حیاتی Sync را روی مقدار پیش‌فرض Production نگه دارید و آن را بدون آزمون روی Disabled نگذارید.">
           برای SMB، Preset را <code>SMB</code>؛ برای NFS و iSCSI،
           <code>Generic</code> انتخاب کنید. <code>Compression=lz4</code> و
           <code>Deduplication=Off</code> نقطه شروع مناسبی است. برای داده‌های
           حیاتی Sync را روی مقدار پیش‌فرض Production نگه دارید و آن را بدون
           آزمون روی Disabled نگذارید.
         </p>
-        <p>
+        <p data-en="Give every share an independent child dataset; do not share the root or pool-level dataset." data-fa="هر Share باید Child Dataset مستقل داشته باشد؛ Root Dataset یا Pool-level Dataset را Share نکنید.">
           هر Share باید Child Dataset مستقل داشته باشد؛ Root Dataset یا
           Pool-level Dataset را Share نکنید.
         </p>
       </section>
       <section id="section-14">
-        <h2>13. ایجاد User و Group</h2>
+        <h2 data-en="13. Create users and groups" data-fa="13. ایجاد User و Group">13. ایجاد User و Group</h2>
         <pre><code class="language-text">Credentials → Local Users
 Credentials → Local Groups
 </code></pre>
-        <p>
+        <p data-en="Create groups such as finance-rw, finance-ro and it-admins, and assign permissions to groups. In a domain-based organization:" data-fa="گروه‌هایی مانند finance-rw، finance-ro و it-admins بسازید و Permission را به Group بدهید. در سازمان Domainمحور:">
           گروه‌هایی مانند <code>finance-rw</code>، <code>finance-ro</code> و
           <code>it-admins</code> بسازید و Permission را به Group بدهید. در
           سازمان Domainمحور:
         </p>
         <pre><code class="language-text">Credentials → Directory Services → Active Directory
 </code></pre>
-        <p>
+        <p data-en="Before joining, test DNS, NTP, FQDN and access to the domain controller." data-fa="قبل از Join شدن، DNS، NTP، FQDN و دسترسی به Domain Controller را تست کنید.">
           قبل از Join شدن، DNS، NTP، FQDN و دسترسی به Domain Controller را تست
           کنید.
         </p>
       </section>
+      <section id="section-23">
+        <h2 data-en="14. Security Hardening" data-fa="۱۴. سخت‌سازی امنیتی">14. Security Hardening</h2>
+        <ul>
+          <li data-en="Do not publish the web UI on the Internet; use only a management VLAN, VPN or bastion." data-fa="Web UI را روی Internet منتشر نکنید؛ فقط Management VLAN، VPN یا Bastion.">
+            Web UI را روی Internet منتشر نکنید؛ فقط Management VLAN، VPN یا
+            Bastion.
+          </li>
+          <li data-en="Use HTTPS and a valid organizational certificate." data-fa="از HTTPS و Certificate معتبر سازمانی استفاده کنید.">از HTTPS و Certificate معتبر سازمانی استفاده کنید.</li>
+          <li data-en="Apply least privilege and group-based ACLs." data-fa="Least Privilege و Group-Based ACL را اجرا کنید.">Least Privilege و Group-Based ACL را اجرا کنید.</li>
+          <li data-en="Keep administrator accounts separate from user accounts." data-fa="Admin Account جدا از User Account داشته باشید.">Admin Account جدا از User Account داشته باشید.</li>
+          <li data-en="Enable MFA if supported by the release and authentication method." data-fa="MFA را در صورت پشتیبانی Release و روش احراز هویت فعال کنید.">MFA را در صورت پشتیبانی Release و روش احراز هویت فعال کنید.</li>
+          <li data-en="Restrict SMB/NFS/iSCSI to appropriate subnets." data-fa="SMB/NFS/iSCSI را روی Subnet مناسب محدود کنید.">SMB/NFS/iSCSI را روی Subnet مناسب محدود کنید.</li>
+          <li data-en="Separate management, storage and backup VLANs." data-fa="Management، Storage و Backup VLAN را جدا کنید.">Management، Storage و Backup VLAN را جدا کنید.</li>
+          <li data-en="For ransomware recovery, retain snapshots, remote replication and offline copies." data-fa="برای Ransomware، Snapshot Retention، Remote Replication و نسخه Offline داشته باشید.">
+            برای Ransomware، Snapshot Retention، Remote Replication و نسخه
+            Offline داشته باشید.
+          </li>
+          <li data-en="Do not enable unused services." data-fa="Serviceهای بلااستفاده را فعال نکنید.">Serviceهای بلااستفاده را فعال نکنید.</li>
+        </ul>
+      </section>
       <section id="section-15">
-        <h2>14. راه‌اندازی SMB برای Windows</h2>
-        <p>Dataset بسازید:</p>
+        <h2 data-en="15. Configure SMB for Windows" data-fa="15. راه‌اندازی SMB برای Windows">15. راه‌اندازی SMB برای Windows</h2>
+        <p data-en="Create a dataset:" data-fa="Dataset بسازید:">Dataset بسازید:</p>
         <pre><code class="language-text">Name: projects
 Preset: SMB
 </code></pre>
-        <p>سپس:</p>
+        <p data-en="Then:" data-fa="سپس:">سپس:</p>
         <pre><code class="language-text">Shares → Windows Shares (SMB) → Add
 Path: /mnt/tank/shares/projects
 Name: Projects
 </code></pre>
-        <p>
+        <p data-en="Start SMB through System Settings → Services → SMB and enable Start Automatically if needed. Configure ACLs by group through Datasets → Edit Permissions." data-fa="از System Settings → Services → SMB سرویس را Start و در صورت نیاز Start Automatically را فعال کنید. ACL را از Datasets → Edit Permissions و بر اساس Group تنظیم کنید.">
           از <code>System Settings → Services → SMB</code> سرویس را Start و در
           صورت نیاز Start Automatically را فعال کنید. ACL را از
           <code>Datasets → Edit Permissions</code> و بر اساس Group تنظیم کنید.
@@ -521,78 +542,78 @@ Name: Projects
             alt="راهنمای SMB در TrueNAS"
           />
         </p>
-        <p>
+        <p data-en="Figure 4 — Create a dataset, ACLs and an SMB share for Windows users." data-fa="تصویر ۴ — ساخت Dataset، ACL و SMB Share برای کاربران Windows.">
           <em>تصویر ۴ — ساخت Dataset، ACL و SMB Share برای کاربران Windows.</em>
         </p>
       </section>
       <section id="section-16">
-        <h2>15. Map Network Drive در Windows</h2>
-        <p>
+        <h2 data-en="16. Map a network drive in Windows" data-fa="16. Map Network Drive در Windows">16. Map Network Drive در Windows</h2>
+        <p data-en="In File Explorer, select Map Network Drive under This PC and enter:" data-fa="در File Explorer، روی This PC گزینه Map Network Drive را انتخاب کنید و مسیر زیر را وارد کنید:">
           در File Explorer، روی This PC گزینه Map Network Drive را انتخاب کنید و
           مسیر زیر را وارد کنید:
         </p>
         <pre><code class="language-text">\\truenas01.example.local\Projects
 </code></pre>
-        <p>با PowerShell:</p>
+        <p data-en="With PowerShell:" data-fa="با PowerShell:">با PowerShell:</p>
         <pre><code class="language-powershell">New-PSDrive -Name P -PSProvider FileSystem `
   -Root &quot;\\truenas01.example.local\Projects&quot; -Persist
 </code></pre>
-        <p>Credentialها را در Script عمومی ذخیره نکنید.</p>
+        <p data-en="Do not store credentials in public scripts." data-fa="Credentialها را در Script عمومی ذخیره نکنید.">Credentialها را در Script عمومی ذخیره نکنید.</p>
       </section>
       <section id="section-17">
-        <h2>16. راه‌اندازی NFS برای Linux و VMware</h2>
-        <p>Dataset با Preset <code>Generic</code> بسازید و سپس:</p>
+        <h2 data-en="17. Configure NFS for Linux and VMware" data-fa="17. راه‌اندازی NFS برای Linux و VMware">17. راه‌اندازی NFS برای Linux و VMware</h2>
+        <p data-en="Create a dataset with the Generic preset, then:" data-fa="Dataset با Preset Generic بسازید و سپس:">Dataset با Preset <code>Generic</code> بسازید و سپس:</p>
         <pre><code class="language-text">Shares → Unix Shares (NFS) → Add
 Path: /mnt/tank/vmware_nfs
 Authorized Networks: 10.10.30.0/24
 </code></pre>
-        <p>در Linux:</p>
+        <p data-en="On Linux:" data-fa="در Linux:">در Linux:</p>
         <pre><code class="language-bash">sudo mkdir -p /mnt/truenas
 sudo mount -t nfs truenas01:/mnt/tank/vmware_nfs /mnt/truenas
 showmount -e truenas01
 </code></pre>
-        <p>
+        <p data-en="In VMware, use Add Datastore → NFS and allow only authorized hosts on the storage VLAN." data-fa="در VMware، از Add Datastore → NFS استفاده کنید و فقط Hostهای مجاز Storage VLAN را اجازه دهید.">
           در VMware، از <code>Add Datastore → NFS</code> استفاده کنید و فقط
           Hostهای مجاز Storage VLAN را اجازه دهید.
         </p>
       </section>
       <section id="section-18">
-        <h2>17. iSCSI برای Virtualization</h2>
-        <p>
+        <h2 data-en="18. iSCSI for virtualization" data-fa="18. iSCSI برای Virtualization">18. iSCSI برای Virtualization</h2>
+        <p data-en="iSCSI provides block storage. Its components include portals, initiators, targets, extents and associations." data-fa="iSCSI Block Storage ارائه می‌کند. اجزای آن شامل Portal، Initiator، Target، Extent و Association است.">
           iSCSI Block Storage ارائه می‌کند. اجزای آن شامل Portal، Initiator،
           Target، Extent و Association است.
         </p>
         <ol>
-          <li>یک ZVOL بسازید: <code>Datasets → Add Zvol</code>.</li>
-          <li>به <code>Shares → Block Shares (iSCSI)</code> بروید.</li>
-          <li>Portal و Initiator را تعریف کنید.</li>
-          <li>Target و Extent را بسازید.</li>
-          <li>آن‌ها را Associate کنید.</li>
+          <li data-en="Create a ZVOL: Datasets → Add Zvol." data-fa="یک ZVOL بسازید: Datasets → Add Zvol.">یک ZVOL بسازید: <code>Datasets → Add Zvol</code>.</li>
+          <li data-en="Open Shares → Block Shares (iSCSI)." data-fa="به Shares → Block Shares (iSCSI) بروید.">به <code>Shares → Block Shares (iSCSI)</code> بروید.</li>
+          <li data-en="Define the portal and initiator." data-fa="Portal و Initiator را تعریف کنید.">Portal و Initiator را تعریف کنید.</li>
+          <li data-en="Create the target and extent." data-fa="Target و Extent را بسازید.">Target و Extent را بسازید.</li>
+          <li data-en="Associate them." data-fa="آن‌ها را Associate کنید.">آن‌ها را Associate کنید.</li>
         </ol>
-        <p>
+        <p data-en="Run iSCSI on a storage VLAN with 10 GbE or faster, controlled latency and multipath if needed. Do not allocate more ZVOL space than the pool can actually provide." data-fa="iSCSI را روی Storage VLAN، با 10 GbE یا بیشتر، Latency کنترل‌شده و در صورت نیاز Multipath اجرا کنید. ZVOL را بیش از ظرفیت واقعی Pool تخصیص ندهید.">
           iSCSI را روی Storage VLAN، با 10 GbE یا بیشتر، Latency کنترل‌شده و در
           صورت نیاز Multipath اجرا کنید. ZVOL را بیش از ظرفیت واقعی Pool تخصیص
           ندهید.
         </p>
       </section>
       <section id="section-19">
-        <h2>18. Snapshot خودکار</h2>
+        <h2 data-en="19. Automated snapshots" data-fa="19. Snapshot خودکار">19. Snapshot خودکار</h2>
         <pre><code class="language-text">Data Protection → Periodic Snapshot Tasks → Add
 </code></pre>
-        <p>نمونه Retention:</p>
-        <pre><code class="language-text">Hourly: 24 ساعت
-Daily: 30 روز
-Weekly: 12 هفته
-Monthly: 12 ماه
+        <p data-en="Retention example:" data-fa="نمونه Retention:">نمونه Retention:</p>
+        <pre><code class="language-text">Hourly: 24 hours
+Daily: 30 days
+Weekly: 12 weeks
+Monthly: 12 months
 </code></pre>
-        <p>
+        <p data-en="Snapshots support quick recovery; when the primary pool is lost, snapshots on that pool are lost too." data-fa="Snapshot برای Recovery سریع است؛ اگر Pool اصلی از بین برود، Snapshot همان Pool نیز از بین می‌رود.">
           Snapshot برای Recovery سریع است؛ اگر Pool اصلی از بین برود، Snapshot
           همان Pool نیز از بین می‌رود.
         </p>
       </section>
       <section id="section-20">
-        <h2>19. ZFS Replication به TrueNAS دوم</h2>
-        <p>
+        <h2 data-en="20. ZFS replication to a second TrueNAS server" data-fa="20. ZFS Replication به TrueNAS دوم">20. ZFS Replication به TrueNAS دوم</h2>
+        <p data-en="First prepare the second TrueNAS server, SSH credentials, destination and sufficient space. Then:" data-fa="ابتدا TrueNAS دوم، SSH Credential، مقصد و فضای کافی را آماده کنید. سپس:">
           ابتدا TrueNAS دوم، SSH Credential، مقصد و فضای کافی را آماده کنید.
           سپس:
         </p>
@@ -600,10 +621,10 @@ Monthly: 12 ماه
 Source: tank/shares
 Destination: truenas02/tank-replica/shares
 Recursive: Enabled
-Schedule: هر 30 دقیقه
+Schedule: every 30 minutes
 Transport: SSH
 </code></pre>
-        <p>
+        <p data-en="Place the destination at a second site or at least a separate rack/room, and test restores regularly. Replication without suitable retention can also propagate logical errors or malicious deletion; manage destination snapshots." data-fa="مقصد را در سایت دوم یا حداقل Rack/اتاق جدا قرار دهید و Restore را دوره‌ای تست کنید. Replication بدون Retention مناسب ممکن است خطای منطقی یا حذف مخرب را نیز منتقل کند؛ Snapshotهای مقصد را مدیریت کنید.">
           مقصد را در سایت دوم یا حداقل Rack/اتاق جدا قرار دهید و Restore را
           دوره‌ای تست کنید. Replication بدون Retention مناسب ممکن است خطای منطقی
           یا حذف مخرب را نیز منتقل کند؛ Snapshotهای مقصد را مدیریت کنید.
@@ -615,114 +636,30 @@ Transport: SSH
             alt="Snapshot و Replication در TrueNAS"
           />
         </p>
-        <p>
+        <p data-en="Figure 5 — Local snapshots versus replication and off-site copies." data-fa="تصویر ۵ — تفاوت Snapshot محلی با Replication و نسخه خارج از سایت.">
           <em
             >تصویر ۵ — تفاوت Snapshot محلی با Replication و نسخه خارج از
             سایت.</em
           >
         </p>
       </section>
-      <section id="section-21">
-        <h2>20. SMART و Scrub</h2>
-        <p>SMART:</p>
-        <pre><code class="language-text">Storage → Disks → S.M.A.R.T. Tests
-Short: روزانه یا هفتگی
-Long: ماهانه
-</code></pre>
-        <p>Scrub:</p>
-        <pre><code class="language-text">Data Protection → Scrub Tasks → Add
-Pool: tank
-Schedule: ماهانه
-</code></pre>
-        <p>
-          تست‌های Long را در ساعات کم‌مصرف اجرا کنید و Alertها را به Email یا
-          سیستم Monitoring ارسال کنید.
-        </p>
-      </section>
       <section id="section-22">
-        <h2>21. Backup از Configuration</h2>
+        <h2 data-en="21. Configuration backup" data-fa="21. Backup از Configuration">21. Backup از Configuration</h2>
         <pre><code class="language-text">System Settings → General → Manage Configuration → Download File
 </code></pre>
-        <p>
+        <p data-en="Encrypt the configuration file and retain it in a secure management system, a second site and storage outside TrueNAS. Configuration backup is not a backup of pool data." data-fa="فایل Configuration را رمزنگاری و در سیستم مدیریت امن، سایت دوم و Storage خارج از TrueNAS نگهداری کنید. Configuration Backup، Backup داده‌های Pool نیست.">
           فایل Configuration را رمزنگاری و در سیستم مدیریت امن، سایت دوم و
           Storage خارج از TrueNAS نگهداری کنید. Configuration Backup، Backup
           داده‌های Pool نیست.
         </p>
       </section>
-      <section id="section-23">
-        <h2>22. Security Hardening</h2>
-        <ul>
-          <li>
-            Web UI را روی Internet منتشر نکنید؛ فقط Management VLAN، VPN یا
-            Bastion.
-          </li>
-          <li>از HTTPS و Certificate معتبر سازمانی استفاده کنید.</li>
-          <li>Least Privilege و Group-Based ACL را اجرا کنید.</li>
-          <li>Admin Account جدا از User Account داشته باشید.</li>
-          <li>MFA را در صورت پشتیبانی Release و روش احراز هویت فعال کنید.</li>
-          <li>SMB/NFS/iSCSI را روی Subnet مناسب محدود کنید.</li>
-          <li>Management، Storage و Backup VLAN را جدا کنید.</li>
-          <li>
-            برای Ransomware، Snapshot Retention، Remote Replication و نسخه
-            Offline داشته باشید.
-          </li>
-          <li>Serviceهای بلااستفاده را فعال نکنید.</li>
-        </ul>
-      </section>
-      <section id="section-24">
-        <h2>23. Monitoring و Alerting</h2>
-        <p>از مسیرهای زیر استفاده کنید:</p>
-        <pre><code class="language-text">Dashboard
-System Settings → Alerts
-Reporting
-</code></pre>
-        <p>
-          هشدارهای Pool Degraded، Disk Failure، SMART، Low Space، Scrub Error،
-          Replication Failure، Temperature، Certificate Expiration، DNS/NTP و
-          Service Down را فعال کنید. Email Alert را با SMTP سازمان تست کنید و در
-          صورت نیاز SNMP، Syslog، Prometheus یا Grafana را اضافه کنید.
-        </p>
-      </section>
-      <section id="section-25">
-        <h2>24. اشتباهات رایج</h2>
-        <ol>
-          <li>
-            <strong>RAID جای Backup نیست.</strong> در برابر حذف، Ransomware،
-            آتش‌سوزی و خرابی کامل کافی نیست.
-          </li>
-          <li>
-            <strong>Snapshot جای Backup نیست.</strong> Snapshot روی همان Pool
-            قرار دارد.
-          </li>
-          <li>
-            <strong>RAIDZ را برای هر Workload انتخاب نکنید.</strong> VM و
-            Database اغلب به Mirror VDEV نیاز دارند.
-          </li>
-          <li><strong>USB را Boot Disk دائمی Production نکنید.</strong></li>
-          <li>
-            <strong>RAM را دست‌کم نگیرید.</strong> ARC، SMB، VM، iSCSI و
-            Deduplication RAM می‌خواهند.
-          </li>
-          <li>
-            <strong>Root Dataset را Share نکنید.</strong> Child Dataset مستقل
-            بسازید.
-          </li>
-          <li>
-            <strong>Deduplication را بدون محاسبه و تست فعال نکنید.</strong>
-          </li>
-          <li>
-            <strong>Replication بدون Restore Test کافی نیست.</strong> Backup
-            باید قابل‌بازیابی باشد.
-          </li>
-        </ol>
-      </section>
       <section id="section-26">
-        <h2>25. سناریوی واقعی شرکت متوسط</h2>
-        <p>برای 80 کاربر، 10 VM و حدود 30 TB داده:</p>
-        <pre><code class="language-text">TrueNAS-01: 8×12 TB، RAIDZ2، 64 GB ECC، 2×10 GbE، Boot SSD Mirror
-TrueNAS-02: 8×12 TB، RAIDZ2، 64 GB ECC، سایت دوم
+        <h2 data-en="22. Practical example for a medium-sized company" data-fa="22. سناریوی واقعی شرکت متوسط">22. سناریوی واقعی شرکت متوسط</h2>
+        <p data-en="For 80 users, 10 VMs and about 30 TB of data:" data-fa="برای 80 کاربر، 10 VM و حدود 30 TB داده:">برای 80 کاربر، 10 VM و حدود 30 TB داده:</p>
+        <pre><code class="language-text">TrueNAS-01: 8×12 TB, RAIDZ2, 64 GB ECC, 2×10 GbE, Boot SSD Mirror
+TrueNAS-02: 8×12 TB, RAIDZ2, 64 GB ECC, second site
 </code></pre>
-        <p>Datasetها:</p>
+        <p data-en="Datasets:" data-fa="Datasetها:">Datasetها:</p>
         <pre><code class="language-text">tank/shares/finance
 tank/shares/hr
 tank/shares/projects
@@ -730,15 +667,46 @@ tank/backups
 tank/vmware_nfs
 tank/replication
 </code></pre>
-        <p>
+        <p data-en="A useful starting design uses SMB on the user VLAN, NFS/iSCSI on the storage VLAN, hourly and daily snapshots, replication to a second site every 30 minutes, and a weekly off-site copy. Calculate final capacity using actual data, annual growth, retention and rebuild space." data-fa="SMB روی User VLAN، NFS/iSCSI روی Storage VLAN، Snapshot ساعتی و روزانه، Replication هر 30 دقیقه به سایت دوم و یک Copy هفتگی خارج از سایت، الگوی مناسبی برای شروع است. Capacity نهایی را بر اساس داده واقعی، رشد سالانه، Retention و فضای لازم برای Rebuild محاسبه کنید.">
           SMB روی User VLAN، NFS/iSCSI روی Storage VLAN، Snapshot ساعتی و
           روزانه، Replication هر 30 دقیقه به سایت دوم و یک Copy هفتگی خارج از
           سایت، الگوی مناسبی برای شروع است. Capacity نهایی را بر اساس داده
           واقعی، رشد سالانه، Retention و فضای لازم برای Rebuild محاسبه کنید.
         </p>
       </section>
+      <section id="section-21">
+        <h2 data-en="23. SMART and scrub" data-fa="23. SMART و Scrub">23. SMART و Scrub</h2>
+        <p>SMART:</p>
+        <pre><code class="language-text">Storage → Disks → S.M.A.R.T. Tests
+Short: daily or weekly
+Long: monthly
+</code></pre>
+        <p>Scrub:</p>
+        <pre><code class="language-text">Data Protection → Scrub Tasks → Add
+Pool: tank
+Schedule: monthly
+</code></pre>
+        <p data-en="Run long tests during quiet hours and send alerts to email or monitoring." data-fa="تست‌های Long را در ساعات کم‌مصرف اجرا کنید و Alertها را به Email یا سیستم Monitoring ارسال کنید.">
+          تست‌های Long را در ساعات کم‌مصرف اجرا کنید و Alertها را به Email یا
+          سیستم Monitoring ارسال کنید.
+        </p>
+      </section>
+      <section id="section-24">
+        <h2 data-en="24. Monitoring and alerting" data-fa="24. Monitoring و Alerting">24. Monitoring و Alerting</h2>
+        <p data-en="Use these paths:" data-fa="از مسیرهای زیر استفاده کنید:">از مسیرهای زیر استفاده کنید:</p>
+        <pre><code class="language-text">Dashboard
+System Settings → Alerts
+Reporting
+</code></pre>
+        <p data-en="Enable alerts for degraded pools, disk failures, SMART, low space, scrub errors, replication failures, temperature, certificate expiry, DNS/NTP and service outages. Test email alerts with organizational SMTP and add SNMP, syslog, Prometheus or Grafana if needed." data-fa="هشدارهای Pool Degraded، Disk Failure، SMART، Low Space، Scrub Error، Replication Failure، Temperature، Certificate Expiration، DNS/NTP و Service Down را فعال کنید. Email Alert را با SMTP سازمان تست کنید و در صورت نیاز SNMP، Syslog، Prometheus یا Grafana را اضافه کنید.">
+          هشدارهای Pool Degraded، Disk Failure، SMART، Low Space، Scrub Error،
+          Replication Failure، Temperature، Certificate Expiration، DNS/NTP و
+          Service Down را فعال کنید. Email Alert را با SMTP سازمان تست کنید و در
+          صورت نیاز SNMP، Syslog، Prometheus یا Grafana را اضافه کنید.
+        </p>
+      </section>
       <section id="section-27">
-        <h2>26. Troubleshooting اولیه و Commandهای Diagnostic</h2>
+        <h2 data-en="25. Initial troubleshooting and diagnostic commands" data-fa="25. Troubleshooting اولیه و Commandهای Diagnostic">25. Troubleshooting اولیه و Commandهای Diagnostic</h2>
         <pre><code class="language-bash">zpool status
 zpool list
 zfs list
@@ -750,45 +718,78 @@ ping &lt;gateway&gt;
 dig truenas01.example.local
 showmount -e &lt;truenas-ip&gt;
 </code></pre>
-        <p>در Windows:</p>
+        <p data-en="On Windows:" data-fa="در Windows:">در Windows:</p>
         <pre><code class="language-powershell">Test-NetConnection truenas01 -Port 445
 </code></pre>
-        <p>
+        <p data-en="First check the dashboard, pool, SMART, free space, DNS, NTP, VLANs, firewall, ACLs, services and latest snapshots/replication. Do not run modifying ZFS commands without a runbook and authorization." data-fa="ابتدا Dashboard، Pool، SMART، فضای آزاد، DNS، NTP، VLAN، Firewall، ACL، Service و آخرین Snapshot/Replication را بررسی کنید. دستورات تغییر‌دهنده ZFS را بدون Runbook و تأیید اجرا نکنید.">
           ابتدا Dashboard، Pool، SMART، فضای آزاد، DNS، NTP، VLAN، Firewall،
           ACL، Service و آخرین Snapshot/Replication را بررسی کنید. دستورات
           تغییر‌دهنده ZFS را بدون Runbook و تأیید اجرا نکنید.
         </p>
       </section>
+      <section id="section-25">
+        <h2 data-en="26. Common mistakes" data-fa="26. اشتباهات رایج">26. اشتباهات رایج</h2>
+        <ol>
+          <li data-en="RAID is not a backup. It does not adequately protect against deletion, ransomware, fire or total failure." data-fa="RAID جای Backup نیست. در برابر حذف، Ransomware، آتش‌سوزی و خرابی کامل کافی نیست.">
+            <strong>RAID جای Backup نیست.</strong> در برابر حذف، Ransomware،
+            آتش‌سوزی و خرابی کامل کافی نیست.
+          </li>
+          <li data-en="A snapshot is not a backup. It resides on the same pool." data-fa="Snapshot جای Backup نیست. Snapshot روی همان Pool قرار دارد.">
+            <strong>Snapshot جای Backup نیست.</strong> Snapshot روی همان Pool
+            قرار دارد.
+          </li>
+          <li data-en="Do not choose RAIDZ for every workload. VMs and databases often need mirror VDEVs." data-fa="RAIDZ را برای هر Workload انتخاب نکنید. VM و Database اغلب به Mirror VDEV نیاز دارند.">
+            <strong>RAIDZ را برای هر Workload انتخاب نکنید.</strong> VM و
+            Database اغلب به Mirror VDEV نیاز دارند.
+          </li>
+          <li data-en="Do not use USB as a permanent production boot disk." data-fa="USB را Boot Disk دائمی Production نکنید."><strong>USB را Boot Disk دائمی Production نکنید.</strong></li>
+          <li data-en="Do not underestimate RAM requirements. ARC, SMB, VMs, iSCSI and deduplication need memory." data-fa="RAM را دست‌کم نگیرید. ARC، SMB، VM، iSCSI و Deduplication RAM می‌خواهند.">
+            <strong>RAM را دست‌کم نگیرید.</strong> ARC، SMB، VM، iSCSI و
+            Deduplication RAM می‌خواهند.
+          </li>
+          <li data-en="Do not share the root dataset. Create independent child datasets." data-fa="Root Dataset را Share نکنید. Child Dataset مستقل بسازید.">
+            <strong>Root Dataset را Share نکنید.</strong> Child Dataset مستقل
+            بسازید.
+          </li>
+          <li data-en="Do not enable deduplication without calculations and tests." data-fa="Deduplication را بدون محاسبه و تست فعال نکنید.">
+            <strong>Deduplication را بدون محاسبه و تست فعال نکنید.</strong>
+          </li>
+          <li data-en="Replication without restore tests is insufficient. Backups must be recoverable." data-fa="Replication بدون Restore Test کافی نیست. Backup باید قابل‌بازیابی باشد.">
+            <strong>Replication بدون Restore Test کافی نیست.</strong> Backup
+            باید قابل‌بازیابی باشد.
+          </li>
+        </ol>
+      </section>
       <section id="section-28">
-        <h2>27. Checklist نهایی Production Deployment</h2>
+        <h2 data-en="27. Final production deployment checklist" data-fa="27. Checklist نهایی Production Deployment">27. Checklist نهایی Production Deployment</h2>
         <ul>
-          <li>ECC RAM، Boot SSD Mirror، HBA، UPS و IPMI آماده است.</li>
-          <li>Diskها Burn-in و SMART شده‌اند.</li>
-          <li>Management، User، Storage و Backup VLAN جدا شده‌اند.</li>
-          <li>DNS، FQDN، Gateway و NTP صحیح است.</li>
-          <li>Pool Layout با Workload و Rebuild Window هماهنگ است.</li>
-          <li>Compression فعال و Deduplication آگاهانه انتخاب شده است.</li>
-          <li>Root Dataset Share نشده و Datasetهای مستقل ساخته شده‌اند.</li>
-          <li>ACL و Groupها تست شده‌اند.</li>
-          <li>SMB/NFS/iSCSI فقط به Clientهای مجاز دسترسی دارند.</li>
-          <li>Snapshot Schedule و Retention مستند است.</li>
-          <li>Remote Replication به مقصد دوم فعال است.</li>
-          <li>Backup خارج از سایت و نسخه Offline وجود دارد.</li>
-          <li>Configuration Backup رمزنگاری و خارج از دستگاه ذخیره شده است.</li>
-          <li>SMART، Scrub، Alerting و Monitoring فعال است.</li>
-          <li>Restore و Disaster Recovery به‌صورت عملی تست شده است.</li>
-          <li>RPO، RTO، Runbook تعویض Disk و فرآیند Escalation مستند است.</li>
+          <li data-en="ECC RAM, mirrored boot SSDs, HBA, UPS and IPMI are ready." data-fa="ECC RAM، Boot SSD Mirror، HBA، UPS و IPMI آماده است.">ECC RAM، Boot SSD Mirror، HBA، UPS و IPMI آماده است.</li>
+          <li data-en="Disks have passed burn-in and SMART tests." data-fa="Diskها Burn-in و SMART شده‌اند.">Diskها Burn-in و SMART شده‌اند.</li>
+          <li data-en="Management, user, storage and backup VLANs are separate." data-fa="Management، User، Storage و Backup VLAN جدا شده‌اند.">Management، User، Storage و Backup VLAN جدا شده‌اند.</li>
+          <li data-en="DNS, FQDN, gateway and NTP are correct." data-fa="DNS، FQDN، Gateway و NTP صحیح است.">DNS، FQDN، Gateway و NTP صحیح است.</li>
+          <li data-en="Pool layout matches the workload and rebuild window." data-fa="Pool Layout با Workload و Rebuild Window هماهنگ است.">Pool Layout با Workload و Rebuild Window هماهنگ است.</li>
+          <li data-en="Compression is enabled and deduplication was chosen deliberately." data-fa="Compression فعال و Deduplication آگاهانه انتخاب شده است.">Compression فعال و Deduplication آگاهانه انتخاب شده است.</li>
+          <li data-en="The root dataset is not shared and independent datasets exist." data-fa="Root Dataset Share نشده و Datasetهای مستقل ساخته شده‌اند.">Root Dataset Share نشده و Datasetهای مستقل ساخته شده‌اند.</li>
+          <li data-en="ACLs and groups have been tested." data-fa="ACL و Groupها تست شده‌اند.">ACL و Groupها تست شده‌اند.</li>
+          <li data-en="SMB/NFS/iSCSI are accessible only to authorized clients." data-fa="SMB/NFS/iSCSI فقط به Clientهای مجاز دسترسی دارند.">SMB/NFS/iSCSI فقط به Clientهای مجاز دسترسی دارند.</li>
+          <li data-en="Snapshot schedules and retention are documented." data-fa="Snapshot Schedule و Retention مستند است.">Snapshot Schedule و Retention مستند است.</li>
+          <li data-en="Remote replication to a second destination is enabled." data-fa="Remote Replication به مقصد دوم فعال است.">Remote Replication به مقصد دوم فعال است.</li>
+          <li data-en="Off-site and offline backups exist." data-fa="Backup خارج از سایت و نسخه Offline وجود دارد.">Backup خارج از سایت و نسخه Offline وجود دارد.</li>
+          <li data-en="Configuration backups are encrypted and stored off the device." data-fa="Configuration Backup رمزنگاری و خارج از دستگاه ذخیره شده است.">Configuration Backup رمزنگاری و خارج از دستگاه ذخیره شده است.</li>
+          <li data-en="SMART, scrub, alerting and monitoring are enabled." data-fa="SMART، Scrub، Alerting و Monitoring فعال است.">SMART، Scrub، Alerting و Monitoring فعال است.</li>
+          <li data-en="Restore and disaster recovery have been tested in practice." data-fa="Restore و Disaster Recovery به‌صورت عملی تست شده است.">Restore و Disaster Recovery به‌صورت عملی تست شده است.</li>
+          <li data-en="RPO, RTO, disk-replacement runbooks and escalation procedures are documented." data-fa="RPO، RTO، Runbook تعویض Disk و فرآیند Escalation مستند است.">RPO، RTO، Runbook تعویض Disk و فرآیند Escalation مستند است.</li>
         </ul>
       </section>
       <section id="section-29">
-        <h2>چه زمانی TrueNAS انتخاب مناسبی است و چه زمانی نیست؟</h2>
-        <p>
+        <h2 data-en="When is TrueNAS a suitable choice, and when is it not?" data-fa="چه زمانی TrueNAS انتخاب مناسبی است و چه زمانی نیست؟">چه زمانی TrueNAS انتخاب مناسبی است و چه زمانی نیست؟</h2>
+        <p data-en="TrueNAS suits teams that need full control over storage, ZFS, snapshots, replication, SMB/NFS/iSCSI, hardware flexibility and manageable costs, and have storage, networking and recovery expertise." data-fa="TrueNAS انتخاب مناسبی است اگر به کنترل کامل روی Storage، ZFS، Snapshot، Replication، SMB/NFS/iSCSI، انعطاف Hardware و هزینه قابل‌کنترل نیاز دارید و تیم شما دانش Storage، Network و Recovery را دارد.">
           TrueNAS انتخاب مناسبی است اگر به کنترل کامل روی Storage، ZFS،
           Snapshot، Replication، SMB/NFS/iSCSI، انعطاف Hardware و هزینه
           قابل‌کنترل نیاز دارید و تیم شما دانش Storage، Network و Recovery را
           دارد.
         </p>
-        <p>
+        <p data-en="It is unsuitable when no team can manage ZFS, only mismatched disks without backups are available, an appliance is expected to require no design, the web UI would be Internet-facing, or very high availability is needed without HA and a second site. A supported appliance, managed storage or a vendor-based solution may be more appropriate." data-fa="انتخاب مناسبی نیست اگر تیمی برای مدیریت ZFS ندارید، فقط چند Disk نامشابه و بدون Backup در اختیار است، انتظار Appliance کاملاً بدون طراحی دارید، Web UI قرار است روی Internet منتشر شود، یا بدون HA و سایت دوم به Availability بسیار بالا نیاز دارید. در این شرایط، Appliance پشتیبانی‌شده، Managed Storage یا راهکار Vendorمحور ممکن است انتخاب منطقی‌تری باشد.">
           انتخاب مناسبی نیست اگر تیمی برای مدیریت ZFS ندارید، فقط چند Disk
           نامشابه و بدون Backup در اختیار است، انتظار Appliance کاملاً بدون
           طراحی دارید، Web UI قرار است روی Internet منتشر شود، یا بدون HA و سایت
@@ -798,14 +799,14 @@ showmount -e &lt;truenas-ip&gt;
         </p>
       </section>
       <section id="faq" class="article-section">
-        <h2>پرسش‌های متداول TrueNAS</h2>
+        <h2 data-en="TrueNAS frequently asked questions" data-fa="پرسش‌های متداول TrueNAS">پرسش‌های متداول TrueNAS</h2>
         <div class="article-faq">
           <div class="article-faq-item">
-            <h3 class="article-faq-question">
+            <h3 class="article-faq-question" data-en="Do RAIDZ and snapshots replace backups?" data-fa="آیا RAIDZ و Snapshot جای نسخهٔ پشتیبان را می‌گیرند؟">
               آیا RAIDZ و Snapshot جای نسخهٔ پشتیبان را می‌گیرند؟
             </h3>
             <div class="article-faq-answer">
-              <p>
+              <p data-en="No. RAIDZ tolerates disk failures and snapshots return data to a point in time. Total pool failure, malicious deletion and site incidents require independent off-site copies." data-fa="خیر. RAIDZ برای تحمل خرابی دیسک و Snapshot برای بازگشت به یک زمان مشخص است. برای خرابی کل Pool، حذف مخرب و حادثهٔ سایت، نسخهٔ مستقل و خارج از سایت لازم است.">
                 خیر. RAIDZ برای تحمل خرابی دیسک و Snapshot برای بازگشت به یک
                 زمان مشخص است. برای خرابی کل Pool، حذف مخرب و حادثهٔ سایت، نسخهٔ
                 مستقل و خارج از سایت لازم است.
@@ -813,9 +814,9 @@ showmount -e &lt;truenas-ip&gt;
             </div>
           </div>
           <div class="article-faq-item">
-            <h3 class="article-faq-question">تفاوت Dataset و ZVOL چیست؟</h3>
+            <h3 class="article-faq-question" data-en="What is the difference between a dataset and a ZVOL?" data-fa="تفاوت Dataset و ZVOL چیست؟">تفاوت Dataset و ZVOL چیست؟</h3>
             <div class="article-faq-answer">
-              <p>
+              <p data-en="A dataset is a filesystem with independent quotas, ACLs and snapshots, used for SMB or NFS shares. A ZVOL is a block device, typically used behind an iSCSI extent." data-fa="Dataset یک فایل‌سیستم با سهمیه، ACL و Snapshot مستقل است و برای اشتراک SMB یا NFS استفاده می‌شود. ZVOL یک دستگاه بلوکی است و معمولاً پشت Extent در iSCSI قرار می‌گیرد.">
                 Dataset یک فایل‌سیستم با سهمیه، ACL و Snapshot مستقل است و برای
                 اشتراک SMB یا NFS استفاده می‌شود. ZVOL یک دستگاه بلوکی است و
                 معمولاً پشت Extent در iSCSI قرار می‌گیرد.
@@ -823,11 +824,11 @@ showmount -e &lt;truenas-ip&gt;
             </div>
           </div>
           <div class="article-faq-item">
-            <h3 class="article-faq-question">
+            <h3 class="article-faq-question" data-en="Are mirrors or RAIDZ2 better for virtual machines?" data-fa="برای ماشین‌های مجازی Mirror مناسب‌تر است یا RAIDZ2؟">
               برای ماشین‌های مجازی Mirror مناسب‌تر است یا RAIDZ2؟
             </h3>
             <div class="article-faq-answer">
-              <p>
+              <p data-en="The choice depends on IOPS, latency, capacity and workload. Mirror VDEVs usually suit random VM workloads; RAIDZ2 provides capacity and tolerance of two disk failures per VDEV. Test the final choice with a real workload." data-fa="انتخاب به IOPS، تأخیر، ظرفیت و الگوی بار بستگی دارد. Mirror VDEVها معمولاً برای بار تصادفی ماشین‌های مجازی مناسب‌اند؛ RAIDZ2 ظرفیت و تحمل خرابی دو دیسک در هر VDEV را ارائه می‌کند. انتخاب نهایی را با بار واقعی آزمایش کنید.">
                 انتخاب به IOPS، تأخیر، ظرفیت و الگوی بار بستگی دارد. Mirror
                 VDEVها معمولاً برای بار تصادفی ماشین‌های مجازی مناسب‌اند؛ RAIDZ2
                 ظرفیت و تحمل خرابی دو دیسک در هر VDEV را ارائه می‌کند. انتخاب
@@ -836,11 +837,11 @@ showmount -e &lt;truenas-ip&gt;
             </div>
           </div>
           <div class="article-faq-item">
-            <h3 class="article-faq-question">
+            <h3 class="article-faq-question" data-en="Why should boot disks be separate from pool disks?" data-fa="چرا دیسک Boot باید از دیسک‌های Pool جدا باشد؟">
               چرا دیسک Boot باید از دیسک‌های Pool جدا باشد؟
             </h3>
             <div class="article-faq-answer">
-              <p>
+              <p data-en="TrueNAS installation erases the selected disk. Separating boot and data reduces selection mistakes and role conflicts. Verify the destination disk model and serial number before installation." data-fa="نصب TrueNAS دیسک انتخاب‌شده را پاک می‌کند. جداسازی Boot از داده‌ها خطر انتخاب اشتباه و تداخل نقش دیسک‌ها را کم می‌کند. قبل از نصب، مدل و شمارهٔ سریال دیسک مقصد را بررسی کنید.">
                 نصب TrueNAS دیسک انتخاب‌شده را پاک می‌کند. جداسازی Boot از
                 داده‌ها خطر انتخاب اشتباه و تداخل نقش دیسک‌ها را کم می‌کند. قبل
                 از نصب، مدل و شمارهٔ سریال دیسک مقصد را بررسی کنید.
@@ -848,11 +849,11 @@ showmount -e &lt;truenas-ip&gt;
             </div>
           </div>
           <div class="article-faq-item">
-            <h3 class="article-faq-question">
+            <h3 class="article-faq-question" data-en="How do we restrict SMB access?" data-fa="چگونه دسترسی به SMB را محدود کنیم؟">
               چگونه دسترسی به SMB را محدود کنیم؟
             </h3>
             <div class="article-faq-answer">
-              <p>
+              <p data-en="Create a separate dataset, assign ACLs to required groups and restrict network access to the service. Test read, write and deletion using both authorized and unauthorized users." data-fa="Dataset مستقل بسازید، ACL را به گروه‌های موردنیاز بدهید و دسترسی شبکه به سرویس را محدود کنید. با یک کاربر مجاز و یک کاربر غیرمجاز، خواندن، نوشتن و حذف را آزمایش کنید.">
                 Dataset مستقل بسازید، ACL را به گروه‌های موردنیاز بدهید و دسترسی
                 شبکه به سرویس را محدود کنید. با یک کاربر مجاز و یک کاربر
                 غیرمجاز، خواندن، نوشتن و حذف را آزمایش کنید.
@@ -860,11 +861,11 @@ showmount -e &lt;truenas-ip&gt;
             </div>
           </div>
           <div class="article-faq-item">
-            <h3 class="article-faq-question">
+            <h3 class="article-faq-question" data-en="Does deduplication always save more space?" data-fa="آیا فعال کردن Deduplication همیشه فضای بیشتری آزاد می‌کند؟">
               آیا فعال کردن Deduplication همیشه فضای بیشتری آزاد می‌کند؟
             </h3>
             <div class="article-faq-answer">
-              <p>
+              <p data-en="No. Results depend on actual duplicate data and system resources. Memory and performance costs can exceed savings. Do not enable it without measurements and tests." data-fa="خیر. نتیجه به تکرار واقعی داده‌ها و منابع سیستم بستگی دارد و ممکن است هزینهٔ حافظه و کارایی از صرفه‌جویی بیشتر باشد. بدون اندازه‌گیری و آزمایش، آن را فعال نکنید.">
                 خیر. نتیجه به تکرار واقعی داده‌ها و منابع سیستم بستگی دارد و
                 ممکن است هزینهٔ حافظه و کارایی از صرفه‌جویی بیشتر باشد. بدون
                 اندازه‌گیری و آزمایش، آن را فعال نکنید.
@@ -872,11 +873,11 @@ showmount -e &lt;truenas-ip&gt;
             </div>
           </div>
           <div class="article-faq-item">
-            <h3 class="article-faq-question">
+            <h3 class="article-faq-question" data-en="Is successful replication sufficient to prove recoverability?" data-fa="موفق بودن Replication برای اطمینان از بازیابی کافی است؟">
               موفق بودن Replication برای اطمینان از بازیابی کافی است؟
             </h3>
             <div class="article-faq-answer">
-              <p>
+              <p data-en="No. Check the job and destination snapshots, then actually restore a file or dataset. Retain destination retention settings and encryption keys separately from the primary server." data-fa="خیر. علاوه بر بررسی Job و Snapshotهای مقصد، بازیابی فایل یا Dataset را عملاً آزمایش کنید. Retention مقصد و کلیدهای رمزنگاری را جدا از سرور اصلی نگهداری کنید.">
                 خیر. علاوه بر بررسی Job و Snapshotهای مقصد، بازیابی فایل یا
                 Dataset را عملاً آزمایش کنید. Retention مقصد و کلیدهای رمزنگاری
                 را جدا از سرور اصلی نگهداری کنید.
@@ -884,11 +885,11 @@ showmount -e &lt;truenas-ip&gt;
             </div>
           </div>
           <div class="article-faq-item">
-            <h3 class="article-faq-question">
+            <h3 class="article-faq-question" data-en="What should we do when a pool becomes degraded?" data-fa="هنگام Degraded شدن Pool چه کاری انجام دهیم؟">
               هنگام Degraded شدن Pool چه کاری انجام دهیم؟
             </h3>
             <div class="article-faq-answer">
-              <p>
+              <p data-en="Check the dashboard and zpool status, identify the failed disk by serial number, and confirm backup health. Replace it through a supported TrueNAS UI procedure and monitor resilver progress." data-fa="از Dashboard و zpool status وضعیت را بررسی کنید، دیسک معیوب را با شمارهٔ سریال شناسایی و سلامت Backup را تأیید کنید. تعویض را از روش پشتیبانی‌شدهٔ رابط TrueNAS انجام دهید و پیشرفت Resilver را پایش کنید.">
                 از Dashboard و zpool status وضعیت را بررسی کنید، دیسک معیوب را
                 با شمارهٔ سریال شناسایی و سلامت Backup را تأیید کنید. تعویض را
                 از روش پشتیبانی‌شدهٔ رابط TrueNAS انجام دهید و پیشرفت Resilver
@@ -899,7 +900,7 @@ showmount -e &lt;truenas-ip&gt;
         </div>
       </section>
       <section id="section-30">
-        <h2>منابع رسمی</h2>
+        <h2 data-en="Official references" data-fa="منابع رسمی">منابع رسمی</h2>
         <ul>
           <li>
             <a

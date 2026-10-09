@@ -399,6 +399,15 @@
             >
           </li>
           <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="پیش از Policy Routing"
+                data-en="Before policy routing"
+                >Before policy routing</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
             <a href="#enterprise-architecture"
               ><span
                 data-fa="Connection Mark و Routing Table"
@@ -408,11 +417,9 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-prerequisites"
-              ><span
-                data-fa="پیش از Policy Routing"
-                data-en="Before policy routing"
-                >Before policy routing</span
+            <a href="#enterprise-security"
+              ><span data-fa="NAT و مسیر داخلی" data-en="NAT and internal paths"
+                >NAT and internal paths</span
               ></a
             >
           </li>
@@ -440,13 +447,6 @@
                 data-fa="توزیع نامناسب و مسیر پاسخ اشتباه"
                 data-en="Uneven distribution and wrong return paths"
                 >Uneven distribution and wrong return paths</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#enterprise-security"
-              ><span data-fa="NAT و مسیر داخلی" data-en="NAT and internal paths"
-                >NAT and internal paths</span
               ></a
             >
           </li>
@@ -671,39 +671,6 @@
                       failover on the target version.
                     </p>
                   </section>
-                  <section id="enterprise-architecture" class="article-section">
-                    <h2
-                      data-fa="Connection Mark و Routing Table"
-                      data-en="Connection marks and routing tables"
-                    >
-                      Connection marks and routing tables
-                    </h2>
-                    <p
-                      data-fa="PCC اتصال را Mark می‌کند و Packetهای همان اتصال Table مربوط را انتخاب می‌کنند. پاسخ ورودی باید از WAN ورود برگردد. Ruleهای Bypass شبکه داخلی از فرستادن مقصدهای LAN و VPN به WAN جلوگیری می‌کنند."
-                      data-en="PCC marks the connection, and its packets select the associated table. Inbound replies must use their ingress WAN. Internal bypass rules keep LAN and VPN destinations out of WAN policy routing."
-                    >
-                      PCC marks the connection, and its packets select the
-                      associated table. Inbound replies must use their ingress
-                      WAN. Internal bypass rules keep LAN and VPN destinations
-                      out of WAN policy routing.
-                    </p>
-                    <h3
-                      id="enterprise-scenario"
-                      data-fa="نقشه آدرس و Interface نمونه"
-                      data-en="Example addresses and interfaces"
-                    >
-                      Example addresses and interfaces
-                    </h3>
-                    <p
-                      data-fa="ether1 برای WAN1 با 192.168.30.2/30 و Gateway برابر 192.168.30.1 است. ether2 برای WAN2 با 172.30.30.2/30 و Gateway برابر 172.30.30.1 است. LAN روی ether3 با 10.10.10.0/24 قرار دارد. این مقادیر را از IPAM واقعی جایگزین کنید."
-                      data-en="ether1/WAN1 uses 192.168.30.2/30 via 192.168.30.1. Ether2/WAN2 uses 172.30.30.2/30 via 172.30.30.1. Ether3 carries LAN 10.10.10.0/24. Replace these values from actual IPAM."
-                    >
-                      ether1/WAN1 uses 192.168.30.2/30 via 192.168.30.1.
-                      Ether2/WAN2 uses 172.30.30.2/30 via 172.30.30.1. Ether3
-                      carries LAN 10.10.10.0/24. Replace these values from
-                      actual IPAM.
-                    </p>
-                  </section>
                   <section
                     id="enterprise-prerequisites"
                     class="article-section"
@@ -753,6 +720,56 @@
                       weighted example uses PCC. Repeating ECMP gateways is not
                       a dependable 2:1 guarantee. In v7, create routing tables
                       before referencing them.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="Connection Mark و Routing Table"
+                      data-en="Connection marks and routing tables"
+                    >
+                      Connection marks and routing tables
+                    </h2>
+                    <p
+                      data-fa="PCC اتصال را Mark می‌کند و Packetهای همان اتصال Table مربوط را انتخاب می‌کنند. پاسخ ورودی باید از WAN ورود برگردد. Ruleهای Bypass شبکه داخلی از فرستادن مقصدهای LAN و VPN به WAN جلوگیری می‌کنند."
+                      data-en="PCC marks the connection, and its packets select the associated table. Inbound replies must use their ingress WAN. Internal bypass rules keep LAN and VPN destinations out of WAN policy routing."
+                    >
+                      PCC marks the connection, and its packets select the
+                      associated table. Inbound replies must use their ingress
+                      WAN. Internal bypass rules keep LAN and VPN destinations
+                      out of WAN policy routing.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="نقشه آدرس و Interface نمونه"
+                      data-en="Example addresses and interfaces"
+                    >
+                      Example addresses and interfaces
+                    </h3>
+                    <p
+                      data-fa="ether1 برای WAN1 با 192.168.30.2/30 و Gateway برابر 192.168.30.1 است. ether2 برای WAN2 با 172.30.30.2/30 و Gateway برابر 172.30.30.1 است. LAN روی ether3 با 10.10.10.0/24 قرار دارد. این مقادیر را از IPAM واقعی جایگزین کنید."
+                      data-en="ether1/WAN1 uses 192.168.30.2/30 via 192.168.30.1. Ether2/WAN2 uses 172.30.30.2/30 via 172.30.30.1. Ether3 carries LAN 10.10.10.0/24. Replace these values from actual IPAM."
+                    >
+                      ether1/WAN1 uses 192.168.30.2/30 via 192.168.30.1.
+                      Ether2/WAN2 uses 172.30.30.2/30 via 172.30.30.1. Ether3
+                      carries LAN 10.10.10.0/24. Replace these values from
+                      actual IPAM.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="NAT و مسیر داخلی"
+                      data-en="NAT and internal paths"
+                    >
+                      NAT and internal paths
+                    </h2>
+                    <p
+                      data-fa="NAT مجوز دسترسی نمی‌دهد. Input WAN باید Default Deny داشته باشد و Forward فقط مسیرهای مجاز را بپذیرد. همه Subnetهای داخلی و VPN را در Bypass بیاورید. DNAT موجود به آزمون مسیر پاسخ مستقل نیاز دارد."
+                      data-en="NAT does not grant access. Keep WAN input default-deny and permit only approved forwarding. Include internal/VPN subnets in bypass policy. Existing DNAT needs independent return-path tests."
+                    >
+                      NAT does not grant access. Keep WAN input default-deny and
+                      permit only approved forwarding. Include internal/VPN
+                      subnets in bypass policy. Existing DNAT needs independent
+                      return-path tests.
                     </p>
                   </section>
                   <section id="enterprise-installation" class="article-section">
@@ -829,7 +846,12 @@
                       loss and latency per WAN. Recursive or multi-target
                       probing needs separate design.
                     </p>
-                  </section>
+                  <div id="technical-enterprise-monitoring"><h3 data-en="Inspect each policy table and connection bucket" data-fa="بررسی هر جدول policy و دستهٔ اتصال">Inspect each policy table and connection bucket</h3><pre dir="ltr"><code class="language-routeros">/routing table print
+/ip route print detail where routing-table=ent-wan1
+/ip route print detail where routing-table=ent-wan2
+/ip firewall mangle print stats where comment~&quot;ENT-PCC&quot;
+/ip firewall connection print count-only where connection-mark=ent-c1
+/ip firewall connection print count-only where connection-mark=ent-c2</code></pre><p data-en="Expected: both FIB tables exist; each has an active reachable next hop, and new client sessions increase the classifier counters. Two WAN1 buckets versus one WAN2 bucket is a connection allocation, not a byte/throughput guarantee. In the isolated lab, fail each link independently and retest new sessions. A responding gateway with dead upstream does not deactivate a gateway-only probe. Preserve existing connections and do not flush conntrack to force a test to pass." data-fa="انتظار می‌رود هر دو جدول FIB موجود و هرکدام next hop فعال و قابل دسترس داشته باشند و اتصال جدید کلاینت شمارندهٔ classifier را افزایش دهد. دو دستهٔ WAN1 در برابر یک WAN2، نسبت اتصال است، نه تضمین بایت یا سرعت. در آزمایشگاه جدا هر لینک را مستقل قطع و اتصال جدید را دوباره آزمایش کنید. پاسخ دروازه با upstream خراب آزمون فقط دروازه را غیرفعال نمی‌کند. اتصال موجود را حفظ و conntrack را برای موفق نشان‌دادن آزمون پاک نکنید.">Expected: both FIB tables exist; each has an active reachable next hop, and new client sessions increase the classifier counters. Two WAN1 buckets versus one WAN2 bucket is a connection allocation, not a byte/throughput guarantee. In the isolated lab, fail each link independently and retest new sessions. A responding gateway with dead upstream does not deactivate a gateway-only probe. Preserve existing connections and do not flush conntrack to force a test to pass.</p></div></section>
                   <section
                     id="enterprise-troubleshooting"
                     class="article-section"
@@ -850,23 +872,6 @@
                       main-table next-hop and scope checks. Pin destinations
                       sensitive to public-IP changes or test a more suitable
                       classifier and remeasure distribution.
-                    </p>
-                  </section>
-                  <section id="enterprise-security" class="article-section">
-                    <h2
-                      data-fa="NAT و مسیر داخلی"
-                      data-en="NAT and internal paths"
-                    >
-                      NAT and internal paths
-                    </h2>
-                    <p
-                      data-fa="NAT مجوز دسترسی نمی‌دهد. Input WAN باید Default Deny داشته باشد و Forward فقط مسیرهای مجاز را بپذیرد. همه Subnetهای داخلی و VPN را در Bypass بیاورید. DNAT موجود به آزمون مسیر پاسخ مستقل نیاز دارد."
-                      data-en="NAT does not grant access. Keep WAN input default-deny and permit only approved forwarding. Include internal/VPN subnets in bypass policy. Existing DNAT needs independent return-path tests."
-                    >
-                      NAT does not grant access. Keep WAN input default-deny and
-                      permit only approved forwarding. Include internal/VPN
-                      subnets in bypass policy. Existing DNAT needs independent
-                      return-path tests.
                     </p>
                   </section>
                   <section id="enterprise-recovery" class="article-section">
@@ -902,7 +907,9 @@
                       inspect every table’s active route and new-connection
                       success. Gateway and upstream failure are different tests.
                     </p>
-                  </section>
+                  <div id="technical-enterprise-recovery"><h3 data-en="Disable only the new lab policy rules first" data-fa="ابتدا فقط قواعد policy آزمایشگاهی جدید را غیرفعال کنید">Disable only the new lab policy rules first</h3><p data-en="These commands modify the example configuration. With console access, disable the new mangle rules first, then disable only the example routes/NAT after reviewing the pre-change path. Do not remove FIB tables until every reference is gone. Restore the exact recorded prior policy, including any FastTrack change, and verify both forwarding and router management." data-fa="این فرمان‌ها تنظیمات مثال را تغییر می‌دهند. با کنسول مستقل ابتدا mangle جدید و سپس فقط مسیر و NAT نمونه را پس از بررسی مسیر قبلی غیرفعال کنید. تا حذف همهٔ referenceها جدول FIB را حذف نکنید. policy دقیق قبلی، از جمله تغییر احتمالی FastTrack را بازگردانید و forwarding و مدیریت روتر را آزمایش کنید.">These commands modify the example configuration. With console access, disable the new mangle rules first, then disable only the example routes/NAT after reviewing the pre-change path. Do not remove FIB tables until every reference is gone. Restore the exact recorded prior policy, including any FastTrack change, and verify both forwarding and router management.</p><pre dir="ltr"><code class="language-routeros">/ip firewall mangle disable [find where comment~&quot;ENT-PCC&quot;]
+/ip route disable [find where comment~&quot;ENT-PCC&quot;]
+/ip firewall nat disable [find where comment~&quot;ENT-PCC&quot;]</code></pre></div></section>
                   <section id="faq" class="article-section">
                     <h2
                       data-fa="پرسش‌های متداول"

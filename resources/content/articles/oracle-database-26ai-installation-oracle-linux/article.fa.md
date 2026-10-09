@@ -4,7 +4,7 @@
 
 ## ۱. مقدمه؛ نسخه، Edition و محدوده راهنما
 
-Oracle Database پایگاه داده رابطه‌ای تراکنشی با SQL، PL/SQL، کنترل هم‌زمانی، Recovery و سرویس‌های داده سازمانی است. در بررسی ۹ اکتبر ۲۰۲۶، Oracle AI Database 26ai نسخه عمومی و بلندمدت جاری در مستندات و صفحه دانلود رسمی Linux x86-64 است. نام محصول 26ai به معنی شروع شماره داخلی با 26 نیست؛ رسانه عمومی پایه شماره 23.26.1.0.0 دارد. آخرین Release Update مجاز را پیش از استقرار در My Oracle Support بررسی کنید؛ نام RPM نشان‌دهنده Patch Level نیست.
+Oracle Database پایگاه داده رابطه‌ای تراکنشی با SQL، PL/SQL، کنترل هم‌زمانی، Recovery و سرویس‌های داده سازمانی است. Oracle AI Database 26ai نسخه عمومی و بلندمدت جاری در مستندات و صفحه دانلود رسمی Linux x86-64 است. نام محصول 26ai به معنی شروع شماره داخلی با 26 نیست؛ رسانه عمومی پایه شماره 23.26.1.0.0 دارد. آخرین Release Update مجاز را پیش از استقرار در My Oracle Support بررسی کنید؛ نام RPM نشان‌دهنده Patch Level نیست.
 
 [ویژگی‌ها و انتشار بلندمدت رسمی Oracle AI Database 26ai](https://docs.oracle.com/en/database/oracle/oracle-database/26/nfcoa/all-nfg.html)
 
@@ -22,18 +22,6 @@ Oracle Database پایگاه داده رابطه‌ای تراکنشی با SQL�
 کاربرد سازمانی شامل ERP، مالی، پردازش سفارش، تحلیل ترکیبی و تجمیع برنامه‌هاست؛ AI Vector Search جست‌وجوی شباهت را اضافه می‌کند. مجوز را با استقرار واقعی و قرارداد، از جمله Virtualization و معیار Processor یا Named User Plus تطبیق دهید. دانلود رسانه به‌تنهایی حق استفاده Production نمی‌دهد. Optionهای فعال را ثبت کنید؛ RMAN پایه و Unified Auditing را از Advanced Security، Advanced Compression و Diagnostics/Tuning Pack دارای مجوز جدا تفکیک کنید.
 
 [مجوز Oracle 26ai؛ Feature، Option و Pack مجاز](https://docs.oracle.com/en/database/oracle/oracle-database/26/dblic/Licensing-Information.html)
-
-## معماری CDB و PDB
-
-Instance شامل SGA و Background Process است و Database از Datafile، Control File و Online Redo تشکیل می‌شود. CDB دارای CDB$ROOT، قالب فقط‌خواندنی PDB$SEED و PDBهای برنامه است. حساب و Schema محلی برنامه در ORCLPDB1 قرار می‌گیرد. PDBها Instance و Failure Domain میزبان را مشترک دارند؛ PDB نود مستقل Availability نیست. برنامه به Service Name مربوط به PDB وصل می‌شود، نه SID ریشه. Script پیکربندی RPM برای ساخت دیتابیس DBCA را فراخوانی می‌کند.
-
-![Oracle Linux میزبان Instance است؛ CDB شامل Root، Seed و PDB برنامه است و برنامه‌ها از طریق سرویس PDB متصل می‌شوند.](/assets/img/articles/content/oracle-database-architecture.png)
-
-Oracle Linux میزبان Instance است؛ CDB شامل Root، Seed و PDB برنامه است و برنامه‌ها از طریق سرویس PDB متصل می‌شوند.
-
-[مفاهیم و معماری فیزیکی Oracle Database](https://docs.oracle.com/en/database/oracle/oracle-database/26/cncpt/introduction-to-oracle-database.html)
-
-[معماری رسمی Multitenant، CDB و PDB](https://docs.oracle.com/en/database/oracle/oracle-database/26/multi/introduction-to-the-multitenant-architecture.html)
 
 ## ۲. پیش‌نیازها و بررسی میزبان
 
@@ -81,6 +69,18 @@ sudo firewall-cmd --get-active-zones
 Filesystemهای تأییدشده را پیش از نصب ایجاد و Mount دائمی کنید؛ Ownership و ترتیب Boot در /etc/fstab را بررسی کنید. در Automation زیر /backup/oracle یک Filesystem مستقل Mountشده است؛ Script در مسیر Mountنشده نمی‌نویسد. Device موجود را با کپی مثال Format نکنید. RMAN از Oracle Home، Wallet، Password File، Config Listener و فایل External Table محافظت نمی‌کند؛ Backup جدا با دسترسی محدود لازم است.
 
 [پیش‌نیاز رسمی فضای نرم‌افزار و ظرفیت Patch](https://docs.oracle.com/en/database/oracle/oracle-database/26/ladbi/storage-checklist-for-oracle-database-installation.html)
+
+## معماری CDB و PDB
+
+Instance شامل SGA و Background Process است و Database از Datafile، Control File و Online Redo تشکیل می‌شود. CDB دارای CDB$ROOT، قالب فقط‌خواندنی PDB$SEED و PDBهای برنامه است. حساب و Schema محلی برنامه در ORCLPDB1 قرار می‌گیرد. PDBها Instance و Failure Domain میزبان را مشترک دارند؛ PDB نود مستقل Availability نیست. برنامه به Service Name مربوط به PDB وصل می‌شود، نه SID ریشه. Script پیکربندی RPM برای ساخت دیتابیس DBCA را فراخوانی می‌کند.
+
+![Oracle Linux میزبان Instance است؛ CDB شامل Root، Seed و PDB برنامه است و برنامه‌ها از طریق سرویس PDB متصل می‌شوند.](/assets/img/articles/content/oracle-database-architecture.png)
+
+Oracle Linux میزبان Instance است؛ CDB شامل Root، Seed و PDB برنامه است و برنامه‌ها از طریق سرویس PDB متصل می‌شوند.
+
+[مفاهیم و معماری فیزیکی Oracle Database](https://docs.oracle.com/en/database/oracle/oracle-database/26/cncpt/introduction-to-oracle-database.html)
+
+[معماری رسمی Multitenant، CDB و PDB](https://docs.oracle.com/en/database/oracle/oracle-database/26/multi/introduction-to-the-multitenant-architecture.html)
 
 ## ۳. نصب و پیکربندی دیتابیس
 
@@ -1060,7 +1060,7 @@ Componentها را روی میزبان مستقل پایش و Restart می‌ک�
 
 ## منابع رسمی و Templateهای بررسی‌شده
 
-مستندات در ۹ اکتبر ۲۰۲۶ بررسی شده‌اند. منابع کنار هر فرآیند را بخوانید، Certification/RU جاری MOS و README مربوط به Patch را دوباره بررسی و Config اختصاصی را پیش از استقرار تست کنید. Template قابل دانلود Credential واقعی ندارد. اجرای Linux/Oracle این فایل‌ها در Workspace ویندوزی Repository تست نشده است.
+منابع کنار هر فرآیند را بخوانید، Certification/RU جاری MOS و README مربوط به Patch را دوباره بررسی و Config اختصاصی را پیش از استقرار تست کنید. Template قابل دانلود Credential واقعی ندارد. اجرای Linux/Oracle این فایل‌ها در Workspace ویندوزی Repository تست نشده است.
 
 [ویژگی‌ها و انتشار بلندمدت رسمی Oracle AI Database 26ai](https://docs.oracle.com/en/database/oracle/oracle-database/26/nfcoa/all-nfg.html)
 

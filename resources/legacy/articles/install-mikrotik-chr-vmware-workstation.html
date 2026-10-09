@@ -310,15 +310,6 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-architecture"
-              ><span
-                data-fa="تطبیق vNIC با Interface روتر"
-                data-en="Map vNICs to router interfaces"
-                >Map vNICs to router interfaces</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#enterprise-prerequisites"
               ><span
                 data-fa="Image و منابع ماشین مجازی"
@@ -328,11 +319,11 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-installation"
+            <a href="#enterprise-architecture"
               ><span
-                data-fa="ساخت VM و تنظیم IPv4 Lab"
-                data-en="Create the VM and configure the IPv4 lab"
-                >Create the VM and configure the IPv4 lab</span
+                data-fa="تطبیق vNIC با Interface روتر"
+                data-en="Map vNICs to router interfaces"
+                >Map vNICs to router interfaces</span
               ></a
             >
           </li>
@@ -342,6 +333,15 @@
                 data-fa="جلوگیری از اتصال Lab به شبکه شرکت"
                 data-en="Keep the lab isolated"
                 >Keep the lab isolated</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="ساخت VM و تنظیم IPv4 Lab"
+                data-en="Create the VM and configure the IPv4 lab"
+                >Create the VM and configure the IPv4 lab</span
               ></a
             >
           </li>
@@ -496,39 +496,6 @@
                       into the company network.
                     </p>
                   </section>
-                  <section id="enterprise-architecture" class="article-section">
-                    <h2
-                      data-fa="تطبیق vNIC با Interface روتر"
-                      data-en="Map vNICs to router interfaces"
-                    >
-                      Map vNICs to router interfaces
-                    </h2>
-                    <p
-                      data-fa="نام VMnet و MAC هر vNIC را ثبت کنید و با خروجی Interface روتر تطبیق دهید. فرض نکنید ترتیب Adapter در Workstation همیشه با ether1 و ether2 یکسان است. Client از CHR به‌عنوان Gateway استفاده می‌کند و NAT روتر آن را به WAN Lab می‌فرستد."
-                      data-en="Record each VMnet and vNIC MAC, then match them to router interfaces. Do not assume Workstation adapter order always matches ether1 and ether2. Clients use CHR as their gateway, with router NAT sending permitted traffic to the lab WAN."
-                    >
-                      Record each VMnet and vNIC MAC, then match them to router
-                      interfaces. Do not assume Workstation adapter order always
-                      matches ether1 and ether2. Clients use CHR as their
-                      gateway, with router NAT sending permitted traffic to the
-                      lab WAN.
-                    </p>
-                    <h3
-                      id="enterprise-scenario"
-                      data-fa="توپولوژی WAN و LAN آزمایشگاه"
-                      data-en="Lab WAN and LAN topology"
-                    >
-                      Lab WAN and LAN topology
-                    </h3>
-                    <p
-                      data-fa="ether1 به VMnet NAT و ether2 به Host-only وصل می‌شود. یک VM کلاینت در LAN قرار دارد. DHCP داخلی VMware را در شبکه LAN خاموش کنید اگر قرار است CHR یا سرویس دیگری همان شبکه را مدیریت کند."
-                      data-en="Connect ether1 to NAT and ether2 to host-only, with a client VM on the LAN. Disable VMware DHCP on that LAN when CHR or another service will manage it."
-                    >
-                      Connect ether1 to NAT and ether2 to host-only, with a
-                      client VM on the LAN. Disable VMware DHCP on that LAN when
-                      CHR or another service will manage it.
-                    </p>
-                  </section>
                   <section
                     id="enterprise-prerequisites"
                     class="article-section"
@@ -577,6 +544,56 @@
                       Free licensing limits upload to 1 Mbps per interface. P1,
                       P10 and P-Unlimited have different limits. Desktop
                       Workstation is not an HA router design.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="تطبیق vNIC با Interface روتر"
+                      data-en="Map vNICs to router interfaces"
+                    >
+                      Map vNICs to router interfaces
+                    </h2>
+                    <p
+                      data-fa="نام VMnet و MAC هر vNIC را ثبت کنید و با خروجی Interface روتر تطبیق دهید. فرض نکنید ترتیب Adapter در Workstation همیشه با ether1 و ether2 یکسان است. Client از CHR به‌عنوان Gateway استفاده می‌کند و NAT روتر آن را به WAN Lab می‌فرستد."
+                      data-en="Record each VMnet and vNIC MAC, then match them to router interfaces. Do not assume Workstation adapter order always matches ether1 and ether2. Clients use CHR as their gateway, with router NAT sending permitted traffic to the lab WAN."
+                    >
+                      Record each VMnet and vNIC MAC, then match them to router
+                      interfaces. Do not assume Workstation adapter order always
+                      matches ether1 and ether2. Clients use CHR as their
+                      gateway, with router NAT sending permitted traffic to the
+                      lab WAN.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="توپولوژی WAN و LAN آزمایشگاه"
+                      data-en="Lab WAN and LAN topology"
+                    >
+                      Lab WAN and LAN topology
+                    </h3>
+                    <p
+                      data-fa="ether1 به VMnet NAT و ether2 به Host-only وصل می‌شود. یک VM کلاینت در LAN قرار دارد. DHCP داخلی VMware را در شبکه LAN خاموش کنید اگر قرار است CHR یا سرویس دیگری همان شبکه را مدیریت کند."
+                      data-en="Connect ether1 to NAT and ether2 to host-only, with a client VM on the LAN. Disable VMware DHCP on that LAN when CHR or another service will manage it."
+                    >
+                      Connect ether1 to NAT and ether2 to host-only, with a
+                      client VM on the LAN. Disable VMware DHCP on that LAN when
+                      CHR or another service will manage it.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="جلوگیری از اتصال Lab به شبکه شرکت"
+                      data-en="Keep the lab isolated"
+                    >
+                      Keep the lab isolated
+                    </h2>
+                    <p
+                      data-fa="VMnet آزمایشی را به NIC شرکت Bridge نکنید. رمز یکتا و حساب مشخص داشته باشید و سرویس مدیریتی اضافی را ببندید. Snapshot شامل Credential است و باید مثل Backup حساس محافظت شود. Firewall نمونه فقط IPv4 را پوشش می‌دهد."
+                      data-en="Do not bridge lab VMnets to the company NIC. Use unique credentials and disable unused management services. Snapshots contain credentials and require sensitive-backup controls. The example firewall covers IPv4 only."
+                    >
+                      Do not bridge lab VMnets to the company NIC. Use unique
+                      credentials and disable unused management services.
+                      Snapshots contain credentials and require sensitive-backup
+                      controls. The example firewall covers IPv4 only.
                     </p>
                   </section>
                   <section id="enterprise-installation" class="article-section">
@@ -629,24 +646,14 @@
                       Test the gateway and a client using 10.99.0.1 plus valid
                       DNS. SSH/WinBox must remain inaccessible from WAN.
                     </p>
-                  </section>
-                  <section id="enterprise-security" class="article-section">
-                    <h2
-                      data-fa="جلوگیری از اتصال Lab به شبکه شرکت"
-                      data-en="Keep the lab isolated"
-                    >
-                      Keep the lab isolated
-                    </h2>
-                    <p
-                      data-fa="VMnet آزمایشی را به NIC شرکت Bridge نکنید. رمز یکتا و حساب مشخص داشته باشید و سرویس مدیریتی اضافی را ببندید. Snapshot شامل Credential است و باید مثل Backup حساس محافظت شود. Firewall نمونه فقط IPv4 را پوشش می‌دهد."
-                      data-en="Do not bridge lab VMnets to the company NIC. Use unique credentials and disable unused management services. Snapshots contain credentials and require sensitive-backup controls. The example firewall covers IPv4 only."
-                    >
-                      Do not bridge lab VMnets to the company NIC. Use unique
-                      credentials and disable unused management services.
-                      Snapshots contain credentials and require sensitive-backup
-                      controls. The example firewall covers IPv4 only.
-                    </p>
-                  </section>
+                  <div id="technical-enterprise-installation"><h3 data-en="Restrict management services on the isolated lab" data-fa="محدودکردن سرویس مدیریت در آزمایشگاه جدا">Restrict management services on the isolated lab</h3><p data-en="After the original fresh-lab firewall and an independent console test, restrict SSH/WinBox to the actual lab LAN and disable unused legacy management services. These commands modify service admission, so verify a new LAN session before closing the old one. Replace the sample subnet; do not apply to a router whose management arrives through WAN." data-fa="پس از فایروال آزمایشگاه تازه و آزمون کنسول مستقل، SSH و WinBox را به LAN واقعی آزمایشگاه محدود و مدیریت قدیمی غیرلازم را غیرفعال کنید. این فرمان‌ها ورود به سرویس را تغییر می‌دهند؛ پیش از بستن نشست قبلی، ورود LAN جدید را بررسی کنید. subnet را جایگزین و روی روتری با مدیریت از WAN اجرا نکنید.">After the original fresh-lab firewall and an independent console test, restrict SSH/WinBox to the actual lab LAN and disable unused legacy management services. These commands modify service admission, so verify a new LAN session before closing the old one. Replace the sample subnet; do not apply to a router whose management arrives through WAN.</p><pre dir="ltr"><code class="language-routeros">/ip service set ssh address=10.99.0.0/24
+/ip service set winbox address=10.99.0.0/24
+/ip service set telnet disabled=yes
+/ip service set ftp disabled=yes
+/ip service set www disabled=yes
+/ip service set api disabled=yes
+/ip service set api-ssl disabled=yes
+/ip service print</code></pre><p data-en="Expected: only approved management services remain enabled with the scoped address. A restricted service does not create a firewall allow. A new management timeout requires checking both service address and input rules through the console." data-fa="انتظار می‌رود فقط سرویس‌های مدیریت مجاز با address محدود فعال بمانند. محدودسازی سرویس، قاعدهٔ allow فایروال نمی‌سازد. timeout نشست جدید نیازمند بررسی address سرویس و قواعد input از کنسول است.">Expected: only approved management services remain enabled with the scoped address. A restricted service does not create a firewall allow. A new management timeout requires checking both service address and input rules through the console.</p></div></section>
                   <section id="enterprise-monitoring" class="article-section">
                     <h2
                       data-fa="اندازه‌گیری سرعت و مصرف منابع"
@@ -662,7 +669,13 @@
                       counters. Attach the license tier to the result.
                       Distinguish Free-license limits from CPU shortages.
                     </p>
-                  </section>
+                  <div id="technical-enterprise-monitoring"><h3 data-en="Verify forwarding from a client, not only router ping" data-fa="آزمون forwarding از کلاینت، نه فقط ping روتر">Verify forwarding from a client, not only router ping</h3><pre dir="ltr"><code class="language-routeros">/ip address print detail
+/ip route print detail
+/ip firewall nat print stats
+/ip firewall filter print stats
+/interface ethernet print stats
+/system resource print
+/export file=chr-accepted-lab</code></pre><p data-en="From the client VM, verify its LAN address, gateway 10.99.0.1 and configured resolver, then request an authorized Internet/test service. Forward and NAT counters should rise for fresh client connections. Router ping uses a different chain and cannot prove client NAT. Compare interface drops, CPU and the earlier license output before diagnosing a throughput cap. The export writes a router file; download it outside the VM and protect it." data-fa="در VM کلاینت، IP مربوط به LAN، دروازهٔ 10.99.0.1 و resolver تنظیم‌شده را بررسی و سپس سرویس اینترنت یا آزمایشی مجاز را درخواست کنید. شمارندهٔ forward و NAT برای اتصال جدید کلاینت باید افزایش یابد. ping خود روتر chain متفاوتی دارد و NAT کلاینت را ثابت نمی‌کند. پیش از تشخیص محدودیت سرعت، drop رابط، CPU و خروجی license قبلی را مقایسه کنید. export فایل روتر می‌نویسد؛ آن را خارج VM دانلود و محافظت کنید.">From the client VM, verify its LAN address, gateway 10.99.0.1 and configured resolver, then request an authorized Internet/test service. Forward and NAT counters should rise for fresh client connections. Router ping uses a different chain and cannot prove client NAT. Compare interface drops, CPU and the earlier license output before diagnosing a throughput cap. The export writes a router file; download it outside the VM and protect it.</p></div></section>
                   <section
                     id="enterprise-troubleshooting"
                     class="article-section"
@@ -769,7 +782,7 @@
                         >
                       </li>
                     </ul>
-                  </section>
+                  <div id="technical-enterprise-sources"><p><a href="https://help.mikrotik.com/docs/spaces/ROS/pages/103841820/Services" rel="noopener" data-en="MikroTik IP Services" data-fa="مستند رسمی: MikroTik IP Services">MikroTik IP Services</a></p></div></section>
                 </div>
               </article>
             </div>

@@ -10,10 +10,12 @@ use App\Models\Article;
  */
 class ArticleContentStandardizer
 {
-    public function standardize(Article $article, string $content): string
+    public function standardize(Article $article, string $content, bool $fillMissingSections = true): string
     {
         // Input has already been normalized and sanitized by Article::displayContent.
         // Decoding entities here would turn inert text back into executable markup.
+        $content = app(ArticleStructure::class)->cleanReviews($content);
+        $content = app(ArticleStructure::class)->translate($content, (string) $article->slug);
         $content = $this->removeArticleBackButton($content);
         $content = $this->wrapFlatSections($content);
         $content = $this->removeSeoSections($content);
@@ -27,12 +29,18 @@ class ArticleContentStandardizer
         $content = $this->mergeRepeatedSections($article, $content);
         $content = $this->deduplicateReferenceLinks($content);
         $content = $this->addKnownSectionIds($content);
-        $content = preg_replace('~<h2\b([^>]*)>\s*FAQ\s*</h2>~i', '<h2$1 data-en="Frequently Asked Questions" data-fa="پرسش‌های متداول">Frequently Asked Questions</h2>', $content) ?? $content;
+        $content = preg_replace_callback('~<h2\b([^>]*)>\s*FAQ\s*</h2>~i', function ($heading) {
+            if (preg_match('~\bdata-(?:en|fa)=~i', $heading[1])) { return $heading[0]; }
+            return '<h2'.$heading[1].' data-en="Frequently Asked Questions" data-fa="پرسش‌های متداول">Frequently Asked Questions</h2>';
+        }, $content) ?? $content;
         if (preg_match('/href=["\']#references["\']/', $content.(string) data_get($article->presentation, 'toc_html'))
             && ! preg_match('/\bid=["\']references["\']/', $content)) {
             $content = preg_replace('~(<section\b[^>]*\bid=["\']official-references["\'][^>]*>)~i', '$1<span id="references" class="article-section-anchor" aria-hidden="true"></span>', $content, 1) ?? $content;
         }
         $content = str_ireplace('Official references', 'Official References', $content);
+        if (! $fillMissingSections) {
+            return app(ArticleStructure::class)->order($content, (string) $article->slug);
+        }
         // Existing FAQ accordions are extended in place so the original
         // questions remain visible and the shared minimum of eight is met.
         $content = $this->extendExistingFaq($content, ! data_get($article->presentation, 'localizations'));
@@ -53,16 +61,21 @@ class ArticleContentStandardizer
         }
 
         if ($missing === []) {
-            return $this->orderEndingSections($content);
+            return app(ArticleStructure::class)->order($content, (string) $article->slug);
         }
 
         $addition = "\n".implode("\n", $missing)."\n";
+        // Authored copy has already been localized by the request. Localize the
+        // newly generated copy too, before it reaches the browser.
+        if (data_get($article->presentation, 'content_language') === 'fa') {
+            $addition = app(ArticleLocalization::class)->html($addition, 'fa');
+        }
         $footerPosition = stripos($content, '<footer class="article-footer"');
         if ($footerPosition === false) {
-            return $this->orderEndingSections($content.$addition);
+            return app(ArticleStructure::class)->order($content.$addition, (string) $article->slug);
         }
 
-        return $this->orderEndingSections(substr($content, 0, $footerPosition).$addition.substr($content, $footerPosition));
+        return app(ArticleStructure::class)->order(substr($content, 0, $footerPosition).$addition.substr($content, $footerPosition), (string) $article->slug);
     }
 
     /** Reuse detailed authored sections and remove only matching automatic filler. */
@@ -85,8 +98,20 @@ class ArticleContentStandardizer
         $references = $this->referencesSection($article, '');
         if ($references !== null) { $templates['official-references'] = $references; }
         $sectionPattern = '~<section\b([^>]*)>(.*?)</section>~is';
+        $canonical = app(ArticleStructure::class)->canonicalSections((string) $article->slug);
 
         foreach ($patterns as $id => $pattern) {
+            $target = $canonical[$id] ?? null;
+            if ($target !== null && preg_match('~\bid=["\']'.preg_quote($target, '~').'["\']~', $content)) {
+                // Correct an older inferred ID while preserving its authored fragment.
+                $content = preg_replace_callback($sectionPattern, function ($section) use ($id, $target) {
+                    if (! preg_match('~\bid=["\']'.preg_quote($id, '~').'["\']~', $section[1])
+                        || ! preg_match('~^\s*<span\b[^>]*\bid=["\']([^"\']+)["\'][^>]*class="article-section-anchor"[^>]*></span>~', $section[2], $alias)
+                        || $alias[1] === $target) { return $section[0]; }
+                    $attrs = preg_replace('~\bid=["\'][^"\']+["\']~', 'id="'.$alias[1].'"', $section[1], 1);
+                    return '<section'.$attrs.'>'.substr($section[2], strlen($alias[0])).'</section>';
+                }, $content) ?? $content;
+            }
             // Attribute values keep this comparison stable after FA/EN localization.
             $signature = function (string $html): string {
                 $dom = new \DOMDocument();
@@ -112,9 +137,12 @@ class ArticleContentStandardizer
                 }
                 if (! preg_match('~<h2\b([^>]*)>(.*?)</h2>~is', $section[2], $heading)) { continue; }
                 preg_match('/\bdata-en="([^"]*)"/i', $heading[1], $english);
+                preg_match('/\bdata-fa="([^"]*)"/i', $heading[1], $persian);
                 $label = html_entity_decode($english[1] ?? strip_tags($heading[2]), ENT_QUOTES | ENT_HTML5, 'UTF-8');
                 $label = preg_replace('/^\s*[0-9۰-۹]+[.،):\s-]+/u', '', $label) ?? $label;
-                if ($currentId === $id || preg_match($pattern, $label)) {
+                $persianLabel = html_entity_decode($persian[1] ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $persianLabel = preg_replace('/^\s*[0-9۰-۹]+[.،):\s-]+/u', '', $persianLabel) ?? $persianLabel;
+                if ($currentId === $id || ($target !== null ? $currentId === $target : (preg_match($pattern, $label) || preg_match($pattern, $persianLabel)))) {
                     $authored ??= [$section, $currentId];
                 }
             }
@@ -221,36 +249,6 @@ class ArticleContentStandardizer
         }, $content) ?? $content;
     }
 
-    /**
-     * Keep the article footer sections predictable for readers and crawlers.
-     * Existing authored sections used to remain wherever they were found,
-     * while generated sections were appended, producing mixed orderings.
-     */
-    private function orderEndingSections(string $content): string
-    {
-        $orderedIds = ['conclusion', 'faq', 'official-references'];
-        $sections = [];
-        foreach ($orderedIds as $id) {
-            $pattern = "~<section\\b(?=[^>]*\\bid=[\"']".preg_quote($id, '~')."[\"'])[^>]*>.*?</section>~is";
-            if (preg_match($pattern, $content, $match)) {
-                $sections[$id] = $match[0];
-                $content = str_replace($match[0], '', $content, $count);
-            }
-        }
-
-        if ($sections === []) {
-            return $content;
-        }
-
-        $addition = "\n".implode("\n", array_map(fn ($id) => $sections[$id], array_keys($sections)))."\n";
-        $footerPosition = stripos($content, '<footer class="article-footer"');
-        if ($footerPosition === false) {
-            return rtrim($content).$addition;
-        }
-
-        return rtrim(substr($content, 0, $footerPosition)).$addition.substr($content, $footerPosition);
-    }
-
     private function removeArticleBackButton(string $content): string
     {
         return preg_replace(
@@ -266,7 +264,7 @@ class ArticleContentStandardizer
         $content = preg_replace_callback('~<section\b[^>]*>.*?</section>~is', function (array $match): string {
             if (preg_match('~<h[12]\b([^>]*)>(.*?)</h[12]>~is', $match[0], $heading)) {
                 $label = html_entity_decode(strip_tags($heading[2]), ENT_QUOTES | ENT_HTML5, 'UTF-8');
-                if (preg_match('/\b(?:SEO\s+Title|Meta\s+Description|Keywords)\b|عنوان\s+SEO|توضیحات\s+متا|کلمات\s+کلیدی/iu', $label)) {
+                if (preg_match('/^SEO$|\b(?:SEO\s+Title|Meta\s+Description|Keywords)\b|عنوان\s+SEO|توضیحات\s+متا|کلمات\s+کلیدی/iu', trim($label))) {
                     return '';
                 }
             }
@@ -320,13 +318,14 @@ class ArticleContentStandardizer
     private function sections(Article $article): array
     {
         $title = e($article->englishTitle());
+        $titleFa = e(data_get($article->presentation, 'localizations.fa.title', data_get($article->presentation, 'hero_title_fa', $article->englishTitle())));
         $topic = e($article->categoryLabelEn());
         $topicFa = e($article->categoryLabelFa());
 
         return [
             'introduction' => $this->section('introduction', 'Introduction', 'مقدمه',
                 "This guide explains {$title} in a production-aware way, including the design choices, implementation checks, and operational safeguards that matter for {$topic} environments.",
-                "این راهنما {$title} را با رویکرد Production بررسی می‌کند و Design، مراحل اجرا، کنترل‌های عملیاتی و نکات ایمنی مربوط به {$topicFa} را پوشش می‌دهد."),
+                "این راهنما {$titleFa} را با رویکرد Production بررسی می‌کند و Design، مراحل اجرا، کنترل‌های عملیاتی و نکات ایمنی مربوط به {$topicFa} را پوشش می‌دهد."),
             'architecture' => $this->section('architecture', 'Architecture and Core Concepts', 'معماری و مفاهیم اصلی',
                 'Understand the data flow, trust boundaries, dependencies, and the expected state before changing a live environment. Separate control-plane configuration from data-plane traffic and document every external dependency.',
                 'پیش از تغییر در محیط زنده، Data Flow، مرزهای اعتماد، Dependencyها و وضعیت مطلوب را مشخص کنید. Configuration مربوط به Control Plane را از Traffic مربوط به Data Plane جدا و Dependencyهای خارجی را مستند کنید.'),
@@ -345,13 +344,27 @@ class ArticleContentStandardizer
             'troubleshooting' => $this->troubleshootingSection(),
             'conclusion' => $this->section('conclusion', 'Conclusion', 'جمع‌بندی',
                 "A reliable implementation of {$title} is more than a successful first run. Keep the configuration documented, observable, recoverable, and aligned with the team's change-management process.",
-                "پیاده‌سازی قابل اتکا برای {$title} فقط اجرای موفق بار اول نیست؛ Configuration را مستند، قابل مشاهده و قابل بازیابی نگه دارید و آن را با فرآیند Change Management تیم هماهنگ کنید."),
+                "پیاده‌سازی قابل اتکا برای {$titleFa} فقط اجرای موفق بار اول نیست؛ Configuration را مستند، قابل مشاهده و قابل بازیابی نگه دارید و آن را با فرآیند Change Management تیم هماهنگ کنید."),
         ];
     }
 
     private function section(string $id, string $en, string $fa, string $enBody, string $faBody): string
     {
-        return '<section id="'.$id.'" class="article-section"><h2 data-en="'.e($en).'" data-fa="'.e($fa).'">'.e($en).'</h2><div data-en="'.e(strip_tags($enBody)).'" data-fa="'.e(strip_tags($faBody)).'">'.$enBody.'</div></section>';
+        if (! str_contains($enBody, '<')) {
+            $enBody = '<p>'.$enBody.'</p>';
+            $faBody = '<p>'.$faBody.'</p>';
+        }
+        // Translate leaf prose, preserving list items and callout containers.
+        // A bilingual div cannot be switched without flattening its children.
+        preg_match_all('~<(p|li)\b[^>]*>(.*?)</\1>~is', $faBody, $persian);
+        $index = 0;
+        $body = preg_replace_callback('~<(p|li)\b([^>]*)>(.*?)</\1>~is', function ($m) use ($persian, &$index) {
+            $faText = $persian[2][$index++];
+            $text = fn ($value) => html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            return '<'.$m[1].$m[2].' data-en="'.e($text($m[3])).'" data-fa="'.e($text($faText)).'">'.$m[3].'</'.$m[1].'>';
+        }, $enBody) ?? $enBody;
+
+        return '<section id="'.$id.'" class="article-section"><h2 data-en="'.e($en).'" data-fa="'.e($fa).'">'.e($en).'</h2><div>'.$body.'</div></section>';
     }
 
     private function troubleshootingSection(): string

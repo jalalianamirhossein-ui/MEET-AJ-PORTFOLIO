@@ -254,18 +254,18 @@
           >
         </li>
         <li class="article-nav-item">
-          <a href="#architecture"
-            ><span data-en="Deployment architecture" data-fa="معماری استقرار"
-              >Deployment architecture</span
-            ></a
-          >
-        </li>
-        <li class="article-nav-item">
           <a href="#prerequisites"
             ><span
               data-en="Prerequisites and compatibility"
               data-fa="پیش‌نیازها و سازگاری"
               >Prerequisites and compatibility</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#architecture"
+            ><span data-en="Deployment architecture" data-fa="معماری استقرار"
+              >Deployment architecture</span
             ></a
           >
         </li>
@@ -338,6 +338,15 @@
           >
         </li>
         <li class="article-nav-item">
+          <a href="#security-filtering"
+            ><span
+              data-en="Limit deployment with Security Filtering"
+              data-fa="محدود کردن نصب با Security Filtering"
+              >Limit deployment with Security Filtering</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
           <a href="#verification"
             ><span
               data-en="Verify policy and installed application"
@@ -383,24 +392,6 @@
           >
         </li>
         <li class="article-nav-item">
-          <a href="#security-filtering"
-            ><span
-              data-en="Limit deployment with Security Filtering"
-              data-fa="محدود کردن نصب با Security Filtering"
-              >Limit deployment with Security Filtering</span
-            ></a
-          >
-        </li>
-        <li class="article-nav-item">
-          <a href="#best-practices"
-            ><span
-              data-en="Enterprise Best Practices"
-              data-fa="بهترین روش‌های استقرار سازمانی"
-              >Enterprise Best Practices</span
-            ></a
-          >
-        </li>
-        <li class="article-nav-item">
           <a href="#uninstall"
             ><span
               data-en="Uninstall and scope changes"
@@ -419,11 +410,11 @@
           >
         </li>
         <li class="article-nav-item">
-          <a href="#faq"
+          <a href="#best-practices"
             ><span
-              data-en="Frequently asked questions"
-              data-fa="پرسش‌های متداول"
-              >Frequently asked questions</span
+              data-en="Enterprise Best Practices"
+              data-fa="بهترین روش‌های استقرار سازمانی"
+              >Enterprise Best Practices</span
             ></a
           >
         </li>
@@ -433,6 +424,15 @@
               data-en="When to consider modern management tools"
               data-fa="چه زمانی ابزارهای مدیریتی جدیدتر مناسب‌اند"
               >When to consider modern management tools</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#faq"
+            ><span
+              data-en="Frequently asked questions"
+              data-fa="پرسش‌های متداول"
+              >Frequently asked questions</span
             ></a
           >
         </li>
@@ -550,43 +550,6 @@ File Server
           >
         </figcaption>
       </figure>
-      <section id="architecture">
-        <h2 data-en="Deployment architecture" data-fa="معماری استقرار">
-          Deployment architecture
-        </h2>
-        <pre
-          dir="ltr"
-        ><code class="language-text">                Active Directory
-                       |
-                 Domain Controller
-                    DC01
-                       |
-                    Group Policy
-                       |
-              Deploy - 7Zip - MSI
-                       |
-               OU = Workstations
-                 /     |      \
-                /      |       \
-             PC-001  PC-002   PC-003
-                \      |       /
-                 \     |      /
-                  File Server
-                     FS01
-                       |
-             \\FS01\Software$
-                       |
-              7Zip\7zip-x64.msi</code></pre>
-        <p
-          data-en="The diagram shows logical relationships, not a physical cable layout. DC01 provides policy and directory services; FS01 supplies package bytes. Successful GPO processing and successful MSI retrieval are separate checkpoints."
-          data-fa="این دیاگرام رابطه منطقی اجزا را نشان می‌دهد، نه کابل‌کشی فیزیکی شبکه. DC01 سرویس دایرکتوری و Policy را فراهم می‌کند و FS01 فایل نصب را تحویل می‌دهد. دریافت موفق GPO و دریافت موفق MSI دو نقطه بررسی مستقل هستند."
-        >
-          The diagram shows logical relationships, not a physical cable layout.
-          DC01 provides policy and directory services; FS01 supplies package
-          bytes. Successful GPO processing and successful MSI retrieval are
-          separate checkpoints.
-        </p>
-      </section>
       <section id="prerequisites">
         <h2
           data-en="Prerequisites and compatibility"
@@ -659,6 +622,43 @@ File Server
             rel="noopener noreferrer"
             >Microsoft: gpresult compatibility</a
           >
+        </p>
+      </section>
+      <section id="architecture">
+        <h2 data-en="Deployment architecture" data-fa="معماری استقرار">
+          Deployment architecture
+        </h2>
+        <pre
+          dir="ltr"
+        ><code class="language-text">                Active Directory
+                       |
+                 Domain Controller
+                    DC01
+                       |
+                    Group Policy
+                       |
+              Deploy - 7Zip - MSI
+                       |
+               OU = Workstations
+                 /     |      \
+                /      |       \
+             PC-001  PC-002   PC-003
+                \      |       /
+                 \     |      /
+                  File Server
+                     FS01
+                       |
+             \\FS01\Software$
+                       |
+              7Zip\7zip-x64.msi</code></pre>
+        <p
+          data-en="The diagram shows logical relationships, not a physical cable layout. DC01 provides policy and directory services; FS01 supplies package bytes. Successful GPO processing and successful MSI retrieval are separate checkpoints."
+          data-fa="این دیاگرام رابطه منطقی اجزا را نشان می‌دهد، نه کابل‌کشی فیزیکی شبکه. DC01 سرویس دایرکتوری و Policy را فراهم می‌کند و FS01 فایل نصب را تحویل می‌دهد. دریافت موفق GPO و دریافت موفق MSI دو نقطه بررسی مستقل هستند."
+        >
+          The diagram shows logical relationships, not a physical cable layout.
+          DC01 provides policy and directory services; FS01 supplies package
+          bytes. Successful GPO processing and successful MSI retrieval are
+          separate checkpoints.
         </p>
       </section>
       <section id="share">
@@ -999,6 +999,69 @@ Setting: Enabled</code></pre>
           >
         </p>
       </section>
+      <section id="security-filtering">
+        <h2
+          data-en="Limit deployment with Security Filtering"
+          data-fa="محدود کردن نصب با Security Filtering"
+        >
+          Limit deployment with Security Filtering
+        </h2>
+        <pre
+          dir="ltr"
+        ><code class="language-text">Security group: GG-Deploy-7Zip
+Members:        PC-001$, PC-002$, PC-003$
+
+GPMC
+→ Deploy - 7Zip - MSI
+→ Scope
+→ Security Filtering
+
+Target group permissions:
+Read              Allow
+Apply Group Policy Allow</code></pre>
+        <p
+          data-en="Create GG-Deploy-7Zip as a Global Security group in AD and add the target computer accounts, not their users. Select Computers in the object picker when adding members. In GPMC, add the group to Security Filtering. Its computer members still need to be inside the linked OU scope; a group does not replace a GPO link."
+          data-fa="در AD گروه GG-Deploy-7Zip از نوع Global Security بسازید و حساب کامپیوترهای هدف را عضو کنید، نه کاربران آن‌ها را. هنگام افزودن عضو، Object Type مربوط به Computers را فعال کنید. در GPMC گروه را به Security Filtering اضافه کنید. اعضا همچنان باید در Scope مربوط به OU لینک‌شده باشند؛ گروه جای Link را نمی‌گیرد."
+        >
+          Create GG-Deploy-7Zip as a Global Security group in AD and add the
+          target computer accounts, not their users. Select Computers in the
+          object picker when adding members. In GPMC, add the group to Security
+          Filtering. Its computer members still need to be inside the linked OU
+          scope; a group does not replace a GPO link.
+        </p>
+        <p
+          data-en="For a restricted rollout, remove the broad Apply grant from Authenticated Users and any other broad applying group. Keep Authenticated Users, or an appropriate computer read group, with Read only through Delegation → Advanced where needed. Verify that GG-Deploy-7Zip has both Read and Apply Group Policy and that no Deny overrides it. Read alone permits reading the GPO but does not apply it; leaving Authenticated Users with Apply defeats the restriction."
+          data-fa="برای Rollout محدود، Apply گسترده Authenticated Users و هر گروه عمومی اعمال‌کننده دیگر را حذف کنید. در صورت نیاز Authenticated Users یا گروه مناسب خواندن کامپیوترها را از Delegation → Advanced با Read تنها نگه دارید. بررسی کنید GG-Deploy-7Zip هر دو مجوز Read و Apply Group Policy را داشته باشد و Deny آن‌ها را خنثی نکند. Read تنها اجازه خواندن GPO می‌دهد و آن را اعمال نمی‌کند؛ باقی ماندن Apply برای Authenticated Users محدودسازی را بی‌اثر می‌کند."
+        >
+          For a restricted rollout, remove the broad Apply grant from
+          Authenticated Users and any other broad applying group. Keep
+          Authenticated Users, or an appropriate computer read group, with Read
+          only through Delegation → Advanced where needed. Verify that
+          GG-Deploy-7Zip has both Read and Apply Group Policy and that no Deny
+          overrides it. Read alone permits reading the GPO but does not apply
+          it; leaving Authenticated Users with Apply defeats the restriction.
+        </p>
+        <p
+          data-en="GPO permissions and repository permissions are independent. Filtering deployment to this group does not restrict file reads while Domain Computers retains share access. For stricter package access, use the same target group for repository Read after validating maintenance/repair needs. Allow AD replication and restart targets after adding computer group members so their machine authentication reflects the membership."
+          data-fa="مجوز GPO و مجوز Repository مستقل هستند. محدود شدن Deployment به این گروه، تا وقتی Domain Computers روی Share دسترسی دارد خواندن فایل را محدود نمی‌کند. برای محدودسازی بیشتر فایل، پس از بررسی نیاز Repair و نگهداری، Read مخزن را به همان گروه هدف بدهید. پس از افزودن کامپیوترها زمان Replication را در نظر بگیرید و سیستم‌ها را Restart کنید تا احراز هویت دستگاه عضویت جدید را منعکس کند."
+        >
+          GPO permissions and repository permissions are independent. Filtering
+          deployment to this group does not restrict file reads while Domain
+          Computers retains share access. For stricter package access, use the
+          same target group for repository Read after validating
+          maintenance/repair needs. Allow AD replication and restart targets
+          after adding computer group members so their machine authentication
+          reflects the membership.
+        </p>
+        <p>
+          <a
+            href="https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-policy/group-policy-scope"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Microsoft: GPO scope, Read and Apply permissions</a
+          >
+        </p>
+      </section>
       <section id="verification">
         <h2
           data-en="Verify policy and installed application"
@@ -1317,158 +1380,6 @@ Windows Logs
           failing client using the same GPO revision.
         </p>
       </section>
-      <section id="security-filtering">
-        <h2
-          data-en="Limit deployment with Security Filtering"
-          data-fa="محدود کردن نصب با Security Filtering"
-        >
-          Limit deployment with Security Filtering
-        </h2>
-        <pre
-          dir="ltr"
-        ><code class="language-text">Security group: GG-Deploy-7Zip
-Members:        PC-001$, PC-002$, PC-003$
-
-GPMC
-→ Deploy - 7Zip - MSI
-→ Scope
-→ Security Filtering
-
-Target group permissions:
-Read              Allow
-Apply Group Policy Allow</code></pre>
-        <p
-          data-en="Create GG-Deploy-7Zip as a Global Security group in AD and add the target computer accounts, not their users. Select Computers in the object picker when adding members. In GPMC, add the group to Security Filtering. Its computer members still need to be inside the linked OU scope; a group does not replace a GPO link."
-          data-fa="در AD گروه GG-Deploy-7Zip از نوع Global Security بسازید و حساب کامپیوترهای هدف را عضو کنید، نه کاربران آن‌ها را. هنگام افزودن عضو، Object Type مربوط به Computers را فعال کنید. در GPMC گروه را به Security Filtering اضافه کنید. اعضا همچنان باید در Scope مربوط به OU لینک‌شده باشند؛ گروه جای Link را نمی‌گیرد."
-        >
-          Create GG-Deploy-7Zip as a Global Security group in AD and add the
-          target computer accounts, not their users. Select Computers in the
-          object picker when adding members. In GPMC, add the group to Security
-          Filtering. Its computer members still need to be inside the linked OU
-          scope; a group does not replace a GPO link.
-        </p>
-        <p
-          data-en="For a restricted rollout, remove the broad Apply grant from Authenticated Users and any other broad applying group. Keep Authenticated Users, or an appropriate computer read group, with Read only through Delegation → Advanced where needed. Verify that GG-Deploy-7Zip has both Read and Apply Group Policy and that no Deny overrides it. Read alone permits reading the GPO but does not apply it; leaving Authenticated Users with Apply defeats the restriction."
-          data-fa="برای Rollout محدود، Apply گسترده Authenticated Users و هر گروه عمومی اعمال‌کننده دیگر را حذف کنید. در صورت نیاز Authenticated Users یا گروه مناسب خواندن کامپیوترها را از Delegation → Advanced با Read تنها نگه دارید. بررسی کنید GG-Deploy-7Zip هر دو مجوز Read و Apply Group Policy را داشته باشد و Deny آن‌ها را خنثی نکند. Read تنها اجازه خواندن GPO می‌دهد و آن را اعمال نمی‌کند؛ باقی ماندن Apply برای Authenticated Users محدودسازی را بی‌اثر می‌کند."
-        >
-          For a restricted rollout, remove the broad Apply grant from
-          Authenticated Users and any other broad applying group. Keep
-          Authenticated Users, or an appropriate computer read group, with Read
-          only through Delegation → Advanced where needed. Verify that
-          GG-Deploy-7Zip has both Read and Apply Group Policy and that no Deny
-          overrides it. Read alone permits reading the GPO but does not apply
-          it; leaving Authenticated Users with Apply defeats the restriction.
-        </p>
-        <p
-          data-en="GPO permissions and repository permissions are independent. Filtering deployment to this group does not restrict file reads while Domain Computers retains share access. For stricter package access, use the same target group for repository Read after validating maintenance/repair needs. Allow AD replication and restart targets after adding computer group members so their machine authentication reflects the membership."
-          data-fa="مجوز GPO و مجوز Repository مستقل هستند. محدود شدن Deployment به این گروه، تا وقتی Domain Computers روی Share دسترسی دارد خواندن فایل را محدود نمی‌کند. برای محدودسازی بیشتر فایل، پس از بررسی نیاز Repair و نگهداری، Read مخزن را به همان گروه هدف بدهید. پس از افزودن کامپیوترها زمان Replication را در نظر بگیرید و سیستم‌ها را Restart کنید تا احراز هویت دستگاه عضویت جدید را منعکس کند."
-        >
-          GPO permissions and repository permissions are independent. Filtering
-          deployment to this group does not restrict file reads while Domain
-          Computers retains share access. For stricter package access, use the
-          same target group for repository Read after validating
-          maintenance/repair needs. Allow AD replication and restart targets
-          after adding computer group members so their machine authentication
-          reflects the membership.
-        </p>
-        <p>
-          <a
-            href="https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-policy/group-policy-scope"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Microsoft: GPO scope, Read and Apply permissions</a
-          >
-        </p>
-      </section>
-      <section id="best-practices">
-        <h2
-          data-en="Enterprise Best Practices"
-          data-fa="بهترین روش‌های استقرار سازمانی"
-        >
-          Enterprise Best Practices
-        </h2>
-        <pre dir="ltr"><code class="language-text">\\FS01\Software$
-│
-├── 7Zip
-│   └── 24.x
-│       └── 7zip-x64.msi
-│
-├── Chrome
-│   └── Enterprise
-│       └── GoogleChromeStandaloneEnterprise64.msi
-│
-└── OtherApplications
-
-Deploy - 7Zip - MSI
-Deploy - Chrome - MSI
-Deploy - ApplicationName - MSI</code></pre>
-        <p
-          data-en="24.x is an illustrative version folder, not a recommendation to deploy an old release. Select an approved maintained version. For production, configure the package with the versioned UNC from the beginning; the shorter lab path illustrates the first deployment only."
-          data-fa="24.x نمونه پوشه نسخه است و توصیه به نصب نسخه قدیمی نیست. نسخه نگهداری‌شده و تأییدشده را انتخاب کنید. در Production از ابتدا Package را با UNC نسخه‌دار معرفی کنید؛ مسیر کوتاه Lab فقط نصب اولیه را نشان می‌دهد."
-        >
-          24.x is an illustrative version folder, not a recommendation to deploy
-          an old release. Select an approved maintained version. For production,
-          configure the package with the versioned UNC from the beginning; the
-          shorter lab path illustrates the first deployment only.
-        </p>
-        <ul>
-          <li
-            data-en="Keep one application per GPO and use a consistent naming convention. Keep related version upgrades documented within that application's deployment plan."
-            data-fa="برای هر برنامه GPO مستقل و Naming Convention ثابت داشته باشید. Upgradeهای نسخه را در برنامه استقرار همان Application مستند کنید."
-          >
-            Keep one application per GPO and use a consistent naming convention.
-            Keep related version upgrades documented within that application's
-            deployment plan.
-          </li>
-          <li
-            data-en="Use immutable version folders. Record vendor source, version, SHA-256, package architecture, owner, deployment date and change ticket."
-            data-fa="پوشه نسخه را ثابت نگه دارید. منبع سازنده، نسخه، SHA-256، معماری، مسئول، تاریخ Deployment و Change Ticket را ثبت کنید."
-          >
-            Use immutable version folders. Record vendor source, version,
-            SHA-256, package architecture, owner, deployment date and change
-            ticket.
-          </li>
-          <li
-            data-en="Use a Test OU, then a small pilot security group, then staged expansion. Define success and rollback criteria before rollout."
-            data-fa="از Test OU شروع کنید، سپس گروه امنیتی Pilot کوچک و بعد گسترش مرحله‌ای. معیار موفقیت و بازگشت را پیش از Rollout مشخص کنید."
-          >
-            Use a Test OU, then a small pilot security group, then staged
-            expansion. Define success and rollback criteria before rollout.
-          </li>
-          <li
-            data-en="Store large installers on a file server rather than SYSVOL. Keep AD/SYSVOL replication focused on policy data and monitor repository capacity and SMB availability."
-            data-fa="Installer حجیم را روی File Server نگه دارید، نه SYSVOL. Replication مربوط به AD/SYSVOL را به داده Policy محدود و ظرفیت Repository و دسترسی SMB را پایش کنید."
-          >
-            Store large installers on a file server rather than SYSVOL. Keep
-            AD/SYSVOL replication focused on policy data and monitor repository
-            capacity and SMB availability.
-          </li>
-          <li
-            data-en="Limit write access to approved maintainers, verify package provenance and back up both the software repository and the GPO. Test restore procedures."
-            data-fa="Write را به مسئولان تأییدشده محدود کنید، اصالت بسته را بررسی و از Repository و GPO Backup بگیرید. روش Restore را تست کنید."
-          >
-            Limit write access to approved maintainers, verify package
-            provenance and back up both the software repository and the GPO.
-            Test restore procedures.
-          </li>
-          <li
-            data-en="Retain source files while clients may need repair, removal or upgrade. Avoid changing the share hostname or deleting old packages during a rollout."
-            data-fa="تا زمانی که کلاینت‌ها برای Repair، حذف یا Upgrade به Source نیاز دارند فایل‌ها را حفظ کنید. هنگام Rollout نام میزبان Share را تغییر ندهید و بسته قبلی را حذف نکنید."
-          >
-            Retain source files while clients may need repair, removal or
-            upgrade. Avoid changing the share hostname or deleting old packages
-            during a rollout.
-          </li>
-          <li
-            data-en="Schedule restarts and communicate expected boot delays. A GPO report is not inventory: verify application versions on representative clients and track exceptions."
-            data-fa="Restartها را زمان‌بندی و تأخیر احتمالی Boot را اطلاع‌رسانی کنید. گزارش GPO، Inventory نیست؛ نسخه برنامه روی کلاینت‌های نماینده و استثناها را ثبت کنید."
-          >
-            Schedule restarts and communicate expected boot delays. A GPO report
-            is not inventory: verify application versions on representative
-            clients and track exceptions.
-          </li>
-        </ul>
-      </section>
       <section id="uninstall">
         <h2
           data-en="Uninstall and scope changes"
@@ -1578,6 +1489,124 @@ Choose only after vendor/pilot validation:
             rel="noopener noreferrer"
             >Microsoft: package upgrade relationships</a
           >
+        </p>
+      </section>
+      <section id="best-practices">
+        <h2
+          data-en="Enterprise Best Practices"
+          data-fa="بهترین روش‌های استقرار سازمانی"
+        >
+          Enterprise Best Practices
+        </h2>
+        <pre dir="ltr"><code class="language-text">\\FS01\Software$
+│
+├── 7Zip
+│   └── 24.x
+│       └── 7zip-x64.msi
+│
+├── Chrome
+│   └── Enterprise
+│       └── GoogleChromeStandaloneEnterprise64.msi
+│
+└── OtherApplications
+
+Deploy - 7Zip - MSI
+Deploy - Chrome - MSI
+Deploy - ApplicationName - MSI</code></pre>
+        <p
+          data-en="24.x is an illustrative version folder, not a recommendation to deploy an old release. Select an approved maintained version. For production, configure the package with the versioned UNC from the beginning; the shorter lab path illustrates the first deployment only."
+          data-fa="24.x نمونه پوشه نسخه است و توصیه به نصب نسخه قدیمی نیست. نسخه نگهداری‌شده و تأییدشده را انتخاب کنید. در Production از ابتدا Package را با UNC نسخه‌دار معرفی کنید؛ مسیر کوتاه Lab فقط نصب اولیه را نشان می‌دهد."
+        >
+          24.x is an illustrative version folder, not a recommendation to deploy
+          an old release. Select an approved maintained version. For production,
+          configure the package with the versioned UNC from the beginning; the
+          shorter lab path illustrates the first deployment only.
+        </p>
+        <ul>
+          <li
+            data-en="Keep one application per GPO and use a consistent naming convention. Keep related version upgrades documented within that application's deployment plan."
+            data-fa="برای هر برنامه GPO مستقل و Naming Convention ثابت داشته باشید. Upgradeهای نسخه را در برنامه استقرار همان Application مستند کنید."
+          >
+            Keep one application per GPO and use a consistent naming convention.
+            Keep related version upgrades documented within that application's
+            deployment plan.
+          </li>
+          <li
+            data-en="Use immutable version folders. Record vendor source, version, SHA-256, package architecture, owner, deployment date and change ticket."
+            data-fa="پوشه نسخه را ثابت نگه دارید. منبع سازنده، نسخه، SHA-256، معماری، مسئول، تاریخ Deployment و Change Ticket را ثبت کنید."
+          >
+            Use immutable version folders. Record vendor source, version,
+            SHA-256, package architecture, owner, deployment date and change
+            ticket.
+          </li>
+          <li
+            data-en="Use a Test OU, then a small pilot security group, then staged expansion. Define success and rollback criteria before rollout."
+            data-fa="از Test OU شروع کنید، سپس گروه امنیتی Pilot کوچک و بعد گسترش مرحله‌ای. معیار موفقیت و بازگشت را پیش از Rollout مشخص کنید."
+          >
+            Use a Test OU, then a small pilot security group, then staged
+            expansion. Define success and rollback criteria before rollout.
+          </li>
+          <li
+            data-en="Store large installers on a file server rather than SYSVOL. Keep AD/SYSVOL replication focused on policy data and monitor repository capacity and SMB availability."
+            data-fa="Installer حجیم را روی File Server نگه دارید، نه SYSVOL. Replication مربوط به AD/SYSVOL را به داده Policy محدود و ظرفیت Repository و دسترسی SMB را پایش کنید."
+          >
+            Store large installers on a file server rather than SYSVOL. Keep
+            AD/SYSVOL replication focused on policy data and monitor repository
+            capacity and SMB availability.
+          </li>
+          <li
+            data-en="Limit write access to approved maintainers, verify package provenance and back up both the software repository and the GPO. Test restore procedures."
+            data-fa="Write را به مسئولان تأییدشده محدود کنید، اصالت بسته را بررسی و از Repository و GPO Backup بگیرید. روش Restore را تست کنید."
+          >
+            Limit write access to approved maintainers, verify package
+            provenance and back up both the software repository and the GPO.
+            Test restore procedures.
+          </li>
+          <li
+            data-en="Retain source files while clients may need repair, removal or upgrade. Avoid changing the share hostname or deleting old packages during a rollout."
+            data-fa="تا زمانی که کلاینت‌ها برای Repair، حذف یا Upgrade به Source نیاز دارند فایل‌ها را حفظ کنید. هنگام Rollout نام میزبان Share را تغییر ندهید و بسته قبلی را حذف نکنید."
+          >
+            Retain source files while clients may need repair, removal or
+            upgrade. Avoid changing the share hostname or deleting old packages
+            during a rollout.
+          </li>
+          <li
+            data-en="Schedule restarts and communicate expected boot delays. A GPO report is not inventory: verify application versions on representative clients and track exceptions."
+            data-fa="Restartها را زمان‌بندی و تأخیر احتمالی Boot را اطلاع‌رسانی کنید. گزارش GPO، Inventory نیست؛ نسخه برنامه روی کلاینت‌های نماینده و استثناها را ثبت کنید."
+          >
+            Schedule restarts and communicate expected boot delays. A GPO report
+            is not inventory: verify application versions on representative
+            clients and track exceptions.
+          </li>
+        </ul>
+      </section>
+      <section id="modern-tools">
+        <h2
+          data-en="When to consider modern management tools"
+          data-fa="چه زمانی ابزارهای مدیریتی جدیدتر مناسب‌اند"
+        >
+          When to consider modern management tools
+        </h2>
+        <p
+          data-en="GPSI remains practical for simple MSI assignments on computers with startup access to the domain network. It provides neither a complete inventory nor a rich deployment reporting and compliance workflow. If the requirement grows to application lifecycle management, remote Internet clients or cloud management, evaluate Microsoft Intune or Microsoft Configuration Manager against the environment, licensing and operational needs."
+          data-fa="GPSI برای تخصیص ساده MSI به کامپیوترهای دارای دسترسی شبکه دامین هنگام Startup کاربردی است. Inventory کامل یا گردش کار گسترده Reporting و Compliance فراهم نمی‌کند. اگر نیاز به مدیریت چرخه عمر برنامه، کلاینت‌های اینترنتی راه‌دور یا Cloud Management افزایش یافت، Microsoft Intune یا Microsoft Configuration Manager را متناسب با محیط، مجوزها و نیاز عملیاتی ارزیابی کنید."
+        >
+          GPSI remains practical for simple MSI assignments on computers with
+          startup access to the domain network. It provides neither a complete
+          inventory nor a rich deployment reporting and compliance workflow. If
+          the requirement grows to application lifecycle management, remote
+          Internet clients or cloud management, evaluate Microsoft Intune or
+          Microsoft Configuration Manager against the environment, licensing and
+          operational needs.
+        </p>
+        <p
+          data-en="Keep the choice proportional to the task: a small local deployment can stay with GPO, while a distributed fleet may need a platform that measures installation state and retries delivery without relying on a domain-connected boot."
+          data-fa="انتخاب را متناسب با نیاز نگه دارید: نصب محدود محلی می‌تواند با GPO انجام شود، اما مجموعه توزیع‌شده ممکن است به بستری نیاز داشته باشد که وضعیت نصب را اندازه بگیرد و بدون وابستگی به Boot متصل به دامین، تحویل را تکرار کند."
+        >
+          Keep the choice proportional to the task: a small local deployment can
+          stay with GPO, while a distributed fleet may need a platform that
+          measures installation state and retries delivery without relying on a
+          domain-connected boot.
         </p>
       </section>
       <section id="faq">
@@ -1695,35 +1724,6 @@ Choose only after vendor/pilot validation:
             correlate MsiInstaller events with the deployment attempt.
           </p>
         </div>
-      </section>
-      <section id="modern-tools">
-        <h2
-          data-en="When to consider modern management tools"
-          data-fa="چه زمانی ابزارهای مدیریتی جدیدتر مناسب‌اند"
-        >
-          When to consider modern management tools
-        </h2>
-        <p
-          data-en="GPSI remains practical for simple MSI assignments on computers with startup access to the domain network. It provides neither a complete inventory nor a rich deployment reporting and compliance workflow. If the requirement grows to application lifecycle management, remote Internet clients or cloud management, evaluate Microsoft Intune or Microsoft Configuration Manager against the environment, licensing and operational needs."
-          data-fa="GPSI برای تخصیص ساده MSI به کامپیوترهای دارای دسترسی شبکه دامین هنگام Startup کاربردی است. Inventory کامل یا گردش کار گسترده Reporting و Compliance فراهم نمی‌کند. اگر نیاز به مدیریت چرخه عمر برنامه، کلاینت‌های اینترنتی راه‌دور یا Cloud Management افزایش یافت، Microsoft Intune یا Microsoft Configuration Manager را متناسب با محیط، مجوزها و نیاز عملیاتی ارزیابی کنید."
-        >
-          GPSI remains practical for simple MSI assignments on computers with
-          startup access to the domain network. It provides neither a complete
-          inventory nor a rich deployment reporting and compliance workflow. If
-          the requirement grows to application lifecycle management, remote
-          Internet clients or cloud management, evaluate Microsoft Intune or
-          Microsoft Configuration Manager against the environment, licensing and
-          operational needs.
-        </p>
-        <p
-          data-en="Keep the choice proportional to the task: a small local deployment can stay with GPO, while a distributed fleet may need a platform that measures installation state and retries delivery without relying on a domain-connected boot."
-          data-fa="انتخاب را متناسب با نیاز نگه دارید: نصب محدود محلی می‌تواند با GPO انجام شود، اما مجموعه توزیع‌شده ممکن است به بستری نیاز داشته باشد که وضعیت نصب را اندازه بگیرد و بدون وابستگی به Boot متصل به دامین، تحویل را تکرار کند."
-        >
-          Keep the choice proportional to the task: a small local deployment can
-          stay with GPO, while a distributed fleet may need a platform that
-          measures installation state and retries delivery without relying on a
-          domain-connected boot.
-        </p>
       </section>
       <section id="references">
         <h2

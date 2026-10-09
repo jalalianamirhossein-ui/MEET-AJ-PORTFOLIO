@@ -184,20 +184,20 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#architecture"
-              ><span
-                data-en="CDB and PDB architecture"
-                data-fa="معماری CDB و PDB"
-                >CDB and PDB architecture</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#prerequisites"
               ><span
                 data-en="2. Prerequisites and host diagnostics"
                 data-fa="۲. پیش‌نیازها و بررسی میزبان"
                 >2. Prerequisites and host diagnostics</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#architecture"
+              ><span
+                data-en="CDB and PDB architecture"
+                data-fa="معماری CDB و PDB"
+                >CDB and PDB architecture</span
               ></a
             >
           </li>
@@ -344,14 +344,13 @@
             1. Introduction: release, edition and scope
           </h2>
           <p
-            data-en="Oracle Database is a transactional relational database with SQL, PL/SQL, concurrency control, recovery and enterprise data services. Oracle AI Database 26ai is the current generally available long-term release verified in Oracle’s documentation and Linux x86-64 downloads on 9 October 2026. The product name 26ai does not mean the internal release number starts with 26: the public base media identifies 23.26.1.0.0. The latest entitled Release Update must be checked in My Oracle Support before deployment; the public RPM filename is not a patch level."
-            data-fa="Oracle Database پایگاه داده رابطه‌ای تراکنشی با SQL، PL/SQL، کنترل هم‌زمانی، Recovery و سرویس‌های داده سازمانی است. در بررسی ۹ اکتبر ۲۰۲۶، Oracle AI Database 26ai نسخه عمومی و بلندمدت جاری در مستندات و صفحه دانلود رسمی Linux x86-64 است. نام محصول 26ai به معنی شروع شماره داخلی با 26 نیست؛ رسانه عمومی پایه شماره 23.26.1.0.0 دارد. آخرین Release Update مجاز را پیش از استقرار در My Oracle Support بررسی کنید؛ نام RPM نشان‌دهنده Patch Level نیست."
+            data-en="Oracle Database is a transactional relational database with SQL, PL/SQL, concurrency control, recovery and enterprise data services. Oracle AI Database 26ai is the current generally available long-term release. The product name 26ai does not mean the internal release number starts with 26: the public base media identifies 23.26.1.0.0. The latest entitled Release Update must be checked in My Oracle Support before deployment; the public RPM filename is not a patch level."
+            data-fa="Oracle Database پایگاه داده رابطه‌ای تراکنشی با SQL، PL/SQL، کنترل هم‌زمانی، Recovery و سرویس‌های داده سازمانی است. Oracle AI Database 26ai نسخه عمومی و بلندمدت جاری در مستندات و صفحه دانلود رسمی Linux x86-64 است. نام محصول 26ai به معنی شروع شماره داخلی با 26 نیست؛ رسانه عمومی پایه شماره 23.26.1.0.0 دارد. آخرین Release Update مجاز را پیش از استقرار در My Oracle Support بررسی کنید؛ نام RPM نشان‌دهنده Patch Level نیست."
           >
             Oracle Database is a transactional relational database with SQL,
             PL/SQL, concurrency control, recovery and enterprise data services.
             Oracle AI Database 26ai is the current generally available long-term
-            release verified in Oracle’s documentation and Linux x86-64
-            downloads on 9 October 2026. The product name 26ai does not mean the
+            release. The product name 26ai does not mean the
             internal release number starts with 26: the public base media
             identifies 23.26.1.0.0. The latest entitled Release Update must be
             checked in My Oracle Support before deployment; the public RPM
@@ -464,67 +463,6 @@
                 data-fa="مجوز Oracle 26ai؛ Feature، Option و Pack مجاز"
                 >Oracle 26ai licensing: permitted features, options and
                 packs</span
-              ></a
-            >
-          </p>
-        </section>
-        <section id="architecture">
-          <h2 data-en="CDB and PDB architecture" data-fa="معماری CDB و PDB">
-            CDB and PDB architecture
-          </h2>
-          <p
-            data-en="An instance contains the SGA and background processes; the database consists of data files, control files and online redo. A CDB has CDB$ROOT, the read-only PDB$SEED template and application PDBs. ORCLPDB1 holds local application users and schemas. PDBs share the instance and host failure domain: a PDB is not an independent availability node. Applications connect to a PDB service name, not the root SID. DBCA is the creation engine invoked by the RPM configure script."
-            data-fa="Instance شامل SGA و Background Process است و Database از Datafile، Control File و Online Redo تشکیل می‌شود. CDB دارای CDB$ROOT، قالب فقط‌خواندنی PDB$SEED و PDBهای برنامه است. حساب و Schema محلی برنامه در ORCLPDB1 قرار می‌گیرد. PDBها Instance و Failure Domain میزبان را مشترک دارند؛ PDB نود مستقل Availability نیست. برنامه به Service Name مربوط به PDB وصل می‌شود، نه SID ریشه. Script پیکربندی RPM برای ساخت دیتابیس DBCA را فراخوانی می‌کند."
-          >
-            An instance contains the SGA and background processes; the database
-            consists of data files, control files and online redo. A CDB has
-            CDB$ROOT, the read-only PDB$SEED template and application PDBs.
-            ORCLPDB1 holds local application users and schemas. PDBs share the
-            instance and host failure domain: a PDB is not an independent
-            availability node. Applications connect to a PDB service name, not
-            the root SID. DBCA is the creation engine invoked by the RPM
-            configure script.
-          </p>
-          <figure>
-            <img
-              src="/assets/img/articles/content/oracle-database-architecture.png"
-              width="1920"
-              height="1080"
-              loading="lazy"
-              decoding="async"
-              alt="Oracle Linux hosts the instance; the CDB contains root, seed and application PDBs. Applications connect through PDB services."
-              data-en-alt="Oracle Linux hosts the instance; the CDB contains root, seed and application PDBs. Applications connect through PDB services."
-              data-fa-alt="Oracle Linux میزبان Instance است؛ CDB شامل Root، Seed و PDB برنامه است و برنامه‌ها از طریق سرویس PDB متصل می‌شوند."
-            />
-            <figcaption>
-              <span
-                data-en="Oracle Linux hosts the instance; the CDB contains root, seed and application PDBs. Applications connect through PDB services."
-                data-fa="Oracle Linux میزبان Instance است؛ CDB شامل Root، Seed و PDB برنامه است و برنامه‌ها از طریق سرویس PDB متصل می‌شوند."
-                >Oracle Linux hosts the instance; the CDB contains root, seed
-                and application PDBs. Applications connect through PDB
-                services.</span
-              >
-            </figcaption>
-          </figure>
-          <p>
-            <a
-              href="https://docs.oracle.com/en/database/oracle/oracle-database/26/cncpt/introduction-to-oracle-database.html"
-              rel="noopener"
-              ><span
-                data-en="Oracle Database concepts and physical architecture"
-                data-fa="مفاهیم و معماری فیزیکی Oracle Database"
-                >Oracle Database concepts and physical architecture</span
-              ></a
-            >
-          </p>
-          <p>
-            <a
-              href="https://docs.oracle.com/en/database/oracle/oracle-database/26/multi/introduction-to-the-multitenant-architecture.html"
-              rel="noopener"
-              ><span
-                data-en="Oracle multitenant CDB and PDB architecture"
-                data-fa="معماری رسمی Multitenant، CDB و PDB"
-                >Oracle multitenant CDB and PDB architecture</span
               ></a
             >
           </p>
@@ -712,6 +650,67 @@ sudo firewall-cmd --get-active-zones</code></pre>
                 data-fa="پیش‌نیاز رسمی فضای نرم‌افزار و ظرفیت Patch"
                 >Official software storage and patch-headroom
                 recommendations</span
+              ></a
+            >
+          </p>
+        </section>
+        <section id="architecture">
+          <h2 data-en="CDB and PDB architecture" data-fa="معماری CDB و PDB">
+            CDB and PDB architecture
+          </h2>
+          <p
+            data-en="An instance contains the SGA and background processes; the database consists of data files, control files and online redo. A CDB has CDB$ROOT, the read-only PDB$SEED template and application PDBs. ORCLPDB1 holds local application users and schemas. PDBs share the instance and host failure domain: a PDB is not an independent availability node. Applications connect to a PDB service name, not the root SID. DBCA is the creation engine invoked by the RPM configure script."
+            data-fa="Instance شامل SGA و Background Process است و Database از Datafile، Control File و Online Redo تشکیل می‌شود. CDB دارای CDB$ROOT، قالب فقط‌خواندنی PDB$SEED و PDBهای برنامه است. حساب و Schema محلی برنامه در ORCLPDB1 قرار می‌گیرد. PDBها Instance و Failure Domain میزبان را مشترک دارند؛ PDB نود مستقل Availability نیست. برنامه به Service Name مربوط به PDB وصل می‌شود، نه SID ریشه. Script پیکربندی RPM برای ساخت دیتابیس DBCA را فراخوانی می‌کند."
+          >
+            An instance contains the SGA and background processes; the database
+            consists of data files, control files and online redo. A CDB has
+            CDB$ROOT, the read-only PDB$SEED template and application PDBs.
+            ORCLPDB1 holds local application users and schemas. PDBs share the
+            instance and host failure domain: a PDB is not an independent
+            availability node. Applications connect to a PDB service name, not
+            the root SID. DBCA is the creation engine invoked by the RPM
+            configure script.
+          </p>
+          <figure>
+            <img
+              src="/assets/img/articles/content/oracle-database-architecture.png"
+              width="1920"
+              height="1080"
+              loading="lazy"
+              decoding="async"
+              alt="Oracle Linux hosts the instance; the CDB contains root, seed and application PDBs. Applications connect through PDB services."
+              data-en-alt="Oracle Linux hosts the instance; the CDB contains root, seed and application PDBs. Applications connect through PDB services."
+              data-fa-alt="Oracle Linux میزبان Instance است؛ CDB شامل Root، Seed و PDB برنامه است و برنامه‌ها از طریق سرویس PDB متصل می‌شوند."
+            />
+            <figcaption>
+              <span
+                data-en="Oracle Linux hosts the instance; the CDB contains root, seed and application PDBs. Applications connect through PDB services."
+                data-fa="Oracle Linux میزبان Instance است؛ CDB شامل Root، Seed و PDB برنامه است و برنامه‌ها از طریق سرویس PDB متصل می‌شوند."
+                >Oracle Linux hosts the instance; the CDB contains root, seed
+                and application PDBs. Applications connect through PDB
+                services.</span
+              >
+            </figcaption>
+          </figure>
+          <p>
+            <a
+              href="https://docs.oracle.com/en/database/oracle/oracle-database/26/cncpt/introduction-to-oracle-database.html"
+              rel="noopener"
+              ><span
+                data-en="Oracle Database concepts and physical architecture"
+                data-fa="مفاهیم و معماری فیزیکی Oracle Database"
+                >Oracle Database concepts and physical architecture</span
+              ></a
+            >
+          </p>
+          <p>
+            <a
+              href="https://docs.oracle.com/en/database/oracle/oracle-database/26/multi/introduction-to-the-multitenant-architecture.html"
+              rel="noopener"
+              ><span
+                data-en="Oracle multitenant CDB and PDB architecture"
+                data-fa="معماری رسمی Multitenant، CDB و PDB"
+                >Oracle multitenant CDB and PDB architecture</span
               ></a
             >
           </p>
@@ -2953,10 +2952,10 @@ sudo journalctl -t oracle-rman --since &#x27;24 hours ago&#x27; --no-pager</code
             Official references and reviewed templates
           </h2>
           <p
-            data-en="Documentation reviewed on 9 October 2026. Follow the references beside each procedure, recheck the current MOS certification/RU and patch README, and test every environment-specific configuration before rollout. The downloadable templates contain no real credentials. Their Linux/Oracle runtime remains untested in this Windows repository environment."
-            data-fa="مستندات در ۹ اکتبر ۲۰۲۶ بررسی شده‌اند. منابع کنار هر فرآیند را بخوانید، Certification/RU جاری MOS و README مربوط به Patch را دوباره بررسی و Config اختصاصی را پیش از استقرار تست کنید. Template قابل دانلود Credential واقعی ندارد. اجرای Linux/Oracle این فایل‌ها در Workspace ویندوزی Repository تست نشده است."
+            data-en="Follow the references beside each procedure, recheck the current MOS certification/RU and patch README, and test every environment-specific configuration before rollout. The downloadable templates contain no real credentials. Their Linux/Oracle runtime remains untested in this Windows repository environment."
+            data-fa="منابع کنار هر فرآیند را بخوانید، Certification/RU جاری MOS و README مربوط به Patch را دوباره بررسی و Config اختصاصی را پیش از استقرار تست کنید. Template قابل دانلود Credential واقعی ندارد. اجرای Linux/Oracle این فایل‌ها در Workspace ویندوزی Repository تست نشده است."
           >
-            Documentation reviewed on 9 October 2026. Follow the references
+            Follow the references
             beside each procedure, recheck the current MOS certification/RU and
             patch README, and test every environment-specific configuration
             before rollout. The downloadable templates contain no real

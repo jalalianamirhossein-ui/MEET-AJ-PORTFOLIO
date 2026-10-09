@@ -309,11 +309,15 @@ add chain=forward action=accept src-address=10.10.10.0/24 dst-address=10.10.20.5
 add chain=forward action=accept src-address=10.10.99.0/24 dst-address-list=INTERNAL-NETWORKS protocol=tcp dst-port=22,443,3389 comment="FORWARD - Mgmt Administrative Services"
 add chain=forward action=accept src-address=10.10.10.0/24 out-interface-list=WAN protocol=tcp dst-port=80,443 comment="FORWARD - Users Internet Web"
 add chain=forward action=accept src-address=10.10.40.0/24 out-interface-list=WAN protocol=tcp dst-port=80,443 comment="FORWARD - Guest Internet Web"
-add chain=forward action=drop src-address-list=GUEST-NETWORKS dst-address-list=INTERNAL-NETWORKS log=yes log-prefix="DROP_GUEST " limit=10,5:packet comment="FORWARD - Drop Guest to Internal"
+add chain=forward action=log src-address-list=GUEST-NETWORKS dst-address-list=INTERNAL-NETWORKS log-prefix="DROP_GUEST " limit=10,5:packet comment="LOG - Drop Guest to Internal"
+add chain=forward action=drop src-address-list=GUEST-NETWORKS dst-address-list=INTERNAL-NETWORKS comment="FORWARD - Drop Guest to Internal"
 add chain=forward action=drop src-address=10.10.10.0/24 dst-address-list=SERVER-NETWORKS comment="FORWARD - Drop Other Users to Servers"
-add chain=forward action=drop src-address-list=INTERNAL-NETWORKS dst-address-list=INTERNAL-NETWORKS log=yes log-prefix="DROP_INTERVLAN " limit=10,5:packet comment="FORWARD - Drop Unauthorized Inter-VLAN"
-add chain=forward action=drop in-interface-list=WAN log=yes log-prefix="DROP_WAN " limit=10,5:packet comment="FORWARD - Drop Unapproved WAN"
-add chain=forward action=drop log=yes log-prefix="DROP_FORWARD " limit=10,5:packet comment="FORWARD - DROP Everything Else"</code></pre>
+add chain=forward action=log src-address-list=INTERNAL-NETWORKS dst-address-list=INTERNAL-NETWORKS log-prefix="DROP_INTERVLAN " limit=10,5:packet comment="LOG - Drop Unauthorized Inter-VLAN"
+add chain=forward action=drop src-address-list=INTERNAL-NETWORKS dst-address-list=INTERNAL-NETWORKS comment="FORWARD - Drop Unauthorized Inter-VLAN"
+add chain=forward action=log in-interface-list=WAN log-prefix="DROP_WAN " limit=10,5:packet comment="LOG - Drop Unapproved WAN"
+add chain=forward action=drop in-interface-list=WAN comment="FORWARD - Drop Unapproved WAN"
+add chain=forward action=log log-prefix="DROP_FORWARD " limit=10,5:packet comment="LOG - DROP Everything Else"
+add chain=forward action=drop comment="FORWARD - DROP Everything Else"</code></pre>
         <p
           data-en="Add DNS, NTP, backup, monitoring, PBX and VoIP rules only after documenting the actual server addresses and ports. Do not hard-code universal SIP/RTP ranges without checking the PBX vendor. Guest must be Internet-only. VoIP should reach only the PBX and required services. Published web servers require an explicit dstnat rule and a matching forward accept rule."
           data-fa="Ruleهای DNS، NTP، Backup، Monitoring، PBX و VoIP را فقط پس از ثبت Address و Port واقعی اضافه کنید. Rangeهای SIP/RTP را بدون بررسی Vendor مربوط به PBX Hard-Code نکنید. Guest فقط به Internet دسترسی داشته باشد. VoIP فقط به PBX و سرویس‌های لازم برسد. Web Server منتشرشده هم به DST-NAT واقعی و هم Rule مجازکننده در Forward نیاز دارد."
@@ -379,42 +383,7 @@ add chain=forward action=drop log=yes log-prefix="DROP_FORWARD " limit=10,5:pack
             Place narrow permits before broad drops.
           </p>
         </figure>
-      </section>
-
-      <section id="troubleshooting">
-        <h2 data-en="Firewall Troubleshooting" data-fa="عیب‌یابی Firewall">
-          Firewall Troubleshooting
-        </h2>
-        <figure>
-          <img
-            src="/assets/img/articles/content/MikroTik Firewall Troubleshooting Flow.png"
-            loading="lazy"
-            decoding="async"
-            alt="MikroTik firewall troubleshooting flow using counters connections Torch packet sniffer and logs"
-          />
-          <p
-            data-en="Start with the path, then counters, connections, Torch and packet capture."
-            data-fa="از مسیر شروع کنید، سپس Counter، Connection، Torch و Packet Capture را بررسی کنید."
-          >
-            Start with the path, then counters, connections, Torch and packet
-            capture.
-          </p>
-        </figure>
-        <pre dir="ltr"><code class="language-routeros">/ip firewall filter print
-/ip firewall filter print stats
-/ip firewall connection print
-/tool torch interface=vlan10-users
-/tool sniffer quick interface=vlan10-users ip-protocol=tcp port=443
-/log print where message~"DROP_"
-/ping 10.10.20.50
-/tool traceroute 1.1.1.1</code></pre>
-        <p
-          data-en="Packets and bytes are evidence. A zero counter on an expected allow usually means wrong rule order, interface, address list, source/destination or that another rule matched first. If users have no Internet, check forward permission, srcnat/masquerade, the default route, DNS and WAN membership. If the router pings but the client cannot browse, the router-originated ping uses output, while the client flow uses forward. If Guest reaches Servers, inspect established connections, address lists, VLAN/bridge design and hardware offload assumptions. Do not use logging on every drop without a rate limit: attacks can cause CPU load and log flooding."
-          data-fa="Packets و Bytes شواهد اصلی هستند. Counter صفر روی Allow مورد انتظار معمولاً یعنی Rule Order، Interface، Address List، Source/Destination اشتباه است یا Rule دیگری زودتر Match شده است. اگر کاربران Internet ندارند، Forward Permission، srcnat/masquerade، Default Route، DNS و عضویت WAN را بررسی کنید. Ping خود Router از Output استفاده می‌کند، اما Flow Client از Forward عبور می‌کند. اگر Guest به Server می‌رسد، Connectionهای Established، Address List، طراحی VLAN/Bridge و فرضیات Hardware Offload را بررسی کنید. روی همه Dropها بدون Rate Limit Logging نگذارید چون Attack می‌تواند CPU و Log Flood ایجاد کند."
-        >
-          Packets and bytes are evidence.
-        </p>
-      </section>
+      <div id="technical-ordering"><h3 data-en="Rate-limit logging separately from unconditional denial" data-fa="محدودسازی لاگ جدا از مسدودسازی بی‌قید نرخ">Rate-limit logging separately from unconditional denial</h3><p data-en="limit is a packet matcher, not a logging-rate setting. Putting limit on the last action=drop rule allows above-limit packets to continue past that rule; a chain ending without a matching deny can accept them. Use a separate action=log rule with a limit, immediately followed by the same unconditional drop. Logging passes to the next rule. The corrected example keeps all segmentation and final denials unconditional. Test traffic above the logging rate: log volume stays bounded while drop counters continue rising." data-fa="limit یک matcher بسته است، نه تنظیم نرخ لاگ. اگر روی آخرین action=drop قرار گیرد، بسته‌های بالاتر از حد از آن قاعده عبور می‌کنند؛ chain بدون deny مطابق ممکن است آن‌ها را بپذیرد. از action=log محدودشده و بلافاصله drop بی‌قید نرخ با همان شروط استفاده کنید. log به قاعدهٔ بعدی می‌رود. نمونهٔ اصلاح‌شده همهٔ denyهای segmentation و نهایی را بی‌قید نرخ نگه می‌دارد. ترافیک بالاتر از نرخ لاگ را آزمایش کنید؛ لاگ محدود و شمارندهٔ drop افزایشی بماند.">limit is a packet matcher, not a logging-rate setting. Putting limit on the last action=drop rule allows above-limit packets to continue past that rule; a chain ending without a matching deny can accept them. Use a separate action=log rule with a limit, immediately followed by the same unconditional drop. Logging passes to the next rule. The corrected example keeps all segmentation and final denials unconditional. Test traffic above the logging rate: log volume stays bounded while drop counters continue rising.</p><p><a href="https://manual.mikrotik.com/docs/firewall-and-quality-of-service/firewall/common-firewall-matchers-and-actions/" rel="noopener" data-en="MikroTik matchers and log action" data-fa="مستند رسمی: MikroTik matchers and log action">MikroTik matchers and log action</a></p></div></section>
 
       <section id="testing">
         <h2 data-en="Testing Matrix" data-fa="ماتریس تست">Testing Matrix</h2>
@@ -496,6 +465,41 @@ add chain=forward action=drop log=yes log-prefix="DROP_FORWARD " limit=10,5:pack
           data-fa="پیش از Production Deployment تمام ردیف‌ها را از Source و Destination واقعی اجرا کنید. Connectionهای جدید و موجود را جداگانه تست کنید."
         >
           Run every row before production deployment.
+        </p>
+      </section>
+
+      <section id="troubleshooting">
+        <h2 data-en="Firewall Troubleshooting" data-fa="عیب‌یابی Firewall">
+          Firewall Troubleshooting
+        </h2>
+        <figure>
+          <img
+            src="/assets/img/articles/content/MikroTik Firewall Troubleshooting Flow.png"
+            loading="lazy"
+            decoding="async"
+            alt="MikroTik firewall troubleshooting flow using counters connections Torch packet sniffer and logs"
+          />
+          <p
+            data-en="Start with the path, then counters, connections, Torch and packet capture."
+            data-fa="از مسیر شروع کنید، سپس Counter، Connection، Torch و Packet Capture را بررسی کنید."
+          >
+            Start with the path, then counters, connections, Torch and packet
+            capture.
+          </p>
+        </figure>
+        <pre dir="ltr"><code class="language-routeros">/ip firewall filter print
+/ip firewall filter print stats
+/ip firewall connection print
+/tool torch interface=vlan10-users
+/tool sniffer quick interface=vlan10-users ip-protocol=tcp port=443
+/log print where message~"DROP_"
+/ping 10.10.20.50
+/tool traceroute 1.1.1.1</code></pre>
+        <p
+          data-en="Packets and bytes are evidence. A zero counter on an expected allow usually means wrong rule order, interface, address list, source/destination or that another rule matched first. If users have no Internet, check forward permission, srcnat/masquerade, the default route, DNS and WAN membership. If the router pings but the client cannot browse, the router-originated ping uses output, while the client flow uses forward. If Guest reaches Servers, inspect established connections, address lists, VLAN/bridge design and hardware offload assumptions. Do not use logging on every drop without a rate limit: attacks can cause CPU load and log flooding."
+          data-fa="Packets و Bytes شواهد اصلی هستند. Counter صفر روی Allow مورد انتظار معمولاً یعنی Rule Order، Interface، Address List، Source/Destination اشتباه است یا Rule دیگری زودتر Match شده است. اگر کاربران Internet ندارند، Forward Permission، srcnat/masquerade، Default Route، DNS و عضویت WAN را بررسی کنید. Ping خود Router از Output استفاده می‌کند، اما Flow Client از Forward عبور می‌کند. اگر Guest به Server می‌رسد، Connectionهای Established، Address List، طراحی VLAN/Bridge و فرضیات Hardware Offload را بررسی کنید. روی همه Dropها بدون Rate Limit Logging نگذارید چون Attack می‌تواند CPU و Log Flood ایجاد کند."
+        >
+          Packets and bytes are evidence.
         </p>
       </section>
 

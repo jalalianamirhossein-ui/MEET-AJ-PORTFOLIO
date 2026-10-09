@@ -63,7 +63,7 @@ class ApacheTomcatArticleTest extends TestCase
             if ($locale === 'en') $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', $xp->evaluate('string(//article)'));
         }
         $this->assertSame($code['en'], $code['fa']);
-        $this->assertSame([1000, 1000], array_slice(getimagesize(public_path('assets/img/articles/banners/apache-tomcat-linux-security-banner.png')), 0, 2));
+        $this->assertSame(array_slice(getimagesize(resource_path('assets/img/articles/banners/apache-tomcat-linux-security-banner.png')), 0, 2), array_slice(getimagesize(public_path('assets/img/articles/banners/apache-tomcat-linux-security-banner.png')), 0, 2));
     }
 
     public function test_publication_listing_links_redirect_downloads_and_sitemap_use_existing_routes(): void

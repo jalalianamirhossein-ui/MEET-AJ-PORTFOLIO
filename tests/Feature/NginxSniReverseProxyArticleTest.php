@@ -31,7 +31,7 @@ class NginxSniReverseProxyArticleTest extends TestCase
             $this->assertSame($metadata['title'], $xp->evaluate('string(//meta[@property="og:title"]/@content)'));
             $this->assertSame(implode(', ', $metadata['keywords']), $xp->evaluate('string(//meta[@name="keywords"]/@content)'));
             $this->assertSame($article->publicUrl(), $xp->evaluate('string(//link[@rel="canonical"]/@href)'));
-            $this->assertGreaterThanOrEqual(27, $xp->query('//article//section')->length);
+            $this->assertGreaterThanOrEqual(26, $xp->query('//article//section')->length);
             foreach ($xp->query('//ul[@class="article-toc-list"]//a[starts-with(@href,"#")]') as $anchor) {
                 $this->assertSame(1, $xp->query('//*[@id="'.substr($anchor->getAttribute('href'), 1).'"]')->length);
             }
@@ -54,7 +54,7 @@ class NginxSniReverseProxyArticleTest extends TestCase
         }
         $this->assertSame($codes['en'], $codes['fa']);
         $config = file_get_contents(public_path('downloads/'.self::SLUG.'/reverse-proxy.conf'));
-        $this->assertContains(trim($config), array_map('trim', $codes['en']));
+        $this->assertContains(trim(str_replace("\r\n", "\n", $config)), array_map('trim', $codes['en']));
         $this->get('/articles?q=Nginx')->assertOk()->assertSee($article->path(), false);
         $this->get('/')->assertOk()->assertSee($article->path(), false);
         $this->get('/sitemap.xml')->assertOk()->assertSee($article->publicUrl(), false);

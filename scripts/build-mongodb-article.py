@@ -718,6 +718,10 @@ html = f'''<!doctype html>
 {chr(10).join(parts)}
 </article></main></body></html>
 '''
+import sys
+sys.path.insert(0, str(ROOT / 'scripts'))
+from article_structure import normalize_html, normalize_markdown
+html = normalize_html(html, SLUG)
 (ROOT / 'resources/legacy/articles' / f'{SLUG}.html').write_text(html, encoding='utf-8')
 PACKAGE.mkdir(parents=True, exist_ok=True)
 for lang, body in markdown.items():

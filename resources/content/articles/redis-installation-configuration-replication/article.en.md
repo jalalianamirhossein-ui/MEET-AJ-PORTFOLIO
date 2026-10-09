@@ -4,7 +4,7 @@ Deploy Redis on Ubuntu with ACL and TLS hardening, RDB/AOF persistence, replicat
 
 ## Introduction: verified versions and deployment scope
 
-Reviewed on 7 October 2026: Redis Open Source 8.10.2 is the latest stable release verified on the official release page, published on 17 September 2026. This guide uses the 8.10 command reference and the tagged 8.10.2 redis.conf. Always recheck the latest security patch and release notes before deployment; do not confuse Redis Open Source with Redis Software or Redis Cloud product versions.
+Redis Open Source 8.10.2 is the latest stable release verified on the official release page, published on 17 September 2026. This guide uses the 8.10 command reference and the tagged 8.10.2 redis.conf. Always recheck the latest security patch and release notes before deployment; do not confuse Redis Open Source with Redis Software or Redis Cloud product versions.
 
 [Official Redis 8.10.2 release](https://github.com/redis/redis/releases/tag/8.10.2)
 
@@ -13,25 +13,6 @@ Reviewed on 7 October 2026: Redis Open Source 8.10.2 is the latest stable releas
 The worked hosts use Ubuntu Server 24.04 LTS, which remains supported. Ubuntu 26.04 LTS is the latest LTS at review time. On a newer LTS verify repository support, codename, package candidate, service unit and paths before applying this runbook. A distribution package may be older than the current upstream stable release. All Linux commands target your Redis hosts; they have been checked against documentation, not executed on a live Redis production deployment in this Windows website workspace.
 
 [Canonical Ubuntu release and support cycle](https://ubuntu.com/about/release-cycle)
-
-## Prerequisites and deployment scenario
-
-```text
-Application Servers: 10.10.30.21, 10.10.30.22
-             |
-             v
-Redis Primary: 10.10.20.10:6379
-             |
-             | Asynchronous Replication
-             v
-Redis Replica: 10.10.20.11:6379
-
-Optional Replica-02: 10.10.20.12:6379
-Management jump host: 10.10.40.10
-Prometheus host: 10.10.40.20
-```
-
-Prerequisites: static private addresses, reliable DNS/time sync, SSH or console access, a dedicated Redis service account, measured RAM/SSD capacity and an approved maintenance window. Both nodes should start with the same Redis patch version and compatible modules. Change the sample IPs to your network; the additional addresses above make firewall examples concrete.
 
 ## 1. What is Redis?
 
@@ -75,7 +56,72 @@ Applications talk to both Redis and the durable database. In cache-aside, read R
 
 Logical databases and key prefixes help organize keys but do not isolate RAM, eviction, CPU or availability. A shared cache instance should not evict critical session, queue or lock keys. Scale the workload and choose a separate deployment where those requirements differ.
 
-## 3. Install Redis on Ubuntu
+## Prerequisites and deployment scenario
+
+```text
+Application Servers: 10.10.30.21, 10.10.30.22
+             |
+             v
+Redis Primary: 10.10.20.10:6379
+             |
+             | Asynchronous Replication
+             v
+Redis Replica: 10.10.20.11:6379
+
+Optional Replica-02: 10.10.20.12:6379
+Management jump host: 10.10.40.10
+Prometheus host: 10.10.40.20
+```
+
+Prerequisites: static private addresses, reliable DNS/time sync, SSH or console access, a dedicated Redis service account, measured RAM/SSD capacity and an approved maintenance window. Both nodes should start with the same Redis patch version and compatible modules. Change the sample IPs to your network; the additional addresses above make firewall examples concrete.
+
+## 3. Redis replication architecture
+
+![Redis asynchronous replication from one primary to two read-only replicas](/assets/img/articles/content/redis-replication-architecture.png)
+
+Redis asynchronous replication from one primary to two read-only replicas
+
+```text
+Applications
+                      |
+                      v
+                 Redis Primary
+              10.10.20.10:6379
+                      |
+           +----------+----------+
+           |                     |
+           v                     v
+       Replica-01             Replica-02
+   10.10.20.11:6379       10.10.20.12:6379
+```
+
+For Replica-02 repeat the replica procedure using its own bind address 10.10.20.12, add an explicit allow rule on the primary and keep replicaof pointed at 10.10.20.10. Distribute credentials independently and verify both connections. This architecture holds a full dataset copy on every Redis node; it is not a three-way partition of the dataset.
+
+## 4. Replication alone is not high availability
+
+If the primary fails, a standalone replica does not automatically become the new primary and the application endpoint does not automatically move. Manual promotion without fencing the old primary risks two writable primaries during a partition. Automatic process restart is also not failover. Never let a persistence-disabled primary restart empty and re-synchronize surviving replicas from an empty dataset.
+
+An acknowledged primary write may not have reached the replica chosen for failover. WAIT can reduce that window; WAITAOF can wait for AOF fsync acknowledgments on selected participants when supported and configured. Neither substitutes for a backup or turns this asynchronous architecture into a universally lossless consensus system. Select RPO/RTO from business requirements and test crash, host failure and network partition recovery.
+
+[WAITAOF durability acknowledgments](https://redis.io/docs/latest/commands/waitaof/)
+
+## 5. Replication vs Sentinel vs Redis Cluster
+
+| Architecture | Replication | Automatic failover | Sharding |
+| --- | --- | --- | --- |
+| Replication | Yes | No | No |
+| Sentinel | Yes | Yes | No |
+| Redis Cluster | Yes, with replicas | Yes, with eligible replicas and quorum | Yes |
+
+Replication copies data. Sentinel adds monitoring/discovery/failover around a non-sharded primary-replica group. Redis Cluster distributes keys over 16,384 hash slots and uses its own failover protocol; it does not require Sentinel for Cluster failover. A common production starting topology is three primaries and one replica per primary, six nodes, placed so a primary and its replica do not share a failure domain.
+
+Cluster needs a Cluster-aware client and changes multi-key operations: related keys often need hash tags to share a slot. It supports database 0 only. Plan migration, resharding and access to both client and cluster-bus ports. The default bus port is the data port + 10000, so 6379 normally implies 16379. ACL on the client port does not authenticate the bus. Redis 8.10.2 specifically documents tls-cluster and cluster-bus-port-protected-mode; secure and segment that bus, and test certificates and client redirection.
+
+[Official Redis Cluster topology, hash slots and ports](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/)
+
+[Redis 8.10.2 cluster bus security change](https://github.com/redis/redis/releases/tag/8.10.2)
+
+## 6. Install Redis on Ubuntu
 
 Run these commands on both nodes. A simple distribution installation is shown first as an alternative, not as a promise to install the latest upstream Redis. For the stable version used by this guide choose the official Redis APT repository and inspect the candidate before accepting it.
 
@@ -113,7 +159,7 @@ Record the exact package versions from the first node and use the same approved 
 
 [Official Redis installation using APT](https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/apt/)
 
-## 4. Check the Redis service
+## 7. Check the Redis service
 
 ```bash
 systemctl status redis-server --no-pager
@@ -135,7 +181,7 @@ PONG without credentials is an initial local check only. After hardening it shou
 redis-cli -h 127.0.0.1 -p 6379 --user admin --askpass PING
 ```
 
-## 5. Configuration layout and backup
+## 8. Configuration layout and backup
 
 APT installations normally use /etc/redis/redis.conf. Verify this with systemctl cat and dpkg -L. Redis 8.10 uses redis.conf; the separate redis-full.conf used in older 8.x distributions is not the default model here. Preserve package module paths and service settings. Apply the operational baseline as a final include rather than replacing the entire package configuration.
 
@@ -149,7 +195,7 @@ sudoedit /etc/redis/production.conf
 sudoedit /etc/redis/redis.conf
 ```
 
-In redis.conf add the line below once, at the end. First create users.acl in section 8; remove any active inline user definitions and legacy requirepass setting to use one ACL source. Backup existing ACL/configuration files before changing an established deployment. These samples are for a new deployment; switching an existing RDB-only instance to AOF needs a live migration procedure.
+In redis.conf add the line below once, at the end. First create users.acl in section 11; remove any active inline user definitions and legacy requirepass setting to use one ACL source. Backup existing ACL/configuration files before changing an established deployment. These samples are for a new deployment; switching an existing RDB-only instance to AOF needs a live migration procedure.
 
 ```text
 include /etc/redis/production.conf
@@ -157,9 +203,9 @@ include /etc/redis/production.conf
 
 [Official configuration file layout and runtime persistence](https://redis.io/docs/latest/operate/oss_and_stack/management/config/)
 
-## 6. Configure the Redis primary
+## 9. Configure the Redis primary
 
-Write this fragment to /etc/redis/production.conf on 10.10.20.10. The example assumes a dedicated 8 GiB host and an initial 4 GiB dataset limit; measure copy-on-write, modules and replication overhead before using that capacity in production. noeviction is the baseline for data that must not be silently removed; section 18 gives the separate cache profile.
+Write this fragment to /etc/redis/production.conf on 10.10.20.10. The example assumes a dedicated 8 GiB host and an initial 4 GiB dataset limit; measure copy-on-write, modules and replication overhead before using that capacity in production. noeviction is the baseline for data that must not be silently removed; section 21 gives the separate cache profile.
 
 ```text
 # Final include for a NEW dedicated Redis deployment; preserve package redis.conf.
@@ -214,7 +260,7 @@ A Type=notify systemd unit may pass --supervised systemd itself; retain that pac
 
 [Tagged Redis 8.10.2 configuration reference](https://raw.githubusercontent.com/redis/redis/8.10.2/redis.conf)
 
-## 7. Security hardening and network segmentation
+## 10. Security hardening and network segmentation
 
 Never publish Redis directly on the internet, even with a password. Place it in a private server VLAN/subnet; deny ingress at host firewall and upstream security groups. Allow only the application servers and replication peers to reach the data service. Management and monitoring require explicit narrowly scoped exceptions, preferably local agents or a controlled jump host. protected-mode is a safety guard, not a firewall or encryption layer.
 
@@ -263,11 +309,11 @@ tls-replication yes must be ready on every promotion candidate, including the cu
 
 [Redis TLS configuration](https://redis.io/docs/latest/operate/oss_and_stack/management/security/encryption/)
 
-## 8. Authentication using Redis ACL
+## 11. Authentication using Redis ACL
 
 Use named ACL users. requirepass remains supported as a compatibility setting for the default user; it is not the recommended multi-user design and is not claimed to be removed. This guide disables default, supplies a separate administrator, narrowly permits cache/session operations, and gives the replica only PING, REPLCONF and PSYNC. ACL is built in; “ACL enabled” means that effective users and permission rules have been deployed and verified.
 
-On a new node, run the Bash script below BEFORE restarting with the include from section 6. Enter four independent strong secrets already stored in your secret manager; enter the same replication secret on both nodes. At least 32 random bytes encoded as hex is a practical choice. This script rejects weak or non-hex inputs, writes hashes rather than plaintext into users.acl and prints no secrets. It intentionally refuses to overwrite an existing ACL file.
+On a new node, run the Bash script below BEFORE restarting with the include from section 9. Enter four independent strong secrets already stored in your secret manager; enter the same replication secret on both nodes. At least 32 random bytes encoded as hex is a practical choice. This script rejects weak or non-hex inputs, writes hashes rather than plaintext into users.acl and prints no secrets. It intentionally refuses to overwrite an existing ACL file.
 
 ```bash
 #!/usr/bin/env bash
@@ -333,7 +379,7 @@ ACL LIST returns rules and password hashes, so limit it to administrators and do
 
 [ACL LIST](https://redis.io/docs/latest/commands/acl-list/)
 
-## 9. Persistence: RDB and AOF
+## 12. Persistence: RDB and AOF
 
 ### RDB: point-in-time snapshots
 
@@ -395,7 +441,7 @@ redis-cli --user admin --askpass INFO persistence
 
 [Official RDB, multipart AOF, recovery and live AOF migration](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/)
 
-## 10. Configure the Redis replica
+## 13. Configure the Redis replica
 
 On 10.10.20.11 install the same packages, deploy its own ACL users, protect its network path and apply the baseline below as the final include. Replication transfers datasets, not ACL/configuration files: provision those independently. Use the repl account on the primary and its matching secret in masterauth. All copies of production.conf containing masterauth must be root/redis readable only.
 
@@ -463,7 +509,7 @@ Partial synchronization can catch up from the primary backlog after a short outa
 
 [Redis synchronization and authentication](https://redis.io/docs/latest/operate/oss_and_stack/management/replication/)
 
-## 11. Verify replication status
+## 14. Verify replication status
 
 ### On the replica
 
@@ -501,7 +547,7 @@ Expect connected_slaves:1 for the two-node scenario, or 2 when Replica-02 is add
 
 [Current INFO fields and legacy replication output labels](https://redis.io/docs/latest/commands/info/)
 
-## 12. Practical replication test
+## 15. Practical replication test
 
 Use an administrator for the requested company key because the app role can access only cache:* and session:*. Open an authenticated interactive connection on the primary; SET and WAIT must run on that SAME connection. WAIT checks acknowledgments for preceding writes from that client, not unrelated CLI connections.
 
@@ -549,7 +595,7 @@ redis-cli --user admin --askpass DEL company
 
 [WAIT acknowledgment semantics and limitations](https://redis.io/docs/latest/commands/wait/)
 
-## 13. Read from replicas
+## 16. Read from replicas
 
 Replicas copy the primary dataset and are read-only by default. Applications can explicitly route suitable reads to them for scaling; Redis does not automatically split application reads between standalone replicas. Standalone replicas accept reads without the Cluster-specific READONLY command. Use a client/router that knows the topology and sends every write to the current primary.
 
@@ -557,37 +603,7 @@ Replication is asynchronous: a replica can return old data, including immediatel
 
 This baseline sets replica-serve-stale-data no so data reads fail while the primary link is down or synchronization is incomplete; it does not eliminate lag on an up link. The default yes serves possibly stale data during outages. Choose availability versus freshness explicitly and alert on disconnected or lagging replicas. Adding replicas increases primary network and replication overhead; it does not shard memory or scale primary writes.
 
-## 14. Redis replication architecture
-
-![Redis asynchronous replication from one primary to two read-only replicas](/assets/img/articles/content/redis-replication-architecture.png)
-
-Redis asynchronous replication from one primary to two read-only replicas
-
-```text
-Applications
-                      |
-                      v
-                 Redis Primary
-              10.10.20.10:6379
-                      |
-           +----------+----------+
-           |                     |
-           v                     v
-       Replica-01             Replica-02
-   10.10.20.11:6379       10.10.20.12:6379
-```
-
-For Replica-02 repeat the replica procedure using its own bind address 10.10.20.12, add an explicit allow rule on the primary and keep replicaof pointed at 10.10.20.10. Distribute credentials independently and verify both connections. This architecture holds a full dataset copy on every Redis node; it is not a three-way partition of the dataset.
-
-## 15. Replication alone is not high availability
-
-If the primary fails, a standalone replica does not automatically become the new primary and the application endpoint does not automatically move. Manual promotion without fencing the old primary risks two writable primaries during a partition. Automatic process restart is also not failover. Never let a persistence-disabled primary restart empty and re-synchronize surviving replicas from an empty dataset.
-
-An acknowledged primary write may not have reached the replica chosen for failover. WAIT can reduce that window; WAITAOF can wait for AOF fsync acknowledgments on selected participants when supported and configured. Neither substitutes for a backup or turns this asynchronous architecture into a universally lossless consensus system. Select RPO/RTO from business requirements and test crash, host failure and network partition recovery.
-
-[WAITAOF durability acknowledgments](https://redis.io/docs/latest/commands/waitaof/)
-
-## 16. Redis Sentinel high availability
+## 17. Redis Sentinel high availability
 
 ![Redis Sentinel high availability with three sentinels, one primary, two replicas and automatic failover](/assets/img/articles/content/redis-sentinel-high-availability.png)
 
@@ -643,64 +659,7 @@ Acceptance: CKQUORUM confirms enough Sentinels and a majority; discovery returns
 
 [Sentinel client discovery protocol](https://redis.io/docs/latest/develop/reference/sentinel-clients/)
 
-## 17. Replication vs Sentinel vs Redis Cluster
-
-| Architecture | Replication | Automatic failover | Sharding |
-| --- | --- | --- | --- |
-| Replication | Yes | No | No |
-| Sentinel | Yes | Yes | No |
-| Redis Cluster | Yes, with replicas | Yes, with eligible replicas and quorum | Yes |
-
-Replication copies data. Sentinel adds monitoring/discovery/failover around a non-sharded primary-replica group. Redis Cluster distributes keys over 16,384 hash slots and uses its own failover protocol; it does not require Sentinel for Cluster failover. A common production starting topology is three primaries and one replica per primary, six nodes, placed so a primary and its replica do not share a failure domain.
-
-Cluster needs a Cluster-aware client and changes multi-key operations: related keys often need hash tags to share a slot. It supports database 0 only. Plan migration, resharding and access to both client and cluster-bus ports. The default bus port is the data port + 10000, so 6379 normally implies 16379. ACL on the client port does not authenticate the bus. Redis 8.10.2 specifically documents tls-cluster and cluster-bus-port-protected-mode; secure and segment that bus, and test certificates and client redirection.
-
-[Official Redis Cluster topology, hash slots and ports](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/)
-
-[Redis 8.10.2 cluster bus security change](https://github.com/redis/redis/releases/tag/8.10.2)
-
-## 18. Memory management and eviction policy
-
-maxmemory limits memory considered by eviction, not the entire process RSS or a hard host RAM cap. Replication/AOF buffers, allocator fragmentation, modules, OS needs and copy-on-write during fork require additional headroom. An 8 GiB host with maxmemory 4gb is an initial example, not a universal 50% sizing rule. Measure peak RSS and copy-on-write under a realistic rewrite/full-sync load, and alert before swap or the OOM killer becomes the limiting mechanism.
-
-| Policy | Behavior and use |
-| --- | --- |
-| noeviction | Reject memory-growing writes at the limit; preserves keys for sessions/jobs but requires handling OOM errors. |
-| allkeys-lru | Evict approximately least recently used keys from all keys; a good general cache starting point. |
-| allkeys-lfu | Evict approximately least frequently used keys; test for a stable hot working set. |
-| volatile-lru | Apply LRU only to keys with TTL; without eligible keys behaves like noeviction. |
-| volatile-ttl | Evict eligible TTL keys with shortest remaining time; useful when TTL encodes value. |
-
-### Practical cache-only profile
-
-```text
-maxmemory 4gb
-maxmemory-policy allkeys-lru
-```
-
-For a cache-only instance start with allkeys-lru, explicit TTLs and protection against stampedes; compare hit rate, evictions and database fallback load before trying LFU. TTL controls freshness while eviction controls capacity. Do not share this profile with job/lock/session keys that must survive memory pressure. Changing the policy requires no application data reset but can immediately affect which keys are evicted.
-
-Replicas normally ignore maxmemory while replicating and apply primary-driven evictions; capacity must fit the full replicated dataset and its buffers. Keep an appropriate maxmemory/policy on replicas for possible promotion. Setting replica-ignore-maxmemory no changes that behavior and is not a general fix for undersized replicas.
-
-[Current eviction policies and memory accounting](https://redis.io/docs/latest/develop/reference/eviction/)
-
-### Linux memory and service prerequisites
-
-```bash
-sysctl vm.overcommit_memory net.core.somaxconn
-systemctl show redis-server -p LimitNOFILE
-cat /sys/kernel/mm/transparent_hugepage/enabled
-# On a dedicated Redis host, persist the official overcommit recommendation:
-printf 'vm.overcommit_memory = 1
-' | sudo tee /etc/sysctl.d/99-redis.conf
-sudo sysctl -p /etc/sysctl.d/99-redis.conf
-```
-
-Redis recommends vm.overcommit_memory=1 to reduce fork failures; it changes the host policy, so coordinate it on shared hosts. Redis 8.10.2 defaults disable-thp yes to disable problematic THP use for the Redis process when needed; verify the running configuration and latency instead of blindly copying a legacy global THP script. Inspect service file limits and listen backlog against the measured client load. Provision swap according to your host policy as a capacity emergency mechanism, but treat actual Redis swapping as an urgent latency incident, not normal operating headroom.
-
-[Redis Linux administration prerequisites](https://redis.io/docs/latest/operate/oss_and_stack/management/admin/)
-
-## 19. Monitoring and operational metrics
+## 18. Monitoring and operational metrics
 
 ```bash
 redis-cli --user monitor --askpass INFO
@@ -739,7 +698,7 @@ SLOWLOG records command execution time in microseconds and excludes client/netwo
 
 [Official latency diagnosis](https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/latency/)
 
-## 20. Prometheus, Grafana and alerting
+## 19. Prometheus, Grafana and alerting
 
 ![Redis monitoring with Redis Exporter, Prometheus, Grafana and Alertmanager](/assets/img/articles/content/redis-monitoring-architecture.png)
 
@@ -808,7 +767,7 @@ Confirm the metric names, units and labels at /metrics for the pinned exporter. 
 
 [Official Prometheus scrape configuration](https://prometheus.io/docs/prometheus/latest/configuration/configuration/)
 
-## 21. Backup and restore
+## 20. Backup and restore
 
 Replication is not backup. Accidental deletion, an application bug and malicious writes can propagate to every replica. Keep dated recoverable backups outside the Redis failure domain, encrypted with restricted access and retention suitable for your RPO. A backup replica can reduce primary load, but must have a current completed sync before snapshotting.
 
@@ -846,7 +805,7 @@ Expected: a completed transfer and a successful redis-check-rdb validation; the 
 A current AOF backup must contain the manifest plus every referenced base/incremental file. A naive live copy can miss files during rewrite or capture inconsistent state. Use a coordinated backup procedure that prevents rewrite/file-set changes, or an atomic filesystem/storage snapshot with the documented Redis consistency procedure. A cleanly stopped dedicated backup replica can also provide a consistent file set; plan its resync and production availability impact.
 
 - Restore to a fresh isolated host with the same approved Redis/module versions; verify backup checksum and configuration compatibility.
-- For an RDB-only restore, load the restored dump.rdb with appendonly no initially; a pre-existing AOF must not override it. Enable AOF later using the live procedure in section 9.
+- For an RDB-only restore, load the restored dump.rdb with appendonly no initially; a pre-existing AOF must not override it. Enable AOF later using the live procedure in section 12.
 - For AOF restore, restore the complete manifest/file set under appenddirname and correct ownership; validate with the version-matched redis-check-aof tooling.
 - Keep applications disconnected until key samples, TTLs, counts, loading logs and business invariants pass. Never run repair --fix on the only backup copy.
 - Measure actual restore time, potential data loss, remote backup age and encryption-key availability. Preserve a verified pre-change backup for rollback.
@@ -854,6 +813,47 @@ A current AOF backup must contain the manifest plus every referenced base/increm
 [redis-cli modes including RDB export and authentication](https://redis.io/docs/latest/develop/tools/cli/)
 
 [LASTSAVE snapshot completion timestamp](https://redis.io/docs/latest/commands/lastsave/)
+
+## 21. Memory management and eviction policy
+
+maxmemory limits memory considered by eviction, not the entire process RSS or a hard host RAM cap. Replication/AOF buffers, allocator fragmentation, modules, OS needs and copy-on-write during fork require additional headroom. An 8 GiB host with maxmemory 4gb is an initial example, not a universal 50% sizing rule. Measure peak RSS and copy-on-write under a realistic rewrite/full-sync load, and alert before swap or the OOM killer becomes the limiting mechanism.
+
+| Policy | Behavior and use |
+| --- | --- |
+| noeviction | Reject memory-growing writes at the limit; preserves keys for sessions/jobs but requires handling OOM errors. |
+| allkeys-lru | Evict approximately least recently used keys from all keys; a good general cache starting point. |
+| allkeys-lfu | Evict approximately least frequently used keys; test for a stable hot working set. |
+| volatile-lru | Apply LRU only to keys with TTL; without eligible keys behaves like noeviction. |
+| volatile-ttl | Evict eligible TTL keys with shortest remaining time; useful when TTL encodes value. |
+
+### Practical cache-only profile
+
+```text
+maxmemory 4gb
+maxmemory-policy allkeys-lru
+```
+
+For a cache-only instance start with allkeys-lru, explicit TTLs and protection against stampedes; compare hit rate, evictions and database fallback load before trying LFU. TTL controls freshness while eviction controls capacity. Do not share this profile with job/lock/session keys that must survive memory pressure. Changing the policy requires no application data reset but can immediately affect which keys are evicted.
+
+Replicas normally ignore maxmemory while replicating and apply primary-driven evictions; capacity must fit the full replicated dataset and its buffers. Keep an appropriate maxmemory/policy on replicas for possible promotion. Setting replica-ignore-maxmemory no changes that behavior and is not a general fix for undersized replicas.
+
+[Current eviction policies and memory accounting](https://redis.io/docs/latest/develop/reference/eviction/)
+
+### Linux memory and service prerequisites
+
+```bash
+sysctl vm.overcommit_memory net.core.somaxconn
+systemctl show redis-server -p LimitNOFILE
+cat /sys/kernel/mm/transparent_hugepage/enabled
+# On a dedicated Redis host, persist the official overcommit recommendation:
+printf 'vm.overcommit_memory = 1
+' | sudo tee /etc/sysctl.d/99-redis.conf
+sudo sysctl -p /etc/sysctl.d/99-redis.conf
+```
+
+Redis recommends vm.overcommit_memory=1 to reduce fork failures; it changes the host policy, so coordinate it on shared hosts. Redis 8.10.2 defaults disable-thp yes to disable problematic THP use for the Redis process when needed; verify the running configuration and latency instead of blindly copying a legacy global THP script. Inspect service file limits and listen backlog against the measured client load. Provision swap according to your host policy as a capacity emergency mechanism, but treat actual Redis swapping as an urgent latency incident, not normal operating headroom.
+
+[Redis Linux administration prerequisites](https://redis.io/docs/latest/operate/oss_and_stack/management/admin/)
 
 ## 22. Production troubleshooting runbook
 
@@ -1018,7 +1018,7 @@ At least three in independent failure domains. With three Sentinels, quorum 2 is
 
 ## Official references and deployment templates
 
-The article cites official Redis documentation beside the relevant sections. Stable patch verified against the official repository on 7 October 2026; recheck versions before every release. Downloadable fragments contain no real secrets. Copy them into a reviewed staging deployment, substitute the mandatory secret markers, preserve packaged module paths and validate the actual target service before production.
+The article cites official Redis documentation beside the relevant sections. Recheck versions before every release. Downloadable fragments contain no real secrets. Copy them into a reviewed staging deployment, substitute the mandatory secret markers, preserve packaged module paths and validate the actual target service before production.
 
 [Redis 8.10 command reference](https://redis.io/docs/latest/commands/redis-8-10-commands/)
 

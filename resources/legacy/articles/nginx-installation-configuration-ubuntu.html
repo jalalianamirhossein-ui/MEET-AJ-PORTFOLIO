@@ -369,15 +369,6 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-architecture"
-              ><span
-                data-fa="TLS در Proxy و HTTP در Loopback"
-                data-en="TLS at the proxy, HTTP on loopback"
-                >TLS at the proxy, HTTP on loopback</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#enterprise-prerequisites"
               ><span
                 data-fa="Backend، DNS و گواهی"
@@ -387,11 +378,11 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-installation"
+            <a href="#enterprise-architecture"
               ><span
-                data-fa="نصب Package و Virtual Host"
-                data-en="Install packages and configure the virtual host"
-                >Install packages and configure the virtual host</span
+                data-fa="TLS در Proxy و HTTP در Loopback"
+                data-en="TLS at the proxy, HTTP on loopback"
+                >TLS at the proxy, HTTP on loopback</span
               ></a
             >
           </li>
@@ -401,6 +392,15 @@
                 data-fa="Key و Headerهای Proxy"
                 data-en="Keys and proxy headers"
                 >Keys and proxy headers</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="نصب Package و Virtual Host"
+                data-en="Install packages and configure the virtual host"
+                >Install packages and configure the virtual host</span
               ></a
             >
           </li>
@@ -554,39 +554,6 @@
                       separately.
                     </p>
                   </section>
-                  <section id="enterprise-architecture" class="article-section">
-                    <h2
-                      data-fa="TLS در Proxy و HTTP در Loopback"
-                      data-en="TLS at the proxy, HTTP on loopback"
-                    >
-                      TLS at the proxy, HTTP on loopback
-                    </h2>
-                    <p
-                      data-fa="مسیر نمونه Client به Nginx روی 443 و سپس Backend روی Loopback است. اگر Backend به میزبان دیگری منتقل می‌شود، امنیت شبکه خصوصی و Firewall آن را جدا تنظیم کنید. برنامه نباید Header مبدا را از هر Client قابل اعتماد بداند."
-                      data-en="The path is client to Nginx on 443, then loopback backend. Moving the backend to another host requires separate private-network and firewall controls. Applications must not trust origin headers from arbitrary clients."
-                    >
-                      The path is client to Nginx on 443, then loopback backend.
-                      Moving the backend to another host requires separate
-                      private-network and firewall controls. Applications must
-                      not trust origin headers from arbitrary clients.
-                    </p>
-                    <h3
-                      id="enterprise-scenario"
-                      data-fa="مثال: برنامه روی Loopback"
-                      data-en="Example: a loopback application"
-                    >
-                      Example: a loopback application
-                    </h3>
-                    <p
-                      data-fa="کاربر فقط Proxy را می‌بیند و Backend مستقیم از بیرون قابل دسترسی نیست. ابتدا یک VM آزمایشی را تنظیم کنید و بعد تغییر را به مسیر Load Balancer ببرید. نام دامنه و گواهی باید در هر دو آزمون یکسان باشند."
-                      data-en="Users reach only the proxy, with no direct external backend access. Configure one canary VM before changing the load-balancer path. Use matching domain/certificate identities in both tests."
-                    >
-                      Users reach only the proxy, with no direct external
-                      backend access. Configure one canary VM before changing
-                      the load-balancer path. Use matching domain/certificate
-                      identities in both tests.
-                    </p>
-                  </section>
                   <section
                     id="enterprise-prerequisites"
                     class="article-section"
@@ -636,6 +603,58 @@
                       listen 443 ssl suits this Ubuntu-package example. HTTP/2
                       syntax differs between Nginx branches. Check the installed
                       version’s documentation before adding directives.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="TLS در Proxy و HTTP در Loopback"
+                      data-en="TLS at the proxy, HTTP on loopback"
+                    >
+                      TLS at the proxy, HTTP on loopback
+                    </h2>
+                    <p
+                      data-fa="مسیر نمونه Client به Nginx روی 443 و سپس Backend روی Loopback است. اگر Backend به میزبان دیگری منتقل می‌شود، امنیت شبکه خصوصی و Firewall آن را جدا تنظیم کنید. برنامه نباید Header مبدا را از هر Client قابل اعتماد بداند."
+                      data-en="The path is client to Nginx on 443, then loopback backend. Moving the backend to another host requires separate private-network and firewall controls. Applications must not trust origin headers from arbitrary clients."
+                    >
+                      The path is client to Nginx on 443, then loopback backend.
+                      Moving the backend to another host requires separate
+                      private-network and firewall controls. Applications must
+                      not trust origin headers from arbitrary clients.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: برنامه روی Loopback"
+                      data-en="Example: a loopback application"
+                    >
+                      Example: a loopback application
+                    </h3>
+                    <p
+                      data-fa="کاربر فقط Proxy را می‌بیند و Backend مستقیم از بیرون قابل دسترسی نیست. ابتدا یک VM آزمایشی را تنظیم کنید و بعد تغییر را به مسیر Load Balancer ببرید. نام دامنه و گواهی باید در هر دو آزمون یکسان باشند."
+                      data-en="Users reach only the proxy, with no direct external backend access. Configure one canary VM before changing the load-balancer path. Use matching domain/certificate identities in both tests."
+                    >
+                      Users reach only the proxy, with no direct external
+                      backend access. Configure one canary VM before changing
+                      the load-balancer path. Use matching domain/certificate
+                      identities in both tests.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="Key و Headerهای Proxy"
+                      data-en="Keys and proxy headers"
+                    >
+                      Keys and proxy headers
+                    </h2>
+                    <p
+                      data-fa="Key را فقط برای هویت لازم خواندنی کنید و Backend را عمومی Bind نکنید. 80 برای Redirect یا ACME و 443 برای سرویس است. در این نمونه تک‌Proxy، X-Forwarded-For را از remote_addr می‌سازیم تا Header جعلی Client به‌عنوان مبدا پذیرفته نشود. زنجیره چند Proxy به تنظیم Trusted Proxy جدا نیاز دارد."
+                      data-en="Restrict key reads and keep the backend off public interfaces. Port 80 serves redirects/ACME and 443 serves HTTPS. This single-proxy example derives X-Forwarded-For from remote_addr so spoofed client headers do not become trusted origins. Multi-proxy chains need explicit trusted-proxy configuration."
+                    >
+                      Restrict key reads and keep the backend off public
+                      interfaces. Port 80 serves redirects/ACME and 443 serves
+                      HTTPS. This single-proxy example derives X-Forwarded-For
+                      from remote_addr so spoofed client headers do not become
+                      trusted origins. Multi-proxy chains need explicit
+                      trusted-proxy configuration.
                     </p>
                   </section>
                   <section id="enterprise-installation" class="article-section">
@@ -708,25 +727,6 @@ curl --fail --max-time 10 https://app.example.com/health</code></pre>
                       syntax is ok and test is successful. Point canary DNS or
                       --resolve at the canary VM. Resolve existing default-host
                       or server_name conflicts before reloading.
-                    </p>
-                  </section>
-                  <section id="enterprise-security" class="article-section">
-                    <h2
-                      data-fa="Key و Headerهای Proxy"
-                      data-en="Keys and proxy headers"
-                    >
-                      Keys and proxy headers
-                    </h2>
-                    <p
-                      data-fa="Key را فقط برای هویت لازم خواندنی کنید و Backend را عمومی Bind نکنید. 80 برای Redirect یا ACME و 443 برای سرویس است. در این نمونه تک‌Proxy، X-Forwarded-For را از remote_addr می‌سازیم تا Header جعلی Client به‌عنوان مبدا پذیرفته نشود. زنجیره چند Proxy به تنظیم Trusted Proxy جدا نیاز دارد."
-                      data-en="Restrict key reads and keep the backend off public interfaces. Port 80 serves redirects/ACME and 443 serves HTTPS. This single-proxy example derives X-Forwarded-For from remote_addr so spoofed client headers do not become trusted origins. Multi-proxy chains need explicit trusted-proxy configuration."
-                    >
-                      Restrict key reads and keep the backend off public
-                      interfaces. Port 80 serves redirects/ACME and 443 serves
-                      HTTPS. This single-proxy example derives X-Forwarded-For
-                      from remote_addr so spoofed client headers do not become
-                      trusted origins. Multi-proxy chains need explicit
-                      trusted-proxy configuration.
                     </p>
                   </section>
                   <section id="enterprise-monitoring" class="article-section">

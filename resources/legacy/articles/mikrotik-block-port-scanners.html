@@ -310,15 +310,6 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-architecture"
-              ><span
-                data-fa="ترتیب تشخیص و Drop"
-                data-en="Detection and drop ordering"
-                >Detection and drop ordering</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#enterprise-prerequisites"
               ><span
                 data-fa="بررسی Ruleهای موجود"
@@ -328,20 +319,11 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-installation"
+            <a href="#enterprise-architecture"
               ><span
-                data-fa="افزودن Rule و آزمون Counter"
-                data-en="Add rules and test counters"
-                >Add rules and test counters</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#enterprise-troubleshooting"
-              ><span
-                data-fa="Counter صفر و False Positive"
-                data-en="Zero counters and false positives"
-                >Zero counters and false positives</span
+                data-fa="ترتیب تشخیص و Drop"
+                data-en="Detection and drop ordering"
+                >Detection and drop ordering</span
               ></a
             >
           </li>
@@ -355,11 +337,29 @@
             >
           </li>
           <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="افزودن Rule و آزمون Counter"
+                data-en="Add rules and test counters"
+                >Add rules and test counters</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
             <a href="#enterprise-monitoring"
               ><span
                 data-fa="حجم List و فشار Connection Tracking"
                 data-en="List size and connection-tracking pressure"
                 >List size and connection-tracking pressure</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="Counter صفر و False Positive"
+                data-en="Zero counters and false positives"
+                >Zero counters and false positives</span
               ></a
             >
           </li>
@@ -496,39 +496,6 @@
                       does not establish safe traffic.
                     </p>
                   </section>
-                  <section id="enterprise-architecture" class="article-section">
-                    <h2
-                      data-fa="ترتیب تشخیص و Drop"
-                      data-en="Detection and drop ordering"
-                    >
-                      Detection and drop ordering
-                    </h2>
-                    <p
-                      data-fa="پذیرش Established و مدیریت مجاز پیش از Heuristic قرار می‌گیرد. Rule اول مبدا مشکوک را موقتاً ثبت می‌کند و Rule دوم ترافیک آن را Drop می‌کند. اگر Accept عمومی پیش از این Ruleها باشد، Matcher اجرا نمی‌شود."
-                      data-en="Handle established traffic and permitted management before the heuristic. The first rule temporarily records suspicious sources. The second drops their traffic. Earlier broad accepts prevent the matcher from running."
-                    >
-                      Handle established traffic and permitted management before
-                      the heuristic. The first rule temporarily records
-                      suspicious sources. The second drops their traffic.
-                      Earlier broad accepts prevent the matcher from running.
-                    </p>
-                    <h3
-                      id="enterprise-scenario"
-                      data-fa="روتر در برابر ترافیک عبوری"
-                      data-en="Router traffic versus transit traffic"
-                    >
-                      Router traffic versus transit traffic
-                    </h3>
-                    <p
-                      data-fa="Ruleهای Input از خود روتر حفاظت می‌کنند. برای سرور پشت NAT یا LAN، مسیر Forward را جدا بررسی کنید. Scanner مجاز شبکه مدیریت 10.20.30.0/24 در نمونه از تشخیص مستثناست."
-                      data-en="Input rules protect the router itself. LAN or NAT-published servers require separate forward-policy checks. The sample exempts approved scanners from management subnet 10.20.30.0/24."
-                    >
-                      Input rules protect the router itself. LAN or
-                      NAT-published servers require separate forward-policy
-                      checks. The sample exempts approved scanners from
-                      management subnet 10.20.30.0/24.
-                    </p>
-                  </section>
                   <section
                     id="enterprise-prerequisites"
                     class="article-section"
@@ -578,6 +545,56 @@
                       establish forward or IPv6 protection.
                     </p>
                   </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="ترتیب تشخیص و Drop"
+                      data-en="Detection and drop ordering"
+                    >
+                      Detection and drop ordering
+                    </h2>
+                    <p
+                      data-fa="پذیرش Established و مدیریت مجاز پیش از Heuristic قرار می‌گیرد. Rule اول مبدا مشکوک را موقتاً ثبت می‌کند و Rule دوم ترافیک آن را Drop می‌کند. اگر Accept عمومی پیش از این Ruleها باشد، Matcher اجرا نمی‌شود."
+                      data-en="Handle established traffic and permitted management before the heuristic. The first rule temporarily records suspicious sources. The second drops their traffic. Earlier broad accepts prevent the matcher from running."
+                    >
+                      Handle established traffic and permitted management before
+                      the heuristic. The first rule temporarily records
+                      suspicious sources. The second drops their traffic.
+                      Earlier broad accepts prevent the matcher from running.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="روتر در برابر ترافیک عبوری"
+                      data-en="Router traffic versus transit traffic"
+                    >
+                      Router traffic versus transit traffic
+                    </h3>
+                    <p
+                      data-fa="Ruleهای Input از خود روتر حفاظت می‌کنند. برای سرور پشت NAT یا LAN، مسیر Forward را جدا بررسی کنید. Scanner مجاز شبکه مدیریت 10.20.30.0/24 در نمونه از تشخیص مستثناست."
+                      data-en="Input rules protect the router itself. LAN or NAT-published servers require separate forward-policy checks. The sample exempts approved scanners from management subnet 10.20.30.0/24."
+                    >
+                      Input rules protect the router itself. LAN or
+                      NAT-published servers require separate forward-policy
+                      checks. The sample exempts approved scanners from
+                      management subnet 10.20.30.0/24.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="Allowlist، IPv6 و Default Deny"
+                      data-en="Allowlists, IPv6 and default deny"
+                    >
+                      Allowlists, IPv6 and default deny
+                    </h2>
+                    <p
+                      data-fa="Allowlist باید از مسیر قابل اعتماد استفاده کند. IP قابل جعل روی WAN را استثنای مطمئن حساب نکنید. IPv6 Rule مستقل می‌خواهد. SNMP و مدیریت اینترنتی را محدود کنید و Default Deny را به تشخیص Scan وابسته نکنید."
+                      data-en="Allowlists require trusted paths. Spoofable WAN source addresses are not reliable exemptions. IPv6 needs separate rules. Restrict SNMP/public management and keep default deny independent of scan detection."
+                    >
+                      Allowlists require trusted paths. Spoofable WAN source
+                      addresses are not reliable exemptions. IPv6 needs separate
+                      rules. Restrict SNMP/public management and keep default
+                      deny independent of scan detection.
+                    </p>
+                  </section>
                   <section id="enterprise-installation" class="article-section">
                     <h2
                       data-fa="افزودن Rule و آزمون Counter"
@@ -622,6 +639,23 @@
                       access. Avoid unlimited packet logs.
                     </p>
                   </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="حجم List و فشار Connection Tracking"
+                      data-en="List size and connection-tracking pressure"
+                    >
+                      List size and connection-tracking pressure
+                    </h2>
+                    <p
+                      data-fa="Counter تشخیص و Drop، اندازه Address List، CPU و تعداد Connection را پایش کنید. افزایش Scan همراه با فشار Resource اهمیت بیشتری از یک Scan منفرد دارد. Log هر Packet را بدون Rate Limit فعال نکنید."
+                      data-en="Monitor detection/drop counters, address-list size, CPU and connection count. A scan surge with resource pressure matters more than an isolated scan. Avoid unlimited per-packet logging."
+                    >
+                      Monitor detection/drop counters, address-list size, CPU
+                      and connection count. A scan surge with resource pressure
+                      matters more than an isolated scan. Avoid unlimited
+                      per-packet logging.
+                    </p>
+                  </section>
                   <section
                     id="enterprise-troubleshooting"
                     class="article-section"
@@ -642,41 +676,10 @@
                       stay below thresholds. UDP is outside this example because
                       its rule selects TCP.
                     </p>
-                  </section>
-                  <section id="enterprise-security" class="article-section">
-                    <h2
-                      data-fa="Allowlist، IPv6 و Default Deny"
-                      data-en="Allowlists, IPv6 and default deny"
-                    >
-                      Allowlists, IPv6 and default deny
-                    </h2>
-                    <p
-                      data-fa="Allowlist باید از مسیر قابل اعتماد استفاده کند. IP قابل جعل روی WAN را استثنای مطمئن حساب نکنید. IPv6 Rule مستقل می‌خواهد. SNMP و مدیریت اینترنتی را محدود کنید و Default Deny را به تشخیص Scan وابسته نکنید."
-                      data-en="Allowlists require trusted paths. Spoofable WAN source addresses are not reliable exemptions. IPv6 needs separate rules. Restrict SNMP/public management and keep default deny independent of scan detection."
-                    >
-                      Allowlists require trusted paths. Spoofable WAN source
-                      addresses are not reliable exemptions. IPv6 needs separate
-                      rules. Restrict SNMP/public management and keep default
-                      deny independent of scan detection.
-                    </p>
-                  </section>
-                  <section id="enterprise-monitoring" class="article-section">
-                    <h2
-                      data-fa="حجم List و فشار Connection Tracking"
-                      data-en="List size and connection-tracking pressure"
-                    >
-                      List size and connection-tracking pressure
-                    </h2>
-                    <p
-                      data-fa="Counter تشخیص و Drop، اندازه Address List، CPU و تعداد Connection را پایش کنید. افزایش Scan همراه با فشار Resource اهمیت بیشتری از یک Scan منفرد دارد. Log هر Packet را بدون Rate Limit فعال نکنید."
-                      data-en="Monitor detection/drop counters, address-list size, CPU and connection count. A scan surge with resource pressure matters more than an isolated scan. Avoid unlimited per-packet logging."
-                    >
-                      Monitor detection/drop counters, address-list size, CPU
-                      and connection count. A scan surge with resource pressure
-                      matters more than an isolated scan. Avoid unlimited
-                      per-packet logging.
-                    </p>
-                  </section>
+                  <div id="technical-enterprise-troubleshooting"><h3 data-en="Interpret a controlled positive and negative test" data-fa="تفسیر آزمون مثبت و منفی کنترل‌شده">Interpret a controlled positive and negative test</h3><p data-en="Before testing, print ENT-SCAN rules with detail and note their positions. In an isolated lab, have an authorized scanner make enough fresh TCP probes to exceed the selected psd heuristic, then immediately inspect the address-list timeout and detection/drop packet counters. Repeat from an approved management source: it must retain management access. Expect no universal packet count because timing/ports and earlier rules determine matching. A listed address with zero drop counters can reflect traffic accepted earlier; a zero detection counter can reflect wrong chain or WAN membership. Test IPv6 separately." data-fa="پیش از آزمون قواعد ENT-SCAN و موقعیتشان را با detail ثبت کنید. در آزمایشگاه جدا، اسکنر مجاز تعداد کافی آزمون TCP جدید برای عبور از معیار psd بفرستد و بلافاصله timeout فهرست و شمارندهٔ detect و drop را ببینید. از مبدأ مدیریت مجاز تکرار کنید؛ دسترسی مدیریت باید باقی بماند. تعداد بستهٔ ثابت وجود ندارد، چون زمان، پورت و قواعد قبلی تعیین‌کننده‌اند. IP فهرست‌شده با drop صفر می‌تواند قبلاً accept شده باشد؛ detect صفر ممکن است از chain یا عضویت WAN نادرست باشد. IPv6 را مستقل آزمایش کنید.">Before testing, print ENT-SCAN rules with detail and note their positions. In an isolated lab, have an authorized scanner make enough fresh TCP probes to exceed the selected psd heuristic, then immediately inspect the address-list timeout and detection/drop packet counters. Repeat from an approved management source: it must retain management access. Expect no universal packet count because timing/ports and earlier rules determine matching. A listed address with zero drop counters can reflect traffic accepted earlier; a zero detection counter can reflect wrong chain or WAN membership. Test IPv6 separately.</p><pre dir="ltr"><code class="language-routeros">/ip firewall filter print detail where comment~&quot;ENT-SCAN&quot;
+/ip firewall filter print stats where comment~&quot;ENT-SCAN&quot;
+/ip firewall address-list print detail where list=port_scanners
+/system resource print</code></pre></div></section>
                   <section id="enterprise-recovery" class="article-section">
                     <h2
                       data-fa="لغو Rule بدون خاموش‌کردن Firewall"

@@ -54,7 +54,30 @@ TrueNAS این قابلیت‌ها را به‌صورت یکپارچه ارائ�
 | هزینه | مناسب Self-Build؛ نسخه و Support را جدا بررسی کنید | License و CAL/Software | هزینه Appliance و Support |
 | بهترین کاربرد | Storage مهندسی‌شده و قابل‌کنترل | Domain/File Services متمرکز | SMB سازمانی کوچک تا متوسط |
 
-## 5. معماری ZFS و مفاهیم کلیدی
+## 5. حداقل و Recommended Hardware برای Production
+
+### حداقل رسمی برای شروع
+
+- CPU سازگار با x86_64
+- حداقل 8 GB RAM
+- SSD برای Boot با ظرفیت حداقل 20 GB مطابق راهنمای نصب 25.04؛ دیسک Boot از دیسک‌های Pool جدا باشد
+- حداقل دو Disk مشابه برای یک Pool
+
+### پیشنهاد Production
+
+- 32 تا 64 GB یا بیشتر ECC RAM، متناسب با تعداد Disk و Workload
+- دو SSD برای Boot به‌صورت Mirror
+- HBA در حالت IT/HBA و بدون Hardware RAID پنهان‌کننده Disk
+- Diskهای NAS/Enterprise تست‌شده و Burn-in شده
+- 10 GbE برای VM، iSCSI و Backup سنگین
+- PSU و مسیر برق Redundant، UPS و IPMI/BMC
+- Hot-Swap Bay و فضای کافی برای Rebuild و رشد
+
+### Home Lab در برابر Production
+
+در Home Lab می‌توان با 8 تا 16 GB RAM، یک Boot SSD و شبکه 1 GbE یادگیری را شروع کرد. در Production باید Downtime، RPO/RTO، Monitoring، Replace کردن Disk و Restore واقعی را طراحی کنید. USB Flash را برای نصب موقت استفاده کنید، نه Boot دائمی Production.
+
+## 6. معماری ZFS و مفاهیم کلیدی
 
 ### Pool و VDEV
 
@@ -92,29 +115,6 @@ Deduplication را بدون محاسبه RAM و تست واقعی فعال نک�
 ![معماری ZFS در TrueNAS](/assets/img/articles/content/TrueNAS%20ZFS%20Architecture%20Infographic.png)
 
 *تصویر ۲ — رابطه Pool، VDEV، Dataset، ZVOL و قابلیت‌های حفاظتی ZFS.*
-
-## 6. حداقل و Recommended Hardware برای Production
-
-### حداقل رسمی برای شروع
-
-- CPU سازگار با x86_64
-- حداقل 8 GB RAM
-- SSD برای Boot با ظرفیت حداقل 20 GB مطابق راهنمای نصب 25.04؛ دیسک Boot از دیسک‌های Pool جدا باشد
-- حداقل دو Disk مشابه برای یک Pool
-
-### پیشنهاد Production
-
-- 32 تا 64 GB یا بیشتر ECC RAM، متناسب با تعداد Disk و Workload
-- دو SSD برای Boot به‌صورت Mirror
-- HBA در حالت IT/HBA و بدون Hardware RAID پنهان‌کننده Disk
-- Diskهای NAS/Enterprise تست‌شده و Burn-in شده
-- 10 GbE برای VM، iSCSI و Backup سنگین
-- PSU و مسیر برق Redundant، UPS و IPMI/BMC
-- Hot-Swap Bay و فضای کافی برای Rebuild و رشد
-
-### Home Lab در برابر Production
-
-در Home Lab می‌توان با 8 تا 16 GB RAM، یک Boot SSD و شبکه 1 GbE یادگیری را شروع کرد. در Production باید Downtime، RPO/RTO، Monitoring، Replace کردن Disk و Restore واقعی را طراحی کنید. USB Flash را برای نصب موقت استفاده کنید، نه Boot دائمی Production.
 
 ## 7. طراحی شبکه سازمانی
 
@@ -216,7 +216,19 @@ Credentials → Directory Services → Active Directory
 
 قبل از Join شدن، DNS، NTP، FQDN و دسترسی به Domain Controller را تست کنید.
 
-## 14. راه‌اندازی SMB برای Windows
+## 14. Security Hardening
+
+- Web UI را روی Internet منتشر نکنید؛ فقط Management VLAN، VPN یا Bastion.
+- از HTTPS و Certificate معتبر سازمانی استفاده کنید.
+- Least Privilege و Group-Based ACL را اجرا کنید.
+- Admin Account جدا از User Account داشته باشید.
+- MFA را در صورت پشتیبانی Release و روش احراز هویت فعال کنید.
+- SMB/NFS/iSCSI را روی Subnet مناسب محدود کنید.
+- Management، Storage و Backup VLAN را جدا کنید.
+- برای Ransomware، Snapshot Retention، Remote Replication و نسخه Offline داشته باشید.
+- Serviceهای بلااستفاده را فعال نکنید.
+
+## 15. راه‌اندازی SMB برای Windows
 
 Dataset بسازید:
 
@@ -239,7 +251,7 @@ Name: Projects
 
 *تصویر ۴ — ساخت Dataset، ACL و SMB Share برای کاربران Windows.*
 
-## 15. Map Network Drive در Windows
+## 16. Map Network Drive در Windows
 
 در File Explorer، روی This PC گزینه Map Network Drive را انتخاب کنید و مسیر زیر را وارد کنید:
 
@@ -256,7 +268,7 @@ New-PSDrive -Name P -PSProvider FileSystem `
 
 Credentialها را در Script عمومی ذخیره نکنید.
 
-## 16. راه‌اندازی NFS برای Linux و VMware
+## 17. راه‌اندازی NFS برای Linux و VMware
 
 Dataset با Preset `Generic` بسازید و سپس:
 
@@ -276,7 +288,7 @@ showmount -e truenas01
 
 در VMware، از `Add Datastore → NFS` استفاده کنید و فقط Hostهای مجاز Storage VLAN را اجازه دهید.
 
-## 17. iSCSI برای Virtualization
+## 18. iSCSI برای Virtualization
 
 iSCSI Block Storage ارائه می‌کند. اجزای آن شامل Portal، Initiator، Target، Extent و Association است.
 
@@ -288,7 +300,7 @@ iSCSI Block Storage ارائه می‌کند. اجزای آن شامل Portal، 
 
 iSCSI را روی Storage VLAN، با 10 GbE یا بیشتر، Latency کنترل‌شده و در صورت نیاز Multipath اجرا کنید. ZVOL را بیش از ظرفیت واقعی Pool تخصیص ندهید.
 
-## 18. Snapshot خودکار
+## 19. Snapshot خودکار
 
 ```text
 Data Protection → Periodic Snapshot Tasks → Add
@@ -297,15 +309,15 @@ Data Protection → Periodic Snapshot Tasks → Add
 نمونه Retention:
 
 ```text
-Hourly: 24 ساعت
-Daily: 30 روز
-Weekly: 12 هفته
-Monthly: 12 ماه
+Hourly: 24 hours
+Daily: 30 days
+Weekly: 12 weeks
+Monthly: 12 months
 ```
 
 Snapshot برای Recovery سریع است؛ اگر Pool اصلی از بین برود، Snapshot همان Pool نیز از بین می‌رود.
 
-## 19. ZFS Replication به TrueNAS دوم
+## 20. ZFS Replication به TrueNAS دوم
 
 ابتدا TrueNAS دوم، SSH Credential، مقصد و فضای کافی را آماده کنید. سپس:
 
@@ -314,7 +326,7 @@ Data Protection → Replication Tasks → Add
 Source: tank/shares
 Destination: truenas02/tank-replica/shares
 Recursive: Enabled
-Schedule: هر 30 دقیقه
+Schedule: every 30 minutes
 Transport: SSH
 ```
 
@@ -324,26 +336,6 @@ Transport: SSH
 
 *تصویر ۵ — تفاوت Snapshot محلی با Replication و نسخه خارج از سایت.*
 
-## 20. SMART و Scrub
-
-SMART:
-
-```text
-Storage → Disks → S.M.A.R.T. Tests
-Short: روزانه یا هفتگی
-Long: ماهانه
-```
-
-Scrub:
-
-```text
-Data Protection → Scrub Tasks → Add
-Pool: tank
-Schedule: ماهانه
-```
-
-تست‌های Long را در ساعات کم‌مصرف اجرا کنید و Alertها را به Email یا سیستم Monitoring ارسال کنید.
-
 ## 21. Backup از Configuration
 
 ```text
@@ -352,48 +344,13 @@ System Settings → General → Manage Configuration → Download File
 
 فایل Configuration را رمزنگاری و در سیستم مدیریت امن، سایت دوم و Storage خارج از TrueNAS نگهداری کنید. Configuration Backup، Backup داده‌های Pool نیست.
 
-## 22. Security Hardening
-
-- Web UI را روی Internet منتشر نکنید؛ فقط Management VLAN، VPN یا Bastion.
-- از HTTPS و Certificate معتبر سازمانی استفاده کنید.
-- Least Privilege و Group-Based ACL را اجرا کنید.
-- Admin Account جدا از User Account داشته باشید.
-- MFA را در صورت پشتیبانی Release و روش احراز هویت فعال کنید.
-- SMB/NFS/iSCSI را روی Subnet مناسب محدود کنید.
-- Management، Storage و Backup VLAN را جدا کنید.
-- برای Ransomware، Snapshot Retention، Remote Replication و نسخه Offline داشته باشید.
-- Serviceهای بلااستفاده را فعال نکنید.
-
-## 23. Monitoring و Alerting
-
-از مسیرهای زیر استفاده کنید:
-
-```text
-Dashboard
-System Settings → Alerts
-Reporting
-```
-
-هشدارهای Pool Degraded، Disk Failure، SMART، Low Space، Scrub Error، Replication Failure، Temperature، Certificate Expiration، DNS/NTP و Service Down را فعال کنید. Email Alert را با SMTP سازمان تست کنید و در صورت نیاز SNMP، Syslog، Prometheus یا Grafana را اضافه کنید.
-
-## 24. اشتباهات رایج
-
-1. **RAID جای Backup نیست.** در برابر حذف، Ransomware، آتش‌سوزی و خرابی کامل کافی نیست.
-2. **Snapshot جای Backup نیست.** Snapshot روی همان Pool قرار دارد.
-3. **RAIDZ را برای هر Workload انتخاب نکنید.** VM و Database اغلب به Mirror VDEV نیاز دارند.
-4. **USB را Boot Disk دائمی Production نکنید.**
-5. **RAM را دست‌کم نگیرید.** ARC، SMB، VM، iSCSI و Deduplication RAM می‌خواهند.
-6. **Root Dataset را Share نکنید.** Child Dataset مستقل بسازید.
-7. **Deduplication را بدون محاسبه و تست فعال نکنید.**
-8. **Replication بدون Restore Test کافی نیست.** Backup باید قابل‌بازیابی باشد.
-
-## 25. سناریوی واقعی شرکت متوسط
+## 22. سناریوی واقعی شرکت متوسط
 
 برای 80 کاربر، 10 VM و حدود 30 TB داده:
 
 ```text
-TrueNAS-01: 8×12 TB، RAIDZ2، 64 GB ECC، 2×10 GbE، Boot SSD Mirror
-TrueNAS-02: 8×12 TB، RAIDZ2، 64 GB ECC، سایت دوم
+TrueNAS-01: 8×12 TB, RAIDZ2, 64 GB ECC, 2×10 GbE, Boot SSD Mirror
+TrueNAS-02: 8×12 TB, RAIDZ2, 64 GB ECC, second site
 ```
 
 Datasetها:
@@ -409,7 +366,39 @@ tank/replication
 
 SMB روی User VLAN، NFS/iSCSI روی Storage VLAN، Snapshot ساعتی و روزانه، Replication هر 30 دقیقه به سایت دوم و یک Copy هفتگی خارج از سایت، الگوی مناسبی برای شروع است. Capacity نهایی را بر اساس داده واقعی، رشد سالانه، Retention و فضای لازم برای Rebuild محاسبه کنید.
 
-## 26. Troubleshooting اولیه و Commandهای Diagnostic
+## 23. SMART و Scrub
+
+SMART:
+
+```text
+Storage → Disks → S.M.A.R.T. Tests
+Short: daily or weekly
+Long: monthly
+```
+
+Scrub:
+
+```text
+Data Protection → Scrub Tasks → Add
+Pool: tank
+Schedule: monthly
+```
+
+تست‌های Long را در ساعات کم‌مصرف اجرا کنید و Alertها را به Email یا سیستم Monitoring ارسال کنید.
+
+## 24. Monitoring و Alerting
+
+از مسیرهای زیر استفاده کنید:
+
+```text
+Dashboard
+System Settings → Alerts
+Reporting
+```
+
+هشدارهای Pool Degraded، Disk Failure، SMART، Low Space، Scrub Error، Replication Failure، Temperature، Certificate Expiration، DNS/NTP و Service Down را فعال کنید. Email Alert را با SMTP سازمان تست کنید و در صورت نیاز SNMP، Syslog، Prometheus یا Grafana را اضافه کنید.
+
+## 25. Troubleshooting اولیه و Commandهای Diagnostic
 
 ```bash
 zpool status
@@ -431,6 +420,17 @@ Test-NetConnection truenas01 -Port 445
 ```
 
 ابتدا Dashboard، Pool، SMART، فضای آزاد، DNS، NTP، VLAN، Firewall، ACL، Service و آخرین Snapshot/Replication را بررسی کنید. دستورات تغییر‌دهنده ZFS را بدون Runbook و تأیید اجرا نکنید.
+
+## 26. اشتباهات رایج
+
+1. **RAID جای Backup نیست.** در برابر حذف، Ransomware، آتش‌سوزی و خرابی کامل کافی نیست.
+2. **Snapshot جای Backup نیست.** Snapshot روی همان Pool قرار دارد.
+3. **RAIDZ را برای هر Workload انتخاب نکنید.** VM و Database اغلب به Mirror VDEV نیاز دارند.
+4. **USB را Boot Disk دائمی Production نکنید.**
+5. **RAM را دست‌کم نگیرید.** ARC، SMB، VM، iSCSI و Deduplication RAM می‌خواهند.
+6. **Root Dataset را Share نکنید.** Child Dataset مستقل بسازید.
+7. **Deduplication را بدون محاسبه و تست فعال نکنید.**
+8. **Replication بدون Restore Test کافی نیست.** Backup باید قابل‌بازیابی باشد.
 
 ## 27. Checklist نهایی Production Deployment
 

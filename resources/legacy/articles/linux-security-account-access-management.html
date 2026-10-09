@@ -310,15 +310,6 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-architecture"
-              ><span
-                data-fa="از گروه تا Rule دقیق sudo"
-                data-en="From groups to exact sudo rules"
-                >From groups to exact sudo rules</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#enterprise-prerequisites"
               ><span
                 data-fa="حساب محلی و دسترسی مدیر"
@@ -328,20 +319,11 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-installation"
+            <a href="#enterprise-architecture"
               ><span
-                data-fa="ایجاد حساب و بررسی Rule"
-                data-en="Create the account and validate the rule"
-                >Create the account and validate the rule</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#enterprise-troubleshooting"
-              ><span
-                data-fa="خطای مجوز یا خطای سرویس؟"
-                data-en="Privilege failure or service failure?"
-                >Privilege failure or service failure?</span
+                data-fa="از گروه تا Rule دقیق sudo"
+                data-en="From groups to exact sudo rules"
+                >From groups to exact sudo rules</span
               ></a
             >
           </li>
@@ -355,11 +337,29 @@
             >
           </li>
           <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="ایجاد حساب و بررسی Rule"
+                data-en="Create the account and validate the rule"
+                >Create the account and validate the rule</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
             <a href="#enterprise-monitoring"
               ><span
                 data-fa="ممیزی تغییر حساب و مجوز"
                 data-en="Audit account and privilege changes"
                 >Audit account and privilege changes</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="خطای مجوز یا خطای سرویس؟"
+                data-en="Privilege failure or service failure?"
+                >Privilege failure or service failure?</span
               ></a
             >
           </li>
@@ -497,39 +497,6 @@
                       Review keys, tokens and active sessions.
                     </p>
                   </section>
-                  <section id="enterprise-architecture" class="article-section">
-                    <h2
-                      data-fa="از گروه تا Rule دقیق sudo"
-                      data-en="From groups to exact sudo rules"
-                    >
-                      From groups to exact sudo rules
-                    </h2>
-                    <p
-                      data-fa="هویت و گروه تعیین می‌کنند کاربر چگونه وارد شود. sudo فرمان مجاز را مشخص می‌کند. حساب انسانی را از Service Account جدا نگه دارید. برای Automation، Credential قابل چرخش و مالک مشخص داشته باشید."
-                      data-en="Identity and groups control admission. Sudo specifies permitted commands. Separate human and service accounts, and assign rotatable automation credentials with accountable owners."
-                    >
-                      Identity and groups control admission. Sudo specifies
-                      permitted commands. Separate human and service accounts,
-                      and assign rotatable automation credentials with
-                      accountable owners.
-                    </p>
-                    <h3
-                      id="enterprise-scenario"
-                      data-fa="مثال: مشاهده وضعیت Nginx بدون Restart"
-                      data-en="Example: inspect Nginx without restart rights"
-                    >
-                      Example: inspect Nginx without restart rights
-                    </h3>
-                    <p
-                      data-fa="opsreader فقط وضعیت nginx.service را می‌خواند. این حساب عضو sudo نیست و Rule اختصاصی دارد. پس از تنظیم، خواندن وضعیت باید مجاز باشد ولی Restart و ویرایش Unit نباید مجاز باشند."
-                      data-en="opsreader reads only nginx.service status. It is not a sudo-group member and receives a dedicated rule. Status inspection must work while restart and unit editing remain denied."
-                    >
-                      opsreader reads only nginx.service status. It is not a
-                      sudo-group member and receives a dedicated rule. Status
-                      inspection must work while restart and unit editing remain
-                      denied.
-                    </p>
-                  </section>
                   <section
                     id="enterprise-prerequisites"
                     class="article-section"
@@ -581,6 +548,58 @@
                       policy.
                     </p>
                   </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="از گروه تا Rule دقیق sudo"
+                      data-en="From groups to exact sudo rules"
+                    >
+                      From groups to exact sudo rules
+                    </h2>
+                    <p
+                      data-fa="هویت و گروه تعیین می‌کنند کاربر چگونه وارد شود. sudo فرمان مجاز را مشخص می‌کند. حساب انسانی را از Service Account جدا نگه دارید. برای Automation، Credential قابل چرخش و مالک مشخص داشته باشید."
+                      data-en="Identity and groups control admission. Sudo specifies permitted commands. Separate human and service accounts, and assign rotatable automation credentials with accountable owners."
+                    >
+                      Identity and groups control admission. Sudo specifies
+                      permitted commands. Separate human and service accounts,
+                      and assign rotatable automation credentials with
+                      accountable owners.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: مشاهده وضعیت Nginx بدون Restart"
+                      data-en="Example: inspect Nginx without restart rights"
+                    >
+                      Example: inspect Nginx without restart rights
+                    </h3>
+                    <p
+                      data-fa="opsreader فقط وضعیت nginx.service را می‌خواند. این حساب عضو sudo نیست و Rule اختصاصی دارد. پس از تنظیم، خواندن وضعیت باید مجاز باشد ولی Restart و ویرایش Unit نباید مجاز باشند."
+                      data-en="opsreader reads only nginx.service status. It is not a sudo-group member and receives a dedicated rule. Status inspection must work while restart and unit editing remain denied."
+                    >
+                      opsreader reads only nginx.service status. It is not a
+                      sudo-group member and receives a dedicated rule. Status
+                      inspection must work while restart and unit editing remain
+                      denied.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="فرمان محدود و مسیرهای دورزدن آن"
+                      data-en="Restricted commands and escape paths"
+                    >
+                      Restricted commands and escape paths
+                    </h2>
+                    <p
+                      data-fa="Shell، Editor و Package Manager اغلب امکان اجرای کد Root دارند. Wildcard گسترده را مجوز محدود حساب نکنید. --no-pager مانع ورود به Pager تعاملی از فرمان نمونه می‌شود. Service Account بدون نیاز واقعی ورود تعاملی نداشته باشد. در Offboarding، کلید SSH، Directory، API Token، Cron، sudo و نشست را جدا لغو کنید."
+                      data-en="Shells, editors and package managers often execute root code. Broad wildcards are not restricted privileges. --no-pager keeps the example out of an interactive pager. Avoid unnecessary interactive service-account login. Revoke keys, directory access, API tokens, cron, sudo and sessions independently."
+                    >
+                      Shells, editors and package managers often execute root
+                      code. Broad wildcards are not restricted privileges.
+                      --no-pager keeps the example out of an interactive pager.
+                      Avoid unnecessary interactive service-account login.
+                      Revoke keys, directory access, API tokens, cron, sudo and
+                      sessions independently.
+                    </p>
+                  </section>
                   <section id="enterprise-installation" class="article-section">
                     <h2
                       data-fa="ایجاد حساب و بررسی Rule"
@@ -629,6 +648,22 @@ sudo -u opsreader sudo /usr/bin/systemctl --no-pager status nginx.service</code>
                       from a service error.
                     </p>
                   </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="ممیزی تغییر حساب و مجوز"
+                      data-en="Audit account and privilege changes"
+                    >
+                      Audit account and privilege changes
+                    </h2>
+                    <p
+                      data-fa="رویدادهای sudo و SSH را در Log مرکزی نگه دارید. تغییر passwd، group و sudoers.d را با Audit Policy مناسب ثبت کنید. تعداد حساب‌های UID صفر را با فهرست مجاز مقایسه کنید."
+                      data-en="Retain sudo and SSH events centrally. Audit changes to passwd, group and sudoers.d with appropriate policy. Compare UID-zero accounts against the approved list."
+                    >
+                      Retain sudo and SSH events centrally. Audit changes to
+                      passwd, group and sudoers.d with appropriate policy.
+                      Compare UID-zero accounts against the approved list.
+                    </p>
+                  </section>
                   <section
                     id="enterprise-troubleshooting"
                     class="article-section"
@@ -662,41 +697,6 @@ sudo journalctl _COMM=sudo -n 50 --no-pager</code></pre>
                       Compare current session groups with new policy. Identity
                       caches and existing sessions might delay changes. Confirm
                       UID and running jobs before terminating sessions.
-                    </p>
-                  </section>
-                  <section id="enterprise-security" class="article-section">
-                    <h2
-                      data-fa="فرمان محدود و مسیرهای دورزدن آن"
-                      data-en="Restricted commands and escape paths"
-                    >
-                      Restricted commands and escape paths
-                    </h2>
-                    <p
-                      data-fa="Shell، Editor و Package Manager اغلب امکان اجرای کد Root دارند. Wildcard گسترده را مجوز محدود حساب نکنید. --no-pager مانع ورود به Pager تعاملی از فرمان نمونه می‌شود. Service Account بدون نیاز واقعی ورود تعاملی نداشته باشد. در Offboarding، کلید SSH، Directory، API Token، Cron، sudo و نشست را جدا لغو کنید."
-                      data-en="Shells, editors and package managers often execute root code. Broad wildcards are not restricted privileges. --no-pager keeps the example out of an interactive pager. Avoid unnecessary interactive service-account login. Revoke keys, directory access, API tokens, cron, sudo and sessions independently."
-                    >
-                      Shells, editors and package managers often execute root
-                      code. Broad wildcards are not restricted privileges.
-                      --no-pager keeps the example out of an interactive pager.
-                      Avoid unnecessary interactive service-account login.
-                      Revoke keys, directory access, API tokens, cron, sudo and
-                      sessions independently.
-                    </p>
-                  </section>
-                  <section id="enterprise-monitoring" class="article-section">
-                    <h2
-                      data-fa="ممیزی تغییر حساب و مجوز"
-                      data-en="Audit account and privilege changes"
-                    >
-                      Audit account and privilege changes
-                    </h2>
-                    <p
-                      data-fa="رویدادهای sudo و SSH را در Log مرکزی نگه دارید. تغییر passwd، group و sudoers.d را با Audit Policy مناسب ثبت کنید. تعداد حساب‌های UID صفر را با فهرست مجاز مقایسه کنید."
-                      data-en="Retain sudo and SSH events centrally. Audit changes to passwd, group and sudoers.d with appropriate policy. Compare UID-zero accounts against the approved list."
-                    >
-                      Retain sudo and SSH events centrally. Audit changes to
-                      passwd, group and sudoers.d with appropriate policy.
-                      Compare UID-zero accounts against the approved list.
                     </p>
                   </section>
                   <section id="enterprise-recovery" class="article-section">

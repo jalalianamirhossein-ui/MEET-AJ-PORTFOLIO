@@ -352,11 +352,11 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-troubleshooting"
+            <a href="#enterprise-security"
               ><span
-                data-fa="مقدار Null و دیسک پشت RAID"
-                data-en="Null values and RAID abstractions"
-                >Null values and RAID abstractions</span
+                data-fa="گزارش و Remote Session"
+                data-en="Reports and remote sessions"
+                >Reports and remote sessions</span
               ></a
             >
           </li>
@@ -370,11 +370,11 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-security"
+            <a href="#enterprise-troubleshooting"
               ><span
-                data-fa="گزارش و Remote Session"
-                data-en="Reports and remote sessions"
-                >Reports and remote sessions</span
+                data-fa="مقدار Null و دیسک پشت RAID"
+                data-en="Null values and RAID abstractions"
+                >Null values and RAID abstractions</span
               ></a
             >
           </li>
@@ -738,25 +738,21 @@ Get-FileHash -LiteralPath $InventoryPath -Algorithm SHA256</code></pre>
 Start-Process -FilePath &quot;$env:WINDIR\System32\dxdiag.exe&quot; -ArgumentList @(&quot;/t&quot;, &#x27;&quot;&#x27; + $DxReport + &#x27;&quot;&#x27;) -Wait -WindowStyle Hidden
 Get-Item -LiteralPath $DxReport -ErrorAction Stop</code></pre>
                   </section>
-                  <section
-                    id="enterprise-troubleshooting"
-                    class="article-section"
-                  >
+                  <section id="enterprise-security" class="article-section">
                     <h2
-                      data-fa="مقدار Null و دیسک پشت RAID"
-                      data-en="Null values and RAID abstractions"
+                      data-fa="گزارش و Remote Session"
+                      data-en="Reports and remote sessions"
                     >
-                      Null values and RAID abstractions
+                      Reports and remote sessions
                     </h2>
                     <p
-                      data-fa="Null را صفر حساب نکنید. Provider VM ممکن است اطلاعات فیزیکی را ندهد. Get-PhysicalDisk ممکن است Volume مجازی Controller را نشان دهد. Access Denied در Remote به Session و Permission مربوط است. نبود DxDiag روی Server Core خطای Script Inventory نیست."
-                      data-en="Do not treat null as zero. VM providers might omit physical information. Get-PhysicalDisk might show controller abstractions. Remote access denied requires session/permission checks. Missing DxDiag on Server Core is not an inventory-script failure."
+                      data-fa="Hostname و Serial اطلاعات دارایی سازمان‌اند. فایل را به Share عمومی ندهید. Remote CIM را با Kerberos یا TLS و حساب کم‌اختیار اجرا کنید. Basic بدون TLS را برای رفع Access Denied فعال نکنید."
+                      data-en="Hostnames and serials disclose organizational assets. Avoid public shares. Use least-privilege Kerberos/TLS remote CIM. Do not enable Basic without TLS to fix access denied."
                     >
-                      Do not treat null as zero. VM providers might omit
-                      physical information. Get-PhysicalDisk might show
-                      controller abstractions. Remote access denied requires
-                      session/permission checks. Missing DxDiag on Server Core
-                      is not an inventory-script failure.
+                      Hostnames and serials disclose organizational assets.
+                      Avoid public shares. Use least-privilege Kerberos/TLS
+                      remote CIM. Do not enable Basic without TLS to fix access
+                      denied.
                     </p>
                   </section>
                   <section id="enterprise-monitoring" class="article-section">
@@ -791,21 +787,25 @@ Get-Item -LiteralPath $DxReport -ErrorAction Stop</code></pre>
                       modern GPUs. Confirm through vendor tools.
                     </p>
                   </section>
-                  <section id="enterprise-security" class="article-section">
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
                     <h2
-                      data-fa="گزارش و Remote Session"
-                      data-en="Reports and remote sessions"
+                      data-fa="مقدار Null و دیسک پشت RAID"
+                      data-en="Null values and RAID abstractions"
                     >
-                      Reports and remote sessions
+                      Null values and RAID abstractions
                     </h2>
                     <p
-                      data-fa="Hostname و Serial اطلاعات دارایی سازمان‌اند. فایل را به Share عمومی ندهید. Remote CIM را با Kerberos یا TLS و حساب کم‌اختیار اجرا کنید. Basic بدون TLS را برای رفع Access Denied فعال نکنید."
-                      data-en="Hostnames and serials disclose organizational assets. Avoid public shares. Use least-privilege Kerberos/TLS remote CIM. Do not enable Basic without TLS to fix access denied."
+                      data-fa="Null را صفر حساب نکنید. Provider VM ممکن است اطلاعات فیزیکی را ندهد. Get-PhysicalDisk ممکن است Volume مجازی Controller را نشان دهد. Access Denied در Remote به Session و Permission مربوط است. نبود DxDiag روی Server Core خطای Script Inventory نیست."
+                      data-en="Do not treat null as zero. VM providers might omit physical information. Get-PhysicalDisk might show controller abstractions. Remote access denied requires session/permission checks. Missing DxDiag on Server Core is not an inventory-script failure."
                     >
-                      Hostnames and serials disclose organizational assets.
-                      Avoid public shares. Use least-privilege Kerberos/TLS
-                      remote CIM. Do not enable Basic without TLS to fix access
-                      denied.
+                      Do not treat null as zero. VM providers might omit
+                      physical information. Get-PhysicalDisk might show
+                      controller abstractions. Remote access denied requires
+                      session/permission checks. Missing DxDiag on Server Core
+                      is not an inventory-script failure.
                     </p>
                   </section>
                   <section id="enterprise-recovery" class="article-section">

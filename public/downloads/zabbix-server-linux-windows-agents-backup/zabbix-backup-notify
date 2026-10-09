@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Requires mailutils and a separately configured authenticated TLS mail relay.
+# Must be root-owned 0750; edit the destination before operational acceptance.
+set -euo pipefail
+umask 077
+rc=${1:-1}
+reference=${2:-journal:zabbix-backup.service}
+command -v mail >/dev/null || { logger -p daemon.err 'Zabbix backup: notification transport unavailable'; exit 69; }
+printf 'Zabbix backup failed on %s. Exit: %s. Evidence: %s\nInspect locally; no credentials or logs are attached.\n' \
+    "$(hostname)" "$rc" "$reference" | mail -s 'Zabbix backup failure' ops@example.com

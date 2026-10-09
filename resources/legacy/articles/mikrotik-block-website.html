@@ -370,20 +370,20 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-architecture"
-              ><span
-                data-fa="DNS Policy با SNI Filtering فرق دارد"
-                data-en="DNS policy and SNI filtering differ"
-                >DNS policy and SNI filtering differ</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#enterprise-prerequisites"
               ><span
                 data-fa="Resolver و نسخه RouterOS"
                 data-en="Resolver and RouterOS requirements"
                 >Resolver and RouterOS requirements</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="DNS Policy با SNI Filtering فرق دارد"
+                data-en="DNS policy and SNI filtering differ"
+                >DNS policy and SNI filtering differ</span
               ></a
             >
           </li>
@@ -406,20 +406,20 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-troubleshooting"
-              ><span
-                data-fa="سایت هنوز باز می‌شود"
-                data-en="When the site still opens"
-                >When the site still opens</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#enterprise-monitoring"
               ><span
                 data-fa="سنجش اثر Policy بر کاربران"
                 data-en="Measure user impact"
                 >Measure user impact</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="سایت هنوز باز می‌شود"
+                data-en="When the site still opens"
+                >When the site still opens</span
               ></a
             >
           </li>
@@ -556,40 +556,6 @@
                       names hidden by ECH limit these approaches.
                     </p>
                   </section>
-                  <section id="enterprise-architecture" class="article-section">
-                    <h2
-                      data-fa="DNS Policy با SNI Filtering فرق دارد"
-                      data-en="DNS policy and SNI filtering differ"
-                    >
-                      DNS policy and SNI filtering differ
-                    </h2>
-                    <p
-                      data-fa="NXDOMAIN پاسخ نام را رد می‌کند. tls-host روی ترافیک TCP و ClientHello قابل مشاهده عمل می‌کند. QUIC از UDP استفاده می‌کند، ECH نام را پنهان می‌کند و VPN مسیر را تغییر می‌دهد. برای Policy سخت‌گیرانه، Endpoint و Secure Web Gateway را هم طراحی کنید."
-                      data-en="NXDOMAIN rejects name resolution. Tls-host acts on TCP traffic with a visible ClientHello. QUIC uses UDP, ECH hides the name and VPNs change the path. Strict enforcement also needs endpoint and secure-web-gateway design."
-                    >
-                      NXDOMAIN rejects name resolution. Tls-host acts on TCP
-                      traffic with a visible ClientHello. QUIC uses UDP, ECH
-                      hides the name and VPNs change the path. Strict
-                      enforcement also needs endpoint and secure-web-gateway
-                      design.
-                    </p>
-                    <h3
-                      id="enterprise-scenario"
-                      data-fa="مثال: Policy روی کلاینت مدیریت‌شده"
-                      data-en="Example: a managed-client policy"
-                    >
-                      Example: a managed-client policy
-                    </h3>
-                    <p
-                      data-fa="در این مثال، کاربران از Resolver داخلی استفاده می‌کنند و example.com دامنه آزمایش است. مسیر DNS و اتصال TCP را جدا می‌سنجیم. مدیریت Endpoint مسئول کنترل DoH و VPN است. Router Rule به‌تنهایی الزام سراسری را تضمین نمی‌کند."
-                      data-en="Users query an internal resolver and example.com is the test domain. Test DNS and TCP independently. Endpoint management controls DoH and VPN use. Router rules alone do not guarantee organization-wide enforcement."
-                    >
-                      Users query an internal resolver and example.com is the
-                      test domain. Test DNS and TCP independently. Endpoint
-                      management controls DoH and VPN use. Router rules alone do
-                      not guarantee organization-wide enforcement.
-                    </p>
-                  </section>
                   <section
                     id="enterprise-prerequisites"
                     class="article-section"
@@ -639,6 +605,40 @@
                       DNS wildcard. DNS match-subdomain and tls-host glob syntax
                       have distinct behavior. Historical content rules are not
                       modern HTTPS enforcement.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="DNS Policy با SNI Filtering فرق دارد"
+                      data-en="DNS policy and SNI filtering differ"
+                    >
+                      DNS policy and SNI filtering differ
+                    </h2>
+                    <p
+                      data-fa="NXDOMAIN پاسخ نام را رد می‌کند. tls-host روی ترافیک TCP و ClientHello قابل مشاهده عمل می‌کند. QUIC از UDP استفاده می‌کند، ECH نام را پنهان می‌کند و VPN مسیر را تغییر می‌دهد. برای Policy سخت‌گیرانه، Endpoint و Secure Web Gateway را هم طراحی کنید."
+                      data-en="NXDOMAIN rejects name resolution. Tls-host acts on TCP traffic with a visible ClientHello. QUIC uses UDP, ECH hides the name and VPNs change the path. Strict enforcement also needs endpoint and secure-web-gateway design."
+                    >
+                      NXDOMAIN rejects name resolution. Tls-host acts on TCP
+                      traffic with a visible ClientHello. QUIC uses UDP, ECH
+                      hides the name and VPNs change the path. Strict
+                      enforcement also needs endpoint and secure-web-gateway
+                      design.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: Policy روی کلاینت مدیریت‌شده"
+                      data-en="Example: a managed-client policy"
+                    >
+                      Example: a managed-client policy
+                    </h3>
+                    <p
+                      data-fa="در این مثال، کاربران از Resolver داخلی استفاده می‌کنند و example.com دامنه آزمایش است. مسیر DNS و اتصال TCP را جدا می‌سنجیم. مدیریت Endpoint مسئول کنترل DoH و VPN است. Router Rule به‌تنهایی الزام سراسری را تضمین نمی‌کند."
+                      data-en="Users query an internal resolver and example.com is the test domain. Test DNS and TCP independently. Endpoint management controls DoH and VPN use. Router rules alone do not guarantee organization-wide enforcement."
+                    >
+                      Users query an internal resolver and example.com is the
+                      test domain. Test DNS and TCP independently. Endpoint
+                      management controls DoH and VPN use. Router rules alone do
+                      not guarantee organization-wide enforcement.
                     </p>
                   </section>
                   <section id="enterprise-security" class="article-section">
@@ -712,6 +712,22 @@ curl --http1.1 --connect-timeout 5 https://example.com</code></pre>
                       DNS does not prove a TLS match.
                     </p>
                   </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="سنجش اثر Policy بر کاربران"
+                      data-en="Measure user impact"
+                    >
+                      Measure user impact
+                    </h2>
+                    <p
+                      data-fa="Counter Rule را با نتیجه واقعی کلاینت مقایسه کنید. حجم UDP/443 و شکایت کاربران و False Positive را ثبت کنید. پیش از مسدودکردن QUIC، رفتار Fallback برنامه‌ها را آزمایش کنید."
+                      data-en="Compare rule counters with actual client outcomes. Record UDP/443 volume, user reports and false positives. Test application fallback before blocking QUIC."
+                    >
+                      Compare rule counters with actual client outcomes. Record
+                      UDP/443 volume, user reports and false positives. Test
+                      application fallback before blocking QUIC.
+                    </p>
+                  </section>
                   <section
                     id="enterprise-troubleshooting"
                     class="article-section"
@@ -732,23 +748,8 @@ curl --http1.1 --connect-timeout 5 https://example.com</code></pre>
                       establish SNI-rule effectiveness. Test it with permitted
                       resolution and a fresh connection.
                     </p>
-                  </section>
-                  <section id="enterprise-monitoring" class="article-section">
-                    <h2
-                      data-fa="سنجش اثر Policy بر کاربران"
-                      data-en="Measure user impact"
-                    >
-                      Measure user impact
-                    </h2>
-                    <p
-                      data-fa="Counter Rule را با نتیجه واقعی کلاینت مقایسه کنید. حجم UDP/443 و شکایت کاربران و False Positive را ثبت کنید. پیش از مسدودکردن QUIC، رفتار Fallback برنامه‌ها را آزمایش کنید."
-                      data-en="Compare rule counters with actual client outcomes. Record UDP/443 volume, user reports and false positives. Test application fallback before blocking QUIC."
-                    >
-                      Compare rule counters with actual client outcomes. Record
-                      UDP/443 volume, user reports and false positives. Test
-                      application fallback before blocking QUIC.
-                    </p>
-                  </section>
+                  <div id="technical-enterprise-troubleshooting"><h3 data-en="Prove DNS and SNI policy independently" data-fa="اثبات مستقل policy مربوط به DNS و SNI">Prove DNS and SNI policy independently</h3><p data-en="A failed DNS query prevents any later TLS test, so it cannot prove SNI filtering. In an isolated managed client, first test example.com and a subdomain against the policy resolver and record NXDOMAIN. For a separate authorized SNI test, obtain a current server address through an approved alternate resolution path and use curl --resolve with the real hostname, forcing HTTP/1.1. Do not substitute the IP in the URL because that changes SNI and certificate-name validation. Compare a permitted control hostname; only the intended policy should fail. Recheck fresh connections, rule counters and IPv6 before acceptance." data-fa="شکست DNS مانع آزمون TLS بعدی است و فیلتر SNI را ثابت نمی‌کند. از کلاینت مدیریت‌شدهٔ آزمایشگاهی ابتدا example.com و زیردامنه را از resolver policy بپرسید و NXDOMAIN را ثبت کنید. برای آزمون مجاز مستقل SNI، IP فعلی سرور را از مسیر resolve جایگزین مجاز بگیرید و curl --resolve را با نام واقعی و HTTP/1.1 به کار ببرید. URL را با IP جایگزین نکنید؛ SNI و اعتبارسنجی نام گواهی تغییر می‌کنند. نام کنترل مجاز را مقایسه کنید؛ فقط policy موردنظر باید شکست بخورد. پیش از پذیرش، اتصال جدید، شمارنده و IPv6 را دوباره بررسی کنید.">A failed DNS query prevents any later TLS test, so it cannot prove SNI filtering. In an isolated managed client, first test example.com and a subdomain against the policy resolver and record NXDOMAIN. For a separate authorized SNI test, obtain a current server address through an approved alternate resolution path and use curl --resolve with the real hostname, forcing HTTP/1.1. Do not substitute the IP in the URL because that changes SNI and certificate-name validation. Compare a permitted control hostname; only the intended policy should fail. Recheck fresh connections, rule counters and IPv6 before acceptance.</p><pre dir="ltr"><code class="language-bash"># Replace documentation hostname/address with the authorized lab endpoint.
+curl --http1.1 --connect-timeout 3 --max-time 10 --resolve example.com:443:203.0.113.20 https://example.com/</code></pre><p data-en="The documentation IP is not an Internet service. A timeout alone is inconclusive: inspect whether the intended SNI drop counter increments while the permitted control completes with valid TLS. ECH, QUIC, segmented ClientHello and VPNs remain limitations. Do not claim this policy blocks all HTTPS access to a brand or CDN." data-fa="IP مستندسازی سرویس اینترنتی نیست. timeout به‌تنهایی قطعی نیست؛ افزایش شمارندهٔ drop مربوط به SNI و موفقیت TLS معتبر مقصد کنترل را بررسی کنید. ECH، QUIC، ClientHello چندبخشی و VPN همچنان محدودیت هستند. ادعا نکنید این policy همهٔ HTTPS یک برند یا CDN را مسدود می‌کند.">The documentation IP is not an Internet service. A timeout alone is inconclusive: inspect whether the intended SNI drop counter increments while the permitted control completes with valid TLS. ECH, QUIC, segmented ClientHello and VPNs remain limitations. Do not claim this policy blocks all HTTPS access to a brand or CDN.</p></div></section>
                   <section id="enterprise-recovery" class="article-section">
                     <h2
                       data-fa="برگشت Policy و Cache"
@@ -845,7 +846,7 @@ curl --http1.1 --connect-timeout 5 https://example.com</code></pre>
                         >
                       </li>
                     </ul>
-                  </section>
+                  <div id="technical-enterprise-sources"><p><a href="https://curl.se/docs/manpage.html" rel="noopener" data-en="curl --resolve" data-fa="مستند رسمی: curl --resolve">curl --resolve</a></p></div></section>
                 </div>
               </article>
             </div>

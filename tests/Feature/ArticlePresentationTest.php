@@ -23,6 +23,9 @@ class ArticlePresentationTest extends TestCase
                 $prepared = $localized->displayContent();
                 preg_match_all('~<pre\b[^>]*>.*?</pre>~is', $localized->content, $original);
                 preg_match_all('~<pre\b[^>]*>.*?</pre>~is', $prepared, $displayed);
+                // Whole sections may move; every exact executable block must survive.
+                sort($original[0]);
+                sort($displayed[0]);
                 $this->assertSame($original[0], $displayed[0], $article->slug.' '.$locale);
 
                 $dom = new \DOMDocument;

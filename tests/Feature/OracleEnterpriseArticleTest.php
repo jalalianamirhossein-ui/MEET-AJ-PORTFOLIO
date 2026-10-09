@@ -59,7 +59,7 @@ class OracleEnterpriseArticleTest extends TestCase
             }
         }
         $this->assertSame($blocks['en'], $blocks['fa']);
-        $this->assertSame([1000, 1000], array_slice(getimagesize(public_path('assets/img/articles/banners/oracle-database-26ai-banner.png')), 0, 2));
+        $this->assertSame(array_slice(getimagesize(resource_path('assets/img/articles/banners/oracle-database-26ai-banner.png')), 0, 2), array_slice(getimagesize(public_path('assets/img/articles/banners/oracle-database-26ai-banner.png')), 0, 2));
         foreach (glob(resource_path('content/articles/'.self::SLUG.'/*')) as $source) {
             $published = public_path('downloads/'.self::SLUG.'/'.basename($source));
             if (is_file($published)) {

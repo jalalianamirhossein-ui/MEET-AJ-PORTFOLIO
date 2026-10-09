@@ -312,15 +312,6 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-architecture"
-              ><span
-                data-fa="Boot، Management و Datastore"
-                data-en="Boot, management and datastore paths"
-                >Boot, management and datastore paths</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#enterprise-prerequisites"
               ><span
                 data-fa="HCL، Image و دیسک نصب"
@@ -330,11 +321,11 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-installation"
+            <a href="#enterprise-architecture"
               ><span
-                data-fa="نصب Image و تنظیم DCUI"
-                data-en="Install the image and configure DCUI"
-                >Install the image and configure DCUI</span
+                data-fa="Boot، Management و Datastore"
+                data-en="Boot, management and datastore paths"
+                >Boot, management and datastore paths</span
               ></a
             >
           </li>
@@ -344,6 +335,15 @@
                 data-fa="مدیریت محدود و SSH موقت"
                 data-en="Restricted management and temporary SSH"
                 >Restricted management and temporary SSH</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="نصب Image و تنظیم DCUI"
+                data-en="Install the image and configure DCUI"
+                >Install the image and configure DCUI</span
               ></a
             >
           </li>
@@ -498,38 +498,6 @@
                       networking, DNS, NTP and datastores.
                     </p>
                   </section>
-                  <section id="enterprise-architecture" class="article-section">
-                    <h2
-                      data-fa="Boot، Management و Datastore"
-                      data-en="Boot, management and datastore paths"
-                    >
-                      Boot, management and datastore paths
-                    </h2>
-                    <p
-                      data-fa="Boot Device سیستم‌عامل را نگه می‌دارد. VMkernel مدیریت از Switch مجازی و vmnic به VLAN مدیریت وصل می‌شود. Datastore داده VM را نگه می‌دارد. مسیر خرابی و بازیابی این سه را جدا ثبت کنید."
-                      data-en="The boot device holds the operating system. Management VMkernel reaches its VLAN through a virtual switch and vmnic. Datastores hold VM data. Document failure and recovery paths for all three separately."
-                    >
-                      The boot device holds the operating system. Management
-                      VMkernel reaches its VLAN through a virtual switch and
-                      vmnic. Datastores hold VM data. Document failure and
-                      recovery paths for all three separately.
-                    </p>
-                    <h3
-                      id="enterprise-scenario"
-                      data-fa="مثال: افزودن Host خالی به Cluster"
-                      data-en="Example: add an empty host to a cluster"
-                    >
-                      Example: add an empty host to a cluster
-                    </h3>
-                    <p
-                      data-fa="Host جدید هنوز Workload ندارد. Management در VLAN 30 با دو Uplink و Console خارج شبکه آماده است. یک VM آزمایشی را پیش از انتقال ماشین‌های سرویس روی آن اجرا کنید."
-                      data-en="The new host has no workloads. Management uses VLAN 30, two uplinks and out-of-band console access. Run a canary VM before moving service VMs onto it."
-                    >
-                      The new host has no workloads. Management uses VLAN 30,
-                      two uplinks and out-of-band console access. Run a canary
-                      VM before moving service VMs onto it.
-                    </p>
-                  </section>
                   <section
                     id="enterprise-prerequisites"
                     class="article-section"
@@ -579,6 +547,55 @@
                       and vCenter compatibility before deployment. Nested ESXi
                       on Workstation does not validate physical hardware
                       compatibility.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="Boot، Management و Datastore"
+                      data-en="Boot, management and datastore paths"
+                    >
+                      Boot, management and datastore paths
+                    </h2>
+                    <p
+                      data-fa="Boot Device سیستم‌عامل را نگه می‌دارد. VMkernel مدیریت از Switch مجازی و vmnic به VLAN مدیریت وصل می‌شود. Datastore داده VM را نگه می‌دارد. مسیر خرابی و بازیابی این سه را جدا ثبت کنید."
+                      data-en="The boot device holds the operating system. Management VMkernel reaches its VLAN through a virtual switch and vmnic. Datastores hold VM data. Document failure and recovery paths for all three separately."
+                    >
+                      The boot device holds the operating system. Management
+                      VMkernel reaches its VLAN through a virtual switch and
+                      vmnic. Datastores hold VM data. Document failure and
+                      recovery paths for all three separately.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: افزودن Host خالی به Cluster"
+                      data-en="Example: add an empty host to a cluster"
+                    >
+                      Example: add an empty host to a cluster
+                    </h3>
+                    <p
+                      data-fa="Host جدید هنوز Workload ندارد. Management در VLAN 30 با دو Uplink و Console خارج شبکه آماده است. یک VM آزمایشی را پیش از انتقال ماشین‌های سرویس روی آن اجرا کنید."
+                      data-en="The new host has no workloads. Management uses VLAN 30, two uplinks and out-of-band console access. Run a canary VM before moving service VMs onto it."
+                    >
+                      The new host has no workloads. Management uses VLAN 30,
+                      two uplinks and out-of-band console access. Run a canary
+                      VM before moving service VMs onto it.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="مدیریت محدود و SSH موقت"
+                      data-en="Restricted management and temporary SSH"
+                    >
+                      Restricted management and temporary SSH
+                    </h2>
+                    <p
+                      data-fa="Management را به شبکه مجاز محدود کنید و در vCenter حساب نام‌دار و نقش کمینه بدهید. SSH و Shell را پس از تغییر ببندید. Lockdown Mode را پس از آزمون Exception و Console Recovery فعال کنید. گواهی و Syslog نیز مسیر اعتماد روشن داشته باشند."
+                      data-en="Restrict management networks and use named least-privilege vCenter identities. Close SSH/Shell after changes. Test exceptions and console recovery before Lockdown Mode. Establish trusted certificate and syslog paths."
+                    >
+                      Restrict management networks and use named least-privilege
+                      vCenter identities. Close SSH/Shell after changes. Test
+                      exceptions and console recovery before Lockdown Mode.
+                      Establish trusted certificate and syslog paths.
                     </p>
                   </section>
                   <section id="enterprise-installation" class="article-section">
@@ -636,24 +653,9 @@ esxcli system ntp get</code></pre>
                       policy. Join vCenter, deploy a canary VM and validate
                       networking, datastore and a test workload restart.
                     </p>
-                  </section>
-                  <section id="enterprise-security" class="article-section">
-                    <h2
-                      data-fa="مدیریت محدود و SSH موقت"
-                      data-en="Restricted management and temporary SSH"
-                    >
-                      Restricted management and temporary SSH
-                    </h2>
-                    <p
-                      data-fa="Management را به شبکه مجاز محدود کنید و در vCenter حساب نام‌دار و نقش کمینه بدهید. SSH و Shell را پس از تغییر ببندید. Lockdown Mode را پس از آزمون Exception و Console Recovery فعال کنید. گواهی و Syslog نیز مسیر اعتماد روشن داشته باشند."
-                      data-en="Restrict management networks and use named least-privilege vCenter identities. Close SSH/Shell after changes. Test exceptions and console recovery before Lockdown Mode. Establish trusted certificate and syslog paths."
-                    >
-                      Restrict management networks and use named least-privilege
-                      vCenter identities. Close SSH/Shell after changes. Test
-                      exceptions and console recovery before Lockdown Mode.
-                      Establish trusted certificate and syslog paths.
-                    </p>
-                  </section>
+                  <div id="technical-enterprise-installation"><h3 data-en="Configure and verify ESXi 8 NTP explicitly" data-fa="تنظیم و بررسی صریح NTP در ESXi 8">Configure and verify ESXi 8 NTP explicitly</h3><p data-en="In Host Client, Manage → System → Time &amp; date, edit NTP settings and approved servers/start policy. Alternatively use the following root ESXi Shell change during an approved window. Replace both documentation addresses with real reachable NTP servers. Review possible clock correction against running workloads first; do not run host configuration changes without console access." data-fa="در Host Client از Manage → System → Time &amp; date تنظیمات NTP، سرورهای مجاز و start policy را ویرایش کنید. روش جایگزین فرمان زیر در ESXi Shell با root در بازهٔ تغییر مجاز است. هر دو IP مستندسازی را با NTP واقعی و قابل دسترس جایگزین کنید. اثر تصحیح ساعت بر workload را ابتدا بررسی کنید؛ بدون کنسول مستقل تنظیم میزبان را تغییر ندهید.">In Host Client, Manage → System → Time &amp; date, edit NTP settings and approved servers/start policy. Alternatively use the following root ESXi Shell change during an approved window. Replace both documentation addresses with real reachable NTP servers. Review possible clock correction against running workloads first; do not run host configuration changes without console access.</p><pre dir="ltr"><code class="language-shell">esxcli system ntp get
+esxcli system ntp set -s 192.0.2.53 -s 192.0.2.54 -e 1
+esxcli system ntp get</code></pre><p data-en="Illustrative acceptance fields are Enabled: true and Time Synchronized: true; synchronization is not immediate. Enabled alone is insufficient. If unsynchronized, inspect source availability, UDP/123 path, server quality and VMkernel routing. ESXi 7.0 U3 and later use ConfigStore-backed esxcli settings: editing ntp.conf alone is not a reliable persistent configuration." data-fa="فیلدهای آموزشی پذیرش Enabled: true و Time Synchronized: true هستند؛ همگام‌سازی فوری نیست. Enabled به‌تنهایی کافی نیست. در حالت ناهماهنگ، منبع، مسیر UDP/123، کیفیت سرور و مسیریابی VMkernel را بررسی کنید. ESXi از 7.0 U3 به بعد تنظیمات esxcli مبتنی بر ConfigStore دارد؛ ویرایش صرف ntp.conf روش قابل اتکای ماندگار نیست.">Illustrative acceptance fields are Enabled: true and Time Synchronized: true; synchronization is not immediate. Enabled alone is insufficient. If unsynchronized, inspect source availability, UDP/123 path, server quality and VMkernel routing. ESXi 7.0 U3 and later use ConfigStore-backed esxcli settings: editing ntp.conf alone is not a reliable persistent configuration.</p></div></section>
                   <section id="enterprise-monitoring" class="article-section">
                     <h2
                       data-fa="سلامت Host و Storage"
@@ -818,7 +820,7 @@ vim-cmd hostsvc/firmware/backup_config</code></pre>
                         >
                       </li>
                     </ul>
-                  </section>
+                  <div id="technical-enterprise-sources"><p><a href="https://knowledge.broadcom.com/external/article/313808" rel="noopener" data-en="Broadcom ESXi NTP ConfigStore" data-fa="مستند رسمی: Broadcom ESXi NTP ConfigStore">Broadcom ESXi NTP ConfigStore</a></p></div></section>
                 </div>
               </article>
             </div>

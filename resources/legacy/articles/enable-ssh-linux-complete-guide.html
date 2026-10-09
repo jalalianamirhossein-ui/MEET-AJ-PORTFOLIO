@@ -390,15 +390,6 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-architecture"
-              ><span
-                data-fa="کلید کاربر و Fingerprint سرور"
-                data-en="User keys and server fingerprints"
-                >User keys and server fingerprints</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#enterprise-prerequisites"
               ><span
                 data-fa="حساب کاربری، Console و بسته‌های لازم"
@@ -408,11 +399,11 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-installation"
+            <a href="#enterprise-architecture"
               ><span
-                data-fa="نصب سرویس و آزمون ورود با کلید"
-                data-en="Install the service and test key login"
-                >Install the service and test key login</span
+                data-fa="کلید کاربر و Fingerprint سرور"
+                data-en="User keys and server fingerprints"
+                >User keys and server fingerprints</span
               ></a
             >
           </li>
@@ -422,6 +413,15 @@
                 data-fa="محدودیت مبدا و سازگاری با MFA"
                 data-en="Source restrictions and MFA compatibility"
                 >Source restrictions and MFA compatibility</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="نصب سرویس و آزمون ورود با کلید"
+                data-en="Install the service and test key login"
+                >Install the service and test key login</span
               ></a
             >
           </li>
@@ -577,41 +577,6 @@
                       access.
                     </p>
                   </section>
-                  <section id="enterprise-architecture" class="article-section">
-                    <h2
-                      data-fa="کلید کاربر و Fingerprint سرور"
-                      data-en="User keys and server fingerprints"
-                    >
-                      User keys and server fingerprints
-                    </h2>
-                    <p
-                      data-fa="کلید خصوصی روی کلاینت می‌ماند و کلید عمومی در authorized_keys حساب سرور قرار می‌گیرد. Host Key سرور موضوع دیگری است. Fingerprint آن را از Console یا مسیر مورد اعتماد بگیرید و پیش از پذیرش اولین اتصال مقایسه کنید. در شبکه سازمانی، Bastion و Firewall مسیر ورود را محدود می‌کنند."
-                      data-en="The private key stays on the client, while its public key goes in the server account’s authorized_keys. The server host key is separate. Obtain its fingerprint through a console or trusted channel before accepting the first connection. Bastion and firewall rules restrict the organizational access path."
-                    >
-                      The private key stays on the client, while its public key
-                      goes in the server account’s authorized_keys. The server
-                      host key is separate. Obtain its fingerprint through a
-                      console or trusted channel before accepting the first
-                      connection. Bastion and firewall rules restrict the
-                      organizational access path.
-                    </p>
-                    <h3
-                      id="enterprise-scenario"
-                      data-fa="مثال: دسترسی از Bastion"
-                      data-en="Example: access through a bastion"
-                    >
-                      Example: access through a bastion
-                    </h3>
-                    <p
-                      data-fa="در این مثال، حساب opsadmin از شبکه مدیریت 10.20.30.0/24 به سرور 10.20.30.10 وصل می‌شود. نام حساب و آدرس‌ها را با محیط خود جایگزین کنید. برای چند سرور، تغییر را ابتدا روی یک ماشین آزمایشی اجرا کنید."
-                      data-en="The example uses opsadmin to reach 10.20.30.10 from management subnet 10.20.30.0/24. Replace these values for your environment. For a fleet, validate one test host before rollout."
-                    >
-                      The example uses opsadmin to reach 10.20.30.10 from
-                      management subnet 10.20.30.0/24. Replace these values for
-                      your environment. For a fleet, validate one test host
-                      before rollout.
-                    </p>
-                  </section>
                   <section
                     id="enterprise-prerequisites"
                     class="article-section"
@@ -665,6 +630,61 @@
                       value wins. Check include order and cloud snippets with
                       sshd -T rather than inferring precedence from the new
                       filename.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="کلید کاربر و Fingerprint سرور"
+                      data-en="User keys and server fingerprints"
+                    >
+                      User keys and server fingerprints
+                    </h2>
+                    <p
+                      data-fa="کلید خصوصی روی کلاینت می‌ماند و کلید عمومی در authorized_keys حساب سرور قرار می‌گیرد. Host Key سرور موضوع دیگری است. Fingerprint آن را از Console یا مسیر مورد اعتماد بگیرید و پیش از پذیرش اولین اتصال مقایسه کنید. در شبکه سازمانی، Bastion و Firewall مسیر ورود را محدود می‌کنند."
+                      data-en="The private key stays on the client, while its public key goes in the server account’s authorized_keys. The server host key is separate. Obtain its fingerprint through a console or trusted channel before accepting the first connection. Bastion and firewall rules restrict the organizational access path."
+                    >
+                      The private key stays on the client, while its public key
+                      goes in the server account’s authorized_keys. The server
+                      host key is separate. Obtain its fingerprint through a
+                      console or trusted channel before accepting the first
+                      connection. Bastion and firewall rules restrict the
+                      organizational access path.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: دسترسی از Bastion"
+                      data-en="Example: access through a bastion"
+                    >
+                      Example: access through a bastion
+                    </h3>
+                    <p
+                      data-fa="در این مثال، حساب opsadmin از شبکه مدیریت 10.20.30.0/24 به سرور 10.20.30.10 وصل می‌شود. نام حساب و آدرس‌ها را با محیط خود جایگزین کنید. برای چند سرور، تغییر را ابتدا روی یک ماشین آزمایشی اجرا کنید."
+                      data-en="The example uses opsadmin to reach 10.20.30.10 from management subnet 10.20.30.0/24. Replace these values for your environment. For a fleet, validate one test host before rollout."
+                    >
+                      The example uses opsadmin to reach 10.20.30.10 from
+                      management subnet 10.20.30.0/24. Replace these values for
+                      your environment. For a fleet, validate one test host
+                      before rollout.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="محدودیت مبدا و سازگاری با MFA"
+                      data-en="Source restrictions and MFA compatibility"
+                    >
+                      Source restrictions and MFA compatibility
+                    </h2>
+                    <p
+                      data-fa="TCP/22 را در Firewall به مبداهای مدیریت محدود کنید. اگر UFW از قبل فعال است، Rule متناسب با همان مسیر اضافه کنید. فعال‌کردن Firewall خاموش از طریق SSH بدون بررسی Ruleها احتمال قطع دسترسی دارد. تغییر Port جای کلید و کنترل حساب را نمی‌گیرد. KbdInteractiveAuthentication no را روی طراحی PAM MFA بدون بازبینی اجرا نکنید. در محیط FIPS، سازگاری Ed25519 را بررسی کنید و در صورت لزوم از RSA با امضای SHA-2 استفاده کنید."
+                      data-en="Restrict TCP/22 to management sources. Add a suitable rule when UFW is already deployed. Enabling an unconfigured firewall over SSH risks lockout. A port change does not replace keys or account controls. Review KbdInteractiveAuthentication no against PAM MFA before applying it. For FIPS environments, check Ed25519 support and use RSA with SHA-2 signatures where required."
+                    >
+                      Restrict TCP/22 to management sources. Add a suitable rule
+                      when UFW is already deployed. Enabling an unconfigured
+                      firewall over SSH risks lockout. A port change does not
+                      replace keys or account controls. Review
+                      KbdInteractiveAuthentication no against PAM MFA before
+                      applying it. For FIPS environments, check Ed25519 support
+                      and use RSA with SHA-2 signatures where required.
                     </p>
                   </section>
                   <section id="enterprise-installation" class="article-section">
@@ -738,26 +758,6 @@ sudo systemctl reload ssh.service</code></pre>
                       passwordauthentication no. Keep the old session open while
                       testing fresh key login and sudo. Effective output matters
                       more than the filename.
-                    </p>
-                  </section>
-                  <section id="enterprise-security" class="article-section">
-                    <h2
-                      data-fa="محدودیت مبدا و سازگاری با MFA"
-                      data-en="Source restrictions and MFA compatibility"
-                    >
-                      Source restrictions and MFA compatibility
-                    </h2>
-                    <p
-                      data-fa="TCP/22 را در Firewall به مبداهای مدیریت محدود کنید. اگر UFW از قبل فعال است، Rule متناسب با همان مسیر اضافه کنید. فعال‌کردن Firewall خاموش از طریق SSH بدون بررسی Ruleها احتمال قطع دسترسی دارد. تغییر Port جای کلید و کنترل حساب را نمی‌گیرد. KbdInteractiveAuthentication no را روی طراحی PAM MFA بدون بازبینی اجرا نکنید. در محیط FIPS، سازگاری Ed25519 را بررسی کنید و در صورت لزوم از RSA با امضای SHA-2 استفاده کنید."
-                      data-en="Restrict TCP/22 to management sources. Add a suitable rule when UFW is already deployed. Enabling an unconfigured firewall over SSH risks lockout. A port change does not replace keys or account controls. Review KbdInteractiveAuthentication no against PAM MFA before applying it. For FIPS environments, check Ed25519 support and use RSA with SHA-2 signatures where required."
-                    >
-                      Restrict TCP/22 to management sources. Add a suitable rule
-                      when UFW is already deployed. Enabling an unconfigured
-                      firewall over SSH risks lockout. A port change does not
-                      replace keys or account controls. Review
-                      KbdInteractiveAuthentication no against PAM MFA before
-                      applying it. For FIPS environments, check Ed25519 support
-                      and use RSA with SHA-2 signatures where required.
                     </p>
                   </section>
                   <section id="enterprise-monitoring" class="article-section">

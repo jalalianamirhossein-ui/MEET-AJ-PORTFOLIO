@@ -154,7 +154,7 @@ The homepage, library and articles share a saved language preference. `/articles
 
 ## SEO
 
-Canonical URLs, Open Graph, Twitter cards, JSON-LD on the homepage and articles, a dynamic `/sitemap.xml` listing the homepage plus published clean article URLs (28 published local article rows) with modification dates, `/robots.txt` disallowing `/admin`, `/livewire` and `/forms`, and 301s for `/index.html`, legacy article `.html` paths and retired language queries. Removed service detail paths return 404. Detail: [docs/current/SEO.md](docs/current/SEO.md).
+Canonical URLs, Open Graph, Twitter cards, JSON-LD on the homepage and articles, a dynamic `/sitemap.xml` listing the homepage, `/articles` library and published indexable clean article URLs with stored article modification dates, `/robots.txt` disallowing `/admin`, `/livewire` and `/forms`, and 301s for `/index.html`, legacy article `.html` paths and retired language queries. Removed service detail paths return 404. Detail: [docs/current/SEO.md](docs/current/SEO.md).
 
 ## PWA
 
@@ -204,6 +204,8 @@ tests/        PHPUnit feature tests and Node frontend tests
 ```
 
 Detail: [docs/current/PROJECT-STRUCTURE.md](docs/current/PROJECT-STRUCTURE.md).
+
+Article source ownership, section ordering and validation: [article structure maintenance](docs/current/ARTICLE-STRUCTURE.md).
 
 ## Documentation index
 

@@ -368,20 +368,20 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-architecture"
-              ><span
-                data-fa="مسیر رفت و برگشت VPN"
-                data-en="VPN forward and return paths"
-                >VPN forward and return paths</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#enterprise-prerequisites"
               ><span
                 data-fa="نسخه، PKI و دسترسی مدیریت"
                 data-en="Version, PKI and management access"
                 >Version, PKI and management access</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="مسیر رفت و برگشت VPN"
+                data-en="VPN forward and return paths"
+                >VPN forward and return paths</span
               ></a
             >
           </li>
@@ -404,20 +404,20 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-troubleshooting"
-              ><span
-                data-fa="از TLS Error تا SSH Timeout"
-                data-en="From TLS errors to SSH timeouts"
-                >From TLS errors to SSH timeouts</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#enterprise-monitoring"
               ><span
                 data-fa="Pool، Session و انقضای گواهی"
                 data-en="Pool, sessions and certificate expiry"
                 >Pool, sessions and certificate expiry</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="از TLS Error تا SSH Timeout"
+                data-en="From TLS errors to SSH timeouts"
+                >From TLS errors to SSH timeouts</span
               ></a
             >
           </li>
@@ -555,40 +555,6 @@
                       routing and forward ACLs together.
                     </p>
                   </section>
-                  <section id="enterprise-architecture" class="article-section">
-                    <h2
-                      data-fa="مسیر رفت و برگشت VPN"
-                      data-en="VPN forward and return paths"
-                    >
-                      VPN forward and return paths
-                    </h2>
-                    <p
-                      data-fa="پس از تأیید Certificate و PPP، ترافیک Pool از Forward ACL عبور می‌کند. شبکه مقصد باید Route برگشت Pool را به همین روتر داشته باشد. اگر Firewall سمت سرور مبداهای محدود دارد، Pool را نیز برای SSH مجاز کنید. NAT پنهان‌کننده مشکل Route، انتخاب پیش‌فرض نیست."
-                      data-en="After certificate and PPP checks, pool traffic passes through forward ACLs. Destination routing must return the pool through this router. Include the pool in any source-restricted server SSH policy. NAT that hides missing routes is not the default design."
-                    >
-                      After certificate and PPP checks, pool traffic passes
-                      through forward ACLs. Destination routing must return the
-                      pool through this router. Include the pool in any
-                      source-restricted server SSH policy. NAT that hides
-                      missing routes is not the default design.
-                    </p>
-                    <h3
-                      id="enterprise-scenario"
-                      data-fa="مثال: SSH یک سرور با Split Tunnel"
-                      data-en="Example: split-tunnel SSH to one server"
-                    >
-                      Example: split-tunnel SSH to one server
-                    </h3>
-                    <p
-                      data-fa="Pool برابر 10.250.0.0/24 و مقصد مجاز 10.20.30.10 است. کلاینت فقط Route همان سرور را می‌گیرد. برای هر فرد حساب و گواهی جدا داشته باشید و آدرس‌ها را با IP Plan خود جایگزین کنید."
-                      data-en="The pool is 10.250.0.0/24 and the permitted destination is 10.20.30.10. The client receives only that host route. Allocate individual accounts/certificates and replace addresses with your IP plan."
-                    >
-                      The pool is 10.250.0.0/24 and the permitted destination is
-                      10.20.30.10. The client receives only that host route.
-                      Allocate individual accounts/certificates and replace
-                      addresses with your IP plan.
-                    </p>
-                  </section>
                   <section
                     id="enterprise-prerequisites"
                     class="article-section"
@@ -641,6 +607,40 @@
                       compatibility, but TCP-over-TCP suffers under loss.
                       Validate UDP against both peers and firewall policy before
                       selecting it.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="مسیر رفت و برگشت VPN"
+                      data-en="VPN forward and return paths"
+                    >
+                      VPN forward and return paths
+                    </h2>
+                    <p
+                      data-fa="پس از تأیید Certificate و PPP، ترافیک Pool از Forward ACL عبور می‌کند. شبکه مقصد باید Route برگشت Pool را به همین روتر داشته باشد. اگر Firewall سمت سرور مبداهای محدود دارد، Pool را نیز برای SSH مجاز کنید. NAT پنهان‌کننده مشکل Route، انتخاب پیش‌فرض نیست."
+                      data-en="After certificate and PPP checks, pool traffic passes through forward ACLs. Destination routing must return the pool through this router. Include the pool in any source-restricted server SSH policy. NAT that hides missing routes is not the default design."
+                    >
+                      After certificate and PPP checks, pool traffic passes
+                      through forward ACLs. Destination routing must return the
+                      pool through this router. Include the pool in any
+                      source-restricted server SSH policy. NAT that hides
+                      missing routes is not the default design.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: SSH یک سرور با Split Tunnel"
+                      data-en="Example: split-tunnel SSH to one server"
+                    >
+                      Example: split-tunnel SSH to one server
+                    </h3>
+                    <p
+                      data-fa="Pool برابر 10.250.0.0/24 و مقصد مجاز 10.20.30.10 است. کلاینت فقط Route همان سرور را می‌گیرد. برای هر فرد حساب و گواهی جدا داشته باشید و آدرس‌ها را با IP Plan خود جایگزین کنید."
+                      data-en="The pool is 10.250.0.0/24 and the permitted destination is 10.20.30.10. The client receives only that host route. Allocate individual accounts/certificates and replace addresses with your IP plan."
+                    >
+                      The pool is 10.250.0.0/24 and the permitted destination is
+                      10.20.30.10. The client receives only that host route.
+                      Allocate individual accounts/certificates and replace
+                      addresses with your IP plan.
                     </p>
                   </section>
                   <section id="enterprise-security" class="article-section">
@@ -747,6 +747,27 @@ verb 3</code></pre>
                       denied destinations.
                     </p>
                   </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="Pool، Session و انقضای گواهی"
+                      data-en="Pool, sessions and certificate expiry"
+                    >
+                      Pool, sessions and certificate expiry
+                    </h2>
+                    <p
+                      data-fa="PPP Active، مصرف Pool و خطای ورود و انقضای گواهی را پایش کنید. قطع یک کاربر را از قطع Listener جدا کنید. هشدار انقضا را زودتر از زمان لازم برای صدور و استقرار گواهی تنظیم کنید."
+                      data-en="Monitor active PPP sessions, pool use, authentication failures and certificate expiry. Distinguish one user’s disconnect from listener failure. Allow enough expiry-warning time for issuance and deployment."
+                    >
+                      Monitor active PPP sessions, pool use, authentication
+                      failures and certificate expiry. Distinguish one user’s
+                      disconnect from listener failure. Allow enough
+                      expiry-warning time for issuance and deployment.
+                    </p>
+                  <div id="technical-enterprise-monitoring"><h3 data-en="Certificate, session and access-policy verification" data-fa="بررسی گواهی، نشست و policy دسترسی">Certificate, session and access-policy verification</h3><pre dir="ltr"><code class="language-routeros">/interface ovpn-server server print detail
+/ppp active print detail
+/certificate print detail
+/ip firewall filter print stats where comment~&quot;ENT-OVPN&quot;
+/log print where topics~&quot;ovpn|ppp&quot;</code></pre><p data-en="Expected: the named listener is enabled, the individual user has a pool address, certificates are valid and the SSH grant counter increases for the authorized destination. On the client, test the granted SSH port and a deliberately unauthorized port/server with a bounded TCP test. The latter must fail while the allowed one works. AUTH_FAILED is different from TLS verification failure; a connected PPP session is not proof of forwarding permission. Restrict logs because usernames and network details are sensitive." data-fa="انتظار می‌رود listener نام‌دار فعال، کاربر مشخص دارای IP از pool، گواهی معتبر و شمارندهٔ مجوز SSH برای مقصد مجاز افزایشی باشد. از کلاینت، پورت SSH مجاز و یک پورت یا سرور عمداً غیرمجاز را با آزمون محدود TCP بررسی کنید؛ غیرمجاز باید شکست و مجاز موفق شود. AUTH_FAILED با شکست اعتبارسنجی TLS متفاوت است؛ PPP متصل مجوز forwarding را ثابت نمی‌کند. لاگ به علت نام کاربر و جزئیات شبکه محدود شود.">Expected: the named listener is enabled, the individual user has a pool address, certificates are valid and the SSH grant counter increases for the authorized destination. On the client, test the granted SSH port and a deliberately unauthorized port/server with a bounded TCP test. The latter must fail while the allowed one works. AUTH_FAILED is different from TLS verification failure; a connected PPP session is not proof of forwarding permission. Restrict logs because usernames and network details are sensitive.</p></div></section>
                   <section
                     id="enterprise-troubleshooting"
                     class="article-section"
@@ -767,23 +788,6 @@ verb 3</code></pre>
                       forward-counter and server-firewall checks. Match
                       cipher/SHA256 settings on both sides. Adding GCM without
                       version/auth validation is not a generic repair.
-                    </p>
-                  </section>
-                  <section id="enterprise-monitoring" class="article-section">
-                    <h2
-                      data-fa="Pool، Session و انقضای گواهی"
-                      data-en="Pool, sessions and certificate expiry"
-                    >
-                      Pool, sessions and certificate expiry
-                    </h2>
-                    <p
-                      data-fa="PPP Active، مصرف Pool و خطای ورود و انقضای گواهی را پایش کنید. قطع یک کاربر را از قطع Listener جدا کنید. هشدار انقضا را زودتر از زمان لازم برای صدور و استقرار گواهی تنظیم کنید."
-                      data-en="Monitor active PPP sessions, pool use, authentication failures and certificate expiry. Distinguish one user’s disconnect from listener failure. Allow enough expiry-warning time for issuance and deployment."
-                    >
-                      Monitor active PPP sessions, pool use, authentication
-                      failures and certificate expiry. Distinguish one user’s
-                      disconnect from listener failure. Allow enough
-                      expiry-warning time for issuance and deployment.
                     </p>
                   </section>
                   <section id="enterprise-recovery" class="article-section">
@@ -819,7 +823,10 @@ verb 3</code></pre>
                       compatibility-oriented cipher choice requires
                       organizational cryptographic-policy review.
                     </p>
-                  </section>
+                  <div id="technical-enterprise-recovery"><h3 data-en="Scope rollback to this named server" data-fa="محدودکردن rollback به همین سرور نام‌دار">Scope rollback to this named server</h3><pre dir="ltr"><code class="language-routeros">/interface ovpn-server server disable [find where name=&quot;ent-ovpn-server&quot;]
+/ppp secret disable [find where name=&quot;opsvpn&quot;]
+/ppp active remove [find where name=&quot;opsvpn&quot;]
+/ip firewall filter disable [find where comment~&quot;ENT-OVPN&quot;]</code></pre><p data-en="These are disruptive changes: they terminate the example user’s tunnel and deny its next login. Review the exact matches before execution. Disabling a PPP secret alone does not necessarily terminate an existing session. Remove only associated client routes/settings and revoke certificates through the PKI workflow when offboarding; this rollback does not replace a tested CRL policy." data-fa="این تغییرات اختلال‌زا هستند: تونل کاربر نمونه را قطع و ورود بعدی را مسدود می‌کنند. پیش از اجرا تطبیق دقیق را بررسی کنید. غیرفعال‌کردن PPP secret الزاماً نشست موجود را قطع نمی‌کند. فقط مسیر و تنظیمات مربوط به کلاینت را حذف و برای خروج کاربر، گواهی را از روند PKI باطل کنید؛ این rollback جای policy آزموده‌شدهٔ CRL را نمی‌گیرد.">These are disruptive changes: they terminate the example user’s tunnel and deny its next login. Review the exact matches before execution. Disabling a PPP secret alone does not necessarily terminate an existing session. Remove only associated client routes/settings and revoke certificates through the PKI workflow when offboarding; this rollback does not replace a tested CRL policy.</p></div></section>
                   <section id="faq" class="article-section">
                     <h2
                       data-fa="پرسش‌های متداول"

@@ -48,6 +48,8 @@ if (! str_contains($html, 'id="faq"')) {
     }
     $html = str_replace('<section id="section-30">', $faqHtml.'</div></section><section id="section-30">', $html);
 }
+require_once $root.'/app/Services/ArticleStructure.php';
+$html = (new App\Services\ArticleStructure)->repair($html, 'truenas-zfs-enterprise');
 file_put_contents($path, $html);
 $markdownPath = $root.'/resources/content/articles/truenas-zfs-enterprise-nas/article.fa.md';
 $markdown = file_get_contents($markdownPath);

@@ -312,20 +312,20 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-architecture"
-              ><span
-                data-fa="Referral و مسیر Replication"
-                data-en="Referrals and replication paths"
-                >Referrals and replication paths</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#enterprise-prerequisites"
               ><span
                 data-fa="آماده‌سازی AD، دیسک و Share"
                 data-en="Prepare AD, storage and shares"
                 >Prepare AD, storage and shares</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="Referral و مسیر Replication"
+                data-en="Referrals and replication paths"
+                >Referrals and replication paths</span
               ></a
             >
           </li>
@@ -499,40 +499,6 @@
                       deletions and overwrites require independent backups.
                     </p>
                   </section>
-                  <section id="enterprise-architecture" class="article-section">
-                    <h2
-                      data-fa="Referral و مسیر Replication"
-                      data-en="Referrals and replication paths"
-                    >
-                      Referrals and replication paths
-                    </h2>
-                    <p
-                      data-fa="کلاینت از DFS-N مقصد SMB را می‌گیرد. DFS-R جداگانه فایل بسته‌شده را تکثیر می‌کند. Multi-master به معنی قفل مشترک بین شعبه‌ها نیست. برای Database زنده یا فایل نیازمند Lock بین سایت‌ها، این طرح مناسب نیست."
-                      data-en="Clients obtain SMB targets through DFS-N. Separately, DFS-R replicates closed files. Multi-master does not provide shared cross-site locking. This design is unsuitable for live databases or files requiring cross-site locks."
-                    >
-                      Clients obtain SMB targets through DFS-N. Separately,
-                      DFS-R replicates closed files. Multi-master does not
-                      provide shared cross-site locking. This design is
-                      unsuitable for live databases or files requiring
-                      cross-site locks.
-                    </p>
-                    <h3
-                      id="enterprise-scenario"
-                      data-fa="مثال: مسیر مشترک دو شعبه"
-                      data-en="Example: a shared path for two branches"
-                    >
-                      Example: a shared path for two branches
-                    </h3>
-                    <p
-                      data-fa="مسیر Company/Data دو مقصد FS01 و FS02 دارد. FS01 داده اولیه را تأمین می‌کند. تا پایان Initial Sync، مقصد FS02 در Referral آفلاین است و کاربران نباید مستقیم روی Share آن بنویسند."
-                      data-en="Company/Data has FS01 and FS02 targets. FS01 supplies the initial data. FS02 remains offline for referrals during initial sync, and users must not write directly to its share."
-                    >
-                      Company/Data has FS01 and FS02 targets. FS01 supplies the
-                      initial data. FS02 remains offline for referrals during
-                      initial sync, and users must not write directly to its
-                      share.
-                    </p>
-                  </section>
                   <section
                     id="enterprise-prerequisites"
                     class="article-section"
@@ -584,6 +550,40 @@
                       a permanent replication leader.
                     </p>
                   </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="Referral و مسیر Replication"
+                      data-en="Referrals and replication paths"
+                    >
+                      Referrals and replication paths
+                    </h2>
+                    <p
+                      data-fa="کلاینت از DFS-N مقصد SMB را می‌گیرد. DFS-R جداگانه فایل بسته‌شده را تکثیر می‌کند. Multi-master به معنی قفل مشترک بین شعبه‌ها نیست. برای Database زنده یا فایل نیازمند Lock بین سایت‌ها، این طرح مناسب نیست."
+                      data-en="Clients obtain SMB targets through DFS-N. Separately, DFS-R replicates closed files. Multi-master does not provide shared cross-site locking. This design is unsuitable for live databases or files requiring cross-site locks."
+                    >
+                      Clients obtain SMB targets through DFS-N. Separately,
+                      DFS-R replicates closed files. Multi-master does not
+                      provide shared cross-site locking. This design is
+                      unsuitable for live databases or files requiring
+                      cross-site locks.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: مسیر مشترک دو شعبه"
+                      data-en="Example: a shared path for two branches"
+                    >
+                      Example: a shared path for two branches
+                    </h3>
+                    <p
+                      data-fa="مسیر Company/Data دو مقصد FS01 و FS02 دارد. FS01 داده اولیه را تأمین می‌کند. تا پایان Initial Sync، مقصد FS02 در Referral آفلاین است و کاربران نباید مستقیم روی Share آن بنویسند."
+                      data-en="Company/Data has FS01 and FS02 targets. FS01 supplies the initial data. FS02 remains offline for referrals during initial sync, and users must not write directly to its share."
+                    >
+                      Company/Data has FS01 and FS02 targets. FS01 supplies the
+                      initial data. FS02 remains offline for referrals during
+                      initial sync, and users must not write directly to its
+                      share.
+                    </p>
+                  </section>
                   <section id="enterprise-security" class="article-section">
                     <h2
                       data-fa="مجوزهای Share، NTFS و Firewall"
@@ -625,12 +625,14 @@ New-SmbShare -Name Company -Path &#x27;D:\DFSRoots\Company&#x27; -ReadAccess &#x
 New-SmbShare -Name Data -Path &#x27;D:\Data&#x27; -ChangeAccess &#x27;CORP\FileUsers&#x27;
 Get-WindowsFeature FS-DFS-Namespace,FS-DFS-Replication</code></pre>
                     <p
-                      data-fa="NTFS ACL نیز با گروه مالک داده طراحی و اعمال شود. Share permission به‌تنهایی اجازه NTFS نمی‌دهد. از یک management host دارای module و delegation:"
-                      data-en="Design/apply NTFS ACLs with the data owner. Share permissions do not grant NTFS access. Continue from a management host with modules and delegation."
+                      data-fa="مجوزهای NTFS را با هماهنگی مالک داده طراحی و اعمال کنید؛ مجوز Share به‌تنهایی دسترسی NTFS نمی‌دهد. سپس فرمان‌های زیر را از یک میزبان مدیریتی دارای ماژول‌های DFSN و DFSR و مجوزهای واگذارشدهٔ لازم اجرا کنید."
+                      data-en="Design and apply NTFS permissions with the data owner; share permissions alone do not grant NTFS access. Then run the following commands from a management host with the DFSN and DFSR modules and the required delegated permissions."
                     >
-                      Design/apply NTFS ACLs with the data owner. Share
-                      permissions do not grant NTFS access. Continue from a
-                      management host with modules and delegation.
+                      Design and apply NTFS permissions with the data owner;
+                      share permissions alone do not grant NTFS access. Then
+                      run the following commands from a management host with
+                      the DFSN and DFSR modules and the required delegated
+                      permissions.
                     </p>
                     <pre
                       dir="ltr"
@@ -697,7 +699,14 @@ Get-DfsnFolderTarget -Path &#x27;\\corp.example.com\Company\Data&#x27;</code></p
                       FS02. Both backlogs must drain during the controlled test.
                       Only then bring the FS02 target online.
                     </p>
-                  </section>
+                  <div id="technical-enterprise-monitoring"><h3 data-en="A closed canary file and both-direction backlog" data-fa="فایل آزمایشی بسته‌شده و backlog دوطرفه">A closed canary file and both-direction backlog</h3><p data-en="Use a delegated administrator with write access to both test shares. Run the first two lines once after configuring the group, then wait for initial sync and run the comparison block repeatedly. No output parity is assumed. The file name is unique and data is a disposable canary. Keep FS02 referrals Offline and direct user writes restricted until acceptance." data-fa="با مدیر دارای دسترسی واگذارشده و مجوز نوشتن روی هر دو share آزمایشی اجرا کنید. دو خط اول را پس از ساخت گروه یک بار اجرا، سپس برای همگام‌سازی اولیه صبر و بلوک مقایسه را تکرار کنید. برابر بودن خروجی فرض نشده است. نام فایل یکتا و محتوا آزمایشی است. تا پذیرش، referral مربوط به FS02 را Offline و نوشتن مستقیم کاربر را محدود نگه دارید.">Use a delegated administrator with write access to both test shares. Run the first two lines once after configuring the group, then wait for initial sync and run the comparison block repeatedly. No output parity is assumed. The file name is unique and data is a disposable canary. Keep FS02 referrals Offline and direct user writes restricted until acceptance.</p><pre dir="ltr"><code class="language-powershell">$CanaryName = &#x27;dfsr-canary-&#x27; + [guid]::NewGuid().ToString(&#x27;N&#x27;) + &#x27;.txt&#x27;
+Set-Content -LiteralPath (Join-Path &#x27;\\FS01\Data&#x27; $CanaryName) -Value &#x27;DFS replication acceptance&#x27; -Encoding UTF8 -ErrorAction Stop
+# Keep CanaryName in this session; run below after initial sync.
+$SourceHash = (Get-FileHash -LiteralPath (Join-Path &#x27;\\FS01\Data&#x27; $CanaryName) -Algorithm SHA256 -ErrorAction Stop).Hash
+$TargetHash = (Get-FileHash -LiteralPath (Join-Path &#x27;\\FS02\Data&#x27; $CanaryName) -Algorithm SHA256 -ErrorAction Stop).Hash
+$SourceHash -eq $TargetHash
+Get-DfsrBacklog -GroupName &#x27;Company-Data&#x27; -FolderName &#x27;Data&#x27; -SourceComputerName &#x27;FS01&#x27; -DestinationComputerName &#x27;FS02&#x27; -Verbose
+Get-DfsrBacklog -GroupName &#x27;Company-Data&#x27; -FolderName &#x27;Data&#x27; -SourceComputerName &#x27;FS02&#x27; -DestinationComputerName &#x27;FS01&#x27; -Verbose</code></pre><p data-en="Expected acceptance: hash comparison True, no pending canary and both backlogs drained. A missing target file or unequal hash is failure; do not enable referrals yet. Verbose backlog reports total count beyond the limited file list. Check DFS Replication events for initial-sync completion, staging pressure and communication failures. This checks one closed file, not every ACL or whole-data consistency; validate permissions and an independent restore separately." data-fa="معیار پذیرش: مقایسهٔ hash برابر True، نبود فایل آزمایشی معطل و تخلیهٔ backlog هر دو جهت. فایل مقصد ناموجود یا hash متفاوت شکست آزمون است؛ referral را هنوز فعال نکنید. خروجی verbose تعداد کل backlog را فراتر از فهرست محدود فایل‌ها نشان می‌دهد. رخدادهای DFS Replication را برای پایان همگام‌سازی، فشار staging و خرابی ارتباط بررسی کنید. این آزمون یک فایل بسته است، نه همهٔ ACLها یا کل داده؛ مجوز و بازیابی مستقل را جداگانه بررسی کنید.">Expected acceptance: hash comparison True, no pending canary and both backlogs drained. A missing target file or unequal hash is failure; do not enable referrals yet. Verbose backlog reports total count beyond the limited file list. Check DFS Replication events for initial-sync completion, staging pressure and communication failures. This checks one closed file, not every ACL or whole-data consistency; validate permissions and an independent restore separately.</p></div></section>
                   <section
                     id="enterprise-troubleshooting"
                     class="article-section"
@@ -821,7 +830,7 @@ Test-NetConnection FS02 -Port 445</code></pre>
                         >
                       </li>
                     </ul>
-                  </section>
+                  <div id="technical-enterprise-sources"><p><a href="https://learn.microsoft.com/en-us/powershell/module/dfsr/get-dfsrbacklog" rel="noopener" data-en="Microsoft Get-DfsrBacklog" data-fa="مستند رسمی: Microsoft Get-DfsrBacklog">Microsoft Get-DfsrBacklog</a></p></div></section>
                 </div>
               </article>
             </div>

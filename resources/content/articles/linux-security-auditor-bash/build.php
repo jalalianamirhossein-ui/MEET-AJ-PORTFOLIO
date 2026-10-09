@@ -219,5 +219,7 @@ $html = '<!doctype html><html lang="en" dir="ltr" data-article-language="en"><he
     .'<p class="article-excerpt hero-subtitle" data-en="'.$escape($localizations['en']['description']).'" data-fa="'.$escape($localizations['fa']['description']).'">'.$escape($localizations['en']['description']).'</p>'
     .'<img class="article-hero-thumbnail" src="'.$image.'" alt="Linux Security Auditor dashboard | داشبورد بررسی امنیت لینوکس" /></section>'
     .'<article class="article-body">'.$body.'</article></main></body></html>'."\n";
+require_once dirname(__DIR__, 4).'/app/Services/ArticleStructure.php';
+$html = (new \App\Services\ArticleStructure)->repair($html, $slug);
 file_put_contents(__DIR__.'/../../../legacy/articles/'.$slug.'.html', $html);
 echo 'Generated '.$slug.' with '.count($sections)." bilingual sections.\n";

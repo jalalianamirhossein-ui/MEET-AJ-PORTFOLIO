@@ -1,0 +1,1801 @@
+{
+  "articles": {
+    "windows-cmd-common-network-commands": {
+      "issues": [
+        "Missing per-command instruction, interpretation and scenarios; archived body had 17 code blocks, current source only four.",
+        "Compatibility and shell distinctions were too brief.",
+        "Short command bundle did not teach each required command, shell, output or precautions.",
+        "Missing staged incident scenarios and failure interpretation.",
+        "Official per-command and lifecycle references were incomplete."
+      ],
+      "sections": {
+        "enterprise-intro": [
+          {
+            "type": "p",
+            "en": "Use the name, address, interface and service port together to isolate a failure. The examples form a fictional branch: client 192.0.2.10/24, gateway 192.0.2.1, DNS 192.0.2.53 and file server files01.corp.example.com at 198.51.100.20. These documentation addresses are not public test services. Substitute authorized endpoints before running probes.",
+            "fa": "برای یافتن محل خرابی، نام، نشانی، رابط و پورت سرویس را کنار هم بررسی کنید. مثال‌ها مربوط به شعبه‌ای فرضی هستند: کلاینت 192.0.2.10/24، دروازه 192.0.2.1، DNS با نشانی 192.0.2.53 و فایل‌سرور files01.corp.example.com با نشانی 198.51.100.20. این نشانی‌های مستندسازی سرویس آزمایشی عمومی نیستند؛ پیش از اجرای آزمون، مقصد مجاز واقعی را جایگزین کنید."
+          },
+          {
+            "type": "p",
+            "en": "All output excerpts below are illustrative, abbreviated and not measurements from a tested production network. Probe results depend on routes, firewall policy, permissions and the selected host. Read each command card independently; do not paste the entire article as a script.",
+            "fa": "تمام خروجی‌های زیر نمونهٔ آموزشی کوتاه‌شده هستند و اندازه‌گیری یک شبکهٔ عملیاتی آزمایش‌شده نیستند. نتیجه به مسیر، فایروال، مجوز و میزبان انتخاب‌شده بستگی دارد. هر فرمان را مستقل و با توجه به توضیح آن اجرا کنید؛ کل مقاله یک اسکریپت قابل اجرا نیست."
+          }
+        ],
+        "enterprise-prerequisites": [
+          {
+            "type": "p",
+            "en": "The scope is serviced Windows 11 builds and Windows Server 2016, 2019, 2022 and 2025 with built-in console utilities; PowerShell examples use Windows PowerShell 5.1 and the Windows NetTCPIP module. Microsoft command applicability also lists Windows 10, but command availability is not lifecycle support: regular Windows 10 servicing ended on October 14, 2025; LTSC/ESU eligibility is separate. Check the exact edition/build lifecycle before deployment.",
+            "fa": "دامنهٔ راهنما بیلدهای تحت پشتیبانی Windows 11 و Windows Server 2016، 2019، 2022 و 2025 با ابزارهای داخلی خط فرمان است. مثال‌های PowerShell برای Windows PowerShell 5.1 و ماژول ویندوزی NetTCPIP هستند. فهرست سازگاری فرمان‌های مایکروسافت Windows 10 را نیز شامل می‌شود، اما وجود فرمان به معنی پشتیبانی محصول نیست: سرویس‌دهی عادی Windows 10 در 14 اکتبر 2025 پایان یافت؛ شرایط LTSC و ESU مستقل است. پیش از استقرار چرخهٔ پشتیبانی ویرایش و بیلد دقیق را بررسی کنید."
+          },
+          {
+            "type": "p",
+            "en": "CMD examples are Windows executables, not PowerShell cmdlets. In PowerShell use ping.exe and hostname.exe when you need the executable rather than a possible alias. Test-NetConnection cannot run directly in CMD. net use mappings belong to the current logon/elevation context: diagnose from the affected user session. Use net help use and net help view on the target build because their online syntax pages are legacy references.",
+            "fa": "مثال‌های CMD برنامه‌های اجرایی ویندوز هستند، نه cmdletهای PowerShell. در PowerShell برای اجرای خود برنامه به‌جای alias احتمالی، از ping.exe و hostname.exe استفاده کنید. Test-NetConnection مستقیماً در CMD اجرا نمی‌شود. نگاشت‌های net use به نشست و سطح دسترسی فعلی تعلق دارند؛ عیب‌یابی را در نشست کاربر آسیب‌دیده انجام دهید. چون صفحات آنلاین نحو net use و net view قدیمی هستند، راهنمای net help use و net help view را روی بیلد مقصد نیز بررسی کنید."
+          }
+        ],
+        "enterprise-installation": [
+          {
+            "type": "h3",
+            "en": "ipconfig: establish the local addressing baseline",
+            "fa": "ipconfig: ثبت وضعیت نشانی‌های محلی",
+            "id": "cmd-ipconfig"
+          },
+          {
+            "type": "p",
+            "en": "Display IPv4/IPv6, mask and gateway before testing a remote service. A helpdesk operator uses this to identify the active adapter and a wrong branch subnet.",
+            "fa": "پیش از آزمون سرویس دوردست، IPv4/IPv6، ماسک و دروازه را ببینید. پشتیبانی با این فرمان رابط فعال و قرارگرفتن کلاینت در شبکهٔ نادرست شعبه را مشخص می‌کند."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: ipconfig",
+            "fa": "نحو CMD: ipconfig"
+          },
+          {
+            "type": "code",
+            "text": "ipconfig",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "Ethernet adapter Ethernet:\n   IPv4 Address . . . . . . . . . . : 192.0.2.10\n   Subnet Mask . . . . . . . . . . : 255.255.255.0\n   Default Gateway . . . . . . . . : 192.0.2.1",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "Compare mask and gateway with IPAM, not another adapter such as a VPN. Media disconnected points to link/adapter state. A 169.254.x.x address commonly means DHCP was unavailable; it is not a usable routed branch address by itself.",
+            "fa": "ماسک و دروازه را با IPAM مقایسه کنید، نه با رابط دیگری مثل VPN. Media disconnected به وضعیت لینک یا رابط اشاره دارد. نشانی 169.254.x.x معمولاً ناشی از نبود DHCP است و به‌تنهایی نشانی مسیریابی‌شدهٔ قابل استفادهٔ شعبه نیست."
+          },
+          {
+            "type": "p",
+            "en": "Read-only; normal user privileges suffice. Redact internal addressing before sharing. Inspect Get-NetIPConfiguration separately for structured PowerShell output.",
+            "fa": "فقط خواندنی است و دسترسی کاربر عادی کافی است. پیش از اشتراک گزارش، نشانی‌های داخلی را حذف کنید. برای خروجی ساختاریافتهٔ PowerShell، Get-NetIPConfiguration را جداگانه بررسی کنید."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft ipconfig",
+            "fa": "مستند رسمی: Microsoft ipconfig",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ipconfig"
+          },
+          {
+            "type": "h3",
+            "en": "ipconfig /all: DHCP and resolver evidence",
+            "fa": "ipconfig /all: شواهد DHCP و DNS",
+            "id": "cmd-all"
+          },
+          {
+            "type": "p",
+            "en": "Inspect adapter identity, DNS suffix, DHCP status, DNS servers and lease information. Use it when one office resolves a name differently from another.",
+            "fa": "شناسهٔ رابط، پسوند DNS، وضعیت DHCP، DNS Server و اطلاعات اجاره را بررسی کنید. وقتی دو دفتر یک نام را متفاوت resolve می‌کنند، این اطلاعات مفید است."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: ipconfig /all",
+            "fa": "نحو CMD: ipconfig /all"
+          },
+          {
+            "type": "code",
+            "text": "ipconfig /all",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "Host Name . . . . . . . . . . . . : BRANCH-PC01\nDHCP Enabled. . . . . . . . . . . : Yes\nPhysical Address. . . . . . . . . : 02-00-5E-10-00-10\nDHCP Server . . . . . . . . . . . : 192.0.2.54\nDNS Servers . . . . . . . . . . . : 192.0.2.53",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "DHCP Server supplied the lease; DNS Servers answer name queries. They need not be the same host. DHCP Enabled: No means renewal is not the fix for that static interface. Unexpected suffix/resolver suggests DHCP scope, VPN or local configuration drift.",
+            "fa": "DHCP Server اجاره را داده و DNS Servers پاسخ نام را می‌دهند؛ الزاماً یک میزبان نیستند. DHCP Enabled: No یعنی تمدید اجاره راهکار آن رابط ثابت نیست. پسوند یا resolver غیرمنتظره می‌تواند از Scope، VPN یا تغییر تنظیمات محلی باشد."
+          },
+          {
+            "type": "p",
+            "en": "Read-only; no elevation normally needed. This report exposes MAC, domain and lease details. Preserve it before any reset.",
+            "fa": "فقط خواندنی است و معمولاً elevation نمی‌خواهد. گزارش شامل MAC، دامنه و اطلاعات اجاره است؛ پیش از reset آن را نگه دارید."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft ipconfig",
+            "fa": "مستند رسمی: Microsoft ipconfig",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ipconfig"
+          },
+          {
+            "type": "h3",
+            "en": "ipconfig /flushdns: discard stale local DNS cache",
+            "fa": "ipconfig /flushdns: پاک‌کردن کش محلی DNS",
+            "id": "cmd-flushdns"
+          },
+          {
+            "type": "p",
+            "en": "Clear cached positive and negative resolver entries only after recording them. Use it following a confirmed DNS correction when this client still uses an old answer.",
+            "fa": "ورودی‌های مثبت و منفی کش resolver را فقط پس از ثبت شواهد پاک کنید. بعد از اصلاح تأییدشدهٔ DNS، اگر کلاینت هنوز پاسخ قدیمی می‌گیرد این فرمان کاربرد دارد."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: ipconfig /displaydns; ipconfig /flushdns (run separately)",
+            "fa": "نحو CMD: ipconfig /displaydns; ipconfig /flushdns (run separately)"
+          },
+          {
+            "type": "code",
+            "text": "ipconfig /displaydns\nipconfig /flushdns",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "Successfully flushed the DNS Resolver Cache.",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "The success message concerns local cache only. nslookup queries a DNS server and does not demonstrate what was in the Windows resolver cache. Compare cache, configured-server query and application behavior before and after; browser/application caches may remain.",
+            "fa": "پیام موفقیت فقط دربارهٔ کش محلی است. nslookup مستقیماً DNS Server را پرس‌وجو می‌کند و محتوای کش resolver ویندوز را نشان نمی‌دهد. کش، پاسخ سرور تنظیم‌شده و رفتار برنامه را قبل و بعد مقایسه کنید؛ کش مرورگر یا برنامه ممکن است باقی بماند."
+          },
+          {
+            "type": "p",
+            "en": "MODIFIES local cache; use an elevated CMD for the clear operation. If elevation is requested, reopen as Administrator instead of disabling DNS Client. No route or DNS-server setting is changed.",
+            "fa": "کش محلی را تغییر می‌دهد؛ پاک‌سازی را در CMD با دسترسی Administrator انجام دهید. اگر elevation لازم شد، CMD را با آن دسترسی باز کنید و DNS Client را غیرفعال نکنید. مسیر یا DNS Server تنظیم‌شده تغییر نمی‌کند."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft ipconfig",
+            "fa": "مستند رسمی: Microsoft ipconfig",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ipconfig"
+          },
+          {
+            "type": "h3",
+            "en": "ipconfig /release: deliberately relinquish DHCP",
+            "fa": "ipconfig /release: آزادکردن عمدی اجارهٔ DHCP",
+            "id": "cmd-release"
+          },
+          {
+            "type": "p",
+            "en": "Release the IPv4 DHCP lease on one explicitly named adapter for a controlled DHCP test. It is not a first-line connectivity diagnostic.",
+            "fa": "برای آزمون کنترل‌شدهٔ DHCP، اجارهٔ IPv4 یک رابط مشخص را آزاد کنید. این فرمان نخستین اقدام عیب‌یابی اتصال نیست."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: ipconfig /release \"adapter name\"",
+            "fa": "نحو CMD: ipconfig /release \"adapter name\""
+          },
+          {
+            "type": "code",
+            "text": "ipconfig /release \"Ethernet\"",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "Ethernet adapter Ethernet:\n   Default Gateway . . . . . . . . :",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "Expect the DHCP-assigned IPv4/gateway to disappear; the exact remaining fields vary. Disconnected or statically configured adapters cannot release a usable DHCP lease. The error about an adapter not being in a permissible state requires checking link and DHCP status.",
+            "fa": "انتظار می‌رود IPv4 و دروازهٔ دریافتی از DHCP حذف شوند؛ فیلدهای باقی‌مانده متفاوت‌اند. رابط قطع‌شده یا ثابت اجارهٔ DHCP قابل استفاده‌ای برای آزادکردن ندارد. خطای permissible state نیازمند بررسی لینک و وضعیت DHCP است."
+          },
+          {
+            "type": "p",
+            "en": "DISRUPTIVE; use elevated CMD with console access and a change window. It can terminate RDP/SSH, monitoring and application sessions. Omitting the adapter targets all eligible adapters. Do not run it on a static-address server.",
+            "fa": "اختلال‌زا است؛ از CMD دارای elevation، کنسول مستقل و بازهٔ تغییر استفاده کنید. ممکن است نشست‌های RDP/SSH، مانیتورینگ و برنامه قطع شوند. حذف نام رابط، همهٔ رابط‌های واجد شرایط را هدف می‌گیرد. روی سرور دارای IP ثابت اجرا نکنید."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft ipconfig",
+            "fa": "مستند رسمی: Microsoft ipconfig",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ipconfig"
+          },
+          {
+            "type": "h3",
+            "en": "ipconfig /renew: request DHCP configuration",
+            "fa": "ipconfig /renew: درخواست تنظیمات DHCP",
+            "id": "cmd-renew"
+          },
+          {
+            "type": "p",
+            "en": "Renew/request IPv4 DHCP configuration on the named adapter. Use after repairing DHCP reachability or during the approved lease test.",
+            "fa": "تنظیمات DHCP مربوط به IPv4 رابط مشخص را تمدید یا درخواست کنید. پس از اصلاح دسترسی به DHCP یا در آزمون مجاز اجاره استفاده شود."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: ipconfig /renew \"adapter name\"",
+            "fa": "نحو CMD: ipconfig /renew \"adapter name\""
+          },
+          {
+            "type": "code",
+            "text": "ipconfig /renew \"Ethernet\"\nipconfig /all",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "IPv4 Address . . . . . . . . . . : 192.0.2.10\nDefault Gateway . . . . . . . . : 192.0.2.1",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "Compare the assigned subnet, resolver and lease with the intended DHCP scope. A timeout reaching DHCP calls for link/VLAN, relay, scope exhaustion and server checks. Renewal does not guarantee the old address returns and does not apply to static configuration.",
+            "fa": "شبکه، DNS و اجارهٔ جدید را با Scope موردنظر مقایسه کنید. timeout دسترسی به DHCP نیازمند بررسی لینک، VLAN، relay، ظرفیت Scope و سرور است. تمدید تضمین نمی‌کند IP قبلی برگردد و برای تنظیمات ثابت کاربرد ندارد."
+          },
+          {
+            "type": "p",
+            "en": "MODIFIES addressing; elevated CMD and independent console recommended. Ensure the DHCP path works before release. If renewal fails, use the recorded configuration and console recovery; do not invent a static IP outside IPAM.",
+            "fa": "نشانی‌ها را تغییر می‌دهد؛ CMD دارای elevation و کنسول مستقل توصیه می‌شود. پیش از release از سلامت مسیر DHCP مطمئن شوید. اگر renew شکست خورد، از تنظیمات ثبت‌شده و کنسول برای بازیابی استفاده کنید؛ خارج از IPAM یک IP ثابت حدس نزنید."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft ipconfig",
+            "fa": "مستند رسمی: Microsoft ipconfig",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ipconfig"
+          },
+          {
+            "type": "h3",
+            "en": "ping: finite ICMP reachability and latency probes",
+            "fa": "ping: آزمون محدود دسترسی ICMP و تأخیر",
+            "id": "cmd-ping"
+          },
+          {
+            "type": "p",
+            "en": "Send a bounded number of echo requests to the gateway, then the target IP. Use the same source host and time interval when comparing a branch latency incident.",
+            "fa": "تعداد محدودی Echo Request به دروازه و سپس IP مقصد بفرستید. برای مقایسهٔ رخداد تأخیر شعبه، میزبان مبدأ و بازهٔ زمانی یکسان باشد."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: ping /n count /w timeout-ms target",
+            "fa": "نحو CMD: ping /n count /w timeout-ms target"
+          },
+          {
+            "type": "code",
+            "text": "ping /n 4 /w 1000 192.0.2.1\nping /n 4 /w 1000 198.51.100.20",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "Reply from 198.51.100.20: bytes=32 time=12ms TTL=124\nPackets: Sent = 4, Received = 4, Lost = 0 (0% loss)",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "Time is round-trip latency; Lost is unanswered ICMP, and TTL is the remaining reply TTL, not a definitive OS identifier. Request timed out can mean ICMP filtering. Destination host unreachable requires inspecting the address of the reporting host/router. Successful ping does not prove TCP/445 or SMB login.",
+            "fa": "Time تأخیر رفت‌وبرگشت، Lost تعداد ICMP بی‌پاسخ و TTL مقدار باقی‌ماندهٔ بستهٔ پاسخ است؛ TTL شناسهٔ قطعی سیستم‌عامل نیست. Request timed out می‌تواند از فیلتر ICMP باشد. در Destination host unreachable نشانی میزبان یا روتر گزارش‌کننده را بررسی کنید. ping موفق، TCP/445 یا ورود SMB را اثبات نمی‌کند."
+          },
+          {
+            "type": "p",
+            "en": "Probe traffic, no configuration change; standard user. Avoid unbounded /t, large floods or unauthorized external targets. Do not use a few replies as a throughput benchmark.",
+            "fa": "ترافیک آزمون تولید می‌کند اما تنظیمات را تغییر نمی‌دهد؛ کاربر عادی کافی است. از /t نامحدود، سیل بسته‌های بزرگ یا مقصد خارجی غیرمجاز پرهیز کنید. چند پاسخ، معیار اندازه‌گیری پهنای باند نیست."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft ping",
+            "fa": "مستند رسمی: Microsoft ping",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ping"
+          },
+          {
+            "type": "h3",
+            "en": "tracert: locate the responding routed hops",
+            "fa": "tracert: یافتن hopهای پاسخ‌دهندهٔ مسیر",
+            "id": "cmd-tracert"
+          },
+          {
+            "type": "p",
+            "en": "Trace the routed path without reverse-DNS delays. A network team compares the first hop with the intended branch gateway and a known-good trace.",
+            "fa": "مسیر مسیریابی‌شده را بدون تأخیر reverse DNS ببینید. تیم شبکه hop اول را با دروازهٔ موردنظر و یک trace سالم مقایسه می‌کند."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: tracert /d /h maximum-hops /w timeout-ms target",
+            "fa": "نحو CMD: tracert /d /h maximum-hops /w timeout-ms target"
+          },
+          {
+            "type": "code",
+            "text": "tracert /d /h 15 /w 1000 198.51.100.20",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "1     1 ms     1 ms     1 ms  192.0.2.1\n2     *        *        *     Request timed out.\n3    12 ms    12 ms    13 ms  198.51.100.20",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "Each row is a TTL hop and three probe round-trip times. A silent middle hop followed by a reachable destination is not proof of packet forwarding failure. Different routes can reflect ECMP; trace does not expose the return path or necessarily the TCP service path.",
+            "fa": "هر ردیف یک hop با TTL مشخص و زمان رفت‌وبرگشت سه آزمون است. hop میانی بی‌پاسخ با مقصد پاسخ‌دهنده، خرابی forwarding را ثابت نمی‌کند. مسیرهای متفاوت ممکن است ناشی از ECMP باشند؛ trace مسیر برگشت یا لزوماً مسیر سرویس TCP را نشان نمی‌دهد."
+          },
+          {
+            "type": "p",
+            "en": "Probe only; standard user. Timeout indicates missing ICMP response, not automatically a failed router. Share topology output through approved channels.",
+            "fa": "فقط آزمون شبکه است؛ کاربر عادی کافی است. timeout یعنی پاسخ ICMP دریافت نشده، نه اینکه روتر حتماً خراب است. اطلاعات توپولوژی را فقط از مسیر مجاز منتشر کنید."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft tracert",
+            "fa": "مستند رسمی: Microsoft tracert",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/tracert"
+          },
+          {
+            "type": "h3",
+            "en": "pathping: sample loss over a routed path",
+            "fa": "pathping: نمونه‌برداری افت بسته در مسیر",
+            "id": "cmd-pathping"
+          },
+          {
+            "type": "p",
+            "en": "Combine hop discovery with repeated ICMP statistics for intermittent loss. Run during the incident and compare endpoint loss with downstream hops.",
+            "fa": "کشف hop را با آمار ICMP تکرارشونده برای افت بستهٔ مقطعی ترکیب کنید. هنگام رخداد اجرا و افت مقصد را با hopهای بعدی مقایسه کنید."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: pathping /n /q queries /p period-ms target",
+            "fa": "نحو CMD: pathping /n /q queries /p period-ms target"
+          },
+          {
+            "type": "code",
+            "text": "pathping /n /q 20 /p 250 198.51.100.20",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "Hop  RTT   Lost/Sent = Pct   Address\n  1   1ms      0/20 = 0%    192.0.2.1\n  3  12ms      1/20 = 5%    198.51.100.20",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "This abbreviated teaching table omits the separate Source-to-Here and This-Node/Link columns in actual output. They distinguish cumulative loss from node/link sampling. Loss at one router that does not continue downstream commonly reflects control-plane rate limiting. Twenty samples are weak evidence; confirm with longer authorized samples and application telemetry.",
+            "fa": "این جدول آموزشی کوتاه، ستون‌های جداگانهٔ Source-to-Here و This-Node/Link خروجی واقعی را حذف کرده است. این ستون‌ها افت تجمعی را از نمونه‌برداری گره یا لینک جدا می‌کنند. افت یک روتر که به hopهای بعدی منتقل نمی‌شود، غالباً از محدودسازی پاسخ‌های control plane است. بیست نمونه شواهد محدودی است؛ با نمونه‌برداری طولانی‌تر مجاز و آمار برنامه بررسی کنید."
+          },
+          {
+            "type": "p",
+            "en": "No configuration change; standard user. It takes longer than tracert and generates repeated probes. A nonresponding target or ACL can invalidate loss interpretation; never declare an SLA breach from this alone.",
+            "fa": "تنظیمات را تغییر نمی‌دهد و کاربر عادی کافی است. از tracert طولانی‌تر است و آزمون‌های تکراری می‌فرستد. مقصد بی‌پاسخ یا ACL می‌تواند تفسیر افت را نامعتبر کند؛ تنها با این خروجی نقض SLA اعلام نکنید."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft pathping",
+            "fa": "مستند رسمی: Microsoft pathping",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/pathping"
+          },
+          {
+            "type": "h3",
+            "en": "nslookup: question a specific DNS resolver",
+            "fa": "nslookup: پرس‌وجو از resolver مشخص",
+            "id": "cmd-nslookup"
+          },
+          {
+            "type": "p",
+            "en": "Resolve a record through the configured or explicitly selected DNS server. Compare an affected branch resolver with the approved authoritative/resolver path.",
+            "fa": "رکورد را از DNS تنظیم‌شده یا سرور انتخابی بپرسید. پاسخ resolver شعبهٔ مشکل‌دار را با مسیر معتبر سازمان مقایسه کنید."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: nslookup [-type=record-type] name [dns-server]",
+            "fa": "نحو CMD: nslookup [-type=record-type] name [dns-server]"
+          },
+          {
+            "type": "code",
+            "text": "nslookup -type=A files01.corp.example.com 192.0.2.53",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "Server:  dns01.corp.example.com\nAddress: 192.0.2.53\nName:    files01.corp.example.com\nAddress: 198.51.100.20",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "The first Address identifies the DNS server, the final Address the answer. NXDOMAIN means that resolver reports no such name, while timeout means no timely answer. Server: Unknown can be a missing PTR for the resolver rather than failed resolution. Check A and AAAA and the exact FQDN; an answer is not proof of TCP reachability.",
+            "fa": "Address اول نشانی DNS Server و Address آخر پاسخ رکورد است. NXDOMAIN یعنی آن resolver نام را موجود نمی‌داند؛ timeout یعنی پاسخ به‌موقع نرسیده است. Server: Unknown ممکن است فقط از نبود PTR سرور DNS باشد. A و AAAA و FQDN دقیق را بررسی کنید؛ دریافت پاسخ به معنی دسترسی TCP نیست."
+          },
+          {
+            "type": "p",
+            "en": "Query only; standard user. Use only organizationally approved resolvers; sending private names to public DNS leaks information. It does not clear caches or alter resolver configuration.",
+            "fa": "فقط پرس‌وجو است و کاربر عادی کافی است. فقط resolver مجاز سازمان را به کار ببرید؛ ارسال نام داخلی به DNS عمومی اطلاعات را افشا می‌کند. کش یا تنظیمات resolver تغییر نمی‌کند."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft nslookup",
+            "fa": "مستند رسمی: Microsoft nslookup",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/nslookup"
+          },
+          {
+            "type": "h3",
+            "en": "netstat -ano: listeners and owning process IDs",
+            "fa": "netstat -ano: پورت‌های باز و شناسهٔ پردازش",
+            "id": "cmd-netstat"
+          },
+          {
+            "type": "p",
+            "en": "List listeners and connections with numeric addresses and PIDs. Run on the file server to identify whether TCP/445 has a local listener, or on the client to inspect its current connections.",
+            "fa": "listenerها و اتصال‌ها را با نشانی عددی و PID ببینید. روی فایل‌سرور وجود listener پورت 445 و روی کلاینت اتصال‌های همان کلاینت را بررسی کنید."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: netstat -ano",
+            "fa": "نحو CMD: netstat -ano"
+          },
+          {
+            "type": "code",
+            "text": "netstat -ano\ntasklist /fi \"PID eq 4\"",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "Proto  Local Address    Foreign Address    State        PID\nTCP    0.0.0.0:445      0.0.0.0:0          LISTENING    4",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "Local Address is the bind endpoint, Foreign Address the peer and PID the owner in this snapshot. LISTENING differs from ESTABLISHED; SYN_SENT suggests pending TCP establishment. A localhost-only bind cannot serve remote clients. UDP lines have no TCP state. The sample PID 4 is illustrative; inspect the actual owner.",
+            "fa": "Local Address محل bind، Foreign Address همتا و PID مالک همان لحظه است. LISTENING با ESTABLISHED متفاوت است؛ SYN_SENT به برقراری ناتمام TCP اشاره دارد. bind صرفاً روی localhost به کلاینت دوردست سرویس نمی‌دهد. ردیف UDP وضعیت TCP ندارد. PID برابر 4 آموزشی است؛ مالک واقعی را بررسی کنید."
+          },
+          {
+            "type": "p",
+            "en": "Read-only; normal user for -ano, process details may require elevation. Do not kill a process solely from its port number. Do not assume an open listener is reachable through a firewall.",
+            "fa": "فقط خواندنی است؛ برای -ano کاربر عادی کافی است اما جزئیات پردازش ممکن است elevation بخواهد. صرفاً از روی شمارهٔ پورت پردازش را خاتمه ندهید. listener باز، عبور از فایروال را تضمین نمی‌کند."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft netstat",
+            "fa": "مستند رسمی: Microsoft netstat",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netstat"
+          },
+          {
+            "type": "h3",
+            "en": "arp -a: inspect IPv4 neighbor mappings",
+            "fa": "arp -a: مشاهدهٔ نگاشت همسایه‌های IPv4",
+            "id": "cmd-arp"
+          },
+          {
+            "type": "p",
+            "en": "Inspect the local IPv4 neighbor cache when a gateway is unreachable or an address appears duplicated. It maps neighbors on the local link, not every remote server.",
+            "fa": "وقتی دروازه قابل دسترس نیست یا نشانی تکراری محتمل است، کش همسایهٔ IPv4 را بررسی کنید. این نگاشت مربوط به همسایه‌های لینک محلی است، نه همهٔ سرورهای دوردست."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: arp -a [IPv4-address] [-N local-interface-IPv4]",
+            "fa": "نحو CMD: arp -a [IPv4-address] [-N local-interface-IPv4]"
+          },
+          {
+            "type": "code",
+            "text": "ping /n 1 192.0.2.1\narp -a 192.0.2.1",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "Interface: 192.0.2.10 --- 0xc\nInternet Address   Physical Address     Type\n192.0.2.1          02-00-5e-10-00-01    dynamic",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "Interface selects the local adapter cache; Type distinguishes dynamic/static entries. A routed server normally uses the gateway MAC. Missing entries can mean no traffic, wrong VLAN or unanswered ARP. A changing MAC requires switch/IPAM checks and may be legitimate HA behavior; it is not proof of spoofing by itself. IPv6 uses neighbor discovery instead.",
+            "fa": "Interface کش رابط محلی را مشخص می‌کند و Type نوع dynamic یا static را نشان می‌دهد. سرور خارج از subnet معمولاً از MAC دروازه استفاده می‌کند. نبود ورودی می‌تواند از نبود ترافیک، VLAN نادرست یا ARP بی‌پاسخ باشد. تغییر MAC نیازمند بررسی سوئیچ و IPAM است و ممکن است از HA مجاز باشد؛ به‌تنهایی جعل را ثابت نمی‌کند. IPv6 از Neighbor Discovery استفاده می‌کند."
+          },
+          {
+            "type": "p",
+            "en": "arp -a is read-only and normally unprivileged. Avoid arp -d or static arp -s during evidence capture; these modify the cache and need elevated access. Do not clear all entries to mask an unresolved duplicate IP.",
+            "fa": "arp -a فقط خواندنی است و معمولاً مجوز ویژه نمی‌خواهد. هنگام ثبت شواهد از arp -d یا arp -s پرهیز کنید؛ این‌ها کش را تغییر می‌دهند و elevation می‌خواهند. برای پنهان‌کردن علت IP تکراری همهٔ ورودی‌ها را پاک نکنید."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft arp",
+            "fa": "مستند رسمی: Microsoft arp",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/arp"
+          },
+          {
+            "type": "h3",
+            "en": "route print: read the routing decision inputs",
+            "fa": "route print: خواندن جدول مسیریابی",
+            "id": "cmd-route-print"
+          },
+          {
+            "type": "p",
+            "en": "Inspect IPv4 routes and interface indexes before adding anything. Use it to identify a VPN route overriding the intended branch path.",
+            "fa": "پیش از افزودن مسیر، جدول IPv4 و index رابط را ببینید. برای شناسایی مسیر VPN که مسیر موردنظر شعبه را تغییر داده مناسب است."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: route print [-4|-6]",
+            "fa": "نحو CMD: route print [-4|-6]"
+          },
+          {
+            "type": "code",
+            "text": "route print -4",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "Interface List\n 12...02 00 5e 10 00 10 ......Ethernet\nNetwork Destination  Netmask        Gateway     Interface    Metric\n0.0.0.0              0.0.0.0        192.0.2.1   192.0.2.10   25",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "The default route is 0.0.0.0/0. More-specific prefixes win before metric comparison; route and interface metrics affect selection among comparable routes. Multiple interfaces are normal. Validate the actual destination with PowerShell route diagnostics rather than deleting every extra default route.",
+            "fa": "مسیر پیش‌فرض 0.0.0.0/0 است. ابتدا prefix اختصاصی‌تر و سپس metric بررسی می‌شود؛ metric مسیر و رابط در انتخاب مسیرهای هم‌ارز اثر دارند. چند رابط طبیعی است. مسیر مقصد واقعی را با تشخیص مسیریابی PowerShell بررسی کنید، نه با حذف همهٔ مسیرهای پیش‌فرض اضافی."
+          },
+          {
+            "type": "p",
+            "en": "Read-only; standard user. route /f clears routes and is not a diagnostic alternative. Record the interface index before any scoped route change.",
+            "fa": "فقط خواندنی است و کاربر عادی کافی است. route /f مسیرها را پاک می‌کند و جایگزین عیب‌یابی نیست. پیش از تغییر محدود مسیر، index رابط را ثبت کنید."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft route_ws2008",
+            "fa": "مستند رسمی: Microsoft route_ws2008",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/route_ws2008"
+          },
+          {
+            "type": "h3",
+            "en": "route add: a controlled temporary route",
+            "fa": "route add: افزودن مسیر موقت کنترل‌شده",
+            "id": "cmd-route-add"
+          },
+          {
+            "type": "p",
+            "en": "Add one nonpersistent IPv4 lab route to test an approved alternative path. Gateway must be reachable on the selected interface.",
+            "fa": "برای آزمون مسیر جایگزین مجاز، یک مسیر IPv4 غیرماندگار در آزمایشگاه اضافه کنید. دروازه باید روی رابط انتخاب‌شده قابل دسترس باشد."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: route add destination mask netmask gateway metric cost if interface-index",
+            "fa": "نحو CMD: route add destination mask netmask gateway metric cost if interface-index"
+          },
+          {
+            "type": "code",
+            "text": "route add 203.0.113.0 mask 255.255.255.0 192.0.2.1 metric 20 if 12\nroute print 203.0.113.*",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "OK!",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "Confirm the route is present and run the same endpoint test. OK only confirms acceptance of the entry, not that the next hop forwards packets. Access denied requires elevation; an invalid interface or off-link gateway requires correcting the recorded topology. Index 12 is a placeholder from this fictional interface list.",
+            "fa": "وجود مسیر را بررسی و آزمون همان مقصد را تکرار کنید. OK فقط پذیرش ورودی را تأیید می‌کند، نه ارسال بسته توسط next hop. Access denied نیازمند elevation و رابط نامعتبر یا دروازهٔ خارج از لینک نیازمند اصلاح توپولوژی ثبت‌شده است. index برابر 12 متعلق به فهرست رابط فرضی این مثال است."
+          },
+          {
+            "type": "p",
+            "en": "MODIFIES routing; elevated CMD, console and approved change required. Do not use /p until persistence is explicitly required. The accompanying route delete card is rollback for this exact new entry; never replace an existing production route without recording it.",
+            "fa": "مسیریابی را تغییر می‌دهد؛ CMD دارای elevation، کنسول و تغییر مجاز لازم است. تا زمانی که ماندگاری صریحاً لازم نشده از /p استفاده نکنید. فرمان route delete بعدی rollback همین ورودی جدید است؛ مسیر موجود عملیاتی را بدون ثبت آن جایگزین نکنید."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft route_ws2008",
+            "fa": "مستند رسمی: Microsoft route_ws2008",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/route_ws2008"
+          },
+          {
+            "type": "h3",
+            "en": "route delete: remove only the added test entry",
+            "fa": "route delete: حذف فقط مسیر آزمایشی افزوده‌شده",
+            "id": "cmd-route-delete"
+          },
+          {
+            "type": "p",
+            "en": "Undo the previous temporary lab route after its test. Match destination, mask, gateway and interface to avoid removing a different route.",
+            "fa": "پس از آزمون، مسیر موقت قبلی را حذف کنید. مقصد، ماسک، دروازه و رابط باید تطبیق داشته باشند تا مسیر دیگری حذف نشود."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: route delete destination mask netmask gateway if interface-index",
+            "fa": "نحو CMD: route delete destination mask netmask gateway if interface-index"
+          },
+          {
+            "type": "code",
+            "text": "route delete 203.0.113.0 mask 255.255.255.0 192.0.2.1 if 12\nroute print -4",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "OK!",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "The test route should be absent afterward; repeat the original connectivity test. Element not found can mean it was never added, already removed or the selector differs. Do not broaden the selector to a wildcard to force success.",
+            "fa": "پس از اجرا مسیر آزمایشی نباید وجود داشته باشد؛ آزمون اتصال اولیه را تکرار کنید. Element not found می‌تواند یعنی مسیر افزوده نشده، قبلاً حذف شده یا مشخصات انتخاب متفاوت است. برای گرفتن پیام موفقیت، انتخاب را با wildcard گسترده نکنید."
+          },
+          {
+            "type": "p",
+            "en": "MODIFIES routing and requires elevated CMD. Removing a route used for remote administration can terminate your session. Keep the exact previous route for rollback if this was an approved production removal.",
+            "fa": "مسیریابی را تغییر می‌دهد و elevation لازم دارد. حذف مسیر مدیریت دوردست ممکن است نشست را قطع کند. اگر حذف عملیاتی مجاز است، مشخصات دقیق مسیر قبلی را برای rollback حفظ کنید."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft route_ws2008",
+            "fa": "مستند رسمی: Microsoft route_ws2008",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/route_ws2008"
+          },
+          {
+            "type": "h3",
+            "en": "getmac: correlate adapter identity with the switch",
+            "fa": "getmac: تطبیق هویت رابط با سوئیچ",
+            "id": "cmd-getmac"
+          },
+          {
+            "type": "p",
+            "en": "Display MAC addresses and verbose interface names for inventory or switch-port correlation. Use the active adapter rather than assuming the first row is Ethernet.",
+            "fa": "برای موجودی یا تطبیق پورت سوئیچ، MAC و نام رابط را به‌صورت verbose ببینید. رابط فعال را انتخاب کنید؛ اولین ردیف الزاماً Ethernet نیست."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: getmac /v /fo list",
+            "fa": "نحو CMD: getmac /v /fo list"
+          },
+          {
+            "type": "code",
+            "text": "getmac /v /fo list",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "Connection Name: Ethernet\nNetwork Adapter: Example Ethernet Adapter\nPhysical Address: 02-00-5E-10-00-10",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "Connection Name maps to the Windows adapter, Physical Address to its current MAC. Disconnected, VPN and virtual adapters may also appear. An unexpected MAC may reflect virtualization or randomized Wi-Fi addressing; reconcile with authorized inventory.",
+            "fa": "Connection Name رابط ویندوز و Physical Address، MAC فعلی آن را نشان می‌دهد. رابط قطع‌شده، VPN و مجازی هم ممکن است ظاهر شوند. MAC غیرمنتظره می‌تواند از مجازی‌سازی یا تصادفی‌سازی Wi-Fi باشد؛ با موجودی معتبر تطبیق دهید."
+          },
+          {
+            "type": "p",
+            "en": "Local read-only query; normal user. Do not use remote /p plaintext credentials or treat MAC identity as authentication. Protect hardware identifiers in exported reports.",
+            "fa": "پرس‌وجوی محلی فقط خواندنی است و کاربر عادی کافی است. برای دسترسی دوردست رمز را با /p وارد نکنید و MAC را احراز هویت ندانید. شناسه‌های سخت‌افزاری گزارش را محافظت کنید."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft getmac",
+            "fa": "مستند رسمی: Microsoft getmac",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/getmac"
+          },
+          {
+            "type": "h3",
+            "en": "hostname: confirm which computer is being tested",
+            "fa": "hostname: تأیید هویت رایانهٔ تحت آزمون",
+            "id": "cmd-hostname"
+          },
+          {
+            "type": "p",
+            "en": "Print the local host name to prevent collecting evidence from the wrong RDP session. Compare with the asset and incident record.",
+            "fa": "نام میزبان محلی را ببینید تا شواهد از نشست RDP اشتباه جمع نشود. با دارایی و پروندهٔ رخداد تطبیق دهید."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: hostname",
+            "fa": "نحو CMD: hostname"
+          },
+          {
+            "type": "code",
+            "text": "hostname",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "BRANCH-PC01",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "The name is not an IP address or proof that DNS is correct. Compare ipconfig /all DNS suffix and nslookup for the registered FQDN. A tool-not-found error calls for checking the command shell, system directory and policy.",
+            "fa": "نام، IP یا تأیید سلامت DNS نیست. پسوند DNS در ipconfig /all و پاسخ nslookup مربوط به FQDN ثبت‌شده را مقایسه کنید. خطای نبود ابزار نیازمند بررسی shell، مسیر سیستم و policy است."
+          },
+          {
+            "type": "p",
+            "en": "Read-only; normal user. hostname does not rename the computer or join a domain. Do not confuse a short host name with a unique fleet-wide identity.",
+            "fa": "فقط خواندنی است و کاربر عادی کافی است. hostname نام رایانه را تغییر نمی‌دهد و آن را عضو دامنه نمی‌کند. نام کوتاه را شناسهٔ یکتای کل سازمان فرض نکنید."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft hostname",
+            "fa": "مستند رسمی: Microsoft hostname",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/hostname"
+          },
+          {
+            "type": "h3",
+            "en": "netsh: read interface and firewall state safely",
+            "fa": "netsh: خواندن امن وضعیت رابط و فایروال",
+            "id": "cmd-netsh"
+          },
+          {
+            "type": "p",
+            "en": "Use the specific show context to inspect IPv4 configuration and firewall profiles. This helps diagnose an unexpected local profile while preserving evidence.",
+            "fa": "از context مشخص show برای دیدن تنظیمات IPv4 و پروفایل فایروال استفاده کنید. این کار برای تشخیص پروفایل محلی غیرمنتظره با حفظ شواهد مناسب است."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: netsh interface ipv4 show config; netsh advfirewall show allprofiles (separate commands)",
+            "fa": "نحو CMD: netsh interface ipv4 show config; netsh advfirewall show allprofiles (separate commands)"
+          },
+          {
+            "type": "code",
+            "text": "netsh interface ipv4 show config\nnetsh advfirewall show allprofiles",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "Configuration for interface \"Ethernet\"\n    DHCP enabled: Yes\nDomain Profile Settings:\nState                                 ON",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "Inspect address/default gateway and the active domain/private/public profile with the system networking UI or PowerShell as needed. State ON means firewall enabled, not that a particular flow is denied. A context not found can mean missing feature/build differences; use netsh ? and context help.",
+            "fa": "نشانی و دروازه و پروفایل فعال domain/private/public را در صورت نیاز با رابط شبکه یا PowerShell بررسی کنید. State ON یعنی فایروال فعال است، نه اینکه جریان خاصی مسدود شده باشد. نبود context می‌تواند از تفاوت بیلد یا قابلیت باشد؛ از netsh ? و راهنمای context استفاده کنید."
+          },
+          {
+            "type": "p",
+            "en": "These show commands are read-only; start as a normal user, elevate only if access policy requires it. netsh int ip reset, winsock reset and advfirewall reset are separate disruptive changes, potentially requiring restart and loss of settings. Do not disable all profiles or export Wi-Fi keys to clear a diagnostic failure.",
+            "fa": "این فرمان‌های show فقط خواندنی‌اند؛ ابتدا کاربر عادی و فقط در صورت الزام policy از elevation استفاده کنید. netsh int ip reset، winsock reset و advfirewall reset تغییرات جداگانه و اختلال‌زا هستند و ممکن است restart و ازبین‌رفتن تنظیمات را در پی داشته باشند. برای رفع شکست آزمون، همهٔ پروفایل‌ها را خاموش یا کلید Wi-Fi را صادر نکنید."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft netsh",
+            "fa": "مستند رسمی: Microsoft netsh",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh"
+          },
+          {
+            "type": "h3",
+            "en": "net use: test authorized SMB access and remove the test mapping",
+            "fa": "net use: آزمون دسترسی مجاز SMB و حذف نگاشت آزمایشی",
+            "id": "cmd-net-use"
+          },
+          {
+            "type": "p",
+            "en": "First list current SMB mappings; then, only for an approved share and unused drive letter, create a temporary mapping in the affected user session. This tests authentication/share access beyond TCP connectivity.",
+            "fa": "ابتدا نگاشت‌های SMB فعلی را ببینید؛ سپس فقط برای share مجاز و حرف درایو آزاد، نگاشت موقت در نشست کاربر آسیب‌دیده بسازید. این کار احراز هویت و دسترسی share را فراتر از اتصال TCP می‌آزماید."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: net use; net use drive: \\\\server\\share * /user:DOMAIN\\user /persistent:no; net use drive: /delete (separately)",
+            "fa": "نحو CMD: net use; net use drive: \\\\server\\share * /user:DOMAIN\\user /persistent:no; net use drive: /delete (separately)"
+          },
+          {
+            "type": "code",
+            "text": "net use\nnet use Z: \\\\files01.corp.example.com\\Operations * /user:CORP\\ops.user /persistent:no\ndir Z:\nnet use Z: /delete",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "Status  Local  Remote\nOK      Z:     \\\\files01.corp.example.com\\Operations",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "The asterisk prompts for the password; do not put the password in a command, script or ticket. OK confirms mapping, while dir checks permitted enumeration, not write permission. Error 5 suggests authorization; 53 network/name path; 67 share name; 1219 conflicting credentials to the same server. Review existing sessions before disconnecting only the approved conflicting mapping.",
+            "fa": "علامت * رمز را تعاملی دریافت می‌کند؛ رمز را در اسکریپت یا تیکت ننویسید. OK نگاشت را تأیید می‌کند و dir مجوز فهرست‌کردن را می‌آزماید، نه نوشتن. خطای 5 به مجوز، 53 به مسیر یا نام شبکه، 67 به نام share و 1219 به تعارض اعتبارنامه برای همان سرور اشاره دارد. پیش از قطع فقط نگاشت متعارض مجاز، نشست‌های موجود را بررسی کنید."
+          },
+          {
+            "type": "p",
+            "en": "net use alone is read-only. Mapping/deletion MODIFIES this user session; normal user usually suffices, with valid share/NTFS rights. Deletion can interrupt open files. Do not run net use * /delete, store credentials with /savecred or switch to IP merely to bypass an identity problem. Never enable SMB1 as a repair.",
+            "fa": "net use بدون پارامتر فقط خواندنی است. ساخت یا حذف نگاشت نشست کاربر را تغییر می‌دهد؛ معمولاً کاربر عادی با مجوز صحیح share و NTFS کافی است. حذف می‌تواند فایل باز را مختل کند. net use * /delete یا /savecred اجرا نکنید و برای دورزدن مشکل هویت به IP تغییر ندهید. SMB1 را برای رفع خطا فعال نکنید."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft windows-commands",
+            "fa": "مستند رسمی: Microsoft windows-commands",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands"
+          },
+          {
+            "type": "h3",
+            "en": "net view: enumerate the named server’s shares",
+            "fa": "net view: مشاهدهٔ shareهای سرور مشخص",
+            "id": "cmd-net-view"
+          },
+          {
+            "type": "p",
+            "en": "Request the resources shared by a known server after DNS and TCP/445 succeed. Use explicit server selection rather than network-wide browsing as a health test.",
+            "fa": "پس از موفقیت DNS و TCP/445، منابع اشتراکی سرور مشخص را بپرسید. به‌جای مرور کل شبکه برای تشخیص سلامت، سرور را صریح انتخاب کنید."
+          },
+          {
+            "type": "p",
+            "en": "CMD syntax: net view \\\\server [ /all ]",
+            "fa": "نحو CMD: net view \\\\server [ /all ]"
+          },
+          {
+            "type": "code",
+            "text": "net view \\\\files01.corp.example.com",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative output excerpt; actual values vary.",
+            "fa": "نمونهٔ آموزشی خروجی؛ مقادیر واقعی متفاوت هستند."
+          },
+          {
+            "type": "code",
+            "text": "Share name   Type   Remark\nOperations   Disk   Operations files",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "Share name is the UNC share component and Type is the resource kind. Enumeration permissions may differ from access to a known share. Error 5 requires identity/authorization checks; 53 suggests name/path/service checks. A failed browse list does not justify enabling obsolete Computer Browser or SMB1 services.",
+            "fa": "Share name بخش share در UNC و Type نوع منبع است. مجوز مشاهدهٔ فهرست ممکن است با دسترسی به share مشخص متفاوت باشد. خطای 5 نیازمند بررسی هویت یا مجوز و 53 نیازمند بررسی نام، مسیر و سرویس است. شکست فهرست مرور، توجیه فعال‌کردن Computer Browser قدیمی یا SMB1 نیست."
+          },
+          {
+            "type": "p",
+            "en": "Read-only request; normal user with server enumeration rights. Output can disclose share names; do not enumerate servers outside authorized scope. It neither maps a drive nor tests application write operations.",
+            "fa": "درخواست فقط خواندنی است؛ کاربر عادی با مجوز مشاهدهٔ منابع سرور کافی است. خروجی نام shareها را افشا می‌کند؛ خارج از دامنهٔ مجاز enumeration انجام ندهید. این فرمان درایو نگاشت نمی‌کند و نوشتن برنامه را نمی‌آزماید."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft windows-commands",
+            "fa": "مستند رسمی: Microsoft windows-commands",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands"
+          },
+          {
+            "type": "h3",
+            "en": "Test-NetConnection: PowerShell TCP and route diagnostics",
+            "fa": "Test-NetConnection: تشخیص TCP و مسیر در PowerShell",
+            "id": "cmd-test-netconnection"
+          },
+          {
+            "type": "p",
+            "en": "Purpose: test one TCP service port or diagnose route selection. Use Windows PowerShell 5.1, not CMD. Syntax: Test-NetConnection -ComputerName host -Port number -InformationLevel Detailed; route diagnosis is a separate parameter set and cannot be combined with -Port.",
+            "fa": "هدف: آزمون یک پورت سرویس TCP یا تشخیص انتخاب مسیر. در Windows PowerShell 5.1 اجرا کنید، نه CMD. نحو: Test-NetConnection -ComputerName host -Port number -InformationLevel Detailed؛ تشخیص مسیر parameter set مستقلی دارد و با -Port ترکیب نمی‌شود."
+          },
+          {
+            "type": "code",
+            "text": "$Target = 'files01.corp.example.com'\nResolve-DnsName $Target -Type A\nTest-NetConnection -ComputerName $Target -Port 445 -InformationLevel Detailed\nTest-NetConnection -ComputerName '198.51.100.20' -DiagnoseRouting -InformationLevel Detailed\nGet-NetIPConfiguration\nGet-SmbConnection",
+            "language": "powershell"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative TCP output excerpt; route diagnostics return different fields.",
+            "fa": "نمونهٔ آموزشی کوتاه خروجی TCP؛ خروجی تشخیص مسیر فیلدهای دیگری دارد."
+          },
+          {
+            "type": "code",
+            "text": "ComputerName     : files01.corp.example.com\nRemoteAddress    : 198.51.100.20\nRemotePort       : 445\nInterfaceAlias   : Ethernet\nSourceAddress    : 192.0.2.10\nTcpTestSucceeded : True",
+            "language": "text"
+          },
+          {
+            "type": "p",
+            "en": "RemoteAddress is the actual resolved target; SourceAddress and InterfaceAlias reveal the selected source/VPN path. TcpTestSucceeded tests TCP establishment, not SMB authorization or TLS/application health. False may mean timeout, rejection, no listener or wrong route; compare with server listener and firewall logs. The route parameter set reports SelectedNetRoute and selected source. DNS resolution warnings call for resolver checks before interpreting a port failure.",
+            "fa": "RemoteAddress مقصد resolve‌شدهٔ واقعی است؛ SourceAddress و InterfaceAlias مبدأ و مسیر احتمالی VPN را نشان می‌دهند. TcpTestSucceeded برقراری TCP را می‌آزماید، نه مجوز SMB یا سلامت TLS و برنامه. False ممکن است از timeout، رد اتصال، نبود listener یا مسیر نادرست باشد؛ با listener سرور و لاگ فایروال مقایسه کنید. parameter set مسیر، SelectedNetRoute و مبدأ انتخابی را نشان می‌دهد. اخطار resolve نام نیازمند بررسی DNS پیش از تفسیر شکست پورت است."
+          },
+          {
+            "type": "p",
+            "en": "Read-only probes; standard user normally suffices. Confirm Get-Command Test-NetConnection and Get-Module -ListAvailable NetTCPIP when unavailable. Installing generic PowerShell on another OS does not supply this Windows module. Query only permitted endpoints and do not interpret a successful port probe as permission to access a share.",
+            "fa": "آزمون‌های فقط خواندنی هستند و معمولاً کاربر عادی کافی است. اگر فرمان موجود نیست، Get-Command Test-NetConnection و Get-Module -ListAvailable NetTCPIP را بررسی کنید. نصب PowerShell عمومی روی سیستم‌عامل دیگر این ماژول ویندوزی را فراهم نمی‌کند. فقط مقصد مجاز را بپرسید و پورت موفق را مجوز دسترسی به share ندانید."
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft Test-NetConnection",
+            "fa": "مستند رسمی: Microsoft Test-NetConnection",
+            "url": "https://learn.microsoft.com/en-us/powershell/module/nettcpip/test-netconnection?view=windowsserver2025-ps"
+          },
+          {
+            "type": "h3",
+            "en": "Capture evidence without changing the network",
+            "fa": "ثبت شواهد بدون تغییر شبکه"
+          },
+          {
+            "type": "p",
+            "en": "Run this separate PowerShell block after setting Target. It creates a new troubleshooting directory under your user TEMP location. Protect the reports and record the actual command exit status; success creating a report is not success of the contained network probe.",
+            "fa": "این بلوک مستقل PowerShell را پس از تنظیم Target اجرا کنید. پوشهٔ جدیدی برای عیب‌یابی در TEMP کاربر می‌سازد. گزارش‌ها را محافظت و وضعیت خروج واقعی فرمان را ثبت کنید؛ موفقیت ساخت فایل گزارش به معنی موفقیت آزمون شبکهٔ درون آن نیست."
+          },
+          {
+            "type": "code",
+            "text": "$Target = 'files01.corp.example.com'\n$ReportPath = Join-Path $env:TEMP ('Network-' + (Get-Date -Format 'yyyyMMdd-HHmmss'))\nNew-Item -ItemType Directory -Path $ReportPath -ErrorAction Stop | Out-Null\nipconfig /all | Out-File (Join-Path $ReportPath 'ipconfig.txt') -Encoding utf8\nroute print | Out-File (Join-Path $ReportPath 'routes.txt') -Encoding utf8\nTest-NetConnection $Target -Port 445 | Export-Clixml (Join-Path $ReportPath 'tcp445.xml')",
+            "language": "powershell"
+          }
+        ],
+        "enterprise-troubleshooting": [
+          {
+            "type": "h3",
+            "en": "DNS failure",
+            "fa": "خرابی DNS"
+          },
+          {
+            "type": "code",
+            "text": "nslookup -type=A files01.corp.example.com 192.0.2.53\nipconfig /displaydns",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "If the configured resolver times out, check resolver reachability and DNS service/ACLs. NXDOMAIN requires record/zone/FQDN checks. If direct server queries are right but the application uses an old IP, preserve then clear the client cache and inspect application caching. Do not flush every machine before comparing evidence.",
+            "fa": "اگر resolver تنظیم‌شده timeout می‌دهد، مسیر، سرویس DNS و ACL را بررسی کنید. NXDOMAIN نیازمند بررسی رکورد، zone و FQDN است. اگر پاسخ مستقیم درست ولی IP برنامه قدیمی است، ابتدا شواهد را حفظ و سپس کش کلاینت و برنامه را بررسی کنید؛ بدون مقایسهٔ شواهد کش همهٔ دستگاه‌ها را پاک نکنید."
+          },
+          {
+            "type": "h3",
+            "en": "No connectivity or wrong gateway",
+            "fa": "قطع ارتباط یا دروازهٔ نادرست"
+          },
+          {
+            "type": "code",
+            "text": "ipconfig\nroute print -4\nping /n 3 192.0.2.1\narp -a 192.0.2.1",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "An off-subnet/wrong gateway or absent default route explains remote failures. If even the local gateway has no neighbor entry after traffic, inspect link, VLAN and switch path. If gateway works but remote TCP fails, continue with route and server checks. Correct the DHCP scope or authoritative static configuration, not a random client route.",
+            "fa": "دروازهٔ خارج از subnet یا نادرست و نبود default route علت محتمل خرابی مقصد دوردست است. اگر پس از ترافیک حتی دروازهٔ محلی neighbor ندارد، لینک، VLAN و سوئیچ را بررسی کنید. اگر دروازه سالم و TCP دوردست ناموفق است، مسیر و سرور را بررسی کنید. Scope DHCP یا منبع تنظیمات ثابت را اصلاح کنید، نه یک مسیر تصادفی کلاینت."
+          },
+          {
+            "type": "h3",
+            "en": "Unexpected routing or duplicate IP",
+            "fa": "مسیر غیرمنتظره یا IP تکراری"
+          },
+          {
+            "type": "code",
+            "text": "route print -4\ntracert /d /h 15 198.51.100.20\narp -a",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Compare selected source/interface through the separate PowerShell route diagnostic. A more-specific VPN route can override the branch default. For suspected duplicate IP, compare neighbor MACs with switch tables and IPAM over time; verify HA/virtual MAC behavior. Route deletion and ARP clearing destroy evidence and are not the first step.",
+            "fa": "مبدأ و رابط انتخابی را با تشخیص مستقل مسیر در PowerShell مقایسه کنید. مسیر اختصاصی‌تر VPN می‌تواند default شعبه را کنار بزند. برای IP تکراری، MAC همسایه را در طول زمان با جدول سوئیچ و IPAM مقایسه و رفتار HA یا MAC مجازی را بررسی کنید. حذف مسیر و پاک‌کردن ARP شواهد را از بین می‌برد و اقدام اول نیست."
+          },
+          {
+            "type": "h3",
+            "en": "TCP succeeds but SMB fails",
+            "fa": "TCP موفق ولی SMB ناموفق"
+          },
+          {
+            "type": "code",
+            "text": "net view \\\\files01.corp.example.com\nnet use",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "In PowerShell first test TCP/445; on the file server inspect netstat -ano. If TCP passes, use the approved temporary mapping to check identity and share/NTFS permissions. Decode 5/53/67/1219 without clearing all sessions. A hostname-to-IP substitution can alter Kerberos/SPN behavior, so do not treat it as an equivalent authorization test.",
+            "fa": "ابتدا در PowerShell پورت TCP/445 و روی فایل‌سرور netstat -ano را بررسی کنید. اگر TCP موفق است، با نگاشت موقت مجاز، هویت و مجوزهای share و NTFS را بررسی کنید. خطاهای 5/53/67/1219 را بدون پاک‌کردن همهٔ نشست‌ها تحلیل کنید. تغییر نام به IP می‌تواند رفتار Kerberos و SPN را عوض کند و آزمون مجوز معادل نیست."
+          },
+          {
+            "type": "h3",
+            "en": "Latency and packet loss",
+            "fa": "تأخیر و افت بسته"
+          },
+          {
+            "type": "code",
+            "text": "ping /n 20 /w 1000 198.51.100.20\npathping /n /q 20 /p 250 198.51.100.20",
+            "language": "batch"
+          },
+          {
+            "type": "p",
+            "en": "Capture at incident time from the affected subnet. Compare destination loss/latency with application telemetry and switch error counters. Isolated silent/slow intermediate hops can be ICMP rate limiting. Persistent loss extending to the destination needs path investigation; TCP retry and application logs establish actual user impact.",
+            "fa": "هنگام رخداد از subnet آسیب‌دیده نمونه بگیرید. افت و تأخیر مقصد را با آمار برنامه و خطای سوئیچ مقایسه کنید. hop میانی کند یا بی‌پاسخ منفرد می‌تواند از محدودسازی ICMP باشد. افتی که تا مقصد ادامه دارد نیازمند بررسی مسیر است؛ retryهای TCP و لاگ برنامه اثر واقعی بر کاربر را مشخص می‌کنند."
+          }
+        ],
+        "enterprise-sources": [
+          {
+            "type": "reference",
+            "en": "Microsoft Windows command applicability",
+            "fa": "مستند رسمی: Microsoft Windows command applicability",
+            "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands"
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft Windows lifecycle",
+            "fa": "مستند رسمی: Microsoft Windows lifecycle",
+            "url": "https://learn.microsoft.com/en-us/lifecycle/faq/windows"
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft net use (legacy syntax)",
+            "fa": "مستند رسمی: Microsoft net use (legacy syntax)",
+            "url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/gg651155(v=ws.11)"
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft net view (legacy syntax)",
+            "fa": "مستند رسمی: Microsoft net view (legacy syntax)",
+            "url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/hh875576(v=ws.11)"
+          },
+          {
+            "type": "reference",
+            "en": "Microsoft error code 1219",
+            "fa": "مستند رسمی: Microsoft error code 1219",
+            "url": "https://learn.microsoft.com/en-us/windows/win32/debug/system-error-codes--1000-1299-"
+          }
+        ]
+      },
+      "replace_sections": [
+        "enterprise-installation"
+      ],
+      "approved_section_text_hashes": {
+        "enterprise-installation": [
+          "1d1b003a3795e72acd0a85aa17414f426870c44f9827934c451f287e485d0d85"
+        ]
+      }
+    },
+    "linux-cli-common-commands": {
+      "issues": [
+        "Package names existed but the installation and availability checks were missing.",
+        "Common CLI article lacked basic filesystem practice and field-by-field operational interpretation.",
+        "DNS, routing and HTTP error interpretation was incomplete.",
+        "Missing primary tool references."
+      ],
+      "sections": {
+        "enterprise-prerequisites": [
+          {
+            "type": "h3",
+            "en": "Install missing diagnostic tools, not a full system upgrade",
+            "fa": "نصب ابزار تشخیصی موردنیاز، نه ارتقای کامل سیستم"
+          },
+          {
+            "type": "p",
+            "en": "On the stated Ubuntu 24.04 baseline, the commands below install the packages used here. Installation changes the host and requires sudo, approved repositories and a change window; skip packages already present. apt update refreshes indexes, not installed package versions. lsof and dnsutils may be absent from minimal images.",
+            "fa": "روی Ubuntu 24.04 اعلام‌شده، فرمان‌های زیر بسته‌های این راهنما را نصب می‌کنند. نصب میزبان را تغییر می‌دهد و sudo، مخزن مجاز و بازهٔ تغییر لازم دارد؛ بسته‌های موجود را دوباره نصب نکنید. apt update فهرست مخزن را تازه می‌کند، نه نسخهٔ بسته‌های نصب‌شده را. lsof و dnsutils ممکن است در image حداقلی موجود نباشند."
+          },
+          {
+            "type": "code",
+            "text": "sudo apt-get update\nsudo apt-get install -y procps iproute2 curl lsof dnsutils\ncommand -v vmstat ss curl lsof dig\ndpkg-query -W procps iproute2 curl lsof dnsutils",
+            "language": "bash"
+          },
+          {
+            "type": "p",
+            "en": "Expected: command -v prints executable paths and dpkg-query reports installed versions. A missing path identifies an unavailable tool; repository/signature errors require repository and clock checks, not disabling signature validation.",
+            "fa": "انتظار می‌رود command -v مسیر برنامه‌ها و dpkg-query نسخهٔ نصب‌شده را نشان دهد. نبود مسیر یعنی ابزار موجود نیست؛ خطای مخزن یا امضا نیازمند بررسی مخزن و ساعت است، نه غیرفعال‌کردن اعتبارسنجی امضا."
+          }
+        ],
+        "enterprise-installation": [
+          {
+            "type": "h3",
+            "en": "Practice filesystem commands in a disposable directory",
+            "fa": "تمرین فرمان‌های فایل در پوشهٔ آزمایشی"
+          },
+          {
+            "type": "p",
+            "en": "pwd shows location; ls -lah exposes hidden entries, mode, owner and human-readable sizes; stat reports exact bytes, inode and timestamps. cp -a preserves attributes, mv changes a path, grep -n prints matching line numbers, head/tail limit evidence and find limits traversal. The following block writes only inside a newly created TEMP directory. It does not delete files or alter service configuration.",
+            "fa": "pwd محل فعلی، ls -lah ورودی مخفی، مجوز، مالک و اندازهٔ خوانا، و stat بایت دقیق، inode و زمان‌ها را نشان می‌دهد. cp -a ویژگی‌ها را حفظ، mv مسیر را تغییر، grep -n شمارهٔ خط مطابق، head و tail شواهد محدود و find محدودهٔ پیمایش را کنترل می‌کنند. بلوک زیر فقط داخل پوشهٔ TEMP جدید می‌نویسد؛ فایل را حذف و تنظیمات سرویس را تغییر نمی‌دهد."
+          },
+          {
+            "type": "code",
+            "text": "LabDir=$(mktemp -d)\ncd -- \"$LabDir\" || exit 1\npwd\nprintf 'health=ok\\nport=8080\\n' > app.conf\nls -lah\nstat -- app.conf\ncp -a -- app.conf app.conf.before\nmv -- app.conf.before app.conf.snapshot\ngrep -n -- 'port=' app.conf\nhead -n 2 -- app.conf\ntail -n 1 -- app.conf\nfind . -maxdepth 1 -type f -name '*.conf' -print\ntar -czf config-demo.tar.gz -- app.conf\ntar -tzf config-demo.tar.gz",
+            "language": "bash"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative excerpt: grep reports 2:port=8080 and tar lists app.conf. grep exit 1 means no match, while exit 2 means an error. ls mode bits and stat owner identify access controls; a successful read does not prove write permission. cp/mv can overwrite existing destinations, so use fresh paths and examine them first. Leave the demo directory for inspection; do not teach rm -rf as a routine repair.",
+            "fa": "نمونهٔ آموزشی: grep مقدار 2:port=8080 و tar نام app.conf را نشان می‌دهد. exit برابر 1 در grep یعنی مطابقی نیست و 2 یعنی خطا. mode در ls و مالک در stat کنترل دسترسی را نشان می‌دهند؛ خواندن موفق، مجوز نوشتن را اثبات نمی‌کند. cp و mv ممکن است مقصد موجود را بازنویسی کنند؛ مسیر جدید و بررسی‌شده استفاده کنید. پوشهٔ تمرین را برای بررسی نگه دارید؛ rm -rf راهکار معمول تعمیر نیست."
+          },
+          {
+            "type": "h3",
+            "en": "Read CPU, memory and storage fields correctly",
+            "fa": "تفسیر صحیح فیلدهای CPU، حافظه و ذخیره‌سازی"
+          },
+          {
+            "type": "p",
+            "en": "For the earlier vmstat 1 5 command, r is runnable tasks, b blocked tasks, si/so swap transfer, and us/sy/id/wa CPU time categories. Sustained wa plus application latency warrants storage investigation; it does not identify a failed disk. Compare uptime load with processor count using nproc. free available estimates memory obtainable without swapping; low free alone is not exhaustion. df -hT reports mounted filesystem space; df -i reports inode exhaustion. ps %CPU is a process lifetime measure, not the same sampling interval as vmstat.",
+            "fa": "در vmstat 1 5 بالا، r کار آمادهٔ اجرا، b کار مسدود، si و so تبادل swap و us/sy/id/wa دسته‌های زمان CPU هستند. wa پایدار همراه تأخیر برنامه نیازمند بررسی ذخیره‌سازی است، نه اثبات خرابی دیسک. load در uptime را با تعداد پردازندهٔ nproc مقایسه کنید. available در free حافظهٔ قابل دسترس بدون swap را برآورد می‌کند؛ free کم به‌تنهایی کمبود نیست. df -hT فضای فایل‌سیستم mounted و df -i مصرف inode را نشان می‌دهد. %CPU در ps معیار عمر پردازش است و بازهٔ نمونه‌برداری vmstat نیست."
+          },
+          {
+            "type": "code",
+            "text": "nproc\nfindmnt -T /var/log\nnamei -l /var/log/nginx/error.log",
+            "language": "bash"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative interpretation: Use% 98 with IUse% 20 indicates byte pressure rather than inode pressure. findmnt identifies the filesystem containing the path. namei shows ownership/mode of every directory component: a denied parent search permission can prevent access even when the final file is readable. These checks are read-only; protected path traversal may need sudo.",
+            "fa": "تفسیر آموزشی: Use% برابر 98 با IUse% برابر 20 نشان‌دهندهٔ فشار بایت است، نه inode. findmnt فایل‌سیستم مسیر را مشخص می‌کند. namei مالک و mode هر جزء مسیر را نشان می‌دهد؛ نداشتن مجوز جست‌وجوی پوشهٔ والد حتی با فایل نهایی خواندنی مانع دسترسی می‌شود. این بررسی‌ها فقط خواندنی هستند؛ مسیر محافظت‌شده ممکن است sudo بخواهد."
+          }
+        ],
+        "enterprise-troubleshooting": [
+          {
+            "type": "h3",
+            "en": "Resolve the failing layer before touching a service",
+            "fa": "یافتن لایهٔ خراب پیش از تغییر سرویس"
+          },
+          {
+            "type": "code",
+            "text": "dig +time=2 +tries=1 app.example.com A\nip route get 203.0.113.20\ncurl --connect-timeout 3 --max-time 10 --fail --show-error --head https://app.example.com/health",
+            "language": "bash"
+          },
+          {
+            "type": "p",
+            "en": "Replace the documentation host/address with an authorized endpoint. dig status NXDOMAIN concerns name existence; timeout concerns resolver response. ip route get prints the chosen via/dev/src and can reveal the wrong VPN/interface. curl exit 6 is resolution, 7 connection, 28 timeout, 22 HTTP failure with --fail and 60 certificate verification. HEAD must be supported by that health endpoint; use its documented request method otherwise. Do not use -k to turn a certificate error into acceptance.",
+            "fa": "نام و IP مستندسازی را با مقصد مجاز جایگزین کنید. status برابر NXDOMAIN در dig مربوط به وجود نام و timeout مربوط به پاسخ resolver است. ip route get مسیر via/dev/src را نشان می‌دهد و ممکن است VPN یا رابط نادرست را مشخص کند. خروجی curl با کد 6 خطای نام، 7 اتصال، 28 timeout، 22 خطای HTTP همراه --fail و 60 اعتبارسنجی گواهی است. endpoint سلامت باید HEAD را پشتیبانی کند؛ در غیر این صورت روش درخواست مستند آن را اجرا کنید. با -k خطای گواهی را به پذیرش تبدیل نکنید."
+          }
+        ],
+        "enterprise-sources": [
+          {
+            "type": "reference",
+            "en": "GNU Coreutils",
+            "fa": "مستند رسمی: GNU Coreutils",
+            "url": "https://www.gnu.org/software/coreutils/manual/coreutils.html"
+          },
+          {
+            "type": "reference",
+            "en": "Ubuntu vmstat",
+            "fa": "مستند رسمی: Ubuntu vmstat",
+            "url": "https://manpages.ubuntu.com/manpages/noble/en/man8/vmstat.8.html"
+          },
+          {
+            "type": "reference",
+            "en": "Ubuntu lsof",
+            "fa": "مستند رسمی: Ubuntu lsof",
+            "url": "https://manpages.ubuntu.com/manpages/noble/man8/lsof.8.html"
+          },
+          {
+            "type": "reference",
+            "en": "curl exit codes",
+            "fa": "مستند رسمی: curl exit codes",
+            "url": "https://curl.se/docs/manpage.html"
+          }
+        ]
+      }
+    },
+    "install-dfs-server-windows-server": {
+      "issues": [
+        "Hash-based initial-sync acceptance was described but no usable canary commands were provided.",
+        "Missing verification command reference."
+      ],
+      "sections": {
+        "enterprise-monitoring": [
+          {
+            "type": "h3",
+            "en": "A closed canary file and both-direction backlog",
+            "fa": "فایل آزمایشی بسته‌شده و backlog دوطرفه"
+          },
+          {
+            "type": "p",
+            "en": "Use a delegated administrator with write access to both test shares. Run the first two lines once after configuring the group, then wait for initial sync and run the comparison block repeatedly. No output parity is assumed. The file name is unique and data is a disposable canary. Keep FS02 referrals Offline and direct user writes restricted until acceptance.",
+            "fa": "با مدیر دارای دسترسی واگذارشده و مجوز نوشتن روی هر دو share آزمایشی اجرا کنید. دو خط اول را پس از ساخت گروه یک بار اجرا، سپس برای همگام‌سازی اولیه صبر و بلوک مقایسه را تکرار کنید. برابر بودن خروجی فرض نشده است. نام فایل یکتا و محتوا آزمایشی است. تا پذیرش، referral مربوط به FS02 را Offline و نوشتن مستقیم کاربر را محدود نگه دارید."
+          },
+          {
+            "type": "code",
+            "text": "$CanaryName = 'dfsr-canary-' + [guid]::NewGuid().ToString('N') + '.txt'\nSet-Content -LiteralPath (Join-Path '\\\\FS01\\Data' $CanaryName) -Value 'DFS replication acceptance' -Encoding UTF8 -ErrorAction Stop\n# Keep CanaryName in this session; run below after initial sync.\n$SourceHash = (Get-FileHash -LiteralPath (Join-Path '\\\\FS01\\Data' $CanaryName) -Algorithm SHA256 -ErrorAction Stop).Hash\n$TargetHash = (Get-FileHash -LiteralPath (Join-Path '\\\\FS02\\Data' $CanaryName) -Algorithm SHA256 -ErrorAction Stop).Hash\n$SourceHash -eq $TargetHash\nGet-DfsrBacklog -GroupName 'Company-Data' -FolderName 'Data' -SourceComputerName 'FS01' -DestinationComputerName 'FS02' -Verbose\nGet-DfsrBacklog -GroupName 'Company-Data' -FolderName 'Data' -SourceComputerName 'FS02' -DestinationComputerName 'FS01' -Verbose",
+            "language": "powershell"
+          },
+          {
+            "type": "p",
+            "en": "Expected acceptance: hash comparison True, no pending canary and both backlogs drained. A missing target file or unequal hash is failure; do not enable referrals yet. Verbose backlog reports total count beyond the limited file list. Check DFS Replication events for initial-sync completion, staging pressure and communication failures. This checks one closed file, not every ACL or whole-data consistency; validate permissions and an independent restore separately.",
+            "fa": "معیار پذیرش: مقایسهٔ hash برابر True، نبود فایل آزمایشی معطل و تخلیهٔ backlog هر دو جهت. فایل مقصد ناموجود یا hash متفاوت شکست آزمون است؛ referral را هنوز فعال نکنید. خروجی verbose تعداد کل backlog را فراتر از فهرست محدود فایل‌ها نشان می‌دهد. رخدادهای DFS Replication را برای پایان همگام‌سازی، فشار staging و خرابی ارتباط بررسی کنید. این آزمون یک فایل بسته است، نه همهٔ ACLها یا کل داده؛ مجوز و بازیابی مستقل را جداگانه بررسی کنید."
+          }
+        ],
+        "enterprise-sources": [
+          {
+            "type": "reference",
+            "en": "Microsoft Get-DfsrBacklog",
+            "fa": "مستند رسمی: Microsoft Get-DfsrBacklog",
+            "url": "https://learn.microsoft.com/en-us/powershell/module/dfsr/get-dfsrbacklog"
+          }
+        ]
+      }
+    },
+    "install-mikrotik-chr-vmware-workstation": {
+      "issues": [
+        "Service hardening was prose-only.",
+        "Forwarding verification, NAT evidence and export commands were missing.",
+        "Service syntax reference needed."
+      ],
+      "sections": {
+        "enterprise-installation": [
+          {
+            "type": "h3",
+            "en": "Restrict management services on the isolated lab",
+            "fa": "محدودکردن سرویس مدیریت در آزمایشگاه جدا"
+          },
+          {
+            "type": "p",
+            "en": "After the original fresh-lab firewall and an independent console test, restrict SSH/WinBox to the actual lab LAN and disable unused legacy management services. These commands modify service admission, so verify a new LAN session before closing the old one. Replace the sample subnet; do not apply to a router whose management arrives through WAN.",
+            "fa": "پس از فایروال آزمایشگاه تازه و آزمون کنسول مستقل، SSH و WinBox را به LAN واقعی آزمایشگاه محدود و مدیریت قدیمی غیرلازم را غیرفعال کنید. این فرمان‌ها ورود به سرویس را تغییر می‌دهند؛ پیش از بستن نشست قبلی، ورود LAN جدید را بررسی کنید. subnet را جایگزین و روی روتری با مدیریت از WAN اجرا نکنید."
+          },
+          {
+            "type": "code",
+            "text": "/ip service set ssh address=10.99.0.0/24\n/ip service set winbox address=10.99.0.0/24\n/ip service set telnet disabled=yes\n/ip service set ftp disabled=yes\n/ip service set www disabled=yes\n/ip service set api disabled=yes\n/ip service set api-ssl disabled=yes\n/ip service print",
+            "language": "routeros"
+          },
+          {
+            "type": "p",
+            "en": "Expected: only approved management services remain enabled with the scoped address. A restricted service does not create a firewall allow. A new management timeout requires checking both service address and input rules through the console.",
+            "fa": "انتظار می‌رود فقط سرویس‌های مدیریت مجاز با address محدود فعال بمانند. محدودسازی سرویس، قاعدهٔ allow فایروال نمی‌سازد. timeout نشست جدید نیازمند بررسی address سرویس و قواعد input از کنسول است."
+          }
+        ],
+        "enterprise-monitoring": [
+          {
+            "type": "h3",
+            "en": "Verify forwarding from a client, not only router ping",
+            "fa": "آزمون forwarding از کلاینت، نه فقط ping روتر"
+          },
+          {
+            "type": "code",
+            "text": "/ip address print detail\n/ip route print detail\n/ip firewall nat print stats\n/ip firewall filter print stats\n/interface ethernet print stats\n/system resource print\n/export file=chr-accepted-lab",
+            "language": "routeros"
+          },
+          {
+            "type": "p",
+            "en": "From the client VM, verify its LAN address, gateway 10.99.0.1 and configured resolver, then request an authorized Internet/test service. Forward and NAT counters should rise for fresh client connections. Router ping uses a different chain and cannot prove client NAT. Compare interface drops, CPU and the earlier license output before diagnosing a throughput cap. The export writes a router file; download it outside the VM and protect it.",
+            "fa": "در VM کلاینت، IP مربوط به LAN، دروازهٔ 10.99.0.1 و resolver تنظیم‌شده را بررسی و سپس سرویس اینترنت یا آزمایشی مجاز را درخواست کنید. شمارندهٔ forward و NAT برای اتصال جدید کلاینت باید افزایش یابد. ping خود روتر chain متفاوتی دارد و NAT کلاینت را ثابت نمی‌کند. پیش از تشخیص محدودیت سرعت، drop رابط، CPU و خروجی license قبلی را مقایسه کنید. export فایل روتر می‌نویسد؛ آن را خارج VM دانلود و محافظت کنید."
+          }
+        ],
+        "enterprise-sources": [
+          {
+            "type": "reference",
+            "en": "MikroTik IP Services",
+            "fa": "مستند رسمی: MikroTik IP Services",
+            "url": "https://help.mikrotik.com/docs/spaces/ROS/pages/103841820/Services"
+          }
+        ]
+      }
+    },
+    "install-vmware-esxi-vmware-workstation-vmcisr": {
+      "issues": [
+        "VMCISr root-cause instructions lacked actual log collection commands."
+      ],
+      "sections": {
+        "enterprise-troubleshooting": [
+          {
+            "type": "h3",
+            "en": "Collect the exact power-on failure on the Windows host",
+            "fa": "ثبت خطای دقیق روشن‌شدن روی میزبان ویندوز"
+          },
+          {
+            "type": "p",
+            "en": "Replace the path with this powered-off VM’s actual folder. Read its log before editing VMX. The block is Windows PowerShell, runs on the Workstation host and makes no VM configuration change. A missing vmware.log calls for checking the actual VM folder and most recent power-on attempt.",
+            "fa": "مسیر را با پوشهٔ واقعی همین VM خاموش جایگزین کنید. پیش از ویرایش VMX لاگ را بخوانید. بلوک در Windows PowerShell میزبان Workstation اجرا می‌شود و تنظیمات VM را تغییر نمی‌دهد. نبود vmware.log نیازمند بررسی پوشهٔ واقعی و آخرین تلاش روشن‌شدن است."
+          },
+          {
+            "type": "code",
+            "text": "$VmFolder = 'D:\\LabVMs\\NestedESXi'\nGet-ChildItem -LiteralPath $VmFolder -Filter 'vmware*.log' | Select-Object Name,Length,LastWriteTime\nGet-Content -LiteralPath (Join-Path $VmFolder 'vmware.log') -Tail 100\nSelect-String -LiteralPath (Join-Path $VmFolder 'vmware.log') -Pattern 'VMCISr','VMCI','VT-x','AMD-V','MonitorMode'",
+            "language": "powershell"
+          },
+          {
+            "type": "p",
+            "en": "Expected: timestamped context around the actual failed module or CPU virtualization limitation. No match is not proof of support. Match the exact host, Workstation and ESXi builds to the vendor KB; preserve a powered-off VMX copy before any documented workaround and undo only that change if it fails. Never blindly delete VMCI entries or disable host security controls.",
+            "fa": "انتظار می‌رود زمینهٔ دارای زمان مربوط به ماژول خراب یا محدودیت مجازی‌سازی CPU پیدا شود. نبود عبارت، پشتیبانی را ثابت نمی‌کند. بیلد دقیق میزبان، Workstation و ESXi را با KB سازنده تطبیق دهید؛ پیش از workaround مستند، کپی VMX خاموش را حفظ و در صورت شکست فقط همان تغییر را برگردانید. VMCI را کورکورانه حذف یا امنیت میزبان را غیرفعال نکنید."
+          }
+        ]
+      }
+    },
+    "vmware-esxi-8-installation-basic-configuration": {
+      "issues": [
+        "NTP configuration was requested but only read-only inspection was supplied.",
+        "NTP configuration reference needed."
+      ],
+      "sections": {
+        "enterprise-installation": [
+          {
+            "type": "h3",
+            "en": "Configure and verify ESXi 8 NTP explicitly",
+            "fa": "تنظیم و بررسی صریح NTP در ESXi 8"
+          },
+          {
+            "type": "p",
+            "en": "In Host Client, Manage → System → Time & date, edit NTP settings and approved servers/start policy. Alternatively use the following root ESXi Shell change during an approved window. Replace both documentation addresses with real reachable NTP servers. Review possible clock correction against running workloads first; do not run host configuration changes without console access.",
+            "fa": "در Host Client از Manage → System → Time & date تنظیمات NTP، سرورهای مجاز و start policy را ویرایش کنید. روش جایگزین فرمان زیر در ESXi Shell با root در بازهٔ تغییر مجاز است. هر دو IP مستندسازی را با NTP واقعی و قابل دسترس جایگزین کنید. اثر تصحیح ساعت بر workload را ابتدا بررسی کنید؛ بدون کنسول مستقل تنظیم میزبان را تغییر ندهید."
+          },
+          {
+            "type": "code",
+            "text": "esxcli system ntp get\nesxcli system ntp set -s 192.0.2.53 -s 192.0.2.54 -e 1\nesxcli system ntp get",
+            "language": "shell"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative acceptance fields are Enabled: true and Time Synchronized: true; synchronization is not immediate. Enabled alone is insufficient. If unsynchronized, inspect source availability, UDP/123 path, server quality and VMkernel routing. ESXi 7.0 U3 and later use ConfigStore-backed esxcli settings: editing ntp.conf alone is not a reliable persistent configuration.",
+            "fa": "فیلدهای آموزشی پذیرش Enabled: true و Time Synchronized: true هستند؛ همگام‌سازی فوری نیست. Enabled به‌تنهایی کافی نیست. در حالت ناهماهنگ، منبع، مسیر UDP/123، کیفیت سرور و مسیریابی VMkernel را بررسی کنید. ESXi از 7.0 U3 به بعد تنظیمات esxcli مبتنی بر ConfigStore دارد؛ ویرایش صرف ntp.conf روش قابل اتکای ماندگار نیست."
+          }
+        ],
+        "enterprise-sources": [
+          {
+            "type": "reference",
+            "en": "Broadcom ESXi NTP ConfigStore",
+            "fa": "مستند رسمی: Broadcom ESXi NTP ConfigStore",
+            "url": "https://knowledge.broadcom.com/external/article/313808"
+          }
+        ]
+      }
+    },
+    "vsphere-standard-switch-vs-distributed-switch": {
+      "issues": [
+        "Recovery guidance did not identify the scoped DCUI operation or distinguish it from a full reset."
+      ],
+      "sections": {
+        "enterprise-recovery": [
+          {
+            "type": "h3",
+            "en": "A scoped management recovery path",
+            "fa": "مسیر بازیابی محدود شبکهٔ مدیریت"
+          },
+          {
+            "type": "p",
+            "en": "For management on vDS in a supported stateful ESXi deployment, use the out-of-band DCUI: Network Restore Options → Restore vDS, enter the recorded correct VLAN/uplink/blocked properties and apply. This creates a local recovery port for management; it is not a general switch reset. For vSS, review Configure Management Network and the recorded adapter/VLAN/IP instead. Test gateway/DNS and reconnect vCenter before changing a second host. Avoid Restore Network Settings unless a separately planned full reset is required; it can remove workload/storage networking. NSX and stateless deployments require their own recovery procedure.",
+            "fa": "اگر مدیریت روی vDS در استقرار stateful پشتیبانی‌شدهٔ ESXi است، از DCUI خارج از شبکه به Network Restore Options → Restore vDS بروید، VLAN و uplink و blocked ثبت‌شدهٔ صحیح را وارد و اعمال کنید. این کار پورت محلی بازیابی مدیریت می‌سازد و reset کلی سوئیچ نیست. برای vSS، Configure Management Network و رابط، VLAN و IP ثبت‌شده را بررسی کنید. پیش از تغییر میزبان دوم، دروازه و DNS و اتصال vCenter را آزمایش کنید. Restore Network Settings را مگر در برنامهٔ مستقل reset کامل اجرا نکنید؛ ممکن است شبکهٔ workload و storage حذف شود. NSX و استقرار stateless روند بازیابی مستقل دارند."
+          },
+          {
+            "type": "reference",
+            "en": "Broadcom DCUI vDS recovery",
+            "fa": "مستند رسمی: Broadcom DCUI vDS recovery",
+            "url": "https://knowledge.broadcom.com/external/article/311145"
+          }
+        ]
+      }
+    },
+    "oxidized-network-device-configuration-backup": {
+      "issues": [
+        "Verified known_hosts provisioning was required but no executable collection/installation steps existed.",
+        "Bare-repository extraction was described but git show example was missing.",
+        "Host-key and extraction primary references missing."
+      ],
+      "sections": {
+        "enterprise-security": [
+          {
+            "type": "h3",
+            "en": "Install only a verified device host key",
+            "fa": "نصب فقط کلید میزبان تأییدشدهٔ دستگاه"
+          },
+          {
+            "type": "p",
+            "en": "After the existing service account setup and before its first poll, collect candidate keys on a management workstation. Compare the SHA256 fingerprint with the device console or another authenticated inventory. ssh-keyscan alone does not authenticate a host. Do not install the candidate if it differs.",
+            "fa": "پس از ساخت حساب سرویس و پیش از نخستین poll، کلید پیشنهادی را روی ایستگاه مدیریت جمع کنید. fingerprint از نوع SHA256 را با کنسول دستگاه یا موجودی احراز‌شده مقایسه کنید. ssh-keyscan به‌تنهایی میزبان را احراز نمی‌کند. اگر کلید متفاوت است نصب نکنید."
+          },
+          {
+            "type": "code",
+            "text": "ssh-keyscan -T 5 core-sw01.corp.example.com > core-sw01.candidate\nssh-keygen -lf core-sw01.candidate -E sha256",
+            "language": "bash"
+          },
+          {
+            "type": "p",
+            "en": "Only after the comparison succeeds, transfer the approved file securely to the collector and run the following collector commands with sudo. Review any existing known_hosts first; the append is for one genuinely new approved host. Secure host-key verification must reject a deliberately mismatched key in staging.",
+            "fa": "فقط پس از تطبیق موفق، فایل تأییدشده را امن به collector منتقل و فرمان‌های بعدی را با sudo روی collector اجرا کنید. ابتدا known_hosts موجود را بررسی کنید؛ افزودن مربوط به یک میزبان جدید تأییدشده است. در staging، اعتبارسنجی secure باید کلید عمداً متفاوت را رد کند."
+          },
+          {
+            "type": "code",
+            "text": "sudo install -d -o oxidized -g oxidized -m 700 /var/lib/oxidized/.ssh\nsudo sh -c 'cat core-sw01.candidate >> /var/lib/oxidized/.ssh/known_hosts'\nsudo chown oxidized:oxidized /var/lib/oxidized/.ssh/known_hosts\nsudo chmod 600 /var/lib/oxidized/.ssh/known_hosts",
+            "language": "bash"
+          }
+        ],
+        "enterprise-recovery": [
+          {
+            "type": "h3",
+            "en": "Extract the exact collected object, not a nonexistent working file",
+            "fa": "استخراج آبجکت جمع‌شده، نه فایل working tree ناموجود"
+          },
+          {
+            "type": "code",
+            "text": "sudo -u oxidized git --git-dir=/var/lib/oxidized/configs.git ls-tree --name-only HEAD\n# Replace this object path with the exact name printed above.\nsudo -u oxidized git --git-dir=/var/lib/oxidized/configs.git show HEAD:core-sw01.corp.example.com",
+            "language": "bash"
+          },
+          {
+            "type": "p",
+            "en": "Expect the model’s complete reviewed configuration; path not found means the object name differs or polling has not produced that object. Select an earlier known-good commit by its recorded hash for recovery. Output can contain secrets retained in history. Review commands and hardware/version compatibility offline before applying anything to a device.",
+            "fa": "انتظار می‌رود تنظیمات کامل بررسی‌شدهٔ مدل ظاهر شود؛ path not found یعنی نام آبجکت متفاوت است یا poll هنوز آن را نساخته است. برای بازیابی commit سالم قبلی را با hash ثبت‌شده انتخاب کنید. تاریخچه ممکن است اطلاعات محرمانه داشته باشد. پیش از اعمال روی دستگاه، فرمان و سازگاری سخت‌افزار و نسخه را آفلاین بررسی کنید."
+          }
+        ],
+        "enterprise-sources": [
+          {
+            "type": "reference",
+            "en": "OpenSSH ssh-keyscan",
+            "fa": "مستند رسمی: OpenSSH ssh-keyscan",
+            "url": "https://man.openbsd.org/ssh-keyscan"
+          },
+          {
+            "type": "reference",
+            "en": "Git show",
+            "fa": "مستند رسمی: Git show",
+            "url": "https://git-scm.com/docs/git-show"
+          }
+        ]
+      }
+    },
+    "mikrotik-unequal-dual-wan-load-balancing-ecmp": {
+      "issues": [
+        "Per-table, classification and connection verification commands were missing.",
+        "Scoped rollback commands were absent despite configuration examples."
+      ],
+      "sections": {
+        "enterprise-monitoring": [
+          {
+            "type": "h3",
+            "en": "Inspect each policy table and connection bucket",
+            "fa": "بررسی هر جدول policy و دستهٔ اتصال"
+          },
+          {
+            "type": "code",
+            "text": "/routing table print\n/ip route print detail where routing-table=ent-wan1\n/ip route print detail where routing-table=ent-wan2\n/ip firewall mangle print stats where comment~\"ENT-PCC\"\n/ip firewall connection print count-only where connection-mark=ent-c1\n/ip firewall connection print count-only where connection-mark=ent-c2",
+            "language": "routeros"
+          },
+          {
+            "type": "p",
+            "en": "Expected: both FIB tables exist; each has an active reachable next hop, and new client sessions increase the classifier counters. Two WAN1 buckets versus one WAN2 bucket is a connection allocation, not a byte/throughput guarantee. In the isolated lab, fail each link independently and retest new sessions. A responding gateway with dead upstream does not deactivate a gateway-only probe. Preserve existing connections and do not flush conntrack to force a test to pass.",
+            "fa": "انتظار می‌رود هر دو جدول FIB موجود و هرکدام next hop فعال و قابل دسترس داشته باشند و اتصال جدید کلاینت شمارندهٔ classifier را افزایش دهد. دو دستهٔ WAN1 در برابر یک WAN2، نسبت اتصال است، نه تضمین بایت یا سرعت. در آزمایشگاه جدا هر لینک را مستقل قطع و اتصال جدید را دوباره آزمایش کنید. پاسخ دروازه با upstream خراب آزمون فقط دروازه را غیرفعال نمی‌کند. اتصال موجود را حفظ و conntrack را برای موفق نشان‌دادن آزمون پاک نکنید."
+          }
+        ],
+        "enterprise-recovery": [
+          {
+            "type": "h3",
+            "en": "Disable only the new lab policy rules first",
+            "fa": "ابتدا فقط قواعد policy آزمایشگاهی جدید را غیرفعال کنید"
+          },
+          {
+            "type": "p",
+            "en": "These commands modify the example configuration. With console access, disable the new mangle rules first, then disable only the example routes/NAT after reviewing the pre-change path. Do not remove FIB tables until every reference is gone. Restore the exact recorded prior policy, including any FastTrack change, and verify both forwarding and router management.",
+            "fa": "این فرمان‌ها تنظیمات مثال را تغییر می‌دهند. با کنسول مستقل ابتدا mangle جدید و سپس فقط مسیر و NAT نمونه را پس از بررسی مسیر قبلی غیرفعال کنید. تا حذف همهٔ referenceها جدول FIB را حذف نکنید. policy دقیق قبلی، از جمله تغییر احتمالی FastTrack را بازگردانید و forwarding و مدیریت روتر را آزمایش کنید."
+          },
+          {
+            "type": "code",
+            "text": "/ip firewall mangle disable [find where comment~\"ENT-PCC\"]\n/ip route disable [find where comment~\"ENT-PCC\"]\n/ip firewall nat disable [find where comment~\"ENT-PCC\"]",
+            "language": "routeros"
+          }
+        ]
+      }
+    },
+    "mikrotik-openvpn-setup-v7": {
+      "issues": [
+        "OpenVPN session/certificate/firewall acceptance commands were missing.",
+        "Named-server rollback and existing-session termination commands were missing."
+      ],
+      "sections": {
+        "enterprise-monitoring": [
+          {
+            "type": "h3",
+            "en": "Certificate, session and access-policy verification",
+            "fa": "بررسی گواهی، نشست و policy دسترسی"
+          },
+          {
+            "type": "code",
+            "text": "/interface ovpn-server server print detail\n/ppp active print detail\n/certificate print detail\n/ip firewall filter print stats where comment~\"ENT-OVPN\"\n/log print where topics~\"ovpn|ppp\"",
+            "language": "routeros"
+          },
+          {
+            "type": "p",
+            "en": "Expected: the named listener is enabled, the individual user has a pool address, certificates are valid and the SSH grant counter increases for the authorized destination. On the client, test the granted SSH port and a deliberately unauthorized port/server with a bounded TCP test. The latter must fail while the allowed one works. AUTH_FAILED is different from TLS verification failure; a connected PPP session is not proof of forwarding permission. Restrict logs because usernames and network details are sensitive.",
+            "fa": "انتظار می‌رود listener نام‌دار فعال، کاربر مشخص دارای IP از pool، گواهی معتبر و شمارندهٔ مجوز SSH برای مقصد مجاز افزایشی باشد. از کلاینت، پورت SSH مجاز و یک پورت یا سرور عمداً غیرمجاز را با آزمون محدود TCP بررسی کنید؛ غیرمجاز باید شکست و مجاز موفق شود. AUTH_FAILED با شکست اعتبارسنجی TLS متفاوت است؛ PPP متصل مجوز forwarding را ثابت نمی‌کند. لاگ به علت نام کاربر و جزئیات شبکه محدود شود."
+          }
+        ],
+        "enterprise-recovery": [
+          {
+            "type": "h3",
+            "en": "Scope rollback to this named server",
+            "fa": "محدودکردن rollback به همین سرور نام‌دار"
+          },
+          {
+            "type": "code",
+            "text": "/interface ovpn-server server disable [find where name=\"ent-ovpn-server\"]\n/ppp secret disable [find where name=\"opsvpn\"]\n/ppp active remove [find where name=\"opsvpn\"]\n/ip firewall filter disable [find where comment~\"ENT-OVPN\"]",
+            "language": "routeros"
+          },
+          {
+            "type": "p",
+            "en": "These are disruptive changes: they terminate the example user’s tunnel and deny its next login. Review the exact matches before execution. Disabling a PPP secret alone does not necessarily terminate an existing session. Remove only associated client routes/settings and revoke certificates through the PKI workflow when offboarding; this rollback does not replace a tested CRL policy.",
+            "fa": "این تغییرات اختلال‌زا هستند: تونل کاربر نمونه را قطع و ورود بعدی را مسدود می‌کنند. پیش از اجرا تطبیق دقیق را بررسی کنید. غیرفعال‌کردن PPP secret الزاماً نشست موجود را قطع نمی‌کند. فقط مسیر و تنظیمات مربوط به کلاینت را حذف و برای خروج کاربر، گواهی را از روند PKI باطل کنید؛ این rollback جای policy آزموده‌شدهٔ CRL را نمی‌گیرد."
+          }
+        ]
+      }
+    },
+    "mikrotik-block-port-scanners": {
+      "issues": [
+        "The scan acceptance procedure did not explain counter/list evidence or a management negative test."
+      ],
+      "sections": {
+        "enterprise-troubleshooting": [
+          {
+            "type": "h3",
+            "en": "Interpret a controlled positive and negative test",
+            "fa": "تفسیر آزمون مثبت و منفی کنترل‌شده"
+          },
+          {
+            "type": "p",
+            "en": "Before testing, print ENT-SCAN rules with detail and note their positions. In an isolated lab, have an authorized scanner make enough fresh TCP probes to exceed the selected psd heuristic, then immediately inspect the address-list timeout and detection/drop packet counters. Repeat from an approved management source: it must retain management access. Expect no universal packet count because timing/ports and earlier rules determine matching. A listed address with zero drop counters can reflect traffic accepted earlier; a zero detection counter can reflect wrong chain or WAN membership. Test IPv6 separately.",
+            "fa": "پیش از آزمون قواعد ENT-SCAN و موقعیتشان را با detail ثبت کنید. در آزمایشگاه جدا، اسکنر مجاز تعداد کافی آزمون TCP جدید برای عبور از معیار psd بفرستد و بلافاصله timeout فهرست و شمارندهٔ detect و drop را ببینید. از مبدأ مدیریت مجاز تکرار کنید؛ دسترسی مدیریت باید باقی بماند. تعداد بستهٔ ثابت وجود ندارد، چون زمان، پورت و قواعد قبلی تعیین‌کننده‌اند. IP فهرست‌شده با drop صفر می‌تواند قبلاً accept شده باشد؛ detect صفر ممکن است از chain یا عضویت WAN نادرست باشد. IPv6 را مستقل آزمایش کنید."
+          },
+          {
+            "type": "code",
+            "text": "/ip firewall filter print detail where comment~\"ENT-SCAN\"\n/ip firewall filter print stats where comment~\"ENT-SCAN\"\n/ip firewall address-list print detail where list=port_scanners\n/system resource print",
+            "language": "routeros"
+          }
+        ]
+      }
+    },
+    "mikrotik-block-website": {
+      "issues": [
+        "SNI testing depended on blocked DNS, so the described test could not establish SNI enforcement.",
+        "Independent SNI test reference needed."
+      ],
+      "sections": {
+        "enterprise-troubleshooting": [
+          {
+            "type": "h3",
+            "en": "Prove DNS and SNI policy independently",
+            "fa": "اثبات مستقل policy مربوط به DNS و SNI"
+          },
+          {
+            "type": "p",
+            "en": "A failed DNS query prevents any later TLS test, so it cannot prove SNI filtering. In an isolated managed client, first test example.com and a subdomain against the policy resolver and record NXDOMAIN. For a separate authorized SNI test, obtain a current server address through an approved alternate resolution path and use curl --resolve with the real hostname, forcing HTTP/1.1. Do not substitute the IP in the URL because that changes SNI and certificate-name validation. Compare a permitted control hostname; only the intended policy should fail. Recheck fresh connections, rule counters and IPv6 before acceptance.",
+            "fa": "شکست DNS مانع آزمون TLS بعدی است و فیلتر SNI را ثابت نمی‌کند. از کلاینت مدیریت‌شدهٔ آزمایشگاهی ابتدا example.com و زیردامنه را از resolver policy بپرسید و NXDOMAIN را ثبت کنید. برای آزمون مجاز مستقل SNI، IP فعلی سرور را از مسیر resolve جایگزین مجاز بگیرید و curl --resolve را با نام واقعی و HTTP/1.1 به کار ببرید. URL را با IP جایگزین نکنید؛ SNI و اعتبارسنجی نام گواهی تغییر می‌کنند. نام کنترل مجاز را مقایسه کنید؛ فقط policy موردنظر باید شکست بخورد. پیش از پذیرش، اتصال جدید، شمارنده و IPv6 را دوباره بررسی کنید."
+          },
+          {
+            "type": "code",
+            "text": "# Replace documentation hostname/address with the authorized lab endpoint.\ncurl --http1.1 --connect-timeout 3 --max-time 10 --resolve example.com:443:203.0.113.20 https://example.com/",
+            "language": "bash"
+          },
+          {
+            "type": "p",
+            "en": "The documentation IP is not an Internet service. A timeout alone is inconclusive: inspect whether the intended SNI drop counter increments while the permitted control completes with valid TLS. ECH, QUIC, segmented ClientHello and VPNs remain limitations. Do not claim this policy blocks all HTTPS access to a brand or CDN.",
+            "fa": "IP مستندسازی سرویس اینترنتی نیست. timeout به‌تنهایی قطعی نیست؛ افزایش شمارندهٔ drop مربوط به SNI و موفقیت TLS معتبر مقصد کنترل را بررسی کنید. ECH، QUIC، ClientHello چندبخشی و VPN همچنان محدودیت هستند. ادعا نکنید این policy همهٔ HTTPS یک برند یا CDN را مسدود می‌کند."
+          }
+        ],
+        "enterprise-sources": [
+          {
+            "type": "reference",
+            "en": "curl --resolve",
+            "fa": "مستند رسمی: curl --resolve",
+            "url": "https://curl.se/docs/manpage.html"
+          }
+        ]
+      }
+    },
+    "netbox-installation-setup-ubuntu": {
+      "issues": [
+        "Nginx activation steps were prose-only.",
+        "Coordinated backup was required but service-stop/restart and archive-readability steps were absent."
+      ],
+      "sections": {
+        "enterprise-installation": [
+          {
+            "type": "h3",
+            "en": "Activate the HTTPS virtual host and verify static assets",
+            "fa": "فعال‌کردن virtual host مربوط به HTTPS و بررسی فایل ثابت"
+          },
+          {
+            "type": "p",
+            "en": "After creating the original complete TLS server block and approved certificate files, use this fresh-instance procedure. The first command deliberately stops if the configuration file is absent. Do not overwrite an existing symlink or remove Ubuntu’s default site without first checking which services it serves. These are host configuration changes requiring sudo.",
+            "fa": "پس از ساخت کامل server block قبلی و فایل گواهی معتبر، این روند نصب تازه را اجرا کنید. فرمان اول در نبود فایل تنظیمات متوقف می‌شود. symlink موجود را بازنویسی یا default site اوبونتو را بدون بررسی سرویس‌های آن حذف نکنید. این‌ها تغییر تنظیمات میزبان و نیازمند sudo هستند."
+          },
+          {
+            "type": "code",
+            "text": "test -f /etc/nginx/sites-available/netbox || exit 1\nsudo ln -s /etc/nginx/sites-available/netbox /etc/nginx/sites-enabled/netbox\nsudo nginx -t\n# Reload only after the syntax test succeeds.\nsudo systemctl reload nginx\ncurl --fail --show-error --head https://netbox.example.com/login/",
+            "language": "bash"
+          },
+          {
+            "type": "p",
+            "en": "Expected: successful Nginx syntax and a successful login-page HTTP response with a trusted hostname certificate. File exists on ln means inspect the existing destination, not force replacement. A loaded page with missing styles needs checking the exact /static/ alias and generated static files; it does not imply a database failure.",
+            "fa": "انتظار می‌رود نحو Nginx صحیح و پاسخ صفحهٔ ورود با گواهی معتبر نام میزبان موفق باشد. File exists در ln یعنی مقصد موجود را بررسی کنید، نه جایگزینی اجباری. صفحهٔ بازشده بدون style نیازمند بررسی alias دقیق /static/ و فایل ثابت تولیدشده است و به معنی خرابی پایگاه داده نیست."
+          }
+        ],
+        "enterprise-recovery": [
+          {
+            "type": "h3",
+            "en": "Actually stop writers during this single-node backup",
+            "fa": "توقف واقعی نویسندگان در پشتیبان‌گیری تک‌گره‌ای"
+          },
+          {
+            "type": "p",
+            "en": "The backup block above implements a coordinated single-node pause: announce downtime, let jobs finish, then stop netbox and netbox-rq before both archives are collected. Its exit trap restarts those services after success or failure. Check service-start status and the original failing endpoint afterward. Fresh-path guards prevent silently replacing a previous recovery set; for recurring backups use a reviewed unique-set/retention design. External writers, additional workers or replicas need their own coordination; this is not an HA backup recipe.",
+            "fa": "بلوک پشتیبان بالا توقف هماهنگ تک‌گره‌ای را اجرا می‌کند: قطعی را اعلام و اجازه دهید کارها تمام شوند؛ سپس netbox و netbox-rq پیش از ساخت هر دو آرشیو متوقف می‌شوند. trap خروج در موفقیت یا شکست سرویس‌ها را راه‌اندازی می‌کند. وضعیت راه‌اندازی و endpoint قبلی را بعداً بررسی کنید. کنترل مسیر جدید مانع جایگزینی خاموش مجموعهٔ بازیابی قبلی است؛ برای پشتیبان تکرارشونده طراحی مجموعهٔ یکتا و retention لازم است. نویسندهٔ خارجی، worker اضافه یا replica هماهنگی مستقل نیاز دارد؛ این روند پشتیبان HA نیست."
+          },
+          {
+            "type": "p",
+            "en": "pg_restore --list and tar -tzf in the backup block check archive readability, not recoverability. A nonzero backup status requires investigation; partial files are not accepted recovery sets. Retain both archives from the same pause together and copy them off-host securely. Acceptance still requires the isolated restore, object counts, media files, login and canary job described above.",
+            "fa": "pg_restore --list و tar -tzf در بلوک پشتیبان، خوانایی آرشیو را می‌آزمایند، نه بازیابی‌پذیری. وضعیت غیرصفر پشتیبان نیازمند بررسی است؛ فایل ناقص مجموعهٔ بازیابی پذیرفته‌شده نیست. هر دو آرشیو همان توقف را کنار هم نگه دارید و امن به خارج میزبان منتقل کنید. پذیرش همچنان به restore جدا، شمارش آبجکت، media، ورود و کار آزمایشی توضیح‌داده‌شده وابسته است."
+          }
+        ]
+      },
+      "code_replacements": [
+        [
+          "sudo install -d -m 700 /var/backups/netbox\nsudo bash -c 'umask 077; sudo -u postgres pg_dump -Fc netbox > /var/backups/netbox/netbox.dump'\nsudo bash -c 'umask 077; tar -czf /var/backups/netbox/application-state.tar.gz -C /opt/netbox netbox/media netbox/reports netbox/scripts netbox/netbox/configuration.py'\nsudo chmod 600 /var/backups/netbox/application-state.tar.gz",
+          "sudo bash <<'BASH'\nset -euo pipefail\numask 077\ninstall -d -m 700 /var/backups/netbox\n# Fresh demo paths only: never overwrite the previous recovery set.\ntest ! -e /var/backups/netbox/netbox.dump\ntest ! -e /var/backups/netbox/application-state.tar.gz\n# Preserve backup failure and also fail if the writers cannot restart.\nresume_writers() {\n    local backup_status=$?\n    trap - EXIT\n    if ! systemctl start netbox netbox-rq; then\n        echo 'NetBox writers failed to restart; console recovery required' >&2\n        exit 1\n    fi\n    exit \"$backup_status\"\n}\ntrap resume_writers EXIT\nsystemctl stop netbox netbox-rq\nif systemctl is-active --quiet netbox netbox-rq; then\n    echo 'A NetBox writer is still active; backup aborted' >&2\n    exit 1\nfi\nsudo -u postgres pg_dump -Fc netbox > /var/backups/netbox/netbox.dump\ntar -czf /var/backups/netbox/application-state.tar.gz -C /opt/netbox netbox/media netbox/reports netbox/scripts netbox/netbox/configuration.py\npg_restore --list /var/backups/netbox/netbox.dump >/dev/null\ntar -tzf /var/backups/netbox/application-state.tar.gz >/dev/null\nBASH\n"
+        ],
+        [
+          "sudo bash <<'BASH'\nset -euo pipefail\numask 077\ninstall -d -m 700 /var/backups/netbox\n# Fresh demo paths only: never overwrite the previous recovery set.\ntest ! -e /var/backups/netbox/netbox.dump\ntest ! -e /var/backups/netbox/application-state.tar.gz\n# Restart writers on success OR failure; inspect any service-start error.\ntrap 'systemctl start netbox netbox-rq' EXIT\nsystemctl stop netbox netbox-rq\nif systemctl is-active --quiet netbox netbox-rq; then\n    echo 'A NetBox writer is still active; backup aborted' >&2\n    exit 1\nfi\nsudo -u postgres pg_dump -Fc netbox > /var/backups/netbox/netbox.dump\ntar -czf /var/backups/netbox/application-state.tar.gz -C /opt/netbox netbox/media netbox/reports netbox/scripts netbox/netbox/configuration.py\npg_restore --list /var/backups/netbox/netbox.dump >/dev/null\ntar -tzf /var/backups/netbox/application-state.tar.gz >/dev/null\nBASH\n",
+          "sudo bash <<'BASH'\nset -euo pipefail\numask 077\ninstall -d -m 700 /var/backups/netbox\n# Fresh demo paths only: never overwrite the previous recovery set.\ntest ! -e /var/backups/netbox/netbox.dump\ntest ! -e /var/backups/netbox/application-state.tar.gz\n# Preserve backup failure and also fail if the writers cannot restart.\nresume_writers() {\n    local backup_status=$?\n    trap - EXIT\n    if ! systemctl start netbox netbox-rq; then\n        echo 'NetBox writers failed to restart; console recovery required' >&2\n        exit 1\n    fi\n    exit \"$backup_status\"\n}\ntrap resume_writers EXIT\nsystemctl stop netbox netbox-rq\nif systemctl is-active --quiet netbox netbox-rq; then\n    echo 'A NetBox writer is still active; backup aborted' >&2\n    exit 1\nfi\nsudo -u postgres pg_dump -Fc netbox > /var/backups/netbox/netbox.dump\ntar -czf /var/backups/netbox/application-state.tar.gz -C /opt/netbox netbox/media netbox/reports netbox/scripts netbox/netbox/configuration.py\npg_restore --list /var/backups/netbox/netbox.dump >/dev/null\ntar -tzf /var/backups/netbox/application-state.tar.gz >/dev/null\nBASH\n"
+        ]
+      ]
+    },
+    "set-static-ip-ubuntu-server-netplan": {
+      "issues": [
+        "Neighbor-level diagnostics were mentioned without executable inspection."
+      ],
+      "sections": {
+        "enterprise-troubleshooting": [
+          {
+            "type": "h3",
+            "en": "Verify link neighbor and address ownership",
+            "fa": "بررسی همسایهٔ لینک و مالکیت نشانی"
+          },
+          {
+            "type": "code",
+            "text": "ip -br link show ens160\nip neigh show dev ens160\nnetworkctl status ens160\nsudo netplan get",
+            "language": "bash"
+          },
+          {
+            "type": "p",
+            "en": "Replace ens160 with the recorded interface. UP is link state, not proof of a correct VLAN. A gateway neighbor persistently FAILED/INCOMPLETE after traffic suggests unanswered neighbor resolution; inspect mask/VLAN/switch path before changing DNS. Compare netplan get with the on-disk authoritative YAML and renderer output. A static address working until reboot suggests another generator still owns the configuration.",
+            "fa": "ens160 را با رابط ثبت‌شده جایگزین کنید. UP وضعیت لینک است، نه صحت VLAN. همسایهٔ دروازه که پس از ترافیک دائماً FAILED یا INCOMPLETE است، به resolve بی‌پاسخ اشاره دارد؛ پیش از تغییر DNS، ماسک، VLAN و سوئیچ را بررسی کنید. netplan get را با YAML منبع و خروجی renderer مقایسه کنید. IP ثابت سالم تا reboot نشانهٔ احتمالی مالکیت تنظیمات توسط تولیدکنندهٔ دیگر است."
+          }
+        ]
+      }
+    },
+    "ubuntu-date-time-settings": {
+      "issues": [
+        "Expected Chrony fields were abbreviated and reach semantics were unexplained."
+      ],
+      "sections": {
+        "enterprise-monitoring": [
+          {
+            "type": "h3",
+            "en": "Interpret Chrony evidence without stepping the clock",
+            "fa": "تفسیر شواهد Chrony بدون پرش ساعت"
+          },
+          {
+            "type": "p",
+            "en": "Illustrative fields, not measured output: a source row with ^*, Reach 377 and a small Last sample has been selected and has eight recent successful replies; 377 is an octal reach register, not a percentage. In tracking, Leap status Normal, Reference ID and System time quantify sync state and offset. Stratum alone is not accuracy. A source marked ^? with Reach 0 needs source/network investigation; ^x is treated as a falseticker. Allow multiple polling cycles before judging a newly started service.",
+            "fa": "فیلدهای آموزشی، نه خروجی اندازه‌گیری‌شده: منبع دارای ^*، Reach برابر 377 و Last sample کم انتخاب شده و هشت پاسخ اخیر موفق داشته است؛ 377 رجیستر reach هشت‌هشتی است، نه درصد. در tracking، Leap status برابر Normal، Reference ID و System time وضعیت و offset را مشخص می‌کنند. stratum به‌تنهایی دقت نیست. منبع ^? با Reach صفر نیازمند بررسی منبع و شبکه و ^x به‌عنوان falseticker شناخته شده است. پیش از قضاوت سرویس تازه‌راه‌اندازی‌شده چند دورهٔ poll صبر کنید."
+          },
+          {
+            "type": "reference",
+            "en": "Chrony sources and tracking",
+            "fa": "مستند رسمی: Chrony sources and tracking",
+            "url": "https://chrony-project.org/doc/4.5/chronyc.html"
+          }
+        ]
+      }
+    },
+    "mikrotik-firewall-hardening-input-forward-chain": {
+      "issues": [
+        "Rate-limited terminal drop rules fail to deny packets above the logging rate."
+      ],
+      "sections": {
+        "ordering": [
+          {
+            "type": "h3",
+            "en": "Rate-limit logging separately from unconditional denial",
+            "fa": "محدودسازی لاگ جدا از مسدودسازی بی‌قید نرخ"
+          },
+          {
+            "type": "p",
+            "en": "limit is a packet matcher, not a logging-rate setting. Putting limit on the last action=drop rule allows above-limit packets to continue past that rule; a chain ending without a matching deny can accept them. Use a separate action=log rule with a limit, immediately followed by the same unconditional drop. Logging passes to the next rule. The corrected example keeps all segmentation and final denials unconditional. Test traffic above the logging rate: log volume stays bounded while drop counters continue rising.",
+            "fa": "limit یک matcher بسته است، نه تنظیم نرخ لاگ. اگر روی آخرین action=drop قرار گیرد، بسته‌های بالاتر از حد از آن قاعده عبور می‌کنند؛ chain بدون deny مطابق ممکن است آن‌ها را بپذیرد. از action=log محدودشده و بلافاصله drop بی‌قید نرخ با همان شروط استفاده کنید. log به قاعدهٔ بعدی می‌رود. نمونهٔ اصلاح‌شده همهٔ denyهای segmentation و نهایی را بی‌قید نرخ نگه می‌دارد. ترافیک بالاتر از نرخ لاگ را آزمایش کنید؛ لاگ محدود و شمارندهٔ drop افزایشی بماند."
+          },
+          {
+            "type": "reference",
+            "en": "MikroTik matchers and log action",
+            "fa": "مستند رسمی: MikroTik matchers and log action",
+            "url": "https://manual.mikrotik.com/docs/firewall-and-quality-of-service/firewall/common-firewall-matchers-and-actions/"
+          }
+        ]
+      },
+      "code_replacements": [
+        [
+          "add chain=forward action=drop src-address-list=GUEST-NETWORKS dst-address-list=INTERNAL-NETWORKS log=yes log-prefix=\"DROP_GUEST \" limit=10,5:packet comment=\"FORWARD - Drop Guest to Internal\"",
+          "add chain=forward action=log src-address-list=GUEST-NETWORKS dst-address-list=INTERNAL-NETWORKS log-prefix=\"DROP_GUEST \" limit=10,5:packet comment=\"LOG - Drop Guest to Internal\"\nadd chain=forward action=drop src-address-list=GUEST-NETWORKS dst-address-list=INTERNAL-NETWORKS comment=\"FORWARD - Drop Guest to Internal\""
+        ],
+        [
+          "add chain=forward action=drop src-address-list=INTERNAL-NETWORKS dst-address-list=INTERNAL-NETWORKS log=yes log-prefix=\"DROP_INTERVLAN \" limit=10,5:packet comment=\"FORWARD - Drop Unauthorized Inter-VLAN\"",
+          "add chain=forward action=log src-address-list=INTERNAL-NETWORKS dst-address-list=INTERNAL-NETWORKS log-prefix=\"DROP_INTERVLAN \" limit=10,5:packet comment=\"LOG - Drop Unauthorized Inter-VLAN\"\nadd chain=forward action=drop src-address-list=INTERNAL-NETWORKS dst-address-list=INTERNAL-NETWORKS comment=\"FORWARD - Drop Unauthorized Inter-VLAN\""
+        ],
+        [
+          "add chain=forward action=drop in-interface-list=WAN log=yes log-prefix=\"DROP_WAN \" limit=10,5:packet comment=\"FORWARD - Drop Unapproved WAN\"",
+          "add chain=forward action=log in-interface-list=WAN log-prefix=\"DROP_WAN \" limit=10,5:packet comment=\"LOG - Drop Unapproved WAN\"\nadd chain=forward action=drop in-interface-list=WAN comment=\"FORWARD - Drop Unapproved WAN\""
+        ],
+        [
+          "add chain=forward action=drop log=yes log-prefix=\"DROP_FORWARD \" limit=10,5:packet comment=\"FORWARD - DROP Everything Else\"",
+          "add chain=forward action=log log-prefix=\"DROP_FORWARD \" limit=10,5:packet comment=\"LOG - DROP Everything Else\"\nadd chain=forward action=drop comment=\"FORWARD - DROP Everything Else\""
+        ]
+      ]
+    },
+    "truenas-zfs-enterprise": {
+      "issues": [
+        "Five GUI schedule/design code blocks contained Persian-only explanatory labels in the English edition; executable commands were unaffected."
+      ],
+      "sections": {},
+      "code_replacements": [
+        [
+          "Hourly: 24 ساعت\nDaily: 30 روز\nWeekly: 12 هفته\nMonthly: 12 ماه\n",
+          "Hourly: 24 hours\nDaily: 30 days\nWeekly: 12 weeks\nMonthly: 12 months\n"
+        ],
+        [
+          "Data Protection → Replication Tasks → Add\nSource: tank/shares\nDestination: truenas02/tank-replica/shares\nRecursive: Enabled\nSchedule: هر 30 دقیقه\nTransport: SSH\n",
+          "Data Protection → Replication Tasks → Add\nSource: tank/shares\nDestination: truenas02/tank-replica/shares\nRecursive: Enabled\nSchedule: every 30 minutes\nTransport: SSH\n"
+        ],
+        [
+          "TrueNAS-01: 8×12 TB، RAIDZ2، 64 GB ECC، 2×10 GbE، Boot SSD Mirror\nTrueNAS-02: 8×12 TB، RAIDZ2، 64 GB ECC، سایت دوم\n",
+          "TrueNAS-01: 8×12 TB, RAIDZ2, 64 GB ECC, 2×10 GbE, Boot SSD Mirror\nTrueNAS-02: 8×12 TB, RAIDZ2, 64 GB ECC, second site\n"
+        ],
+        [
+          "Storage → Disks → S.M.A.R.T. Tests\nShort: روزانه یا هفتگی\nLong: ماهانه\n",
+          "Storage → Disks → S.M.A.R.T. Tests\nShort: daily or weekly\nLong: monthly\n"
+        ],
+        [
+          "Data Protection → Scrub Tasks → Add\nPool: tank\nSchedule: ماهانه\n",
+          "Data Protection → Scrub Tasks → Add\nPool: tank\nSchedule: monthly\n"
+        ]
+      ]
+    }
+  }
+}

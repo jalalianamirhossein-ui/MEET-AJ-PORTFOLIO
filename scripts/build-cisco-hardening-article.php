@@ -227,6 +227,8 @@ if (is_file($bannerSource)) {
     $html=str_replace('</section><article class="article-body"','<img class="article-hero-thumbnail" src="'.e($banner).'" alt="Cisco Catalyst L2 and L3 switch hardening"></section><article class="article-body"',$html);
 }
 $html=str_replace('</head>','<script type="application/ld+json">'.json_encode($schema,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES).'</script></head>',$html);
+require_once dirname(__DIR__).'/app/Services/ArticleStructure.php';
+$html = (new \App\Services\ArticleStructure)->repair($html, $slug);
 file_put_contents($root.'/resources/legacy/articles/'.$slug.'.html',$html);
 $download=$root.'/public/downloads/'.$slug; if(!is_dir($download)) mkdir($download,0775,true);
 file_put_contents($download.'/l2-access.cfg',$l2); file_put_contents($download.'/l3-switch.cfg',$l3);

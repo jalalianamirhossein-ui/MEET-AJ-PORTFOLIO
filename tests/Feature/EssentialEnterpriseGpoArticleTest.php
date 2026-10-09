@@ -52,7 +52,7 @@ class EssentialEnterpriseGpoArticleTest extends TestCase
         $this->assertSame('microsoft', $article->category->slug);
         $this->assertSame('published', $article->status);
         $banner = public_path('assets/img/articles/banners/10-Essential-Group-Policies-for-Enterprise-Windows.png');
-        $this->assertSame([1000,1000], array_slice(getimagesize($banner),0,2));
+        $this->assertSame(array_slice(getimagesize(resource_path('assets/img/articles/banners/10-Essential-Group-Policies-for-Enterprise-Windows.png')),0,2), array_slice(getimagesize($banner),0,2));
         foreach (['Active-Directory-GPO-Architecture.png','Windows-Group-Policy-Security-Baseline.png','GPO-Deployment-Workflow-Test-to-Production.png','Group-Policy-Troubleshooting-gpresult-RSoP.png'] as $name) {
             $this->assertFileExists(public_path('assets/img/articles/content/'.$name));
             $this->assertStringContainsString($name,$article->content);

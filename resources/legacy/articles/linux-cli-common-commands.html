@@ -323,20 +323,20 @@
             >
           </li>
           <li class="article-nav-item">
+            <a href="#enterprise-security"
+              ><span
+                data-fa="حفاظت از شواهد و محدودکردن sudo"
+                data-en="Protect evidence and limit sudo"
+                >Protect evidence and limit sudo</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
             <a href="#enterprise-installation"
               ><span
                 data-fa="CPU، RAM، دیسک و وضعیت سرویس"
                 data-en="CPU, memory, disks and service state"
                 >CPU, memory, disks and service state</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#enterprise-troubleshooting"
-              ><span
-                data-fa="اختلاف df و du و خطای شبکه"
-                data-en="df/du disagreement and network failures"
-                >df/du disagreement and network failures</span
               ></a
             >
           </li>
@@ -350,11 +350,11 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-security"
+            <a href="#enterprise-troubleshooting"
               ><span
-                data-fa="حفاظت از شواهد و محدودکردن sudo"
-                data-en="Protect evidence and limit sudo"
-                >Protect evidence and limit sudo</span
+                data-fa="اختلاف df و du و خطای شبکه"
+                data-en="df/du disagreement and network failures"
+                >df/du disagreement and network failures</span
               ></a
             >
           </li>
@@ -558,7 +558,10 @@
                       host-level state. Ifconfig and netstat are not installed
                       everywhere, so examples use ip and ss.
                     </p>
-                  </section>
+                  <div id="technical-enterprise-prerequisites"><h3 data-en="Install missing diagnostic tools, not a full system upgrade" data-fa="نصب ابزار تشخیصی موردنیاز، نه ارتقای کامل سیستم">Install missing diagnostic tools, not a full system upgrade</h3><p data-en="On the stated Ubuntu 24.04 baseline, the commands below install the packages used here. Installation changes the host and requires sudo, approved repositories and a change window; skip packages already present. apt update refreshes indexes, not installed package versions. lsof and dnsutils may be absent from minimal images." data-fa="روی Ubuntu 24.04 اعلام‌شده، فرمان‌های زیر بسته‌های این راهنما را نصب می‌کنند. نصب میزبان را تغییر می‌دهد و sudo، مخزن مجاز و بازهٔ تغییر لازم دارد؛ بسته‌های موجود را دوباره نصب نکنید. apt update فهرست مخزن را تازه می‌کند، نه نسخهٔ بسته‌های نصب‌شده را. lsof و dnsutils ممکن است در image حداقلی موجود نباشند.">On the stated Ubuntu 24.04 baseline, the commands below install the packages used here. Installation changes the host and requires sudo, approved repositories and a change window; skip packages already present. apt update refreshes indexes, not installed package versions. lsof and dnsutils may be absent from minimal images.</p><pre dir="ltr"><code class="language-bash">sudo apt-get update
+sudo apt-get install -y procps iproute2 curl lsof dnsutils
+command -v vmstat ss curl lsof dig
+dpkg-query -W procps iproute2 curl lsof dnsutils</code></pre><p data-en="Expected: command -v prints executable paths and dpkg-query reports installed versions. A missing path identifies an unavailable tool; repository/signature errors require repository and clock checks, not disabling signature validation." data-fa="انتظار می‌رود command -v مسیر برنامه‌ها و dpkg-query نسخهٔ نصب‌شده را نشان دهد. نبود مسیر یعنی ابزار موجود نیست؛ خطای مخزن یا امضا نیازمند بررسی مخزن و ساعت است، نه غیرفعال‌کردن اعتبارسنجی امضا.">Expected: command -v prints executable paths and dpkg-query reports installed versions. A missing path identifies an unavailable tool; repository/signature errors require repository and clock checks, not disabling signature validation.</p></div></section>
                   <section id="enterprise-architecture" class="article-section">
                     <h2
                       data-fa="ترتیب بررسی در رخداد"
@@ -574,6 +577,24 @@
                       correlate service logs and DNS/network checks. Once
                       evidence supports a cause, make a limited change and
                       repeat the original failing test.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="حفاظت از شواهد و محدودکردن sudo"
+                      data-en="Protect evidence and limit sudo"
+                    >
+                      Protect evidence and limit sudo
+                    </h2>
+                    <p
+                      data-fa="خروجی Process، Environment و Config ممکن است Secret داشته باشد. آن را در Ticket عمومی نگذارید. Permission را فقط برای مسیر و مالک تأییدشده اصلاح کنید. chmod یا chown بازگشتی روی یک پوشه بزرگ، راه‌حل عمومی Permission denied نیست."
+                      data-en="Process, environment and configuration output might contain secrets. Keep it out of public tickets. Correct permissions only for verified paths and owners. Broad recursive chmod or chown is not a general Permission denied fix."
+                    >
+                      Process, environment and configuration output might
+                      contain secrets. Keep it out of public tickets. Correct
+                      permissions only for verified paths and owners. Broad
+                      recursive chmod or chown is not a general Permission
+                      denied fix.
                     </p>
                   </section>
                   <section id="enterprise-installation" class="article-section">
@@ -628,39 +649,22 @@ sudo du -xhd1 /var/log</code></pre>
                       endpoint. Du -x avoids other filesystems but still incurs
                       IO. Compare results with that application’s latency.
                     </p>
-                  </section>
-                  <section
-                    id="enterprise-troubleshooting"
-                    class="article-section"
-                  >
-                    <h2
-                      data-fa="اختلاف df و du و خطای شبکه"
-                      data-en="df/du disagreement and network failures"
-                    >
-                      df/du disagreement and network failures
-                    </h2>
-                    <p
-                      data-fa="اگر df دیسک را پر نشان می‌دهد ولی du کوچک است، فایل حذف‌شده باز یا داده پنهان‌شده زیر Mount را بررسی کنید. lsof در صورت نصب، Process نگه‌دارنده فایل را نشان می‌دهد."
-                      data-en="When df reports full storage but du totals are small, inspect open deleted files or data hidden beneath mounts. Installed lsof identifies processes holding deleted files."
-                    >
-                      When df reports full storage but du totals are small,
-                      inspect open deleted files or data hidden beneath mounts.
-                      Installed lsof identifies processes holding deleted files.
-                    </p>
-                    <pre dir="ltr"><code class="language-bash">sudo lsof +L1
-sudo ss -lntp
-ip route get 1.1.1.1
-resolvectl status</code></pre>
-                    <p
-                      data-fa="پس از شناسایی Process، روش مستند Reopen یا Reload لاگ را به کار ببرید. سرویس Active با Endpoint خراب به بررسی وابستگی نیاز دارد. برای Permission، مسیر واقعی را با namei -l و Policy AppArmor بررسی کنید."
-                      data-en="Use the process’s supported log-reopen or reload method. Active services with failing endpoints require dependency checks. For permissions, inspect the actual path with namei -l and review AppArmor policy."
-                    >
-                      Use the process’s supported log-reopen or reload method.
-                      Active services with failing endpoints require dependency
-                      checks. For permissions, inspect the actual path with
-                      namei -l and review AppArmor policy.
-                    </p>
-                  </section>
+                  <div id="technical-enterprise-installation"><h3 data-en="Practice filesystem commands in a disposable directory" data-fa="تمرین فرمان‌های فایل در پوشهٔ آزمایشی">Practice filesystem commands in a disposable directory</h3><p data-en="pwd shows location; ls -lah exposes hidden entries, mode, owner and human-readable sizes; stat reports exact bytes, inode and timestamps. cp -a preserves attributes, mv changes a path, grep -n prints matching line numbers, head/tail limit evidence and find limits traversal. The following block writes only inside a newly created TEMP directory. It does not delete files or alter service configuration." data-fa="pwd محل فعلی، ls -lah ورودی مخفی، مجوز، مالک و اندازهٔ خوانا، و stat بایت دقیق، inode و زمان‌ها را نشان می‌دهد. cp -a ویژگی‌ها را حفظ، mv مسیر را تغییر، grep -n شمارهٔ خط مطابق، head و tail شواهد محدود و find محدودهٔ پیمایش را کنترل می‌کنند. بلوک زیر فقط داخل پوشهٔ TEMP جدید می‌نویسد؛ فایل را حذف و تنظیمات سرویس را تغییر نمی‌دهد.">pwd shows location; ls -lah exposes hidden entries, mode, owner and human-readable sizes; stat reports exact bytes, inode and timestamps. cp -a preserves attributes, mv changes a path, grep -n prints matching line numbers, head/tail limit evidence and find limits traversal. The following block writes only inside a newly created TEMP directory. It does not delete files or alter service configuration.</p><pre dir="ltr"><code class="language-bash">LabDir=$(mktemp -d)
+cd -- &quot;$LabDir&quot; || exit 1
+pwd
+printf &#x27;health=ok\nport=8080\n&#x27; &gt; app.conf
+ls -lah
+stat -- app.conf
+cp -a -- app.conf app.conf.before
+mv -- app.conf.before app.conf.snapshot
+grep -n -- &#x27;port=&#x27; app.conf
+head -n 2 -- app.conf
+tail -n 1 -- app.conf
+find . -maxdepth 1 -type f -name &#x27;*.conf&#x27; -print
+tar -czf config-demo.tar.gz -- app.conf
+tar -tzf config-demo.tar.gz</code></pre><p data-en="Illustrative excerpt: grep reports 2:port=8080 and tar lists app.conf. grep exit 1 means no match, while exit 2 means an error. ls mode bits and stat owner identify access controls; a successful read does not prove write permission. cp/mv can overwrite existing destinations, so use fresh paths and examine them first. Leave the demo directory for inspection; do not teach rm -rf as a routine repair." data-fa="نمونهٔ آموزشی: grep مقدار 2:port=8080 و tar نام app.conf را نشان می‌دهد. exit برابر 1 در grep یعنی مطابقی نیست و 2 یعنی خطا. mode در ls و مالک در stat کنترل دسترسی را نشان می‌دهند؛ خواندن موفق، مجوز نوشتن را اثبات نمی‌کند. cp و mv ممکن است مقصد موجود را بازنویسی کنند؛ مسیر جدید و بررسی‌شده استفاده کنید. پوشهٔ تمرین را برای بررسی نگه دارید؛ rm -rf راهکار معمول تعمیر نیست.">Illustrative excerpt: grep reports 2:port=8080 and tar lists app.conf. grep exit 1 means no match, while exit 2 means an error. ls mode bits and stat owner identify access controls; a successful read does not prove write permission. cp/mv can overwrite existing destinations, so use fresh paths and examine them first. Leave the demo directory for inspection; do not teach rm -rf as a routine repair.</p><h3 data-en="Read CPU, memory and storage fields correctly" data-fa="تفسیر صحیح فیلدهای CPU، حافظه و ذخیره‌سازی">Read CPU, memory and storage fields correctly</h3><p data-en="For the earlier vmstat 1 5 command, r is runnable tasks, b blocked tasks, si/so swap transfer, and us/sy/id/wa CPU time categories. Sustained wa plus application latency warrants storage investigation; it does not identify a failed disk. Compare uptime load with processor count using nproc. free available estimates memory obtainable without swapping; low free alone is not exhaustion. df -hT reports mounted filesystem space; df -i reports inode exhaustion. ps %CPU is a process lifetime measure, not the same sampling interval as vmstat." data-fa="در vmstat 1 5 بالا، r کار آمادهٔ اجرا، b کار مسدود، si و so تبادل swap و us/sy/id/wa دسته‌های زمان CPU هستند. wa پایدار همراه تأخیر برنامه نیازمند بررسی ذخیره‌سازی است، نه اثبات خرابی دیسک. load در uptime را با تعداد پردازندهٔ nproc مقایسه کنید. available در free حافظهٔ قابل دسترس بدون swap را برآورد می‌کند؛ free کم به‌تنهایی کمبود نیست. df -hT فضای فایل‌سیستم mounted و df -i مصرف inode را نشان می‌دهد. %CPU در ps معیار عمر پردازش است و بازهٔ نمونه‌برداری vmstat نیست.">For the earlier vmstat 1 5 command, r is runnable tasks, b blocked tasks, si/so swap transfer, and us/sy/id/wa CPU time categories. Sustained wa plus application latency warrants storage investigation; it does not identify a failed disk. Compare uptime load with processor count using nproc. free available estimates memory obtainable without swapping; low free alone is not exhaustion. df -hT reports mounted filesystem space; df -i reports inode exhaustion. ps %CPU is a process lifetime measure, not the same sampling interval as vmstat.</p><pre dir="ltr"><code class="language-bash">nproc
+findmnt -T /var/log
+namei -l /var/log/nginx/error.log</code></pre><p data-en="Illustrative interpretation: Use% 98 with IUse% 20 indicates byte pressure rather than inode pressure. findmnt identifies the filesystem containing the path. namei shows ownership/mode of every directory component: a denied parent search permission can prevent access even when the final file is readable. These checks are read-only; protected path traversal may need sudo." data-fa="تفسیر آموزشی: Use% برابر 98 با IUse% برابر 20 نشان‌دهندهٔ فشار بایت است، نه inode. findmnt فایل‌سیستم مسیر را مشخص می‌کند. namei مالک و mode هر جزء مسیر را نشان می‌دهد؛ نداشتن مجوز جست‌وجوی پوشهٔ والد حتی با فایل نهایی خواندنی مانع دسترسی می‌شود. این بررسی‌ها فقط خواندنی هستند؛ مسیر محافظت‌شده ممکن است sudo بخواهد.">Illustrative interpretation: Use% 98 with IUse% 20 indicates byte pressure rather than inode pressure. findmnt identifies the filesystem containing the path. namei shows ownership/mode of every directory component: a denied parent search permission can prevent access even when the final file is readable. These checks are read-only; protected path traversal may need sudo.</p></div></section>
                   <section id="enterprise-monitoring" class="article-section">
                     <h2
                       data-fa="مقایسه Snapshot با Trend"
@@ -694,24 +698,40 @@ resolvectl status</code></pre>
                       rather than to clear visible errors.
                     </p>
                   </section>
-                  <section id="enterprise-security" class="article-section">
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
                     <h2
-                      data-fa="حفاظت از شواهد و محدودکردن sudo"
-                      data-en="Protect evidence and limit sudo"
+                      data-fa="اختلاف df و du و خطای شبکه"
+                      data-en="df/du disagreement and network failures"
                     >
-                      Protect evidence and limit sudo
+                      df/du disagreement and network failures
                     </h2>
                     <p
-                      data-fa="خروجی Process، Environment و Config ممکن است Secret داشته باشد. آن را در Ticket عمومی نگذارید. Permission را فقط برای مسیر و مالک تأییدشده اصلاح کنید. chmod یا chown بازگشتی روی یک پوشه بزرگ، راه‌حل عمومی Permission denied نیست."
-                      data-en="Process, environment and configuration output might contain secrets. Keep it out of public tickets. Correct permissions only for verified paths and owners. Broad recursive chmod or chown is not a general Permission denied fix."
+                      data-fa="اگر df دیسک را پر نشان می‌دهد ولی du کوچک است، فایل حذف‌شده باز یا داده پنهان‌شده زیر Mount را بررسی کنید. lsof در صورت نصب، Process نگه‌دارنده فایل را نشان می‌دهد."
+                      data-en="When df reports full storage but du totals are small, inspect open deleted files or data hidden beneath mounts. Installed lsof identifies processes holding deleted files."
                     >
-                      Process, environment and configuration output might
-                      contain secrets. Keep it out of public tickets. Correct
-                      permissions only for verified paths and owners. Broad
-                      recursive chmod or chown is not a general Permission
-                      denied fix.
+                      When df reports full storage but du totals are small,
+                      inspect open deleted files or data hidden beneath mounts.
+                      Installed lsof identifies processes holding deleted files.
                     </p>
-                  </section>
+                    <pre dir="ltr"><code class="language-bash">sudo lsof +L1
+sudo ss -lntp
+ip route get 1.1.1.1
+resolvectl status</code></pre>
+                    <p
+                      data-fa="پس از شناسایی Process، روش مستند Reopen یا Reload لاگ را به کار ببرید. سرویس Active با Endpoint خراب به بررسی وابستگی نیاز دارد. برای Permission، مسیر واقعی را با namei -l و Policy AppArmor بررسی کنید."
+                      data-en="Use the process’s supported log-reopen or reload method. Active services with failing endpoints require dependency checks. For permissions, inspect the actual path with namei -l and review AppArmor policy."
+                    >
+                      Use the process’s supported log-reopen or reload method.
+                      Active services with failing endpoints require dependency
+                      checks. For permissions, inspect the actual path with
+                      namei -l and review AppArmor policy.
+                    </p>
+                  <div id="technical-enterprise-troubleshooting"><h3 data-en="Resolve the failing layer before touching a service" data-fa="یافتن لایهٔ خراب پیش از تغییر سرویس">Resolve the failing layer before touching a service</h3><pre dir="ltr"><code class="language-bash">dig +time=2 +tries=1 app.example.com A
+ip route get 203.0.113.20
+curl --connect-timeout 3 --max-time 10 --fail --show-error --head https://app.example.com/health</code></pre><p data-en="Replace the documentation host/address with an authorized endpoint. dig status NXDOMAIN concerns name existence; timeout concerns resolver response. ip route get prints the chosen via/dev/src and can reveal the wrong VPN/interface. curl exit 6 is resolution, 7 connection, 28 timeout, 22 HTTP failure with --fail and 60 certificate verification. HEAD must be supported by that health endpoint; use its documented request method otherwise. Do not use -k to turn a certificate error into acceptance." data-fa="نام و IP مستندسازی را با مقصد مجاز جایگزین کنید. status برابر NXDOMAIN در dig مربوط به وجود نام و timeout مربوط به پاسخ resolver است. ip route get مسیر via/dev/src را نشان می‌دهد و ممکن است VPN یا رابط نادرست را مشخص کند. خروجی curl با کد 6 خطای نام، 7 اتصال، 28 timeout، 22 خطای HTTP همراه --fail و 60 اعتبارسنجی گواهی است. endpoint سلامت باید HEAD را پشتیبانی کند؛ در غیر این صورت روش درخواست مستند آن را اجرا کنید. با -k خطای گواهی را به پذیرش تبدیل نکنید.">Replace the documentation host/address with an authorized endpoint. dig status NXDOMAIN concerns name existence; timeout concerns resolver response. ip route get prints the chosen via/dev/src and can reveal the wrong VPN/interface. curl exit 6 is resolution, 7 connection, 28 timeout, 22 HTTP failure with --fail and 60 certificate verification. HEAD must be supported by that health endpoint; use its documented request method otherwise. Do not use -k to turn a certificate error into acceptance.</p></div></section>
                   <section id="enterprise-recovery" class="article-section">
                     <h2
                       data-fa="قبل و بعد از تغییر"
@@ -783,7 +803,7 @@ resolvectl status</code></pre>
                         >
                       </li>
                     </ul>
-                  </section>
+                  <div id="technical-enterprise-sources"><p><a href="https://www.gnu.org/software/coreutils/manual/coreutils.html" rel="noopener" data-en="GNU Coreutils" data-fa="مستند رسمی: GNU Coreutils">GNU Coreutils</a></p><p><a href="https://manpages.ubuntu.com/manpages/noble/en/man8/vmstat.8.html" rel="noopener" data-en="Ubuntu vmstat" data-fa="مستند رسمی: Ubuntu vmstat">Ubuntu vmstat</a></p><p><a href="https://manpages.ubuntu.com/manpages/noble/man8/lsof.8.html" rel="noopener" data-en="Ubuntu lsof" data-fa="مستند رسمی: Ubuntu lsof">Ubuntu lsof</a></p><p><a href="https://curl.se/docs/manpage.html" rel="noopener" data-en="curl exit codes" data-fa="مستند رسمی: curl exit codes">curl exit codes</a></p></div></section>
                 </div>
               </article>
             </div>

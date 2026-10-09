@@ -1,0 +1,6420 @@
+{
+  "date": "2026-10-09",
+  "summary": {
+    "repository_articles_discovered": 41,
+    "repository_articles_audited": 41,
+    "language_editions_audited": 82,
+    "corrected_articles": 9,
+    "source_articles_corrected": 8,
+    "rendering_only_articles_corrected": 1,
+    "h2_headings_renumbered": 93,
+    "language_heading_labels_renumbered": 186,
+    "sections_reordered": 13,
+    "duplicate_sections_removed": 0,
+    "broken_fragment_targets_fixed": 0,
+    "incorrect_toc_targets_fixed": 1,
+    "bilingual_content_inconsistencies_fixed": 0,
+    "editorial_review_labels_removed_this_audit": 0,
+    "real_cms_records_audited": 0,
+    "source_toc_entries_renumbered": 79
+  },
+  "articles": [
+    {
+      "slug": "cisco-catalyst-layer-2-layer-3-switch-hardening",
+      "original_heading_order": [
+        {
+          "id": "prechecks",
+          "en": "1. Pre-Hardening Checks",
+          "fa": "۱. بررسی پیش از هاردنینگ"
+        },
+        {
+          "id": "architecture",
+          "en": "Architecture and deployment contract",
+          "fa": "معماری و الزامات استقرار"
+        },
+        {
+          "id": "baseline",
+          "en": "2. Common Hardening Baseline: Identity and AAA",
+          "fa": "۲. تنظیمات مشترک: Identity و AAA"
+        },
+        {
+          "id": "ssh",
+          "en": "3. SSH Hardening",
+          "fa": "۳. امنیت SSH"
+        },
+        {
+          "id": "services",
+          "en": "4. Disable Unnecessary Services",
+          "fa": "۴. غیرفعال‌سازی سرویس غیرضروری"
+        },
+        {
+          "id": "l2",
+          "en": "5. Layer 2 Switch Hardening",
+          "fa": "۵. هاردنینگ سوئیچ لایه ۲"
+        },
+        {
+          "id": "dhcp",
+          "en": "6. DHCP Snooping",
+          "fa": "۶. DHCP Snooping"
+        },
+        {
+          "id": "dai",
+          "en": "7. Dynamic ARP Inspection",
+          "fa": "۷. Dynamic ARP Inspection"
+        },
+        {
+          "id": "ipsg",
+          "en": "8. IP Source Guard",
+          "fa": "۸. IP Source Guard"
+        },
+        {
+          "id": "stp",
+          "en": "9. STP Hardening",
+          "fa": "۹. هاردنینگ STP"
+        },
+        {
+          "id": "port-security",
+          "en": "10. Port Security",
+          "fa": "۱۰. Port Security"
+        },
+        {
+          "id": "storm",
+          "en": "11. Storm Control",
+          "fa": "۱۱. Storm Control"
+        },
+        {
+          "id": "trunk",
+          "en": "12. Trunk Hardening",
+          "fa": "۱۲. هاردنینگ Trunk"
+        },
+        {
+          "id": "unused",
+          "en": "13. Unused Ports",
+          "fa": "۱۳. پورت بلااستفاده"
+        },
+        {
+          "id": "l3",
+          "en": "14. Layer 3 Switch Hardening",
+          "fa": "۱۴. هاردنینگ سوئیچ لایه ۳"
+        },
+        {
+          "id": "svi-acl",
+          "en": "15. Layer 3 ACL Hardening",
+          "fa": "۱۵. هاردنینگ ACL لایه ۳"
+        },
+        {
+          "id": "routing",
+          "en": "16. Routing Protocol Security — OSPF",
+          "fa": "۱۶. امنیت پروتکل Routing — OSPF"
+        },
+        {
+          "id": "ntp",
+          "en": "17. NTP Hardening",
+          "fa": "۱۷. امنیت NTP"
+        },
+        {
+          "id": "syslog",
+          "en": "18. Syslog",
+          "fa": "۱۸. Syslog"
+        },
+        {
+          "id": "snmp",
+          "en": "19. SNMP — AuthPriv First",
+          "fa": "۱۹. SNMP با اولویت AuthPriv"
+        },
+        {
+          "id": "login",
+          "en": "20. Login Attack Protection",
+          "fa": "۲۰. حفاظت در برابر حمله Login"
+        },
+        {
+          "id": "final-configs",
+          "en": "22. Final Independent Configurations",
+          "fa": "۲۲. پیکربندی‌های نهایی مستقل"
+        },
+        {
+          "id": "verification",
+          "en": "21. Verification and Acceptance",
+          "fa": "۲۱. اعتبارسنجی و پذیرش"
+        },
+        {
+          "id": "warnings",
+          "en": "23. Important Warnings",
+          "fa": "۲۳. هشدارهای مهم"
+        },
+        {
+          "id": "checklist",
+          "en": "24. Final Hardening Checklist",
+          "fa": "۲۴. چک‌لیست نهایی"
+        },
+        {
+          "id": "references",
+          "en": "Official Cisco References",
+          "fa": "منابع رسمی Cisco"
+        }
+      ],
+      "final_heading_order": [
+        {
+          "id": "prechecks",
+          "en": "1. Pre-Hardening Checks",
+          "fa": "۱. بررسی پیش از هاردنینگ"
+        },
+        {
+          "id": "architecture",
+          "en": "Architecture and deployment contract",
+          "fa": "معماری و الزامات استقرار"
+        },
+        {
+          "id": "baseline",
+          "en": "2. Common Hardening Baseline: Identity and AAA",
+          "fa": "۲. تنظیمات مشترک: Identity و AAA"
+        },
+        {
+          "id": "ssh",
+          "en": "3. SSH Hardening",
+          "fa": "۳. امنیت SSH"
+        },
+        {
+          "id": "services",
+          "en": "4. Disable Unnecessary Services",
+          "fa": "۴. غیرفعال‌سازی سرویس غیرضروری"
+        },
+        {
+          "id": "l2",
+          "en": "5. Layer 2 Switch Hardening",
+          "fa": "۵. هاردنینگ سوئیچ لایه ۲"
+        },
+        {
+          "id": "dhcp",
+          "en": "6. DHCP Snooping",
+          "fa": "۶. DHCP Snooping"
+        },
+        {
+          "id": "dai",
+          "en": "7. Dynamic ARP Inspection",
+          "fa": "۷. Dynamic ARP Inspection"
+        },
+        {
+          "id": "ipsg",
+          "en": "8. IP Source Guard",
+          "fa": "۸. IP Source Guard"
+        },
+        {
+          "id": "stp",
+          "en": "9. STP Hardening",
+          "fa": "۹. هاردنینگ STP"
+        },
+        {
+          "id": "port-security",
+          "en": "10. Port Security",
+          "fa": "۱۰. Port Security"
+        },
+        {
+          "id": "storm",
+          "en": "11. Storm Control",
+          "fa": "۱۱. Storm Control"
+        },
+        {
+          "id": "trunk",
+          "en": "12. Trunk Hardening",
+          "fa": "۱۲. هاردنینگ Trunk"
+        },
+        {
+          "id": "unused",
+          "en": "13. Unused Ports",
+          "fa": "۱۳. پورت بلااستفاده"
+        },
+        {
+          "id": "l3",
+          "en": "14. Layer 3 Switch Hardening",
+          "fa": "۱۴. هاردنینگ سوئیچ لایه ۳"
+        },
+        {
+          "id": "svi-acl",
+          "en": "15. Layer 3 ACL Hardening",
+          "fa": "۱۵. هاردنینگ ACL لایه ۳"
+        },
+        {
+          "id": "routing",
+          "en": "16. Routing Protocol Security — OSPF",
+          "fa": "۱۶. امنیت پروتکل Routing — OSPF"
+        },
+        {
+          "id": "ntp",
+          "en": "17. NTP Hardening",
+          "fa": "۱۷. امنیت NTP"
+        },
+        {
+          "id": "syslog",
+          "en": "18. Syslog",
+          "fa": "۱۸. Syslog"
+        },
+        {
+          "id": "snmp",
+          "en": "19. SNMP — AuthPriv First",
+          "fa": "۱۹. SNMP با اولویت AuthPriv"
+        },
+        {
+          "id": "login",
+          "en": "20. Login Attack Protection",
+          "fa": "۲۰. حفاظت در برابر حمله Login"
+        },
+        {
+          "id": "final-configs",
+          "en": "21. Final Independent Configurations",
+          "fa": "۲۱. پیکربندی‌های نهایی مستقل"
+        },
+        {
+          "id": "verification",
+          "en": "22. Verification and Acceptance",
+          "fa": "۲۲. اعتبارسنجی و پذیرش"
+        },
+        {
+          "id": "warnings",
+          "en": "23. Important Warnings",
+          "fa": "۲۳. هشدارهای مهم"
+        },
+        {
+          "id": "checklist",
+          "en": "24. Final Hardening Checklist",
+          "fa": "۲۴. چک‌لیست نهایی"
+        },
+        {
+          "id": "references",
+          "en": "Official Cisco References",
+          "fa": "منابع رسمی Cisco"
+        }
+      ],
+      "headings_renumbered": [
+        {
+          "id": "final-configs",
+          "before": {
+            "id": "final-configs",
+            "en": "22. Final Independent Configurations",
+            "fa": "۲۲. پیکربندی‌های نهایی مستقل"
+          },
+          "after": {
+            "id": "final-configs",
+            "en": "21. Final Independent Configurations",
+            "fa": "۲۱. پیکربندی‌های نهایی مستقل"
+          }
+        },
+        {
+          "id": "verification",
+          "before": {
+            "id": "verification",
+            "en": "21. Verification and Acceptance",
+            "fa": "۲۱. اعتبارسنجی و پذیرش"
+          },
+          "after": {
+            "id": "verification",
+            "en": "22. Verification and Acceptance",
+            "fa": "۲۲. اعتبارسنجی و پذیرش"
+          }
+        }
+      ],
+      "section_movements": [],
+      "validation": "passed (source, final EN/FA rendering, browser desktop/mobile, regeneration)",
+      "code_correction": null,
+      "final_rendered_heading_order": {
+        "en": [
+          {
+            "id": "introduction",
+            "text": "Introduction"
+          },
+          {
+            "id": "prerequisites",
+            "text": "1. Pre-Hardening Checks"
+          },
+          {
+            "id": "architecture",
+            "text": "Architecture and deployment contract"
+          },
+          {
+            "id": "configuration",
+            "text": "2. Common Hardening Baseline: Identity and AAA"
+          },
+          {
+            "id": "security",
+            "text": "3. SSH Hardening"
+          },
+          {
+            "id": "services",
+            "text": "4. Disable Unnecessary Services"
+          },
+          {
+            "id": "l2",
+            "text": "5. Layer 2 Switch Hardening"
+          },
+          {
+            "id": "dhcp",
+            "text": "6. DHCP Snooping"
+          },
+          {
+            "id": "dai",
+            "text": "7. Dynamic ARP Inspection"
+          },
+          {
+            "id": "ipsg",
+            "text": "8. IP Source Guard"
+          },
+          {
+            "id": "stp",
+            "text": "9. STP Hardening"
+          },
+          {
+            "id": "port-security",
+            "text": "10. Port Security"
+          },
+          {
+            "id": "storm",
+            "text": "11. Storm Control"
+          },
+          {
+            "id": "trunk",
+            "text": "12. Trunk Hardening"
+          },
+          {
+            "id": "unused",
+            "text": "13. Unused Ports"
+          },
+          {
+            "id": "l3",
+            "text": "14. Layer 3 Switch Hardening"
+          },
+          {
+            "id": "svi-acl",
+            "text": "15. Layer 3 ACL Hardening"
+          },
+          {
+            "id": "routing",
+            "text": "16. Routing Protocol Security — OSPF"
+          },
+          {
+            "id": "ntp",
+            "text": "17. NTP Hardening"
+          },
+          {
+            "id": "syslog",
+            "text": "18. Syslog"
+          },
+          {
+            "id": "snmp",
+            "text": "19. SNMP — AuthPriv First"
+          },
+          {
+            "id": "login",
+            "text": "20. Login Attack Protection"
+          },
+          {
+            "id": "final-configs",
+            "text": "21. Final Independent Configurations"
+          },
+          {
+            "id": "verification",
+            "text": "22. Verification and Acceptance"
+          },
+          {
+            "id": "troubleshooting",
+            "text": "Troubleshooting"
+          },
+          {
+            "id": "warnings",
+            "text": "23. Important Warnings"
+          },
+          {
+            "id": "best-practices",
+            "text": "24. Final Hardening Checklist"
+          },
+          {
+            "id": "conclusion",
+            "text": "Conclusion"
+          },
+          {
+            "id": "faq",
+            "text": "Frequently Asked Questions"
+          },
+          {
+            "id": "official-references",
+            "text": "Official Cisco References"
+          }
+        ],
+        "fa": [
+          {
+            "id": "introduction",
+            "text": "مقدمه"
+          },
+          {
+            "id": "prerequisites",
+            "text": "۱. بررسی پیش از هاردنینگ"
+          },
+          {
+            "id": "architecture",
+            "text": "معماری و الزامات استقرار"
+          },
+          {
+            "id": "configuration",
+            "text": "۲. تنظیمات مشترک: Identity و AAA"
+          },
+          {
+            "id": "security",
+            "text": "۳. امنیت SSH"
+          },
+          {
+            "id": "services",
+            "text": "۴. غیرفعال‌سازی سرویس غیرضروری"
+          },
+          {
+            "id": "l2",
+            "text": "۵. هاردنینگ سوئیچ لایه ۲"
+          },
+          {
+            "id": "dhcp",
+            "text": "۶. DHCP Snooping"
+          },
+          {
+            "id": "dai",
+            "text": "۷. Dynamic ARP Inspection"
+          },
+          {
+            "id": "ipsg",
+            "text": "۸. IP Source Guard"
+          },
+          {
+            "id": "stp",
+            "text": "۹. هاردنینگ STP"
+          },
+          {
+            "id": "port-security",
+            "text": "۱۰. Port Security"
+          },
+          {
+            "id": "storm",
+            "text": "۱۱. Storm Control"
+          },
+          {
+            "id": "trunk",
+            "text": "۱۲. هاردنینگ Trunk"
+          },
+          {
+            "id": "unused",
+            "text": "۱۳. پورت بلااستفاده"
+          },
+          {
+            "id": "l3",
+            "text": "۱۴. هاردنینگ سوئیچ لایه ۳"
+          },
+          {
+            "id": "svi-acl",
+            "text": "۱۵. هاردنینگ ACL لایه ۳"
+          },
+          {
+            "id": "routing",
+            "text": "۱۶. امنیت پروتکل Routing — OSPF"
+          },
+          {
+            "id": "ntp",
+            "text": "۱۷. امنیت NTP"
+          },
+          {
+            "id": "syslog",
+            "text": "۱۸. Syslog"
+          },
+          {
+            "id": "snmp",
+            "text": "۱۹. SNMP با اولویت AuthPriv"
+          },
+          {
+            "id": "login",
+            "text": "۲۰. حفاظت در برابر حمله Login"
+          },
+          {
+            "id": "final-configs",
+            "text": "۲۱. پیکربندی‌های نهایی مستقل"
+          },
+          {
+            "id": "verification",
+            "text": "۲۲. اعتبارسنجی و پذیرش"
+          },
+          {
+            "id": "troubleshooting",
+            "text": "عیب‌یابی"
+          },
+          {
+            "id": "warnings",
+            "text": "۲۳. هشدارهای مهم"
+          },
+          {
+            "id": "best-practices",
+            "text": "۲۴. چک‌لیست نهایی"
+          },
+          {
+            "id": "conclusion",
+            "text": "جمع‌بندی"
+          },
+          {
+            "id": "faq",
+            "text": "پرسش‌های متداول"
+          },
+          {
+            "id": "official-references",
+            "text": "منابع رسمی Cisco"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "mikrotik-ping-triggered-policy-routing",
+      "original_heading_order": [
+        {
+          "id": "introduction",
+          "en": "1. Introduction",
+          "fa": "۱. مقدمه"
+        },
+        {
+          "id": "architecture",
+          "en": "2. Architecture",
+          "fa": "۲. معماری"
+        },
+        {
+          "id": "technical-limitation",
+          "en": "3. Root Cause / Technical Limitation",
+          "fa": "۳. محدودیت فنی Firewall"
+        },
+        {
+          "id": "control-interface",
+          "en": "4. Control Interface",
+          "fa": "۴. Interface کنترلی"
+        },
+        {
+          "id": "local-networks",
+          "en": "5. Local Networks",
+          "fa": "۵. شبکه‌های داخلی"
+        },
+        {
+          "id": "enable-trigger",
+          "en": "6. Enable Trigger",
+          "fa": "۶. Trigger فعال‌سازی"
+        },
+        {
+          "id": "disable-trigger",
+          "en": "7. Disable Trigger",
+          "fa": "۷. Trigger غیرفعال‌سازی"
+        },
+        {
+          "id": "routing-table",
+          "en": "8. RouterOS v7 Routing Table",
+          "fa": "۸. Routing Table در RouterOS v7"
+        },
+        {
+          "id": "mangle-policy",
+          "en": "9. Mangle Policy Routing",
+          "fa": "۹. Policy Routing با Mangle"
+        },
+        {
+          "id": "removal-script",
+          "en": "10. Removal Script",
+          "fa": "۱۰. Script حذف"
+        },
+        {
+          "id": "scheduler",
+          "en": "11. Scheduler",
+          "fa": "۱۱. Scheduler"
+        },
+        {
+          "id": "fasttrack",
+          "en": "12. FastTrack",
+          "fa": "۱۲. FastTrack"
+        },
+        {
+          "id": "nat",
+          "en": "13. NAT",
+          "fa": "۱۳. NAT"
+        },
+        {
+          "id": "connection-tracking",
+          "en": "14. Connection Tracking",
+          "fa": "۱۴. Connection Tracking"
+        },
+        {
+          "id": "security",
+          "en": "18. Security Considerations",
+          "fa": "۱۸. ملاحظات امنیتی"
+        },
+        {
+          "id": "complete-configuration",
+          "en": "20. Complete Example Configuration",
+          "fa": "۲۰. پیکربندی کامل مثال"
+        },
+        {
+          "id": "testing",
+          "en": "15. Testing",
+          "fa": "۱۵. آزمون"
+        },
+        {
+          "id": "expected-result",
+          "en": "16. Expected Result",
+          "fa": "۱۶. نتیجه مورد انتظار"
+        },
+        {
+          "id": "troubleshooting",
+          "en": "17. Troubleshooting",
+          "fa": "۱۷. عیب‌یابی"
+        },
+        {
+          "id": "best-practices",
+          "en": "19. Production Best Practices",
+          "fa": "۱۹. توصیه‌های Production"
+        },
+        {
+          "id": "conclusion",
+          "en": "Conclusion",
+          "fa": "جمع‌بندی"
+        },
+        {
+          "id": "faq",
+          "en": "FAQ",
+          "fa": "پرسش‌های متداول"
+        }
+      ],
+      "final_heading_order": [
+        {
+          "id": "introduction",
+          "en": "1. Introduction",
+          "fa": "۱. مقدمه"
+        },
+        {
+          "id": "architecture",
+          "en": "2. Architecture",
+          "fa": "۲. معماری"
+        },
+        {
+          "id": "technical-limitation",
+          "en": "3. Root Cause / Technical Limitation",
+          "fa": "۳. محدودیت فنی Firewall"
+        },
+        {
+          "id": "control-interface",
+          "en": "4. Control Interface",
+          "fa": "۴. Interface کنترلی"
+        },
+        {
+          "id": "local-networks",
+          "en": "5. Local Networks",
+          "fa": "۵. شبکه‌های داخلی"
+        },
+        {
+          "id": "enable-trigger",
+          "en": "6. Enable Trigger",
+          "fa": "۶. Trigger فعال‌سازی"
+        },
+        {
+          "id": "disable-trigger",
+          "en": "7. Disable Trigger",
+          "fa": "۷. Trigger غیرفعال‌سازی"
+        },
+        {
+          "id": "routing-table",
+          "en": "8. RouterOS v7 Routing Table",
+          "fa": "۸. Routing Table در RouterOS v7"
+        },
+        {
+          "id": "mangle-policy",
+          "en": "9. Mangle Policy Routing",
+          "fa": "۹. Policy Routing با Mangle"
+        },
+        {
+          "id": "removal-script",
+          "en": "10. Removal Script",
+          "fa": "۱۰. Script حذف"
+        },
+        {
+          "id": "scheduler",
+          "en": "11. Scheduler",
+          "fa": "۱۱. Scheduler"
+        },
+        {
+          "id": "fasttrack",
+          "en": "12. FastTrack",
+          "fa": "۱۲. FastTrack"
+        },
+        {
+          "id": "nat",
+          "en": "13. NAT",
+          "fa": "۱۳. NAT"
+        },
+        {
+          "id": "connection-tracking",
+          "en": "14. Connection Tracking",
+          "fa": "۱۴. Connection Tracking"
+        },
+        {
+          "id": "security",
+          "en": "15. Security Considerations",
+          "fa": "۱۵. ملاحظات امنیتی"
+        },
+        {
+          "id": "complete-configuration",
+          "en": "16. Complete Example Configuration",
+          "fa": "۱۶. پیکربندی کامل مثال"
+        },
+        {
+          "id": "testing",
+          "en": "17. Testing",
+          "fa": "۱۷. آزمون"
+        },
+        {
+          "id": "expected-result",
+          "en": "18. Expected Result",
+          "fa": "۱۸. نتیجه مورد انتظار"
+        },
+        {
+          "id": "troubleshooting",
+          "en": "19. Troubleshooting",
+          "fa": "۱۹. عیب‌یابی"
+        },
+        {
+          "id": "best-practices",
+          "en": "20. Production Best Practices",
+          "fa": "۲۰. توصیه‌های Production"
+        },
+        {
+          "id": "conclusion",
+          "en": "Conclusion",
+          "fa": "جمع‌بندی"
+        },
+        {
+          "id": "faq",
+          "en": "FAQ",
+          "fa": "پرسش‌های متداول"
+        }
+      ],
+      "headings_renumbered": [
+        {
+          "id": "security",
+          "before": {
+            "id": "security",
+            "en": "18. Security Considerations",
+            "fa": "۱۸. ملاحظات امنیتی"
+          },
+          "after": {
+            "id": "security",
+            "en": "15. Security Considerations",
+            "fa": "۱۵. ملاحظات امنیتی"
+          }
+        },
+        {
+          "id": "complete-configuration",
+          "before": {
+            "id": "complete-configuration",
+            "en": "20. Complete Example Configuration",
+            "fa": "۲۰. پیکربندی کامل مثال"
+          },
+          "after": {
+            "id": "complete-configuration",
+            "en": "16. Complete Example Configuration",
+            "fa": "۱۶. پیکربندی کامل مثال"
+          }
+        },
+        {
+          "id": "testing",
+          "before": {
+            "id": "testing",
+            "en": "15. Testing",
+            "fa": "۱۵. آزمون"
+          },
+          "after": {
+            "id": "testing",
+            "en": "17. Testing",
+            "fa": "۱۷. آزمون"
+          }
+        },
+        {
+          "id": "expected-result",
+          "before": {
+            "id": "expected-result",
+            "en": "16. Expected Result",
+            "fa": "۱۶. نتیجه مورد انتظار"
+          },
+          "after": {
+            "id": "expected-result",
+            "en": "18. Expected Result",
+            "fa": "۱۸. نتیجه مورد انتظار"
+          }
+        },
+        {
+          "id": "troubleshooting",
+          "before": {
+            "id": "troubleshooting",
+            "en": "17. Troubleshooting",
+            "fa": "۱۷. عیب‌یابی"
+          },
+          "after": {
+            "id": "troubleshooting",
+            "en": "19. Troubleshooting",
+            "fa": "۱۹. عیب‌یابی"
+          }
+        },
+        {
+          "id": "best-practices",
+          "before": {
+            "id": "best-practices",
+            "en": "19. Production Best Practices",
+            "fa": "۱۹. توصیه‌های Production"
+          },
+          "after": {
+            "id": "best-practices",
+            "en": "20. Production Best Practices",
+            "fa": "۲۰. توصیه‌های Production"
+          }
+        }
+      ],
+      "section_movements": [],
+      "validation": "passed (source, final EN/FA rendering, browser desktop/mobile, regeneration)",
+      "code_correction": null,
+      "final_rendered_heading_order": {
+        "en": [
+          {
+            "id": "introduction",
+            "text": "1. Introduction"
+          },
+          {
+            "id": "prerequisites",
+            "text": "Prerequisites"
+          },
+          {
+            "id": "architecture",
+            "text": "2. Architecture"
+          },
+          {
+            "id": "technical-limitation",
+            "text": "3. Root Cause / Technical Limitation"
+          },
+          {
+            "id": "control-interface",
+            "text": "4. Control Interface"
+          },
+          {
+            "id": "local-networks",
+            "text": "5. Local Networks"
+          },
+          {
+            "id": "configuration",
+            "text": "Configuration and Validation"
+          },
+          {
+            "id": "enable-trigger",
+            "text": "6. Enable Trigger"
+          },
+          {
+            "id": "disable-trigger",
+            "text": "7. Disable Trigger"
+          },
+          {
+            "id": "routing-table",
+            "text": "8. RouterOS v7 Routing Table"
+          },
+          {
+            "id": "mangle-policy",
+            "text": "9. Mangle Policy Routing"
+          },
+          {
+            "id": "removal-script",
+            "text": "10. Removal Script"
+          },
+          {
+            "id": "scheduler",
+            "text": "11. Scheduler"
+          },
+          {
+            "id": "fasttrack",
+            "text": "12. FastTrack"
+          },
+          {
+            "id": "nat",
+            "text": "13. NAT"
+          },
+          {
+            "id": "connection-tracking",
+            "text": "14. Connection Tracking"
+          },
+          {
+            "id": "security",
+            "text": "15. Security Considerations"
+          },
+          {
+            "id": "complete-configuration",
+            "text": "16. Complete Example Configuration"
+          },
+          {
+            "id": "testing",
+            "text": "17. Testing"
+          },
+          {
+            "id": "expected-result",
+            "text": "18. Expected Result"
+          },
+          {
+            "id": "troubleshooting",
+            "text": "19. Troubleshooting"
+          },
+          {
+            "id": "best-practices",
+            "text": "20. Production Best Practices"
+          },
+          {
+            "id": "conclusion",
+            "text": "Conclusion"
+          },
+          {
+            "id": "faq",
+            "text": "FAQ"
+          },
+          {
+            "id": "official-references",
+            "text": "Official References"
+          }
+        ],
+        "fa": [
+          {
+            "id": "introduction",
+            "text": "۱. مقدمه"
+          },
+          {
+            "id": "prerequisites",
+            "text": "پیش‌نیازها"
+          },
+          {
+            "id": "architecture",
+            "text": "۲. معماری"
+          },
+          {
+            "id": "technical-limitation",
+            "text": "۳. محدودیت فنی Firewall"
+          },
+          {
+            "id": "control-interface",
+            "text": "۴. Interface کنترلی"
+          },
+          {
+            "id": "local-networks",
+            "text": "۵. شبکه‌های داخلی"
+          },
+          {
+            "id": "configuration",
+            "text": "Configuration و اعتبارسنجی"
+          },
+          {
+            "id": "enable-trigger",
+            "text": "۶. Trigger فعال‌سازی"
+          },
+          {
+            "id": "disable-trigger",
+            "text": "۷. Trigger غیرفعال‌سازی"
+          },
+          {
+            "id": "routing-table",
+            "text": "۸. Routing Table در RouterOS v7"
+          },
+          {
+            "id": "mangle-policy",
+            "text": "۹. Policy Routing با Mangle"
+          },
+          {
+            "id": "removal-script",
+            "text": "۱۰. Script حذف"
+          },
+          {
+            "id": "scheduler",
+            "text": "۱۱. Scheduler"
+          },
+          {
+            "id": "fasttrack",
+            "text": "۱۲. FastTrack"
+          },
+          {
+            "id": "nat",
+            "text": "۱۳. NAT"
+          },
+          {
+            "id": "connection-tracking",
+            "text": "۱۴. Connection Tracking"
+          },
+          {
+            "id": "security",
+            "text": "۱۵. ملاحظات امنیتی"
+          },
+          {
+            "id": "complete-configuration",
+            "text": "۱۶. پیکربندی کامل مثال"
+          },
+          {
+            "id": "testing",
+            "text": "۱۷. آزمون"
+          },
+          {
+            "id": "expected-result",
+            "text": "۱۸. نتیجه مورد انتظار"
+          },
+          {
+            "id": "troubleshooting",
+            "text": "۱۹. عیب‌یابی"
+          },
+          {
+            "id": "best-practices",
+            "text": "۲۰. توصیه‌های Production"
+          },
+          {
+            "id": "conclusion",
+            "text": "جمع‌بندی"
+          },
+          {
+            "id": "faq",
+            "text": "پرسش‌های متداول"
+          },
+          {
+            "id": "official-references",
+            "text": "منابع رسمی و مرجع"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "mongodb-installation-configuration-production-deployment",
+      "original_heading_order": [
+        {
+          "id": "introduction",
+          "en": "1. What Is MongoDB?",
+          "fa": "۱. MongoDB چیست؟"
+        },
+        {
+          "id": "prerequisites",
+          "en": "3. Server Requirements",
+          "fa": "۳. پیش‌نیاز سرور"
+        },
+        {
+          "id": "pre-installation",
+          "en": "4. Pre-Installation Checks",
+          "fa": "۴. بررسی پیش از نصب"
+        },
+        {
+          "id": "architecture",
+          "en": "2. Architecture Overview",
+          "fa": "۲. نمای معماری"
+        },
+        {
+          "id": "ubuntu-install",
+          "en": "5. Install MongoDB on Ubuntu 22.04 / 24.04",
+          "fa": "۵. نصب MongoDB روی Ubuntu 22.04 / 24.04"
+        },
+        {
+          "id": "debian-install",
+          "en": "6. Install MongoDB on Debian 12",
+          "fa": "۶. نصب MongoDB روی Debian 12"
+        },
+        {
+          "id": "rhel-install",
+          "en": "7. Install on RHEL / Rocky / AlmaLinux",
+          "fa": "۷. نصب روی RHEL / Rocky / AlmaLinux"
+        },
+        {
+          "id": "configuration",
+          "en": "8. MongoDB Configuration",
+          "fa": "۸. پیکربندی MongoDB"
+        },
+        {
+          "id": "remote-access",
+          "en": "9. Secure Remote Access",
+          "fa": "۹. دسترسی Remote امن"
+        },
+        {
+          "id": "authentication",
+          "en": "10. MongoDB Authentication",
+          "fa": "۱۰. احراز هویت MongoDB"
+        },
+        {
+          "id": "application-user",
+          "en": "11. Dedicated Application User",
+          "fa": "۱۱. حساب اختصاصی Application"
+        },
+        {
+          "id": "firewall",
+          "en": "12. Firewall Hardening",
+          "fa": "۱۲. ایمن‌سازی Firewall"
+        },
+        {
+          "id": "security",
+          "en": "13. MongoDB Security Hardening",
+          "fa": "۱۳. ایمن‌سازی MongoDB"
+        },
+        {
+          "id": "tls",
+          "en": "14. TLS Encryption",
+          "fa": "۱۴. رمزنگاری TLS"
+        },
+        {
+          "id": "replica-set",
+          "en": "15. Production Replica Set",
+          "fa": "۱۵. Replica Set در Production"
+        },
+        {
+          "id": "replica-security",
+          "en": "16. Replica Set Internal Authentication",
+          "fa": "۱۶. احراز هویت داخلی Replica Set"
+        },
+        {
+          "id": "connection-string",
+          "en": "17. MongoDB Connection Strings and Secrets",
+          "fa": "۱۷. Connection String و Secretها"
+        },
+        {
+          "id": "logging",
+          "en": "21. Logging and Slow Queries",
+          "fa": "۲۱. Log و Slow Query"
+        },
+        {
+          "id": "monitoring",
+          "en": "22. Monitoring and Alerting",
+          "fa": "۲۲. مانیتورینگ و Alert"
+        },
+        {
+          "id": "backup",
+          "en": "18. Backup and Tested Recovery",
+          "fa": "۱۸. Backup و بازیابی آزموده‌شده"
+        },
+        {
+          "id": "verification",
+          "en": "24. Verification Checklist",
+          "fa": "۲۴. چک‌لیست اعتبارسنجی"
+        },
+        {
+          "id": "troubleshooting",
+          "en": "23. Troubleshooting",
+          "fa": "۲۳. عیب‌یابی"
+        },
+        {
+          "id": "performance",
+          "en": "19. Performance Checks",
+          "fa": "۱۹. بررسی Performance"
+        },
+        {
+          "id": "indexing",
+          "en": "20. Indexing and Query Plans",
+          "fa": "۲۰. Index و Query Plan"
+        },
+        {
+          "id": "best-practices",
+          "en": "25. Production Checklist",
+          "fa": "۲۵. چک‌لیست Production"
+        },
+        {
+          "id": "conclusion",
+          "en": "Operational Handover",
+          "fa": "تحویل عملیاتی"
+        },
+        {
+          "id": "faq",
+          "en": "Frequently Asked Questions",
+          "fa": "پرسش‌های متداول"
+        },
+        {
+          "id": "official-references",
+          "en": "Official References",
+          "fa": "منابع رسمی"
+        }
+      ],
+      "final_heading_order": [
+        {
+          "id": "introduction",
+          "en": "1. What Is MongoDB?",
+          "fa": "۱. MongoDB چیست؟"
+        },
+        {
+          "id": "prerequisites",
+          "en": "2. Server Requirements",
+          "fa": "۲. پیش‌نیاز سرور"
+        },
+        {
+          "id": "architecture",
+          "en": "3. Architecture Overview",
+          "fa": "۳. نمای معماری"
+        },
+        {
+          "id": "pre-installation",
+          "en": "4. Pre-Installation Checks",
+          "fa": "۴. بررسی پیش از نصب"
+        },
+        {
+          "id": "ubuntu-install",
+          "en": "5. Install MongoDB on Ubuntu 22.04 / 24.04",
+          "fa": "۵. نصب MongoDB روی Ubuntu 22.04 / 24.04"
+        },
+        {
+          "id": "debian-install",
+          "en": "6. Install MongoDB on Debian 12",
+          "fa": "۶. نصب MongoDB روی Debian 12"
+        },
+        {
+          "id": "rhel-install",
+          "en": "7. Install on RHEL / Rocky / AlmaLinux",
+          "fa": "۷. نصب روی RHEL / Rocky / AlmaLinux"
+        },
+        {
+          "id": "configuration",
+          "en": "8. MongoDB Configuration",
+          "fa": "۸. پیکربندی MongoDB"
+        },
+        {
+          "id": "authentication",
+          "en": "9. MongoDB Authentication",
+          "fa": "۹. احراز هویت MongoDB"
+        },
+        {
+          "id": "application-user",
+          "en": "10. Dedicated Application User",
+          "fa": "۱۰. حساب اختصاصی Application"
+        },
+        {
+          "id": "firewall",
+          "en": "11. Firewall Hardening",
+          "fa": "۱۱. ایمن‌سازی Firewall"
+        },
+        {
+          "id": "security",
+          "en": "12. MongoDB Security Hardening",
+          "fa": "۱۲. ایمن‌سازی MongoDB"
+        },
+        {
+          "id": "tls",
+          "en": "13. TLS Encryption",
+          "fa": "۱۳. رمزنگاری TLS"
+        },
+        {
+          "id": "remote-access",
+          "en": "14. Secure Remote Access",
+          "fa": "۱۴. دسترسی Remote امن"
+        },
+        {
+          "id": "replica-security",
+          "en": "15. Replica Set Internal Authentication",
+          "fa": "۱۵. احراز هویت داخلی Replica Set"
+        },
+        {
+          "id": "replica-set",
+          "en": "16. Production Replica Set",
+          "fa": "۱۶. Replica Set در Production"
+        },
+        {
+          "id": "connection-string",
+          "en": "17. MongoDB Connection Strings and Secrets",
+          "fa": "۱۷. Connection String و Secretها"
+        },
+        {
+          "id": "logging",
+          "en": "18. Logging and Slow Queries",
+          "fa": "۱۸. Log و Slow Query"
+        },
+        {
+          "id": "monitoring",
+          "en": "19. Monitoring and Alerting",
+          "fa": "۱۹. مانیتورینگ و Alert"
+        },
+        {
+          "id": "backup",
+          "en": "20. Backup and Tested Recovery",
+          "fa": "۲۰. Backup و بازیابی آزموده‌شده"
+        },
+        {
+          "id": "verification",
+          "en": "21. Verification Checklist",
+          "fa": "۲۱. چک‌لیست اعتبارسنجی"
+        },
+        {
+          "id": "performance",
+          "en": "22. Performance Checks",
+          "fa": "۲۲. بررسی Performance"
+        },
+        {
+          "id": "indexing",
+          "en": "23. Indexing and Query Plans",
+          "fa": "۲۳. Index و Query Plan"
+        },
+        {
+          "id": "troubleshooting",
+          "en": "24. Troubleshooting",
+          "fa": "۲۴. عیب‌یابی"
+        },
+        {
+          "id": "best-practices",
+          "en": "25. Production Checklist",
+          "fa": "۲۵. چک‌لیست Production"
+        },
+        {
+          "id": "conclusion",
+          "en": "Operational Handover",
+          "fa": "تحویل عملیاتی"
+        },
+        {
+          "id": "faq",
+          "en": "Frequently Asked Questions",
+          "fa": "پرسش‌های متداول"
+        },
+        {
+          "id": "official-references",
+          "en": "Official References",
+          "fa": "منابع رسمی"
+        }
+      ],
+      "headings_renumbered": [
+        {
+          "id": "prerequisites",
+          "before": {
+            "id": "prerequisites",
+            "en": "3. Server Requirements",
+            "fa": "۳. پیش‌نیاز سرور"
+          },
+          "after": {
+            "id": "prerequisites",
+            "en": "2. Server Requirements",
+            "fa": "۲. پیش‌نیاز سرور"
+          }
+        },
+        {
+          "id": "architecture",
+          "before": {
+            "id": "architecture",
+            "en": "2. Architecture Overview",
+            "fa": "۲. نمای معماری"
+          },
+          "after": {
+            "id": "architecture",
+            "en": "3. Architecture Overview",
+            "fa": "۳. نمای معماری"
+          }
+        },
+        {
+          "id": "authentication",
+          "before": {
+            "id": "authentication",
+            "en": "10. MongoDB Authentication",
+            "fa": "۱۰. احراز هویت MongoDB"
+          },
+          "after": {
+            "id": "authentication",
+            "en": "9. MongoDB Authentication",
+            "fa": "۹. احراز هویت MongoDB"
+          }
+        },
+        {
+          "id": "application-user",
+          "before": {
+            "id": "application-user",
+            "en": "11. Dedicated Application User",
+            "fa": "۱۱. حساب اختصاصی Application"
+          },
+          "after": {
+            "id": "application-user",
+            "en": "10. Dedicated Application User",
+            "fa": "۱۰. حساب اختصاصی Application"
+          }
+        },
+        {
+          "id": "firewall",
+          "before": {
+            "id": "firewall",
+            "en": "12. Firewall Hardening",
+            "fa": "۱۲. ایمن‌سازی Firewall"
+          },
+          "after": {
+            "id": "firewall",
+            "en": "11. Firewall Hardening",
+            "fa": "۱۱. ایمن‌سازی Firewall"
+          }
+        },
+        {
+          "id": "security",
+          "before": {
+            "id": "security",
+            "en": "13. MongoDB Security Hardening",
+            "fa": "۱۳. ایمن‌سازی MongoDB"
+          },
+          "after": {
+            "id": "security",
+            "en": "12. MongoDB Security Hardening",
+            "fa": "۱۲. ایمن‌سازی MongoDB"
+          }
+        },
+        {
+          "id": "tls",
+          "before": {
+            "id": "tls",
+            "en": "14. TLS Encryption",
+            "fa": "۱۴. رمزنگاری TLS"
+          },
+          "after": {
+            "id": "tls",
+            "en": "13. TLS Encryption",
+            "fa": "۱۳. رمزنگاری TLS"
+          }
+        },
+        {
+          "id": "remote-access",
+          "before": {
+            "id": "remote-access",
+            "en": "9. Secure Remote Access",
+            "fa": "۹. دسترسی Remote امن"
+          },
+          "after": {
+            "id": "remote-access",
+            "en": "14. Secure Remote Access",
+            "fa": "۱۴. دسترسی Remote امن"
+          }
+        },
+        {
+          "id": "replica-security",
+          "before": {
+            "id": "replica-security",
+            "en": "16. Replica Set Internal Authentication",
+            "fa": "۱۶. احراز هویت داخلی Replica Set"
+          },
+          "after": {
+            "id": "replica-security",
+            "en": "15. Replica Set Internal Authentication",
+            "fa": "۱۵. احراز هویت داخلی Replica Set"
+          }
+        },
+        {
+          "id": "replica-set",
+          "before": {
+            "id": "replica-set",
+            "en": "15. Production Replica Set",
+            "fa": "۱۵. Replica Set در Production"
+          },
+          "after": {
+            "id": "replica-set",
+            "en": "16. Production Replica Set",
+            "fa": "۱۶. Replica Set در Production"
+          }
+        },
+        {
+          "id": "logging",
+          "before": {
+            "id": "logging",
+            "en": "21. Logging and Slow Queries",
+            "fa": "۲۱. Log و Slow Query"
+          },
+          "after": {
+            "id": "logging",
+            "en": "18. Logging and Slow Queries",
+            "fa": "۱۸. Log و Slow Query"
+          }
+        },
+        {
+          "id": "monitoring",
+          "before": {
+            "id": "monitoring",
+            "en": "22. Monitoring and Alerting",
+            "fa": "۲۲. مانیتورینگ و Alert"
+          },
+          "after": {
+            "id": "monitoring",
+            "en": "19. Monitoring and Alerting",
+            "fa": "۱۹. مانیتورینگ و Alert"
+          }
+        },
+        {
+          "id": "backup",
+          "before": {
+            "id": "backup",
+            "en": "18. Backup and Tested Recovery",
+            "fa": "۱۸. Backup و بازیابی آزموده‌شده"
+          },
+          "after": {
+            "id": "backup",
+            "en": "20. Backup and Tested Recovery",
+            "fa": "۲۰. Backup و بازیابی آزموده‌شده"
+          }
+        },
+        {
+          "id": "verification",
+          "before": {
+            "id": "verification",
+            "en": "24. Verification Checklist",
+            "fa": "۲۴. چک‌لیست اعتبارسنجی"
+          },
+          "after": {
+            "id": "verification",
+            "en": "21. Verification Checklist",
+            "fa": "۲۱. چک‌لیست اعتبارسنجی"
+          }
+        },
+        {
+          "id": "performance",
+          "before": {
+            "id": "performance",
+            "en": "19. Performance Checks",
+            "fa": "۱۹. بررسی Performance"
+          },
+          "after": {
+            "id": "performance",
+            "en": "22. Performance Checks",
+            "fa": "۲۲. بررسی Performance"
+          }
+        },
+        {
+          "id": "indexing",
+          "before": {
+            "id": "indexing",
+            "en": "20. Indexing and Query Plans",
+            "fa": "۲۰. Index و Query Plan"
+          },
+          "after": {
+            "id": "indexing",
+            "en": "23. Indexing and Query Plans",
+            "fa": "۲۳. Index و Query Plan"
+          }
+        },
+        {
+          "id": "troubleshooting",
+          "before": {
+            "id": "troubleshooting",
+            "en": "23. Troubleshooting",
+            "fa": "۲۳. عیب‌یابی"
+          },
+          "after": {
+            "id": "troubleshooting",
+            "en": "24. Troubleshooting",
+            "fa": "۲۴. عیب‌یابی"
+          }
+        }
+      ],
+      "section_movements": [
+        {
+          "id": "architecture",
+          "from": 4,
+          "to": 3,
+          "reason": "Move before pre-installation implementation checks."
+        },
+        {
+          "id": "remote-access",
+          "from": 9,
+          "to": 14,
+          "reason": "Move after authentication, firewall and TLS prerequisites."
+        },
+        {
+          "id": "replica-security",
+          "from": 16,
+          "to": 15,
+          "reason": "Prepare internal member authentication before replica-set startup."
+        },
+        {
+          "id": "performance",
+          "from": 23,
+          "to": 22,
+          "reason": "Move before troubleshooting so diagnostic expectations are established."
+        },
+        {
+          "id": "indexing",
+          "from": 24,
+          "to": 23,
+          "reason": "Keep query-plan/index checks with performance before troubleshooting."
+        }
+      ],
+      "validation": "passed (source, final EN/FA rendering, browser desktop/mobile, regeneration)",
+      "code_correction": null,
+      "final_rendered_heading_order": {
+        "en": [
+          {
+            "id": "introduction",
+            "text": "1. What Is MongoDB?"
+          },
+          {
+            "id": "prerequisites",
+            "text": "2. Server Requirements"
+          },
+          {
+            "id": "architecture",
+            "text": "3. Architecture Overview"
+          },
+          {
+            "id": "pre-installation",
+            "text": "4. Pre-Installation Checks"
+          },
+          {
+            "id": "ubuntu-install",
+            "text": "5. Install MongoDB on Ubuntu 22.04 / 24.04"
+          },
+          {
+            "id": "debian-install",
+            "text": "6. Install MongoDB on Debian 12"
+          },
+          {
+            "id": "rhel-install",
+            "text": "7. Install on RHEL / Rocky / AlmaLinux"
+          },
+          {
+            "id": "configuration",
+            "text": "8. MongoDB Configuration"
+          },
+          {
+            "id": "authentication",
+            "text": "9. MongoDB Authentication"
+          },
+          {
+            "id": "application-user",
+            "text": "10. Dedicated Application User"
+          },
+          {
+            "id": "firewall",
+            "text": "11. Firewall Hardening"
+          },
+          {
+            "id": "security",
+            "text": "12. MongoDB Security Hardening"
+          },
+          {
+            "id": "tls",
+            "text": "13. TLS Encryption"
+          },
+          {
+            "id": "remote-access",
+            "text": "14. Secure Remote Access"
+          },
+          {
+            "id": "replica-security",
+            "text": "15. Replica Set Internal Authentication"
+          },
+          {
+            "id": "replica-set",
+            "text": "16. Production Replica Set"
+          },
+          {
+            "id": "connection-string",
+            "text": "17. MongoDB Connection Strings and Secrets"
+          },
+          {
+            "id": "logging",
+            "text": "18. Logging and Slow Queries"
+          },
+          {
+            "id": "monitoring",
+            "text": "19. Monitoring and Alerting"
+          },
+          {
+            "id": "backup",
+            "text": "20. Backup and Tested Recovery"
+          },
+          {
+            "id": "verification",
+            "text": "21. Verification Checklist"
+          },
+          {
+            "id": "performance",
+            "text": "22. Performance Checks"
+          },
+          {
+            "id": "indexing",
+            "text": "23. Indexing and Query Plans"
+          },
+          {
+            "id": "troubleshooting",
+            "text": "24. Troubleshooting"
+          },
+          {
+            "id": "best-practices",
+            "text": "25. Production Checklist"
+          },
+          {
+            "id": "conclusion",
+            "text": "Operational Handover"
+          },
+          {
+            "id": "faq",
+            "text": "Frequently Asked Questions"
+          },
+          {
+            "id": "official-references",
+            "text": "Official References"
+          }
+        ],
+        "fa": [
+          {
+            "id": "introduction",
+            "text": "۱. MongoDB چیست؟"
+          },
+          {
+            "id": "prerequisites",
+            "text": "۲. پیش‌نیاز سرور"
+          },
+          {
+            "id": "architecture",
+            "text": "۳. نمای معماری"
+          },
+          {
+            "id": "pre-installation",
+            "text": "۴. بررسی پیش از نصب"
+          },
+          {
+            "id": "ubuntu-install",
+            "text": "۵. نصب MongoDB روی Ubuntu 22.04 / 24.04"
+          },
+          {
+            "id": "debian-install",
+            "text": "۶. نصب MongoDB روی Debian 12"
+          },
+          {
+            "id": "rhel-install",
+            "text": "۷. نصب روی RHEL / Rocky / AlmaLinux"
+          },
+          {
+            "id": "configuration",
+            "text": "۸. پیکربندی MongoDB"
+          },
+          {
+            "id": "authentication",
+            "text": "۹. احراز هویت MongoDB"
+          },
+          {
+            "id": "application-user",
+            "text": "۱۰. حساب اختصاصی Application"
+          },
+          {
+            "id": "firewall",
+            "text": "۱۱. ایمن‌سازی Firewall"
+          },
+          {
+            "id": "security",
+            "text": "۱۲. ایمن‌سازی MongoDB"
+          },
+          {
+            "id": "tls",
+            "text": "۱۳. رمزنگاری TLS"
+          },
+          {
+            "id": "remote-access",
+            "text": "۱۴. دسترسی Remote امن"
+          },
+          {
+            "id": "replica-security",
+            "text": "۱۵. احراز هویت داخلی Replica Set"
+          },
+          {
+            "id": "replica-set",
+            "text": "۱۶. Replica Set در Production"
+          },
+          {
+            "id": "connection-string",
+            "text": "۱۷. Connection String و Secretها"
+          },
+          {
+            "id": "logging",
+            "text": "۱۸. Log و Slow Query"
+          },
+          {
+            "id": "monitoring",
+            "text": "۱۹. مانیتورینگ و Alert"
+          },
+          {
+            "id": "backup",
+            "text": "۲۰. Backup و بازیابی آزموده‌شده"
+          },
+          {
+            "id": "verification",
+            "text": "۲۱. چک‌لیست اعتبارسنجی"
+          },
+          {
+            "id": "performance",
+            "text": "۲۲. بررسی Performance"
+          },
+          {
+            "id": "indexing",
+            "text": "۲۳. Index و Query Plan"
+          },
+          {
+            "id": "troubleshooting",
+            "text": "۲۴. عیب‌یابی"
+          },
+          {
+            "id": "best-practices",
+            "text": "۲۵. چک‌لیست Production"
+          },
+          {
+            "id": "conclusion",
+            "text": "تحویل عملیاتی"
+          },
+          {
+            "id": "faq",
+            "text": "پرسش‌های متداول"
+          },
+          {
+            "id": "official-references",
+            "text": "منابع رسمی"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "nginx-reverse-proxy-multiple-domains-single-ip-443",
+      "original_heading_order": [
+        {
+          "id": "introduction",
+          "en": "1. Introduction",
+          "fa": "۱. مقدمه"
+        },
+        {
+          "id": "scenario",
+          "en": "2. Scenario",
+          "fa": "۲. سناریو"
+        },
+        {
+          "id": "architecture",
+          "en": "3. Architecture",
+          "fa": "۳. معماری"
+        },
+        {
+          "id": "sni",
+          "en": "4. How SNI Works",
+          "fa": "۴. نحوه کار SNI"
+        },
+        {
+          "id": "nat",
+          "en": "20. Why NAT Alone Is Not Enough",
+          "fa": "۲۰. Why NAT Alone Is Not Enough؛ چرا NAT کافی نیست؟"
+        },
+        {
+          "id": "enterprise",
+          "en": "21. Enterprise Architecture Example",
+          "fa": "۲۱. مثال معماری سازمانی"
+        },
+        {
+          "id": "installation",
+          "en": "6. Nginx Installation",
+          "fa": "۶. نصب Nginx"
+        },
+        {
+          "id": "dns",
+          "en": "5. DNS Configuration",
+          "fa": "۵. تنظیم DNS"
+        },
+        {
+          "id": "backend-connectivity",
+          "en": "7. Backend Connectivity Check",
+          "fa": "۷. بررسی ارتباط با Backend"
+        },
+        {
+          "id": "certificates",
+          "en": "8. SSL Certificate",
+          "fa": "۸. گواهی SSL و TLS"
+        },
+        {
+          "id": "complete-configuration",
+          "en": "9. Complete Nginx Configuration",
+          "fa": "۹. تنظیمات کامل Nginx"
+        },
+        {
+          "id": "http-redirect",
+          "en": "10. HTTP to HTTPS Redirect",
+          "fa": "۱۰. هدایت HTTP به HTTPS"
+        },
+        {
+          "id": "default-server",
+          "en": "11. Default Server Security",
+          "fa": "۱۱. امنیت Default Server"
+        },
+        {
+          "id": "websocket",
+          "en": "12. WebSocket Support and Upload Size",
+          "fa": "۱۲. WebSocket و اندازه Upload"
+        },
+        {
+          "id": "logging",
+          "en": "13. Logging",
+          "fa": "۱۳. لاگ‌گیری"
+        },
+        {
+          "id": "hardening",
+          "en": "14. Security Hardening",
+          "fa": "۱۴. تقویت امنیت"
+        },
+        {
+          "id": "testing",
+          "en": "15. Testing Configuration and Renewal",
+          "fa": "۱۵. تست تنظیمات و تمدید"
+        },
+        {
+          "id": "resolve",
+          "en": "16. curl --resolve: Test Before DNS Cutover",
+          "fa": "۱۶. تست با curl --resolve پیش از تغییر DNS"
+        },
+        {
+          "id": "openssl",
+          "en": "17. openssl s_client: SNI and Certificate Verification",
+          "fa": "۱۷. تست SNI و گواهی با openssl s_client"
+        },
+        {
+          "id": "troubleshooting",
+          "en": "18. Troubleshooting",
+          "fa": "۱۸. عیب‌یابی"
+        },
+        {
+          "id": "root-cause",
+          "en": "19. Root Cause Analysis",
+          "fa": "۱۹. تحلیل علت ریشه‌ای"
+        },
+        {
+          "id": "recommendations",
+          "en": "22. Security Recommendations and Operational Limits",
+          "fa": "۲۲. توصیه‌های امنیتی و محدودیت عملیاتی"
+        },
+        {
+          "id": "conclusion",
+          "en": "23. Conclusion",
+          "fa": "۲۳. نتیجه‌گیری"
+        },
+        {
+          "id": "faq",
+          "en": "Frequently Asked Questions",
+          "fa": "پرسش‌های متداول"
+        },
+        {
+          "id": "official-references",
+          "en": "Official References",
+          "fa": "منابع رسمی"
+        },
+        {
+          "id": "seo-title",
+          "en": "24. SEO Title",
+          "fa": "۲۴. عنوان SEO"
+        },
+        {
+          "id": "meta-description",
+          "en": "25. Meta Description",
+          "fa": "۲۵. توضیحات متا"
+        },
+        {
+          "id": "keywords",
+          "en": "26. Keywords",
+          "fa": "۲۶. کلمات کلیدی"
+        }
+      ],
+      "final_heading_order": [
+        {
+          "id": "introduction",
+          "en": "1. Introduction",
+          "fa": "۱. مقدمه"
+        },
+        {
+          "id": "scenario",
+          "en": "2. Scenario",
+          "fa": "۲. سناریو"
+        },
+        {
+          "id": "architecture",
+          "en": "3. Architecture",
+          "fa": "۳. معماری"
+        },
+        {
+          "id": "sni",
+          "en": "4. How SNI Works",
+          "fa": "۴. نحوه کار SNI"
+        },
+        {
+          "id": "nat",
+          "en": "5. Why NAT Alone Is Not Enough",
+          "fa": "۵. Why NAT Alone Is Not Enough؛ چرا NAT کافی نیست؟"
+        },
+        {
+          "id": "enterprise",
+          "en": "6. Enterprise Architecture Example",
+          "fa": "۶. مثال معماری سازمانی"
+        },
+        {
+          "id": "installation",
+          "en": "7. Nginx Installation",
+          "fa": "۷. نصب Nginx"
+        },
+        {
+          "id": "dns",
+          "en": "8. DNS Configuration",
+          "fa": "۸. تنظیم DNS"
+        },
+        {
+          "id": "backend-connectivity",
+          "en": "9. Backend Connectivity Check",
+          "fa": "۹. بررسی ارتباط با Backend"
+        },
+        {
+          "id": "certificates",
+          "en": "10. SSL Certificate",
+          "fa": "۱۰. گواهی SSL و TLS"
+        },
+        {
+          "id": "complete-configuration",
+          "en": "11. Complete Nginx Configuration",
+          "fa": "۱۱. تنظیمات کامل Nginx"
+        },
+        {
+          "id": "http-redirect",
+          "en": "12. HTTP to HTTPS Redirect",
+          "fa": "۱۲. هدایت HTTP به HTTPS"
+        },
+        {
+          "id": "default-server",
+          "en": "13. Default Server Security",
+          "fa": "۱۳. امنیت Default Server"
+        },
+        {
+          "id": "websocket",
+          "en": "14. WebSocket Support and Upload Size",
+          "fa": "۱۴. WebSocket و اندازه Upload"
+        },
+        {
+          "id": "logging",
+          "en": "15. Logging",
+          "fa": "۱۵. لاگ‌گیری"
+        },
+        {
+          "id": "hardening",
+          "en": "16. Security Hardening",
+          "fa": "۱۶. تقویت امنیت"
+        },
+        {
+          "id": "testing",
+          "en": "17. Testing Configuration and Renewal",
+          "fa": "۱۷. تست تنظیمات و تمدید"
+        },
+        {
+          "id": "resolve",
+          "en": "18. curl --resolve: Test Before DNS Cutover",
+          "fa": "۱۸. تست با curl --resolve پیش از تغییر DNS"
+        },
+        {
+          "id": "openssl",
+          "en": "19. openssl s_client: SNI and Certificate Verification",
+          "fa": "۱۹. تست SNI و گواهی با openssl s_client"
+        },
+        {
+          "id": "troubleshooting",
+          "en": "20. Troubleshooting",
+          "fa": "۲۰. عیب‌یابی"
+        },
+        {
+          "id": "root-cause",
+          "en": "21. Root Cause Analysis",
+          "fa": "۲۱. تحلیل علت ریشه‌ای"
+        },
+        {
+          "id": "recommendations",
+          "en": "22. Security Recommendations and Operational Limits",
+          "fa": "۲۲. توصیه‌های امنیتی و محدودیت عملیاتی"
+        },
+        {
+          "id": "conclusion",
+          "en": "23. Conclusion",
+          "fa": "۲۳. نتیجه‌گیری"
+        },
+        {
+          "id": "faq",
+          "en": "Frequently Asked Questions",
+          "fa": "پرسش‌های متداول"
+        },
+        {
+          "id": "official-references",
+          "en": "Official References",
+          "fa": "منابع رسمی"
+        },
+        {
+          "id": "seo-title",
+          "en": "24. SEO Title",
+          "fa": "۲۴. عنوان SEO"
+        },
+        {
+          "id": "meta-description",
+          "en": "25. Meta Description",
+          "fa": "۲۵. توضیحات متا"
+        },
+        {
+          "id": "keywords",
+          "en": "26. Keywords",
+          "fa": "۲۶. کلمات کلیدی"
+        }
+      ],
+      "headings_renumbered": [
+        {
+          "id": "nat",
+          "before": {
+            "id": "nat",
+            "en": "20. Why NAT Alone Is Not Enough",
+            "fa": "۲۰. Why NAT Alone Is Not Enough؛ چرا NAT کافی نیست؟"
+          },
+          "after": {
+            "id": "nat",
+            "en": "5. Why NAT Alone Is Not Enough",
+            "fa": "۵. Why NAT Alone Is Not Enough؛ چرا NAT کافی نیست؟"
+          }
+        },
+        {
+          "id": "enterprise",
+          "before": {
+            "id": "enterprise",
+            "en": "21. Enterprise Architecture Example",
+            "fa": "۲۱. مثال معماری سازمانی"
+          },
+          "after": {
+            "id": "enterprise",
+            "en": "6. Enterprise Architecture Example",
+            "fa": "۶. مثال معماری سازمانی"
+          }
+        },
+        {
+          "id": "installation",
+          "before": {
+            "id": "installation",
+            "en": "6. Nginx Installation",
+            "fa": "۶. نصب Nginx"
+          },
+          "after": {
+            "id": "installation",
+            "en": "7. Nginx Installation",
+            "fa": "۷. نصب Nginx"
+          }
+        },
+        {
+          "id": "dns",
+          "before": {
+            "id": "dns",
+            "en": "5. DNS Configuration",
+            "fa": "۵. تنظیم DNS"
+          },
+          "after": {
+            "id": "dns",
+            "en": "8. DNS Configuration",
+            "fa": "۸. تنظیم DNS"
+          }
+        },
+        {
+          "id": "backend-connectivity",
+          "before": {
+            "id": "backend-connectivity",
+            "en": "7. Backend Connectivity Check",
+            "fa": "۷. بررسی ارتباط با Backend"
+          },
+          "after": {
+            "id": "backend-connectivity",
+            "en": "9. Backend Connectivity Check",
+            "fa": "۹. بررسی ارتباط با Backend"
+          }
+        },
+        {
+          "id": "certificates",
+          "before": {
+            "id": "certificates",
+            "en": "8. SSL Certificate",
+            "fa": "۸. گواهی SSL و TLS"
+          },
+          "after": {
+            "id": "certificates",
+            "en": "10. SSL Certificate",
+            "fa": "۱۰. گواهی SSL و TLS"
+          }
+        },
+        {
+          "id": "complete-configuration",
+          "before": {
+            "id": "complete-configuration",
+            "en": "9. Complete Nginx Configuration",
+            "fa": "۹. تنظیمات کامل Nginx"
+          },
+          "after": {
+            "id": "complete-configuration",
+            "en": "11. Complete Nginx Configuration",
+            "fa": "۱۱. تنظیمات کامل Nginx"
+          }
+        },
+        {
+          "id": "http-redirect",
+          "before": {
+            "id": "http-redirect",
+            "en": "10. HTTP to HTTPS Redirect",
+            "fa": "۱۰. هدایت HTTP به HTTPS"
+          },
+          "after": {
+            "id": "http-redirect",
+            "en": "12. HTTP to HTTPS Redirect",
+            "fa": "۱۲. هدایت HTTP به HTTPS"
+          }
+        },
+        {
+          "id": "default-server",
+          "before": {
+            "id": "default-server",
+            "en": "11. Default Server Security",
+            "fa": "۱۱. امنیت Default Server"
+          },
+          "after": {
+            "id": "default-server",
+            "en": "13. Default Server Security",
+            "fa": "۱۳. امنیت Default Server"
+          }
+        },
+        {
+          "id": "websocket",
+          "before": {
+            "id": "websocket",
+            "en": "12. WebSocket Support and Upload Size",
+            "fa": "۱۲. WebSocket و اندازه Upload"
+          },
+          "after": {
+            "id": "websocket",
+            "en": "14. WebSocket Support and Upload Size",
+            "fa": "۱۴. WebSocket و اندازه Upload"
+          }
+        },
+        {
+          "id": "logging",
+          "before": {
+            "id": "logging",
+            "en": "13. Logging",
+            "fa": "۱۳. لاگ‌گیری"
+          },
+          "after": {
+            "id": "logging",
+            "en": "15. Logging",
+            "fa": "۱۵. لاگ‌گیری"
+          }
+        },
+        {
+          "id": "hardening",
+          "before": {
+            "id": "hardening",
+            "en": "14. Security Hardening",
+            "fa": "۱۴. تقویت امنیت"
+          },
+          "after": {
+            "id": "hardening",
+            "en": "16. Security Hardening",
+            "fa": "۱۶. تقویت امنیت"
+          }
+        },
+        {
+          "id": "testing",
+          "before": {
+            "id": "testing",
+            "en": "15. Testing Configuration and Renewal",
+            "fa": "۱۵. تست تنظیمات و تمدید"
+          },
+          "after": {
+            "id": "testing",
+            "en": "17. Testing Configuration and Renewal",
+            "fa": "۱۷. تست تنظیمات و تمدید"
+          }
+        },
+        {
+          "id": "resolve",
+          "before": {
+            "id": "resolve",
+            "en": "16. curl --resolve: Test Before DNS Cutover",
+            "fa": "۱۶. تست با curl --resolve پیش از تغییر DNS"
+          },
+          "after": {
+            "id": "resolve",
+            "en": "18. curl --resolve: Test Before DNS Cutover",
+            "fa": "۱۸. تست با curl --resolve پیش از تغییر DNS"
+          }
+        },
+        {
+          "id": "openssl",
+          "before": {
+            "id": "openssl",
+            "en": "17. openssl s_client: SNI and Certificate Verification",
+            "fa": "۱۷. تست SNI و گواهی با openssl s_client"
+          },
+          "after": {
+            "id": "openssl",
+            "en": "19. openssl s_client: SNI and Certificate Verification",
+            "fa": "۱۹. تست SNI و گواهی با openssl s_client"
+          }
+        },
+        {
+          "id": "troubleshooting",
+          "before": {
+            "id": "troubleshooting",
+            "en": "18. Troubleshooting",
+            "fa": "۱۸. عیب‌یابی"
+          },
+          "after": {
+            "id": "troubleshooting",
+            "en": "20. Troubleshooting",
+            "fa": "۲۰. عیب‌یابی"
+          }
+        },
+        {
+          "id": "root-cause",
+          "before": {
+            "id": "root-cause",
+            "en": "19. Root Cause Analysis",
+            "fa": "۱۹. تحلیل علت ریشه‌ای"
+          },
+          "after": {
+            "id": "root-cause",
+            "en": "21. Root Cause Analysis",
+            "fa": "۲۱. تحلیل علت ریشه‌ای"
+          }
+        }
+      ],
+      "section_movements": [],
+      "validation": "passed (source, final EN/FA rendering, browser desktop/mobile, regeneration)",
+      "code_correction": null,
+      "final_rendered_heading_order": {
+        "en": [
+          {
+            "id": "introduction",
+            "text": "1. Introduction"
+          },
+          {
+            "id": "scenario",
+            "text": "2. Scenario"
+          },
+          {
+            "id": "prerequisites",
+            "text": "Prerequisites"
+          },
+          {
+            "id": "architecture",
+            "text": "3. Architecture"
+          },
+          {
+            "id": "sni",
+            "text": "4. How SNI Works"
+          },
+          {
+            "id": "nat",
+            "text": "5. Why NAT Alone Is Not Enough"
+          },
+          {
+            "id": "enterprise",
+            "text": "6. Enterprise Architecture Example"
+          },
+          {
+            "id": "configuration",
+            "text": "7. Nginx Installation"
+          },
+          {
+            "id": "dns",
+            "text": "8. DNS Configuration"
+          },
+          {
+            "id": "backend-connectivity",
+            "text": "9. Backend Connectivity Check"
+          },
+          {
+            "id": "certificates",
+            "text": "10. SSL Certificate"
+          },
+          {
+            "id": "complete-configuration",
+            "text": "11. Complete Nginx Configuration"
+          },
+          {
+            "id": "http-redirect",
+            "text": "12. HTTP to HTTPS Redirect"
+          },
+          {
+            "id": "security",
+            "text": "13. Default Server Security"
+          },
+          {
+            "id": "websocket",
+            "text": "14. WebSocket Support and Upload Size"
+          },
+          {
+            "id": "logging",
+            "text": "15. Logging"
+          },
+          {
+            "id": "hardening",
+            "text": "16. Security Hardening"
+          },
+          {
+            "id": "testing",
+            "text": "17. Testing Configuration and Renewal"
+          },
+          {
+            "id": "resolve",
+            "text": "18. curl --resolve: Test Before DNS Cutover"
+          },
+          {
+            "id": "openssl",
+            "text": "19. openssl s_client: SNI and Certificate Verification"
+          },
+          {
+            "id": "troubleshooting",
+            "text": "20. Troubleshooting"
+          },
+          {
+            "id": "root-cause",
+            "text": "21. Root Cause Analysis"
+          },
+          {
+            "id": "best-practices",
+            "text": "22. Security Recommendations and Operational Limits"
+          },
+          {
+            "id": "conclusion",
+            "text": "23. Conclusion"
+          },
+          {
+            "id": "faq",
+            "text": "Frequently Asked Questions"
+          },
+          {
+            "id": "official-references",
+            "text": "Official References"
+          }
+        ],
+        "fa": [
+          {
+            "id": "introduction",
+            "text": "۱. مقدمه"
+          },
+          {
+            "id": "scenario",
+            "text": "۲. سناریو"
+          },
+          {
+            "id": "prerequisites",
+            "text": "پیش‌نیازها"
+          },
+          {
+            "id": "architecture",
+            "text": "۳. معماری"
+          },
+          {
+            "id": "sni",
+            "text": "۴. نحوه کار SNI"
+          },
+          {
+            "id": "nat",
+            "text": "۵. Why NAT Alone Is Not Enough؛ چرا NAT کافی نیست؟"
+          },
+          {
+            "id": "enterprise",
+            "text": "۶. مثال معماری سازمانی"
+          },
+          {
+            "id": "configuration",
+            "text": "۷. نصب Nginx"
+          },
+          {
+            "id": "dns",
+            "text": "۸. تنظیم DNS"
+          },
+          {
+            "id": "backend-connectivity",
+            "text": "۹. بررسی ارتباط با Backend"
+          },
+          {
+            "id": "certificates",
+            "text": "۱۰. گواهی SSL و TLS"
+          },
+          {
+            "id": "complete-configuration",
+            "text": "۱۱. تنظیمات کامل Nginx"
+          },
+          {
+            "id": "http-redirect",
+            "text": "۱۲. هدایت HTTP به HTTPS"
+          },
+          {
+            "id": "security",
+            "text": "۱۳. امنیت Default Server"
+          },
+          {
+            "id": "websocket",
+            "text": "۱۴. WebSocket و اندازه Upload"
+          },
+          {
+            "id": "logging",
+            "text": "۱۵. لاگ‌گیری"
+          },
+          {
+            "id": "hardening",
+            "text": "۱۶. تقویت امنیت"
+          },
+          {
+            "id": "testing",
+            "text": "۱۷. تست تنظیمات و تمدید"
+          },
+          {
+            "id": "resolve",
+            "text": "۱۸. تست با curl --resolve پیش از تغییر DNS"
+          },
+          {
+            "id": "openssl",
+            "text": "۱۹. تست SNI و گواهی با openssl s_client"
+          },
+          {
+            "id": "troubleshooting",
+            "text": "۲۰. عیب‌یابی"
+          },
+          {
+            "id": "root-cause",
+            "text": "۲۱. تحلیل علت ریشه‌ای"
+          },
+          {
+            "id": "best-practices",
+            "text": "۲۲. توصیه‌های امنیتی و محدودیت عملیاتی"
+          },
+          {
+            "id": "conclusion",
+            "text": "۲۳. نتیجه‌گیری"
+          },
+          {
+            "id": "faq",
+            "text": "پرسش‌های متداول"
+          },
+          {
+            "id": "official-references",
+            "text": "منابع رسمی"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "redis-installation-configuration-replication",
+      "original_heading_order": [
+        {
+          "id": "introduction",
+          "en": "Introduction: verified versions and deployment scope",
+          "fa": "مقدمه؛ نسخه‌های بررسی‌شده و محدوده استقرار"
+        },
+        {
+          "id": "what-is-redis",
+          "en": "1. What is Redis?",
+          "fa": "۱. Redis چیست؟"
+        },
+        {
+          "id": "enterprise-use",
+          "en": "2. Redis in enterprise architecture",
+          "fa": "۲. کاربرد Redis در معماری Enterprise"
+        },
+        {
+          "id": "prerequisites",
+          "en": "Prerequisites and deployment scenario",
+          "fa": "پیش‌نیازها و سناریوی استقرار"
+        },
+        {
+          "id": "replication-architecture",
+          "en": "14. Redis replication architecture",
+          "fa": "۱۴. Redis Replication Architecture"
+        },
+        {
+          "id": "replication-is-not-ha",
+          "en": "15. Replication alone is not high availability",
+          "fa": "۱۵. Replication به‌تنهایی High Availability نیست"
+        },
+        {
+          "id": "cluster-comparison",
+          "en": "17. Replication vs Sentinel vs Redis Cluster",
+          "fa": "۱۷. تفاوت Replication، Sentinel و Redis Cluster"
+        },
+        {
+          "id": "installation",
+          "en": "3. Install Redis on Ubuntu",
+          "fa": "۳. نصب Redis روی Ubuntu"
+        },
+        {
+          "id": "service-diagnostics",
+          "en": "4. Check the Redis service",
+          "fa": "۴. بررسی سرویس Redis"
+        },
+        {
+          "id": "configuration-files",
+          "en": "5. Configuration layout and backup",
+          "fa": "۵. ساختار Configuration و Backup پیش از تغییر"
+        },
+        {
+          "id": "primary-configuration",
+          "en": "6. Configure the Redis primary",
+          "fa": "۶. تنظیم Redis Primary"
+        },
+        {
+          "id": "security-hardening",
+          "en": "7. Security hardening and network segmentation",
+          "fa": "۷. Security Hardening و تفکیک شبکه"
+        },
+        {
+          "id": "authentication-acl",
+          "en": "8. Authentication using Redis ACL",
+          "fa": "۸. Authentication با Redis ACL"
+        },
+        {
+          "id": "persistence",
+          "en": "9. Persistence: RDB and AOF",
+          "fa": "۹. Persistence؛ RDB و AOF"
+        },
+        {
+          "id": "replica-configuration",
+          "en": "10. Configure the Redis replica",
+          "fa": "۱۰. راه‌اندازی Redis Replica"
+        },
+        {
+          "id": "verify-replication",
+          "en": "11. Verify replication status",
+          "fa": "۱۱. بررسی وضعیت Replication"
+        },
+        {
+          "id": "replication-test",
+          "en": "12. Practical replication test",
+          "fa": "۱۲. تست عملی Replication"
+        },
+        {
+          "id": "read-scaling",
+          "en": "13. Read from replicas",
+          "fa": "۱۳. Read From Replica و Read Scaling"
+        },
+        {
+          "id": "sentinel",
+          "en": "16. Redis Sentinel high availability",
+          "fa": "۱۶. Redis Sentinel و High Availability"
+        },
+        {
+          "id": "monitoring",
+          "en": "19. Monitoring and operational metrics",
+          "fa": "۱۹. Monitoring و Metricهای عملیاتی"
+        },
+        {
+          "id": "prometheus-grafana",
+          "en": "20. Prometheus, Grafana and alerting",
+          "fa": "۲۰. Prometheus، Grafana و Alerting"
+        },
+        {
+          "id": "troubleshooting",
+          "en": "22. Production troubleshooting runbook",
+          "fa": "۲۲. Runbook عملیاتی Troubleshooting"
+        },
+        {
+          "id": "backup-restore",
+          "en": "21. Backup and restore",
+          "fa": "۲۱. Backup و Restore"
+        },
+        {
+          "id": "memory-management",
+          "en": "18. Memory management and eviction policy",
+          "fa": "۱۸. Memory Management و Eviction Policy"
+        },
+        {
+          "id": "production-checklist",
+          "en": "23. Production acceptance checklist",
+          "fa": "۲۳. Production Checklist و معیار پذیرش"
+        },
+        {
+          "id": "conclusion",
+          "en": "Conclusion: release acceptance",
+          "fa": "جمع‌بندی؛ پذیرش استقرار"
+        },
+        {
+          "id": "faq",
+          "en": "Frequently asked questions",
+          "fa": "پرسش‌های متداول Redis در Production"
+        },
+        {
+          "id": "references-downloads",
+          "en": "Official references and deployment templates",
+          "fa": "منابع رسمی و Templateهای استقرار"
+        }
+      ],
+      "final_heading_order": [
+        {
+          "id": "introduction",
+          "en": "Introduction: verified versions and deployment scope",
+          "fa": "مقدمه؛ نسخه‌های بررسی‌شده و محدوده استقرار"
+        },
+        {
+          "id": "what-is-redis",
+          "en": "1. What is Redis?",
+          "fa": "۱. Redis چیست؟"
+        },
+        {
+          "id": "enterprise-use",
+          "en": "2. Redis in enterprise architecture",
+          "fa": "۲. کاربرد Redis در معماری Enterprise"
+        },
+        {
+          "id": "prerequisites",
+          "en": "Prerequisites and deployment scenario",
+          "fa": "پیش‌نیازها و سناریوی استقرار"
+        },
+        {
+          "id": "replication-architecture",
+          "en": "3. Redis replication architecture",
+          "fa": "۳. Redis Replication Architecture"
+        },
+        {
+          "id": "replication-is-not-ha",
+          "en": "4. Replication alone is not high availability",
+          "fa": "۴. Replication به‌تنهایی High Availability نیست"
+        },
+        {
+          "id": "cluster-comparison",
+          "en": "5. Replication vs Sentinel vs Redis Cluster",
+          "fa": "۵. تفاوت Replication، Sentinel و Redis Cluster"
+        },
+        {
+          "id": "installation",
+          "en": "6. Install Redis on Ubuntu",
+          "fa": "۶. نصب Redis روی Ubuntu"
+        },
+        {
+          "id": "service-diagnostics",
+          "en": "7. Check the Redis service",
+          "fa": "۷. بررسی سرویس Redis"
+        },
+        {
+          "id": "configuration-files",
+          "en": "8. Configuration layout and backup",
+          "fa": "۸. ساختار Configuration و Backup پیش از تغییر"
+        },
+        {
+          "id": "primary-configuration",
+          "en": "9. Configure the Redis primary",
+          "fa": "۹. تنظیم Redis Primary"
+        },
+        {
+          "id": "security-hardening",
+          "en": "10. Security hardening and network segmentation",
+          "fa": "۱۰. Security Hardening و تفکیک شبکه"
+        },
+        {
+          "id": "authentication-acl",
+          "en": "11. Authentication using Redis ACL",
+          "fa": "۱۱. Authentication با Redis ACL"
+        },
+        {
+          "id": "persistence",
+          "en": "12. Persistence: RDB and AOF",
+          "fa": "۱۲. Persistence؛ RDB و AOF"
+        },
+        {
+          "id": "replica-configuration",
+          "en": "13. Configure the Redis replica",
+          "fa": "۱۳. راه‌اندازی Redis Replica"
+        },
+        {
+          "id": "verify-replication",
+          "en": "14. Verify replication status",
+          "fa": "۱۴. بررسی وضعیت Replication"
+        },
+        {
+          "id": "replication-test",
+          "en": "15. Practical replication test",
+          "fa": "۱۵. تست عملی Replication"
+        },
+        {
+          "id": "read-scaling",
+          "en": "16. Read from replicas",
+          "fa": "۱۶. Read From Replica و Read Scaling"
+        },
+        {
+          "id": "sentinel",
+          "en": "17. Redis Sentinel high availability",
+          "fa": "۱۷. Redis Sentinel و High Availability"
+        },
+        {
+          "id": "monitoring",
+          "en": "18. Monitoring and operational metrics",
+          "fa": "۱۸. Monitoring و Metricهای عملیاتی"
+        },
+        {
+          "id": "prometheus-grafana",
+          "en": "19. Prometheus, Grafana and alerting",
+          "fa": "۱۹. Prometheus، Grafana و Alerting"
+        },
+        {
+          "id": "backup-restore",
+          "en": "20. Backup and restore",
+          "fa": "۲۰. Backup و Restore"
+        },
+        {
+          "id": "memory-management",
+          "en": "21. Memory management and eviction policy",
+          "fa": "۲۱. Memory Management و Eviction Policy"
+        },
+        {
+          "id": "troubleshooting",
+          "en": "22. Production troubleshooting runbook",
+          "fa": "۲۲. Runbook عملیاتی Troubleshooting"
+        },
+        {
+          "id": "production-checklist",
+          "en": "23. Production acceptance checklist",
+          "fa": "۲۳. Production Checklist و معیار پذیرش"
+        },
+        {
+          "id": "conclusion",
+          "en": "Conclusion: release acceptance",
+          "fa": "جمع‌بندی؛ پذیرش استقرار"
+        },
+        {
+          "id": "faq",
+          "en": "Frequently asked questions",
+          "fa": "پرسش‌های متداول Redis در Production"
+        },
+        {
+          "id": "references-downloads",
+          "en": "Official references and deployment templates",
+          "fa": "منابع رسمی و Templateهای استقرار"
+        }
+      ],
+      "headings_renumbered": [
+        {
+          "id": "replication-architecture",
+          "before": {
+            "id": "replication-architecture",
+            "en": "14. Redis replication architecture",
+            "fa": "۱۴. Redis Replication Architecture"
+          },
+          "after": {
+            "id": "replication-architecture",
+            "en": "3. Redis replication architecture",
+            "fa": "۳. Redis Replication Architecture"
+          }
+        },
+        {
+          "id": "replication-is-not-ha",
+          "before": {
+            "id": "replication-is-not-ha",
+            "en": "15. Replication alone is not high availability",
+            "fa": "۱۵. Replication به‌تنهایی High Availability نیست"
+          },
+          "after": {
+            "id": "replication-is-not-ha",
+            "en": "4. Replication alone is not high availability",
+            "fa": "۴. Replication به‌تنهایی High Availability نیست"
+          }
+        },
+        {
+          "id": "cluster-comparison",
+          "before": {
+            "id": "cluster-comparison",
+            "en": "17. Replication vs Sentinel vs Redis Cluster",
+            "fa": "۱۷. تفاوت Replication، Sentinel و Redis Cluster"
+          },
+          "after": {
+            "id": "cluster-comparison",
+            "en": "5. Replication vs Sentinel vs Redis Cluster",
+            "fa": "۵. تفاوت Replication، Sentinel و Redis Cluster"
+          }
+        },
+        {
+          "id": "installation",
+          "before": {
+            "id": "installation",
+            "en": "3. Install Redis on Ubuntu",
+            "fa": "۳. نصب Redis روی Ubuntu"
+          },
+          "after": {
+            "id": "installation",
+            "en": "6. Install Redis on Ubuntu",
+            "fa": "۶. نصب Redis روی Ubuntu"
+          }
+        },
+        {
+          "id": "service-diagnostics",
+          "before": {
+            "id": "service-diagnostics",
+            "en": "4. Check the Redis service",
+            "fa": "۴. بررسی سرویس Redis"
+          },
+          "after": {
+            "id": "service-diagnostics",
+            "en": "7. Check the Redis service",
+            "fa": "۷. بررسی سرویس Redis"
+          }
+        },
+        {
+          "id": "configuration-files",
+          "before": {
+            "id": "configuration-files",
+            "en": "5. Configuration layout and backup",
+            "fa": "۵. ساختار Configuration و Backup پیش از تغییر"
+          },
+          "after": {
+            "id": "configuration-files",
+            "en": "8. Configuration layout and backup",
+            "fa": "۸. ساختار Configuration و Backup پیش از تغییر"
+          }
+        },
+        {
+          "id": "primary-configuration",
+          "before": {
+            "id": "primary-configuration",
+            "en": "6. Configure the Redis primary",
+            "fa": "۶. تنظیم Redis Primary"
+          },
+          "after": {
+            "id": "primary-configuration",
+            "en": "9. Configure the Redis primary",
+            "fa": "۹. تنظیم Redis Primary"
+          }
+        },
+        {
+          "id": "security-hardening",
+          "before": {
+            "id": "security-hardening",
+            "en": "7. Security hardening and network segmentation",
+            "fa": "۷. Security Hardening و تفکیک شبکه"
+          },
+          "after": {
+            "id": "security-hardening",
+            "en": "10. Security hardening and network segmentation",
+            "fa": "۱۰. Security Hardening و تفکیک شبکه"
+          }
+        },
+        {
+          "id": "authentication-acl",
+          "before": {
+            "id": "authentication-acl",
+            "en": "8. Authentication using Redis ACL",
+            "fa": "۸. Authentication با Redis ACL"
+          },
+          "after": {
+            "id": "authentication-acl",
+            "en": "11. Authentication using Redis ACL",
+            "fa": "۱۱. Authentication با Redis ACL"
+          }
+        },
+        {
+          "id": "persistence",
+          "before": {
+            "id": "persistence",
+            "en": "9. Persistence: RDB and AOF",
+            "fa": "۹. Persistence؛ RDB و AOF"
+          },
+          "after": {
+            "id": "persistence",
+            "en": "12. Persistence: RDB and AOF",
+            "fa": "۱۲. Persistence؛ RDB و AOF"
+          }
+        },
+        {
+          "id": "replica-configuration",
+          "before": {
+            "id": "replica-configuration",
+            "en": "10. Configure the Redis replica",
+            "fa": "۱۰. راه‌اندازی Redis Replica"
+          },
+          "after": {
+            "id": "replica-configuration",
+            "en": "13. Configure the Redis replica",
+            "fa": "۱۳. راه‌اندازی Redis Replica"
+          }
+        },
+        {
+          "id": "verify-replication",
+          "before": {
+            "id": "verify-replication",
+            "en": "11. Verify replication status",
+            "fa": "۱۱. بررسی وضعیت Replication"
+          },
+          "after": {
+            "id": "verify-replication",
+            "en": "14. Verify replication status",
+            "fa": "۱۴. بررسی وضعیت Replication"
+          }
+        },
+        {
+          "id": "replication-test",
+          "before": {
+            "id": "replication-test",
+            "en": "12. Practical replication test",
+            "fa": "۱۲. تست عملی Replication"
+          },
+          "after": {
+            "id": "replication-test",
+            "en": "15. Practical replication test",
+            "fa": "۱۵. تست عملی Replication"
+          }
+        },
+        {
+          "id": "read-scaling",
+          "before": {
+            "id": "read-scaling",
+            "en": "13. Read from replicas",
+            "fa": "۱۳. Read From Replica و Read Scaling"
+          },
+          "after": {
+            "id": "read-scaling",
+            "en": "16. Read from replicas",
+            "fa": "۱۶. Read From Replica و Read Scaling"
+          }
+        },
+        {
+          "id": "sentinel",
+          "before": {
+            "id": "sentinel",
+            "en": "16. Redis Sentinel high availability",
+            "fa": "۱۶. Redis Sentinel و High Availability"
+          },
+          "after": {
+            "id": "sentinel",
+            "en": "17. Redis Sentinel high availability",
+            "fa": "۱۷. Redis Sentinel و High Availability"
+          }
+        },
+        {
+          "id": "monitoring",
+          "before": {
+            "id": "monitoring",
+            "en": "19. Monitoring and operational metrics",
+            "fa": "۱۹. Monitoring و Metricهای عملیاتی"
+          },
+          "after": {
+            "id": "monitoring",
+            "en": "18. Monitoring and operational metrics",
+            "fa": "۱۸. Monitoring و Metricهای عملیاتی"
+          }
+        },
+        {
+          "id": "prometheus-grafana",
+          "before": {
+            "id": "prometheus-grafana",
+            "en": "20. Prometheus, Grafana and alerting",
+            "fa": "۲۰. Prometheus، Grafana و Alerting"
+          },
+          "after": {
+            "id": "prometheus-grafana",
+            "en": "19. Prometheus, Grafana and alerting",
+            "fa": "۱۹. Prometheus، Grafana و Alerting"
+          }
+        },
+        {
+          "id": "backup-restore",
+          "before": {
+            "id": "backup-restore",
+            "en": "21. Backup and restore",
+            "fa": "۲۱. Backup و Restore"
+          },
+          "after": {
+            "id": "backup-restore",
+            "en": "20. Backup and restore",
+            "fa": "۲۰. Backup و Restore"
+          }
+        },
+        {
+          "id": "memory-management",
+          "before": {
+            "id": "memory-management",
+            "en": "18. Memory management and eviction policy",
+            "fa": "۱۸. Memory Management و Eviction Policy"
+          },
+          "after": {
+            "id": "memory-management",
+            "en": "21. Memory management and eviction policy",
+            "fa": "۲۱. Memory Management و Eviction Policy"
+          }
+        }
+      ],
+      "section_movements": [
+        {
+          "id": "backup-restore",
+          "from": 23,
+          "to": 22,
+          "reason": "Move before troubleshooting; teach recoverable backups before failure handling."
+        },
+        {
+          "id": "memory-management",
+          "from": 24,
+          "to": 23,
+          "reason": "Move before troubleshooting; establish capacity/eviction expectations first."
+        }
+      ],
+      "validation": "passed (source, final EN/FA rendering, browser desktop/mobile, regeneration)",
+      "code_correction": null,
+      "final_rendered_heading_order": {
+        "en": [
+          {
+            "id": "introduction",
+            "text": "Introduction: verified versions and deployment scope"
+          },
+          {
+            "id": "what-is-redis",
+            "text": "1. What is Redis?"
+          },
+          {
+            "id": "architecture",
+            "text": "2. Redis in enterprise architecture"
+          },
+          {
+            "id": "prerequisites",
+            "text": "Prerequisites and deployment scenario"
+          },
+          {
+            "id": "replication-architecture",
+            "text": "3. Redis replication architecture"
+          },
+          {
+            "id": "replication-is-not-ha",
+            "text": "4. Replication alone is not high availability"
+          },
+          {
+            "id": "cluster-comparison",
+            "text": "5. Replication vs Sentinel vs Redis Cluster"
+          },
+          {
+            "id": "configuration",
+            "text": "6. Install Redis on Ubuntu"
+          },
+          {
+            "id": "service-diagnostics",
+            "text": "7. Check the Redis service"
+          },
+          {
+            "id": "configuration-files",
+            "text": "8. Configuration layout and backup"
+          },
+          {
+            "id": "primary-configuration",
+            "text": "9. Configure the Redis primary"
+          },
+          {
+            "id": "security",
+            "text": "10. Security hardening and network segmentation"
+          },
+          {
+            "id": "authentication-acl",
+            "text": "11. Authentication using Redis ACL"
+          },
+          {
+            "id": "persistence",
+            "text": "12. Persistence: RDB and AOF"
+          },
+          {
+            "id": "replica-configuration",
+            "text": "13. Configure the Redis replica"
+          },
+          {
+            "id": "verify-replication",
+            "text": "14. Verify replication status"
+          },
+          {
+            "id": "replication-test",
+            "text": "15. Practical replication test"
+          },
+          {
+            "id": "read-scaling",
+            "text": "16. Read from replicas"
+          },
+          {
+            "id": "sentinel",
+            "text": "17. Redis Sentinel high availability"
+          },
+          {
+            "id": "monitoring",
+            "text": "18. Monitoring and operational metrics"
+          },
+          {
+            "id": "prometheus-grafana",
+            "text": "19. Prometheus, Grafana and alerting"
+          },
+          {
+            "id": "backup-restore",
+            "text": "20. Backup and restore"
+          },
+          {
+            "id": "memory-management",
+            "text": "21. Memory management and eviction policy"
+          },
+          {
+            "id": "troubleshooting",
+            "text": "22. Production troubleshooting runbook"
+          },
+          {
+            "id": "best-practices",
+            "text": "23. Production acceptance checklist"
+          },
+          {
+            "id": "conclusion",
+            "text": "Conclusion: release acceptance"
+          },
+          {
+            "id": "faq",
+            "text": "Frequently asked questions"
+          },
+          {
+            "id": "official-references",
+            "text": "Official References and deployment templates"
+          }
+        ],
+        "fa": [
+          {
+            "id": "introduction",
+            "text": "مقدمه؛ نسخه‌های بررسی‌شده و محدوده استقرار"
+          },
+          {
+            "id": "what-is-redis",
+            "text": "۱. Redis چیست؟"
+          },
+          {
+            "id": "architecture",
+            "text": "۲. کاربرد Redis در معماری Enterprise"
+          },
+          {
+            "id": "prerequisites",
+            "text": "پیش‌نیازها و سناریوی استقرار"
+          },
+          {
+            "id": "replication-architecture",
+            "text": "۳. Redis Replication Architecture"
+          },
+          {
+            "id": "replication-is-not-ha",
+            "text": "۴. Replication به‌تنهایی High Availability نیست"
+          },
+          {
+            "id": "cluster-comparison",
+            "text": "۵. تفاوت Replication، Sentinel و Redis Cluster"
+          },
+          {
+            "id": "configuration",
+            "text": "۶. نصب Redis روی Ubuntu"
+          },
+          {
+            "id": "service-diagnostics",
+            "text": "۷. بررسی سرویس Redis"
+          },
+          {
+            "id": "configuration-files",
+            "text": "۸. ساختار Configuration و Backup پیش از تغییر"
+          },
+          {
+            "id": "primary-configuration",
+            "text": "۹. تنظیم Redis Primary"
+          },
+          {
+            "id": "security",
+            "text": "۱۰. Security Hardening و تفکیک شبکه"
+          },
+          {
+            "id": "authentication-acl",
+            "text": "۱۱. Authentication با Redis ACL"
+          },
+          {
+            "id": "persistence",
+            "text": "۱۲. Persistence؛ RDB و AOF"
+          },
+          {
+            "id": "replica-configuration",
+            "text": "۱۳. راه‌اندازی Redis Replica"
+          },
+          {
+            "id": "verify-replication",
+            "text": "۱۴. بررسی وضعیت Replication"
+          },
+          {
+            "id": "replication-test",
+            "text": "۱۵. تست عملی Replication"
+          },
+          {
+            "id": "read-scaling",
+            "text": "۱۶. Read From Replica و Read Scaling"
+          },
+          {
+            "id": "sentinel",
+            "text": "۱۷. Redis Sentinel و High Availability"
+          },
+          {
+            "id": "monitoring",
+            "text": "۱۸. Monitoring و Metricهای عملیاتی"
+          },
+          {
+            "id": "prometheus-grafana",
+            "text": "۱۹. Prometheus، Grafana و Alerting"
+          },
+          {
+            "id": "backup-restore",
+            "text": "۲۰. Backup و Restore"
+          },
+          {
+            "id": "memory-management",
+            "text": "۲۱. Memory Management و Eviction Policy"
+          },
+          {
+            "id": "troubleshooting",
+            "text": "۲۲. Runbook عملیاتی Troubleshooting"
+          },
+          {
+            "id": "best-practices",
+            "text": "۲۳. Production Checklist و معیار پذیرش"
+          },
+          {
+            "id": "conclusion",
+            "text": "جمع‌بندی؛ پذیرش استقرار"
+          },
+          {
+            "id": "faq",
+            "text": "پرسش‌های متداول Redis در Production"
+          },
+          {
+            "id": "official-references",
+            "text": "منابع رسمی و Templateهای استقرار"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "truenas-zfs-enterprise",
+      "original_heading_order": [
+        {
+          "id": "section-1",
+          "en": "Introduction",
+          "fa": "مقدمه"
+        },
+        {
+          "id": "section-2",
+          "en": "1. What is TrueNAS?",
+          "fa": "1. TrueNAS چیست؟"
+        },
+        {
+          "id": "section-3",
+          "en": "2. What is NAS, and what problem does TrueNAS solve?",
+          "fa": "2. NAS چیست و TrueNAS چه مشکلی را حل می‌کند؟"
+        },
+        {
+          "id": "section-4",
+          "en": "3. Enterprise uses for TrueNAS",
+          "fa": "3. کاربردهای TrueNAS در سازمان"
+        },
+        {
+          "id": "section-5",
+          "en": "4. TrueNAS advantages over a general file server",
+          "fa": "4. مزایای TrueNAS نسبت به File Server معمولی"
+        },
+        {
+          "id": "section-7",
+          "en": "6. Minimum and recommended production hardware",
+          "fa": "6. حداقل و Recommended Hardware برای Production"
+        },
+        {
+          "id": "section-6",
+          "en": "5. ZFS architecture and key concepts",
+          "fa": "5. معماری ZFS و مفاهیم کلیدی"
+        },
+        {
+          "id": "section-8",
+          "en": "7. Enterprise network design",
+          "fa": "7. طراحی شبکه سازمانی"
+        },
+        {
+          "id": "section-9",
+          "en": "8. Download the ISO and create bootable USB media",
+          "fa": "8. دانلود ISO و ساخت Bootable USB"
+        },
+        {
+          "id": "section-10",
+          "en": "9. Install TrueNAS on bare metal",
+          "fa": "9. نصب TrueNAS روی Bare Metal"
+        },
+        {
+          "id": "section-11",
+          "en": "10. Configure static IP, DNS, gateway and NTP",
+          "fa": "10. تنظیم Static IP، DNS، Gateway و NTP"
+        },
+        {
+          "id": "section-12",
+          "en": "11. Create a storage pool",
+          "fa": "11. ساخت Storage Pool"
+        },
+        {
+          "id": "section-13",
+          "en": "12. Create datasets",
+          "fa": "12. ساخت Dataset"
+        },
+        {
+          "id": "section-14",
+          "en": "13. Create users and groups",
+          "fa": "13. ایجاد User و Group"
+        },
+        {
+          "id": "section-23",
+          "en": "22. Security Hardening",
+          "fa": "۲۲. سخت‌سازی امنیتی"
+        },
+        {
+          "id": "section-15",
+          "en": "14. Configure SMB for Windows",
+          "fa": "14. راه‌اندازی SMB برای Windows"
+        },
+        {
+          "id": "section-16",
+          "en": "15. Map a network drive in Windows",
+          "fa": "15. Map Network Drive در Windows"
+        },
+        {
+          "id": "section-17",
+          "en": "16. Configure NFS for Linux and VMware",
+          "fa": "16. راه‌اندازی NFS برای Linux و VMware"
+        },
+        {
+          "id": "section-18",
+          "en": "17. iSCSI for virtualization",
+          "fa": "17. iSCSI برای Virtualization"
+        },
+        {
+          "id": "section-26",
+          "en": "25. Practical example for a medium-sized company",
+          "fa": "25. سناریوی واقعی شرکت متوسط"
+        },
+        {
+          "id": "section-24",
+          "en": "23. Monitoring and alerting",
+          "fa": "23. Monitoring و Alerting"
+        },
+        {
+          "id": "section-25",
+          "en": "24. Common mistakes",
+          "fa": "24. اشتباهات رایج"
+        },
+        {
+          "id": "section-27",
+          "en": "26. Initial troubleshooting and diagnostic commands",
+          "fa": "26. Troubleshooting اولیه و Commandهای Diagnostic"
+        },
+        {
+          "id": "section-19",
+          "en": "18. Automated snapshots",
+          "fa": "18. Snapshot خودکار"
+        },
+        {
+          "id": "section-20",
+          "en": "19. ZFS replication to a second TrueNAS server",
+          "fa": "19. ZFS Replication به TrueNAS دوم"
+        },
+        {
+          "id": "section-21",
+          "en": "20. SMART and scrub",
+          "fa": "20. SMART و Scrub"
+        },
+        {
+          "id": "section-22",
+          "en": "21. Configuration backup",
+          "fa": "21. Backup از Configuration"
+        },
+        {
+          "id": "section-28",
+          "en": "27. Final production deployment checklist",
+          "fa": "27. Checklist نهایی Production Deployment"
+        },
+        {
+          "id": "section-29",
+          "en": "When is TrueNAS a suitable choice, and when is it not?",
+          "fa": "چه زمانی TrueNAS انتخاب مناسبی است و چه زمانی نیست؟"
+        },
+        {
+          "id": "faq",
+          "en": "TrueNAS frequently asked questions",
+          "fa": "پرسش‌های متداول TrueNAS"
+        },
+        {
+          "id": "section-30",
+          "en": "Official references",
+          "fa": "منابع رسمی"
+        }
+      ],
+      "final_heading_order": [
+        {
+          "id": "section-1",
+          "en": "Introduction",
+          "fa": "مقدمه"
+        },
+        {
+          "id": "section-2",
+          "en": "1. What is TrueNAS?",
+          "fa": "1. TrueNAS چیست؟"
+        },
+        {
+          "id": "section-3",
+          "en": "2. What is NAS, and what problem does TrueNAS solve?",
+          "fa": "2. NAS چیست و TrueNAS چه مشکلی را حل می‌کند؟"
+        },
+        {
+          "id": "section-4",
+          "en": "3. Enterprise uses for TrueNAS",
+          "fa": "3. کاربردهای TrueNAS در سازمان"
+        },
+        {
+          "id": "section-5",
+          "en": "4. TrueNAS advantages over a general file server",
+          "fa": "4. مزایای TrueNAS نسبت به File Server معمولی"
+        },
+        {
+          "id": "section-7",
+          "en": "5. Minimum and recommended production hardware",
+          "fa": "5. حداقل و Recommended Hardware برای Production"
+        },
+        {
+          "id": "section-6",
+          "en": "6. ZFS architecture and key concepts",
+          "fa": "6. معماری ZFS و مفاهیم کلیدی"
+        },
+        {
+          "id": "section-8",
+          "en": "7. Enterprise network design",
+          "fa": "7. طراحی شبکه سازمانی"
+        },
+        {
+          "id": "section-9",
+          "en": "8. Download the ISO and create bootable USB media",
+          "fa": "8. دانلود ISO و ساخت Bootable USB"
+        },
+        {
+          "id": "section-10",
+          "en": "9. Install TrueNAS on bare metal",
+          "fa": "9. نصب TrueNAS روی Bare Metal"
+        },
+        {
+          "id": "section-11",
+          "en": "10. Configure static IP, DNS, gateway and NTP",
+          "fa": "10. تنظیم Static IP، DNS، Gateway و NTP"
+        },
+        {
+          "id": "section-12",
+          "en": "11. Create a storage pool",
+          "fa": "11. ساخت Storage Pool"
+        },
+        {
+          "id": "section-13",
+          "en": "12. Create datasets",
+          "fa": "12. ساخت Dataset"
+        },
+        {
+          "id": "section-14",
+          "en": "13. Create users and groups",
+          "fa": "13. ایجاد User و Group"
+        },
+        {
+          "id": "section-23",
+          "en": "14. Security Hardening",
+          "fa": "۱۴. سخت‌سازی امنیتی"
+        },
+        {
+          "id": "section-15",
+          "en": "15. Configure SMB for Windows",
+          "fa": "15. راه‌اندازی SMB برای Windows"
+        },
+        {
+          "id": "section-16",
+          "en": "16. Map a network drive in Windows",
+          "fa": "16. Map Network Drive در Windows"
+        },
+        {
+          "id": "section-17",
+          "en": "17. Configure NFS for Linux and VMware",
+          "fa": "17. راه‌اندازی NFS برای Linux و VMware"
+        },
+        {
+          "id": "section-18",
+          "en": "18. iSCSI for virtualization",
+          "fa": "18. iSCSI برای Virtualization"
+        },
+        {
+          "id": "section-19",
+          "en": "19. Automated snapshots",
+          "fa": "19. Snapshot خودکار"
+        },
+        {
+          "id": "section-20",
+          "en": "20. ZFS replication to a second TrueNAS server",
+          "fa": "20. ZFS Replication به TrueNAS دوم"
+        },
+        {
+          "id": "section-22",
+          "en": "21. Configuration backup",
+          "fa": "21. Backup از Configuration"
+        },
+        {
+          "id": "section-26",
+          "en": "22. Practical example for a medium-sized company",
+          "fa": "22. سناریوی واقعی شرکت متوسط"
+        },
+        {
+          "id": "section-21",
+          "en": "23. SMART and scrub",
+          "fa": "23. SMART و Scrub"
+        },
+        {
+          "id": "section-24",
+          "en": "24. Monitoring and alerting",
+          "fa": "24. Monitoring و Alerting"
+        },
+        {
+          "id": "section-27",
+          "en": "25. Initial troubleshooting and diagnostic commands",
+          "fa": "25. Troubleshooting اولیه و Commandهای Diagnostic"
+        },
+        {
+          "id": "section-25",
+          "en": "26. Common mistakes",
+          "fa": "26. اشتباهات رایج"
+        },
+        {
+          "id": "section-28",
+          "en": "27. Final production deployment checklist",
+          "fa": "27. Checklist نهایی Production Deployment"
+        },
+        {
+          "id": "section-29",
+          "en": "When is TrueNAS a suitable choice, and when is it not?",
+          "fa": "چه زمانی TrueNAS انتخاب مناسبی است و چه زمانی نیست؟"
+        },
+        {
+          "id": "faq",
+          "en": "TrueNAS frequently asked questions",
+          "fa": "پرسش‌های متداول TrueNAS"
+        },
+        {
+          "id": "section-30",
+          "en": "Official references",
+          "fa": "منابع رسمی"
+        }
+      ],
+      "headings_renumbered": [
+        {
+          "id": "section-7",
+          "before": {
+            "id": "section-7",
+            "en": "6. Minimum and recommended production hardware",
+            "fa": "6. حداقل و Recommended Hardware برای Production"
+          },
+          "after": {
+            "id": "section-7",
+            "en": "5. Minimum and recommended production hardware",
+            "fa": "5. حداقل و Recommended Hardware برای Production"
+          }
+        },
+        {
+          "id": "section-6",
+          "before": {
+            "id": "section-6",
+            "en": "5. ZFS architecture and key concepts",
+            "fa": "5. معماری ZFS و مفاهیم کلیدی"
+          },
+          "after": {
+            "id": "section-6",
+            "en": "6. ZFS architecture and key concepts",
+            "fa": "6. معماری ZFS و مفاهیم کلیدی"
+          }
+        },
+        {
+          "id": "section-23",
+          "before": {
+            "id": "section-23",
+            "en": "22. Security Hardening",
+            "fa": "۲۲. سخت‌سازی امنیتی"
+          },
+          "after": {
+            "id": "section-23",
+            "en": "14. Security Hardening",
+            "fa": "۱۴. سخت‌سازی امنیتی"
+          }
+        },
+        {
+          "id": "section-15",
+          "before": {
+            "id": "section-15",
+            "en": "14. Configure SMB for Windows",
+            "fa": "14. راه‌اندازی SMB برای Windows"
+          },
+          "after": {
+            "id": "section-15",
+            "en": "15. Configure SMB for Windows",
+            "fa": "15. راه‌اندازی SMB برای Windows"
+          }
+        },
+        {
+          "id": "section-16",
+          "before": {
+            "id": "section-16",
+            "en": "15. Map a network drive in Windows",
+            "fa": "15. Map Network Drive در Windows"
+          },
+          "after": {
+            "id": "section-16",
+            "en": "16. Map a network drive in Windows",
+            "fa": "16. Map Network Drive در Windows"
+          }
+        },
+        {
+          "id": "section-17",
+          "before": {
+            "id": "section-17",
+            "en": "16. Configure NFS for Linux and VMware",
+            "fa": "16. راه‌اندازی NFS برای Linux و VMware"
+          },
+          "after": {
+            "id": "section-17",
+            "en": "17. Configure NFS for Linux and VMware",
+            "fa": "17. راه‌اندازی NFS برای Linux و VMware"
+          }
+        },
+        {
+          "id": "section-18",
+          "before": {
+            "id": "section-18",
+            "en": "17. iSCSI for virtualization",
+            "fa": "17. iSCSI برای Virtualization"
+          },
+          "after": {
+            "id": "section-18",
+            "en": "18. iSCSI for virtualization",
+            "fa": "18. iSCSI برای Virtualization"
+          }
+        },
+        {
+          "id": "section-19",
+          "before": {
+            "id": "section-19",
+            "en": "18. Automated snapshots",
+            "fa": "18. Snapshot خودکار"
+          },
+          "after": {
+            "id": "section-19",
+            "en": "19. Automated snapshots",
+            "fa": "19. Snapshot خودکار"
+          }
+        },
+        {
+          "id": "section-20",
+          "before": {
+            "id": "section-20",
+            "en": "19. ZFS replication to a second TrueNAS server",
+            "fa": "19. ZFS Replication به TrueNAS دوم"
+          },
+          "after": {
+            "id": "section-20",
+            "en": "20. ZFS replication to a second TrueNAS server",
+            "fa": "20. ZFS Replication به TrueNAS دوم"
+          }
+        },
+        {
+          "id": "section-26",
+          "before": {
+            "id": "section-26",
+            "en": "25. Practical example for a medium-sized company",
+            "fa": "25. سناریوی واقعی شرکت متوسط"
+          },
+          "after": {
+            "id": "section-26",
+            "en": "22. Practical example for a medium-sized company",
+            "fa": "22. سناریوی واقعی شرکت متوسط"
+          }
+        },
+        {
+          "id": "section-21",
+          "before": {
+            "id": "section-21",
+            "en": "20. SMART and scrub",
+            "fa": "20. SMART و Scrub"
+          },
+          "after": {
+            "id": "section-21",
+            "en": "23. SMART and scrub",
+            "fa": "23. SMART و Scrub"
+          }
+        },
+        {
+          "id": "section-24",
+          "before": {
+            "id": "section-24",
+            "en": "23. Monitoring and alerting",
+            "fa": "23. Monitoring و Alerting"
+          },
+          "after": {
+            "id": "section-24",
+            "en": "24. Monitoring and alerting",
+            "fa": "24. Monitoring و Alerting"
+          }
+        },
+        {
+          "id": "section-27",
+          "before": {
+            "id": "section-27",
+            "en": "26. Initial troubleshooting and diagnostic commands",
+            "fa": "26. Troubleshooting اولیه و Commandهای Diagnostic"
+          },
+          "after": {
+            "id": "section-27",
+            "en": "25. Initial troubleshooting and diagnostic commands",
+            "fa": "25. Troubleshooting اولیه و Commandهای Diagnostic"
+          }
+        },
+        {
+          "id": "section-25",
+          "before": {
+            "id": "section-25",
+            "en": "24. Common mistakes",
+            "fa": "24. اشتباهات رایج"
+          },
+          "after": {
+            "id": "section-25",
+            "en": "26. Common mistakes",
+            "fa": "26. اشتباهات رایج"
+          }
+        }
+      ],
+      "section_movements": [
+        {
+          "id": "section-19",
+          "from": 24,
+          "to": 20,
+          "reason": "Snapshots follow storage/sharing configuration, before replication."
+        },
+        {
+          "id": "section-20",
+          "from": 25,
+          "to": 21,
+          "reason": "Replication follows snapshots, before operations/troubleshooting."
+        },
+        {
+          "id": "section-22",
+          "from": 27,
+          "to": 22,
+          "reason": "Configuration backup follows replication, before the complete example."
+        },
+        {
+          "id": "section-21",
+          "from": 26,
+          "to": 24,
+          "reason": "SMART/scrub maintenance accompanies monitoring."
+        },
+        {
+          "id": "section-25",
+          "from": 22,
+          "to": 27,
+          "reason": "Common mistakes accompany troubleshooting and the final checklist."
+        }
+      ],
+      "validation": "passed (source, final EN/FA rendering, browser desktop/mobile, regeneration)",
+      "code_correction": null,
+      "final_rendered_heading_order": {
+        "en": [
+          {
+            "id": "introduction",
+            "text": "Introduction"
+          },
+          {
+            "id": "section-2",
+            "text": "1. What is TrueNAS?"
+          },
+          {
+            "id": "section-3",
+            "text": "2. What is NAS, and what problem does TrueNAS solve?"
+          },
+          {
+            "id": "section-4",
+            "text": "3. Enterprise uses for TrueNAS"
+          },
+          {
+            "id": "section-5",
+            "text": "4. TrueNAS advantages over a general file server"
+          },
+          {
+            "id": "prerequisites",
+            "text": "5. Minimum and recommended production hardware"
+          },
+          {
+            "id": "architecture",
+            "text": "6. ZFS architecture and key concepts"
+          },
+          {
+            "id": "section-8",
+            "text": "7. Enterprise network design"
+          },
+          {
+            "id": "section-9",
+            "text": "8. Download the ISO and create bootable USB media"
+          },
+          {
+            "id": "configuration",
+            "text": "9. Install TrueNAS on bare metal"
+          },
+          {
+            "id": "section-11",
+            "text": "10. Configure static IP, DNS, gateway and NTP"
+          },
+          {
+            "id": "section-12",
+            "text": "11. Create a storage pool"
+          },
+          {
+            "id": "section-13",
+            "text": "12. Create datasets"
+          },
+          {
+            "id": "section-14",
+            "text": "13. Create users and groups"
+          },
+          {
+            "id": "security",
+            "text": "14. Security Hardening"
+          },
+          {
+            "id": "section-15",
+            "text": "15. Configure SMB for Windows"
+          },
+          {
+            "id": "section-16",
+            "text": "16. Map a network drive in Windows"
+          },
+          {
+            "id": "section-17",
+            "text": "17. Configure NFS for Linux and VMware"
+          },
+          {
+            "id": "section-18",
+            "text": "18. iSCSI for virtualization"
+          },
+          {
+            "id": "section-19",
+            "text": "19. Automated snapshots"
+          },
+          {
+            "id": "section-20",
+            "text": "20. ZFS replication to a second TrueNAS server"
+          },
+          {
+            "id": "section-22",
+            "text": "21. Configuration backup"
+          },
+          {
+            "id": "section-26",
+            "text": "22. Practical example for a medium-sized company"
+          },
+          {
+            "id": "section-21",
+            "text": "23. SMART and scrub"
+          },
+          {
+            "id": "section-24",
+            "text": "24. Monitoring and alerting"
+          },
+          {
+            "id": "troubleshooting",
+            "text": "25. Initial troubleshooting and diagnostic commands"
+          },
+          {
+            "id": "section-25",
+            "text": "26. Common mistakes"
+          },
+          {
+            "id": "best-practices",
+            "text": "27. Final production deployment checklist"
+          },
+          {
+            "id": "conclusion",
+            "text": "When is TrueNAS a suitable choice, and when is it not?"
+          },
+          {
+            "id": "faq",
+            "text": "TrueNAS frequently asked questions"
+          },
+          {
+            "id": "official-references",
+            "text": "Official References"
+          }
+        ],
+        "fa": [
+          {
+            "id": "introduction",
+            "text": "مقدمه"
+          },
+          {
+            "id": "section-2",
+            "text": "1. TrueNAS چیست؟"
+          },
+          {
+            "id": "section-3",
+            "text": "2. NAS چیست و TrueNAS چه مشکلی را حل می‌کند؟"
+          },
+          {
+            "id": "section-4",
+            "text": "3. کاربردهای TrueNAS در سازمان"
+          },
+          {
+            "id": "section-5",
+            "text": "4. مزایای TrueNAS نسبت به File Server معمولی"
+          },
+          {
+            "id": "prerequisites",
+            "text": "5. حداقل و Recommended Hardware برای Production"
+          },
+          {
+            "id": "architecture",
+            "text": "6. معماری ZFS و مفاهیم کلیدی"
+          },
+          {
+            "id": "section-8",
+            "text": "7. طراحی شبکه سازمانی"
+          },
+          {
+            "id": "section-9",
+            "text": "8. دانلود ISO و ساخت Bootable USB"
+          },
+          {
+            "id": "configuration",
+            "text": "9. نصب TrueNAS روی Bare Metal"
+          },
+          {
+            "id": "section-11",
+            "text": "10. تنظیم Static IP، DNS، Gateway و NTP"
+          },
+          {
+            "id": "section-12",
+            "text": "11. ساخت Storage Pool"
+          },
+          {
+            "id": "section-13",
+            "text": "12. ساخت Dataset"
+          },
+          {
+            "id": "section-14",
+            "text": "13. ایجاد User و Group"
+          },
+          {
+            "id": "security",
+            "text": "۱۴. سخت‌سازی امنیتی"
+          },
+          {
+            "id": "section-15",
+            "text": "15. راه‌اندازی SMB برای Windows"
+          },
+          {
+            "id": "section-16",
+            "text": "16. Map Network Drive در Windows"
+          },
+          {
+            "id": "section-17",
+            "text": "17. راه‌اندازی NFS برای Linux و VMware"
+          },
+          {
+            "id": "section-18",
+            "text": "18. iSCSI برای Virtualization"
+          },
+          {
+            "id": "section-19",
+            "text": "19. Snapshot خودکار"
+          },
+          {
+            "id": "section-20",
+            "text": "20. ZFS Replication به TrueNAS دوم"
+          },
+          {
+            "id": "section-22",
+            "text": "21. Backup از Configuration"
+          },
+          {
+            "id": "section-26",
+            "text": "22. سناریوی واقعی شرکت متوسط"
+          },
+          {
+            "id": "section-21",
+            "text": "23. SMART و Scrub"
+          },
+          {
+            "id": "section-24",
+            "text": "24. Monitoring و Alerting"
+          },
+          {
+            "id": "troubleshooting",
+            "text": "25. Troubleshooting اولیه و Commandهای Diagnostic"
+          },
+          {
+            "id": "section-25",
+            "text": "26. اشتباهات رایج"
+          },
+          {
+            "id": "best-practices",
+            "text": "27. Checklist نهایی Production Deployment"
+          },
+          {
+            "id": "conclusion",
+            "text": "چه زمانی TrueNAS انتخاب مناسبی است و چه زمانی نیست؟"
+          },
+          {
+            "id": "faq",
+            "text": "پرسش‌های متداول TrueNAS"
+          },
+          {
+            "id": "official-references",
+            "text": "منابع رسمی"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "ubiquiti-unifi-wireless-mesh-network",
+      "original_heading_order": [
+        {
+          "id": "wireless-mesh",
+          "en": "1. What Is Wireless Mesh in UniFi?",
+          "fa": "۱. Wireless Mesh در UniFi چیست؟"
+        },
+        {
+          "id": "when-to-mesh",
+          "en": "2. When to Use Mesh and When to Use Ethernet",
+          "fa": "۲. Mesh چه زمانی مناسب است و چه زمانی Ethernet لازم است؟"
+        },
+        {
+          "id": "prerequisites",
+          "en": "4. Prerequisites",
+          "fa": "۴. پیش‌نیازها"
+        },
+        {
+          "id": "architecture",
+          "en": "3. Parent AP and Mesh AP Architecture",
+          "fa": "۳. معماری Parent AP و Mesh AP"
+        },
+        {
+          "id": "rf-backhaul",
+          "en": "11. RF Design and 5 GHz Backhaul",
+          "fa": "۱۱. طراحی RF و Backhaul روی 5GHz"
+        },
+        {
+          "id": "channels",
+          "en": "12. Channel Planning",
+          "fa": "۱۲. Channel Planning"
+        },
+        {
+          "id": "signal",
+          "en": "13. RSSI and Signal Strength",
+          "fa": "۱۳. RSSI و Signal Strength"
+        },
+        {
+          "id": "enterprise-design",
+          "en": "Enterprise Design Recommendations",
+          "fa": "توصیه‌های طراحی سازمانی — Enterprise Design Recommendations"
+        },
+        {
+          "id": "adoption",
+          "en": "5. Adopt the Devices",
+          "fa": "۵. Adoption تجهیزات"
+        },
+        {
+          "id": "ssid",
+          "en": "6. Create the Shared SSID",
+          "fa": "۶. ایجاد SSID مشترک"
+        },
+        {
+          "id": "enable-meshing",
+          "en": "7. Enable Wireless Meshing",
+          "fa": "۷. فعال‌سازی Wireless Meshing"
+        },
+        {
+          "id": "mesh-parent",
+          "en": "8. Configure the Wired Mesh Parent",
+          "fa": "۸. تنظیم Mesh Parent روی AP کابلی"
+        },
+        {
+          "id": "mesh-connect",
+          "en": "9. Configure Mesh Connect on Wireless APs",
+          "fa": "۹. تنظیم Mesh Connect روی APهای Wireless"
+        },
+        {
+          "id": "vlans",
+          "en": "14. VLANs Across the Mesh",
+          "fa": "۱۴. VLAN در شبکه Mesh"
+        },
+        {
+          "id": "roaming",
+          "en": "15. Client Roaming Between APs",
+          "fa": "۱۵. Roaming کاربران بین APها"
+        },
+        {
+          "id": "wireless-uplink",
+          "en": "10. Verify Wireless Uplink",
+          "fa": "۱۰. بررسی Wireless Uplink"
+        },
+        {
+          "id": "performance",
+          "en": "16. Performance Testing and Acceptance",
+          "fa": "۱۶. Performance Testing و معیار پذیرش"
+        },
+        {
+          "id": "troubleshooting",
+          "en": "17. Troubleshooting",
+          "fa": "۱۷. عیب‌یابی"
+        },
+        {
+          "id": "troubleshooting-checklist",
+          "en": "Troubleshooting Checklist",
+          "fa": "چک‌لیست عیب‌یابی"
+        },
+        {
+          "id": "best-practices",
+          "en": "Best Practices Checklist",
+          "fa": "چک‌لیست Best Practiceها"
+        },
+        {
+          "id": "conclusion",
+          "en": "Conclusion",
+          "fa": "نتیجه‌گیری"
+        },
+        {
+          "id": "faq",
+          "en": "FAQ",
+          "fa": "پرسش‌های متداول — FAQ"
+        },
+        {
+          "id": "official-references",
+          "en": "Official References",
+          "fa": "منابع رسمی"
+        }
+      ],
+      "final_heading_order": [
+        {
+          "id": "wireless-mesh",
+          "en": "1. What Is Wireless Mesh in UniFi?",
+          "fa": "۱. Wireless Mesh در UniFi چیست؟"
+        },
+        {
+          "id": "when-to-mesh",
+          "en": "2. When to Use Mesh and When to Use Ethernet",
+          "fa": "۲. Mesh چه زمانی مناسب است و چه زمانی Ethernet لازم است؟"
+        },
+        {
+          "id": "prerequisites",
+          "en": "3. Prerequisites",
+          "fa": "۳. پیش‌نیازها"
+        },
+        {
+          "id": "architecture",
+          "en": "4. Parent AP and Mesh AP Architecture",
+          "fa": "۴. معماری Parent AP و Mesh AP"
+        },
+        {
+          "id": "rf-backhaul",
+          "en": "5. RF Design and 5 GHz Backhaul",
+          "fa": "۵. طراحی RF و Backhaul روی 5GHz"
+        },
+        {
+          "id": "channels",
+          "en": "6. Channel Planning",
+          "fa": "۶. Channel Planning"
+        },
+        {
+          "id": "signal",
+          "en": "7. RSSI and Signal Strength",
+          "fa": "۷. RSSI و Signal Strength"
+        },
+        {
+          "id": "enterprise-design",
+          "en": "Enterprise Design Recommendations",
+          "fa": "توصیه‌های طراحی سازمانی — Enterprise Design Recommendations"
+        },
+        {
+          "id": "adoption",
+          "en": "8. Adopt the Devices",
+          "fa": "۸. Adoption تجهیزات"
+        },
+        {
+          "id": "ssid",
+          "en": "9. Create the Shared SSID",
+          "fa": "۹. ایجاد SSID مشترک"
+        },
+        {
+          "id": "enable-meshing",
+          "en": "10. Enable Wireless Meshing",
+          "fa": "۱۰. فعال‌سازی Wireless Meshing"
+        },
+        {
+          "id": "mesh-parent",
+          "en": "11. Configure the Wired Mesh Parent",
+          "fa": "۱۱. تنظیم Mesh Parent روی AP کابلی"
+        },
+        {
+          "id": "mesh-connect",
+          "en": "12. Configure Mesh Connect on Wireless APs",
+          "fa": "۱۲. تنظیم Mesh Connect روی APهای Wireless"
+        },
+        {
+          "id": "vlans",
+          "en": "13. VLANs Across the Mesh",
+          "fa": "۱۳. VLAN در شبکه Mesh"
+        },
+        {
+          "id": "roaming",
+          "en": "14. Client Roaming Between APs",
+          "fa": "۱۴. Roaming کاربران بین APها"
+        },
+        {
+          "id": "wireless-uplink",
+          "en": "15. Verify Wireless Uplink",
+          "fa": "۱۵. بررسی Wireless Uplink"
+        },
+        {
+          "id": "performance",
+          "en": "16. Performance Testing and Acceptance",
+          "fa": "۱۶. Performance Testing و معیار پذیرش"
+        },
+        {
+          "id": "troubleshooting",
+          "en": "17. Troubleshooting",
+          "fa": "۱۷. عیب‌یابی"
+        },
+        {
+          "id": "troubleshooting-checklist",
+          "en": "Troubleshooting Checklist",
+          "fa": "چک‌لیست عیب‌یابی"
+        },
+        {
+          "id": "best-practices",
+          "en": "Best Practices Checklist",
+          "fa": "چک‌لیست Best Practiceها"
+        },
+        {
+          "id": "conclusion",
+          "en": "Conclusion",
+          "fa": "نتیجه‌گیری"
+        },
+        {
+          "id": "faq",
+          "en": "FAQ",
+          "fa": "پرسش‌های متداول — FAQ"
+        },
+        {
+          "id": "official-references",
+          "en": "Official References",
+          "fa": "منابع رسمی"
+        }
+      ],
+      "headings_renumbered": [
+        {
+          "id": "prerequisites",
+          "before": {
+            "id": "prerequisites",
+            "en": "4. Prerequisites",
+            "fa": "۴. پیش‌نیازها"
+          },
+          "after": {
+            "id": "prerequisites",
+            "en": "3. Prerequisites",
+            "fa": "۳. پیش‌نیازها"
+          }
+        },
+        {
+          "id": "architecture",
+          "before": {
+            "id": "architecture",
+            "en": "3. Parent AP and Mesh AP Architecture",
+            "fa": "۳. معماری Parent AP و Mesh AP"
+          },
+          "after": {
+            "id": "architecture",
+            "en": "4. Parent AP and Mesh AP Architecture",
+            "fa": "۴. معماری Parent AP و Mesh AP"
+          }
+        },
+        {
+          "id": "rf-backhaul",
+          "before": {
+            "id": "rf-backhaul",
+            "en": "11. RF Design and 5 GHz Backhaul",
+            "fa": "۱۱. طراحی RF و Backhaul روی 5GHz"
+          },
+          "after": {
+            "id": "rf-backhaul",
+            "en": "5. RF Design and 5 GHz Backhaul",
+            "fa": "۵. طراحی RF و Backhaul روی 5GHz"
+          }
+        },
+        {
+          "id": "channels",
+          "before": {
+            "id": "channels",
+            "en": "12. Channel Planning",
+            "fa": "۱۲. Channel Planning"
+          },
+          "after": {
+            "id": "channels",
+            "en": "6. Channel Planning",
+            "fa": "۶. Channel Planning"
+          }
+        },
+        {
+          "id": "signal",
+          "before": {
+            "id": "signal",
+            "en": "13. RSSI and Signal Strength",
+            "fa": "۱۳. RSSI و Signal Strength"
+          },
+          "after": {
+            "id": "signal",
+            "en": "7. RSSI and Signal Strength",
+            "fa": "۷. RSSI و Signal Strength"
+          }
+        },
+        {
+          "id": "adoption",
+          "before": {
+            "id": "adoption",
+            "en": "5. Adopt the Devices",
+            "fa": "۵. Adoption تجهیزات"
+          },
+          "after": {
+            "id": "adoption",
+            "en": "8. Adopt the Devices",
+            "fa": "۸. Adoption تجهیزات"
+          }
+        },
+        {
+          "id": "ssid",
+          "before": {
+            "id": "ssid",
+            "en": "6. Create the Shared SSID",
+            "fa": "۶. ایجاد SSID مشترک"
+          },
+          "after": {
+            "id": "ssid",
+            "en": "9. Create the Shared SSID",
+            "fa": "۹. ایجاد SSID مشترک"
+          }
+        },
+        {
+          "id": "enable-meshing",
+          "before": {
+            "id": "enable-meshing",
+            "en": "7. Enable Wireless Meshing",
+            "fa": "۷. فعال‌سازی Wireless Meshing"
+          },
+          "after": {
+            "id": "enable-meshing",
+            "en": "10. Enable Wireless Meshing",
+            "fa": "۱۰. فعال‌سازی Wireless Meshing"
+          }
+        },
+        {
+          "id": "mesh-parent",
+          "before": {
+            "id": "mesh-parent",
+            "en": "8. Configure the Wired Mesh Parent",
+            "fa": "۸. تنظیم Mesh Parent روی AP کابلی"
+          },
+          "after": {
+            "id": "mesh-parent",
+            "en": "11. Configure the Wired Mesh Parent",
+            "fa": "۱۱. تنظیم Mesh Parent روی AP کابلی"
+          }
+        },
+        {
+          "id": "mesh-connect",
+          "before": {
+            "id": "mesh-connect",
+            "en": "9. Configure Mesh Connect on Wireless APs",
+            "fa": "۹. تنظیم Mesh Connect روی APهای Wireless"
+          },
+          "after": {
+            "id": "mesh-connect",
+            "en": "12. Configure Mesh Connect on Wireless APs",
+            "fa": "۱۲. تنظیم Mesh Connect روی APهای Wireless"
+          }
+        },
+        {
+          "id": "vlans",
+          "before": {
+            "id": "vlans",
+            "en": "14. VLANs Across the Mesh",
+            "fa": "۱۴. VLAN در شبکه Mesh"
+          },
+          "after": {
+            "id": "vlans",
+            "en": "13. VLANs Across the Mesh",
+            "fa": "۱۳. VLAN در شبکه Mesh"
+          }
+        },
+        {
+          "id": "roaming",
+          "before": {
+            "id": "roaming",
+            "en": "15. Client Roaming Between APs",
+            "fa": "۱۵. Roaming کاربران بین APها"
+          },
+          "after": {
+            "id": "roaming",
+            "en": "14. Client Roaming Between APs",
+            "fa": "۱۴. Roaming کاربران بین APها"
+          }
+        },
+        {
+          "id": "wireless-uplink",
+          "before": {
+            "id": "wireless-uplink",
+            "en": "10. Verify Wireless Uplink",
+            "fa": "۱۰. بررسی Wireless Uplink"
+          },
+          "after": {
+            "id": "wireless-uplink",
+            "en": "15. Verify Wireless Uplink",
+            "fa": "۱۵. بررسی Wireless Uplink"
+          }
+        }
+      ],
+      "section_movements": [],
+      "validation": "passed (source, final EN/FA rendering, browser desktop/mobile, regeneration)",
+      "code_correction": null,
+      "final_rendered_heading_order": {
+        "en": [
+          {
+            "id": "introduction",
+            "text": "Introduction"
+          },
+          {
+            "id": "wireless-mesh",
+            "text": "1. What Is Wireless Mesh in UniFi?"
+          },
+          {
+            "id": "when-to-mesh",
+            "text": "2. When to Use Mesh and When to Use Ethernet"
+          },
+          {
+            "id": "prerequisites",
+            "text": "3. Prerequisites"
+          },
+          {
+            "id": "architecture",
+            "text": "4. Parent AP and Mesh AP Architecture"
+          },
+          {
+            "id": "rf-backhaul",
+            "text": "5. RF Design and 5 GHz Backhaul"
+          },
+          {
+            "id": "channels",
+            "text": "6. Channel Planning"
+          },
+          {
+            "id": "signal",
+            "text": "7. RSSI and Signal Strength"
+          },
+          {
+            "id": "enterprise-design",
+            "text": "Enterprise Design Recommendations"
+          },
+          {
+            "id": "adoption",
+            "text": "8. Adopt the Devices"
+          },
+          {
+            "id": "ssid",
+            "text": "9. Create the Shared SSID"
+          },
+          {
+            "id": "enable-meshing",
+            "text": "10. Enable Wireless Meshing"
+          },
+          {
+            "id": "configuration",
+            "text": "11. Configure the Wired Mesh Parent"
+          },
+          {
+            "id": "mesh-connect",
+            "text": "12. Configure Mesh Connect on Wireless APs"
+          },
+          {
+            "id": "vlans",
+            "text": "13. VLANs Across the Mesh"
+          },
+          {
+            "id": "roaming",
+            "text": "14. Client Roaming Between APs"
+          },
+          {
+            "id": "wireless-uplink",
+            "text": "15. Verify Wireless Uplink"
+          },
+          {
+            "id": "performance",
+            "text": "16. Performance Testing and Acceptance"
+          },
+          {
+            "id": "security",
+            "text": "Security Considerations"
+          },
+          {
+            "id": "troubleshooting",
+            "text": "17. Troubleshooting"
+          },
+          {
+            "id": "troubleshooting-checklist",
+            "text": "Troubleshooting Checklist"
+          },
+          {
+            "id": "best-practices",
+            "text": "Best Practices Checklist"
+          },
+          {
+            "id": "conclusion",
+            "text": "Conclusion"
+          },
+          {
+            "id": "faq",
+            "text": "FAQ"
+          },
+          {
+            "id": "official-references",
+            "text": "Official References"
+          }
+        ],
+        "fa": [
+          {
+            "id": "introduction",
+            "text": "مقدمه"
+          },
+          {
+            "id": "wireless-mesh",
+            "text": "۱. Wireless Mesh در UniFi چیست؟"
+          },
+          {
+            "id": "when-to-mesh",
+            "text": "۲. Mesh چه زمانی مناسب است و چه زمانی Ethernet لازم است؟"
+          },
+          {
+            "id": "prerequisites",
+            "text": "۳. پیش‌نیازها"
+          },
+          {
+            "id": "architecture",
+            "text": "۴. معماری Parent AP و Mesh AP"
+          },
+          {
+            "id": "rf-backhaul",
+            "text": "۵. طراحی RF و Backhaul روی 5GHz"
+          },
+          {
+            "id": "channels",
+            "text": "۶. Channel Planning"
+          },
+          {
+            "id": "signal",
+            "text": "۷. RSSI و Signal Strength"
+          },
+          {
+            "id": "enterprise-design",
+            "text": "توصیه‌های طراحی سازمانی — Enterprise Design Recommendations"
+          },
+          {
+            "id": "adoption",
+            "text": "۸. Adoption تجهیزات"
+          },
+          {
+            "id": "ssid",
+            "text": "۹. ایجاد SSID مشترک"
+          },
+          {
+            "id": "enable-meshing",
+            "text": "۱۰. فعال‌سازی Wireless Meshing"
+          },
+          {
+            "id": "configuration",
+            "text": "۱۱. تنظیم Mesh Parent روی AP کابلی"
+          },
+          {
+            "id": "mesh-connect",
+            "text": "۱۲. تنظیم Mesh Connect روی APهای Wireless"
+          },
+          {
+            "id": "vlans",
+            "text": "۱۳. VLAN در شبکه Mesh"
+          },
+          {
+            "id": "roaming",
+            "text": "۱۴. Roaming کاربران بین APها"
+          },
+          {
+            "id": "wireless-uplink",
+            "text": "۱۵. بررسی Wireless Uplink"
+          },
+          {
+            "id": "performance",
+            "text": "۱۶. Performance Testing و معیار پذیرش"
+          },
+          {
+            "id": "security",
+            "text": "ملاحظات امنیتی"
+          },
+          {
+            "id": "troubleshooting",
+            "text": "۱۷. عیب‌یابی"
+          },
+          {
+            "id": "troubleshooting-checklist",
+            "text": "چک‌لیست عیب‌یابی"
+          },
+          {
+            "id": "best-practices",
+            "text": "چک‌لیست Best Practiceها"
+          },
+          {
+            "id": "conclusion",
+            "text": "نتیجه‌گیری"
+          },
+          {
+            "id": "faq",
+            "text": "پرسش‌های متداول — FAQ"
+          },
+          {
+            "id": "official-references",
+            "text": "منابع رسمی"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "zabbix-server-linux-windows-agents-backup",
+      "original_heading_order": [
+        {
+          "id": "introduction",
+          "en": "Introduction and deployment scope",
+          "fa": "مقدمه و محدوده استقرار"
+        },
+        {
+          "id": "prerequisites",
+          "en": "2. Server preparation and prerequisites",
+          "fa": "۲. آماده‌سازی و پیش‌نیاز سرور"
+        },
+        {
+          "id": "architecture",
+          "en": "1. Enterprise Zabbix architecture",
+          "fa": "۱. معماری سازمانی Zabbix"
+        },
+        {
+          "id": "configuration",
+          "en": "3. Installation: Server, PostgreSQL and the frontend",
+          "fa": "۳. نصب Server، PostgreSQL و Frontend"
+        },
+        {
+          "id": "linux-agent",
+          "en": "4. Install Agent 2 on Ubuntu Linux",
+          "fa": "۴. نصب Agent 2 روی Ubuntu Linux"
+        },
+        {
+          "id": "windows-agent",
+          "en": "5. Install Agent 2 on Windows Server",
+          "fa": "۵. نصب Agent 2 روی Windows Server"
+        },
+        {
+          "id": "security",
+          "en": "8. Security hardening",
+          "fa": "۸. امن‌سازی"
+        },
+        {
+          "id": "monitoring",
+          "en": "6. Practical monitoring and triggers",
+          "fa": "۶. مانیتورینگ و Trigger عملی"
+        },
+        {
+          "id": "notifications",
+          "en": "7. Alerts and notifications",
+          "fa": "۷. هشدار و اعلان"
+        },
+        {
+          "id": "troubleshooting",
+          "en": "12. Production troubleshooting",
+          "fa": "۱۲. عیب‌یابی Production"
+        },
+        {
+          "id": "database-backup",
+          "en": "9. Database and configuration backup",
+          "fa": "۹. بکاپ Database و Configuration"
+        },
+        {
+          "id": "automated-backup",
+          "en": "10. Automated daily backup",
+          "fa": "۱۰. بکاپ روزانه خودکار"
+        },
+        {
+          "id": "recovery",
+          "en": "11. Restore and disaster recovery",
+          "fa": "۱۱. Restore و بازیابی بحران"
+        },
+        {
+          "id": "best-practices",
+          "en": "13. Production checklist",
+          "fa": "۱۳. چک‌لیست Production"
+        },
+        {
+          "id": "conclusion",
+          "en": "Operational handover and runtime acceptance",
+          "fa": "تحویل عملیاتی و پذیرش Runtime"
+        },
+        {
+          "id": "faq",
+          "en": "Frequently asked questions",
+          "fa": "پرسش‌های متداول"
+        },
+        {
+          "id": "official-references",
+          "en": "Official references, downloads and related articles",
+          "fa": "منابع رسمی، دانلود و مقاله مرتبط"
+        }
+      ],
+      "final_heading_order": [
+        {
+          "id": "introduction",
+          "en": "Introduction and deployment scope",
+          "fa": "مقدمه و محدوده استقرار"
+        },
+        {
+          "id": "prerequisites",
+          "en": "1. Server preparation and prerequisites",
+          "fa": "۱. آماده‌سازی و پیش‌نیاز سرور"
+        },
+        {
+          "id": "architecture",
+          "en": "2. Enterprise Zabbix architecture",
+          "fa": "۲. معماری سازمانی Zabbix"
+        },
+        {
+          "id": "configuration",
+          "en": "3. Installation: Server, PostgreSQL and the frontend",
+          "fa": "۳. نصب Server، PostgreSQL و Frontend"
+        },
+        {
+          "id": "linux-agent",
+          "en": "4. Install Agent 2 on Ubuntu Linux",
+          "fa": "۴. نصب Agent 2 روی Ubuntu Linux"
+        },
+        {
+          "id": "windows-agent",
+          "en": "5. Install Agent 2 on Windows Server",
+          "fa": "۵. نصب Agent 2 روی Windows Server"
+        },
+        {
+          "id": "security",
+          "en": "6. Security hardening",
+          "fa": "۶. امن‌سازی"
+        },
+        {
+          "id": "monitoring",
+          "en": "7. Practical monitoring and triggers",
+          "fa": "۷. مانیتورینگ و Trigger عملی"
+        },
+        {
+          "id": "notifications",
+          "en": "8. Alerts and notifications",
+          "fa": "۸. هشدار و اعلان"
+        },
+        {
+          "id": "database-backup",
+          "en": "9. Database and configuration backup",
+          "fa": "۹. بکاپ Database و Configuration"
+        },
+        {
+          "id": "automated-backup",
+          "en": "10. Automated daily backup",
+          "fa": "۱۰. بکاپ روزانه خودکار"
+        },
+        {
+          "id": "recovery",
+          "en": "11. Restore and disaster recovery",
+          "fa": "۱۱. Restore و بازیابی بحران"
+        },
+        {
+          "id": "troubleshooting",
+          "en": "12. Production troubleshooting",
+          "fa": "۱۲. عیب‌یابی Production"
+        },
+        {
+          "id": "best-practices",
+          "en": "13. Production checklist",
+          "fa": "۱۳. چک‌لیست Production"
+        },
+        {
+          "id": "conclusion",
+          "en": "Operational handover and runtime acceptance",
+          "fa": "تحویل عملیاتی و پذیرش Runtime"
+        },
+        {
+          "id": "faq",
+          "en": "Frequently asked questions",
+          "fa": "پرسش‌های متداول"
+        },
+        {
+          "id": "official-references",
+          "en": "Official references, downloads and related articles",
+          "fa": "منابع رسمی، دانلود و مقاله مرتبط"
+        }
+      ],
+      "headings_renumbered": [
+        {
+          "id": "prerequisites",
+          "before": {
+            "id": "prerequisites",
+            "en": "2. Server preparation and prerequisites",
+            "fa": "۲. آماده‌سازی و پیش‌نیاز سرور"
+          },
+          "after": {
+            "id": "prerequisites",
+            "en": "1. Server preparation and prerequisites",
+            "fa": "۱. آماده‌سازی و پیش‌نیاز سرور"
+          }
+        },
+        {
+          "id": "architecture",
+          "before": {
+            "id": "architecture",
+            "en": "1. Enterprise Zabbix architecture",
+            "fa": "۱. معماری سازمانی Zabbix"
+          },
+          "after": {
+            "id": "architecture",
+            "en": "2. Enterprise Zabbix architecture",
+            "fa": "۲. معماری سازمانی Zabbix"
+          }
+        },
+        {
+          "id": "security",
+          "before": {
+            "id": "security",
+            "en": "8. Security hardening",
+            "fa": "۸. امن‌سازی"
+          },
+          "after": {
+            "id": "security",
+            "en": "6. Security hardening",
+            "fa": "۶. امن‌سازی"
+          }
+        },
+        {
+          "id": "monitoring",
+          "before": {
+            "id": "monitoring",
+            "en": "6. Practical monitoring and triggers",
+            "fa": "۶. مانیتورینگ و Trigger عملی"
+          },
+          "after": {
+            "id": "monitoring",
+            "en": "7. Practical monitoring and triggers",
+            "fa": "۷. مانیتورینگ و Trigger عملی"
+          }
+        },
+        {
+          "id": "notifications",
+          "before": {
+            "id": "notifications",
+            "en": "7. Alerts and notifications",
+            "fa": "۷. هشدار و اعلان"
+          },
+          "after": {
+            "id": "notifications",
+            "en": "8. Alerts and notifications",
+            "fa": "۸. هشدار و اعلان"
+          }
+        }
+      ],
+      "section_movements": [
+        {
+          "id": "troubleshooting",
+          "from": 10,
+          "to": 13,
+          "reason": "Move after backup automation and disaster recovery."
+        }
+      ],
+      "validation": "passed (source, final EN/FA rendering, browser desktop/mobile, regeneration)",
+      "code_correction": "Rendered backup script now includes zabbix-backup-failure.service, matching the unchanged authoritative script, both Markdown editions and download.",
+      "final_rendered_heading_order": {
+        "en": [
+          {
+            "id": "introduction",
+            "text": "Introduction and deployment scope"
+          },
+          {
+            "id": "prerequisites",
+            "text": "1. Server preparation and prerequisites"
+          },
+          {
+            "id": "architecture",
+            "text": "2. Enterprise Zabbix architecture"
+          },
+          {
+            "id": "configuration",
+            "text": "3. Installation: Server, PostgreSQL and the frontend"
+          },
+          {
+            "id": "linux-agent",
+            "text": "4. Install Agent 2 on Ubuntu Linux"
+          },
+          {
+            "id": "windows-agent",
+            "text": "5. Install Agent 2 on Windows Server"
+          },
+          {
+            "id": "security",
+            "text": "6. Security hardening"
+          },
+          {
+            "id": "monitoring",
+            "text": "7. Practical monitoring and triggers"
+          },
+          {
+            "id": "notifications",
+            "text": "8. Alerts and notifications"
+          },
+          {
+            "id": "database-backup",
+            "text": "9. Database and configuration backup"
+          },
+          {
+            "id": "automated-backup",
+            "text": "10. Automated daily backup"
+          },
+          {
+            "id": "recovery",
+            "text": "11. Restore and disaster recovery"
+          },
+          {
+            "id": "troubleshooting",
+            "text": "12. Production troubleshooting"
+          },
+          {
+            "id": "best-practices",
+            "text": "13. Production checklist"
+          },
+          {
+            "id": "conclusion",
+            "text": "Operational handover and runtime acceptance"
+          },
+          {
+            "id": "faq",
+            "text": "Frequently asked questions"
+          },
+          {
+            "id": "official-references",
+            "text": "Official References, downloads and related articles"
+          }
+        ],
+        "fa": [
+          {
+            "id": "introduction",
+            "text": "مقدمه و محدوده استقرار"
+          },
+          {
+            "id": "prerequisites",
+            "text": "۱. آماده‌سازی و پیش‌نیاز سرور"
+          },
+          {
+            "id": "architecture",
+            "text": "۲. معماری سازمانی Zabbix"
+          },
+          {
+            "id": "configuration",
+            "text": "۳. نصب Server، PostgreSQL و Frontend"
+          },
+          {
+            "id": "linux-agent",
+            "text": "۴. نصب Agent 2 روی Ubuntu Linux"
+          },
+          {
+            "id": "windows-agent",
+            "text": "۵. نصب Agent 2 روی Windows Server"
+          },
+          {
+            "id": "security",
+            "text": "۶. امن‌سازی"
+          },
+          {
+            "id": "monitoring",
+            "text": "۷. مانیتورینگ و Trigger عملی"
+          },
+          {
+            "id": "notifications",
+            "text": "۸. هشدار و اعلان"
+          },
+          {
+            "id": "database-backup",
+            "text": "۹. بکاپ Database و Configuration"
+          },
+          {
+            "id": "automated-backup",
+            "text": "۱۰. بکاپ روزانه خودکار"
+          },
+          {
+            "id": "recovery",
+            "text": "۱۱. Restore و بازیابی بحران"
+          },
+          {
+            "id": "troubleshooting",
+            "text": "۱۲. عیب‌یابی Production"
+          },
+          {
+            "id": "best-practices",
+            "text": "۱۳. چک‌لیست Production"
+          },
+          {
+            "id": "conclusion",
+            "text": "تحویل عملیاتی و پذیرش Runtime"
+          },
+          {
+            "id": "faq",
+            "text": "پرسش‌های متداول"
+          },
+          {
+            "id": "official-references",
+            "text": "منابع رسمی، دانلود و مقاله مرتبط"
+          }
+        ]
+      }
+    }
+  ],
+  "rendering_correction": {
+    "slug": "sql-server-automatic-backup-job",
+    "original_heading_order": [
+      {
+        "id": "introduction",
+        "en": "Automated backups must lead to a working restore",
+        "fa": "Backup خودکار باید به Restore برسد"
+      },
+      {
+        "id": "prerequisites",
+        "en": "Versions, service identities and implementation scope",
+        "fa": "نسخه‌ها، هویت سرویس و حدود اجرا"
+      },
+      {
+        "id": "architecture",
+        "en": "Design schedules and recovery chains for Jira and Confluence",
+        "fa": "طراحی زمان‌بندی و زنجیره برای Jira و Confluence"
+      },
+      {
+        "id": "recovery-model",
+        "en": "Choose recovery models before enabling log jobs",
+        "fa": "انتخاب Recovery Model پیش از فعال‌کردن Log Job"
+      },
+      {
+        "id": "backup-folders",
+        "en": "Per-database paths and storage capacity",
+        "fa": "مسیر مستقل هر Database و ظرفیت Storage"
+      },
+      {
+        "id": "configuration",
+        "en": "Procedure, whitelist and folder provisioning",
+        "fa": "Procedure و آماده‌سازی Whitelist و پوشه‌ها"
+      },
+      {
+        "id": "agent-jobs",
+        "en": "Build Agent jobs and test manually",
+        "fa": "ساخت Jobهای Agent و آزمون دستی"
+      },
+      {
+        "id": "cleanup",
+        "en": "Cleanup while retaining the recovery-chain base",
+        "fa": "Cleanup با حفظ پایه زنجیره Retention"
+      },
+      {
+        "id": "security",
+        "en": "Encryption and certificate/private-key recovery",
+        "fa": "Encryption و بازیابی Certificate و Private Key"
+      },
+      {
+        "id": "validation",
+        "en": "History, VERIFYONLY and an actual restore",
+        "fa": "History، VERIFYONLY و Restore واقعی"
+      },
+      {
+        "id": "troubleshooting",
+        "en": "Diagnose job failures from audit to storage",
+        "fa": "تشخیص خطای Job از Audit تا Storage"
+      },
+      {
+        "id": "best-practices",
+        "en": "Freshness, alerts and independent backup copies",
+        "fa": "Freshness، Alert و نسخه مستقل Backup"
+      },
+      {
+        "id": "faq",
+        "en": "SQL Server Automated Backup FAQ",
+        "fa": "سوالات متداول دربارهٔ Backup خودکار SQL Server"
+      },
+      {
+        "id": "official-references",
+        "en": "Microsoft backup and restore references",
+        "fa": "منابع Backup و Restore در Microsoft"
+      }
+    ],
+    "section_movements": [],
+    "headings_renumbered": [],
+    "before": "Legacy author footer captured the following generated H2, producing a spurious #author TOC entry.",
+    "after": "Strip the embedded footer before TOC extraction; article heading order/content unchanged.",
+    "validation": "passed (all 82 Blade pages and SQL EN/FA desktop/mobile browser cases)",
+    "final_heading_order": [
+      {
+        "id": "introduction",
+        "en": "Automated backups must lead to a working restore",
+        "fa": "Backup خودکار باید به Restore برسد"
+      },
+      {
+        "id": "prerequisites",
+        "en": "Versions, service identities and implementation scope",
+        "fa": "نسخه‌ها، هویت سرویس و حدود اجرا"
+      },
+      {
+        "id": "architecture",
+        "en": "Design schedules and recovery chains for Jira and Confluence",
+        "fa": "طراحی زمان‌بندی و زنجیره برای Jira و Confluence"
+      },
+      {
+        "id": "recovery-model",
+        "en": "Choose recovery models before enabling log jobs",
+        "fa": "انتخاب Recovery Model پیش از فعال‌کردن Log Job"
+      },
+      {
+        "id": "backup-folders",
+        "en": "Per-database paths and storage capacity",
+        "fa": "مسیر مستقل هر Database و ظرفیت Storage"
+      },
+      {
+        "id": "configuration",
+        "en": "Procedure, whitelist and folder provisioning",
+        "fa": "Procedure و آماده‌سازی Whitelist و پوشه‌ها"
+      },
+      {
+        "id": "agent-jobs",
+        "en": "Build Agent jobs and test manually",
+        "fa": "ساخت Jobهای Agent و آزمون دستی"
+      },
+      {
+        "id": "cleanup",
+        "en": "Cleanup while retaining the recovery-chain base",
+        "fa": "Cleanup با حفظ پایه زنجیره Retention"
+      },
+      {
+        "id": "security",
+        "en": "Encryption and certificate/private-key recovery",
+        "fa": "Encryption و بازیابی Certificate و Private Key"
+      },
+      {
+        "id": "validation",
+        "en": "History, VERIFYONLY and an actual restore",
+        "fa": "History، VERIFYONLY و Restore واقعی"
+      },
+      {
+        "id": "troubleshooting",
+        "en": "Diagnose job failures from audit to storage",
+        "fa": "تشخیص خطای Job از Audit تا Storage"
+      },
+      {
+        "id": "best-practices",
+        "en": "Freshness, alerts and independent backup copies",
+        "fa": "Freshness، Alert و نسخه مستقل Backup"
+      },
+      {
+        "id": "faq",
+        "en": "SQL Server Automated Backup FAQ",
+        "fa": "سوالات متداول دربارهٔ Backup خودکار SQL Server"
+      },
+      {
+        "id": "official-references",
+        "en": "Microsoft backup and restore references",
+        "fa": "منابع Backup و Restore در Microsoft"
+      }
+    ],
+    "final_rendered_heading_order": {
+      "en": [
+        {
+          "id": "introduction",
+          "text": "Automated backups must lead to a working restore"
+        },
+        {
+          "id": "prerequisites",
+          "text": "Versions, service identities and implementation scope"
+        },
+        {
+          "id": "architecture",
+          "text": "Design schedules and recovery chains for Jira and Confluence"
+        },
+        {
+          "id": "recovery-model",
+          "text": "Choose recovery models before enabling log jobs"
+        },
+        {
+          "id": "backup-folders",
+          "text": "Per-database paths and storage capacity"
+        },
+        {
+          "id": "configuration",
+          "text": "Procedure, whitelist and folder provisioning"
+        },
+        {
+          "id": "agent-jobs",
+          "text": "Build Agent jobs and test manually"
+        },
+        {
+          "id": "cleanup",
+          "text": "Cleanup while retaining the recovery-chain base"
+        },
+        {
+          "id": "security",
+          "text": "Encryption and certificate/private-key recovery"
+        },
+        {
+          "id": "validation",
+          "text": "History, VERIFYONLY and an actual restore"
+        },
+        {
+          "id": "troubleshooting",
+          "text": "Diagnose job failures from audit to storage"
+        },
+        {
+          "id": "best-practices",
+          "text": "Freshness, alerts and independent backup copies"
+        },
+        {
+          "id": "conclusion",
+          "text": "Conclusion"
+        },
+        {
+          "id": "faq",
+          "text": "SQL Server Automated Backup FAQ"
+        },
+        {
+          "id": "official-references",
+          "text": "Microsoft backup and restore references"
+        },
+        {
+          "id": "",
+          "text": "AmirHossein Jalalian"
+        }
+      ],
+      "fa": [
+        {
+          "id": "introduction",
+          "text": "Backup خودکار باید به Restore برسد"
+        },
+        {
+          "id": "prerequisites",
+          "text": "نسخه‌ها، هویت سرویس و حدود اجرا"
+        },
+        {
+          "id": "architecture",
+          "text": "طراحی زمان‌بندی و زنجیره برای Jira و Confluence"
+        },
+        {
+          "id": "recovery-model",
+          "text": "انتخاب Recovery Model پیش از فعال‌کردن Log Job"
+        },
+        {
+          "id": "backup-folders",
+          "text": "مسیر مستقل هر Database و ظرفیت Storage"
+        },
+        {
+          "id": "configuration",
+          "text": "Procedure و آماده‌سازی Whitelist و پوشه‌ها"
+        },
+        {
+          "id": "agent-jobs",
+          "text": "ساخت Jobهای Agent و آزمون دستی"
+        },
+        {
+          "id": "cleanup",
+          "text": "Cleanup با حفظ پایه زنجیره Retention"
+        },
+        {
+          "id": "security",
+          "text": "Encryption و بازیابی Certificate و Private Key"
+        },
+        {
+          "id": "validation",
+          "text": "History، VERIFYONLY و Restore واقعی"
+        },
+        {
+          "id": "troubleshooting",
+          "text": "تشخیص خطای Job از Audit تا Storage"
+        },
+        {
+          "id": "best-practices",
+          "text": "Freshness، Alert و نسخه مستقل Backup"
+        },
+        {
+          "id": "conclusion",
+          "text": "جمع‌بندی"
+        },
+        {
+          "id": "faq",
+          "text": "سوالات متداول دربارهٔ Backup خودکار SQL Server"
+        },
+        {
+          "id": "official-references",
+          "text": "منابع Backup و Restore در Microsoft"
+        },
+        {
+          "id": "",
+          "text": "امیرحسین جلالیان"
+        }
+      ]
+    }
+  },
+  "all_article_integrity": [
+    {
+      "slug": "10-essential-group-policies-windows-domain",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 36,
+      "code_blocks_after": 36
+    },
+    {
+      "slug": "apache-tomcat-linux-installation-security-hardening",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 40,
+      "code_blocks_after": 40
+    },
+    {
+      "slug": "cisco-catalyst-layer-2-layer-3-switch-hardening",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 30,
+      "code_blocks_after": 30
+    },
+    {
+      "slug": "creating-a-bootable-usb",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 1,
+      "code_blocks_after": 1
+    },
+    {
+      "slug": "deploy-msi-active-directory-group-policy",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 30,
+      "code_blocks_after": 30
+    },
+    {
+      "slug": "downgrade-mikrotik-routeros-firmware-safely",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 3,
+      "code_blocks_after": 3
+    },
+    {
+      "slug": "enable-ssh-linux-complete-guide",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 5,
+      "code_blocks_after": 5
+    },
+    {
+      "slug": "fortigate-sd-wan-load-balancing-failover",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 27,
+      "code_blocks_after": 27
+    },
+    {
+      "slug": "http-vs-https-ssl-certificate-impact",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 3,
+      "code_blocks_after": 3
+    },
+    {
+      "slug": "imap-vs-pop3-email-protocol-comparison",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 3,
+      "code_blocks_after": 3
+    },
+    {
+      "slug": "install-dfs-server-windows-server",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 4,
+      "code_blocks_after": 4
+    },
+    {
+      "slug": "install-mikrotik-chr-vmware-workstation",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 1,
+      "code_blocks_after": 1
+    },
+    {
+      "slug": "install-vmware-esxi-vmware-workstation-vmcisr",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 1,
+      "code_blocks_after": 1
+    },
+    {
+      "slug": "linux-cli-common-commands",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 3,
+      "code_blocks_after": 3
+    },
+    {
+      "slug": "linux-security-account-access-management",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 4,
+      "code_blocks_after": 4
+    },
+    {
+      "slug": "linux-security-auditor-bash",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 5,
+      "code_blocks_after": 5
+    },
+    {
+      "slug": "mikrotik-block-port-scanners",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 3,
+      "code_blocks_after": 3
+    },
+    {
+      "slug": "mikrotik-block-website",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 4,
+      "code_blocks_after": 4
+    },
+    {
+      "slug": "mikrotik-firewall-hardening-input-forward-chain",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 7,
+      "code_blocks_after": 7
+    },
+    {
+      "slug": "mikrotik-openvpn-setup-v7",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 3,
+      "code_blocks_after": 3
+    },
+    {
+      "slug": "mikrotik-pbr-client",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 2,
+      "code_blocks_after": 2
+    },
+    {
+      "slug": "mikrotik-ping-triggered-policy-routing",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 43,
+      "code_blocks_after": 43
+    },
+    {
+      "slug": "mikrotik-unequal-dual-wan-load-balancing-ecmp",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 1,
+      "code_blocks_after": 1
+    },
+    {
+      "slug": "mongodb-installation-configuration-production-deployment",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 57,
+      "code_blocks_after": 57
+    },
+    {
+      "slug": "netbox-installation-setup-ubuntu",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 6,
+      "code_blocks_after": 6
+    },
+    {
+      "slug": "nginx-installation-configuration-ubuntu",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 4,
+      "code_blocks_after": 4
+    },
+    {
+      "slug": "nginx-reverse-proxy-multiple-domains-single-ip-443",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 41,
+      "code_blocks_after": 41
+    },
+    {
+      "slug": "oracle-database-26ai-installation-oracle-linux",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 48,
+      "code_blocks_after": 48
+    },
+    {
+      "slug": "oxidized-network-device-configuration-backup",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 5,
+      "code_blocks_after": 5
+    },
+    {
+      "slug": "redis-installation-configuration-replication",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 58,
+      "code_blocks_after": 58
+    },
+    {
+      "slug": "set-static-ip-ubuntu-server-netplan",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 5,
+      "code_blocks_after": 5
+    },
+    {
+      "slug": "sql-server-automatic-backup-job",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 16,
+      "code_blocks_after": 16
+    },
+    {
+      "slug": "truenas-zfs-enterprise",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 26,
+      "code_blocks_after": 26
+    },
+    {
+      "slug": "ubiquiti-unifi-wireless-mesh-network",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 5,
+      "code_blocks_after": 5
+    },
+    {
+      "slug": "ubuntu-date-time-settings",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 4,
+      "code_blocks_after": 4
+    },
+    {
+      "slug": "vmware-esxi-8-installation-basic-configuration",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 3,
+      "code_blocks_after": 3
+    },
+    {
+      "slug": "vsphere-standard-switch-vs-distributed-switch",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 2,
+      "code_blocks_after": 2
+    },
+    {
+      "slug": "windows-cmd-common-network-commands",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 4,
+      "code_blocks_after": 4
+    },
+    {
+      "slug": "windows-hardware-info-cmd-vs-dxdiag",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 2,
+      "code_blocks_after": 2
+    },
+    {
+      "slug": "windows-password-reset-secure-access-recovery",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": true,
+      "code_blocks_before": 2,
+      "code_blocks_after": 2
+    },
+    {
+      "slug": "zabbix-server-linux-windows-agents-backup",
+      "ids_preserved": true,
+      "image_urls_preserved": true,
+      "download_links_preserved": true,
+      "json_ld_preserved": true,
+      "head_metadata_preserved": true,
+      "code_preserved": false,
+      "code_blocks_before": 46,
+      "code_blocks_after": 46
+    }
+  ],
+  "tests": {
+    "phpunit_full": {
+      "status": "passed",
+      "tests": "182",
+      "assertions": "50302",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "1",
+      "time": "592.906873",
+      "skipped_tests": [
+        "test_mysql_engine_constraints_when_connected"
+      ]
+    },
+    "phpunit_final_article_regressions": {
+      "status": "passed",
+      "tests": "11",
+      "assertions": "18152",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "time": "89.989379",
+      "skipped_tests": []
+    },
+    "phpunit_ordering_and_localization": {
+      "status": "passed",
+      "tests": "14",
+      "assertions": "29077",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "time": "111.180019",
+      "skipped_tests": []
+    },
+    "frontend": {
+      "status": "passed",
+      "tests": 6,
+      "failures": 0
+    },
+    "python_source_regressions": {
+      "status": "passed",
+      "tests": 3,
+      "failures": 0
+    },
+    "source_structure": {
+      "status": "passed",
+      "articles": 41,
+      "issues": 0
+    },
+    "rendered_structure_anchors_localization": {
+      "status": "passed",
+      "editions": 82,
+      "issues": 0
+    },
+    "browser": {
+      "status": "passed",
+      "cases": 36,
+      "issues": 0,
+      "articles": 9,
+      "locales": [
+        "en",
+        "fa"
+      ],
+      "viewports": [
+        "1365x900",
+        "390x844"
+      ],
+      "manual_screenshots_reviewed": [
+        "Redis Persian mobile",
+        "TrueNAS Persian desktop",
+        "Zabbix English mobile"
+      ]
+    },
+    "regeneration": {
+      "status": "passed",
+      "writers": 13,
+      "runs_per_writer": 2,
+      "details": [
+        {
+          "normalization_drift": []
+        },
+        {
+          "heading_drift": [],
+          "code_drift": [],
+          "image_drift": [],
+          "section_reference_drift": [],
+          "second_generation_failures": [],
+          "regeneration_instability": []
+        }
+      ]
+    },
+    "images": {
+      "status": "passed",
+      "source_images": 117,
+      "references": 354,
+      "errors": 0
+    },
+    "explicit_section_references": {
+      "status": "passed",
+      "changed_bilingual_prose_attributes_checked": 30,
+      "mismatches": []
+    },
+    "documentation": {
+      "status": "passed",
+      "documents": 160,
+      "local_links": 979,
+      "broken_links": 0
+    },
+    "repository_security_and_layout": {
+      "status": "passed",
+      "files_inventoried": 905,
+      "text_files_scanned": 761,
+      "errors": 0
+    },
+    "diff_whitespace": {
+      "status": "passed"
+    },
+    "cms_read_only_synthetic_coverage": {
+      "status": "passed",
+      "articles": 44,
+      "editions": 88,
+      "states": [
+        "draft: 1",
+        "published: 42",
+        "scheduled: 1"
+      ],
+      "expected_invalid_fa_editions": 3,
+      "audit_exit": 1,
+      "database_byte_identical": true,
+      "note": "Three synthetic Persian editions deliberately lack localization metadata; exit 1 and the three localization findings demonstrate that the auditor reports errors. These are not actual CMS-only records."
+    },
+    "actual_cms": {
+      "status": "unavailable",
+      "articles_audited": 0,
+      "reason": "Configured local CMS database is unavailable; CMS-only records were not inspected."
+    },
+    "frontend_build": {
+      "status": "not_applicable",
+      "reason": "Static frontend; no package.json or frontend build pipeline."
+    },
+    "production_deployment": {
+      "status": "unexecuted",
+      "reason": "Excluded by task."
+    }
+  },
+  "limitations": [
+    "Configured local SQLite CMS database is absent; actual CMS-only drafts and scheduled records were not inspected.",
+    "The CMS currently supports draft/published; scheduled means published with a future publication date. Archived is unsupported.",
+    "Infrastructure commands were preserved/reviewed but not executed on real Redis, TrueNAS, Zabbix or other infrastructure.",
+    "MySQL-specific test requires a MySQL connection and was skipped.",
+    "No production database connection, deployment, commit or push was performed."
+  ],
+  "browser_results": [
+    {
+      "slug": "cisco-catalyst-layer-2-layer-3-switch-hardening",
+      "locale": "en",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 30,
+      "headingIds": 35,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "cisco-catalyst-layer-2-layer-3-switch-hardening",
+      "locale": "en",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 30,
+      "headingIds": 35,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "cisco-catalyst-layer-2-layer-3-switch-hardening",
+      "locale": "fa",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 30,
+      "headingIds": 35,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "cisco-catalyst-layer-2-layer-3-switch-hardening",
+      "locale": "fa",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 30,
+      "headingIds": 35,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "mikrotik-ping-triggered-policy-routing",
+      "locale": "en",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 43,
+      "headingIds": 25,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "mikrotik-ping-triggered-policy-routing",
+      "locale": "en",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 43,
+      "headingIds": 25,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "mikrotik-ping-triggered-policy-routing",
+      "locale": "fa",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 43,
+      "headingIds": 25,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "mikrotik-ping-triggered-policy-routing",
+      "locale": "fa",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 43,
+      "headingIds": 25,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "mongodb-installation-configuration-production-deployment",
+      "locale": "en",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 57,
+      "headingIds": 28,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "mongodb-installation-configuration-production-deployment",
+      "locale": "en",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 57,
+      "headingIds": 28,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "mongodb-installation-configuration-production-deployment",
+      "locale": "fa",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 57,
+      "headingIds": 28,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "mongodb-installation-configuration-production-deployment",
+      "locale": "fa",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 57,
+      "headingIds": 28,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "nginx-reverse-proxy-multiple-domains-single-ip-443",
+      "locale": "en",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 40,
+      "headingIds": 29,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "nginx-reverse-proxy-multiple-domains-single-ip-443",
+      "locale": "en",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 40,
+      "headingIds": 29,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "nginx-reverse-proxy-multiple-domains-single-ip-443",
+      "locale": "fa",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 40,
+      "headingIds": 29,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "nginx-reverse-proxy-multiple-domains-single-ip-443",
+      "locale": "fa",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 40,
+      "headingIds": 29,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "redis-installation-configuration-replication",
+      "locale": "en",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 58,
+      "headingIds": 33,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "redis-installation-configuration-replication",
+      "locale": "en",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 58,
+      "headingIds": 33,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "redis-installation-configuration-replication",
+      "locale": "fa",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 58,
+      "headingIds": 33,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "redis-installation-configuration-replication",
+      "locale": "fa",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 58,
+      "headingIds": 33,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "truenas-zfs-enterprise",
+      "locale": "en",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 26,
+      "headingIds": 40,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "truenas-zfs-enterprise",
+      "locale": "en",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 26,
+      "headingIds": 40,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "truenas-zfs-enterprise",
+      "locale": "fa",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 26,
+      "headingIds": 40,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "truenas-zfs-enterprise",
+      "locale": "fa",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 26,
+      "headingIds": 40,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "ubiquiti-unifi-wireless-mesh-network",
+      "locale": "en",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 5,
+      "headingIds": 26,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "ubiquiti-unifi-wireless-mesh-network",
+      "locale": "en",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 5,
+      "headingIds": 26,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "ubiquiti-unifi-wireless-mesh-network",
+      "locale": "fa",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 5,
+      "headingIds": 26,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "ubiquiti-unifi-wireless-mesh-network",
+      "locale": "fa",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 5,
+      "headingIds": 26,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "zabbix-server-linux-windows-agents-backup",
+      "locale": "en",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 46,
+      "headingIds": 17,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "zabbix-server-linux-windows-agents-backup",
+      "locale": "en",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 46,
+      "headingIds": 17,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "zabbix-server-linux-windows-agents-backup",
+      "locale": "fa",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 46,
+      "headingIds": 17,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "zabbix-server-linux-windows-agents-backup",
+      "locale": "fa",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 46,
+      "headingIds": 17,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "sql-server-automatic-backup-job",
+      "locale": "en",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 16,
+      "headingIds": 27,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "sql-server-automatic-backup-job",
+      "locale": "en",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 16,
+      "headingIds": 27,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "sql-server-automatic-backup-job",
+      "locale": "fa",
+      "mobile": false,
+      "issues": [],
+      "codeBlocks": 16,
+      "headingIds": 27,
+      "hash": "#official-references",
+      "errors": []
+    },
+    {
+      "slug": "sql-server-automatic-backup-job",
+      "locale": "fa",
+      "mobile": true,
+      "issues": [],
+      "codeBlocks": 16,
+      "headingIds": 27,
+      "hash": "#official-references",
+      "errors": []
+    }
+  ]
+}

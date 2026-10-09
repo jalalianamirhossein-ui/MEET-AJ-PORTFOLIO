@@ -134,20 +134,20 @@
           >
         </li>
         <li class="article-nav-item">
-          <a href="#enterprise-architecture"
-            ><span
-              data-fa="از SSH تا Bare Repository"
-              data-en="From SSH to a bare repository"
-              >From SSH to a bare repository</span
-            ></a
-          >
-        </li>
-        <li class="article-nav-item">
           <a href="#enterprise-prerequisites"
             ><span
               data-fa="Ruby، Model و حساب تجهیز"
               data-en="Ruby, models and device accounts"
               >Ruby, models and device accounts</span
+            ></a
+          >
+        </li>
+        <li class="article-nav-item">
+          <a href="#enterprise-architecture"
+            ><span
+              data-fa="از SSH تا Bare Repository"
+              data-en="From SSH to a bare repository"
+              >From SSH to a bare repository</span
             ></a
           >
         </li>
@@ -257,37 +257,6 @@
               presence alone does not establish recoverability.
             </p>
           </section>
-          <section id="enterprise-architecture" class="article-section">
-            <h2
-              data-fa="از SSH تا Bare Repository"
-              data-en="From SSH to a bare repository"
-            >
-              From SSH to a bare repository
-            </h2>
-            <p
-              data-fa="SSH خروجی Model را به Oxidized می‌دهد و Git نسخه‌ها را ذخیره می‌کند. remove_secret برخی Secretها را حذف می‌کند و بازگردانی را ناقص می‌سازد. Certificate و License و Backup بومی تجهیز را جدا نگه دارید."
-              data-en="SSH supplies model output to Oxidized and Git stores versions. Remove_secret strips some secrets and limits restoration. Protect certificates, licenses and native device backups separately."
-            >
-              SSH supplies model output to Oxidized and Git stores versions.
-              Remove_secret strips some secrets and limits restoration. Protect
-              certificates, licenses and native device backups separately.
-            </p>
-            <h3
-              id="enterprise-scenario"
-              data-fa="مثال: Poll ساعتی تجهیزات"
-              data-en="Example: hourly device polling"
-            >
-              Example: hourly device polling
-            </h3>
-            <p
-              data-fa="برای ۱۲۰ تجهیز، Interval یک ساعت نمونه است. تازگی آخرین Fetch موفق هر Node را بررسی کنید. نبود Commit جدید ممکن است به معنی نبود تغییر باشد، نه شکست Fetch."
-              data-en="For 120 devices, hourly polling is an example. Monitor each node’s last successful fetch. No new commit might mean unchanged configuration rather than collection failure."
-            >
-              For 120 devices, hourly polling is an example. Monitor each node’s
-              last successful fetch. No new commit might mean unchanged
-              configuration rather than collection failure.
-            </p>
-          </section>
           <section id="enterprise-prerequisites" class="article-section">
             <h2
               data-fa="Ruby، Model و حساب تجهیز"
@@ -334,6 +303,37 @@
               versions in artifacts or lockfiles for reproducible deployment.
             </p>
           </section>
+          <section id="enterprise-architecture" class="article-section">
+            <h2
+              data-fa="از SSH تا Bare Repository"
+              data-en="From SSH to a bare repository"
+            >
+              From SSH to a bare repository
+            </h2>
+            <p
+              data-fa="SSH خروجی Model را به Oxidized می‌دهد و Git نسخه‌ها را ذخیره می‌کند. remove_secret برخی Secretها را حذف می‌کند و بازگردانی را ناقص می‌سازد. Certificate و License و Backup بومی تجهیز را جدا نگه دارید."
+              data-en="SSH supplies model output to Oxidized and Git stores versions. Remove_secret strips some secrets and limits restoration. Protect certificates, licenses and native device backups separately."
+            >
+              SSH supplies model output to Oxidized and Git stores versions.
+              Remove_secret strips some secrets and limits restoration. Protect
+              certificates, licenses and native device backups separately.
+            </p>
+            <h3
+              id="enterprise-scenario"
+              data-fa="مثال: Poll ساعتی تجهیزات"
+              data-en="Example: hourly device polling"
+            >
+              Example: hourly device polling
+            </h3>
+            <p
+              data-fa="برای ۱۲۰ تجهیز، Interval یک ساعت نمونه است. تازگی آخرین Fetch موفق هر Node را بررسی کنید. نبود Commit جدید ممکن است به معنی نبود تغییر باشد، نه شکست Fetch."
+              data-en="For 120 devices, hourly polling is an example. Monitor each node’s last successful fetch. No new commit might mean unchanged configuration rather than collection failure."
+            >
+              For 120 devices, hourly polling is an example. Monitor each node’s
+              last successful fetch. No new commit might mean unchanged
+              configuration rather than collection failure.
+            </p>
+          </section>
           <section id="enterprise-security" class="article-section">
             <h2
               data-fa="Known Hosts و Secretهای تاریخچه"
@@ -351,7 +351,11 @@
               repositories/credentials and encrypt off-host copies. Do not
               expose optional REST/UI without authentication.
             </p>
-          </section>
+          <div id="technical-enterprise-security"><h3 data-en="Install only a verified device host key" data-fa="نصب فقط کلید میزبان تأییدشدهٔ دستگاه">Install only a verified device host key</h3><p data-en="After the existing service account setup and before its first poll, collect candidate keys on a management workstation. Compare the SHA256 fingerprint with the device console or another authenticated inventory. ssh-keyscan alone does not authenticate a host. Do not install the candidate if it differs." data-fa="پس از ساخت حساب سرویس و پیش از نخستین poll، کلید پیشنهادی را روی ایستگاه مدیریت جمع کنید. fingerprint از نوع SHA256 را با کنسول دستگاه یا موجودی احراز‌شده مقایسه کنید. ssh-keyscan به‌تنهایی میزبان را احراز نمی‌کند. اگر کلید متفاوت است نصب نکنید.">After the existing service account setup and before its first poll, collect candidate keys on a management workstation. Compare the SHA256 fingerprint with the device console or another authenticated inventory. ssh-keyscan alone does not authenticate a host. Do not install the candidate if it differs.</p><pre dir="ltr"><code class="language-bash">ssh-keyscan -T 5 core-sw01.corp.example.com &gt; core-sw01.candidate
+ssh-keygen -lf core-sw01.candidate -E sha256</code></pre><p data-en="Only after the comparison succeeds, transfer the approved file securely to the collector and run the following collector commands with sudo. Review any existing known_hosts first; the append is for one genuinely new approved host. Secure host-key verification must reject a deliberately mismatched key in staging." data-fa="فقط پس از تطبیق موفق، فایل تأییدشده را امن به collector منتقل و فرمان‌های بعدی را با sudo روی collector اجرا کنید. ابتدا known_hosts موجود را بررسی کنید؛ افزودن مربوط به یک میزبان جدید تأییدشده است. در staging، اعتبارسنجی secure باید کلید عمداً متفاوت را رد کند.">Only after the comparison succeeds, transfer the approved file securely to the collector and run the following collector commands with sudo. Review any existing known_hosts first; the append is for one genuinely new approved host. Secure host-key verification must reject a deliberately mismatched key in staging.</p><pre dir="ltr"><code class="language-bash">sudo install -d -o oxidized -g oxidized -m 700 /var/lib/oxidized/.ssh
+sudo sh -c &#x27;cat core-sw01.candidate &gt;&gt; /var/lib/oxidized/.ssh/known_hosts&#x27;
+sudo chown oxidized:oxidized /var/lib/oxidized/.ssh/known_hosts
+sudo chmod 600 /var/lib/oxidized/.ssh/known_hosts</code></pre></div></section>
           <section id="enterprise-installation" class="article-section">
             <h2
               data-fa="نصب Gem، Config و Systemd Unit"
@@ -420,9 +424,15 @@ vars:
               Permit model-required commands without assigning privilege 15 by
               default.
             </p>
-            <pre
-              dir="ltr"
-            ><code class="language-bash">sudo -u oxidized env HOME=/var/lib/oxidized /usr/local/bin/oxidized</code></pre>
+            <p
+              data-fa="پیش از آزمون Foreground، Known Hosts همان حساب Service را بسازید. ssh-keyscan کلید را جمع می‌کند ولی هویت را تأیید نمی‌کند. Fingerprint را با Console مقایسه و سپس ورودی تأییدشده را نصب کنید."
+              data-en="Before the foreground test, provision known hosts for the service identity. Ssh-keyscan collects keys but does not authenticate them. Compare fingerprints through the console before installing approved entries."
+            >
+              Before the foreground test, provision known hosts for the service
+              identity. Ssh-keyscan collects keys but does not authenticate
+              them. Compare fingerprints through the console before installing
+              approved entries.
+            </p>
             <p
               data-fa="این foreground test است. مسیر binary را با خروجی واقعی جایگزین کنید. پس از یک poll موفق آن را متوقف و unit زیر با همین مسیر واقعی نصب کنید."
               data-en="This is a foreground test. Substitute the actual executable path. Stop it after a successful poll, then install the unit with that same path."
@@ -431,6 +441,10 @@ vars:
               Stop it after a successful poll, then install the unit with that
               same path.
             </p>
+            <pre
+              dir="ltr"
+            ><code class="language-bash">sudo -u oxidized env HOME=/var/lib/oxidized /usr/local/bin/oxidized</code></pre>
+
             <pre dir="ltr"><code class="language-ini">[Unit]
 Description=Network configuration collection
 After=network-online.target
@@ -461,15 +475,7 @@ sudo -u oxidized git --git-dir=/var/lib/oxidized/configs.git ls-tree --name-only
               inappropriate. Inspect ls-tree, then git show HEAD:node-name.
               Match successful logs to an actually collected node.
             </p>
-            <p
-              data-fa="پیش از آزمون Foreground، Known Hosts همان حساب Service را بسازید. ssh-keyscan کلید را جمع می‌کند ولی هویت را تأیید نمی‌کند. Fingerprint را با Console مقایسه و سپس ورودی تأییدشده را نصب کنید."
-              data-en="Before the foreground test, provision known hosts for the service identity. Ssh-keyscan collects keys but does not authenticate them. Compare fingerprints through the console before installing approved entries."
-            >
-              Before the foreground test, provision known hosts for the service
-              identity. Ssh-keyscan collects keys but does not authenticate
-              them. Compare fingerprints through the console before installing
-              approved entries.
-            </p>
+
           </section>
           <section id="enterprise-monitoring" class="article-section">
             <h2
@@ -551,7 +557,9 @@ sudo -u oxidized git --git-dir=/var/lib/oxidized/configs.git ls-tree --name-only
                 ></a
               >
             </p>
-          </section>
+          <div id="technical-enterprise-recovery"><h3 data-en="Extract the exact collected object, not a nonexistent working file" data-fa="استخراج آبجکت جمع‌شده، نه فایل working tree ناموجود">Extract the exact collected object, not a nonexistent working file</h3><pre dir="ltr"><code class="language-bash">sudo -u oxidized git --git-dir=/var/lib/oxidized/configs.git ls-tree --name-only HEAD
+# Replace this object path with the exact name printed above.
+sudo -u oxidized git --git-dir=/var/lib/oxidized/configs.git show HEAD:core-sw01.corp.example.com</code></pre><p data-en="Expect the model’s complete reviewed configuration; path not found means the object name differs or polling has not produced that object. Select an earlier known-good commit by its recorded hash for recovery. Output can contain secrets retained in history. Review commands and hardware/version compatibility offline before applying anything to a device." data-fa="انتظار می‌رود تنظیمات کامل بررسی‌شدهٔ مدل ظاهر شود؛ path not found یعنی نام آبجکت متفاوت است یا poll هنوز آن را نساخته است. برای بازیابی commit سالم قبلی را با hash ثبت‌شده انتخاب کنید. تاریخچه ممکن است اطلاعات محرمانه داشته باشد. پیش از اعمال روی دستگاه، فرمان و سازگاری سخت‌افزار و نسخه را آفلاین بررسی کنید.">Expect the model’s complete reviewed configuration; path not found means the object name differs or polling has not produced that object. Select an earlier known-good commit by its recorded hash for recovery. Output can contain secrets retained in history. Review commands and hardware/version compatibility offline before applying anything to a device.</p></div></section>
           <section id="faq" class="article-section">
             <h2 data-fa="پرسش‌های متداول" data-en="Frequently Asked Questions">
               Frequently Asked Questions
@@ -615,7 +623,7 @@ sudo -u oxidized git --git-dir=/var/lib/oxidized/configs.git ls-tree --name-only
                 >
               </li>
             </ul>
-          </section>
+          <div id="technical-enterprise-sources"><p><a href="https://man.openbsd.org/ssh-keyscan" rel="noopener" data-en="OpenSSH ssh-keyscan" data-fa="مستند رسمی: OpenSSH ssh-keyscan">OpenSSH ssh-keyscan</a></p><p><a href="https://git-scm.com/docs/git-show" rel="noopener" data-en="Git show" data-fa="مستند رسمی: Git show">Git show</a></p></div></section>
         </div>
       </article>
     </main>

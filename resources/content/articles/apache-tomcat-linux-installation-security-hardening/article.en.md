@@ -16,22 +16,6 @@ Enterprise uses include internal portals, REST services and vendor WAR applicati
 
 [Official Tomcat 11 specifications and documentation](https://tomcat.apache.org/tomcat-11.0-doc/index.html)
 
-## 2. Architecture and server requirements
-
-![Internet through firewall and Nginx TLS on 443 to localhost Tomcat 8080 and a Java application in the JVM](/assets/img/articles/content/apache-tomcat-production-architecture.png)
-
-Internet through firewall and Nginx TLS on 443 to localhost Tomcat 8080 and a Java application in the JVM
-
-```text
-Internet -> Firewall -> Nginx HTTPS :443
-                            |
-                            v
-                 Tomcat 127.0.0.1:8080
-                            |
-                            v
-                   Java application (JVM)
-```
-
 ## Server prerequisites and directory plan
 
 The worked platform is Ubuntu Server 24.04 LTS on a fresh dedicated host, Bash, sudo and systemd. The RHEL-compatible alternatives target a maintained RHEL 9 family host with Java 21 packages available. Do not combine APT and DNF commands. This guide uses the upstream archive, not the distribution Tomcat service; do not run a packaged Tomcat instance on the same port.
@@ -62,9 +46,25 @@ getent hosts tomcat.example.com
 
 Check mount capacity, existing listeners and kernel security policy before installation. A separate runtime volume must be mounted at the documented path before startup. Treat application uploads and heap dumps as sensitive data, with quotas and restricted retention.
 
+## 2. Architecture and server requirements
+
+![Internet through firewall and Nginx TLS on 443 to localhost Tomcat 8080 and a Java application in the JVM](/assets/img/articles/content/apache-tomcat-production-architecture.png)
+
+Internet through firewall and Nginx TLS on 443 to localhost Tomcat 8080 and a Java application in the JVM
+
+```text
+Internet -> Firewall -> Nginx HTTPS :443
+                            |
+                            v
+                 Tomcat 127.0.0.1:8080
+                            |
+                            v
+                   Java application (JVM)
+```
+
 ## 3. Verified stable release and Java compatibility
 
-Verified on 9 October 2026: the official Apache download and version matrix list Tomcat 11.0.26 as the latest stable 11 release. The example pins that version and uses Java 21 LTS from maintained distribution packages. Java 21 is a deliberate compatible choice, not a claim that it is the newest Java feature release. Recheck Apache security advisories and the stable download page before every installation; a pinned example will age.
+the official Apache download and version matrix list Tomcat 11.0.26 as the latest stable 11 release. The example pins that version and uses Java 21 LTS from maintained distribution packages. Java 21 is a deliberate compatible choice, not a claim that it is the newest Java feature release. Recheck Apache security advisories and the stable download page before every installation; a pinned example will age.
 
 [Official Tomcat 11 stable download and integrity files](https://tomcat.apache.org/download-11.cgi)
 

@@ -4,7 +4,7 @@ Install Oracle Database 26ai Enterprise on Oracle Linux 9 with automatic startup
 
 ## 1. Introduction: release, edition and scope
 
-Oracle Database is a transactional relational database with SQL, PL/SQL, concurrency control, recovery and enterprise data services. Oracle AI Database 26ai is the current generally available long-term release verified in Oracle’s documentation and Linux x86-64 downloads on 9 October 2026. The product name 26ai does not mean the internal release number starts with 26: the public base media identifies 23.26.1.0.0. The latest entitled Release Update must be checked in My Oracle Support before deployment; the public RPM filename is not a patch level.
+Oracle Database is a transactional relational database with SQL, PL/SQL, concurrency control, recovery and enterprise data services. Oracle AI Database 26ai is the current generally available long-term release. The product name 26ai does not mean the internal release number starts with 26: the public base media identifies 23.26.1.0.0. The latest entitled Release Update must be checked in My Oracle Support before deployment; the public RPM filename is not a patch level.
 
 [Oracle AI Database 26ai new features and long-term release](https://docs.oracle.com/en/database/oracle/oracle-database/26/nfcoa/all-nfg.html)
 
@@ -22,18 +22,6 @@ This runbook targets a new single-instance Enterprise Edition deployment on Orac
 Enterprise workloads include ERP, finance, order processing, mixed analytics and application consolidation; AI Vector Search adds similarity workloads. Choose licensing by the actual deployment and contract, including virtualization and processor or Named User Plus metrics. Do not assume that downloading media grants production rights. Keep an inventory of enabled options; basic RMAN and unified auditing differ from separately licensed Advanced Security, Advanced Compression and Diagnostics/Tuning Packs.
 
 [Oracle 26ai licensing: permitted features, options and packs](https://docs.oracle.com/en/database/oracle/oracle-database/26/dblic/Licensing-Information.html)
-
-## CDB and PDB architecture
-
-An instance contains the SGA and background processes; the database consists of data files, control files and online redo. A CDB has CDB$ROOT, the read-only PDB$SEED template and application PDBs. ORCLPDB1 holds local application users and schemas. PDBs share the instance and host failure domain: a PDB is not an independent availability node. Applications connect to a PDB service name, not the root SID. DBCA is the creation engine invoked by the RPM configure script.
-
-![Oracle Linux hosts the instance; the CDB contains root, seed and application PDBs. Applications connect through PDB services.](/assets/img/articles/content/oracle-database-architecture.png)
-
-Oracle Linux hosts the instance; the CDB contains root, seed and application PDBs. Applications connect through PDB services.
-
-[Oracle Database concepts and physical architecture](https://docs.oracle.com/en/database/oracle/oracle-database/26/cncpt/introduction-to-oracle-database.html)
-
-[Oracle multitenant CDB and PDB architecture](https://docs.oracle.com/en/database/oracle/oracle-database/26/multi/introduction-to-the-multitenant-architecture.html)
 
 ## 2. Prerequisites and host diagnostics
 
@@ -81,6 +69,18 @@ Expected: Oracle Linux 9.x, x86_64, a certified kernel, sufficient available RAM
 Provision and persist approved filesystems before installation; verify mount ownership and boot ordering in /etc/fstab. /backup/oracle is a separate mounted filesystem in the automation below, which refuses to write to an unmounted directory. Do not format an existing device from copied examples. RMAN does not protect Oracle homes, wallets, password files, listener configuration or external-table files: protect those separately with restricted access.
 
 [Official software storage and patch-headroom recommendations](https://docs.oracle.com/en/database/oracle/oracle-database/26/ladbi/storage-checklist-for-oracle-database-installation.html)
+
+## CDB and PDB architecture
+
+An instance contains the SGA and background processes; the database consists of data files, control files and online redo. A CDB has CDB$ROOT, the read-only PDB$SEED template and application PDBs. ORCLPDB1 holds local application users and schemas. PDBs share the instance and host failure domain: a PDB is not an independent availability node. Applications connect to a PDB service name, not the root SID. DBCA is the creation engine invoked by the RPM configure script.
+
+![Oracle Linux hosts the instance; the CDB contains root, seed and application PDBs. Applications connect through PDB services.](/assets/img/articles/content/oracle-database-architecture.png)
+
+Oracle Linux hosts the instance; the CDB contains root, seed and application PDBs. Applications connect through PDB services.
+
+[Oracle Database concepts and physical architecture](https://docs.oracle.com/en/database/oracle/oracle-database/26/cncpt/introduction-to-oracle-database.html)
+
+[Oracle multitenant CDB and PDB architecture](https://docs.oracle.com/en/database/oracle/oracle-database/26/multi/introduction-to-the-multitenant-architecture.html)
 
 ## 3. Installation and database configuration
 
@@ -1060,7 +1060,7 @@ Oracle Advanced Security is required for this deployment. Verify entitlements be
 
 ## Official references and reviewed templates
 
-Documentation reviewed on 9 October 2026. Follow the references beside each procedure, recheck the current MOS certification/RU and patch README, and test every environment-specific configuration before rollout. The downloadable templates contain no real credentials. Their Linux/Oracle runtime remains untested in this Windows repository environment.
+Follow the references beside each procedure, recheck the current MOS certification/RU and patch README, and test every environment-specific configuration before rollout. The downloadable templates contain no real credentials. Their Linux/Oracle runtime remains untested in this Windows repository environment.
 
 [Oracle AI Database 26ai new features and long-term release](https://docs.oracle.com/en/database/oracle/oracle-database/26/nfcoa/all-nfg.html)
 

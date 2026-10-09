@@ -1,0 +1,322 @@
+
+                <div class="enterprise-runbook" lang="en" dir="ltr">
+                  <section id="enterprise-intro" class="article-section">
+                    <h2
+                      data-fa="Ping، DNS و TCP نتایج جدا دارند"
+                      data-en="Ping, DNS and TCP establish different facts"
+                    >
+                      Ping, DNS and TCP establish different facts
+                    </h2>
+                    <p
+                      data-fa="برای اتصال ناموفق، ابتدا آدرس و DNS را بررسی کنید، سپس Route و Port سرویس را بسنجید. Ping موفق، بازبودن TCP یا مجوز SMB را ثابت نمی‌کند. release/renew یا Reset Stack را پیش از ثبت شواهد روی سرور اجرا نکنید."
+                      data-en="For failed connections, inspect addressing/DNS, then routes and the service port. Successful ping proves neither TCP access nor SMB authorization. Avoid release/renew or stack resets before collecting server evidence."
+                    >
+                      For failed connections, inspect addressing/DNS, then
+                      routes and the service port. Successful ping proves
+                      neither TCP access nor SMB authorization. Avoid
+                      release/renew or stack resets before collecting server
+                      evidence.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: Share سرور باز نمی‌شود"
+                      data-en="Example: an inaccessible server share"
+                    >
+                      Example: an inaccessible server share
+                    </h3>
+                    <p
+                      data-fa="برنامه به files01.corp.example.com دسترسی SMB ندارد. از همان Subnet برنامه، DNS و TCP/445 را آزمایش کنید. نام و IP مقصد را ثبت کنید تا پاسخ DNS اشتباه با Firewall اشتباه نشود."
+                      data-en="An application cannot reach files01.corp.example.com over SMB. Test DNS and TCP/445 from its subnet. Record resolved names/addresses to separate wrong DNS from firewall failure."
+                    >
+                      An application cannot reach files01.corp.example.com over
+                      SMB. Test DNS and TCP/445 from its subnet. Record resolved
+                      names/addresses to separate wrong DNS from firewall
+                      failure.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-prerequisites"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="CMD و PowerShell روی میزبان واقعی"
+                      data-en="CMD and PowerShell on the affected host"
+                    >
+                      CMD and PowerShell on the affected host
+                    </h2>
+                    <p
+                      data-fa="مثال‌ها برای Windows 11 و Windows Server 2022/2025 با Windows PowerShell 5.1 x64 هستند. بخش CMD و PowerShell را در Shell مربوط اجرا کنید."
+                      data-en="Examples target Windows 11 and Windows Server 2022/2025 with x64 Windows PowerShell 5.1. Run CMD and PowerShell blocks in their respective shells."
+                    >
+                      Examples target Windows 11 and Windows Server 2022/2025
+                      with x64 Windows PowerShell 5.1. Run CMD and PowerShell
+                      blocks in their respective shells.
+                    </p>
+                    <p
+                      data-fa="ابزارها روی میزبان موجود اجرا می‌شوند و Capacity اضافی نمی‌خواهند. مهم است آزمون از مسیر واقعی کلاینت خراب انجام شود."
+                      data-en="These tools require no extra compute allocation. Run checks through the affected client’s actual path."
+                    >
+                      These tools require no extra compute allocation. Run
+                      checks through the affected client’s actual path.
+                    </p>
+                    <p
+                      data-fa="خواندن وضعیت معمولاً دسترسی عادی دارد. اصلاح Route یا Firewall به Elevation نیاز دارد. دامنه و IP نمونه را با مقصد واقعی جایگزین کنید."
+                      data-en="Status reads usually need standard privileges. Route/firewall changes require elevation. Replace sample domains/IPs with actual targets."
+                    >
+                      Status reads usually need standard privileges.
+                      Route/firewall changes require elevation. Replace sample
+                      domains/IPs with actual targets.
+                    </p>
+                    <h3
+                      id="enterprise-compatibility"
+                      data-fa="ماژول Windows و PowerShell دیگر سیستم‌ها"
+                      data-en="Windows modules and other PowerShell platforms"
+                    >
+                      Windows modules and other PowerShell platforms
+                    </h3>
+                    <p
+                      data-fa="NetTCPIP و SMB Cmdletهای مثال به Windows وابسته‌اند. PowerShell روی Linux همان ماژول‌ها را ندارد. برای تشخیص قدیمی CMD، فرمان‌ها هنوز مفیدند، اما Resetهای تغییر‌دهنده تنظیم بخشی از شروع بررسی نیستند."
+                      data-en="The example NetTCPIP/SMB cmdlets are Windows-specific. PowerShell on Linux does not provide the same modules. CMD diagnostics remain useful, while configuration-reset commands do not belong at the start of investigation."
+                    >
+                      The example NetTCPIP/SMB cmdlets are Windows-specific.
+                      PowerShell on Linux does not provide the same modules. CMD
+                      diagnostics remain useful, while configuration-reset
+                      commands do not belong at the start of investigation.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="مسیر تشخیص تا مجوز Share"
+                      data-en="Investigation through share authorization"
+                    >
+                      Investigation through share authorization
+                    </h2>
+                    <p
+                      data-fa="Client نام را Resolve می‌کند، Route و Interface را انتخاب می‌کند و به Listener TCP می‌رسد. پس از آن، SMB هویت و مجوز Share و NTFS را بررسی می‌کند. خطای هر مرحله، اقدام متفاوتی می‌خواهد."
+                      data-en="The client resolves names, selects route/interface and reaches the TCP listener. SMB then checks identity, share and NTFS permissions. Each failed stage requires a different correction."
+                    >
+                      The client resolves names, selects route/interface and
+                      reaches the TCP listener. SMB then checks identity, share
+                      and NTFS permissions. Each failed stage requires a
+                      different correction.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="حفاظت از گزارش تشخیص"
+                      data-en="Protect diagnostic reports"
+                    >
+                      Protect diagnostic reports
+                    </h2>
+                    <p
+                      data-fa="Report شامل Hostname و شبکه داخلی است و باید محدود باشد. Wi-Fi Export با key=clear Secret را افشا می‌کند. Password را در net use یا Command Line نگذارید و Firewall را برای تشخیص خاموش نکنید."
+                      data-en="Reports disclose hostnames and internal networks. Restrict access. Wi-Fi exports with key=clear expose secrets. Avoid passwords in net use/command lines and do not disable firewalls to investigate."
+                    >
+                      Reports disclose hostnames and internal networks. Restrict
+                      access. Wi-Fi exports with key=clear expose secrets. Avoid
+                      passwords in net use/command lines and do not disable
+                      firewalls to investigate.
+                    </p>
+                  </section>
+                  <section id="enterprise-installation" class="article-section">
+                    <h2
+                      data-fa="فرمان‌های آدرس، Route و Port"
+                      data-en="Address, route and port commands"
+                    >
+                      Address, route and port commands
+                    </h2>
+                    <p
+                      data-fa="ابتدا در CMD شواهد بگیرید. دامنه زیر placeholder داخلی است."
+                      data-en="Capture evidence in CMD first. The internal domain below is a placeholder."
+                    >
+                      Capture evidence in CMD first. The internal domain below
+                      is a placeholder.
+                    </p>
+                    <pre dir="ltr"><code class="language-cmd">ipconfig /all
+route print
+arp -a
+nslookup files01.corp.example.com
+tracert -d 10.20.30.20
+netstat -ano</code></pre>
+                    <p
+                      data-fa="در PowerShell آزمون TCP و route انجام دهید. انتظار TcpTestSucceeded: True برای ارتباط TCP. این خروجی permission SMB را تأیید نمی‌کند."
+                      data-en="Use PowerShell to test TCP and routing. TcpTestSucceeded: True establishes TCP connectivity, not SMB permissions."
+                    >
+                      Use PowerShell to test TCP and routing. TcpTestSucceeded:
+                      True establishes TCP connectivity, not SMB permissions.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-powershell">$Target = &#x27;files01.corp.example.com&#x27;
+Resolve-DnsName $Target -Type A
+Test-NetConnection $Target -Port 445 -InformationLevel Detailed
+Get-NetIPConfiguration
+Get-SmbConnection</code></pre>
+                    <p
+                      data-fa="برای نگهداری خروجی پوشه یکتا بسازید. commandهای خارجی exit code مستقل دارند."
+                      data-en="Create a unique evidence directory. External programs have their own exit codes."
+                    >
+                      Create a unique evidence directory. External programs have
+                      their own exit codes.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-powershell">$ReportPath = Join-Path $env:TEMP (&#x27;Network-&#x27; + (Get-Date -Format &#x27;yyyyMMdd-HHmmss&#x27;))
+New-Item -ItemType Directory -Path $ReportPath -ErrorAction Stop | Out-Null
+ipconfig /all | Out-File (Join-Path $ReportPath &#x27;ipconfig.txt&#x27;) -Encoding utf8
+route print | Out-File (Join-Path $ReportPath &#x27;routes.txt&#x27;) -Encoding utf8
+Test-NetConnection $Target -Port 445 | Export-Clixml (Join-Path $ReportPath &#x27;tcp445.xml&#x27;)</code></pre>
+                    <p
+                      data-fa="Flush DNS فقط وقتی stale cache با پاسخ authoritative مقایسه شده باشد انجام شود. سپس همان query و برنامه دوباره آزمایش شود."
+                      data-en="Flush DNS only after comparing suspected stale cache entries with authoritative responses. Repeat the same query and application test afterwards."
+                    >
+                      Flush DNS only after comparing suspected stale cache
+                      entries with authoritative responses. Repeat the same
+                      query and application test afterwards.
+                    </p>
+                  </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="قابل دسترس بودن با کارکرد سرویس فرق دارد"
+                      data-en="Reachability differs from service function"
+                    >
+                      Reachability differs from service function
+                    </h2>
+                    <p
+                      data-fa="TCP Probe و آزمون واقعی SMB را جدا نگه دارید. Latency و Reconnect و Event شبکه را با زمان رخداد مقایسه کنید. مانیتورینگ باید از Subnetی اجرا شود که مسیر کاربر را نمایندگی می‌کند."
+                      data-en="Separate TCP probes from functional SMB tests. Correlate latency, reconnects and network events with incident timing. Monitor from a subnet representative of user access."
+                    >
+                      Separate TCP probes from functional SMB tests. Correlate
+                      latency, reconnects and network events with incident
+                      timing. Monitor from a subnet representative of user
+                      access.
+                    </p>
+                  </section>
+                  <section
+                    id="enterprise-troubleshooting"
+                    class="article-section"
+                  >
+                    <h2
+                      data-fa="DNS Timeout، Port بسته یا Access Denied"
+                      data-en="DNS timeout, closed port or access denied"
+                    >
+                      DNS timeout, closed port or access denied
+                    </h2>
+                    <p
+                      data-fa="DNS Timeout با IP قابل دسترسی به Resolver و 53 و Suffix نیاز دارد. TCP ناموفق با Ping موفق به Listener یا ACL مربوط است. SMB Access Denied با TCP سالم به هویت و Share/NTFS اشاره دارد."
+                      data-en="DNS timeout with IP connectivity requires resolver/53/suffix checks. Failed TCP with working ping suggests listeners or ACLs. SMB access denied with working TCP points to identity and share/NTFS."
+                    >
+                      DNS timeout with IP connectivity requires
+                      resolver/53/suffix checks. Failed TCP with working ping
+                      suggests listeners or ACLs. SMB access denied with working
+                      TCP points to identity and share/NTFS.
+                    </p>
+                    <pre
+                      dir="ltr"
+                    ><code class="language-powershell">Get-NetTCPConnection -State Listen | Select-Object LocalAddress,LocalPort,OwningProcess
+$Listener = Get-NetTCPConnection -LocalPort 445 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
+if ($null -ne $Listener) {
+    Get-Process -Id $Listener.OwningProcess
+} else {
+    Write-Warning &#x27;No TCP/445 listener found on this host&#x27;
+}
+Get-WinEvent -LogName &#x27;Microsoft-Windows-SMBClient/Connectivity&#x27; -MaxEvents 20 -ErrorAction SilentlyContinue</code></pre>
+                    <p
+                      data-fa="Listener را روی File Server بررسی کنید، نه کلاینت. نبود خروجی یعنی روی همان Host Listener پیدا نشده است. Hop بی‌پاسخ در tracert به‌تنهایی Loss برنامه نیست، چون ICMP ممکن است محدود شده باشد."
+                      data-en="Inspect listeners on the file server, not the client. Empty output means no matching listener on that host. Unresponsive tracert hops alone do not prove application loss because ICMP might be limited."
+                    >
+                      Inspect listeners on the file server, not the client.
+                      Empty output means no matching listener on that host.
+                      Unresponsive tracert hops alone do not prove application
+                      loss because ICMP might be limited.
+                    </p>
+                  </section>
+                  <section id="enterprise-recovery" class="article-section">
+                    <h2
+                      data-fa="تغییر محدود و آزمون دوباره"
+                      data-en="Limited corrections and retesting"
+                    >
+                      Limited corrections and retesting
+                    </h2>
+                    <p
+                      data-fa="پیش از اصلاح Route و Rule، وضعیت قبلی را ثبت کنید و برگشت همان تغییر را آماده داشته باشید. release و netsh int ip reset دسترسی مدیریت را قطع می‌کنند. فقط با Console و برنامه بازیابی اجرا کنید. پس از اصلاح، همان نام و Port و برنامه را دوباره بسنجید."
+                      data-en="Record prior routes/rules and prepare change-specific rollback. Release and netsh int ip reset interrupt management. Use console recovery when required. Repeat the same name, port and application tests after correction."
+                    >
+                      Record prior routes/rules and prepare change-specific
+                      rollback. Release and netsh int ip reset interrupt
+                      management. Use console recovery when required. Repeat the
+                      same name, port and application tests after correction.
+                    </p>
+                    <h3
+                      id="enterprise-practices"
+                      data-fa="Hostname و IP در Authentication"
+                      data-en="Hostnames and IPs in authentication"
+                    >
+                      Hostnames and IPs in authentication
+                    </h3>
+                    <p
+                      data-fa="آزمون با IP برای جداکردن DNS مفید است، اما SMB با IP ممکن است روش Kerberos را تغییر دهد. نتیجه IP را با نتیجه Hostname یکسان نگیرید. netstat و PID فقط Snapshot هستند."
+                      data-en="IP tests help isolate DNS, but SMB by IP might change Kerberos behavior. Do not assume IP and hostname tests are equivalent. Netstat/PID output is only a snapshot."
+                    >
+                      IP tests help isolate DNS, but SMB by IP might change
+                      Kerberos behavior. Do not assume IP and hostname tests are
+                      equivalent. Netstat/PID output is only a snapshot.
+                    </p>
+                  </section>
+                  <section id="faq" class="article-section">
+                    <h2
+                      data-fa="پرسش‌های متداول"
+                      data-en="Frequently Asked Questions"
+                    >
+                      Frequently Asked Questions
+                    </h2>
+                    <h3
+                      data-fa="آیا ping موفق یعنی SMB سالم است؟"
+                      data-en="Does successful ping prove SMB is healthy?"
+                    >
+                      Does successful ping prove SMB is healthy?
+                    </h3>
+                    <p
+                      data-fa="خیر. TCP/445، authentication و permission باید جدا بررسی شوند."
+                      data-en="No. Test TCP/445, authentication and permissions independently."
+                    >
+                      No. Test TCP/445, authentication and permissions
+                      independently.
+                    </p>
+                    <h3
+                      data-fa="آیا باید ابتدا DNS cache را پاک کرد؟"
+                      data-en="Should DNS cache be cleared first?"
+                    >
+                      Should DNS cache be cleared first?
+                    </h3>
+                    <p
+                      data-fa="خیر. ابتدا cache و پاسخ resolver را ثبت و مقایسه کنید."
+                      data-en="No. Record and compare cached and resolver responses before clearing it."
+                    >
+                      No. Record and compare cached and resolver responses
+                      before clearing it.
+                    </p>
+                  </section>
+                  <section id="enterprise-sources">
+                    <h2 data-fa="منابع رسمی" data-en="Official Sources">
+                      Official Sources
+                    </h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://learn.microsoft.com/en-us/powershell/module/nettcpip/test-netconnection"
+                          rel="noopener"
+                          >Microsoft: Test-NetConnection</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ipconfig"
+                          rel="noopener"
+                          >Microsoft: ipconfig</a
+                        >
+                      </li>
+                    </ul>
+                  </section>
+                </div>
+              

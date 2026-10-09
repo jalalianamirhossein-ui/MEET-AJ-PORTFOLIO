@@ -1,0 +1,130 @@
+{
+  "slug": "zabbix-server-linux-windows-agents-backup",
+  "reviewed_at": "2026-10-09",
+  "zabbix_branch": "7.0 LTS",
+  "verified_zabbix_version": "7.0.31",
+  "verified_ubuntu_package": "1:7.0.31-1+ubuntu24.04",
+  "windows_msi_minimum": "7.0.22",
+  "postgresql_major": 16,
+  "php_series": "8.3",
+  "nginx_series": "1.24",
+  "os": "Ubuntu Server 24.04 LTS",
+  "localizations": {
+    "en": {
+      "title": "Zabbix Server Installation and Configuration: Linux & Windows Agents, Security, Backup and Recovery",
+      "meta_title": "Zabbix Server Installation and Configuration: Linux & Windows Agents, Security, Backup and Recovery",
+      "description": "Deploy Zabbix 7.0 LTS on Ubuntu 24.04 with PostgreSQL, Nginx, Linux and Windows Agent 2, TLS, alerts, verified daily backups and disaster recovery.",
+      "keywords": [
+        "Zabbix 7.0 LTS",
+        "Ubuntu 24.04",
+        "PostgreSQL 16",
+        "Nginx",
+        "PHP-FPM",
+        "Zabbix Agent 2",
+        "Windows Server 2022",
+        "Windows Server 2025",
+        "TLS PSK",
+        "pg_dump",
+        "pgBackRest",
+        "PITR",
+        "Disaster Recovery"
+      ],
+      "faq": [
+        [
+          "Why 7.0 LTS instead of 8.0 RC?",
+          "The verified lifecycle lists 7.0 as the latest released LTS. RC is not production; recheck the stable selector before deployment."
+        ],
+        [
+          "Which templates work with Agent 2?",
+          "Official Linux by Zabbix agent and Windows by Zabbix agent templates support Agent 2; choose their active variants for active checks."
+        ],
+        [
+          "Which ports are required?",
+          "Active agents connect to Server/Proxy TCP/10051; passive polling reaches agents TCP/10050, with TLS and source allowlists."
+        ],
+        [
+          "Is /etc/zabbix alone a backup?",
+          "No. Recover PostgreSQL together with protected configuration, TLS material and custom scripts."
+        ],
+        [
+          "Does the script store DB passwords?",
+          "No. Local peer authentication uses postgres OS user and the restricted zabbix role. Off-site credentials are protected separately."
+        ],
+        [
+          "When are old backups deleted?",
+          "Only after new archive verification and required off-site success, and only completed sets older than configured retention."
+        ],
+        [
+          "Can a dump provide PITR?",
+          "A dump restores its snapshot. PITR requires a physical base backup and complete WAL archive chain."
+        ],
+        [
+          "Do checksums prove recovery?",
+          "No. Restore and validate hosts, data, triggers and notifications in isolation; record achieved RPO/RTO."
+        ]
+      ],
+      "image_alt": "Enterprise Zabbix monitoring with Linux and Windows agents, security and disaster recovery",
+      "image_title": "Zabbix Server Installation and Configuration: Linux & Windows Agents, Security, Backup and Recovery",
+      "image_caption": "Enterprise monitoring: Linux and Windows agents, security, backup and recovery"
+    },
+    "fa": {
+      "title": "آموزش جامع نصب و راه‌اندازی Zabbix Server، مانیتورینگ لینوکس و ویندوز، امنیت، بکاپ و بازیابی",
+      "meta_title": "آموزش جامع نصب و راه‌اندازی Zabbix Server، مانیتورینگ لینوکس و ویندوز، امنیت، بکاپ و بازیابی",
+      "description": "نصب Zabbix 7.0 LTS روی Ubuntu 24.04 با PostgreSQL و Nginx، Agent 2 لینوکس و ویندوز، TLS، هشدار، بکاپ روزانه معتبر و بازیابی بحران.",
+      "keywords": [
+        "Zabbix 7.0 LTS",
+        "Ubuntu 24.04",
+        "PostgreSQL 16",
+        "Nginx",
+        "PHP-FPM",
+        "Zabbix Agent 2",
+        "Windows Server 2022",
+        "Windows Server 2025",
+        "TLS PSK",
+        "pg_dump",
+        "pgBackRest",
+        "PITR",
+        "Disaster Recovery",
+        "نصب زبیکس",
+        "بکاپ زبیکس"
+      ],
+      "faq": [
+        [
+          "چرا 7.0 LTS به جای 8.0 RC؟",
+          "Lifecycle بررسی‌شده 7.0 را آخرین LTS منتشرشده می‌داند. RC برای Production نیست؛ Stable Selector قبل استقرار دوباره بررسی شود."
+        ],
+        [
+          "کدام Template با Agent 2 کار می‌کند؟",
+          "Template رسمی Linux by Zabbix agent و Windows by Zabbix agent؛ برای Active نوع Active انتخاب شود."
+        ],
+        [
+          "Port لازم چیست؟",
+          "Agent فعال به Server/Proxy روی TCP/10051؛ Poll غیرفعال به Agent روی TCP/10050 با TLS و Allowlist."
+        ],
+        [
+          "آیا /etc/zabbix به‌تنهایی بکاپ است؟",
+          "خیر؛ PostgreSQL همراه Config محافظت‌شده، TLS و Script سفارشی بازیابی شود."
+        ],
+        [
+          "Script Password DB ذخیره می‌کند؟",
+          "خیر؛ Peer محلی با کاربر OS برابر postgres و Role محدود zabbix. Credential Off-site جدا محافظت می‌شود."
+        ],
+        [
+          "بکاپ قدیمی چه زمانی حذف می‌شود؟",
+          "فقط پس از Verification جدید و Off-site لازم موفق، برای مجموعه تکمیل‌شده قدیمی طبق Retention."
+        ],
+        [
+          "آیا Dump، PITR می‌دهد؟",
+          "Dump به Snapshot برمی‌گردد؛ PITR نیازمند Base Backup فیزیکی و زنجیره کامل WAL است."
+        ],
+        [
+          "Checksum اثبات Recovery است؟",
+          "خیر؛ Host، Data، Trigger و Notification در Isolation بازیابی/تأیید و RPO/RTO ثبت شود."
+        ]
+      ],
+      "image_alt": "مانیتورینگ سازمانی Zabbix با Agent لینوکس و ویندوز، امنیت و بازیابی بحران",
+      "image_title": "آموزش جامع نصب و راه‌اندازی Zabbix Server، مانیتورینگ لینوکس و ویندوز، امنیت، بکاپ و بازیابی",
+      "image_caption": "مانیتورینگ سازمانی: Agent لینوکس و ویندوز، امنیت، بکاپ و بازیابی"
+    }
+  }
+}

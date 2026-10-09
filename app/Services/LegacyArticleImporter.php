@@ -67,7 +67,7 @@ class LegacyArticleImporter
                         unset($attributes['status'], $attributes['published_at'], $attributes['sort_order']);
                         $existing->forceFill($attributes);
                         $existing->translation_key = $translationKey;
-                        $existing->save();
+                        Article::withoutTimestamps(fn () => $existing->save());
                         $updated++;
                         $report[] = [
                             'slug' => $slug,
@@ -184,6 +184,7 @@ class LegacyArticleImporter
             throw new \RuntimeException('Missing article body in '.$relative);
         }
         $body = $this->rewritePublicPaths($body);
+        $body = app(ArticleStructure::class)->repair($body, $slug);
         // Original HTML is a trusted hashed source. The sanitizer is used as a
         // report for CMS-authored HTML, not as a filter that may drop data-fa.
 

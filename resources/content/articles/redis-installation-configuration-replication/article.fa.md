@@ -4,7 +4,7 @@
 
 ## مقدمه؛ نسخه‌های بررسی‌شده و محدوده استقرار
 
-تاریخ بررسی: ۷ اکتبر ۲۰۲۶، برابر با ۱۵ مهر ۱۴۰۵. آخرین نسخه Stable تأییدشده در Release رسمی، Redis Open Source 8.10.2 است که در ۱۷ سپتامبر ۲۰۲۶ منتشر شده است. مبنای سینتکس، Command Reference نسخه 8.10 و redis.conf مربوط به Tag نسخه 8.10.2 است. پیش از استقرار، آخرین Patch امنیتی و Release Notes را دوباره بررسی کنید؛ شماره نسخه Redis Software و Redis Cloud را با Redis Open Source اشتباه نگیرید.
+آخرین نسخه Stable تأییدشده در Release رسمی، Redis Open Source 8.10.2 است که در ۱۷ سپتامبر ۲۰۲۶ منتشر شده است. مبنای سینتکس، Command Reference نسخه 8.10 و redis.conf مربوط به Tag نسخه 8.10.2 است. پیش از استقرار، آخرین Patch امنیتی و Release Notes را دوباره بررسی کنید؛ شماره نسخه Redis Software و Redis Cloud را با Redis Open Source اشتباه نگیرید.
 
 [Release رسمی Redis 8.10.2](https://github.com/redis/redis/releases/tag/8.10.2)
 
@@ -13,25 +13,6 @@
 Hostهای مثال Ubuntu Server 24.04 LTS دارند که همچنان پشتیبانی می‌شود. جدیدترین LTS در تاریخ بررسی Ubuntu 26.04 است. روی LTS جدیدتر، پشتیبانی مخزن Redis، Codename، نسخه Candidate، Unit سرویس و مسیرها را پیش از اعمال این راهنما تطبیق دهید. بسته مخزن Ubuntu الزاماً آخرین Stable بالادستی نیست. فرمان‌های Linux برای سرورهای Redis شما هستند؛ با مستندات بررسی شده‌اند و اجرای زنده آن‌ها روی Production در Workspace ویندوزی این سایت ادعا نمی‌شود.
 
 [چرخه انتشار و پشتیبانی رسمی Ubuntu](https://ubuntu.com/about/release-cycle)
-
-## پیش‌نیازها و سناریوی استقرار
-
-```text
-Application Servers: 10.10.30.21, 10.10.30.22
-             |
-             v
-Redis Primary: 10.10.20.10:6379
-             |
-             | Asynchronous Replication
-             v
-Redis Replica: 10.10.20.11:6379
-
-Optional Replica-02: 10.10.20.12:6379
-Management jump host: 10.10.40.10
-Prometheus host: 10.10.40.20
-```
-
-پیش‌نیازها: IP خصوصی ثابت، DNS و Time Sync صحیح، دسترسی SSH یا Console، حساب سرویس مستقل Redis، ظرفیت RAM و SSD اندازه‌گیری‌شده و Maintenance Window. هر دو نود را با Patch یکسان Redis و Moduleهای سازگار شروع کنید. IPهای نمونه را با شبکه خود عوض کنید؛ آدرس‌های تکمیلی بالا برای دقیق‌بودن مثال Firewall تعریف شده‌اند.
 
 ## ۱. Redis چیست؟
 
@@ -75,7 +56,72 @@ Application هم به Redis و هم به Database پایدار متصل است. 
 
 Logical Database و Prefix برای سازمان‌دهی کلید مفیدند، اما RAM، Eviction، CPU و Availability را جدا نمی‌کنند. Instance مشترک Cache نباید کلید حیاتی Session، Queue یا Lock را Evict کند. در تفاوت نیازها، Deployment جدا انتخاب کنید.
 
-## ۳. نصب Redis روی Ubuntu
+## پیش‌نیازها و سناریوی استقرار
+
+```text
+Application Servers: 10.10.30.21, 10.10.30.22
+             |
+             v
+Redis Primary: 10.10.20.10:6379
+             |
+             | Asynchronous Replication
+             v
+Redis Replica: 10.10.20.11:6379
+
+Optional Replica-02: 10.10.20.12:6379
+Management jump host: 10.10.40.10
+Prometheus host: 10.10.40.20
+```
+
+پیش‌نیازها: IP خصوصی ثابت، DNS و Time Sync صحیح، دسترسی SSH یا Console، حساب سرویس مستقل Redis، ظرفیت RAM و SSD اندازه‌گیری‌شده و Maintenance Window. هر دو نود را با Patch یکسان Redis و Moduleهای سازگار شروع کنید. IPهای نمونه را با شبکه خود عوض کنید؛ آدرس‌های تکمیلی بالا برای دقیق‌بودن مثال Firewall تعریف شده‌اند.
+
+## ۳. Redis Replication Architecture
+
+![Replication ناهمزمان Redis از یک Primary به دو Replica فقط‌خواندنی](/assets/img/articles/content/redis-replication-architecture.png)
+
+Replication ناهمزمان Redis از یک Primary به دو Replica فقط‌خواندنی
+
+```text
+Applications
+                      |
+                      v
+                 Redis Primary
+              10.10.20.10:6379
+                      |
+           +----------+----------+
+           |                     |
+           v                     v
+       Replica-01             Replica-02
+   10.10.20.11:6379       10.10.20.12:6379
+```
+
+برای Replica-02 فرآیند Replica را با bind برابر 10.10.20.12 تکرار کنید، Rule صریح روی Primary اضافه و replicaof را همچنان به 10.10.20.10 اشاره دهید. Credentialها را مستقل توزیع و هر دو اتصال را بررسی کنید. هر نود Redis در این معماری کپی کامل Dataset دارد؛ داده میان سه نود تقسیم نمی‌شود.
+
+## ۴. Replication به‌تنهایی High Availability نیست
+
+اگر Primary خراب شود، Replica مستقل خودکار Primary جدید نمی‌شود و Endpoint برنامه خودکار جابه‌جا نمی‌شود. Promotion دستی بدون Fencing مربوط به Primary قبلی در Network Partition می‌تواند دو Primary قابل Write بسازد. Restart خودکار Process نیز Failover نیست. Primary بدون Persistence نباید خالی Restart شود و Replicaهای دارای داده را از Dataset خالی دوباره Sync کند.
+
+Write تأییدشده Primary ممکن است به Replica انتخاب‌شده برای Failover نرسیده باشد. WAIT پنجره را کاهش می‌دهد؛ WAITAOF در تنظیم پشتیبانی‌شده منتظر Acknowledgment مربوط به fsync در AOF روی مشارکت‌کننده‌های مشخص می‌ماند. هیچ‌کدام جای Backup نیست و معماری ناهمزمان را به سیستم Consensus همیشه بدون Loss تبدیل نمی‌کند. RPO/RTO را از نیاز کسب‌وکار انتخاب و بازیابی Crash، خرابی Host و Network Partition را تست کنید.
+
+[Acknowledgment مربوط به Durability با WAITAOF](https://redis.io/docs/latest/commands/waitaof/)
+
+## ۵. تفاوت Replication، Sentinel و Redis Cluster
+
+| معماری | Replication | Failover خودکار | Sharding |
+| --- | --- | --- | --- |
+| Replication | بله | خیر | خیر |
+| Sentinel | بله | بله | خیر |
+| Redis Cluster | بله، با Replica | بله، با Replica مناسب و Quorum | بله |
+
+Replication داده را کپی می‌کند. Sentinel، Monitoring، Discovery و Failover را به گروه Primary/Replica بدون Sharding اضافه می‌کند. Redis Cluster کلیدها را میان 16,384 Hash Slot توزیع و از Failover Protocol خود استفاده می‌کند؛ برای Failover مربوط به Cluster به Sentinel نیاز ندارد. Topology رایج شروع Production سه Primary و یک Replica برای هر Primary، مجموعاً شش نود است؛ Primary و Replica متناظر نباید Failure Domain مشترک داشته باشند.
+
+Cluster به Client سازگار نیاز دارد و عملیات Multi-Key را تغییر می‌دهد: کلیدهای مرتبط معمولاً به Hash Tag برای Slot مشترک نیاز دارند. فقط Database 0 دارد. Migration، Resharding و دسترسی به Port Client و Cluster Bus را برنامه‌ریزی کنید. Port پیش‌فرض Bus برابر Port داده به‌اضافه 10000 است؛ برای 6379 معمولاً 16379 می‌شود. ACL Port Client، Bus را احراز هویت نمی‌کند. Redis 8.10.2 صریحاً tls-cluster و cluster-bus-port-protected-mode را توضیح داده است؛ Bus را امن و Segment و گواهی و Client Redirection را تست کنید.
+
+[Topology، Hash Slot و Portهای رسمی Redis Cluster](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/)
+
+[تغییر امنیت Cluster Bus در Redis 8.10.2](https://github.com/redis/redis/releases/tag/8.10.2)
+
+## ۶. نصب Redis روی Ubuntu
 
 این مراحل را روی هر دو نود اجرا کنید. روش ساده مخزن توزیع ابتدا به‌عنوان گزینه جایگزین آمده است و تضمین نصب آخرین Redis بالادستی نیست. برای نسخه Stable مبنای مقاله، مخزن رسمی APT Redis را انتخاب کنید و قبل از نصب Candidate را بررسی کنید.
 
@@ -113,7 +159,7 @@ systemctl status redis-server --no-pager
 
 [راهنمای رسمی نصب Redis با APT](https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/apt/)
 
-## ۴. بررسی سرویس Redis
+## ۷. بررسی سرویس Redis
 
 ```bash
 systemctl status redis-server --no-pager
@@ -135,7 +181,7 @@ PONG بدون Credential فقط بررسی اولیه محلی است. پس از
 redis-cli -h 127.0.0.1 -p 6379 --user admin --askpass PING
 ```
 
-## ۵. ساختار Configuration و Backup پیش از تغییر
+## ۸. ساختار Configuration و Backup پیش از تغییر
 
 نصب APT معمولاً از /etc/redis/redis.conf استفاده می‌کند؛ با systemctl cat و dpkg -L آن را تأیید کنید. Redis 8.10 از redis.conf استفاده می‌کند؛ مدل redis-full.conf جدا در برخی 8.x قدیمی‌تر مبنای این راهنما نیست. مسیر Moduleها و تنظیمات سرویس بسته را حفظ کنید. Baseline عملیاتی را با include نهایی اعمال کنید و کل فایل بسته را بی‌دلیل جایگزین نکنید.
 
@@ -149,7 +195,7 @@ sudoedit /etc/redis/production.conf
 sudoedit /etc/redis/redis.conf
 ```
 
-خط زیر را فقط یک بار در انتهای redis.conf اضافه کنید. ابتدا طبق بخش ۸ users.acl را بسازید؛ برای یک منبع ACL، تعریف فعال inline user و requirepass قدیمی را حذف کنید. در Deployment موجود از فایل ACL و Config فعلی پیش از تغییر Backup بگیرید. نمونه‌ها برای استقرار جدیدند؛ تبدیل Instance دارای داده از RDB-only به AOF به فرآیند Migration زنده نیاز دارد.
+خط زیر را فقط یک بار در انتهای redis.conf اضافه کنید. ابتدا طبق بخش ۱۱ users.acl را بسازید؛ برای یک منبع ACL، تعریف فعال inline user و requirepass قدیمی را حذف کنید. در Deployment موجود از فایل ACL و Config فعلی پیش از تغییر Backup بگیرید. نمونه‌ها برای استقرار جدیدند؛ تبدیل Instance دارای داده از RDB-only به AOF به فرآیند Migration زنده نیاز دارد.
 
 ```text
 include /etc/redis/production.conf
@@ -157,9 +203,9 @@ include /etc/redis/production.conf
 
 [ساختار رسمی فایل تنظیمات و دوام تغییر Runtime](https://redis.io/docs/latest/operate/oss_and_stack/management/config/)
 
-## ۶. تنظیم Redis Primary
+## ۹. تنظیم Redis Primary
 
-روی 10.10.20.10 قطعه تنظیمات زیر را در /etc/redis/production.conf قرار دهید. فرض مثال Host مستقل با 8 GiB RAM و سقف اولیه 4 GiB برای Dataset است؛ پیش از استفاده عملیاتی سربار Copy-on-Write، Module و Replication را اندازه بگیرید. noeviction مبنای داده‌ای است که نباید بی‌صدا حذف شود؛ پروفایل مستقل Cache در بخش ۱۸ آمده است.
+روی 10.10.20.10 قطعه تنظیمات زیر را در /etc/redis/production.conf قرار دهید. فرض مثال Host مستقل با 8 GiB RAM و سقف اولیه 4 GiB برای Dataset است؛ پیش از استفاده عملیاتی سربار Copy-on-Write، Module و Replication را اندازه بگیرید. noeviction مبنای داده‌ای است که نباید بی‌صدا حذف شود؛ پروفایل مستقل Cache در بخش ۲۱ آمده است.
 
 ```text
 # Final include for a NEW dedicated Redis deployment; preserve package redis.conf.
@@ -214,7 +260,7 @@ Unit با Type=notify ممکن است --supervised systemd را خودش بده�
 
 [مرجع تنظیمات Tag نسخه Redis 8.10.2](https://raw.githubusercontent.com/redis/redis/8.10.2/redis.conf)
 
-## ۷. Security Hardening و تفکیک شبکه
+## ۱۰. Security Hardening و تفکیک شبکه
 
 Redis را حتی با Password مستقیماً روی Internet منتشر نکنید. آن را در VLAN/Subnet خصوصی قرار دهید و Ingress را در Host Firewall و Security Group بالادستی محدود کنید. فقط Application Server و Peerهای Replication به سرویس داده دسترسی داشته باشند. Management و Monitoring به استثنای صریح و محدود نیاز دارند؛ ترجیحاً Agent محلی یا Jump Host کنترل‌شده. protected-mode یک Guard است، نه Firewall یا رمزنگاری.
 
@@ -263,11 +309,11 @@ tls-replication yes باید روی تمام Candidateهای Promotion، از ج
 
 [تنظیم TLS در Redis](https://redis.io/docs/latest/operate/oss_and_stack/management/security/encryption/)
 
-## ۸. Authentication با Redis ACL
+## ۱۱. Authentication با Redis ACL
 
 از Named User در ACL استفاده کنید. requirepass همچنان برای سازگاری User پیش‌فرض پشتیبانی می‌شود؛ طراحی پیشنهادی Multi-User نیست و ادعا نمی‌کنیم حذف شده است. در این راهنما default غیرفعال، Administrator مستقل، عملیات Cache/Session محدود و Replica فقط دارای PING، REPLCONF و PSYNC است. ACL قابلیت داخلی است؛ «ACL فعال است» یعنی User و Permission مؤثر مستقر و بررسی شده‌اند.
 
-روی نود جدید، Script Bash زیر را پیش از Restart با include بخش ۶ اجرا کنید. چهار Secret قوی و مستقل که قبلاً در Secret Manager ذخیره کرده‌اید وارد کنید؛ Secret مربوط به Replication در هر دو نود یکسان باشد. حداقل ۳۲ بایت تصادفی به‌صورت Hex انتخاب عملی است. Script ورودی ضعیف یا غیر Hex را رد می‌کند، Hash را به‌جای متن Password در users.acl می‌نویسد و Secret چاپ نمی‌کند. فایل ACL موجود را عمداً Overwrite نمی‌کند.
+روی نود جدید، Script Bash زیر را پیش از Restart با include بخش ۹ اجرا کنید. چهار Secret قوی و مستقل که قبلاً در Secret Manager ذخیره کرده‌اید وارد کنید؛ Secret مربوط به Replication در هر دو نود یکسان باشد. حداقل ۳۲ بایت تصادفی به‌صورت Hex انتخاب عملی است. Script ورودی ضعیف یا غیر Hex را رد می‌کند، Hash را به‌جای متن Password در users.acl می‌نویسد و Secret چاپ نمی‌کند. فایل ACL موجود را عمداً Overwrite نمی‌کند.
 
 ```bash
 #!/usr/bin/env bash
@@ -333,7 +379,7 @@ ACL LIST Ruleها و Hashهای Password را برمی‌گرداند؛ فقط �
 
 [مرجع ACL LIST](https://redis.io/docs/latest/commands/acl-list/)
 
-## ۹. Persistence؛ RDB و AOF
+## ۱۲. Persistence؛ RDB و AOF
 
 ### RDB؛ Snapshot در یک لحظه مشخص
 
@@ -395,7 +441,7 @@ redis-cli --user admin --askpass INFO persistence
 
 [مرجع رسمی RDB، Multipart AOF، Recovery و Migration زنده AOF](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/)
 
-## ۱۰. راه‌اندازی Redis Replica
+## ۱۳. راه‌اندازی Redis Replica
 
 روی 10.10.20.11 بسته‌های یکسان، ACL مستقل و مسیر شبکه محدود ایجاد و Baseline زیر را با include نهایی اعمال کنید. Replication، Dataset را منتقل می‌کند، نه فایل ACL یا Config؛ آن‌ها را مستقل Provision کنید. Username برابر repl روی Primary و Secret متناظر در masterauth است. تمام کپی‌های production.conf دارای masterauth فقط برای root/redis قابل خواندن باشند.
 
@@ -463,7 +509,7 @@ Partial Sync پس از قطعی کوتاه می‌تواند از Backlog Primar
 
 [همگام‌سازی و Authentication در Redis Replication](https://redis.io/docs/latest/operate/oss_and_stack/management/replication/)
 
-## ۱۱. بررسی وضعیت Replication
+## ۱۴. بررسی وضعیت Replication
 
 ### روی Replica
 
@@ -501,7 +547,7 @@ repl_backlog_active:1
 
 [Fieldهای فعلی INFO و نام‌های Legacy خروجی Replication](https://redis.io/docs/latest/commands/info/)
 
-## ۱۲. تست عملی Replication
+## ۱۵. تست عملی Replication
 
 برای کلید company در مثال از Admin استفاده کنید چون app فقط cache:* و session:* را می‌بیند. روی Primary اتصال Interactive احراز هویت‌شده باز کنید؛ SET و WAIT باید در همان Connection اجرا شوند. WAIT، Acknowledgment مربوط به Write قبلی همین Client را بررسی می‌کند، نه CLI جدا.
 
@@ -549,7 +595,7 @@ redis-cli --user admin --askpass DEL company
 
 [معنای Acknowledgment و محدودیت WAIT](https://redis.io/docs/latest/commands/wait/)
 
-## ۱۳. Read From Replica و Read Scaling
+## ۱۶. Read From Replica و Read Scaling
 
 Replicaها Dataset Primary را کپی می‌کنند و به‌صورت پیش‌فرض Read-Only هستند. Application می‌تواند Read مناسب را صریح به آن‌ها Route کند؛ Redis خودکار Read را میان Replicaهای Standalone تقسیم نمی‌کند. Replica مستقل برای Read به فرمان مخصوص Cluster یعنی READONLY نیاز ندارد. Client یا Router آگاه از Topology باید تمام Writeها را به Primary فعلی بفرستد.
 
@@ -557,37 +603,7 @@ Replication ناهمزمان است؛ Replica می‌تواند داده قدی�
 
 در Baseline مقدار replica-serve-stale-data no باعث شکست Read داده هنگام Link قطع یا Sync ناقص می‌شود؛ Lag با Link سالم را حذف نمی‌کند. مقدار پیش‌فرض yes در قطعی ممکن است داده قدیمی سرو کند. Availability و Freshness را آگاهانه انتخاب و روی Replica قطع یا Lagging هشدار بدهید. افزودن Replica سربار شبکه و Replication Primary را بیشتر می‌کند؛ Memory را Shard یا Write Primary را Scale نمی‌کند.
 
-## ۱۴. Redis Replication Architecture
-
-![Replication ناهمزمان Redis از یک Primary به دو Replica فقط‌خواندنی](/assets/img/articles/content/redis-replication-architecture.png)
-
-Replication ناهمزمان Redis از یک Primary به دو Replica فقط‌خواندنی
-
-```text
-Applications
-                      |
-                      v
-                 Redis Primary
-              10.10.20.10:6379
-                      |
-           +----------+----------+
-           |                     |
-           v                     v
-       Replica-01             Replica-02
-   10.10.20.11:6379       10.10.20.12:6379
-```
-
-برای Replica-02 فرآیند Replica را با bind برابر 10.10.20.12 تکرار کنید، Rule صریح روی Primary اضافه و replicaof را همچنان به 10.10.20.10 اشاره دهید. Credentialها را مستقل توزیع و هر دو اتصال را بررسی کنید. هر نود Redis در این معماری کپی کامل Dataset دارد؛ داده میان سه نود تقسیم نمی‌شود.
-
-## ۱۵. Replication به‌تنهایی High Availability نیست
-
-اگر Primary خراب شود، Replica مستقل خودکار Primary جدید نمی‌شود و Endpoint برنامه خودکار جابه‌جا نمی‌شود. Promotion دستی بدون Fencing مربوط به Primary قبلی در Network Partition می‌تواند دو Primary قابل Write بسازد. Restart خودکار Process نیز Failover نیست. Primary بدون Persistence نباید خالی Restart شود و Replicaهای دارای داده را از Dataset خالی دوباره Sync کند.
-
-Write تأییدشده Primary ممکن است به Replica انتخاب‌شده برای Failover نرسیده باشد. WAIT پنجره را کاهش می‌دهد؛ WAITAOF در تنظیم پشتیبانی‌شده منتظر Acknowledgment مربوط به fsync در AOF روی مشارکت‌کننده‌های مشخص می‌ماند. هیچ‌کدام جای Backup نیست و معماری ناهمزمان را به سیستم Consensus همیشه بدون Loss تبدیل نمی‌کند. RPO/RTO را از نیاز کسب‌وکار انتخاب و بازیابی Crash، خرابی Host و Network Partition را تست کنید.
-
-[Acknowledgment مربوط به Durability با WAITAOF](https://redis.io/docs/latest/commands/waitaof/)
-
-## ۱۶. Redis Sentinel و High Availability
+## ۱۷. Redis Sentinel و High Availability
 
 ![High Availability در Redis Sentinel با سه Sentinel، یک Primary، دو Replica و Failover خودکار](/assets/img/articles/content/redis-sentinel-high-availability.png)
 
@@ -643,64 +659,7 @@ redis-cli -h 127.0.0.1 -p 26379 --user sentinel-observer --askpass SENTINEL REPL
 
 [پروتکل Discovery برای Clientهای Sentinel](https://redis.io/docs/latest/develop/reference/sentinel-clients/)
 
-## ۱۷. تفاوت Replication، Sentinel و Redis Cluster
-
-| معماری | Replication | Failover خودکار | Sharding |
-| --- | --- | --- | --- |
-| Replication | بله | خیر | خیر |
-| Sentinel | بله | بله | خیر |
-| Redis Cluster | بله، با Replica | بله، با Replica مناسب و Quorum | بله |
-
-Replication داده را کپی می‌کند. Sentinel، Monitoring، Discovery و Failover را به گروه Primary/Replica بدون Sharding اضافه می‌کند. Redis Cluster کلیدها را میان 16,384 Hash Slot توزیع و از Failover Protocol خود استفاده می‌کند؛ برای Failover مربوط به Cluster به Sentinel نیاز ندارد. Topology رایج شروع Production سه Primary و یک Replica برای هر Primary، مجموعاً شش نود است؛ Primary و Replica متناظر نباید Failure Domain مشترک داشته باشند.
-
-Cluster به Client سازگار نیاز دارد و عملیات Multi-Key را تغییر می‌دهد: کلیدهای مرتبط معمولاً به Hash Tag برای Slot مشترک نیاز دارند. فقط Database 0 دارد. Migration، Resharding و دسترسی به Port Client و Cluster Bus را برنامه‌ریزی کنید. Port پیش‌فرض Bus برابر Port داده به‌اضافه 10000 است؛ برای 6379 معمولاً 16379 می‌شود. ACL Port Client، Bus را احراز هویت نمی‌کند. Redis 8.10.2 صریحاً tls-cluster و cluster-bus-port-protected-mode را توضیح داده است؛ Bus را امن و Segment و گواهی و Client Redirection را تست کنید.
-
-[Topology، Hash Slot و Portهای رسمی Redis Cluster](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/)
-
-[تغییر امنیت Cluster Bus در Redis 8.10.2](https://github.com/redis/redis/releases/tag/8.10.2)
-
-## ۱۸. Memory Management و Eviction Policy
-
-maxmemory حافظه محاسبه‌شده برای Eviction را محدود می‌کند، نه کل RSS فرآیند یا سقف سخت RAM Host. Buffer مربوط به Replication/AOF، Fragmentation، Module، OS و Copy-on-Write زمان Fork به ظرفیت اضافی نیاز دارند. maxmemory 4gb روی Host دارای 8 GiB فقط مثال اولیه است، نه قانون عمومی ۵۰ درصد. Peak RSS و Copy-on-Write را زیر Rewrite و Full Sync واقعی اندازه بگیرید و پیش از Swap یا OOM Killer هشدار بدهید.
-
-| Policy | رفتار و کاربرد |
-| --- | --- |
-| noeviction | Write افزاینده حافظه را در سقف رد می‌کند؛ کلید Session/Job حفظ می‌شود اما مدیریت OOM لازم است. |
-| allkeys-lru | حذف تقریبی کلیدهای کمتر استفاده‌شده اخیراً از تمام کلیدها؛ شروع مناسب Cache عمومی. |
-| allkeys-lfu | حذف تقریبی کلیدهای کمتر استفاده‌شده از نظر دفعات؛ برای Hot Working Set پایدار تست کنید. |
-| volatile-lru | LRU فقط روی کلید دارای TTL؛ بدون Candidate رفتار شبیه noeviction دارد. |
-| volatile-ttl | حذف کلید دارای TTL با کوتاه‌ترین عمر باقی‌مانده؛ وقتی TTL بیانگر ارزش داده است مفید است. |
-
-### پروفایل عملی Cache مستقل
-
-```text
-maxmemory 4gb
-maxmemory-policy allkeys-lru
-```
-
-برای Instance فقط Cache از allkeys-lru، TTL صریح و کنترل Stampede شروع کنید؛ قبل از آزمایش LFU، Hit Rate، Eviction و بار Fallback Database را مقایسه کنید. TTL تازگی داده و Eviction ظرفیت را کنترل می‌کند. این پروفایل را با Job، Lock یا Session دارای الزام ماندگاری زیر فشار حافظه مشترک نکنید. تغییر Policy به Reset داده نیاز ندارد اما می‌تواند بلافاصله انتخاب کلید Evicted را عوض کند.
-
-Replica معمولاً هنگام Replication، maxmemory را نادیده می‌گیرد و Eviction Primary را اعمال می‌کند؛ ظرفیت باید کل Dataset کپی‌شده و Buffer را پوشش دهد. برای Promotion احتمالی maxmemory/Policy مناسب روی Replica نیز تنظیم کنید. replica-ignore-maxmemory no این رفتار را تغییر می‌دهد و راه‌حل عمومی Replica کم‌ظرفیت نیست.
-
-[Policyهای فعلی Eviction و محاسبه Memory](https://redis.io/docs/latest/develop/reference/eviction/)
-
-### پیش‌نیاز Memory و سرویس در Linux
-
-```bash
-sysctl vm.overcommit_memory net.core.somaxconn
-systemctl show redis-server -p LimitNOFILE
-cat /sys/kernel/mm/transparent_hugepage/enabled
-# On a dedicated Redis host, persist the official overcommit recommendation:
-printf 'vm.overcommit_memory = 1
-' | sudo tee /etc/sysctl.d/99-redis.conf
-sudo sysctl -p /etc/sysctl.d/99-redis.conf
-```
-
-Redis برای کاهش Fork Failure مقدار vm.overcommit_memory=1 را توصیه می‌کند؛ این Policy کل Host را تغییر می‌دهد و روی Host مشترک باید هماهنگ شود. در Redis 8.10.2 پیش‌فرض disable-thp yes در صورت نیاز اثر نامناسب THP را برای Process Redis محدود می‌کند؛ Config اجراشده و Latency را بررسی کنید، نه اینکه Script قدیمی غیرفعال‌کردن سراسری THP را کورکورانه کپی کنید. File Limit سرویس و Listen Backlog را با بار Client اندازه‌گیری‌شده تطبیق دهید. Swap را مطابق Policy Host برای وضعیت اضطراری ظرفیت Provision کنید اما Swap واقعی Redis را Incident فوری Latency بدانید، نه حاشیه ظرفیت روزمره.
-
-[پیش‌نیازهای رسمی Administration در Linux](https://redis.io/docs/latest/operate/oss_and_stack/management/admin/)
-
-## ۱۹. Monitoring و Metricهای عملیاتی
+## ۱۸. Monitoring و Metricهای عملیاتی
 
 ```bash
 redis-cli --user monitor --askpass INFO
@@ -739,7 +698,7 @@ SLOWLOG زمان اجرای Command را به Microsecond ثبت می‌کند �
 
 [تشخیص رسمی Latency](https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/latency/)
 
-## ۲۰. Prometheus، Grafana و Alerting
+## ۱۹. Prometheus، Grafana و Alerting
 
 ![پایش Redis با Redis Exporter، Prometheus، Grafana و Alertmanager](/assets/img/articles/content/redis-monitoring-architecture.png)
 
@@ -808,7 +767,7 @@ redis_up{job="redis"} == 0
 
 [تنظیم Scrape رسمی Prometheus](https://prometheus.io/docs/prometheus/latest/configuration/configuration/)
 
-## ۲۱. Backup و Restore
+## ۲۰. Backup و Restore
 
 Replication جای Backup نیست. حذف اشتباه، Bug برنامه و Write مخرب به تمام Replicaها منتقل می‌شود. Backup تاریخ‌دار و قابل بازیابی را خارج از Failure Domain Redis، رمزنگاری‌شده و با Access محدود و Retention متناسب با RPO نگه دارید. Backup Replica می‌تواند بار Primary را کم کند اما پیش از Snapshot باید Sync کامل و تازه داشته باشد.
 
@@ -846,7 +805,7 @@ sudo sha256sum "$backup_file"
 Backup AOF فعلی باید Manifest و همه Base/Incremental File ارجاع‌شده را داشته باشد. کپی ساده فایل زنده هنگام Rewrite ممکن است File را جا بیندازد یا وضعیت ناسازگار بگیرد. از فرآیند هماهنگ جلوگیری از تغییر File Set/Rewrite یا Snapshot اتمیک Storage/Filesystem با روش Consistency مستند Redis استفاده کنید. Replica اختصاصی Backup که تمیز متوقف شده نیز File Set سازگار می‌دهد؛ Resync و اثر Availability را برنامه‌ریزی کنید.
 
 - Restore روی Host تازه و ایزوله با Redis/Module نسخه تأییدشده؛ Checksum و سازگاری Config را بررسی کنید.
-- برای Restore فقط RDB، dump.rdb بازیابی‌شده را ابتدا با appendonly no بارگذاری کنید؛ AOF قبلی نباید آن را Override کند. بعداً AOF را با فرآیند زنده بخش ۹ فعال کنید.
+- برای Restore فقط RDB، dump.rdb بازیابی‌شده را ابتدا با appendonly no بارگذاری کنید؛ AOF قبلی نباید آن را Override کند. بعداً AOF را با فرآیند زنده بخش ۱۲ فعال کنید.
 - برای Restore AOF، Manifest/File Set کامل را زیر appenddirname با Ownership صحیح قرار دهید؛ با redis-check-aof همان نسخه بررسی کنید.
 - تا تأیید نمونه کلید، TTL، Count، Loading Log و Invariant کسب‌وکار، Application قطع باشد. --fix را روی تنها کپی Backup اجرا نکنید.
 - زمان واقعی Restore، Loss احتمالی، سن Backup Remote و دسترسی کلید رمزنگاری را اندازه بگیرید؛ Backup قبل از تغییر برای Rollback حفظ شود.
@@ -854,6 +813,47 @@ Backup AOF فعلی باید Manifest و همه Base/Incremental File ارجاع
 [Modeهای redis-cli شامل Export RDB و Authentication](https://redis.io/docs/latest/develop/tools/cli/)
 
 [Timestamp تکمیل Snapshot با LASTSAVE](https://redis.io/docs/latest/commands/lastsave/)
+
+## ۲۱. Memory Management و Eviction Policy
+
+maxmemory حافظه محاسبه‌شده برای Eviction را محدود می‌کند، نه کل RSS فرآیند یا سقف سخت RAM Host. Buffer مربوط به Replication/AOF، Fragmentation، Module، OS و Copy-on-Write زمان Fork به ظرفیت اضافی نیاز دارند. maxmemory 4gb روی Host دارای 8 GiB فقط مثال اولیه است، نه قانون عمومی ۵۰ درصد. Peak RSS و Copy-on-Write را زیر Rewrite و Full Sync واقعی اندازه بگیرید و پیش از Swap یا OOM Killer هشدار بدهید.
+
+| Policy | رفتار و کاربرد |
+| --- | --- |
+| noeviction | Write افزاینده حافظه را در سقف رد می‌کند؛ کلید Session/Job حفظ می‌شود اما مدیریت OOM لازم است. |
+| allkeys-lru | حذف تقریبی کلیدهای کمتر استفاده‌شده اخیراً از تمام کلیدها؛ شروع مناسب Cache عمومی. |
+| allkeys-lfu | حذف تقریبی کلیدهای کمتر استفاده‌شده از نظر دفعات؛ برای Hot Working Set پایدار تست کنید. |
+| volatile-lru | LRU فقط روی کلید دارای TTL؛ بدون Candidate رفتار شبیه noeviction دارد. |
+| volatile-ttl | حذف کلید دارای TTL با کوتاه‌ترین عمر باقی‌مانده؛ وقتی TTL بیانگر ارزش داده است مفید است. |
+
+### پروفایل عملی Cache مستقل
+
+```text
+maxmemory 4gb
+maxmemory-policy allkeys-lru
+```
+
+برای Instance فقط Cache از allkeys-lru، TTL صریح و کنترل Stampede شروع کنید؛ قبل از آزمایش LFU، Hit Rate، Eviction و بار Fallback Database را مقایسه کنید. TTL تازگی داده و Eviction ظرفیت را کنترل می‌کند. این پروفایل را با Job، Lock یا Session دارای الزام ماندگاری زیر فشار حافظه مشترک نکنید. تغییر Policy به Reset داده نیاز ندارد اما می‌تواند بلافاصله انتخاب کلید Evicted را عوض کند.
+
+Replica معمولاً هنگام Replication، maxmemory را نادیده می‌گیرد و Eviction Primary را اعمال می‌کند؛ ظرفیت باید کل Dataset کپی‌شده و Buffer را پوشش دهد. برای Promotion احتمالی maxmemory/Policy مناسب روی Replica نیز تنظیم کنید. replica-ignore-maxmemory no این رفتار را تغییر می‌دهد و راه‌حل عمومی Replica کم‌ظرفیت نیست.
+
+[Policyهای فعلی Eviction و محاسبه Memory](https://redis.io/docs/latest/develop/reference/eviction/)
+
+### پیش‌نیاز Memory و سرویس در Linux
+
+```bash
+sysctl vm.overcommit_memory net.core.somaxconn
+systemctl show redis-server -p LimitNOFILE
+cat /sys/kernel/mm/transparent_hugepage/enabled
+# On a dedicated Redis host, persist the official overcommit recommendation:
+printf 'vm.overcommit_memory = 1
+' | sudo tee /etc/sysctl.d/99-redis.conf
+sudo sysctl -p /etc/sysctl.d/99-redis.conf
+```
+
+Redis برای کاهش Fork Failure مقدار vm.overcommit_memory=1 را توصیه می‌کند؛ این Policy کل Host را تغییر می‌دهد و روی Host مشترک باید هماهنگ شود. در Redis 8.10.2 پیش‌فرض disable-thp yes در صورت نیاز اثر نامناسب THP را برای Process Redis محدود می‌کند؛ Config اجراشده و Latency را بررسی کنید، نه اینکه Script قدیمی غیرفعال‌کردن سراسری THP را کورکورانه کپی کنید. File Limit سرویس و Listen Backlog را با بار Client اندازه‌گیری‌شده تطبیق دهید. Swap را مطابق Policy Host برای وضعیت اضطراری ظرفیت Provision کنید اما Swap واقعی Redis را Incident فوری Latency بدانید، نه حاشیه ظرفیت روزمره.
+
+[پیش‌نیازهای رسمی Administration در Linux](https://redis.io/docs/latest/operate/oss_and_stack/management/admin/)
 
 ## ۲۲. Runbook عملیاتی Troubleshooting
 
@@ -1018,7 +1018,7 @@ allkeys-lru با maxmemory صریح و TTL برنامه. Session، Queue و Lock
 
 ## منابع رسمی و Templateهای استقرار
 
-در بخش‌های مرتبط به مستندات رسمی Redis لینک داده شده است. Stable Patch با Repository رسمی در ۷ اکتبر ۲۰۲۶ بررسی شده؛ پیش از هر Release نسخه را دوباره بررسی کنید. Fragmentهای Download هیچ Secret واقعی ندارند. آن‌ها را در Staging بررسی‌شده به‌کار ببرید، Marker اجباری Secret را جایگزین، مسیر Module بسته را حفظ و سرویس مقصد واقعی را پیش از Production تأیید کنید.
+در بخش‌های مرتبط به مستندات رسمی Redis لینک داده شده است. پیش از هر Release نسخه را دوباره بررسی کنید. Fragmentهای Download هیچ Secret واقعی ندارند. آن‌ها را در Staging بررسی‌شده به‌کار ببرید، Marker اجباری Secret را جایگزین، مسیر Module بسته را حفظ و سرویس مقصد واقعی را پیش از Production تأیید کنید.
 
 [Command Reference نسخه Redis 8.10](https://redis.io/docs/latest/commands/redis-8-10-commands/)
 

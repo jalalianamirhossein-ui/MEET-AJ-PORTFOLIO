@@ -20,14 +20,16 @@ The homepage retains its existing person/site structured data. Imported images u
 
 ## Sitemap and redirects
 
-`GET /sitemap.xml` is generated from published English article identities. With the current library it contains the homepage plus published clean article URLs (28 published local rows on 2026-10-06). Article `lastmod` uses the stored modification date. Draft/future/German articles and removed service detail pages are excluded. The article library itself is not currently a separate sitemap entry.
+`GET /sitemap.xml` is generated from published English article identities. It contains the homepage, the canonical `/articles` library and published clean article URLs. Article `lastmod` uses the stored modification date. Draft/future/non-English rows, articles marked `noindex` or `none`, and removed service detail pages are excluded. Homepage/library `lastmod` is omitted because their content comes from multiple CMS records and templates; the archived legacy homepage's file timestamp does not represent their last significant update.
 
 Legacy `/articles/{slug}.html` URLs redirect once to the clean path, removing `lang` while preserving unrelated query parameters. `/index.html` redirects to `/`. Slug-history redirects work through `article_redirects`; unknown or unpublished destinations return 404. Removed `/services/...` routes return 404.
 
 `robots.txt` excludes `/admin`, `/livewire` and `/forms` and points to the configured sitemap. Robots rules do not replace authorization.
 
+Both endpoints are served by `SitemapController`/`RobotsController`; XML is rendered through `resources/views/seo/sitemap.blade.php`. The files in `resources/legacy` are historical exports. Do not copy them to `public`: static files there would bypass the dynamic routes, and `site:publish-assets` rejects them.
+
 ## Deployment checks
 
-Set `APP_URL` to the real canonical HTTPS origin. Deploy PHP/views/assets together. Check the same article URL with no preference and with cookie `lang=fa`, then the sitemap and redirects. A CDN must forward the preference cookie and respect the article response's `Cache-Control: private`; do not force shared caching of article HTML. Publish the versioned assets and purge stale application/CDN responses after a release. Updating source content also requires the reviewed import procedure.
+Set `APP_URL` to the real canonical origin, including the actual HTTP/HTTPS scheme configured by hosting; sitemap and robots must agree with it. Deploy PHP/views/assets together. Check the same article URL with no preference and with cookie `lang=fa`, then the sitemap and redirects. A CDN must forward the preference cookie and respect the article response's `Cache-Control: private`; do not force shared caching of article HTML. Publish the versioned assets and purge stale application/CDN responses after a release. Updating source content also requires the reviewed import procedure.
 
 See [DEPLOYMENT.md](DEPLOYMENT.md), [MULTILINGUAL.md](MULTILINGUAL.md) and [the current audit](../qa/FULL-AUDIT-2026-10-01.md). Production crawler/indexing checks were not performed in this local review.

@@ -199,6 +199,7 @@
     "installation": [
       "Record the current state. Only one daemon should own synchronization. Installing chrony normally replaces timesyncd, but verify the resulting service states.",
       "Review existing pool/server lines and generated sourcedir entries in /etc/chrony/chrony.conf. Remove conflicting sources only after identifying their ownership. These complete source lines replace public sources with approved internal ones.",
+      "Run the following commands one at a time. After printing the configuration with chronyd -p and before restarting, inspect makestep and DHCP-supplied sources. If abrupt clock correction is unacceptable, align policy with the workload and use an appropriate maintenance window.",
       "Expect a source marked ^*, Reach approaching 377 over multiple polls and Leap status: Normal. Reverse DNS may change the displayed source name. Do not run makestep on production with a large offset until its effects on databases and scheduling have been assessed."
     ],
     "security": "An NTP client should not accidentally become a public time server. Restrict egress to approved sources. Where authenticated time is required, design NTS with a supporting server. Two servers with the same upstream dependency do not provide source diversity.",
@@ -881,6 +882,7 @@
       "This lab example uses a fresh VM. Check executable location with command -v, install the approved gem and record actual versions.",
       "Pin the observed version and preserve its artifact before production rollout. Store complete config at /var/lib/oxidized/.config/oxidized/config with mode 600; replace credentials with vault secrets.",
       "The sample router.db line is core-sw01.corp.example.com:ios. Verify DNS/SSH fingerprints through a trusted path and negatively test secure/strict-verification behavior for this input version. Permit model-required commands without assigning privilege 15 by default.",
+      "Before the foreground test, provision known hosts for the service identity. Ssh-keyscan collects keys but does not authenticate them. Compare fingerprints through the console before installing approved entries.",
       "This is a foreground test. Substitute the actual executable path. Stop it after a successful poll, then install the unit with that same path.",
       "Git output is commonly bare: cat on a working-tree path is inappropriate. Inspect ls-tree, then git show HEAD:node-name. Match successful logs to an actually collected node."
     ],
@@ -925,7 +927,7 @@
     "architecture": "Client → AD referral/DFS-N → SMB target. Separately, DFS-R replicates closed files between members. Multi-master replication does not provide cross-site file locking.",
     "installation": [
       "Prepare roles and paths on both file servers. D: must be suitable NTFS storage. CORP FileUsers represents the actual organizational group.",
-      "Design/apply NTFS ACLs with the data owner; share permissions do not grant NTFS access. Continue from a management host with modules and delegation.",
+      "Design and apply NTFS permissions with the data owner; share permissions alone do not grant NTFS access. Then run the following commands from a management host with the DFSN and DFSR modules and the required delegated permissions.",
       "Add-DfsrConnection creates the reverse connection by default; inspect Get-DfsrConnection. Do not repeat creation on existing deployments. AD propagation/initial sync takes time. PrimaryMember selects the initial source only. FS02 starts Offline so clients receive no referrals before acceptance; also restrict direct user access to its share during initial sync. Accept only after a closed canary file reaches FS02 with the same hash and both backlogs reach zero. Run the following commands to bring that target Online only after these checks pass."
     ],
     "security": "Scope SMB and RPC/DFSR to members and consumer subnets using official Windows Firewall guidance. Coordinate dynamic RPC ranges with policy. Review share/NTFS ACLs, SMB signing and access audit. End users should not write to the namespace root.",

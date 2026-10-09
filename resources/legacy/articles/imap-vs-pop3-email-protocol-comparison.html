@@ -323,15 +323,6 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-architecture"
-              ><span
-                data-fa="دریافت، ارسال و احراز هویت"
-                data-en="Retrieval, sending and authentication"
-                >Retrieval, sending and authentication</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#enterprise-prerequisites"
               ><span
                 data-fa="اطلاعات Provider و مجوز پروتکل"
@@ -341,20 +332,11 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-installation"
+            <a href="#enterprise-architecture"
               ><span
-                data-fa="تنظیم کلاینت و آزمون TLS"
-                data-en="Configure the client and test TLS"
-                >Configure the client and test TLS</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#enterprise-troubleshooting"
-              ><span
-                data-fa="تفکیک مشکل دریافت و ارسال"
-                data-en="Separate retrieval and sending failures"
-                >Separate retrieval and sending failures</span
+                data-fa="دریافت، ارسال و احراز هویت"
+                data-en="Retrieval, sending and authentication"
+                >Retrieval, sending and authentication</span
               ></a
             >
           </li>
@@ -368,11 +350,29 @@
             >
           </li>
           <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="تنظیم کلاینت و آزمون TLS"
+                data-en="Configure the client and test TLS"
+                >Configure the client and test TLS</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
             <a href="#enterprise-monitoring"
               ><span
                 data-fa="سلامت Sync و Quota"
                 data-en="Synchronization health and quota"
                 >Synchronization health and quota</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="تفکیک مشکل دریافت و ارسال"
+                data-en="Separate retrieval and sending failures"
+                >Separate retrieval and sending failures</span
               ></a
             >
           </li>
@@ -640,39 +640,6 @@
                       does not imply that Basic Authentication is available.
                     </p>
                   </section>
-                  <section id="enterprise-architecture" class="article-section">
-                    <h2
-                      data-fa="دریافت، ارسال و احراز هویت"
-                      data-en="Retrieval, sending and authentication"
-                    >
-                      Retrieval, sending and authentication
-                    </h2>
-                    <p
-                      data-fa="IMAP و POP3 مسیر دریافت‌اند. SMTP Submission مسیر ارسال است و تنظیم احراز هویت خود را دارد. TLS انتقال را محافظت می‌کند و OAuth دسترسی هویتی را کنترل می‌کند. TLS موفق، مجوز ورود یا ارسال را ثابت نمی‌کند."
-                      data-en="IMAP and POP3 handle retrieval. SMTP submission handles sending with its own authentication. TLS protects transport, while OAuth manages identity access. Working TLS proves neither login nor submission permission."
-                    >
-                      IMAP and POP3 handle retrieval. SMTP submission handles
-                      sending with its own authentication. TLS protects
-                      transport, while OAuth manages identity access. Working
-                      TLS proves neither login nor submission permission.
-                    </p>
-                    <h3
-                      id="enterprise-scenario"
-                      data-fa="مثال: موبایل و دسکتاپ یک کاربر"
-                      data-en="Example: one user on mobile and desktop"
-                    >
-                      Example: one user on mobile and desktop
-                    </h3>
-                    <p
-                      data-fa="برای Folder و وضعیت خواندن مشترک، IMAP یا کلاینت رسمی Provider مناسب‌تر است. پیش از مهاجرت از POP3، پیام‌های فقط محلی را Export کنید و رفتار حذف را با Mailbox آزمایشی بسنجید."
-                      data-en="For shared folders and read state, prefer IMAP or the provider’s native client. Before migrating from POP3, export local-only messages and test deletion behavior with a dedicated mailbox."
-                    >
-                      For shared folders and read state, prefer IMAP or the
-                      provider’s native client. Before migrating from POP3,
-                      export local-only messages and test deletion behavior with
-                      a dedicated mailbox.
-                    </p>
-                  </section>
                   <section
                     id="enterprise-prerequisites"
                     class="article-section"
@@ -721,6 +688,57 @@
                       POP3 does not invariably delete retrieved messages. Client
                       and server settings determine retention. Keeping a server
                       copy still does not guarantee deleted-version recovery.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="دریافت، ارسال و احراز هویت"
+                      data-en="Retrieval, sending and authentication"
+                    >
+                      Retrieval, sending and authentication
+                    </h2>
+                    <p
+                      data-fa="IMAP و POP3 مسیر دریافت‌اند. SMTP Submission مسیر ارسال است و تنظیم احراز هویت خود را دارد. TLS انتقال را محافظت می‌کند و OAuth دسترسی هویتی را کنترل می‌کند. TLS موفق، مجوز ورود یا ارسال را ثابت نمی‌کند."
+                      data-en="IMAP and POP3 handle retrieval. SMTP submission handles sending with its own authentication. TLS protects transport, while OAuth manages identity access. Working TLS proves neither login nor submission permission."
+                    >
+                      IMAP and POP3 handle retrieval. SMTP submission handles
+                      sending with its own authentication. TLS protects
+                      transport, while OAuth manages identity access. Working
+                      TLS proves neither login nor submission permission.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: موبایل و دسکتاپ یک کاربر"
+                      data-en="Example: one user on mobile and desktop"
+                    >
+                      Example: one user on mobile and desktop
+                    </h3>
+                    <p
+                      data-fa="برای Folder و وضعیت خواندن مشترک، IMAP یا کلاینت رسمی Provider مناسب‌تر است. پیش از مهاجرت از POP3، پیام‌های فقط محلی را Export کنید و رفتار حذف را با Mailbox آزمایشی بسنجید."
+                      data-en="For shared folders and read state, prefer IMAP or the provider’s native client. Before migrating from POP3, export local-only messages and test deletion behavior with a dedicated mailbox."
+                    >
+                      For shared folders and read state, prefer IMAP or the
+                      provider’s native client. Before migrating from POP3,
+                      export local-only messages and test deletion behavior with
+                      a dedicated mailbox.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="TLS و روش ورود پشتیبانی‌شده"
+                      data-en="TLS and supported authentication"
+                    >
+                      TLS and supported authentication
+                    </h2>
+                    <p
+                      data-fa="روی 110 و 143 بدون STARTTLS اجباری Credential ارسال نکنید. روی 993 و 995، TLS از شروع اتصال فعال است. SMTP روی 587 معمولاً از STARTTLS استفاده می‌کند. Basic Authentication یا App Password را فقط با پشتیبانی Provider و Policy مجاز انتخاب کنید."
+                      data-en="Never send credentials on 110 or 143 without enforced STARTTLS. Ports 993 and 995 start TLS immediately, while SMTP 587 commonly uses STARTTLS. Use Basic authentication or app passwords only where provider support and policy permit them."
+                    >
+                      Never send credentials on 110 or 143 without enforced
+                      STARTTLS. Ports 993 and 995 start TLS immediately, while
+                      SMTP 587 commonly uses STARTTLS. Use Basic authentication
+                      or app passwords only where provider support and policy
+                      permit them.
                     </p>
                   </section>
                   <section id="enterprise-installation" class="article-section">
@@ -779,6 +797,23 @@ a002 LOGOUT</code></pre>
                       SMTP sending separately.
                     </p>
                   </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="سلامت Sync و Quota"
+                      data-en="Synchronization health and quota"
+                    >
+                      Synchronization health and quota
+                    </h2>
+                    <p
+                      data-fa="خطای ورود، پرشدن Mailbox و تأخیر Sync را جدا از تأخیر تحویل ثبت کنید. برای آزمون خودکار، Mailbox کم‌اختیار اختصاصی داشته باشید و Credential آن را در Dashboard منتشر نکنید."
+                      data-en="Track authentication failures, mailbox capacity and sync delays separately from delivery latency. Use a dedicated restricted mailbox for synthetic tests and keep credentials out of dashboards."
+                    >
+                      Track authentication failures, mailbox capacity and sync
+                      delays separately from delivery latency. Use a dedicated
+                      restricted mailbox for synthetic tests and keep
+                      credentials out of dashboards.
+                    </p>
+                  </section>
                   <section
                     id="enterprise-troubleshooting"
                     class="article-section"
@@ -798,41 +833,6 @@ a002 LOGOUT</code></pre>
                       subscription, cache and POP3 deletion checks. Healthy
                       retrieval with failed sending points to SMTP. Preserve
                       local messages and PST files before deleting profiles.
-                    </p>
-                  </section>
-                  <section id="enterprise-security" class="article-section">
-                    <h2
-                      data-fa="TLS و روش ورود پشتیبانی‌شده"
-                      data-en="TLS and supported authentication"
-                    >
-                      TLS and supported authentication
-                    </h2>
-                    <p
-                      data-fa="روی 110 و 143 بدون STARTTLS اجباری Credential ارسال نکنید. روی 993 و 995، TLS از شروع اتصال فعال است. SMTP روی 587 معمولاً از STARTTLS استفاده می‌کند. Basic Authentication یا App Password را فقط با پشتیبانی Provider و Policy مجاز انتخاب کنید."
-                      data-en="Never send credentials on 110 or 143 without enforced STARTTLS. Ports 993 and 995 start TLS immediately, while SMTP 587 commonly uses STARTTLS. Use Basic authentication or app passwords only where provider support and policy permit them."
-                    >
-                      Never send credentials on 110 or 143 without enforced
-                      STARTTLS. Ports 993 and 995 start TLS immediately, while
-                      SMTP 587 commonly uses STARTTLS. Use Basic authentication
-                      or app passwords only where provider support and policy
-                      permit them.
-                    </p>
-                  </section>
-                  <section id="enterprise-monitoring" class="article-section">
-                    <h2
-                      data-fa="سلامت Sync و Quota"
-                      data-en="Synchronization health and quota"
-                    >
-                      Synchronization health and quota
-                    </h2>
-                    <p
-                      data-fa="خطای ورود، پرشدن Mailbox و تأخیر Sync را جدا از تأخیر تحویل ثبت کنید. برای آزمون خودکار، Mailbox کم‌اختیار اختصاصی داشته باشید و Credential آن را در Dashboard منتشر نکنید."
-                      data-en="Track authentication failures, mailbox capacity and sync delays separately from delivery latency. Use a dedicated restricted mailbox for synthetic tests and keep credentials out of dashboards."
-                    >
-                      Track authentication failures, mailbox capacity and sync
-                      delays separately from delivery latency. Use a dedicated
-                      restricted mailbox for synthetic tests and keep
-                      credentials out of dashboards.
                     </p>
                   </section>
                   <section id="enterprise-recovery" class="article-section">

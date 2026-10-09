@@ -173,20 +173,20 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#architecture"
-              ><span
-                data-en="2. Architecture and server requirements"
-                data-fa="۲. معماری و پیش‌نیازهای سرور"
-                >2. Architecture and server requirements</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#prerequisites"
               ><span
                 data-en="Server prerequisites and directory plan"
                 data-fa="پیش‌نیازهای سرور و طرح مسیرها"
                 >Server prerequisites and directory plan</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#architecture"
+              ><span
+                data-en="2. Architecture and server requirements"
+                data-fa="۲. معماری و پیش‌نیازهای سرور"
+                >2. Architecture and server requirements</span
               ></a
             >
           </li>
@@ -435,43 +435,6 @@
             >
           </p>
         </section>
-        <section id="architecture">
-          <h2
-            data-en="2. Architecture and server requirements"
-            data-fa="۲. معماری و پیش‌نیازهای سرور"
-          >
-            2. Architecture and server requirements
-          </h2>
-          <figure>
-            <img
-              src="/assets/img/articles/content/apache-tomcat-production-architecture.png"
-              width="1920"
-              height="1080"
-              loading="lazy"
-              decoding="async"
-              alt="Internet through firewall and Nginx TLS on 443 to localhost Tomcat 8080 and a Java application in the JVM"
-              data-en-alt="Internet through firewall and Nginx TLS on 443 to localhost Tomcat 8080 and a Java application in the JVM"
-              data-fa-alt="ارتباط اینترنت از Firewall و Nginx با TLS روی 443 به Tomcat محلی روی 8080 و برنامه Java داخل JVM"
-            />
-            <figcaption>
-              <span
-                data-en="Internet through firewall and Nginx TLS on 443 to localhost Tomcat 8080 and a Java application in the JVM"
-                data-fa="ارتباط اینترنت از Firewall و Nginx با TLS روی 443 به Tomcat محلی روی 8080 و برنامه Java داخل JVM"
-                >Internet through firewall and Nginx TLS on 443 to localhost
-                Tomcat 8080 and a Java application in the JVM</span
-              >
-            </figcaption>
-          </figure>
-          <pre
-            dir="ltr"
-          ><code class="language-text">Internet -&gt; Firewall -&gt; Nginx HTTPS :443
-                            |
-                            v
-                 Tomcat 127.0.0.1:8080
-                            |
-                            v
-                   Java application (JVM)</code></pre>
-        </section>
         <section id="prerequisites">
           <h2
             data-en="Server prerequisites and directory plan"
@@ -624,6 +587,43 @@ getent hosts tomcat.example.com</code></pre>
             heap dumps as sensitive data, with quotas and restricted retention.
           </p>
         </section>
+        <section id="architecture">
+          <h2
+            data-en="2. Architecture and server requirements"
+            data-fa="۲. معماری و پیش‌نیازهای سرور"
+          >
+            2. Architecture and server requirements
+          </h2>
+          <figure>
+            <img
+              src="/assets/img/articles/content/apache-tomcat-production-architecture.png"
+              width="1920"
+              height="1080"
+              loading="lazy"
+              decoding="async"
+              alt="Internet through firewall and Nginx TLS on 443 to localhost Tomcat 8080 and a Java application in the JVM"
+              data-en-alt="Internet through firewall and Nginx TLS on 443 to localhost Tomcat 8080 and a Java application in the JVM"
+              data-fa-alt="ارتباط اینترنت از Firewall و Nginx با TLS روی 443 به Tomcat محلی روی 8080 و برنامه Java داخل JVM"
+            />
+            <figcaption>
+              <span
+                data-en="Internet through firewall and Nginx TLS on 443 to localhost Tomcat 8080 and a Java application in the JVM"
+                data-fa="ارتباط اینترنت از Firewall و Nginx با TLS روی 443 به Tomcat محلی روی 8080 و برنامه Java داخل JVM"
+                >Internet through firewall and Nginx TLS on 443 to localhost
+                Tomcat 8080 and a Java application in the JVM</span
+              >
+            </figcaption>
+          </figure>
+          <pre
+            dir="ltr"
+          ><code class="language-text">Internet -&gt; Firewall -&gt; Nginx HTTPS :443
+                            |
+                            v
+                 Tomcat 127.0.0.1:8080
+                            |
+                            v
+                   Java application (JVM)</code></pre>
+        </section>
         <section id="versions">
           <h2
             data-en="3. Verified stable release and Java compatibility"
@@ -632,10 +632,10 @@ getent hosts tomcat.example.com</code></pre>
             3. Verified stable release and Java compatibility
           </h2>
           <p
-            data-en="Verified on 9 October 2026: the official Apache download and version matrix list Tomcat 11.0.26 as the latest stable 11 release. The example pins that version and uses Java 21 LTS from maintained distribution packages. Java 21 is a deliberate compatible choice, not a claim that it is the newest Java feature release. Recheck Apache security advisories and the stable download page before every installation; a pinned example will age."
-            data-fa="در ۹ اکتبر ۲۰۲۶، صفحه Download و Version Matrix رسمی Apache نسخه 11.0.26 را آخرین Stable شاخه 11 معرفی می‌کنند. مثال همین نسخه را Pin و Java 21 LTS را از بسته نگهداری‌شده توزیع نصب می‌کند. Java 21 انتخاب سازگار آگاهانه است، نه ادعای جدیدترین Feature Release جاوا. پیش از هر نصب، Security Advisory و صفحه Stable را دوباره بررسی کنید؛ نسخه ثابت مثال با زمان قدیمی می‌شود."
+            data-en="the official Apache download and version matrix list Tomcat 11.0.26 as the latest stable 11 release. The example pins that version and uses Java 21 LTS from maintained distribution packages. Java 21 is a deliberate compatible choice, not a claim that it is the newest Java feature release. Recheck Apache security advisories and the stable download page before every installation; a pinned example will age."
+            data-fa="صفحه Download و Version Matrix رسمی Apache نسخه 11.0.26 را آخرین Stable شاخه 11 معرفی می‌کنند. مثال همین نسخه را Pin و Java 21 LTS را از بسته نگهداری‌شده توزیع نصب می‌کند. Java 21 انتخاب سازگار آگاهانه است، نه ادعای جدیدترین Feature Release جاوا. پیش از هر نصب، Security Advisory و صفحه Stable را دوباره بررسی کنید؛ نسخه ثابت مثال با زمان قدیمی می‌شود."
           >
-            Verified on 9 October 2026: the official Apache download and version
+            the official Apache download and version
             matrix list Tomcat 11.0.26 as the latest stable 11 release. The
             example pins that version and uses Java 21 LTS from maintained
             distribution packages. Java 21 is a deliberate compatible choice,

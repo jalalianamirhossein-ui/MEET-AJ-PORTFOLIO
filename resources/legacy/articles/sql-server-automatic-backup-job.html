@@ -410,21 +410,21 @@
             >
           </li>
           <li class="article-nav-item">
+            <a href="#prerequisites"
+              ><span
+                data-fa="نسخه‌ها، هویت سرویس و حدود اجرا"
+                data-en="Versions, service identities and implementation scope"
+                >Versions, service identities and implementation scope</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
             <a href="#architecture"
               ><span
                 data-fa="طراحی زمان‌بندی و زنجیره برای Jira و Confluence"
                 data-en="Design schedules and recovery chains for Jira and Confluence"
                 >Design schedules and recovery chains for Jira and
                 Confluence</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#prerequisites"
-              ><span
-                data-fa="نسخه‌ها، هویت سرویس و حدود اجرا"
-                data-en="Versions, service identities and implementation scope"
-                >Versions, service identities and implementation scope</span
               ></a
             >
           </li>
@@ -474,6 +474,15 @@
             >
           </li>
           <li class="article-nav-item">
+            <a href="#security"
+              ><span
+                data-fa="Encryption و بازیابی Certificate و Private Key"
+                data-en="Encryption and certificate/private-key recovery"
+                >Encryption and certificate/private-key recovery</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
             <a href="#validation"
               ><span
                 data-fa="History، VERIFYONLY و Restore واقعی"
@@ -488,15 +497,6 @@
                 data-fa="تشخیص خطای Job از Audit تا Storage"
                 data-en="Diagnose job failures from audit to storage"
                 >Diagnose job failures from audit to storage</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#security"
-              ><span
-                data-fa="Encryption و بازیابی Certificate و Private Key"
-                data-en="Encryption and certificate/private-key recovery"
-                >Encryption and certificate/private-key recovery</span
               ></a
             >
           </li>
@@ -681,6 +681,97 @@
                     copies outside primary storage.
                   </p>
                 </section>
+                <section id="prerequisites" class="article-section">
+                  <h2
+                    data-fa="نسخه‌ها، هویت سرویس و حدود اجرا"
+                    data-en="Versions, service identities and implementation scope"
+                  >
+                    Versions, service identities and implementation scope
+                  </h2>
+                  <ul>
+                    <li
+                      data-fa="سناریو برای SQL Server 2019 یا 2022 روی Windows، نسخهٔ Standard، Enterprise یا Developer و Instance مستقل است. Developer فقط برای محیط غیرتولیدی است. SQL Server Express فاقد SQL Server Agent است. برای آن باید زمان‌بند دیگری مانند Windows Task Scheduler طراحی شود."
+                      data-en="This scenario uses standalone SQL Server 2019/2022 on Windows with Standard, Enterprise or Developer. Developer is nonproduction only. Express lacks SQL Server Agent and requires a separately designed scheduler such as Windows Task Scheduler."
+                    >
+                      This scenario uses standalone SQL Server 2019/2022 on
+                      Windows with Standard, Enterprise or Developer. Developer
+                      is nonproduction only. Express lacks SQL Server Agent and
+                      requires a separately designed scheduler such as Windows
+                      Task Scheduler.
+                    </li>
+                    <li
+                      data-fa="SQL Server Agent باید Running باشد و Startup Type مناسب داشته باشد. این کد برای Azure SQL Database، Availability Group یا مسیر UNC نوشته نشده است. در AG باید سیاست Replica و محدودیت نسخهٔ SQL Server جداگانه بررسی شود."
+                      data-en="Agent must be running with an appropriate startup setting. This implementation does not target Azure SQL Database, Availability Groups or UNC storage. AG deployments require separate replica-policy and SQL-version assessment."
+                    >
+                      Agent must be running with an appropriate startup setting.
+                      This implementation does not target Azure SQL Database,
+                      Availability Groups or UNC storage. AG deployments require
+                      separate replica-policy and SQL-version assessment.
+                    </li>
+                    <li
+                      data-fa="بکاپ با هویت سرویس Database Engine روی دیسک نوشته می‌شود. ساخت فولدر و Cleanup با هویت CmdExec Proxy اجرا می‌شوند. مجوز یکی، جایگزین مجوز دیگری نیست."
+                      data-en="The Database Engine service identity writes backups. A CmdExec proxy creates folders and performs cleanup. Permissions for one identity do not substitute for the other."
+                    >
+                      The Database Engine service identity writes backups. A
+                      CmdExec proxy creates folders and performs cleanup.
+                      Permissions for one identity do not substitute for the
+                      other.
+                    </li>
+                    <li
+                      data-fa="روی مسیر اختصاصی Backup، به سرویس Database Engine مجوز لازم برای خواندن و نوشتن و به حساب Proxy مجوز ساخت فولدر و حذف فایل بدهید. از Everyone و مجوزهای گسترده پرهیز کنید. پوشهٔ اسکریپت‌ها برای Proxy فقط Read/Execute باشد و تغییر آن در اختیار DBA یا مدیر سیستم بماند."
+                      data-en="Grant the engine required reads/writes on dedicated backup paths and the proxy folder-creation/file-deletion rights. Avoid Everyone and broad grants. Restrict the script directory to proxy Read/Execute and DBA/system-administrator modifications."
+                    >
+                      Grant the engine required reads/writes on dedicated backup
+                      paths and the proxy folder-creation/file-deletion rights.
+                      Avoid Everyone and broad grants. Restrict the script
+                      directory to proxy Read/Execute and
+                      DBA/system-administrator modifications.
+                    </li>
+                    <li
+                      data-fa="اسکریپت‌های PowerShell از Windows PowerShell 5.1 و کتابخانهٔ داخلی SqlClient استفاده می‌کنند و به نصب ماژول SqlServer نیاز ندارند. اتصال Integrated Security، رمزگذاری TLS و اعتبارسنجی Certificate فعال است. مقدار localhost را در محیط واقعی با نام Instance/FQDN مطابق Certificate معتبر جایگزین کنید. TrustServerCertificate را برای رفع خطا خاموش و روشن نکنید."
+                      data-en="PowerShell uses Windows PowerShell 5.1 and built-in SqlClient. The SqlServer module is unnecessary. Integrated Security, TLS encryption and certificate validation are enabled. Replace localhost with an instance/FQDN matching a trusted certificate. Do not toggle TrustServerCertificate to conceal trust errors."
+                    >
+                      PowerShell uses Windows PowerShell 5.1 and built-in
+                      SqlClient. The SqlServer module is unnecessary. Integrated
+                      Security, TLS encryption and certificate validation are
+                      enabled. Replace localhost with an instance/FQDN matching
+                      a trusted certificate. Do not toggle
+                      TrustServerCertificate to conceal trust errors.
+                    </li>
+                    <li
+                      data-fa="هشت نام Whitelist مثال هستند. دیتابیس‌های ناموجود را پیش از تست غیرفعال کنید. اسکریپت آن‌ها را بی‌صدا رد نمی‌کند. System Databaseها در این Job ممنوع‌اند. برای master، model و msdb برنامهٔ جداگانه لازم است. tempdb بکاپ‌پذیر نیست."
+                      data-en="The eight whitelist names are examples. Disable absent databases before testing. The procedure does not silently skip them. System databases are rejected: protect master, model and msdb separately. Tempdb cannot be backed up."
+                    >
+                      The eight whitelist names are examples. Disable absent
+                      databases before testing. The procedure does not silently
+                      skip them. System databases are rejected: protect master,
+                      model and msdb separately. Tempdb cannot be backed up.
+                    </li>
+                  </ul>
+                  <p
+                    data-fa="COMPRESSION حجم و I/O Backup را کم می‌کند، ولی هزینهٔ CPU دارد. پیش از فعال‌سازی روی ساعات پرترافیک، مدت اجرا و بار CPU را اندازه بگیرید. محدودیت‌ها و پشتیبانی Compression"
+                    data-en="COMPRESSION reduces backup size and IO at a CPU cost. Measure duration and CPU before enabling it during busy periods and check edition/version support."
+                  >
+                    COMPRESSION reduces backup size and IO at a CPU cost.
+                    Measure duration and CPU before enabling it during busy
+                    periods and check edition/version support.
+                    <a
+                      href="https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/backup-compression-sql-server?view&#61;sql-server-ver17"
+                      target="_blank"
+                      rel="noopener"
+                      >Official documentation</a
+                    >
+                  </p>
+                  <p
+                    data-fa="Backup نسخه جدیدتر SQL Server روی Engine قدیمی‌تر Restore نمی‌شود. مقصد Restore را پیش از حادثه با نسخه و Certificateهای موردنیاز آماده کنید."
+                    data-en="A backup from a newer SQL Server engine does not restore to an older engine. Prepare the restore destination with compatible versions and required certificates before an incident."
+                  >
+                    A backup from a newer SQL Server engine does not restore to
+                    an older engine. Prepare the restore destination with
+                    compatible versions and required certificates before an
+                    incident.
+                  </p>
+                </section>
                 <section id="architecture" class="article-section">
                   <h2
                     data-fa="طراحی زمان‌بندی و زنجیره برای Jira و Confluence"
@@ -828,97 +919,6 @@
                     Jira/Confluence also require coordinated Application Home,
                     Shared Home, attachments and configuration according to
                     their installed-version guidance.
-                  </p>
-                </section>
-                <section id="prerequisites" class="article-section">
-                  <h2
-                    data-fa="نسخه‌ها، هویت سرویس و حدود اجرا"
-                    data-en="Versions, service identities and implementation scope"
-                  >
-                    Versions, service identities and implementation scope
-                  </h2>
-                  <ul>
-                    <li
-                      data-fa="سناریو برای SQL Server 2019 یا 2022 روی Windows، نسخهٔ Standard، Enterprise یا Developer و Instance مستقل است. Developer فقط برای محیط غیرتولیدی است. SQL Server Express فاقد SQL Server Agent است. برای آن باید زمان‌بند دیگری مانند Windows Task Scheduler طراحی شود."
-                      data-en="This scenario uses standalone SQL Server 2019/2022 on Windows with Standard, Enterprise or Developer. Developer is nonproduction only. Express lacks SQL Server Agent and requires a separately designed scheduler such as Windows Task Scheduler."
-                    >
-                      This scenario uses standalone SQL Server 2019/2022 on
-                      Windows with Standard, Enterprise or Developer. Developer
-                      is nonproduction only. Express lacks SQL Server Agent and
-                      requires a separately designed scheduler such as Windows
-                      Task Scheduler.
-                    </li>
-                    <li
-                      data-fa="SQL Server Agent باید Running باشد و Startup Type مناسب داشته باشد. این کد برای Azure SQL Database، Availability Group یا مسیر UNC نوشته نشده است. در AG باید سیاست Replica و محدودیت نسخهٔ SQL Server جداگانه بررسی شود."
-                      data-en="Agent must be running with an appropriate startup setting. This implementation does not target Azure SQL Database, Availability Groups or UNC storage. AG deployments require separate replica-policy and SQL-version assessment."
-                    >
-                      Agent must be running with an appropriate startup setting.
-                      This implementation does not target Azure SQL Database,
-                      Availability Groups or UNC storage. AG deployments require
-                      separate replica-policy and SQL-version assessment.
-                    </li>
-                    <li
-                      data-fa="بکاپ با هویت سرویس Database Engine روی دیسک نوشته می‌شود. ساخت فولدر و Cleanup با هویت CmdExec Proxy اجرا می‌شوند. مجوز یکی، جایگزین مجوز دیگری نیست."
-                      data-en="The Database Engine service identity writes backups. A CmdExec proxy creates folders and performs cleanup. Permissions for one identity do not substitute for the other."
-                    >
-                      The Database Engine service identity writes backups. A
-                      CmdExec proxy creates folders and performs cleanup.
-                      Permissions for one identity do not substitute for the
-                      other.
-                    </li>
-                    <li
-                      data-fa="روی مسیر اختصاصی Backup، به سرویس Database Engine مجوز لازم برای خواندن و نوشتن و به حساب Proxy مجوز ساخت فولدر و حذف فایل بدهید. از Everyone و مجوزهای گسترده پرهیز کنید. پوشهٔ اسکریپت‌ها برای Proxy فقط Read/Execute باشد و تغییر آن در اختیار DBA یا مدیر سیستم بماند."
-                      data-en="Grant the engine required reads/writes on dedicated backup paths and the proxy folder-creation/file-deletion rights. Avoid Everyone and broad grants. Restrict the script directory to proxy Read/Execute and DBA/system-administrator modifications."
-                    >
-                      Grant the engine required reads/writes on dedicated backup
-                      paths and the proxy folder-creation/file-deletion rights.
-                      Avoid Everyone and broad grants. Restrict the script
-                      directory to proxy Read/Execute and
-                      DBA/system-administrator modifications.
-                    </li>
-                    <li
-                      data-fa="اسکریپت‌های PowerShell از Windows PowerShell 5.1 و کتابخانهٔ داخلی SqlClient استفاده می‌کنند و به نصب ماژول SqlServer نیاز ندارند. اتصال Integrated Security، رمزگذاری TLS و اعتبارسنجی Certificate فعال است. مقدار localhost را در محیط واقعی با نام Instance/FQDN مطابق Certificate معتبر جایگزین کنید. TrustServerCertificate را برای رفع خطا خاموش و روشن نکنید."
-                      data-en="PowerShell uses Windows PowerShell 5.1 and built-in SqlClient. The SqlServer module is unnecessary. Integrated Security, TLS encryption and certificate validation are enabled. Replace localhost with an instance/FQDN matching a trusted certificate. Do not toggle TrustServerCertificate to conceal trust errors."
-                    >
-                      PowerShell uses Windows PowerShell 5.1 and built-in
-                      SqlClient. The SqlServer module is unnecessary. Integrated
-                      Security, TLS encryption and certificate validation are
-                      enabled. Replace localhost with an instance/FQDN matching
-                      a trusted certificate. Do not toggle
-                      TrustServerCertificate to conceal trust errors.
-                    </li>
-                    <li
-                      data-fa="هشت نام Whitelist مثال هستند. دیتابیس‌های ناموجود را پیش از تست غیرفعال کنید. اسکریپت آن‌ها را بی‌صدا رد نمی‌کند. System Databaseها در این Job ممنوع‌اند. برای master، model و msdb برنامهٔ جداگانه لازم است. tempdb بکاپ‌پذیر نیست."
-                      data-en="The eight whitelist names are examples. Disable absent databases before testing. The procedure does not silently skip them. System databases are rejected: protect master, model and msdb separately. Tempdb cannot be backed up."
-                    >
-                      The eight whitelist names are examples. Disable absent
-                      databases before testing. The procedure does not silently
-                      skip them. System databases are rejected: protect master,
-                      model and msdb separately. Tempdb cannot be backed up.
-                    </li>
-                  </ul>
-                  <p
-                    data-fa="COMPRESSION حجم و I/O Backup را کم می‌کند، ولی هزینهٔ CPU دارد. پیش از فعال‌سازی روی ساعات پرترافیک، مدت اجرا و بار CPU را اندازه بگیرید. محدودیت‌ها و پشتیبانی Compression"
-                    data-en="COMPRESSION reduces backup size and IO at a CPU cost. Measure duration and CPU before enabling it during busy periods and check edition/version support."
-                  >
-                    COMPRESSION reduces backup size and IO at a CPU cost.
-                    Measure duration and CPU before enabling it during busy
-                    periods and check edition/version support.
-                    <a
-                      href="https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/backup-compression-sql-server?view&#61;sql-server-ver17"
-                      target="_blank"
-                      rel="noopener"
-                      >Official documentation</a
-                    >
-                  </p>
-                  <p
-                    data-fa="Backup نسخه جدیدتر SQL Server روی Engine قدیمی‌تر Restore نمی‌شود. مقصد Restore را پیش از حادثه با نسخه و Certificateهای موردنیاز آماده کنید."
-                    data-en="A backup from a newer SQL Server engine does not restore to an older engine. Prepare the restore destination with compatible versions and required certificates before an incident."
-                  >
-                    A backup from a newer SQL Server engine does not restore to
-                    an older engine. Prepare the restore destination with
-                    compatible versions and required certificates before an
-                    incident.
                   </p>
                 </section>
                 <section id="recovery-model" class="article-section">
@@ -1782,6 +1782,49 @@ GO
                     audit-based cleanup.
                   </p>
                 </section>
+                <section id="security" class="article-section">
+                  <h2
+                    data-fa="Encryption و بازیابی Certificate و Private Key"
+                    data-en="Encryption and certificate/private-key recovery"
+                  >
+                    Encryption and certificate/private-key recovery
+                  </h2>
+                  <p
+                    data-fa="Backup شامل دادهٔ قابل‌خواندن سازمان است و باید در زمان نگهداری و انتقال محافظت شود. Procedure پارامتر @EncryptionCertificate دارد و با Certificate از master، AES_256 را به BACKUP اضافه می‌کند. ابتدا Database Master Key و Certificate را با سیاست مدیریت کلید سازمان ایجاد کنید. سپس Certificate و Private Key را در مقصد امن، جدا از فایل‌های Backup، Export کنید. بدون کلید لازم، Restore روی سرور جایگزین امکان‌پذیر نیست. پیش‌نیازهای Encryption و بازیابی کلید"
+                    data-en="Backups contain readable organizational data and need protection at rest/in transit. @EncryptionCertificate adds AES_256 using a master certificate. Provision the database master key/certificate under organizational key policy, then export the certificate/private key to protected storage separate from backup files. Without required keys, replacement-server restore fails."
+                  >
+                    Backups contain readable organizational data and need
+                    protection at rest/in transit. @EncryptionCertificate adds
+                    AES_256 using a master certificate. Provision the database
+                    master key/certificate under organizational key policy, then
+                    export the certificate/private key to protected storage
+                    separate from backup files. Without required keys,
+                    replacement-server restore fails.
+                    <a
+                      href="https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/backup-encryption?view&#61;sql-server-ver17"
+                      target="_blank"
+                      rel="noopener"
+                      >Official documentation</a
+                    >
+                  </p>
+                  <pre><code class="language-sql">-- After provisioning and securely exporting the certificate/private key:
+EXEC DBAOperations.dbo.usp_BackupWhitelist
+    &#64;BackupType&#61;&#039;FULL&#039;,
+    &#64;EncryptionCertificate&#61;N&#039;SqlBackupEncryptionCert&#039;,
+    &#64;Verify&#61;1;
+-- Add the SAME encryption parameter to the DIFF and LOG job commands too.</code></pre>
+                  <p
+                    data-fa="پیش‌فرض نمونه برای سهولت تست، Encryption ندارد. قبل از Production، Certificate معتبر را آماده و پارامتر را در هر سه Job اضافه کنید. TDE، Backup Encryption و رمزگذاری Storage کاربردهای متفاوت دارند. دسترسی به کلید و امکان Import آن روی Instance بازیابی را دوره‌ای تست کنید و کلید را همراه با همان Backup قابل‌حذف رها نکنید."
+                    data-en="Encryption defaults off to simplify testing. Before production, provision a certificate and add the parameter to all three jobs. TDE, backup encryption and storage encryption serve different purposes. Periodically test key access/import and do not leave keys only beside disposable backups."
+                  >
+                    Encryption defaults off to simplify testing. Before
+                    production, provision a certificate and add the parameter to
+                    all three jobs. TDE, backup encryption and storage
+                    encryption serve different purposes. Periodically test key
+                    access/import and do not leave keys only beside disposable
+                    backups.
+                  </p>
+                </section>
                 <section id="validation" class="article-section">
                   <h2
                     data-fa="History، VERIFYONLY و Restore واقعی"
@@ -2266,49 +2309,6 @@ ORDER BY backup_finish_date DESC;</code></pre>
                       </tbody>
                     </table>
                   </div>
-                </section>
-                <section id="security" class="article-section">
-                  <h2
-                    data-fa="Encryption و بازیابی Certificate و Private Key"
-                    data-en="Encryption and certificate/private-key recovery"
-                  >
-                    Encryption and certificate/private-key recovery
-                  </h2>
-                  <p
-                    data-fa="Backup شامل دادهٔ قابل‌خواندن سازمان است و باید در زمان نگهداری و انتقال محافظت شود. Procedure پارامتر @EncryptionCertificate دارد و با Certificate از master، AES_256 را به BACKUP اضافه می‌کند. ابتدا Database Master Key و Certificate را با سیاست مدیریت کلید سازمان ایجاد کنید. سپس Certificate و Private Key را در مقصد امن، جدا از فایل‌های Backup، Export کنید. بدون کلید لازم، Restore روی سرور جایگزین امکان‌پذیر نیست. پیش‌نیازهای Encryption و بازیابی کلید"
-                    data-en="Backups contain readable organizational data and need protection at rest/in transit. @EncryptionCertificate adds AES_256 using a master certificate. Provision the database master key/certificate under organizational key policy, then export the certificate/private key to protected storage separate from backup files. Without required keys, replacement-server restore fails."
-                  >
-                    Backups contain readable organizational data and need
-                    protection at rest/in transit. @EncryptionCertificate adds
-                    AES_256 using a master certificate. Provision the database
-                    master key/certificate under organizational key policy, then
-                    export the certificate/private key to protected storage
-                    separate from backup files. Without required keys,
-                    replacement-server restore fails.
-                    <a
-                      href="https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/backup-encryption?view&#61;sql-server-ver17"
-                      target="_blank"
-                      rel="noopener"
-                      >Official documentation</a
-                    >
-                  </p>
-                  <pre><code class="language-sql">-- After provisioning and securely exporting the certificate/private key:
-EXEC DBAOperations.dbo.usp_BackupWhitelist
-    &#64;BackupType&#61;&#039;FULL&#039;,
-    &#64;EncryptionCertificate&#61;N&#039;SqlBackupEncryptionCert&#039;,
-    &#64;Verify&#61;1;
--- Add the SAME encryption parameter to the DIFF and LOG job commands too.</code></pre>
-                  <p
-                    data-fa="پیش‌فرض نمونه برای سهولت تست، Encryption ندارد. قبل از Production، Certificate معتبر را آماده و پارامتر را در هر سه Job اضافه کنید. TDE، Backup Encryption و رمزگذاری Storage کاربردهای متفاوت دارند. دسترسی به کلید و امکان Import آن روی Instance بازیابی را دوره‌ای تست کنید و کلید را همراه با همان Backup قابل‌حذف رها نکنید."
-                    data-en="Encryption defaults off to simplify testing. Before production, provision a certificate and add the parameter to all three jobs. TDE, backup encryption and storage encryption serve different purposes. Periodically test key access/import and do not leave keys only beside disposable backups."
-                  >
-                    Encryption defaults off to simplify testing. Before
-                    production, provision a certificate and add the parameter to
-                    all three jobs. TDE, backup encryption and storage
-                    encryption serve different purposes. Periodically test key
-                    access/import and do not leave keys only beside disposable
-                    backups.
-                  </p>
                 </section>
                 <section id="best-practices" class="article-section">
                   <h2

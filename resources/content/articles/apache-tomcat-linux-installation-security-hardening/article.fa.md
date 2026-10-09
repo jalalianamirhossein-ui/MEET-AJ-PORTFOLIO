@@ -16,22 +16,6 @@ Apache Tomcat یک Web Container جاوا است: Connector درخواست HTTP 
 
 [Specificationها و مستندات رسمی Tomcat 11](https://tomcat.apache.org/tomcat-11.0-doc/index.html)
 
-## ۲. معماری و پیش‌نیازهای سرور
-
-![ارتباط اینترنت از Firewall و Nginx با TLS روی 443 به Tomcat محلی روی 8080 و برنامه Java داخل JVM](/assets/img/articles/content/apache-tomcat-production-architecture.png)
-
-ارتباط اینترنت از Firewall و Nginx با TLS روی 443 به Tomcat محلی روی 8080 و برنامه Java داخل JVM
-
-```text
-Internet -> Firewall -> Nginx HTTPS :443
-                            |
-                            v
-                 Tomcat 127.0.0.1:8080
-                            |
-                            v
-                   Java application (JVM)
-```
-
 ## پیش‌نیازهای سرور و طرح مسیرها
 
 پلتفرم اصلی Ubuntu Server 24.04 LTS روی Host جدید و اختصاصی با Bash، sudo و systemd است. گزینه RHEL برای سیستم نگهداری‌شده خانواده RHEL 9 با بسته Java 21 موجود است. فرمان APT و DNF را ترکیب نکنید. این راهنما از Archive بالادستی استفاده می‌کند، نه سرویس Tomcat بسته توزیع؛ Instance بسته را روی همان Port همزمان اجرا نکنید.
@@ -62,9 +46,25 @@ getent hosts tomcat.example.com
 
 ظرفیت Mount، Listener موجود و Policy امنیت Kernel را پیش از نصب بررسی کنید. Volume جدا برای Runtime باید قبل از Start در مسیر مستند Mount شود. Upload برنامه و Heap Dump داده حساس‌اند؛ Quota و Retention محدود تعریف کنید.
 
+## ۲. معماری و پیش‌نیازهای سرور
+
+![ارتباط اینترنت از Firewall و Nginx با TLS روی 443 به Tomcat محلی روی 8080 و برنامه Java داخل JVM](/assets/img/articles/content/apache-tomcat-production-architecture.png)
+
+ارتباط اینترنت از Firewall و Nginx با TLS روی 443 به Tomcat محلی روی 8080 و برنامه Java داخل JVM
+
+```text
+Internet -> Firewall -> Nginx HTTPS :443
+                            |
+                            v
+                 Tomcat 127.0.0.1:8080
+                            |
+                            v
+                   Java application (JVM)
+```
+
 ## ۳. نسخه Stable بررسی‌شده و سازگاری Java
 
-در ۹ اکتبر ۲۰۲۶، صفحه Download و Version Matrix رسمی Apache نسخه 11.0.26 را آخرین Stable شاخه 11 معرفی می‌کنند. مثال همین نسخه را Pin و Java 21 LTS را از بسته نگهداری‌شده توزیع نصب می‌کند. Java 21 انتخاب سازگار آگاهانه است، نه ادعای جدیدترین Feature Release جاوا. پیش از هر نصب، Security Advisory و صفحه Stable را دوباره بررسی کنید؛ نسخه ثابت مثال با زمان قدیمی می‌شود.
+صفحه Download و Version Matrix رسمی Apache نسخه 11.0.26 را آخرین Stable شاخه 11 معرفی می‌کنند. مثال همین نسخه را Pin و Java 21 LTS را از بسته نگهداری‌شده توزیع نصب می‌کند. Java 21 انتخاب سازگار آگاهانه است، نه ادعای جدیدترین Feature Release جاوا. پیش از هر نصب، Security Advisory و صفحه Stable را دوباره بررسی کنید؛ نسخه ثابت مثال با زمان قدیمی می‌شود.
 
 [دانلود رسمی Stable نسخه Tomcat 11 و فایل‌های Integrity](https://tomcat.apache.org/download-11.cgi)
 

@@ -11,11 +11,19 @@ class SitemapController extends Controller
     {
         $origin = rtrim((string) config('app.url'), '/');
         $urls = [
-            ['loc' => $origin.'/', 'lastmod' => $this->sourceLastmod(resource_path('legacy/index.html'))],
+            ['loc' => $origin.'/'],
+            ['loc' => $origin.'/articles'],
         ];
 
         $articles = Article::published()->where('language', 'en')->orderByDesc('published_at')->orderBy('sort_order')->get();
         foreach ($articles as $article) {
+            // Match the robots metadata rendered by ArticleSeo. "none"
+            // includes noindex, so neither directive belongs in the sitemap.
+            $robots = (string) data_get($article->seo_data, 'robots', 'index, follow');
+            if (preg_match('/(?:^|[\s,])(?:noindex|none)(?:$|[\s,])/i', $robots)) {
+                continue;
+            }
+
             $urls[] = [
                 'loc' => $article->canonicalUrl(),
                 'lastmod' => ($article->updated_at ?? $article->published_at)?->toDateString(),
@@ -25,12 +33,5 @@ class SitemapController extends Controller
         $xml = view('seo.sitemap', compact('urls'))->render();
 
         return response($xml, 200)->header('Content-Type', 'application/xml; charset=UTF-8');
-    }
-
-    private function sourceLastmod(string $path): ?string
-    {
-        $mtime = is_file($path) ? filemtime($path) : false;
-
-        return $mtime === false ? null : gmdate('Y-m-d', $mtime);
     }
 }

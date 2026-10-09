@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Article;
 use App\Services\ArticleContentStandardizer;
+use App\Services\ArticleLocalization;
 use App\Services\ArticlePresentation;
 use App\Services\LegacyArticleImporter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -61,13 +62,76 @@ class ArticleLayoutAuditTest extends TestCase
         $this->assertSame($result, $service->prepare($result));
     }
 
+    public function test_generated_sections_use_the_requested_language_without_flattening_lists(): void
+    {
+        $service = app(ArticleContentStandardizer::class);
+        foreach (['en', 'fa'] as $locale) {
+            $article = new Article(['title' => 'Example & recovery', 'slug' => 'example',
+                'presentation' => ['content_language' => $locale, 'localizations' => ['en' => [], 'fa' => []]],
+            ]);
+            $result = $service->standardize($article, '<pre><code>echo "unchanged"</code></pre>');
+            $dom = new \DOMDocument();
+            @$dom->loadHTML('<?xml encoding="UTF-8">'.$result, LIBXML_NONET);
+            $xp = new \DOMXPath($dom);
+            $this->assertSame(4, $xp->query('//*[@id="best-practices"]//li')->length);
+            $this->assertSame(3, $xp->query('//*[@id="security"]//li')->length);
+            $this->assertSame(0, $xp->query('//div[@data-en or @data-fa]')->length);
+            foreach ($xp->query('//*[@data-'.$locale.']') as $node) {
+                // FAQ chevrons have no text. Leaf prose must already be localized
+                // in server HTML, before any client-side language switching.
+                $this->assertSame($node->getAttribute('data-'.$locale), trim($node->textContent), $locale.' '.$node->nodeName);
+            }
+            $this->assertStringContainsString('<pre><code>echo "unchanged"</code></pre>', $result);
+            $this->assertSame($result, $service->standardize($article, $result));
+        }
+    }
+
+    public function test_all_article_prose_matches_its_locale_before_javascript_runs(): void
+    {
+        app(LegacyArticleImporter::class)->import(false);
+        foreach (Article::with(['category', 'tags'])->get() as $source) {
+            foreach (['en', 'fa'] as $locale) {
+                $article = app(ArticleLocalization::class)->apply(clone $source, $locale);
+                $dom = new \DOMDocument();
+                @$dom->loadHTML('<?xml encoding="UTF-8">'.$article->displayContent(), LIBXML_NONET);
+                $xp = new \DOMXPath($dom);
+                foreach ($xp->query('//*[@data-'.$locale.'][not(ancestor::pre)]') as $node) {
+                    if (! in_array($node->nodeName, ['h2', 'h3', 'h4', 'p', 'span', 'a', 'li', 'th', 'td', 'figcaption', 'summary'])) { continue; }
+                    $normalize = fn ($value) => trim(preg_replace('/\s+/u', ' ', $value));
+                    $expected = $normalize($node->getAttribute('data-'.$locale));
+                    $actual = $normalize($node->textContent);
+                    $message = $source->slug.' '.$locale.' '.$node->nodeName;
+                    if ($expected === '') { $this->assertSame('', $actual, $message); }
+                    else { $this->assertStringStartsWith($expected, $actual, $message); }
+                }
+            }
+        }
+    }
+
+    public function test_legacy_warnings_appear_before_the_operations_they_guard(): void
+    {
+        app(LegacyArticleImporter::class)->import(false);
+        foreach ([
+            ['oxidized-network-device-configuration-backup', 'Before the foreground test, provision known hosts', 'sudo -u oxidized env HOME=/var/lib/oxidized /usr/local/bin/oxidized'],
+            ['ubuntu-date-time-settings', 'Run the following commands one at a time.', 'sudo chronyd -p -f /etc/chrony/chrony.conf'],
+        ] as [$slug, $warning, $command]) {
+            $source = Article::where('slug', $slug)->firstOrFail();
+            foreach (['en', 'fa'] as $locale) {
+                $html = app(ArticleLocalization::class)->apply(clone $source, $locale)->displayContent();
+                $this->assertStringContainsString($warning, $html);
+                $this->assertStringContainsString($command, $html);
+                $this->assertLessThan(strpos($html, $command), strpos($html, $warning), $slug.' '.$locale);
+            }
+        }
+    }
+
     public function test_truenas_keeps_qnap_theme_and_complete_persian_content_after_import(): void
     {
         app(LegacyArticleImporter::class)->import(false);
         $article = Article::with(['category', 'tags'])->where('slug', 'truenas-zfs-enterprise')->firstOrFail();
         $this->assertSame('qnap', $article->category->slug);
         $this->assertNotEmpty($article->englishCardTitle());
-        $this->get($article->path())->assertOk()->assertSee('lang="fa" dir="rtl"', false)
+        $this->withUnencryptedCookie('lang', 'fa')->get($article->path())->assertOk()->assertSee('lang="fa" dir="rtl"', false)
             ->assertSee('پرسش‌های متداول TrueNAS')->assertSee('NAS فایل‌ها را')
             ->assertDontSee('|---|')->assertDontSee('This guide explains');
         $article->update(['content' => '<p>Custom CMS content.</p>']);

@@ -1,0 +1,902 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-article-language="en"><head>
+<meta charset="UTF-8"><title>Zabbix Server Installation and Configuration: Linux &amp; Windows Agents, Security, Backup and Recovery</title>
+<meta name="article:content-language" content="en"><meta name="description" content="Deploy Zabbix 7.0 LTS on Ubuntu 24.04 with PostgreSQL, Nginx, Linux and Windows Agent 2, TLS, alerts, verified daily backups and disaster recovery.">
+<meta name="keywords" content="Zabbix 7.0 LTS, Ubuntu 24.04, PostgreSQL 16, Nginx, PHP-FPM, Zabbix Agent 2, Windows Server 2022, Windows Server 2025, TLS PSK, pg_dump, pgBackRest, PITR, Disaster Recovery"><meta name="robots" content="index, follow">
+<meta property="og:title" content="Zabbix Server Installation and Configuration: Linux &amp; Windows Agents, Security, Backup and Recovery"><meta property="og:description" content="Deploy Zabbix 7.0 LTS on Ubuntu 24.04 with PostgreSQL, Nginx, Linux and Windows Agent 2, TLS, alerts, verified daily backups and disaster recovery.">
+<meta property="og:type" content="article"><meta property="og:image" content="/assets/img/articles/banners/zabbix-enterprise-monitoring-banner.png"><meta property="og:url" content="https://meetaj.ir/articles/zabbix-server-linux-windows-agents-backup">
+<link rel="canonical" href="https://meetaj.ir/articles/zabbix-server-linux-windows-agents-backup"><meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Zabbix Server Installation and Configuration: Linux & Windows Agents, Security, Backup and Recovery", "description": "Deploy Zabbix 7.0 LTS on Ubuntu 24.04 with PostgreSQL, Nginx, Linux and Windows Agent 2, TLS, alerts, verified daily backups and disaster recovery.", "inLanguage": "en", "datePublished": "2026-10-09T00:00:00+03:30", "dateModified": "2026-10-09", "image": "/assets/img/articles/banners/zabbix-enterprise-monitoring-banner.png", "author": {"@type": "Person", "name": "AmirHossein Jalalian"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why 7.0 LTS instead of 8.0 RC?", "acceptedAnswer": {"@type": "Answer", "text": "The verified lifecycle lists 7.0 as the latest released LTS. RC is not production; recheck the stable selector before deployment."}}, {"@type": "Question", "name": "Which templates work with Agent 2?", "acceptedAnswer": {"@type": "Answer", "text": "Official Linux by Zabbix agent and Windows by Zabbix agent templates support Agent 2; choose their active variants for active checks."}}, {"@type": "Question", "name": "Which ports are required?", "acceptedAnswer": {"@type": "Answer", "text": "Active agents connect to Server/Proxy TCP/10051; passive polling reaches agents TCP/10050, with TLS and source allowlists."}}, {"@type": "Question", "name": "Is /etc/zabbix alone a backup?", "acceptedAnswer": {"@type": "Answer", "text": "No. Recover PostgreSQL together with protected configuration, TLS material and custom scripts."}}, {"@type": "Question", "name": "Does the script store DB passwords?", "acceptedAnswer": {"@type": "Answer", "text": "No. Local peer authentication uses postgres OS user and the restricted zabbix role. Off-site credentials are protected separately."}}, {"@type": "Question", "name": "When are old backups deleted?", "acceptedAnswer": {"@type": "Answer", "text": "Only after new archive verification and required off-site success, and only completed sets older than configured retention."}}, {"@type": "Question", "name": "Can a dump provide PITR?", "acceptedAnswer": {"@type": "Answer", "text": "A dump restores its snapshot. PITR requires a physical base backup and complete WAL archive chain."}}, {"@type": "Question", "name": "Do checksums prove recovery?", "acceptedAnswer": {"@type": "Answer", "text": "No. Restore and validate hosts, data, triggers and notifications in isolation; record achieved RPO/RTO."}}]}</script>
+<script id="article-localizations" type="application/json">{"en": {"title": "Zabbix Server Installation and Configuration: Linux & Windows Agents, Security, Backup and Recovery", "meta_title": "Zabbix Server Installation and Configuration: Linux & Windows Agents, Security, Backup and Recovery", "description": "Deploy Zabbix 7.0 LTS on Ubuntu 24.04 with PostgreSQL, Nginx, Linux and Windows Agent 2, TLS, alerts, verified daily backups and disaster recovery.", "keywords": ["Zabbix 7.0 LTS", "Ubuntu 24.04", "PostgreSQL 16", "Nginx", "PHP-FPM", "Zabbix Agent 2", "Windows Server 2022", "Windows Server 2025", "TLS PSK", "pg_dump", "pgBackRest", "PITR", "Disaster Recovery"], "faq": [["Why 7.0 LTS instead of 8.0 RC?", "The verified lifecycle lists 7.0 as the latest released LTS. RC is not production; recheck the stable selector before deployment."], ["Which templates work with Agent 2?", "Official Linux by Zabbix agent and Windows by Zabbix agent templates support Agent 2; choose their active variants for active checks."], ["Which ports are required?", "Active agents connect to Server/Proxy TCP/10051; passive polling reaches agents TCP/10050, with TLS and source allowlists."], ["Is /etc/zabbix alone a backup?", "No. Recover PostgreSQL together with protected configuration, TLS material and custom scripts."], ["Does the script store DB passwords?", "No. Local peer authentication uses postgres OS user and the restricted zabbix role. Off-site credentials are protected separately."], ["When are old backups deleted?", "Only after new archive verification and required off-site success, and only completed sets older than configured retention."], ["Can a dump provide PITR?", "A dump restores its snapshot. PITR requires a physical base backup and complete WAL archive chain."], ["Do checksums prove recovery?", "No. Restore and validate hosts, data, triggers and notifications in isolation; record achieved RPO/RTO."]], "image_alt": "Enterprise Zabbix monitoring with Linux and Windows agents, security and disaster recovery", "image_title": "Zabbix Server Installation and Configuration: Linux & Windows Agents, Security, Backup and Recovery", "image_caption": "Enterprise monitoring: Linux and Windows agents, security, backup and recovery"}, "fa": {"title": "آموزش جامع نصب و راه‌اندازی Zabbix Server، مانیتورینگ لینوکس و ویندوز، امنیت، بکاپ و بازیابی", "meta_title": "آموزش جامع نصب و راه‌اندازی Zabbix Server، مانیتورینگ لینوکس و ویندوز، امنیت، بکاپ و بازیابی", "description": "نصب Zabbix 7.0 LTS روی Ubuntu 24.04 با PostgreSQL و Nginx، Agent 2 لینوکس و ویندوز، TLS، هشدار، بکاپ روزانه معتبر و بازیابی بحران.", "keywords": ["Zabbix 7.0 LTS", "Ubuntu 24.04", "PostgreSQL 16", "Nginx", "PHP-FPM", "Zabbix Agent 2", "Windows Server 2022", "Windows Server 2025", "TLS PSK", "pg_dump", "pgBackRest", "PITR", "Disaster Recovery", "نصب زبیکس", "بکاپ زبیکس"], "faq": [["چرا 7.0 LTS به جای 8.0 RC؟", "Lifecycle بررسی‌شده 7.0 را آخرین LTS منتشرشده می‌داند. RC برای Production نیست؛ Stable Selector قبل استقرار دوباره بررسی شود."], ["کدام Template با Agent 2 کار می‌کند؟", "Template رسمی Linux by Zabbix agent و Windows by Zabbix agent؛ برای Active نوع Active انتخاب شود."], ["Port لازم چیست؟", "Agent فعال به Server/Proxy روی TCP/10051؛ Poll غیرفعال به Agent روی TCP/10050 با TLS و Allowlist."], ["آیا /etc/zabbix به‌تنهایی بکاپ است؟", "خیر؛ PostgreSQL همراه Config محافظت‌شده، TLS و Script سفارشی بازیابی شود."], ["Script Password DB ذخیره می‌کند؟", "خیر؛ Peer محلی با کاربر OS برابر postgres و Role محدود zabbix. Credential Off-site جدا محافظت می‌شود."], ["بکاپ قدیمی چه زمانی حذف می‌شود؟", "فقط پس از Verification جدید و Off-site لازم موفق، برای مجموعه تکمیل‌شده قدیمی طبق Retention."], ["آیا Dump، PITR می‌دهد؟", "Dump به Snapshot برمی‌گردد؛ PITR نیازمند Base Backup فیزیکی و زنجیره کامل WAL است."], ["Checksum اثبات Recovery است؟", "خیر؛ Host، Data، Trigger و Notification در Isolation بازیابی/تأیید و RPO/RTO ثبت شود."]], "image_alt": "مانیتورینگ سازمانی Zabbix با Agent لینوکس و ویندوز، امنیت و بازیابی بحران", "image_title": "آموزش جامع نصب و راه‌اندازی Zabbix Server، مانیتورینگ لینوکس و ویندوز، امنیت، بکاپ و بازیابی", "image_caption": "مانیتورینگ سازمانی: Agent لینوکس و ویندوز، امنیت، بکاپ و بازیابی"}}</script>
+</head><body class="article-page theme-linux"><header><nav><ul><li class="article-nav-item"><a href="#introduction"><span  data-en="Introduction and deployment scope" data-fa="مقدمه و محدوده استقرار">Introduction and deployment scope</span></a></li><li class="article-nav-item"><a href="#prerequisites"><span  data-en="1. Server preparation and prerequisites" data-fa="۱. آماده‌سازی و پیش‌نیاز سرور">1. Server preparation and prerequisites</span></a></li><li class="article-nav-item"><a href="#architecture"><span  data-en="2. Enterprise Zabbix architecture" data-fa="۲. معماری سازمانی Zabbix">2. Enterprise Zabbix architecture</span></a></li><li class="article-nav-item"><a href="#configuration"><span  data-en="3. Installation: Server, PostgreSQL and the frontend" data-fa="۳. نصب Server، PostgreSQL و Frontend">3. Installation: Server, PostgreSQL and the frontend</span></a></li><li class="article-nav-item"><a href="#linux-agent"><span  data-en="4. Install Agent 2 on Ubuntu Linux" data-fa="۴. نصب Agent 2 روی Ubuntu Linux">4. Install Agent 2 on Ubuntu Linux</span></a></li><li class="article-nav-item"><a href="#windows-agent"><span  data-en="5. Install Agent 2 on Windows Server" data-fa="۵. نصب Agent 2 روی Windows Server">5. Install Agent 2 on Windows Server</span></a></li><li class="article-nav-item"><a href="#security"><span  data-en="6. Security hardening" data-fa="۶. امن‌سازی">6. Security hardening</span></a></li><li class="article-nav-item"><a href="#monitoring"><span  data-en="7. Practical monitoring and triggers" data-fa="۷. مانیتورینگ و Trigger عملی">7. Practical monitoring and triggers</span></a></li><li class="article-nav-item"><a href="#notifications"><span  data-en="8. Alerts and notifications" data-fa="۸. هشدار و اعلان">8. Alerts and notifications</span></a></li><li class="article-nav-item"><a href="#database-backup"><span  data-en="9. Database and configuration backup" data-fa="۹. بکاپ Database و Configuration">9. Database and configuration backup</span></a></li><li class="article-nav-item"><a href="#automated-backup"><span  data-en="10. Automated daily backup" data-fa="۱۰. بکاپ روزانه خودکار">10. Automated daily backup</span></a></li><li class="article-nav-item"><a href="#recovery"><span  data-en="11. Restore and disaster recovery" data-fa="۱۱. Restore و بازیابی بحران">11. Restore and disaster recovery</span></a></li><li class="article-nav-item"><a href="#troubleshooting"><span  data-en="12. Production troubleshooting" data-fa="۱۲. عیب‌یابی Production">12. Production troubleshooting</span></a></li><li class="article-nav-item"><a href="#best-practices"><span  data-en="13. Production checklist" data-fa="۱۳. چک‌لیست Production">13. Production checklist</span></a></li><li class="article-nav-item"><a href="#conclusion"><span  data-en="Operational handover and runtime acceptance" data-fa="تحویل عملیاتی و پذیرش Runtime">Operational handover and runtime acceptance</span></a></li><li class="article-nav-item"><a href="#faq"><span  data-en="Frequently asked questions" data-fa="پرسش‌های متداول">Frequently asked questions</span></a></li><li class="article-nav-item"><a href="#official-references"><span  data-en="Official references, downloads and related articles" data-fa="منابع رسمی، دانلود و مقاله مرتبط">Official references, downloads and related articles</span></a></li></ul></nav></header><main>
+<section class="article-hero article-header hero">
+<span class="article-category" data-en="Linux" data-fa="لینوکس">Linux</span>
+<h1 class="article-title hero-title" data-en="Zabbix Server Installation and Configuration: Linux &amp; Windows Agents, Security, Backup and Recovery" data-fa="آموزش جامع نصب و راه‌اندازی Zabbix Server، مانیتورینگ لینوکس و ویندوز، امنیت، بکاپ و بازیابی">Zabbix Server Installation and Configuration: Linux &amp; Windows Agents, Security, Backup and Recovery</h1>
+<p class="article-excerpt hero-subtitle" data-en="Deploy Zabbix 7.0 LTS on Ubuntu 24.04 with PostgreSQL, Nginx, Linux and Windows Agent 2, TLS, alerts, verified daily backups and disaster recovery." data-fa="نصب Zabbix 7.0 LTS روی Ubuntu 24.04 با PostgreSQL و Nginx، Agent 2 لینوکس و ویندوز، TLS، هشدار، بکاپ روزانه معتبر و بازیابی بحران.">Deploy Zabbix 7.0 LTS on Ubuntu 24.04 with PostgreSQL, Nginx, Linux and Windows Agent 2, TLS, alerts, verified daily backups and disaster recovery.</p>
+<img class="article-hero-thumbnail" src="/assets/img/articles/banners/zabbix-enterprise-monitoring-banner.png" width="512" height="512" alt="Enterprise Zabbix monitoring with Linux and Windows agents, security and disaster recovery" data-en-alt="Enterprise Zabbix monitoring with Linux and Windows agents, security and disaster recovery" data-fa-alt="مانیتورینگ سازمانی Zabbix با Agent لینوکس و ویندوز، امنیت و بازیابی بحران">
+</section><article class="article-body" lang="en" dir="ltr"><section id="introduction"><h2  data-en="Introduction and deployment scope" data-fa="مقدمه و محدوده استقرار">Introduction and deployment scope</h2>
+<p  data-en="Enterprise Zabbix Monitoring: Server Installation, Linux &amp; Windows Agents, Security Hardening, Backup &amp; Disaster Recovery. This guide follows a fresh dedicated deployment through operational handover, with reusable configuration downloads and explicit staging acceptance requirements." data-fa="مانیتورینگ سازمانی Zabbix: نصب Server، Agent لینوکس و ویندوز، امن‌سازی، بکاپ و بازیابی بحران. راهنما استقرار اختصاصی جدید را تا تحویل عملیاتی با فایل تنظیم قابل استفاده مجدد و الزام پذیرش Staging دنبال می‌کند.">Enterprise Zabbix Monitoring: Server Installation, Linux &amp; Windows Agents, Security Hardening, Backup &amp; Disaster Recovery. This guide follows a fresh dedicated deployment through operational handover, with reusable configuration downloads and explicit staging acceptance requirements.</p>
+</section>
+<section id="prerequisites"><h2  data-en="1. Server preparation and prerequisites" data-fa="۱. آماده‌سازی و پیش‌نیاز سرور">1. Server preparation and prerequisites</h2>
+<p  data-en="Every example address is RFC 5737 documentation space, not a usable deployment address. Replace networks/domain with approved values. Reserve a static IP or DHCP reservation, forward/reverse DNS, console access and a maintenance window. Keep AppArmor/firewalls enabled. Netplan can disconnect SSH: use netplan try from a console and the existing static-IP guide." data-fa="همه IPها فضای مستند RFC 5737 هستند، نه آدرس قابل استفاده استقرار. شبکه/دامنه را با مقدار تأییدشده عوض کنید. IP ثابت یا DHCP Reservation، DNS مستقیم/معکوس، Console و Maintenance آماده کنید. AppArmor/Firewall فعال بماند. Netplan ممکن است SSH را قطع کند؛ netplan try از Console و راهنمای IP ثابت موجود استفاده شود.">Every example address is RFC 5737 documentation space, not a usable deployment address. Replace networks/domain with approved values. Reserve a static IP or DHCP reservation, forward/reverse DNS, console access and a maintenance window. Keep AppArmor/firewalls enabled. Netplan can disconnect SSH: use netplan try from a console and the existing static-IP guide.</p>
+<pre dir="ltr"><code class="language-bash">sudo apt update
+sudo apt full-upgrade
+sudo hostnamectl set-hostname zabbix.example.com
+hostnamectl
+getent ahostsv4 zabbix.example.com
+ip -br address
+ip route
+sudo apt install -y chrony ufw curl ca-certificates openssl netcat-openbsd
+sudo systemctl enable --now chrony
+chronyc tracking
+chronyc sources -v
+timedatectl
+test -e /var/run/reboot-required &amp;&amp; cat /var/run/reboot-required || true
+free -h
+df -hT
+lsblk -f
+sudo aa-status</code></pre>
+<p  data-en="Expected: DNS reaches the reserved IP, routes reach approved update/DNS/NTP services and chronyc has a synchronized selected source. Configure approved NTP sources in /etc/chrony/chrony.conf, restart and recheck. Reboot in maintenance if needed and repeat health checks; clock errors break certificates, timestamps and escalation timing." data-fa="انتظار: DNS به IP رزروشده، Route به Update/DNS/NTP مجاز و chronyc دارای منبع همگام منتخب باشد. منبع NTP تأییدشده در /etc/chrony/chrony.conf تنظیم، Restart و بررسی شود. Reboot لازم در Maintenance و تکرار Check؛ زمان غلط Certificate، Timestamp و Escalation را مختل می‌کند.">Expected: DNS reaches the reserved IP, routes reach approved update/DNS/NTP services and chronyc has a synchronized selected source. Configure approved NTP sources in /etc/chrony/chrony.conf, restart and recheck. Reboot in maintenance if needed and repeat health checks; clock errors break certificates, timestamps and escalation timing.</p>
+<table><thead><tr><th  data-en="Port" data-fa="Port">Port</th><th  data-en="Source / purpose" data-fa="Source و کاربرد">Source / purpose</th></tr></thead><tbody><tr><td  data-en="22/tcp" data-fa="22/tcp">22/tcp</td><td  data-en="Management VPN only; adapt the actual SSH port before UFW." data-fa="فقط VPN مدیریت؛ Port واقعی SSH پیش از UFW لحاظ شود.">Management VPN only; adapt the actual SSH port before UFW.</td></tr><tr><td  data-en="443/tcp" data-fa="443/tcp">443/tcp</td><td  data-en="Operator network to HTTPS frontend; setup HTTP remains loopback-only." data-fa="شبکه Operator به Frontend HTTPS؛ HTTP Setup فقط Loopback.">Operator network to HTTPS frontend; setup HTTP remains loopback-only.</td></tr><tr><td  data-en="10051/tcp" data-fa="10051/tcp">10051/tcp</td><td  data-en="Approved active agents/proxies to Server; also used by trappers." data-fa="Agent/Proxy فعال مجاز به Server؛ Trapper نیز همین Port.">Approved active agents/proxies to Server; also used by trappers.</td></tr><tr><td  data-en="10050/tcp" data-fa="10050/tcp">10050/tcp</td><td  data-en="Assigned Server/Proxy to Agent for passive checks." data-fa="Server/Proxy تعیین‌شده به Agent برای Passive.">Assigned Server/Proxy to Agent for passive checks.</td></tr><tr><td  data-en="5432/tcp" data-fa="5432/tcp">5432/tcp</td><td  data-en="PostgreSQL loopback only; no endpoint/public exposure." data-fa="PostgreSQL فقط Loopback؛ بدون دسترسی Endpoint/عمومی.">PostgreSQL loopback only; no endpoint/public exposure.</td></tr><tr><td  data-en="Egress" data-fa="خروجی">Egress</td><td  data-en="Approved DNS/NTP, HTTPS updates/Telegram, SMTP relay and backup transport." data-fa="DNS/NTP مجاز، HTTPS بسته/Telegram، SMTP Relay و Transport بکاپ.">Approved DNS/NTP, HTTPS updates/Telegram, SMTP relay and backup transport.</td></tr></tbody></table>
+<pre dir="ltr"><code class="language-bash"># Confirm actual SSH port, VPN access and console recovery before enabling UFW.
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow from 192.0.2.0/24 to any port 22 proto tcp
+sudo ufw allow from 192.0.2.0/24 to any port 443 proto tcp
+sudo ufw allow from 198.51.100.21 to any port 10051 proto tcp
+sudo ufw allow from 198.51.100.22 to any port 10051 proto tcp
+sudo ufw allow from 203.0.113.20 to any port 10051 proto tcp
+sudo ufw enable
+sudo ufw status numbered
+sudo ss -lntp</code></pre>
+<p  data-en="Capacity starting point for a modest installation: 4 vCPU, 16 GiB RAM, reliable SSD, measured IOPS and a separately mounted backup volume. This is planning guidance, not a minimum/throughput promise. Measure new values per second, write latency, queue and cache utilization. 3,000 items every 60s give 50 values/s and 129.6 million samples over 30 days. Include indexes, trends, logs, WAL and maintenance headroom; reserve at least 30% free storage. Size /backup for database estimates and retention. Separate the database and adopt physical backups for large installations." data-fa="نقطه شروع نصب متوسط کوچک: 4 vCPU، حافظه 16 GiB، SSD مطمئن، IOPS اندازه‌گیری‌شده و Volume بکاپ Mount‌شده جدا. راهنمای ظرفیت است، نه حداقل/تضمین Throughput. NVPS، تأخیر Write، Queue و Cache اندازه‌گیری شود. ۳۰۰۰ Item هر 60s، برابر ۵۰ مقدار در ثانیه و ۱۲۹٫۶ میلیون نمونه طی ۳۰ روز است. Index، Trend، Log، WAL و فضای Maintenance لحاظ؛ حداقل ۳۰٪ آزاد رزرو کنید. /backup براساس حجم DB و Retention؛ برای مقیاس بزرگ DB جدا و بکاپ فیزیکی.">Capacity starting point for a modest installation: 4 vCPU, 16 GiB RAM, reliable SSD, measured IOPS and a separately mounted backup volume. This is planning guidance, not a minimum/throughput promise. Measure new values per second, write latency, queue and cache utilization. 3,000 items every 60s give 50 values/s and 129.6 million samples over 30 days. Include indexes, trends, logs, WAL and maintenance headroom; reserve at least 30% free storage. Size /backup for database estimates and retention. Separate the database and adopt physical backups for large installations.</p>
+<p><a href="/articles/set-static-ip-ubuntu-server-netplan" rel="noopener"><span  data-en="Related: safe Netplan static IP" data-fa="مرتبط: IP ثابت ایمن Netplan">Related: safe Netplan static IP</span></a></p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/installation/requirements" rel="noopener"><span  data-en="Official compatibility and sizing" data-fa="سازگاری و ظرفیت رسمی">Official compatibility and sizing</span></a></p>
+</section>
+<section id="architecture"><h2  data-en="2. Enterprise Zabbix architecture" data-fa="۲. معماری سازمانی Zabbix">2. Enterprise Zabbix architecture</h2>
+<p  data-en="This runbook builds a dedicated Ubuntu Server 24.04 monitoring server and enrolls Ubuntu and Windows Server 2022/2025 endpoints. Installation, alerts, security, backups and recovery form one operational lifecycle. The central example is one failure domain; a branch proxy buffers WAN interruptions but does not replace server/database high availability." data-fa="این راهنما سرور اختصاصی مانیتورینگ Ubuntu Server 24.04 و میزبان Ubuntu و Windows Server 2022/2025 را پوشش می‌دهد. نصب، هشدار، امنیت، بکاپ و بازیابی یک چرخه عملیاتی هستند. سرور مرکزی مثال یک دامنه خرابی است؛ Proxy شعبه قطع WAN را بافر می‌کند اما جایگزین دسترس‌پذیری بالای Server/Database نیست.">This runbook builds a dedicated Ubuntu Server 24.04 monitoring server and enrolls Ubuntu and Windows Server 2022/2025 endpoints. Installation, alerts, security, backups and recovery form one operational lifecycle. The central example is one failure domain; a branch proxy buffers WAN interruptions but does not replace server/database high availability.</p>
+<figure><img src="/assets/img/articles/content/zabbix-enterprise-architecture.png" width="1920" height="1080" loading="lazy" decoding="async" alt="Enterprise topology: HTTPS operators, TLS agents and branch proxy, local PostgreSQL and off-site backup" data-en-alt="Enterprise topology: HTTPS operators, TLS agents and branch proxy, local PostgreSQL and off-site backup" data-fa-alt="توپولوژی سازمانی: اپراتور HTTPS، Agent و Proxy با TLS، PostgreSQL محلی و بکاپ Off-site"><figcaption ><span  data-en="Enterprise topology: HTTPS operators, TLS agents and branch proxy, local PostgreSQL and off-site backup" data-fa="توپولوژی سازمانی: اپراتور HTTPS، Agent و Proxy با TLS، PostgreSQL محلی و بکاپ Off-site">Enterprise topology: HTTPS operators, TLS agents and branch proxy, local PostgreSQL and off-site backup</span></figcaption></figure>
+<table><thead><tr><th  data-en="Component" data-fa="جزء">Component</th><th  data-en="Responsibility" data-fa="مسئولیت">Responsibility</th></tr></thead><tbody><tr><td  data-en="Server" data-fa="Server">Server</td><td  data-en="Schedules collection, accepts data, evaluates triggers and executes notification actions." data-fa="زمان‌بندی جمع‌آوری، دریافت داده، ارزیابی Trigger و اجرای Action اعلان.">Schedules collection, accepts data, evaluates triggers and executes notification actions.</td></tr><tr><td  data-en="Frontend / Nginx / PHP-FPM" data-fa="Frontend / Nginx / PHP-FPM">Frontend / Nginx / PHP-FPM</td><td  data-en="HTTPS UI and JSON-RPC API; PHP accesses PostgreSQL and selected server functions." data-fa="رابط HTTPS و API مبتنی بر JSON-RPC؛ PHP به PostgreSQL و عملکرد منتخب Server دسترسی دارد.">HTTPS UI and JSON-RPC API; PHP accesses PostgreSQL and selected server functions.</td></tr><tr><td  data-en="PostgreSQL" data-fa="PostgreSQL">PostgreSQL</td><td  data-en="Hosts, users, templates, items, triggers, actions, events, history, trends and audit records." data-fa="Host، User، Template، Item، Trigger، Action، Event، History، Trend و رکورد Audit.">Hosts, users, templates, items, triggers, actions, events, history, trends and audit records.</td></tr><tr><td  data-en="Agent and Agent 2" data-fa="Agent و Agent 2">Agent and Agent 2</td><td  data-en="Classic agent is a lightweight collector; Agent 2 adds plugins. Use one service for these ports; official OS agent templates support Agent 2." data-fa="Agent کلاسیک جمع‌آوری‌کننده سبک و Agent 2 دارای Plugin است. برای این Portها یک سرویس انتخاب کنید؛ Template رسمی OS با Agent 2 کار می‌کند.">Classic agent is a lightweight collector; Agent 2 adds plugins. Use one service for these ports; official OS agent templates support Agent 2.</td></tr><tr><td  data-en="Proxy" data-fa="Proxy">Proxy</td><td  data-en="Collects and buffers branch data, forwards to Server; does not evaluate central triggers/actions independently." data-fa="جمع‌آوری و بافر داده شعبه و ارسال به Server؛ Trigger/Action مرکزی مستقل اجرا نمی‌کند.">Collects and buffers branch data, forwards to Server; does not evaluate central triggers/actions independently.</td></tr></tbody></table>
+<p  data-en="An item is a measurement/key such as system.uptime. Templates group reusable items, discovery rules, triggers and graphs. Triggers evaluate stored values; PROBLEM and recovery transitions create events. Problems shows current incidents, Events records transitions, dashboards display health/trends, and actions notify users through media types." data-fa="Item اندازه‌گیری و Key مانند system.uptime است. Template، Item، Discovery، Trigger و Graph قابل استفاده مجدد را گروه‌بندی می‌کند. Trigger مقدار ذخیره‌شده را ارزیابی؛ تغییر PROBLEM و Recovery رویداد می‌سازد. Problems رخداد جاری، Events تغییر وضعیت، Dashboard سلامت/روند و Action اعلان به کاربر با Media Type را نشان می‌دهد.">An item is a measurement/key such as system.uptime. Templates group reusable items, discovery rules, triggers and graphs. Triggers evaluate stored values; PROBLEM and recovery transitions create events. Problems shows current incidents, Events records transitions, dashboards display health/trends, and actions notify users through media types.</p>
+<pre dir="ltr"><code class="language-text">Management VPN 192.0.2.0/24 -&gt; HTTPS 443 -&gt; zabbix.example.com 192.0.2.10
+Central: Nginx -&gt; PHP-FPM -&gt; PostgreSQL 127.0.0.1:5432
+         Zabbix Server -&gt; PostgreSQL 127.0.0.1:5432
+linux-app-01   198.51.100.21 -&gt; TLS 10051 -&gt; Server
+windows-app-01 198.51.100.22 -&gt; TLS 10051 -&gt; Server
+Server -&gt; TLS 10050 -&gt; agents (optional passive checks)
+Branch proxy 203.0.113.20 -&gt; TLS 10051 -&gt; Server
+Backup -&gt; encrypted off-site repository 203.0.113.30</code></pre>
+<p  data-en="Active checks: agent connects to ServerActive TCP/10051, obtains its item list using the exact Hostname and sends values. Passive checks: Server or assigned Proxy connects to agent TCP/10050; Server is the allowed polling-source list. Proxy-assigned hosts must use that proxy in both settings. Neither setting creates a frontend host." data-fa="Active: Agent به ServerActive روی TCP/10051 وصل، با Hostname دقیق فهرست Item می‌گیرد و مقدار می‌فرستد. Passive: Server یا Proxy تعیین‌شده به TCP/10050 Agent متصل؛ Server فهرست Source مجاز Poll است. میزبان سپرده‌شده به Proxy در هر دو تنظیم از همان Proxy استفاده کند. هیچ تنظیمی Host در Frontend نمی‌سازد.">Active checks: agent connects to ServerActive TCP/10051, obtains its item list using the exact Hostname and sends values. Passive checks: Server or assigned Proxy connects to agent TCP/10050; Server is the allowed polling-source list. Proxy-assigned hosts must use that proxy in both settings. Neither setting creates a frontend host.</p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/concepts" rel="noopener"><span  data-en="Monitoring concepts" data-fa="مفاهیم مانیتورینگ">Monitoring concepts</span></a></p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/distributed_monitoring/proxies" rel="noopener"><span  data-en="Official proxy architecture" data-fa="معماری رسمی Proxy">Official proxy architecture</span></a></p>
+</section>
+<section id="configuration"><h2  data-en="3. Installation: Server, PostgreSQL and the frontend" data-fa="۳. نصب Server، PostgreSQL و Frontend">3. Installation: Server, PostgreSQL and the frontend</h2>
+<figure><img src="/assets/img/articles/content/zabbix-server-installation-workflow.png" width="1920" height="1080" loading="lazy" decoding="async" alt="Ubuntu preparation, official repository, PostgreSQL schema, Zabbix services and HTTPS validation workflow" data-en-alt="Ubuntu preparation, official repository, PostgreSQL schema, Zabbix services and HTTPS validation workflow" data-fa-alt="فرایند آماده‌سازی Ubuntu، Repository رسمی، Schema PostgreSQL، سرویس Zabbix و اعتبارسنجی HTTPS"><figcaption ><span  data-en="Ubuntu preparation, official repository, PostgreSQL schema, Zabbix services and HTTPS validation workflow" data-fa="فرایند آماده‌سازی Ubuntu، Repository رسمی، Schema PostgreSQL، سرویس Zabbix و اعتبارسنجی HTTPS">Ubuntu preparation, official repository, PostgreSQL schema, Zabbix services and HTTPS validation workflow</span></figcaption></figure>
+<p  data-en="the official lifecycle lists 7.0 as the latest released LTS; the 8.0 release note describes 8.0.0rc1, excluded here. Install the latest stable 7.0 maintenance build from the official repository. PostgreSQL 16, Ubuntu Nginx 1.24 and PHP 8.3 meet 7.0 requirements. Security revisions change: record actual APT candidates/installed versions instead of claiming a fixed revision is current. Keep Server, SQL scripts and Frontend on the same patch." data-fa="Lifecycle رسمی 7.0 را آخرین LTS منتشرشده و Release Note نسخه 8.0 را 8.0.0rc1 معرفی می‌کند که استفاده نمی‌شود. آخرین Maintenance پایدار 7.0 از Repository رسمی نصب شود. PostgreSQL 16، Nginx 1.24 و PHP 8.3 در Ubuntu با نیاز 7.0 سازگارند. Revision امنیت تغییر می‌کند؛ Candidate/Version واقعی APT ثبت شود نه ادعای Revision ثابت جاری. Server، SQL Script و Frontend Patch یکسان داشته باشند.">the official lifecycle lists 7.0 as the latest released LTS; the 8.0 release note describes 8.0.0rc1, excluded here. Install the latest stable 7.0 maintenance build from the official repository. PostgreSQL 16, Ubuntu Nginx 1.24 and PHP 8.3 meet 7.0 requirements. Security revisions change: record actual APT candidates/installed versions instead of claiming a fixed revision is current. Keep Server, SQL scripts and Frontend on the same patch.</p>
+<p><a href="https://www.zabbix.com/life_cycle_and_release_policy" rel="noopener"><span  data-en="Official released and planned LTS lifecycle" data-fa="Lifecycle رسمی LTS منتشرشده و برنامه‌ریزی‌شده">Official released and planned LTS lifecycle</span></a></p>
+<p><a href="https://www.zabbix.com/release_notes" rel="noopener"><span  data-en="Release notes: distinguish stable and RC" data-fa="Release Note: تفکیک Stable و RC">Release notes: distinguish stable and RC</span></a></p>
+<p  data-en="The official Ubuntu Noble amd64 package index was also checked: Server and Agent 2 latest stable entries are 1:7.0.31-1+ubuntu24.04. Release 7.0.31 was published on 22 September 2026. These are verified review-time values; keep the 7.0 repository branch and recheck candidates before each installation. Ubuntu security revisions for PostgreSQL/Nginx/PHP remain selected by maintained Ubuntu 24.04 repositories." data-fa="Index رسمی Ubuntu Noble amd64 نیز بررسی شد: آخرین Entry پایدار Server و Agent 2 برابر 1:7.0.31-1+ubuntu24.04 است. 7.0.31 در ۲۲ سپتامبر ۲۰۲۶ منتشر شد. این مقدار زمان Review است؛ شاخه Repository برابر 7.0 و Candidate پیش از هر نصب دوباره بررسی شود. Revision امنیت PostgreSQL/Nginx/PHP از Repository نگهداری‌شده Ubuntu 24.04 انتخاب می‌شود.">The official Ubuntu Noble amd64 package index was also checked: Server and Agent 2 latest stable entries are 1:7.0.31-1+ubuntu24.04. Release 7.0.31 was published on 22 September 2026. These are verified review-time values; keep the 7.0 repository branch and recheck candidates before each installation. Ubuntu security revisions for PostgreSQL/Nginx/PHP remain selected by maintained Ubuntu 24.04 repositories.</p>
+<p><a href="https://www.zabbix.com/rn/rn7.0.31" rel="noopener"><span  data-en="Verified stable Zabbix 7.0.31 release notes" data-fa="Release Note نسخه پایدار تأییدشده 7.0.31">Verified stable Zabbix 7.0.31 release notes</span></a></p>
+<p><a href="https://repo.zabbix.com/zabbix/7.0/ubuntu/dists/noble/main/binary-amd64/Packages" rel="noopener"><span  data-en="Official Ubuntu Noble amd64 package index" data-fa="Index رسمی Package در Ubuntu Noble amd64">Official Ubuntu Noble amd64 package index</span></a></p>
+<pre dir="ltr"><code class="language-bash">cd /tmp
+curl --fail --location --proto &#x27;=https&#x27; --tlsv1.2 -O \
+  https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_7.0+ubuntu24.04_all.deb
+dpkg-deb --info zabbix-release_latest_7.0+ubuntu24.04_all.deb
+sudo dpkg -i zabbix-release_latest_7.0+ubuntu24.04_all.deb
+sudo apt update
+apt-cache policy zabbix-server-pgsql zabbix-agent2 zabbix-frontend-php postgresql-16 nginx php8.3-fpm
+# Verify official stable 7.0.x candidates, no beta/RC/devel.
+sudo apt install -y postgresql-16 postgresql-client-16 nginx php8.3-fpm \
+  php8.3-pgsql php8.3-bcmath php8.3-mbstring php8.3-xml php8.3-gd php8.3-curl \
+  zabbix-server-pgsql zabbix-frontend-php zabbix-nginx-conf zabbix-sql-scripts zabbix-agent2 zabbix-get
+sudo systemctl stop zabbix-server zabbix-agent2 nginx
+sudo systemctl enable --now postgresql
+pg_lsclusters
+dpkg-query -W zabbix-server-pgsql zabbix-agent2 zabbix-frontend-php postgresql-16 nginx php8.3-fpm
+zabbix_server -V
+zabbix_agent2 -V
+php -v
+nginx -v</code></pre>
+<p  data-en="Verify bootstrap URL against the official selector. HTTPS protects bootstrap transport; APT validates signed repository metadata. Never use trusted=yes or --allow-unauthenticated. Put allowlisted firewall rules in place before package installation because packages can start services; enroll no hosts until TLS is ready." data-fa="URL نصب Repository با Selector رسمی تطبیق داده شود. HTTPS از Bootstrap Transport و APT از Metadata امضاشده محافظت می‌کند. trusted=yes یا --allow-unauthenticated ممنوع. چون بسته ممکن است Start کند، قبل نصب Firewall محدود برقرار؛ تا TLS آماده نیست Host ثبت نشود.">Verify bootstrap URL against the official selector. HTTPS protects bootstrap transport; APT validates signed repository metadata. Never use trusted=yes or --allow-unauthenticated. Put allowlisted firewall rules in place before package installation because packages can start services; enroll no hosts until TLS is ready.</p>
+<p><a href="https://www.zabbix.com/download?zabbix=7.0&amp;os_distribution=ubuntu&amp;os_version=24.04&amp;components=server_frontend_agent&amp;db=pgsql&amp;ws=nginx" rel="noopener"><span  data-en="Official Ubuntu 24.04 PostgreSQL/Nginx selector" data-fa="Selector رسمی Ubuntu 24.04 و PostgreSQL/Nginx">Official Ubuntu 24.04 PostgreSQL/Nginx selector</span></a></p>
+<h3  data-en="Restricted role, authentication and initial schema" data-fa="Role محدود، احراز هویت و Schema اولیه">Restricted role, authentication and initial schema</h3>
+<pre dir="ltr"><code class="language-bash">sudo -u postgres psql -X -v ON_ERROR_STOP=1 &lt;&lt;&#x27;SQL&#x27;
+SET password_encryption = &#x27;scram-sha-256&#x27;;
+CREATE ROLE zabbix LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION;
+SQL
+# Interactive prompt: no password in shell history.
+sudo -u postgres psql -X -c &#x27;\password zabbix&#x27;
+sudo -u postgres createdb -O zabbix -E UTF8 -T template0 zabbix
+sudo -u postgres psql -X -d zabbix -c &#x27;REVOKE ALL ON DATABASE zabbix FROM PUBLIC;&#x27;
+sudo -u postgres psql -X -d zabbix -c &#x27;REVOKE CREATE ON SCHEMA public FROM PUBLIC;&#x27;
+sudo -u postgres psql -X -d zabbix -c &#x27;GRANT ALL ON SCHEMA public TO zabbix;&#x27;
+sudoedit /etc/postgresql/16/main/postgresql.conf
+sudoedit /etc/postgresql/16/main/pg_hba.conf</code></pre>
+<pre dir="ltr"><code class="language-conf"># postgresql.conf
+listen_addresses = &#x27;127.0.0.1&#x27;
+password_encryption = &#x27;scram-sha-256&#x27;
+# pg_hba.conf: place before broader host rules; preserve local admin peer access
+local all     postgres                   peer
+local zabbix  zabbix                     peer
+host  zabbix  zabbix  127.0.0.1/32        scram-sha-256
+host  all     all     0.0.0.0/0           reject
+host  all     all     ::/0                reject</code></pre>
+<pre dir="ltr"><code class="language-bash">sudo pg_ctlcluster 16 main restart
+sudo -u postgres psql -X -c &quot;SELECT line_number,error FROM pg_hba_file_rules WHERE error IS NOT NULL;&quot;
+sudo -u postgres psql -X -c &#x27;SHOW listen_addresses;&#x27;
+sudo -u postgres psql -X -c &#x27;\du zabbix&#x27;
+# INITIALIZATION ONLY: NEW EMPTY database, never before a database restore.
+set -o pipefail
+zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz | sudo -u zabbix psql -X -v ON_ERROR_STOP=1 -d zabbix
+sudo -u zabbix psql -X -d zabbix -c &#x27;SELECT mandatory,optional FROM dbversion;&#x27;
+psql -h 127.0.0.1 -U zabbix -W -d zabbix -c &#x27;SELECT current_user,current_database();&#x27;
+sudoedit /etc/zabbix/zabbix_server.conf</code></pre>
+<pre dir="ltr"><code class="language-conf"># Merge into package file; avoid duplicate active parameters.
+DBHost=127.0.0.1
+DBName=zabbix
+DBUser=zabbix
+# Set the actual DBPassword using sudoedit; never include it in downloads.
+ListenIP=127.0.0.1,192.0.2.10
+ListenPort=10051
+# Preserve package LogFile, PidFile, SocketDir and script paths.</code></pre>
+<p  data-en="Expected: no pg_hba error rows, loopback PostgreSQL, one dbversion row, TCP login as zabbix. Put the real DBPassword in root:zabbix 0640 server configuration. Zabbix owns its schema and needs controlled schema upgrades; PostgreSQL superuser, role creation and unrelated database privileges are unnecessary." data-fa="انتظار: بدون ردیف خطای pg_hba، PostgreSQL محلی، یک ردیف dbversion و TCP Login با zabbix. DBPassword واقعی در فایل root:zabbix با 0640 ثبت شود. Zabbix مالک Schema و نیازمند Upgrade کنترل‌شده است؛ Superuser، ساخت Role و مجوز DB غیرمرتبط لازم نیست.">Expected: no pg_hba error rows, loopback PostgreSQL, one dbversion row, TCP login as zabbix. Put the real DBPassword in root:zabbix 0640 server configuration. Zabbix owns its schema and needs controlled schema upgrades; PostgreSQL superuser, role creation and unrelated database privileges are unnecessary.</p>
+<h3  data-en="Packaged Nginx/PHP-FPM and protected initial administration" data-fa="Nginx/PHP-FPM بسته و مدیریت اولیه محافظت‌شده">Packaged Nginx/PHP-FPM and protected initial administration</h3>
+<p  data-en="Keep packaged application locations/fastcgi rules. Edit /etc/zabbix/nginx.conf (normally linked in /etc/nginx/conf.d/) to listen 127.0.0.1:8080 and server_name zabbix.example.com. Verify /etc/zabbix/php-fpm.conf is included under /etc/php/8.3/fpm/pool.d/ and its pool user/socket. Nginx must use that actual socket, normally unix:/var/run/php/zabbix.sock. Do not expose the HTTP installer." data-fa="Location/FastCGI بسته حفظ شود. /etc/zabbix/nginx.conf که معمولاً در /etc/nginx/conf.d/ لینک دارد، با listen برابر 127.0.0.1:8080 و server_name برابر zabbix.example.com تنظیم شود. Include فایل /etc/zabbix/php-fpm.conf در /etc/php/8.3/fpm/pool.d/ و User/Socket بررسی شود. Nginx از Socket واقعی معمولاً unix:/var/run/php/zabbix.sock استفاده کند. Installer HTTP عمومی نباشد.">Keep packaged application locations/fastcgi rules. Edit /etc/zabbix/nginx.conf (normally linked in /etc/nginx/conf.d/) to listen 127.0.0.1:8080 and server_name zabbix.example.com. Verify /etc/zabbix/php-fpm.conf is included under /etc/php/8.3/fpm/pool.d/ and its pool user/socket. Nginx must use that actual socket, normally unix:/var/run/php/zabbix.sock. Do not expose the HTTP installer.</p>
+<pre dir="ltr"><code class="language-bash">sudoedit /etc/zabbix/nginx.conf
+sudoedit /etc/zabbix/php-fpm.conf
+# Pool: php_value[date.timezone] = Asia/Tehran
+# Verify memory_limit &gt;=128M, post_max_size &gt;=16M, max_execution_time &gt;=300,
+# max_input_time &gt;=300, upload_max_filesize &gt;=2M.
+sudo chown root:zabbix /etc/zabbix/zabbix_server.conf
+sudo chmod 0640 /etc/zabbix/zabbix_server.conf
+sudo php-fpm8.3 -t
+sudo nginx -t
+sudo systemctl enable --now php8.3-fpm nginx zabbix-server
+sudo systemctl status zabbix-server php8.3-fpm nginx --no-pager
+sudo journalctl -u zabbix-server -n 50 --no-pager
+sudo tail -n 50 /var/log/zabbix/zabbix_server.log
+curl -I -H &#x27;Host: zabbix.example.com&#x27; http://127.0.0.1:8080/
+# Operator workstation: encrypted tunnel for setup
+ssh -L 8080:127.0.0.1:8080 admin@192.0.2.10</code></pre>
+<p  data-en="Through the SSH tunnel open http://127.0.0.1:8080 in the workstation browser. Complete prerequisite checks, PostgreSQL 127.0.0.1:5432, database/user zabbix and the real password, server name and time zone. Protect /etc/zabbix/web/zabbix.conf.php with root ownership and only the actual PHP pool group read access (0640); remove web-user write after setup. If manually transferred, delete the workstation copy securely." data-fa="از Tunnel، http://127.0.0.1:8080 در Browser ایستگاه کاری باز شود. Prerequisite، PostgreSQL روی 127.0.0.1:5432، Database/User برابر zabbix و Password واقعی، نام سرور و Timezone تکمیل شود. /etc/zabbix/web/zabbix.conf.php متعلق به root و فقط گروه واقعی Pool PHP دارای Read با 0640؛ Write وب پس از Setup حذف شود. کپی منتقل‌شده ایستگاه کاری امن حذف شود.">Through the SSH tunnel open http://127.0.0.1:8080 in the workstation browser. Complete prerequisite checks, PostgreSQL 127.0.0.1:5432, database/user zabbix and the real password, server name and time zone. Protect /etc/zabbix/web/zabbix.conf.php with root ownership and only the actual PHP pool group read access (0640); remove web-user write after setup. If manually transferred, delete the workstation copy securely.</p>
+<p  data-en="Expected: services active, local HTTP 200/redirect and Reports → System information says Server running. Use initial case-sensitive Admin / zabbix only over the protected setup channel; immediately change the password, create a named administrator, disable unused guest access and enroll MFA. Apply chapter 6 HTTPS before operator access and remove the bootstrap listener. A login does not prove monitoring: verify item arrival and test notifications." data-fa="انتظار: سرویس Active، HTTP محلی 200/Redirect و Reports → System information برابر Server Running. Admin / zabbix اولیه حساس به حروف فقط در Setup محافظت‌شده؛ فوراً Password تغییر، Administrator نام‌دار، Guest بلااستفاده غیرفعال و MFA فعال شود. قبل دسترسی Operator، HTTPS فصل ۶ و حذف Listener اولیه. Login اثبات مانیتورینگ نیست؛ دریافت Item و اعلان تست شود.">Expected: services active, local HTTP 200/redirect and Reports → System information says Server running. Use initial case-sensitive Admin / zabbix only over the protected setup channel; immediately change the password, create a named administrator, disable unused guest access and enroll MFA. Apply chapter 6 HTTPS before operator access and remove the bootstrap listener. A login does not prove monitoring: verify item arrival and test notifications.</p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/installation/install_from_packages" rel="noopener"><span  data-en="Package installation and schema initialization" data-fa="نصب بسته و Schema اولیه">Package installation and schema initialization</span></a></p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/installation/frontend" rel="noopener"><span  data-en="Frontend setup prerequisites" data-fa="پیش‌نیاز Setup Frontend">Frontend setup prerequisites</span></a></p>
+</section>
+<section id="linux-agent"><h2  data-en="4. Install Agent 2 on Ubuntu Linux" data-fa="۴. نصب Agent 2 روی Ubuntu Linux">4. Install Agent 2 on Ubuntu Linux</h2>
+<figure><img src="/assets/img/articles/content/zabbix-linux-windows-agent-topology.png" width="1920" height="1080" loading="lazy" decoding="async" alt="Active TLS to TCP/10051 and optional passive TLS on TCP/10050 for Linux and Windows Agent 2" data-en-alt="Active TLS to TCP/10051 and optional passive TLS on TCP/10050 for Linux and Windows Agent 2" data-fa-alt="TLS فعال به TCP/10051 و TLS غیرفعال اختیاری روی TCP/10050 برای Agent 2 لینوکس و ویندوز"><figcaption ><span  data-en="Active TLS to TCP/10051 and optional passive TLS on TCP/10050 for Linux and Windows Agent 2" data-fa="TLS فعال به TCP/10051 و TLS غیرفعال اختیاری روی TCP/10050 برای Agent 2 لینوکس و ویندوز">Active TLS to TCP/10051 and optional passive TLS on TCP/10050 for Linux and Windows Agent 2</span></figcaption></figure>
+<p  data-en="On linux-app-01 add the chapter 3 official 7.0 Ubuntu repository, then install only Agent 2. Server is the passive-source allowlist; ServerActive is the active destination; Hostname must match frontend Host name, not Visible name; ListenPort is 10050. Replace ListenIP with the real interface IP. Agent 2 runs in the foreground under systemd; do not add classic-agent StartAgents or daemonization settings." data-fa="روی linux-app-01، Repository رسمی 7.0 فصل ۳ سپس فقط Agent 2 نصب شود. Server فهرست Source مجاز Passive، ServerActive مقصد Active، Hostname برابر Host name در Frontend نه Visible name و ListenPort برابر 10050 است. ListenIP با IP واقعی Interface جایگزین شود. Agent 2 در Foreground تحت systemd است؛ StartAgents یا Daemonization کلاسیک اضافه نشود.">On linux-app-01 add the chapter 3 official 7.0 Ubuntu repository, then install only Agent 2. Server is the passive-source allowlist; ServerActive is the active destination; Hostname must match frontend Host name, not Visible name; ListenPort is 10050. Replace ListenIP with the real interface IP. Agent 2 runs in the foreground under systemd; do not add classic-agent StartAgents or daemonization settings.</p>
+<pre dir="ltr"><code class="language-bash">sudo apt update
+sudo apt install -y zabbix-agent2 openssl
+sudo systemctl stop zabbix-agent2
+sudo install -d -o root -g zabbix -m 0750 /etc/zabbix/keys
+sudo sh -c &#x27;umask 027; openssl rand -hex 32 &gt; /etc/zabbix/keys/agent2.psk&#x27;
+sudo chown root:zabbix /etc/zabbix/keys/agent2.psk
+sudo chmod 0640 /etc/zabbix/keys/agent2.psk
+# Adapt the downloaded configuration BEFORE starting the service.
+sudo install -o root -g zabbix -m 0640 zabbix-agent2-linux.conf /etc/zabbix/zabbix_agent2.conf
+sudoedit /etc/zabbix/zabbix_agent2.conf
+sudo ufw allow from 192.0.2.10 to any port 10050 proto tcp
+sudo -u zabbix zabbix_agent2 -c /etc/zabbix/zabbix_agent2.conf -t agent.ping
+sudo systemctl enable --now zabbix-agent2
+sudo systemctl status zabbix-agent2 --no-pager
+sudo journalctl -u zabbix-agent2 -n 50 --no-pager
+sudo ss -lntp | grep &#x27;:10050&#x27;
+nc -vz 192.0.2.10 10051</code></pre>
+<pre dir="ltr"><code class="language-conf"># Ubuntu 24.04, Zabbix Agent 2 7.0 LTS. Replace documentation IP/name/identity.
+LogType=file
+LogFile=/var/log/zabbix/zabbix_agent2.log
+LogFileSize=10
+Server=192.0.2.10
+ServerActive=192.0.2.10:10051
+Hostname=linux-app-01
+ListenIP=198.51.100.21
+ListenPort=10050
+TLSConnect=psk
+TLSAccept=psk
+TLSPSKIdentity=linux-app-01-psk
+TLSPSKFile=/etc/zabbix/keys/agent2.psk
+DenyKey=system.run[*]
+UnsafeUserParameters=0
+Include=/etc/zabbix/zabbix_agent2.d/*.conf
+Include=/etc/zabbix/zabbix_agent2.d/plugins.d/*.conf
+# Explicit read-only key for one approved service; no wildcard shell execution.
+UserParameter=custom.service.nginx,/usr/bin/systemctl is-active nginx || true</code></pre>
+<p  data-en="Data collection → Hosts → Create host: Host name linux-app-01, group Linux servers, monitored by Server, Agent interface 198.51.100.21:10050. Link Linux by Zabbix agent active for active monitoring or Linux by Zabbix agent for passive monitoring. Agent 2 uses these official templates; do not attach both OS variants because keys overlap. Encryption: PSK for connections to and from host, identity linux-app-01-psk, generated per-host key. Transfer the key securely through the protected UI, never tickets/Git." data-fa="Data collection → Hosts → Create host: Host name برابر linux-app-01، Group برابر Linux servers، Monitored by برابر Server، Interface برابر 198.51.100.21:10050. Template برای Active برابر Linux by Zabbix agent active و برای Passive برابر Linux by Zabbix agent. Agent 2 همین Template رسمی را استفاده می‌کند؛ هر دو نوع با Key مشترک همزمان لینک نشود. Encryption هر دو جهت PSK، Identity برابر linux-app-01-psk و Key یکتای تولیدشده؛ انتقال امن از UI محافظت‌شده نه Ticket/Git.">Data collection → Hosts → Create host: Host name linux-app-01, group Linux servers, monitored by Server, Agent interface 198.51.100.21:10050. Link Linux by Zabbix agent active for active monitoring or Linux by Zabbix agent for passive monitoring. Agent 2 uses these official templates; do not attach both OS variants because keys overlap. Encryption: PSK for connections to and from host, identity linux-app-01-psk, generated per-host key. Transfer the key securely through the protected UI, never tickets/Git.</p>
+<table><thead><tr><th  data-en="Metric" data-fa="معیار">Metric</th><th  data-en="Keys / validation" data-fa="Key و اعتبارسنجی">Keys / validation</th></tr></thead><tbody><tr><td  data-en="CPU / load" data-fa="CPU و Load">CPU / load</td><td  data-en="system.cpu.util[,idle], system.cpu.load[all,avg1]; observe a controlled workload." data-fa="system.cpu.util[,idle] و system.cpu.load[all,avg1]؛ بار کنترل‌شده مشاهده شود.">system.cpu.util[,idle], system.cpu.load[all,avg1]; observe a controlled workload.</td></tr><tr><td  data-en="RAM" data-fa="RAM">RAM</td><td  data-en="vm.memory.size[available], vm.memory.size[total]; available memory includes reclaimable cache." data-fa="vm.memory.size[available] و vm.memory.size[total]؛ Available شامل Cache قابل بازیافت است.">vm.memory.size[available], vm.memory.size[total]; available memory includes reclaimable cache.</td></tr><tr><td  data-en="Disk / filesystem" data-fa="Disk و Filesystem">Disk / filesystem</td><td  data-en="vfs.fs.discovery, vfs.fs.size[/,pused]; review mount discovery and pseudo-filesystem exclusions." data-fa="vfs.fs.discovery و vfs.fs.size[/,pused]؛ Discovery Mount و حذف Filesystem مجازی بررسی شود.">vfs.fs.discovery, vfs.fs.size[/,pused]; review mount discovery and pseudo-filesystem exclusions.</td></tr><tr><td  data-en="Network" data-fa="شبکه">Network</td><td  data-en="net.if.discovery, net.if.in[ens160], net.if.out[ens160]; use actual discovered interface." data-fa="net.if.discovery، net.if.in[ens160] و net.if.out[ens160]؛ Interface واقعی کشف‌شده استفاده شود.">net.if.discovery, net.if.in[ens160], net.if.out[ens160]; use actual discovered interface.</td></tr><tr><td  data-en="Uptime / service" data-fa="Uptime و Service">Uptime / service</td><td  data-en="system.uptime, custom.service.nginx; custom item configuration in chapter 7." data-fa="system.uptime و custom.service.nginx؛ تنظیم Item سفارشی فصل ۷.">system.uptime, custom.service.nginx; custom item configuration in chapter 7.</td></tr></tbody></table>
+<pre dir="ltr"><code class="language-bash">sudo -u zabbix zabbix_agent2 -c /etc/zabbix/zabbix_agent2.conf -t &#x27;system.uptime&#x27;
+sudo -u zabbix zabbix_agent2 -c /etc/zabbix/zabbix_agent2.conf -t &#x27;vfs.fs.size[/,pused]&#x27;
+sudo -u zabbix zabbix_agent2 -c /etc/zabbix/zabbix_agent2.conf -t &#x27;custom.service.nginx&#x27;
+# From the authorized Server: provision this per-host PSK copy securely, root-only.
+sudo zabbix_get -s 198.51.100.21 -p 10050 -k agent.ping \
+  --tls-connect psk --tls-psk-identity linux-app-01-psk --tls-psk-file /root/linux-app-01.psk</code></pre>
+<p  data-en="Expected: ping=1, uptime positive, filesystem use 0–100 and service active when running. nc proves only TCP, local -t only key evaluation, zabbix_get a passive application/TLS exchange. Monitoring → Latest data must advance after item/configuration intervals for active acceptance; graphs need samples. Passive ZBX interface status is not active health. For active-only mode omit Server (disables Agent 2 passive checks), remove inbound 10050 and use only the active template. Retire the temporary diagnostic key through the secret lifecycle." data-fa="انتظار: Ping برابر 1، Uptime مثبت، مصرف Filesystem بین ۰ تا ۱۰۰ و سرویس Running برابر active. nc فقط TCP، -t فقط ارزیابی محلی Key و zabbix_get تبادل کاربردی/TLS Passive را ثابت می‌کند. برای پذیرش Active، Timestamp در Monitoring → Latest data پس از Interval جلو برود؛ Graph نمونه می‌خواهد. ZBX Passive وضعیت Active نیست. برای Active-only، Server حذف که Passive Agent 2 را غیرفعال می‌کند، ورودی 10050 حذف و فقط Template Active. Key تشخیصی موقت طبق چرخه Secret حذف شود.">Expected: ping=1, uptime positive, filesystem use 0–100 and service active when running. nc proves only TCP, local -t only key evaluation, zabbix_get a passive application/TLS exchange. Monitoring → Latest data must advance after item/configuration intervals for active acceptance; graphs need samples. Passive ZBX interface status is not active health. For active-only mode omit Server (disables Agent 2 passive checks), remove inbound 10050 and use only the active template. Retire the temporary diagnostic key through the secret lifecycle.</p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/appendix/config/zabbix_agent2" rel="noopener"><span  data-en="Official Linux Agent 2 parameters" data-fa="پارامتر رسمی Agent 2 لینوکس">Official Linux Agent 2 parameters</span></a></p>
+<p><a href="https://git.zabbix.com/projects/ZBX/repos/zabbix/browse/templates/os/linux?at=refs%2Fheads%2Frelease%2F7.0" rel="noopener"><span  data-en="Official release/7.0 Linux templates" data-fa="Template رسمی Linux در release/7.0">Official release/7.0 Linux templates</span></a></p>
+</section>
+<section id="windows-agent"><h2  data-en="5. Install Agent 2 on Windows Server" data-fa="۵. نصب Agent 2 روی Windows Server">5. Install Agent 2 on Windows Server</h2>
+<p  data-en="Use supported x64 Windows Server 2022/2025. Download stable 7.0 Agent 2 amd64 OpenSSL MSI from the official page. Record vendor SHA256, approved patch and verified Authenticode publisher thumbprint. The unattended script requires 7.0.22+ because DONOTSTART was introduced then. A hash obtained from an untrusted source is insufficient; verify the valid Zabbix publisher signature independently." data-fa="Windows Server 2022/2025 پشتیبانی‌شده x64 استفاده شود. MSI پایدار Agent 2 نسخه 7.0 از نوع amd64 OpenSSL از صفحه رسمی دریافت شود. SHA256 سازنده، Patch تأییدشده و Thumbprint ناشر Authenticode معتبر ثبت شود. Script به 7.0.22+ نیاز دارد زیرا DONOTSTART آن زمان اضافه شد. Hash از Source نامطمئن کافی نیست؛ Signature معتبر ناشر Zabbix مستقل تأیید شود.">Use supported x64 Windows Server 2022/2025. Download stable 7.0 Agent 2 amd64 OpenSSL MSI from the official page. Record vendor SHA256, approved patch and verified Authenticode publisher thumbprint. The unattended script requires 7.0.22+ because DONOTSTART was introduced then. A hash obtained from an untrusted source is insufficient; verify the valid Zabbix publisher signature independently.</p>
+<p><a href="https://www.zabbix.com/download_agents" rel="noopener"><span  data-en="Official stable Agent 2 MSI download" data-fa="دانلود رسمی MSI پایدار Agent 2">Official stable Agent 2 MSI download</span></a></p>
+<p  data-en="GUI: verify MSI, run wizard as administrator, accept license and select Agent 2 in default Program Files. Enter server 192.0.2.10, active server 192.0.2.10:10051, exact hostname windows-app-01 and unique TLS PSK identity. Protect key/config ACLs and inspect firewall rules before exposed startup. If GUI starts automatically, block network ingress until complete. For reproducible production use CONF plus DONOTSTART so no PSK value enters MSI properties or verbose logs." data-fa="GUI: MSI تأیید، Wizard با Administrator، قبول License و انتخاب Agent 2 در Program Files پیش‌فرض. Server برابر 192.0.2.10، Active برابر 192.0.2.10:10051، نام دقیق windows-app-01 و Identity یکتای TLS PSK. ACL فایل Key/Config و Firewall پیش از Start در معرض شبکه بررسی شود. اگر GUI خودکار Start کرد، Ingress تا تکمیل مسدود. Production تکرارپذیر از CONF و DONOTSTART استفاده کند تا مقدار PSK وارد Property/Log MSI نشود.">GUI: verify MSI, run wizard as administrator, accept license and select Agent 2 in default Program Files. Enter server 192.0.2.10, active server 192.0.2.10:10051, exact hostname windows-app-01 and unique TLS PSK identity. Protect key/config ACLs and inspect firewall rules before exposed startup. If GUI starts automatically, block network ingress until complete. For reproducible production use CONF plus DONOTSTART so no PSK value enters MSI properties or verbose logs.</p>
+<pre dir="ltr"><code class="language-conf"># Windows Server 2022/2025 x64, Agent 2 7.0 LTS; default MSI destination.
+LogType=file
+LogFile=C:\ProgramData\Zabbix\zabbix_agent2.log
+LogFileSize=10
+Server=192.0.2.10
+ServerActive=192.0.2.10:10051
+Hostname=windows-app-01
+ListenPort=10050
+TLSConnect=psk
+TLSAccept=psk
+TLSPSKIdentity=windows-app-01-psk
+TLSPSKFile=C:\ProgramData\Zabbix\agent2.psk
+DenyKey=system.run[*]
+UnsafeUserParameters=0
+Include=C:\Program Files\Zabbix Agent 2\zabbix_agent2.d\plugins.d\*.conf</code></pre>
+<pre dir="ltr"><code class="language-powershell"># Elevated PowerShell; approved values come from the deployment record.
+$msi = &#x27;C:\Staging\approved-agent2-7.0-windows-amd64-openssl.msi&#x27;
+Get-FileHash -LiteralPath $msi -Algorithm SHA256
+Get-AuthenticodeSignature -LiteralPath $msi | Format-List Status,SignerCertificate
+# Run the script with MsiPath, ExpectedSha256, ApprovedSignerThumbprint,
+# ConfigPath, PskSourcePath and ServerAddress parameters.
+# Silent MSI step AFTER protected PSK/configuration provisioning:
+msiexec.exe /i &quot;C:\Staging\approved-agent2.msi&quot; /qn /norestart CONF=&quot;C:\ProgramData\Zabbix\install.conf&quot; DONOTSTART=1 /l*v &quot;C:\ProgramData\Zabbix\install.log&quot;</code></pre>
+<p  data-en="The full script below validates hash/signature/TLS, uses language-independent SYSTEM/Administrators SIDs for ACLs, refuses existing installations, checks MSI codes 0/3010 and service identity, and restricts Defender Firewall to the monitoring server on Domain/Private profiles. Adapt inputs first; it does not fetch MSI or register hosts. A custom service account needs explicit key/config read and log write rights. Code 3010 requires scheduled reboot and startup verification." data-fa="Script کامل زیر Hash/Signature/TLS را بررسی، SID مستقل از زبان SYSTEM/Administrators برای ACL، رد نصب موجود، بررسی MSI 0/3010 و هویت سرویس و محدودکردن Defender Firewall به Server در Profile Domain/Private دارد. ورودی تطبیق داده شود؛ MSI دریافت یا Host ثبت نمی‌کند. حساب سرویس سفارشی Read فایل Key/Config و Write Log نیاز دارد. 3010 نیازمند Reboot زمان‌بندی‌شده و بررسی Startup است.">The full script below validates hash/signature/TLS, uses language-independent SYSTEM/Administrators SIDs for ACLs, refuses existing installations, checks MSI codes 0/3010 and service identity, and restricts Defender Firewall to the monitoring server on Domain/Private profiles. Adapt inputs first; it does not fetch MSI or register hosts. A custom service account needs explicit key/config read and log write rights. Code 3010 requires scheduled reboot and startup verification.</p>
+<pre dir="ltr"><code class="language-powershell">#requires -RunAsAdministrator
+&lt;# Fresh-install workflow for Windows Server 2022/2025, Agent 2 7.0.22+.
+Download the current stable 7.0 x64 OpenSSL MSI from the official site first.
+Requires approved SHA256 AND valid Zabbix Authenticode publisher signature.
+Never pass PSK values to msiexec arguments or logs. Existing installs are refused.
+#&gt;
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory)][string]$MsiPath,
+    [Parameter(Mandatory)][ValidatePattern(&#x27;^[A-Fa-f0-9]{64}$&#x27;)][string]$ExpectedSha256,
+    [Parameter(Mandatory)][string]$ApprovedSignerThumbprint,
+    [Parameter(Mandatory)][string]$ConfigPath,
+    [Parameter(Mandatory)][string]$PskSourcePath,
+    [string]$ServerAddress = &#x27;192.0.2.10&#x27;
+)
+Set-StrictMode -Version Latest
+$ErrorActionPreference = &#x27;Stop&#x27;
+if (Get-Service -Name &#x27;Zabbix Agent 2&#x27; -ErrorAction SilentlyContinue) { throw &#x27;Existing Agent 2 found; use a reviewed upgrade workflow.&#x27; }
+if (Get-Service -Name &#x27;Zabbix Agent&#x27; -ErrorAction SilentlyContinue) { throw &#x27;Classic agent exists; review port and service migration first.&#x27; }
+$msi = (Resolve-Path -LiteralPath $MsiPath).Path
+$config = (Resolve-Path -LiteralPath $ConfigPath).Path
+$pskSource = (Resolve-Path -LiteralPath $PskSourcePath).Path
+foreach ($path in @($msi, $config, $pskSource)) {
+    if ((Get-Item -LiteralPath $path).Attributes -band [IO.FileAttributes]::ReparsePoint) { throw &#x27;Reparse-point input refused.&#x27; }
+    if ($path.Contains(&#x27;&quot;&#x27;)) { throw &#x27;Invalid path.&#x27; }
+}
+if ((Get-FileHash -LiteralPath $msi -Algorithm SHA256).Hash -ne $ExpectedSha256) { throw &#x27;MSI hash mismatch.&#x27; }
+$signature = Get-AuthenticodeSignature -LiteralPath $msi
+if ($signature.Status -ne &#x27;Valid&#x27; -or $signature.SignerCertificate.Thumbprint -ne $ApprovedSignerThumbprint) { throw &#x27;MSI signature/publisher mismatch.&#x27; }
+$content = Get-Content -LiteralPath $config -Raw
+$parsedAddress = $null
+if (-not [System.Net.IPAddress]::TryParse($ServerAddress, [ref]$parsedAddress)) { throw &#x27;ServerAddress must be an approved IP address for the firewall allowlist.&#x27; }
+if ($content -notmatch (&#x27;(?m)^Server=&#x27; + [regex]::Escape($ServerAddress) + &#x27;\r?$&#x27;)) { throw &#x27;Configuration Server must match the firewall ServerAddress.&#x27; }
+if ($content -notmatch (&#x27;(?m)^ServerActive=&#x27; + [regex]::Escape($ServerAddress) + &#x27;:10051\r?$&#x27;)) { throw &#x27;Configuration ServerActive must match the selected monitoring server.&#x27; }
+foreach ($setting in @(&#x27;TLSConnect=psk&#x27;,&#x27;TLSAccept=psk&#x27;,&#x27;TLSPSKFile=C:\ProgramData\Zabbix\agent2.psk&#x27;,&#x27;DenyKey=system.run[*]&#x27;)) {
+    if (-not $content.Contains($setting)) { throw &quot;Required configuration missing: $setting&quot; }
+}
+$psk = (Get-Content -LiteralPath $pskSource -Raw).Trim()
+if ($psk -notmatch &#x27;^[a-fA-F0-9]{64}$&#x27;) { throw &#x27;Expected a unique 256-bit hex PSK.&#x27; }
+$data = &#x27;C:\ProgramData\Zabbix&#x27;
+if (Test-Path -LiteralPath $data) { throw &#x27;Existing data directory refused; inspect before installation.&#x27; }
+New-Item -ItemType Directory -Path $data | Out-Null
+&amp; icacls.exe $data /inheritance:r /grant:r &#x27;*S-1-5-18:(OI)(CI)F&#x27; &#x27;*S-1-5-32-544:(OI)(CI)F&#x27; | Out-Null
+if ($LASTEXITCODE -ne 0) { throw &#x27;ACL setup failed.&#x27; }
+[IO.File]::WriteAllText(&quot;$data\agent2.psk&quot;, $psk + &quot;`r`n&quot;, [Text.Encoding]::ASCII)
+$psk = $null
+Copy-Item -LiteralPath $config -Destination &quot;$data\install.conf&quot;
+$arguments = &quot;/i `&quot;$msi`&quot; /qn /norestart /l*v `&quot;$data\install.log`&quot; CONF=`&quot;$data\install.conf`&quot; DONOTSTART=1&quot;
+$process = Start-Process -FilePath msiexec.exe -ArgumentList $arguments -Wait -PassThru -WindowStyle Hidden
+if ($process.ExitCode -notin @(0,3010)) { throw &quot;MSI installation failed: $($process.ExitCode)&quot; }
+$target = &#x27;C:\Program Files\Zabbix Agent 2\zabbix_agent2.conf&#x27;
+Copy-Item -LiteralPath &quot;$data\install.conf&quot; -Destination $target -Force
+&amp; icacls.exe $target /inheritance:r /grant:r &#x27;*S-1-5-18:F&#x27; &#x27;*S-1-5-32-544:F&#x27; | Out-Null
+if ($LASTEXITCODE -ne 0) { throw &#x27;Configuration ACL setup failed.&#x27; }
+$service = Get-CimInstance Win32_Service -Filter &quot;Name=&#x27;Zabbix Agent 2&#x27;&quot;
+if ($service.StartName -notin @(&#x27;LocalSystem&#x27;,&#x27;NT AUTHORITY\SYSTEM&#x27;)) { throw &#x27;Adjust ACLs for the actual service account before startup.&#x27; }
+New-NetFirewallRule -Name &#x27;Zabbix-Agent2-TLS&#x27; -DisplayName &#x27;Zabbix Agent 2 TLS from monitoring server&#x27; -Direction Inbound -Action Allow -Protocol TCP -LocalPort 10050 -RemoteAddress $ServerAddress -Profile Domain,Private | Out-Null
+# Audit and remove any broad installer-created Agent rule before enabling the service.
+Get-NetFirewallRule | Where-Object { $_.DisplayName -like &#x27;*Zabbix*&#x27; -and $_.Name -ne &#x27;Zabbix-Agent2-TLS&#x27; } | Disable-NetFirewallRule
+Set-Service -Name &#x27;Zabbix Agent 2&#x27; -StartupType Automatic
+Start-Service -Name &#x27;Zabbix Agent 2&#x27;
+Get-Service -Name &#x27;Zabbix Agent 2&#x27;
+Test-NetConnection -ComputerName $ServerAddress -Port 10051
+if ($process.ExitCode -eq 3010) { Write-Warning &#x27;MSI requests a reboot; schedule it and validate service startup afterwards.&#x27; }</code></pre>
+<pre dir="ltr"><code class="language-powershell">Get-Service -Name &#x27;Zabbix Agent 2&#x27;
+Get-CimInstance Win32_Service -Filter &quot;Name=&#x27;Zabbix Agent 2&#x27;&quot; | Select-Object Name,State,StartMode,StartName,PathName
+Set-Service -Name &#x27;Zabbix Agent 2&#x27; -StartupType Automatic
+Restart-Service -Name &#x27;Zabbix Agent 2&#x27;
+Get-NetTCPConnection -LocalPort 10050 -State Listen
+Test-NetConnection -ComputerName 192.0.2.10 -Port 10051
+Get-NetFirewallRule -Name &#x27;Zabbix-Agent2-TLS&#x27; | Get-NetFirewallAddressFilter
+Get-Content &#x27;C:\ProgramData\Zabbix\zabbix_agent2.log&#x27; -Tail 50
+&amp; &#x27;C:\Program Files\Zabbix Agent 2\zabbix_agent2.exe&#x27; -c &#x27;C:\Program Files\Zabbix Agent 2\zabbix_agent2.conf&#x27; -t agent.ping
+&amp; &#x27;C:\Program Files\Zabbix Agent 2\zabbix_agent2.exe&#x27; -c &#x27;C:\Program Files\Zabbix Agent 2\zabbix_agent2.conf&#x27; -t &#x27;service.info[Spooler,state]&#x27;
+Get-WinEvent -FilterHashtable @{LogName=&#x27;System&#x27;; Level=2} -MaxEvents 5</code></pre>
+<p  data-en="Register windows-app-01 under Data collection → Hosts, group Windows servers, Server monitoring, Agent interface 198.51.100.22:10050. Link Windows by Zabbix agent active, or Windows by Zabbix agent for passive mode, not both. Encryption in both directions: PSK, windows-app-01-psk, matching unique key. Verify Latest data: CPU utilization, available/total memory, disk capacity, network traffic, service discovery and system.uptime. Filter service discovery to required business services; stopped/trigger-started Windows services are often intentional." data-fa="windows-app-01 در Data collection → Hosts با Group برابر Windows servers، Server Monitoring و Interface برابر 198.51.100.22:10050 ثبت شود. Windows by Zabbix agent active یا برای Passive برابر Windows by Zabbix agent لینک، نه هر دو. Encryption هر دو جهت PSK، هویت windows-app-01-psk و Key یکتا منطبق. Latest Data برای CPU، حافظه Available/Total، ظرفیت Disk، ترافیک Network، Service Discovery و system.uptime بررسی. Discovery سرویس به سرویس تجاری ضروری محدود؛ بسیاری از سرویس Windows عمداً Stopped/Trigger-start هستند.">Register windows-app-01 under Data collection → Hosts, group Windows servers, Server monitoring, Agent interface 198.51.100.22:10050. Link Windows by Zabbix agent active, or Windows by Zabbix agent for passive mode, not both. Encryption in both directions: PSK, windows-app-01-psk, matching unique key. Verify Latest data: CPU utilization, available/total memory, disk capacity, network traffic, service discovery and system.uptime. Filter service discovery to required business services; stopped/trigger-started Windows services are often intentional.</p>
+<p  data-en="Event Logs require additional active items. Create Zabbix agent (active) item eventlog[System,,&quot;Error|Critical&quot;,,,,skip], information type Log, interval 30s. skip avoids old log replay at startup; document this choice. Add application-specific source/event-ID filters and inspect new records in Latest data. Grant only required log-reading privileges, especially for Security logs. Expected diagnostics: running automatic service, TcpTestSucceeded=True, agent.ping=1 and Spooler state=0 when running; network TCP success alone does not prove active delivery." data-fa="Event Log به Item فعال اضافی نیاز دارد. Item برابر Zabbix agent (active) با Key برابر eventlog[System,,&quot;Error|Critical&quot;,,,,skip]، Type برابر Log و Interval برابر 30s بسازید. skip از Replay تاریخچه شروع جلوگیری؛ تصمیم مستند شود. Filter Source/Event ID برای برنامه و رکورد تازه در Latest Data بررسی. فقط مجوز Read لازم خصوصاً Security Log داده شود. انتظار: سرویس Running/Automatic، TcpTestSucceeded=True، agent.ping=1 و Spooler در Running برابر 0؛ موفقیت TCP اثبات تحویل Active نیست.">Event Logs require additional active items. Create Zabbix agent (active) item eventlog[System,,&quot;Error|Critical&quot;,,,,skip], information type Log, interval 30s. skip avoids old log replay at startup; document this choice. Add application-specific source/event-ID filters and inspect new records in Latest data. Grant only required log-reading privileges, especially for Security logs. Expected diagnostics: running automatic service, TcpTestSucceeded=True, agent.ping=1 and Spooler state=0 when running; network TCP success alone does not prove active delivery.</p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/installation/install_from_packages/win_msi" rel="noopener"><span  data-en="Official MSI properties and GUI installation" data-fa="Property رسمی MSI و نصب GUI">Official MSI properties and GUI installation</span></a></p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/appendix/config/zabbix_agent2_win" rel="noopener"><span  data-en="Windows Agent 2 configuration" data-fa="Configuration Agent 2 ویندوز">Windows Agent 2 configuration</span></a></p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/config/items/itemtypes/zabbix_agent/win_keys" rel="noopener"><span  data-en="Windows service and eventlog keys" data-fa="Key مربوط به Service و Eventlog ویندوز">Windows service and eventlog keys</span></a></p>
+<p><a href="https://git.zabbix.com/projects/ZBX/repos/zabbix/browse/templates/os/windows?at=refs%2Fheads%2Frelease%2F7.0" rel="noopener"><span  data-en="Official release/7.0 Windows templates" data-fa="Template رسمی Windows در release/7.0">Official release/7.0 Windows templates</span></a></p>
+</section>
+<section id="security"><h2  data-en="6. Security hardening" data-fa="۶. امن‌سازی">6. Security hardening</h2>
+<figure><img src="/assets/img/articles/content/zabbix-security-hardening.png" width="1920" height="1080" loading="lazy" decoding="async" alt="HTTPS and MFA, scoped roles/API, Agent TLS, firewall allowlists and local PostgreSQL security layers" data-en-alt="HTTPS and MFA, scoped roles/API, Agent TLS, firewall allowlists and local PostgreSQL security layers" data-fa-alt="لایه امنیت HTTPS و MFA، Role/API محدود، TLS Agent، Allowlist Firewall و PostgreSQL محلی"><figcaption ><span  data-en="HTTPS and MFA, scoped roles/API, Agent TLS, firewall allowlists and local PostgreSQL security layers" data-fa="لایه امنیت HTTPS و MFA، Role/API محدود، TLS Agent، Allowlist Firewall و PostgreSQL محلی">HTTPS and MFA, scoped roles/API, Agent TLS, firewall allowlists and local PostgreSQL security layers</span></figcaption></figure>
+<h3  data-en="HTTPS and certificate lifecycle" data-fa="HTTPS و چرخه Certificate">HTTPS and certificate lifecycle</h3>
+<p  data-en="Issue a real FQDN certificate from enterprise CA or supported ACME DNS-01 for private access. Install chain/key below with root 0600 key and 0700 directory; root Nginx master reads it. In the existing packaged Nginx server block replace bootstrap listen/server_name and add directives below; preserve application locations and FastCGI. Do not create competing blocks or generic PHP rules exposing /etc/zabbix." data-fa="Certificate FQDN واقعی از CA سازمان یا ACME DNS-01 پشتیبانی‌شده برای دسترسی خصوصی. Chain/Key در مسیر زیر، Key با root 0600 و Directory با 0700؛ Master Nginx با root می‌خواند. در Server Block موجود، listen/server_name اولیه جایگزین و Directive زیر؛ Location/FastCGI حفظ. Block متعارض یا PHP عمومی افشاکننده /etc/zabbix نباشد.">Issue a real FQDN certificate from enterprise CA or supported ACME DNS-01 for private access. Install chain/key below with root 0600 key and 0700 directory; root Nginx master reads it. In the existing packaged Nginx server block replace bootstrap listen/server_name and add directives below; preserve application locations and FastCGI. Do not create competing blocks or generic PHP rules exposing /etc/zabbix.</p>
+<pre dir="ltr"><code class="language-nginx"># Inside existing /etc/zabbix/nginx.conf server block:
+listen 192.0.2.10:443 ssl;
+server_name zabbix.example.com;
+ssl_certificate /etc/ssl/zabbix/fullchain.pem;
+ssl_certificate_key /etc/ssl/zabbix/privkey.pem;
+ssl_protocols TLSv1.2 TLSv1.3;
+ssl_session_cache shared:ZabbixTLS:10m;
+ssl_session_timeout 1d;
+add_header Strict-Transport-Security &quot;max-age=31536000&quot; always;
+add_header X-Content-Type-Options &quot;nosniff&quot; always;
+add_header Referrer-Policy &quot;same-origin&quot; always;
+# Keep packaged root/index/PHP location/deny rules/fastcgi_pass.
+# Enable HSTS only after HTTPS and renewal validation.</code></pre>
+<pre dir="ltr"><code class="language-bash">sudo install -d -o root -g root -m 0700 /etc/ssl/zabbix
+# Securely install approved certificate and key before testing Nginx.
+sudo chmod 0600 /etc/ssl/zabbix/privkey.pem
+sudo chmod 0644 /etc/ssl/zabbix/fullchain.pem
+sudo nginx -t
+sudo php-fpm8.3 -t
+sudo systemctl reload nginx
+curl -I --cacert /path/to/enterprise-ca.pem https://zabbix.example.com/
+openssl s_client -connect zabbix.example.com:443 -servername zabbix.example.com \
+  -CAfile /path/to/enterprise-ca.pem -verify_return_error &lt;/dev/null
+sudo ss -lntp
+sudo ufw status numbered</code></pre>
+<p  data-en="Expected: valid config, HTTPS 200/redirect, verified chain/FQDN; never curl -k. Confirm bootstrap 8080 gone and 5432 loopback-only. Schedule CA/ACME renewal, test it, run nginx -t before reload in deploy hook, and alert on expiry/failure. Set HTTPS PHP pool session.cookie_secure=1, session.cookie_httponly=1, session.cookie_samesite=Lax and retest sessions." data-fa="انتظار: Config معتبر، HTTPS 200/Redirect و Chain/FQDN تأیید؛ هرگز curl -k. حذف 8080 اولیه و محلی بودن 5432. Renewal CA/ACME زمان‌بندی و تست، Deploy Hook ابتدا nginx -t سپس Reload و Alert انقضا/شکست. Pool PHP HTTPS با session.cookie_secure=1، session.cookie_httponly=1 و session.cookie_samesite=Lax و تست Session.">Expected: valid config, HTTPS 200/redirect, verified chain/FQDN; never curl -k. Confirm bootstrap 8080 gone and 5432 loopback-only. Schedule CA/ACME renewal, test it, run nginx -t before reload in deploy hook, and alert on expiry/failure. Set HTTPS PHP pool session.cookie_secure=1, session.cookie_httponly=1, session.cookie_samesite=Lax and retest sessions.</p>
+<h3  data-en="Agent authentication and least privilege" data-fa="احراز هویت Agent و کمترین مجوز">Agent authentication and least privilege</h3>
+<p  data-en="Unique random per-host PSK, TLSConnect=psk, TLSAccept=psk and matching frontend directions. Shared fleet keys multiply compromise risk. Certificate alternative uses TLSConnect/TLSAccept=cert, TLSCAFile, TLSCertFile, TLSKeyFile and allowed issuer/subject; configure host UI constraints and renewal/revocation. HTTPS and agent certificates are separate. No unencrypted fallback or bypassed peer verification." data-fa="PSK تصادفی یکتای Host، TLSConnect=psk، TLSAccept=psk و جهت UI منطبق. Key مشترک Fleet ریسک نفوذ را تکثیر می‌کند. گزینه Certificate با TLSConnect/TLSAccept=cert، TLSCAFile، TLSCertFile، TLSKeyFile و Issuer/Subject مجاز؛ Constraint UI و Renewal/Revocation. Certificate HTTPS از Agent جدا است. بدون Fallback ساده یا دورزدن Peer Verification.">Unique random per-host PSK, TLSConnect=psk, TLSAccept=psk and matching frontend directions. Shared fleet keys multiply compromise risk. Certificate alternative uses TLSConnect/TLSAccept=cert, TLSCAFile, TLSCertFile, TLSKeyFile and allowed issuer/subject; configure host UI constraints and renewal/revocation. HTTPS and agent certificates are separate. No unencrypted fallback or bypassed peer verification.</p>
+<pre dir="ltr"><code class="language-conf"># Replace PSK settings for a reviewed certificate deployment:
+TLSConnect=cert
+TLSAccept=cert
+TLSCAFile=/etc/zabbix/keys/ca.pem
+TLSCertFile=/etc/zabbix/keys/agent-chain.pem
+TLSKeyFile=/etc/zabbix/keys/agent.key
+TLSServerCertIssuer=CN=Monitoring CA,O=Example
+TLSServerCertSubject=CN=zabbix.example.com,O=Example</code></pre>
+<ul><li  data-en="Firewall and Agent Server source allowlists agree; restrict 10051, discovery and auto-registration." data-fa="Allowlist Firewall و Server Agent منطبق؛ محدودیت 10051، Discovery و Auto-registration.">Firewall and Agent Server source allowlists agree; restrict 10051, discovery and auto-registration.</li><li  data-en="Linux agent runs as zabbix, DenyKey=system.run[*], UnsafeUserParameters=0 and fixed reviewed commands; no broad sudo/writable scripts." data-fa="Agent Linux با zabbix، DenyKey=system.run[*]، UnsafeUserParameters=0 و فرمان ثابت بررسی‌شده؛ بدون sudo گسترده/Script قابل نوشتن.">Linux agent runs as zabbix, DenyKey=system.run[*], UnsafeUserParameters=0 and fixed reviewed commands; no broad sudo/writable scripts.</li><li  data-en="PostgreSQL local SCRAM/peer, no trust; remote DB needs verify-full TLS and database-only firewall." data-fa="PostgreSQL محلی SCRAM/Peer، بدون trust؛ DB Remote نیازمند TLS verify-full و Firewall اختصاصی.">PostgreSQL local SCRAM/peer, no trust; remote DB needs verify-full TLS and database-only firewall.</li><li  data-en="Config, PSKs, web credentials, scripts and backups have restricted ownership/modes; review AppArmor denials, grant narrowly, never disable profile." data-fa="Config، PSK، Credential وب، Script و Backup دارای Owner/Mode محدود؛ Denial AppArmor بررسی و مجوز باریک، نه غیرفعال‌سازی Profile.">Config, PSKs, web credentials, scripts and backups have restricted ownership/modes; review AppArmor denials, grant narrowly, never disable profile.</li></ul>
+<h3  data-en="Strong administration, RBAC, MFA, audit and API" data-fa="مدیریت قوی، RBAC، MFA، Audit و API">Strong administration, RBAC, MFA, audit and API</h3>
+<p  data-en="Users → User groups controls host-group access; User roles controls UI/API methods. Operators read-only, service owners limited to their hosts, named administrators few. Keep a vaulted emergency account with tested recovery. Zabbix 7.0 supports TOTP and Duo: Users → Authentication → MFA, enroll users and enforce group method after testing recovery/IdP behavior. Limit sessions/remove dormant accounts." data-fa="Users → User groups دسترسی Host Group و User roles متد UI/API را کنترل می‌کند. Operator Read-only، مالک سرویس فقط Host خودش و Administrator نام‌دار اندک. حساب اضطراری Vault با Recovery تست‌شده. Zabbix 7.0 با TOTP و Duo: Users → Authentication → MFA، Enroll و الزام روش Group بعد تست Recovery/IdP. Session محدود/حساب راکد حذف.">Users → User groups controls host-group access; User roles controls UI/API methods. Operators read-only, service owners limited to their hosts, named administrators few. Keep a vaulted emergency account with tested recovery. Zabbix 7.0 supports TOTP and Duo: Users → Authentication → MFA, enroll users and enforce group method after testing recovery/IdP behavior. Limit sessions/remove dormant accounts.</p>
+<p  data-en="Enable Administration → General → Audit log, review Reports → Audit log, define retention and central protected log forwarding. API: dedicated least-privilege service user, explicit role method allowlist, expiring API token in a secret manager, HTTPS only. Use /api_jsonrpc.php with Authorization: Bearer and JSON-RPC; prove an allowed read and denied write, rotate/revoke and audit. Never hard-code token or use query URLs." data-fa="Administration → General → Audit log فعال، Reports → Audit log بررسی، Retention و ارسال مرکزی Log محافظت‌شده. API: کاربر سرویس کم‌مجوز، Method Allowlist صریح Role، Token انقضادار در Secret Manager و فقط HTTPS. /api_jsonrpc.php با Authorization: Bearer و JSON-RPC؛ Read مجاز و Write ردشده، Rotate/Revoke و Audit. Token ثابت یا Query URL ممنوع.">Enable Administration → General → Audit log, review Reports → Audit log, define retention and central protected log forwarding. API: dedicated least-privilege service user, explicit role method allowlist, expiring API token in a secret manager, HTTPS only. Use /api_jsonrpc.php with Authorization: Bearer and JSON-RPC; prove an allowed read and denied write, rotate/revoke and audit. Never hard-code token or use query URLs.</p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/encryption/using_pre_shared_keys" rel="noopener"><span  data-en="PSK authentication" data-fa="احراز هویت PSK">PSK authentication</span></a></p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/encryption/using_certificates" rel="noopener"><span  data-en="Certificate encryption" data-fa="رمزنگاری Certificate">Certificate encryption</span></a></p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/web_interface/frontend_sections/users/authentication/mfa" rel="noopener"><span  data-en="Zabbix 7.0 MFA" data-fa="MFA در Zabbix 7.0">Zabbix 7.0 MFA</span></a></p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/web_interface/frontend_sections/users/user_roles" rel="noopener"><span  data-en="Role/API controls" data-fa="کنترل Role/API">Role/API controls</span></a></p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/api" rel="noopener"><span  data-en="Supported API authentication" data-fa="احراز هویت API رسمی">Supported API authentication</span></a></p>
+<p><a href="https://nginx.org/en/docs/http/configuring_https_servers.html" rel="noopener"><span  data-en="Nginx HTTPS reference" data-fa="مرجع HTTPS در Nginx">Nginx HTTPS reference</span></a></p>
+</section>
+<section id="monitoring"><h2  data-en="7. Practical monitoring and triggers" data-fa="۷. مانیتورینگ و Trigger عملی">7. Practical monitoring and triggers</h2>
+<p  data-en="Override OS template macros at host level for thresholds; do not edit vendor templates. Put custom service items in a local Enterprise Service Checks template. Under Hosts → Items create exact key, type Zabbix agent (active), correct value type and interval, then wait for samples before triggers. Reuse discovered OS items instead of duplicating keys. The expressions use concrete hosts and require referenced items to exist." data-fa="Threshold با Override Macro در Host تنظیم، نه ویرایش Template سازنده. Item سفارشی سرویس در Template محلی Enterprise Service Checks. در Hosts → Items، Key دقیق، Type برابر Zabbix agent (active)، Value Type و Interval صحیح؛ قبل Trigger چند Sample. Item کشف‌شده دوباره ساخته نشود. Expression دارای Host مشخص و نیازمند Item موجود است.">Override OS template macros at host level for thresholds; do not edit vendor templates. Put custom service items in a local Enterprise Service Checks template. Under Hosts → Items create exact key, type Zabbix agent (active), correct value type and interval, then wait for samples before triggers. Reuse discovered OS items instead of duplicating keys. The expressions use concrete hosts and require referenced items to exist.</p>
+<table><thead><tr><th  data-en="Item / value / interval" data-fa="Item و Value و Interval">Item / value / interval</th><th  data-en="Purpose" data-fa="کاربرد">Purpose</th></tr></thead><tbody><tr><td  data-en="vfs.fs.size[/,pused] / Float / 60s" data-fa="vfs.fs.size[/,pused] / Float / 60s">vfs.fs.size[/,pused] / Float / 60s</td><td  data-en="Linux capacity; reuse discovered item." data-fa="ظرفیت Linux؛ استفاده Item کشف‌شده.">Linux capacity; reuse discovered item.</td></tr><tr><td  data-en="vfs.fs.size[C:,pused] / Float / 60s" data-fa="vfs.fs.size[C:,pused] / Float / 60s">vfs.fs.size[C:,pused] / Float / 60s</td><td  data-en="Windows volume; confirm actual discovery key." data-fa="Volume Windows؛ تأیید Key واقعی Discovery.">Windows volume; confirm actual discovery key.</td></tr><tr><td  data-en="custom.service.nginx / Character / 30s" data-fa="custom.service.nginx / Character / 30s">custom.service.nginx / Character / 30s</td><td  data-en="Fixed read-only UserParameter returns active/inactive/failed." data-fa="UserParameter ثابت Read-only، خروجی active/inactive/failed.">Fixed read-only UserParameter returns active/inactive/failed.</td></tr><tr><td  data-en="service.info[Spooler,state] / Unsigned / 30s" data-fa="service.info[Spooler,state] / Unsigned / 30s">service.info[Spooler,state] / Unsigned / 30s</td><td  data-en="Running=0; select a required service, Spooler is a lab example." data-fa="Running=0؛ سرویس ضروری انتخاب؛ Spooler مثال Lab.">Running=0; select a required service, Spooler is a lab example.</td></tr><tr><td  data-en="agent.ping / Unsigned / 60s" data-fa="agent.ping / Unsigned / 60s">agent.ping / Unsigned / 60s</td><td  data-en="Data absence detects monitoring path loss, not necessarily physical host failure." data-fa="نبود داده نشان فقدان مسیر پایش است، نه الزاماً خرابی فیزیکی Host.">Data absence detects monitoring path loss, not necessarily physical host failure.</td></tr></tbody></table>
+<pre dir="ltr"><code class="language-text"># Data collection -&gt; Hosts -&gt; Triggers
+# Linux disk Warning; use separate Recovery expression below.
+min(/linux-app-01/vfs.fs.size[/,pused],5m)&gt;80
+# Recovery:
+max(/linux-app-01/vfs.fs.size[/,pused],5m)&lt;75
+# Windows disk High:
+min(/windows-app-01/vfs.fs.size[C:,pused],5m)&gt;90
+# Linux CPU High (idle percent below 10 for the whole window):
+max(/linux-app-01/system.cpu.util[,idle],5m)&lt;10
+# Recovery:
+min(/linux-app-01/system.cpu.util[,idle],5m)&gt;20
+# Memory Average, less than 10% available:
+max(/linux-app-01/vm.memory.size[available],5m)/last(/linux-app-01/vm.memory.size[total])&lt;0.10
+# Monitoring path unavailable, High:
+nodata(/linux-app-01/agent.ping,5m)=1
+# Windows service stopped for three samples, Average:
+min(/windows-app-01/service.info[Spooler,state],#3)&lt;&gt;0
+# Linux service stopped, Average:
+last(/linux-app-01/custom.service.nginx)&lt;&gt;&quot;active&quot;</code></pre>
+<p  data-en="Create a named trigger with severity, expression, service/environment/team tags and operational data. For hysteresis set OK event generation=Recovery expression: the problem expression must become false and recovery condition true. Warning is capacity risk, Average degradation, High required service/monitoring loss, Disaster confirmed critical business outage. Add a higher disk threshold and dependency from the lower alarm. Dashboard: availability/problems, CPU/load, memory, free space, throughput and server queue." data-fa="Trigger نام‌دار با Severity، Expression، Tagهای service/environment/team و Operational Data بسازید. برای Hysteresis، OK event generation=Recovery expression؛ شرط Problem باید False و Recovery True شود. Warning ریسک ظرفیت، Average افت، High فقدان سرویس/پایش لازم و Disaster قطعی تأییدشده حیاتی. Threshold بالاتر Disk و Dependency هشدار پایین‌تر بسازید. Dashboard: Availability/Problem، CPU/Load، Memory، فضای آزاد، Throughput و Queue.">Create a named trigger with severity, expression, service/environment/team tags and operational data. For hysteresis set OK event generation=Recovery expression: the problem expression must become false and recovery condition true. Warning is capacity risk, Average degradation, High required service/monitoring loss, Disaster confirmed critical business outage. Add a higher disk threshold and dependency from the lower alarm. Dashboard: availability/problems, CPU/load, memory, free space, throughput and server queue.</p>
+<p  data-en="In staging temporarily lower a test threshold or stop only a disposable service; verify PROBLEM, action and recovery and reset the test. Never fill a production disk or stop a business service for a drill. Combine nodata with an independent ICMP/reachability item when distinguishing agent/network failure from a dead server." data-fa="در Staging، Threshold تست موقت کم یا فقط سرویس قابل حذف Stop؛ PROBLEM، Action و Recovery بررسی و Reset شود. Disk Production پر یا سرویس تجاری برای Drill متوقف نشود. برای تفکیک خرابی Agent/Network از سرور مرده، nodata با ICMP/Reachability مستقل ترکیب شود.">In staging temporarily lower a test threshold or stop only a disposable service; verify PROBLEM, action and recovery and reset the test. Never fill a production disk or stop a business service for a drill. Combine nodata with an independent ICMP/reachability item when distinguishing agent/network failure from a dead server.</p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/config/triggers/expression" rel="noopener"><span  data-en="Supported trigger expressions and recovery" data-fa="Expression و Recovery پشتیبانی‌شده">Supported trigger expressions and recovery</span></a></p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/config/items/itemtypes/zabbix_agent" rel="noopener"><span  data-en="Supported agent keys and item types" data-fa="Key و Type رسمی Agent">Supported agent keys and item types</span></a></p>
+</section>
+<section id="notifications"><h2  data-en="8. Alerts and notifications" data-fa="۸. هشدار و اعلان">8. Alerts and notifications</h2>
+<p  data-en="Trigger transitions create events; actions filter host group, tags and severity then run operations. Notification requires an enabled matching action, recipient with host read permission, enabled media, matching schedule/severity. Alerts → Media types → Email: approved SMTP relay, STARTTLS or SSL/TLS, certificate/hostname verification and dedicated credentials. Test with an approved recipient and verify mailbox delivery, not only SMTP submission." data-fa="تغییر Trigger رویداد می‌سازد؛ Action با Host Group، Tag و Severity فیلتر و Operation اجرا می‌کند. اعلان به Action فعال منطبق، دریافت‌کننده با Read میزبان، Media فعال و Schedule/Severity منطبق نیاز دارد. Alerts → Media types → Email: Relay مجاز، STARTTLS یا SSL/TLS، بررسی Certificate/Hostname و Credential اختصاصی. Test به گیرنده تأییدشده و اثبات تحویل Mailbox، نه صرف SMTP.">Trigger transitions create events; actions filter host group, tags and severity then run operations. Notification requires an enabled matching action, recipient with host read permission, enabled media, matching schedule/severity. Alerts → Media types → Email: approved SMTP relay, STARTTLS or SSL/TLS, certificate/hostname verification and dedicated credentials. Test with an approved recipient and verify mailbox delivery, not only SMTP submission.</p>
+<ul><li  data-en="Users → named operator → Media: Email, approved address, 1-7,00:00-24:00 and selected severities." data-fa="Users → اپراتور نام‌دار → Media: Email، آدرس مجاز، 1-7,00:00-24:00 و Severity منتخب.">Users → named operator → Media: Email, approved address, 1-7,00:00-24:00 and selected severities.</li><li  data-en="Alerts → Actions → Trigger actions: environment=production and severity &gt;= Average; step 1 to Operations immediately." data-fa="Alerts → Actions → Trigger actions: environment=production و Severity حداقل Average؛ Step 1 فوراً Operations.">Alerts → Actions → Trigger actions: environment=production and severity &gt;= Average; step 1 to Operations immediately.</li><li  data-en="Default operation step duration 10m; step 2 on-call, step 3 incident lead; add Recovery and acknowledgement Update operations." data-fa="Default Step Duration برابر 10m؛ Step 2 به On-call و Step 3 Incident Lead؛ Recovery و Update برای Acknowledgement.">Default operation step duration 10m; step 2 on-call, step 3 incident lead; add Recovery and acknowledgement Update operations.</li><li  data-en="Include event ID, host, severity and authenticated problem URL; exclude credentials and unnecessary event-log details." data-fa="Event ID، Host، Severity و URL نیازمند Login؛ بدون Credential و جزئیات غیرضروری Event Log.">Include event ID, host, severity and authenticated problem URL; exclude credentials and unnecessary event-log details.</li></ul>
+<p  data-en="Telegram: use the bundled official webhook or import its release/7.0 media type and README. Create the bot with documented BotFather steps, protect token, initiate the chat/add bot to approved group, obtain chat ID per official instructions. Configure documented token parameter and user Send to chat ID; test media then complete trigger action. Approve outbound HTTPS and privacy for external incident data. Do not write undocumented shell integrations or include tokens in URLs/downloads." data-fa="Telegram: Webhook رسمی همراه یا Import Media Type و README شاخه release/7.0. Bot با مراحل مستند BotFather، حفاظت Token، شروع Chat/افزودن به Group مجاز و دریافت Chat ID طبق مرجع رسمی. Parameter Token مستند و Send to برابر Chat ID؛ Test Media سپس Action کامل. HTTPS خروجی و Privacy داده خارجی تأیید. Integration Shell غیرمستند یا Token در URL/Download نباشد.">Telegram: use the bundled official webhook or import its release/7.0 media type and README. Create the bot with documented BotFather steps, protect token, initiate the chat/add bot to approved group, obtain chat ID per official instructions. Configure documented token parameter and user Send to chat ID; test media then complete trigger action. Approve outbound HTTPS and privacy for external incident data. Do not write undocumented shell integrations or include tokens in URLs/downloads.</p>
+<p  data-en="Data collection → Maintenance: hosts/tags, period, time zone and with/without data collection. With collection preserves history; without collection needs nodata review. Configure pause operations for suppressed problems. Dependencies make service alarms depend on upstream host/network loss and avoid duplicate pages. Check Reports → Action log for sent/failed details and Problems for suppression, acknowledgement and recovery." data-fa="Data collection → Maintenance: Host/Tag، دوره، Timezone و With/Without Data Collection. With تاریخچه حفظ؛ Without نیازمند بررسی nodata. Pause Operation برای Problem سرکوب‌شده تنظیم. Dependency سرویس به فقدان Host/Network بالادستی از اعلان تکراری جلوگیری می‌کند. Reports → Action log برای Sent/Failed و Problems برای Suppression/Acknowledgement/Recovery.">Data collection → Maintenance: hosts/tags, period, time zone and with/without data collection. With collection preserves history; without collection needs nodata review. Configure pause operations for suppressed problems. Dependencies make service alarms depend on upstream host/network loss and avoid duplicate pages. Check Reports → Action log for sent/failed details and Problems for suppression, acknowledgement and recovery.</p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/config/notifications/media/email" rel="noopener"><span  data-en="Email media type" data-fa="Media Type ایمیل">Email media type</span></a></p>
+<p><a href="https://git.zabbix.com/projects/ZBX/repos/zabbix/browse/templates/media/telegram?at=refs%2Fheads%2Frelease%2F7.0" rel="noopener"><span  data-en="Official Telegram webhook and README" data-fa="Webhook و README رسمی Telegram">Official Telegram webhook and README</span></a></p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/config/notifications/action" rel="noopener"><span  data-en="Actions and escalation" data-fa="Action و Escalation">Actions and escalation</span></a></p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/maintenance" rel="noopener"><span  data-en="Maintenance collection modes" data-fa="حالت Collection در Maintenance">Maintenance collection modes</span></a></p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/config/triggers/dependencies" rel="noopener"><span  data-en="Trigger dependencies" data-fa="Dependency مربوط به Trigger">Trigger dependencies</span></a></p>
+</section>
+<section id="database-backup"><h2  data-en="9. Database and configuration backup" data-fa="۹. بکاپ Database و Configuration">9. Database and configuration backup</h2>
+<p  data-en="PostgreSQL is the core recovery asset: hosts, templates, users/permissions, items, triggers, actions, events, history, trends and audit. Template exports or /etc/zabbix alone cannot restore the system. Back up DB plus configuration as one documented set, record packages/extensions/time zone and secret dependencies. This example uses PostgreSQL 16 without TimescaleDB; extension deployments need their compatible documented procedure." data-fa="PostgreSQL دارایی اصلی Recovery است: Host، Template، User/Permission، Item، Trigger، Action، Event، History، Trend و Audit. Export Template یا /etc/zabbix به‌تنهایی سیستم را برنمی‌گرداند. DB و Config یک مجموعه مستند، Package/Extension/Timezone و Dependency Secret ثبت شود. مثال PostgreSQL 16 بدون TimescaleDB است؛ Extension به روش سازگار مستند خودش نیاز دارد.">PostgreSQL is the core recovery asset: hosts, templates, users/permissions, items, triggers, actions, events, history, trends and audit. Template exports or /etc/zabbix alone cannot restore the system. Back up DB plus configuration as one documented set, record packages/extensions/time zone and secret dependencies. This example uses PostgreSQL 16 without TimescaleDB; extension deployments need their compatible documented procedure.</p>
+<pre dir="ltr"><code class="language-bash"># Protected mounted /backup volume, on the database host.
+sudo install -d -o root -g root -m 0700 /backup/zabbix/manual
+sudo bash &lt;&lt;&#x27;BASH&#x27;
+set -Eeuo pipefail
+umask 077
+stamp=$(date -u +%Y%m%dT%H%M%SZ)
+target=&quot;/backup/zabbix/manual/$stamp&quot;
+mkdir -m 0700 &quot;$target&quot;
+runuser -u postgres -- pg_dump -h /var/run/postgresql --role=zabbix \
+  -d zabbix -Fc -Z 6 --no-owner --no-acl &gt; &quot;$target/zabbix.dump&quot;
+pg_restore --list &quot;$target/zabbix.dump&quot; &gt; &quot;$target/database-toc.txt&quot;
+pg_restore --file=/dev/null &quot;$target/zabbix.dump&quot;
+cd &quot;$target&quot;
+sha256sum zabbix.dump database-toc.txt &gt; SHA256SUMS
+sha256sum --check SHA256SUMS
+BASH</code></pre>
+<p  data-en="pg_dump uses a consistent MVCC snapshot during ordinary writes; avoid schema upgrades during the dump. Custom format compresses and supports selective/parallel restore. --no-owner/--no-acl allows a recreated restricted role to own objects. Database dump omits cluster roles and OS config: recreate role and archive configuration separately. --list checks catalog; --file=/dev/null decodes all archive data; SHA256 detects later corruption. Only an isolated real restore proves recoverability." data-fa="pg_dump هنگام Write عادی Snapshot سازگار MVCC می‌گیرد؛ Schema Upgrade همزمان نباشد. Custom Format فشرده و Restore انتخابی/موازی دارد. --no-owner/--no-acl اجازه مالکیت Role محدود بازسازی‌شده می‌دهد. Dump شامل Cluster Role و Config OS نیست؛ Role بازسازی و Config جدا Archive شود. --list بررسی Catalog، --file=/dev/null Decode همه Data و SHA256 خرابی بعدی؛ فقط Restore واقعی ایزوله Recovery را ثابت می‌کند.">pg_dump uses a consistent MVCC snapshot during ordinary writes; avoid schema upgrades during the dump. Custom format compresses and supports selective/parallel restore. --no-owner/--no-acl allows a recreated restricted role to own objects. Database dump omits cluster roles and OS config: recreate role and archive configuration separately. --list checks catalog; --file=/dev/null decodes all archive data; SHA256 detects later corruption. Only an isolated real restore proves recoverability.</p>
+<p  data-en="Local peer authentication through postgres OS user and SET ROLE zabbix avoids database passwords. Remote backup needs a dedicated authorized role, verify-full TLS and protected 0600 PGPASSFILE outside scripts; never PGPASSWORD in units/history/URLs. Archives contain sensitive data and credentials: encrypt local volume and off-site copies, keep recovery keys separately in a vault." data-fa="Peer محلی با کاربر OS برابر postgres و SET ROLE zabbix بدون Password DB است. Backup Remote نیازمند Role اختصاصی مجاز، TLS verify-full و PGPASSFILE با 0600 خارج Script؛ نه PGPASSWORD در Unit/History/URL. Archive شامل داده حساس/Credential؛ Volume محلی و کپی Off-site رمزنگاری و Recovery Key در Vault جدا.">Local peer authentication through postgres OS user and SET ROLE zabbix avoids database passwords. Remote backup needs a dedicated authorized role, verify-full TLS and protected 0600 PGPASSFILE outside scripts; never PGPASSWORD in units/history/URLs. Archives contain sensitive data and credentials: encrypt local volume and off-site copies, keep recovery keys separately in a vault.</p>
+<ul><li  data-en="Archive /etc/zabbix including web credentials/PSKs, /etc/nginx, PHP-FPM and PostgreSQL settings." data-fa="Archive از /etc/zabbix شامل Credential وب/PSK، /etc/nginx و تنظیم PHP-FPM/PostgreSQL.">Archive /etc/zabbix including web credentials/PSKs, /etc/nginx, PHP-FPM and PostgreSQL settings.</li><li  data-en="Include TLS chain/keys and renewal hooks, alert/external scripts, custom plugins and their dependencies." data-fa="Chain/Key TLS و Renewal Hook، Script Alert/External، Plugin سفارشی و Dependency.">Include TLS chain/keys and renewal hooks, alert/external scripts, custom plugins and their dependencies.</li><li  data-en="Example retention: 14 daily local sets; off-site daily/weekly/monthly policy defined separately from compliance/RPO needs." data-fa="مثال Retention: ۱۴ مجموعه روزانه محلی؛ Policy روزانه/هفتگی/ماهانه Off-site جدا براساس الزام/RPO.">Example retention: 14 daily local sets; off-site daily/weekly/monthly policy defined separately from compliance/RPO needs.</li><li  data-en="Monitor backup age and failure independently of Zabbix; verify archive, off-site retrieval and scheduled restore drills." data-fa="سن/شکست Backup مستقل از Zabbix پایش؛ Archive، Retrieval Off-site و Restore Drill زمان‌بندی‌شده تأیید.">Monitor backup age and failure independently of Zabbix; verify archive, off-site retrieval and scheduled restore drills.</li></ul>
+<h3  data-en="Logical vs physical, pgBackRest, WAL and PITR" data-fa="منطقی در برابر فیزیکی، pgBackRest، WAL و PITR">Logical vs physical, pgBackRest, WAL and PITR</h3>
+<p  data-en="Logical pg_dump exports objects/data and can move to compatible newer PostgreSQL versions; it cannot recover changes between dumps. Physical backup includes a consistent cluster and required WAL, generally needs the same PostgreSQL major/platform. Plain tar of running PGDATA is not a consistent backup. Large production installations should use pgBackRest full/differential/incremental backups, encrypted remote repositories, continuous WAL archiving and tested PITR; retained base backups need their full WAL chain." data-fa="pg_dump منطقی Object/Data صادر و به PostgreSQL جدیدتر سازگار منتقل می‌کند؛ بین Dumpها بازیابی ندارد. Backup فیزیکی Cluster سازگار و WAL لازم، معمولاً Major/Platform یکسان. tar ساده PGDATA در حال اجرا Backup سازگار نیست. Production بزرگ از pgBackRest برای Full/Differential/Incremental، Repository Remote رمزنگاری‌شده، WAL Archiving پیوسته و PITR تست‌شده؛ Base Backup به کل زنجیره WAL نیاز دارد.">Logical pg_dump exports objects/data and can move to compatible newer PostgreSQL versions; it cannot recover changes between dumps. Physical backup includes a consistent cluster and required WAL, generally needs the same PostgreSQL major/platform. Plain tar of running PGDATA is not a consistent backup. Large production installations should use pgBackRest full/differential/incremental backups, encrypted remote repositories, continuous WAL archiving and tested PITR; retained base backups need their full WAL chain.</p>
+<pre dir="ltr"><code class="language-conf"># DESIGN starting point for a separately reviewed pgBackRest deployment:
+# /etc/pgbackrest/pgbackrest.conf
+[global]
+repo1-path=/srv/pgbackrest
+repo1-retention-full=2
+[zabbix]
+pg1-path=/var/lib/postgresql/16/main
+# postgresql.conf: archive_mode change requires restart
+wal_level = replica
+archive_mode = on
+archive_command = &#x27;pgbackrest --stanza=zabbix archive-push %p&#x27;
+# AFTER dedicated repository ownership, remote access and encryption setup:
+# sudo -u postgres pgbackrest --stanza=zabbix stanza-create
+# sudo -u postgres pgbackrest --stanza=zabbix check
+# sudo -u postgres pgbackrest --stanza=zabbix --type=full backup
+# sudo -u postgres pgbackrest --stanza=zabbix info
+# ISOLATED EMPTY CLUSTER ONLY, destructive physical restore workflow:
+# pgbackrest --stanza=zabbix --type=time --target=&#x27;2026-10-09 01:30:00+00&#x27; --target-action=pause restore</code></pre>
+<p  data-en="Provision and protect the repository first, then follow official remote backup/encryption instructions. Monitor pg_stat_archiver failures and WAL growth. Restore a target timestamp to an isolated cluster, inspect paused recovery, promote after acceptance. WAL archive delay controls achievable RPO; base retrieval/restore and replay determine RTO. Never physical-restore over active production. The pgBackRest example is a separate design, not a substitute for the following logical script." data-fa="ابتدا Repository محافظت‌شده سپس دستور رسمی Remote Backup/Encryption. pg_stat_archiver و رشد WAL پایش. Timestamp هدف به Cluster ایزوله Restore، Recovery متوقف بررسی و بعد پذیرش Promote. تأخیر Archive تعیین RPO؛ دریافت/Restore Base و Replay تعیین RTO. Physical Restore روی Production فعال ممنوع. مثال pgBackRest طراحی جدا است، نه جای Script منطقی بعدی.">Provision and protect the repository first, then follow official remote backup/encryption instructions. Monitor pg_stat_archiver failures and WAL growth. Restore a target timestamp to an isolated cluster, inspect paused recovery, promote after acceptance. WAL archive delay controls achievable RPO; base retrieval/restore and replay determine RTO. Never physical-restore over active production. The pgBackRest example is a separate design, not a substitute for the following logical script.</p>
+<p><a href="https://www.postgresql.org/docs/16/app-pgdump.html" rel="noopener"><span  data-en="PostgreSQL pg_dump formats and consistency" data-fa="Format و Consistency در pg_dump">PostgreSQL pg_dump formats and consistency</span></a></p>
+<p><a href="https://www.postgresql.org/docs/16/backup.html" rel="noopener"><span  data-en="Official logical and physical strategies" data-fa="راهبرد رسمی Backup منطقی و فیزیکی">Official logical and physical strategies</span></a></p>
+<p><a href="https://pgbackrest.org/user-guide.html" rel="noopener"><span  data-en="Official pgBackRest WAL/PITR guide" data-fa="راهنمای رسمی pgBackRest و WAL/PITR">Official pgBackRest WAL/PITR guide</span></a></p>
+</section>
+<section id="automated-backup"><h2  data-en="10. Automated daily backup" data-fa="۱۰. بکاپ روزانه خودکار">10. Automated daily backup</h2>
+<p  data-en="Mount a protected encrypted volume at /backup; the job refuses an absent mount to protect the OS disk. systemd EnvironmentFile supplies plain settings, not executable shell sourcing. The complete script below provides root-only permissions, flock overlap protection, conservative disk validation, compressed dump/config archive, full decoding/checksums, atomic publication, logs and failure codes. Incomplete sets remain for diagnosis and are never counted successful." data-fa="Volume محافظت‌شده رمزنگاری‌شده در /backup Mount؛ در نبود Mount، Job برای حفاظت Disk OS رد می‌شود. systemd EnvironmentFile تنظیم ساده می‌دهد، نه Source قابل اجرا. Script کامل زیر دارای Permission فقط root، flock، بررسی محافظه‌کارانه Disk، Dump/Config فشرده، Decode/Checksum، انتشار Atomic، Log و Exit Code؛ مجموعه ناقص برای تشخیص و هرگز موفق محسوب نمی‌شود.">Mount a protected encrypted volume at /backup; the job refuses an absent mount to protect the OS disk. systemd EnvironmentFile supplies plain settings, not executable shell sourcing. The complete script below provides root-only permissions, flock overlap protection, conservative disk validation, compressed dump/config archive, full decoding/checksums, atomic publication, logs and failure codes. Incomplete sets remain for diagnosis and are never counted successful.</p>
+<pre dir="ltr"><code class="language-bash">#!/usr/bin/env bash
+# Ubuntu 24.04 / PostgreSQL 16. Run as root through the supplied systemd unit.
+# EnvironmentFile supplies settings; this script never sources executable config.
+set -Eeuo pipefail
+umask 077
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+BACKUP_ROOT=${BACKUP_ROOT:-/backup/zabbix}
+RETENTION_DAYS=${RETENTION_DAYS:-14}
+MIN_FREE_MB=${MIN_FREE_MB:-4096}
+SPACE_FACTOR=${SPACE_FACTOR:-2}
+PGDATABASE=${PGDATABASE:-zabbix}
+PGROLE=${PGROLE:-zabbix}
+OFFSITE_REQUIRED=${OFFSITE_REQUIRED:-yes}
+FAILURE_HOOK=${FAILURE_HOOK:-/usr/local/sbin/zabbix-backup-notify}
+stage=&#x27;&#x27;
+log_file=&#x27;&#x27;
+log() { printf &#x27;%s %s\n&#x27; &quot;$(date -u +%FT%TZ)&quot; &quot;$*&quot;; }
+finish() {
+    local rc=$?
+    trap - EXIT
+    if (( rc != 0 )); then
+        log &quot;FAILED exit=$rc; incomplete backups retained for diagnosis; retention skipped&quot;
+        if [[ -n &quot;$log_file&quot; &amp;&amp; -x &quot;$FAILURE_HOOK&quot; ]]; then
+            timeout 30 &quot;$FAILURE_HOOK&quot; &quot;$rc&quot; &quot;$log_file&quot; || log &#x27;Failure notification hook failed&#x27;
+        fi
+    fi
+    exit &quot;$rc&quot;
+}
+trap finish EXIT
+[[ $EUID -eq 0 ]] || { log &#x27;Root is required&#x27;; exit 77; }
+[[ &quot;$BACKUP_ROOT&quot; =~ ^/backup/[a-zA-Z0-9/_-]+$ &amp;&amp; &quot;$BACKUP_ROOT&quot; != *&#x27;..&#x27;* ]] || exit 64
+for number in &quot;$RETENTION_DAYS&quot; &quot;$MIN_FREE_MB&quot; &quot;$SPACE_FACTOR&quot;; do
+    [[ &quot;$number&quot; =~ ^[1-9][0-9]*$ ]] || exit 64
+done
+[[ &quot;$PGDATABASE&quot; =~ ^[a-zA-Z0-9_]+$ &amp;&amp; &quot;$PGROLE&quot; =~ ^[a-zA-Z0-9_]+$ ]] || exit 64
+[[ &quot;$OFFSITE_REQUIRED&quot; == yes || &quot;$OFFSITE_REQUIRED&quot; == no ]] || exit 64
+for command in flock runuser pg_dump pg_restore psql tar gzip sha256sum df du find timeout realpath mountpoint; do
+    command -v &quot;$command&quot; &gt;/dev/null || { log &quot;Missing command: $command&quot;; exit 69; }
+done
+install -d -o root -g root -m 0700 /var/lib/zabbix-backup
+exec 9&gt;/var/lib/zabbix-backup/backup.lock
+flock -n 9 || { log &#x27;Another backup is running&#x27;; exit 75; }
+# A dedicated mounted backup volume prevents filling the OS root filesystem.
+mountpoint -q /backup || { log &#x27;/backup must be a mounted backup volume&#x27;; exit 73; }
+install -d -m 0700 &quot;$BACKUP_ROOT&quot; /var/log/zabbix-backup
+[[ &quot;$(realpath -e &quot;$BACKUP_ROOT&quot;)&quot; == &quot;$BACKUP_ROOT&quot; ]] || exit 64
+[[ &quot;$(stat -c %u &quot;$BACKUP_ROOT&quot;)&quot; == 0 &amp;&amp; &quot;$(stat -c %a &quot;$BACKUP_ROOT&quot;)&quot; == 700 ]] || exit 77
+stamp=$(date -u +%Y%m%dT%H%M%SZ)
+log_file=&quot;/var/log/zabbix-backup/$stamp.log&quot;
+exec &gt; &gt;(tee -a &quot;$log_file&quot;) 2&gt;&amp;1
+log &#x27;Backup started&#x27;
+if [[ &quot;$OFFSITE_REQUIRED&quot; == yes ]]; then
+    command -v restic &gt;/dev/null || exit 69
+    : &quot;${RESTIC_REPOSITORY:?Set an encrypted off-site restic repository}&quot;
+    : &quot;${RESTIC_PASSWORD_FILE:?Set a protected restic password file}&quot;
+    [[ -f &quot;$RESTIC_PASSWORD_FILE&quot; &amp;&amp; ! -L &quot;$RESTIC_PASSWORD_FILE&quot; ]] || exit 77
+    [[ &quot;$(stat -c %u &quot;$RESTIC_PASSWORD_FILE&quot;)&quot; == 0 &amp;&amp; &quot;$(stat -c %a &quot;$RESTIC_PASSWORD_FILE&quot;)&quot; == 600 ]] || exit 77
+fi
+# These directories contain secrets. Do not publish this archive or put it in Git.
+paths=(etc/zabbix etc/nginx etc/php/8.3/fpm etc/postgresql/16/main etc/ssl/zabbix
+       etc/zabbix-backup etc/systemd/system/zabbix-backup.service
+       etc/systemd/system/zabbix-backup.timer etc/systemd/system/zabbix-backup-failure.service
+       usr/local/sbin/zabbix-backup.sh)
+for optional in etc/letsencrypt usr/lib/zabbix/alertscripts usr/lib/zabbix/externalscripts usr/local/lib/zabbix usr/local/sbin/zabbix-backup-notify etc/logrotate.d/zabbix-backup; do
+    [[ ! -e &quot;/$optional&quot; ]] || paths+=(&quot;$optional&quot;)
+done
+for path in &quot;${paths[@]}&quot;; do [[ -e &quot;/$path&quot; ]] || { log &quot;Missing required path: /$path&quot;; exit 66; }; done
+db_bytes=$(runuser -u postgres -- psql -X -At -v ON_ERROR_STOP=1 -d &quot;$PGDATABASE&quot; -c &#x27;SELECT pg_database_size(current_database())&#x27;)
+[[ &quot;$db_bytes&quot; =~ ^[0-9]+$ ]] || exit 65
+config_bytes=$(du -scb &quot;${paths[@]/#//}&quot; | tail -n 1 | cut -f 1)
+required_mb=$(( (db_bytes * SPACE_FACTOR + config_bytes) / 1048576 + MIN_FREE_MB ))
+free_mb=$(df -Pm &quot;$BACKUP_ROOT&quot; | awk &#x27;NR==2 {print $4}&#x27;)
+(( free_mb &gt;= required_mb )) || { log &quot;Insufficient space: free=${free_mb}MiB required=${required_mb}MiB&quot;; exit 73; }
+stage=$(mktemp -d &quot;$BACKUP_ROOT/.incomplete-$stamp-XXXXXX&quot;)
+# The database role owns the schema but has no superuser/createdb/createrole rights.
+# pg_dump&#x27;s MVCC snapshot is consistent while ordinary monitoring writes continue.
+runuser -u postgres -- pg_dump -h /var/run/postgresql --role=&quot;$PGROLE&quot; \
+    -d &quot;$PGDATABASE&quot; --format=custom --compress=6 --no-owner --no-acl &gt; &quot;$stage/zabbix.dump&quot;
+# tar exits nonzero if selected files change. Schedule configuration changes separately.
+tar --acls --xattrs --numeric-owner -czf &quot;$stage/configuration.tar.gz&quot; -C / &quot;${paths[@]}&quot;
+dpkg-query -W -f=&#x27;${Package}\t${Version}\n&#x27; &#x27;zabbix*&#x27; &#x27;postgresql*&#x27; &#x27;nginx*&#x27; &#x27;php8.3*&#x27; &gt; &quot;$stage/packages.tsv&quot;
+pg_restore --list &quot;$stage/zabbix.dump&quot; &gt; &quot;$stage/database-toc.txt&quot;
+# Decode all archive data, not just its table of contents; still not a restore test.
+pg_restore --file=/dev/null &quot;$stage/zabbix.dump&quot;
+gzip -t &quot;$stage/configuration.tar.gz&quot;
+tar -tzf &quot;$stage/configuration.tar.gz&quot; &gt; &quot;$stage/configuration-files.txt&quot;
+[[ -s &quot;$stage/zabbix.dump&quot; &amp;&amp; -s &quot;$stage/configuration.tar.gz&quot; ]] || exit 65
+(
+    cd &quot;$stage&quot;
+    sha256sum zabbix.dump configuration.tar.gz packages.tsv database-toc.txt configuration-files.txt &gt; SHA256SUMS
+    sha256sum --check SHA256SUMS
+)
+date -u +%FT%TZ &gt; &quot;$stage/VERIFIED&quot;
+final=&quot;$BACKUP_ROOT/$stamp&quot;
+[[ ! -e &quot;$final&quot; ]] || exit 73
+mv -- &quot;$stage&quot; &quot;$final&quot;
+stage=&#x27;&#x27;
+if [[ &quot;$OFFSITE_REQUIRED&quot; == yes ]]; then
+    # Configure transport authentication separately (SSH agent or restic credentials).
+    # Bounded operation fails the job instead of leaving retention running on timeout.
+    timeout 6h restic backup --tag zabbix -- &quot;$final&quot;
+    timeout 1h restic check
+    date -u +%FT%TZ &gt; &quot;$final/OFFSITE_OK&quot;
+fi
+date -u +%FT%TZ &gt; &quot;$final/SUCCESS&quot;
+# Delete only completed, real timestamp directories AFTER a verified successful backup.
+# Exact cutoff uses directory names; altered directory mtimes cannot shorten retention.
+cutoff=$(date -u -d &quot;$RETENTION_DAYS days ago&quot; +%Y%m%dT%H%M%SZ)
+while IFS= read -r -d &#x27;&#x27; old; do
+    name=${old##*/}
+    [[ &quot;$name&quot; =~ ^[0-9]{8}T[0-9]{6}Z$ &amp;&amp; &quot;$name&quot; &lt; &quot;$cutoff&quot; ]] || continue
+    [[ &quot;$old&quot; != &quot;$final&quot; &amp;&amp; -f &quot;$old/SUCCESS&quot; &amp;&amp; ! -L &quot;$old&quot; ]] || continue
+    [[ &quot;$(realpath -e &quot;$old&quot;)&quot; == &quot;$BACKUP_ROOT/$name&quot; ]] || exit 64
+    rm -rf --one-file-system -- &quot;$old&quot;
+done &lt; &lt;(find &quot;$BACKUP_ROOT&quot; -mindepth 1 -maxdepth 1 -type d -print0)
+date -u +%FT%TZ &gt; &quot;$BACKUP_ROOT/last-success.txt&quot;
+# Log retention is independent of backup retention and runs only on success.
+find /var/log/zabbix-backup -maxdepth 1 -type f -name &#x27;*.log&#x27; -mtime +90 -delete
+log &quot;SUCCESS backup=$final offsite=$OFFSITE_REQUIRED&quot;</code></pre>
+<p  data-en="Exit codes: 64 bad configuration, 65 invalid data, 66 missing file, 69 dependency, 73 mount/storage, 75 overlap, 77 permissions; native PostgreSQL/tar/restic failures stay nonzero. EXIT trap runs a bounded independent hook; OnFailure also catches startup/time-limit failures. Configure approved SMTP relay or replace hook with approved transport; independent stale-success alerts must detect missed timers/dead hosts because failure email alone cannot." data-fa="Exit Code: 64 تنظیم غلط، 65 Data نامعتبر، 66 فایل غایب، 69 Dependency، 73 Mount/Storage، 75 Overlap، 77 Permission؛ شکست PostgreSQL/tar/restic غیرصفر می‌ماند. EXIT Trap، Hook مستقل با Timeout؛ OnFailure برای Startup/Time-limit. Relay مجاز یا Hook تأییدشده و Alert مستقل سن Success برای Timer اجرا‌نشده/Host مرده؛ ایمیل شکست کافی نیست.">Exit codes: 64 bad configuration, 65 invalid data, 66 missing file, 69 dependency, 73 mount/storage, 75 overlap, 77 permissions; native PostgreSQL/tar/restic failures stay nonzero. EXIT trap runs a bounded independent hook; OnFailure also catches startup/time-limit failures. Configure approved SMTP relay or replace hook with approved transport; independent stale-success alerts must detect missed timers/dead hosts because failure email alone cannot.</p>
+<pre dir="ltr"><code class="language-conf"># Install as /etc/zabbix-backup/backup.env, root:root 0600.
+# Plain assignments only; compatible with systemd EnvironmentFile.
+BACKUP_ROOT=/backup/zabbix
+PGDATABASE=zabbix
+PGROLE=zabbix
+RETENTION_DAYS=14
+MIN_FREE_MB=4096
+SPACE_FACTOR=2
+OFFSITE_REQUIRED=yes
+# Replace with your actual off-site server; RFC 5737 address is documentation only.
+RESTIC_REPOSITORY=sftp:backup@203.0.113.30:/srv/restic/zabbix
+RESTIC_PASSWORD_FILE=/etc/zabbix-backup/restic-password
+FAILURE_HOOK=/usr/local/sbin/zabbix-backup-notify</code></pre>
+<pre dir="ltr"><code class="language-ini">[Unit]
+Description=Verified PostgreSQL and Zabbix configuration backup
+Wants=network-online.target
+After=network-online.target postgresql.service
+RequiresMountsFor=/backup
+OnFailure=zabbix-backup-failure.service
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+UMask=0077
+StateDirectory=zabbix-backup
+StateDirectoryMode=0700
+EnvironmentFile=/etc/zabbix-backup/backup.env
+ExecStart=/usr/local/sbin/zabbix-backup.sh
+TimeoutStartSec=8h
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/backup /var/log/zabbix-backup /var/lib/zabbix-backup /var/cache/restic
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true</code></pre>
+<pre dir="ltr"><code class="language-ini">[Unit]
+Description=Daily Zabbix backup at 02:15 UTC
+
+[Timer]
+OnCalendar=*-*-* 02:15:00 UTC
+RandomizedDelaySec=10m
+Persistent=true
+Unit=zabbix-backup.service
+
+[Install]
+WantedBy=timers.target</code></pre>
+<pre dir="ltr"><code class="language-ini">[Unit]
+Description=Notify independent operations channel of Zabbix backup failure
+
+[Service]
+Type=oneshot
+User=root
+UMask=0077
+ExecStart=/usr/local/sbin/zabbix-backup-notify 1 journal:zabbix-backup.service
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true</code></pre>
+<pre dir="ltr"><code class="language-bash">#!/usr/bin/env bash
+# Requires mailutils and a separately configured authenticated TLS mail relay.
+# Must be root-owned 0750; edit the destination before operational acceptance.
+set -euo pipefail
+umask 077
+rc=${1:-1}
+reference=${2:-journal:zabbix-backup.service}
+command -v mail &gt;/dev/null || { logger -p daemon.err &#x27;Zabbix backup: notification transport unavailable&#x27;; exit 69; }
+printf &#x27;Zabbix backup failed on %s. Exit: %s. Evidence: %s\nInspect locally; no credentials or logs are attached.\n&#x27; \
+    &quot;$(hostname)&quot; &quot;$rc&quot; &quot;$reference&quot; | mail -s &#x27;Zabbix backup failure&#x27; ops@example.com</code></pre>
+<pre dir="ltr"><code class="language-bash">sudo apt install -y restic mailutils
+# Mount encrypted /backup through a reviewed fstab entry first.
+mountpoint /backup
+sudo install -d -m 0700 /backup/zabbix /etc/zabbix-backup
+sudo install -d -m 0700 /var/log/zabbix-backup /var/cache/restic
+sudo install -o root -g root -m 0750 zabbix-backup.sh /usr/local/sbin/zabbix-backup.sh
+sudo install -o root -g root -m 0750 zabbix-backup-notify /usr/local/sbin/zabbix-backup-notify
+sudo install -o root -g root -m 0600 zabbix-backup.env /etc/zabbix-backup/backup.env
+sudo install -o root -g root -m 0644 zabbix-backup.service zabbix-backup.timer zabbix-backup-failure.service /etc/systemd/system/
+sudoedit /etc/zabbix-backup/backup.env
+sudoedit /usr/local/sbin/zabbix-backup-notify
+# Provision restic-password root:root 0600, SSH key and verified known_hosts.
+# Never disable host-key verification; keep recovery keys separately in a vault.
+sudo systemctl daemon-reload
+sudo systemd-analyze verify /etc/systemd/system/zabbix-backup.service /etc/systemd/system/zabbix-backup.timer /etc/systemd/system/zabbix-backup-failure.service
+sudo systemctl start zabbix-backup.service
+sudo systemctl show zabbix-backup.service -p Result -p ExecMainStatus
+sudo journalctl -u zabbix-backup.service -n 100 --no-pager
+sudo cat /backup/zabbix/last-success.txt
+sudo systemctl enable --now zabbix-backup.timer
+systemctl list-timers --all zabbix-backup.timer</code></pre>
+<pre dir="ltr"><code class="language-bash"># Protected root session; use the SAME non-secret settings as backup.env.
+export RESTIC_REPOSITORY=&#x27;sftp:backup@203.0.113.30:/srv/restic/zabbix&#x27;
+export RESTIC_PASSWORD_FILE=/etc/zabbix-backup/restic-password
+restic init       # ONLY for a newly provisioned empty repository, once
+restic snapshots
+restic check
+# Schedule a separate full-data verification:
+restic check --read-data
+# Separate approved remote retention policy AFTER verified snapshots:
+# restic forget --tag zabbix --keep-daily 14 --keep-weekly 8 --keep-monthly 12 --prune</code></pre>
+<p  data-en="Initialize off-site storage before the first job; interactive shells do not inherit systemd EnvironmentFile. OFFSITE_REQUIRED=yes is the production default: upload/check failure fails the job and prevents retention. no is only for a documented isolated lab or independently verified transfer with its own age/failure monitoring. Local retention deletes only successful timestamp directories older than policy after verified replacement and required off-site success. Logs last 90 days; incomplete sets require reviewed cleanup. Keep remote retention separate and retain immutable/offline copies: writable remote storage alone does not prevent ransomware. A checksum and restic metadata check do not replace full-data verification and restore drills." data-fa="Off-site قبل اولین Job مقداردهی؛ Shell، EnvironmentFile را ارث نمی‌برد. OFFSITE_REQUIRED=yes پیش‌فرض Production: شکست Upload/Check یعنی Job ناموفق و بدون Retention. no فقط Lab مستند یا Transfer مستقل تأییدشده با Age/Failure Monitoring. Retention محلی فقط Timestamp موفق قدیمی طبق Policy پس از جایگزین معتبر و Off-site موفق. Log ۹۰ روز؛ ناقص نیازمند Cleanup بررسی‌شده. Retention Remote جدا و کپی Immutable/Offline؛ Storage قابل نوشتن به‌تنهایی ضد Ransomware نیست. Checksum و Metadata Check جای Full Data/Restore Drill نیست.">Initialize off-site storage before the first job; interactive shells do not inherit systemd EnvironmentFile. OFFSITE_REQUIRED=yes is the production default: upload/check failure fails the job and prevents retention. no is only for a documented isolated lab or independently verified transfer with its own age/failure monitoring. Local retention deletes only successful timestamp directories older than policy after verified replacement and required off-site success. Logs last 90 days; incomplete sets require reviewed cleanup. Keep remote retention separate and retain immutable/offline copies: writable remote storage alone does not prevent ransomware. A checksum and restic metadata check do not replace full-data verification and restore drills.</p>
+<p><a href="https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html" rel="noopener"><span  data-en="Encrypted restic repository setup" data-fa="Setup Repository رمزنگاری‌شده restic">Encrypted restic repository setup</span></a></p>
+<p><a href="https://restic.readthedocs.io/en/stable/045_working_with_repos.html" rel="noopener"><span  data-en="restic integrity and full-data checks" data-fa="Integrity و Full Data Check در restic">restic integrity and full-data checks</span></a></p>
+</section>
+<section id="recovery"><h2  data-en="11. Restore and disaster recovery" data-fa="۱۱. Restore و بازیابی بحران">11. Restore and disaster recovery</h2>
+<figure><img src="/assets/img/articles/content/zabbix-backup-disaster-recovery.png" width="1920" height="1080" loading="lazy" decoding="async" alt="Verified database/config backup, encrypted off-site storage, isolated restore drill and WAL-based PITR recovery chain" data-en-alt="Verified database/config backup, encrypted off-site storage, isolated restore drill and WAL-based PITR recovery chain" data-fa-alt="زنجیره Backup معتبر DB/Config، Off-site رمزنگاری‌شده، Restore Drill ایزوله و PITR مبتنی بر WAL"><figcaption ><span  data-en="Verified database/config backup, encrypted off-site storage, isolated restore drill and WAL-based PITR recovery chain" data-fa="زنجیره Backup معتبر DB/Config، Off-site رمزنگاری‌شده، Restore Drill ایزوله و PITR مبتنی بر WAL">Verified database/config backup, encrypted off-site storage, isolated restore drill and WAL-based PITR recovery chain</span></figcaption></figure>
+<p  data-en="RPO is maximum acceptable lost data/config interval; RTO is maximum acceptable service recovery time. Daily dumps can lose nearly a day plus transfer/scheduling delay; 24-hour RPO is not guaranteed without age monitoring. PITR approaches available WAL archive coverage. Measure retrieval, install, restore, secret recovery and validation for RTO. Plan downtime, communication and a single cutover authority; never run duplicate collecting/alerting servers with the same identity." data-fa="RPO حداکثر بازه قابل قبول فقدان Data/Config و RTO حداکثر زمان Recovery سرویس. Dump روزانه نزدیک یک روز به‌علاوه تأخیر Transfer/Schedule؛ بدون Age Monitoring، ۲۴ ساعت تضمین نیست. PITR به پوشش WAL Archive نزدیک می‌شود. Retrieval، Install، Restore، Secret Recovery و Validation برای RTO اندازه‌گیری. Downtime، Communication و مرجع واحد Cutover؛ Server تکراری Collect/Alert با یک هویت اجرا نشود.">RPO is maximum acceptable lost data/config interval; RTO is maximum acceptable service recovery time. Daily dumps can lose nearly a day plus transfer/scheduling delay; 24-hour RPO is not guaranteed without age monitoring. PITR approaches available WAL archive coverage. Measure retrieval, install, restore, secret recovery and validation for RTO. Plan downtime, communication and a single cutover authority; never run duplicate collecting/alerting servers with the same identity.</p>
+<p  data-en="1–2. Prepare Ubuntu 24.04 replacement on an isolated recovery VLAN: patches, IP/DNS, NTP, firewall. Block agent/proxy traffic and external SMTP/Telegram, keep backup timer stopped. Install recorded compatible Zabbix 7.0 patch and PostgreSQL 16/PHP/Nginx. Retrieve selected encrypted snapshot into root-only staging, preserve original, verify SHA256 and archive decoding. Never run older Zabbix on a newer schema; startup can irreversibly upgrade schema. For vulnerable recorded packages rehearse a supported patch upgrade on a clone." data-fa="۱–۲. Ubuntu 24.04 جایگزین در VLAN ایزوله: Patch، IP/DNS، NTP، Firewall. ترافیک Agent/Proxy و SMTP/Telegram خارجی مسدود، Timer متوقف. Patch ثبت‌شده سازگار Zabbix 7.0 و PostgreSQL 16/PHP/Nginx نصب. Snapshot رمزنگاری‌شده منتخب به Staging فقط root، حفظ اصل و بررسی SHA256/Decode. Zabbix قدیمی روی Schema جدید ممنوع؛ Startup ممکن است Upgrade غیرقابل برگشت دهد. Package ثبت‌شده آسیب‌پذیر با Upgrade پشتیبانی‌شده روی Clone تمرین شود.">1–2. Prepare Ubuntu 24.04 replacement on an isolated recovery VLAN: patches, IP/DNS, NTP, firewall. Block agent/proxy traffic and external SMTP/Telegram, keep backup timer stopped. Install recorded compatible Zabbix 7.0 patch and PostgreSQL 16/PHP/Nginx. Retrieve selected encrypted snapshot into root-only staging, preserve original, verify SHA256 and archive decoding. Never run older Zabbix on a newer schema; startup can irreversibly upgrade schema. For vulnerable recorded packages rehearse a supported patch upgrade on a clone.</p>
+<pre dir="ltr"><code class="language-bash"># ISOLATED REPLACEMENT ONLY; adapt selected-set to retrieved snapshot.
+sudo systemctl stop zabbix-server zabbix-agent2 nginx
+sudo systemctl disable --now zabbix-backup.timer 2&gt;/dev/null || true
+sudo install -d -m 0700 /restore/zabbix
+# With protected repository settings, select reviewed snapshot ID:
+# restic restore SELECTED_SNAPSHOT_ID --target /restore/zabbix
+sudo bash -c &#x27;cd /restore/zabbix/selected-set &amp;&amp; sha256sum --check SHA256SUMS&#x27;
+sudo pg_restore --list /restore/zabbix/selected-set/zabbix.dump
+sudo pg_restore --file=/dev/null /restore/zabbix/selected-set/zabbix.dump
+sudo gzip -t /restore/zabbix/selected-set/configuration.tar.gz
+sudo tar -tzf /restore/zabbix/selected-set/configuration.tar.gz
+# 3. Recreate role only if absent, then new EMPTY recovery database.
+sudo -u postgres createuser --no-superuser --no-createdb --no-createrole zabbix
+sudo -u postgres psql -X -c &#x27;\password zabbix&#x27;
+sudo -u postgres createdb -O zabbix -E UTF8 -T template0 zabbix_recovery
+sudo -u postgres psql -X -d zabbix_recovery -c &#x27;REVOKE ALL ON DATABASE zabbix_recovery FROM PUBLIC;&#x27;
+sudo -u postgres psql -X -d zabbix_recovery -c &#x27;REVOKE CREATE ON SCHEMA public FROM PUBLIC;&#x27;
+sudo -u postgres psql -X -d zabbix_recovery -c &#x27;GRANT ALL ON SCHEMA public TO zabbix;&#x27;
+# Pipe stdin because postgres cannot traverse root-only backup directories.
+set -o pipefail
+sudo cat /restore/zabbix/selected-set/zabbix.dump | sudo -u postgres pg_restore --exit-on-error --no-owner --no-acl --role=zabbix -d zabbix_recovery
+sudo -u postgres psql -X -d zabbix_recovery -c &#x27;SELECT mandatory,optional FROM dbversion;&#x27;
+sudo -u postgres psql -X -d zabbix_recovery -c &#x27;SELECT count(*) FROM hosts;&#x27;
+sudo -u postgres psql -X -d zabbix_recovery -c &#x27;SELECT count(*) FROM triggers;&#x27;
+sudo -u postgres psql -X -d zabbix_recovery -c &#x27;ANALYZE;&#x27;
+# 4–6. Extract to staging, not directly over /etc.
+sudo install -d -m 0700 /restore/configuration
+sudo tar --acls --xattrs --numeric-owner -xzf /restore/zabbix/selected-set/configuration.tar.gz -C /restore/configuration</code></pre>
+<p  data-en="3. Do not import initial server.sql.gz before pg_restore. Use PostgreSQL 16 pg_restore or documented compatible newer tools. 4–6. Review staged /etc/zabbix, Nginx/PHP-FPM, TLS keys/chain, PostgreSQL settings and custom alert/external scripts; install selectively with recorded owner/mode, reconcile account IDs, IPs, certificate names and interpreter dependencies. Never overwrite PGDATA or OS config blindly. The following copies overwrite replacement configuration and are for the reviewed replacement only. Set DBName=zabbix_recovery/reset DBPassword in server and frontend and add its limited SCRAM pg_hba rule for the drill." data-fa="۳. قبل pg_restore، server.sql.gz اولیه وارد نشود. pg_restore نسخه 16 یا ابزار جدیدتر سازگار مستند. ۴–۶. /etc/zabbix، Nginx/PHP-FPM، Chain/Key TLS، تنظیم PostgreSQL و Script Alert/External در Staging بررسی؛ انتقال انتخابی با Owner/Mode ثبت‌شده، تطبیق ID حساب، IP، نام Certificate و Interpreter. PGDATA/Config OS کورکورانه Overwrite نشود. کپی‌های زیر Config جایگزین را بازنویسی می‌کنند و فقط برای جایگزین بررسی‌شده‌اند. برای Drill، DBName=zabbix_recovery و DBPassword Reset در Server/Frontend و Rule SCRAM محدود آن.">3. Do not import initial server.sql.gz before pg_restore. Use PostgreSQL 16 pg_restore or documented compatible newer tools. 4–6. Review staged /etc/zabbix, Nginx/PHP-FPM, TLS keys/chain, PostgreSQL settings and custom alert/external scripts; install selectively with recorded owner/mode, reconcile account IDs, IPs, certificate names and interpreter dependencies. Never overwrite PGDATA or OS config blindly. The following copies overwrite replacement configuration and are for the reviewed replacement only. Set DBName=zabbix_recovery/reset DBPassword in server and frontend and add its limited SCRAM pg_hba rule for the drill.</p>
+<pre dir="ltr"><code class="language-bash"># OVERWRITES REPLACEMENT CONFIG: review staged files and destination host first.
+sudo cp -a /restore/configuration/etc/zabbix/. /etc/zabbix/
+sudo cp -a /restore/configuration/etc/nginx/. /etc/nginx/
+sudo cp -a /restore/configuration/etc/php/8.3/fpm/. /etc/php/8.3/fpm/
+sudo install -d -m 0700 /etc/ssl/zabbix
+sudo cp -a /restore/configuration/etc/ssl/zabbix/. /etc/ssl/zabbix/
+sudo chown root:root /etc/ssl/zabbix/privkey.pem
+sudo chmod 0600 /etc/ssl/zabbix/privkey.pem
+sudo chown root:zabbix /etc/zabbix/zabbix_server.conf
+sudo chmod 0640 /etc/zabbix/zabbix_server.conf
+# Reconcile PHP pool group before protecting zabbix.conf.php.
+# Optional custom scripts, only if they were in the selected set:
+for relative in usr/lib/zabbix/alertscripts usr/lib/zabbix/externalscripts usr/local/lib/zabbix; do
+  if sudo test -d &quot;/restore/configuration/$relative&quot;; then
+    sudo install -d -o root -g zabbix -m 0750 &quot;/$relative&quot;
+    sudo cp -a &quot;/restore/configuration/$relative/.&quot; &quot;/$relative/&quot;
+  fi
+done
+# Restore /etc/letsencrypt and renewal hooks only if that CA workflow was used.
+# Restore backup scripts/units from the set, but keep its timer disabled during drill.
+sudoedit /etc/zabbix/zabbix_server.conf
+sudoedit /etc/zabbix/web/zabbix.conf.php
+sudoedit /etc/zabbix/nginx.conf
+sudoedit /etc/postgresql/16/main/pg_hba.conf
+# Add BEFORE rejection rules:
+# host zabbix_recovery zabbix 127.0.0.1/32 scram-sha-256</code></pre>
+<pre dir="ltr"><code class="language-bash"># 7. Start required services only after configuration review.
+sudo pg_ctlcluster 16 main reload
+sudo php-fpm8.3 -t
+sudo nginx -t
+sudo systemctl start php8.3-fpm zabbix-server nginx
+sudo systemctl status zabbix-server php8.3-fpm nginx --no-pager
+sudo tail -n 100 /var/log/zabbix/zabbix_server.log
+curl -I --cacert /path/to/enterprise-ca.pem https://zabbix.example.com/
+# Start only disposable lab agents after name/network/TLS validation.</code></pre>
+<p  data-en="8–10. Check System information/schema, counts against recovery record, historical graphs, fresh Linux/Windows lab data, PROBLEM/OK and notification to an isolated test sink. Test RBAC/MFA, HTTPS, scripts, queue, maintenance/dependencies and backup on replacement. Live hosts have stale data while isolated; use cloned lab identities or controlled rerouting, not duplicate collectors. Record restored last sample and elapsed retrieval/start/validation, achieved RPO/RTO. Then approve IP/DNS cutover, alert routes and timer reactivation; preserve rollback source." data-fa="۸–۱۰. System Information/Schema، شمارش با رکورد، Graph تاریخی، داده تازه Lab Linux/Windows، PROBLEM/OK و اعلان به Test Sink ایزوله. RBAC/MFA، HTTPS، Script، Queue، Maintenance/Dependency و Backup جایگزین تست. Host زنده در Isolation داده قدیمی دارد؛ هویت Clone Lab یا Reroute کنترل‌شده نه Collector تکراری. آخرین Sample، زمان Retrieval/Start/Validation و RPO/RTO ثبت. سپس تأیید Cutover IP/DNS، Alert و Timer؛ Source Rollback حفظ.">8–10. Check System information/schema, counts against recovery record, historical graphs, fresh Linux/Windows lab data, PROBLEM/OK and notification to an isolated test sink. Test RBAC/MFA, HTTPS, scripts, queue, maintenance/dependencies and backup on replacement. Live hosts have stale data while isolated; use cloned lab identities or controlled rerouting, not duplicate collectors. Record restored last sample and elapsed retrieval/start/validation, achieved RPO/RTO. Then approve IP/DNS cutover, alert routes and timer reactivation; preserve rollback source.</p>
+<h3  data-en="Destructive commands — approved replacement cutover only" data-fa="فرمان مخرب — فقط Cutover جایگزین تأییدشده">Destructive commands — approved replacement cutover only</h3>
+<p  data-en="dropdb permanently deletes the existing monitoring database. Keep it separate from the new-name drill; only execute on a confirmed replacement after verified backup, recorded host identity and explicit operational approval. Never on the live source. --clean or extracting config over /etc also overwrites state and needs review." data-fa="dropdb دیتابیس موجود را دائماً حذف می‌کند. جدا از Drill با نام جدید؛ فقط جایگزین تأییدشده با Backup معتبر، هویت Host ثبت‌شده و تأیید عملیاتی صریح. هرگز Source زنده. --clean یا Extract روی /etc نیز Overwrite و نیازمند Review.">dropdb permanently deletes the existing monitoring database. Keep it separate from the new-name drill; only execute on a confirmed replacement after verified backup, recorded host identity and explicit operational approval. Never on the live source. --clean or extracting config over /etc also overwrites state and needs review.</p>
+<pre dir="ltr"><code class="language-bash"># DESTRUCTIVE, intentionally commented: confirmed replacement host only.
+sudo systemctl stop nginx zabbix-server
+# sudo -u postgres dropdb --if-exists zabbix
+# sudo -u postgres createdb -O zabbix -E UTF8 -T template0 zabbix
+# Restore the verified dump into this EMPTY DB as above, no initial schema import.</code></pre>
+<p><a href="https://www.postgresql.org/docs/16/app-pgrestore.html" rel="noopener"><span  data-en="pg_restore compatibility and ownership" data-fa="سازگاری و Ownership در pg_restore">pg_restore compatibility and ownership</span></a></p>
+<p><a href="https://www.zabbix.com/documentation/7.0/en/manual/installation/upgrade" rel="noopener"><span  data-en="Zabbix schema/version upgrade compatibility" data-fa="سازگاری Upgrade مربوط به Schema/Version">Zabbix schema/version upgrade compatibility</span></a></p>
+</section>
+<section id="troubleshooting"><h2  data-en="12. Production troubleshooting" data-fa="۱۲. عیب‌یابی Production">12. Production troubleshooting</h2>
+<p  data-en="Symptoms → Root cause → Diagnostic commands → Expected results → Resolution. Expected results describe healthy infrastructure, not runtime results from this website workspace. Diagnose from the assigned Server/Proxy and save evidence before restarting. Never resolve failures by disabling TLS/firewall/AppArmor/authentication." data-fa="نشانه ← علت ریشه‌ای ← فرمان تشخیص ← نتیجه مورد انتظار ← راه‌حل. Expected Result توصیف زیرساخت سالم است نه نتیجه Runtime در Workspace سایت. از Server/Proxy تعیین‌شده تشخیص و پیش از Restart شاهد حفظ شود. رفع شکست با غیرفعال‌کردن TLS/Firewall/AppArmor/احراز هویت ممنوع.">Symptoms → Root cause → Diagnostic commands → Expected results → Resolution. Expected results describe healthy infrastructure, not runtime results from this website workspace. Diagnose from the assigned Server/Proxy and save evidence before restarting. Never resolve failures by disabling TLS/firewall/AppArmor/authentication.</p>
+<h3  data-en="Server not starting" data-fa="Server شروع نمی‌شود">Server not starting</h3>
+<p  data-en="Symptoms: Failed unit / Server down. Root cause: Config, DB/schema or port conflict." data-fa="نشانه: Unit ناموفق یا Server Down. علت ریشه‌ای: Config، DB/Schema یا تداخل Port.">Symptoms: Failed unit / Server down. Root cause: Config, DB/schema or port conflict.</p>
+<pre dir="ltr"><code class="language-bash">sudo systemctl status zabbix-server --no-pager
+sudo journalctl -u zabbix-server -n 100 --no-pager
+sudo tail -n 100 /var/log/zabbix/zabbix_server.log
+sudo ss -lntp</code></pre>
+<p  data-en="Expected results: Running, listener 10051, no fatal DB errors. Resolution: Fix first logged error and compatibility before restart." data-fa="نتیجه مورد انتظار: Running، Listener 10051 و بدون Fatal DB. راه‌حل: اولین خطای Log و سازگاری پیش از Restart اصلاح.">Expected results: Running, listener 10051, no fatal DB errors. Resolution: Fix first logged error and compatibility before restart.</p>
+<h3  data-en="Database connection failure" data-fa="شکست اتصال Database">Database connection failure</h3>
+<p  data-en="Symptoms: Refused / authentication failed. Root cause: Wrong DBHost/password/HBA or stopped cluster." data-fa="نشانه: Refused یا Authentication Failed. علت ریشه‌ای: DBHost/Password/HBA غلط یا Cluster متوقف.">Symptoms: Refused / authentication failed. Root cause: Wrong DBHost/password/HBA or stopped cluster.</p>
+<pre dir="ltr"><code class="language-bash">pg_lsclusters
+pg_isready -h 127.0.0.1
+psql -h 127.0.0.1 -U zabbix -W -d zabbix -c &#x27;SELECT 1;&#x27;
+sudo -u postgres psql -X -c &#x27;SELECT line_number,error FROM pg_hba_file_rules;&#x27;</code></pre>
+<p  data-en="Expected results: Online, accepting, SELECT 1 succeeds. Resolution: Repair protected credentials and ordered SCRAM rules; no trust." data-fa="نتیجه مورد انتظار: Online، Accepting و SELECT 1 موفق. راه‌حل: Credential محافظت‌شده و ترتیب SCRAM اصلاح؛ بدون trust.">Expected results: Online, accepting, SELECT 1 succeeds. Resolution: Repair protected credentials and ordered SCRAM rules; no trust.</p>
+<h3  data-en="Agent unavailable" data-fa="Agent در دسترس نیست">Agent unavailable</h3>
+<p  data-en="Symptoms: Stale OS data / passive red icon. Root cause: Agent stopped, interface/allowlist/TLS wrong." data-fa="نشانه: داده OS قدیمی یا Icon Passive قرمز. علت ریشه‌ای: Agent متوقف، Interface/Allowlist/TLS غلط.">Symptoms: Stale OS data / passive red icon. Root cause: Agent stopped, interface/allowlist/TLS wrong.</p>
+<pre dir="ltr"><code class="language-bash">sudo systemctl status zabbix-agent2 --no-pager
+sudo tail -n 50 /var/log/zabbix/zabbix_agent2.log
+sudo ufw status numbered
+# Windows: Get-Service -Name &quot;Zabbix Agent 2&quot;</code></pre>
+<p  data-en="Expected results: Running, encrypted passive ping=1, active data advances. Resolution: Repair path/TLS; use active heartbeat for active-only hosts." data-fa="نتیجه مورد انتظار: Running، Ping رمزنگاری‌شده 1 و داده Active تازه. راه‌حل: مسیر/TLS اصلاح؛ Heartbeat فعال برای Active-only.">Expected results: Running, encrypted passive ping=1, active data advances. Resolution: Repair path/TLS; use active heartbeat for active-only hosts.</p>
+<h3  data-en="Hostname mismatch" data-fa="عدم تطابق Hostname">Hostname mismatch</h3>
+<p  data-en="Symptoms: Active host not found. Root cause: Hostname differs from technical Host name." data-fa="نشانه: Host Not Found در Active. علت ریشه‌ای: Hostname با Host name فنی متفاوت.">Symptoms: Active host not found. Root cause: Hostname differs from technical Host name.</p>
+<pre dir="ltr"><code class="language-bash">sudo grep &#x27;^Hostname=&#x27; /etc/zabbix/zabbix_agent2.conf
+sudo tail -n 50 /var/log/zabbix/zabbix_agent2.log</code></pre>
+<p  data-en="Expected results: Exact case-sensitive name and enabled host. Resolution: Align Hostname, not Visible name; restart agent and wait refresh." data-fa="نتیجه مورد انتظار: نام دقیق حساس به حروف و Host فعال. راه‌حل: Hostname نه Visible name تطبیق؛ Restart و انتظار Refresh.">Expected results: Exact case-sensitive name and enabled host. Resolution: Align Hostname, not Visible name; restart agent and wait refresh.</p>
+<h3  data-en="Active checks not working" data-fa="Active کار نمی‌کند">Active checks not working</h3>
+<p  data-en="Symptoms: Passive works but active data absent. Root cause: Wrong ServerActive/proxy or template type." data-fa="نشانه: Passive موفق ولی Active غایب. علت ریشه‌ای: ServerActive/Proxy یا Type Template غلط.">Symptoms: Passive works but active data absent. Root cause: Wrong ServerActive/proxy or template type.</p>
+<pre dir="ltr"><code class="language-bash">sudo grep -E &#x27;^(ServerActive|Hostname|TLSConnect)=&#x27; /etc/zabbix/zabbix_agent2.conf
+nc -vz 192.0.2.10 10051
+sudo tail -n 50 /var/log/zabbix/zabbix_agent2.log</code></pre>
+<p  data-en="Expected results: Active list/data accepted by assigned destination. Resolution: Fix assigned destination, active item/template and UI encryption." data-fa="نتیجه مورد انتظار: List/Data فعال در مقصد تعیین‌شده قبول. راه‌حل: مقصد تعیین‌شده، Item/Template فعال و Encryption UI اصلاح.">Expected results: Active list/data accepted by assigned destination. Resolution: Fix assigned destination, active item/template and UI encryption.</p>
+<h3  data-en="TCP/10050 problems" data-fa="مشکل TCP/10050">TCP/10050 problems</h3>
+<p  data-en="Symptoms: Passive timeout/refused. Root cause: Listener or poller allowlist absent." data-fa="نشانه: Timeout/Refused در Passive. علت ریشه‌ای: Listener یا Allowlist Poller غایب.">Symptoms: Passive timeout/refused. Root cause: Listener or poller allowlist absent.</p>
+<pre dir="ltr"><code class="language-bash"># On agent:
+sudo ss -lntp | grep &#x27;:10050&#x27;
+sudo ufw status numbered
+# On assigned Server/Proxy:
+nc -vz 198.51.100.21 10050</code></pre>
+<p  data-en="Expected results: Agent listens; approved source reaches it. Resolution: Correct ListenIP/source rule; not needed in active-only design." data-fa="نتیجه مورد انتظار: Agent Listen و Source مجاز دسترسی. راه‌حل: ListenIP/Source Rule اصلاح؛ در Active-only لازم نیست.">Expected results: Agent listens; approved source reaches it. Resolution: Correct ListenIP/source rule; not needed in active-only design.</p>
+<h3  data-en="TCP/10051 problems" data-fa="مشکل TCP/10051">TCP/10051 problems</h3>
+<p  data-en="Symptoms: Active timeout/refused. Root cause: Destination listener, routing or egress." data-fa="نشانه: Timeout/Refused در Active. علت ریشه‌ای: Listener مقصد، Route یا Egress.">Symptoms: Active timeout/refused. Root cause: Destination listener, routing or egress.</p>
+<pre dir="ltr"><code class="language-bash">sudo ss -lntp | grep &#x27;:10051&#x27;
+# From agent:
+nc -vz 192.0.2.10 10051
+ip route get 192.0.2.10</code></pre>
+<p  data-en="Expected results: Correct listener and allowed route/TCP. Resolution: Repair real path/NAT source allowlist while retaining TLS." data-fa="نتیجه مورد انتظار: Listener صحیح و Route/TCP مجاز. راه‌حل: مسیر واقعی/Allowlist Source NAT اصلاح با حفظ TLS.">Expected results: Correct listener and allowed route/TCP. Resolution: Repair real path/NAT source allowlist while retaining TLS.</p>
+<h3  data-en="TLS PSK mismatch" data-fa="عدم تطابق TLS PSK">TLS PSK mismatch</h3>
+<p  data-en="Symptoms: Handshake / unknown identity error. Root cause: Identity/key/direction mismatch or unreadable file." data-fa="نشانه: خطای Handshake/Unknown Identity. علت ریشه‌ای: Identity/Key/جهت متفاوت یا فایل ناخوانا.">Symptoms: Handshake / unknown identity error. Root cause: Identity/key/direction mismatch or unreadable file.</p>
+<pre dir="ltr"><code class="language-bash">sudo grep -E &#x27;^(TLSConnect|TLSAccept|TLSPSKIdentity|TLSPSKFile)=&#x27; /etc/zabbix/zabbix_agent2.conf
+sudo -u zabbix test -r /etc/zabbix/keys/agent2.psk
+sudo tail -n 50 /var/log/zabbix/zabbix_agent2.log</code></pre>
+<p  data-en="Expected results: Protected readable key and UI/agent match. Resolution: Securely re-provision per-host key, correct directions, test TLS." data-fa="نتیجه مورد انتظار: Key محافظت‌شده خوانا و UI/Agent منطبق. راه‌حل: باز‌تأمین امن Key یکتا، اصلاح جهت و تست TLS.">Expected results: Protected readable key and UI/agent match. Resolution: Securely re-provision per-host key, correct directions, test TLS.</p>
+<h3  data-en="Unsupported items" data-fa="Item پشتیبانی نمی‌شود">Unsupported items</h3>
+<p  data-en="Symptoms: Not supported item. Root cause: Key/type, permissions, plugin or discovery mismatch." data-fa="نشانه: Item برابر Not Supported. علت ریشه‌ای: Key/Type، Permission، Plugin یا Discovery غلط.">Symptoms: Not supported item. Root cause: Key/type, permissions, plugin or discovery mismatch.</p>
+<pre dir="ltr"><code class="language-bash">sudo -u zabbix zabbix_agent2 -c /etc/zabbix/zabbix_agent2.conf -t &#x27;custom.service.nginx&#x27;
+# Read item error under Hosts -&gt; Items.</code></pre>
+<p  data-en="Expected results: Typed value, not ZBX_NOTSUPPORTED. Resolution: Fix exact error with release/7.0 keys and minimal access." data-fa="نتیجه مورد انتظار: Value Type‌دار نه ZBX_NOTSUPPORTED. راه‌حل: خطای دقیق با Key نسخه release/7.0 و حداقل دسترسی اصلاح.">Expected results: Typed value, not ZBX_NOTSUPPORTED. Resolution: Fix exact error with release/7.0 keys and minimal access.</p>
+<h3  data-en="No data received" data-fa="داده دریافت نمی‌شود">No data received</h3>
+<p  data-en="Symptoms: Stale Latest data timestamps. Root cause: Disabled item/host, maintenance, queue/clock." data-fa="نشانه: Timestamp قدیمی Latest Data. علت ریشه‌ای: Host/Item غیرفعال، Maintenance، Queue/Clock.">Symptoms: Stale Latest data timestamps. Root cause: Disabled item/host, maintenance, queue/clock.</p>
+<pre dir="ltr"><code class="language-bash">sudo tail -n 100 /var/log/zabbix/zabbix_server.log
+chronyc tracking
+# Frontend: host/item status, Maintenance and Administration -&gt; Queue</code></pre>
+<p  data-en="Expected results: Enabled values advance after interval, bounded queue. Resolution: Restore intended collection, time/interval; investigate DB latency." data-fa="نتیجه مورد انتظار: Value فعال پس از Interval تازه و Queue محدود. راه‌حل: Collection لازم، Time/Interval اصلاح؛ تأخیر DB بررسی.">Expected results: Enabled values advance after interval, bounded queue. Resolution: Restore intended collection, time/interval; investigate DB latency.</p>
+<h3  data-en="Database storage exhaustion" data-fa="اتمام Storage دیتابیس">Database storage exhaustion</h3>
+<p  data-en="Symptoms: Full disk, insert failures, queue growth. Root cause: History/WAL/log growth or failed archiving." data-fa="نشانه: Disk پر، شکست Insert، رشد Queue. علت ریشه‌ای: رشد History/WAL/Log یا Archiving ناموفق.">Symptoms: Full disk, insert failures, queue growth. Root cause: History/WAL/log growth or failed archiving.</p>
+<pre dir="ltr"><code class="language-bash">df -hT
+df -i
+sudo -u postgres psql -X -d zabbix -c &#x27;SELECT pg_size_pretty(pg_database_size(current_database()));&#x27;
+sudo -u postgres psql -X -c &#x27;SELECT * FROM pg_stat_archiver;&#x27;</code></pre>
+<p  data-en="Expected results: Free blocks/inodes, healthy WAL archiving. Resolution: Expand safely, repair archiving/retention; never delete WAL/DB files manually." data-fa="نتیجه مورد انتظار: Block/Inode آزاد و WAL Archiving سالم. راه‌حل: افزایش ایمن، اصلاح Archiving/Retention؛ WAL/DB دستی حذف نشود.">Expected results: Free blocks/inodes, healthy WAL archiving. Resolution: Expand safely, repair archiving/retention; never delete WAL/DB files manually.</p>
+<h3  data-en="Backup failure" data-fa="شکست Backup">Backup failure</h3>
+<p  data-en="Symptoms: Failed unit or stale last-success. Root cause: Mount/space, credentials, changed files or off-site failure." data-fa="نشانه: Unit ناموفق یا Last Success قدیمی. علت ریشه‌ای: Mount/Space، Credential، فایل تغییرکرده یا Off-site.">Symptoms: Failed unit or stale last-success. Root cause: Mount/space, credentials, changed files or off-site failure.</p>
+<pre dir="ltr"><code class="language-bash">sudo systemctl show zabbix-backup.service -p Result -p ExecMainStatus
+sudo journalctl -u zabbix-backup.service -n 100 --no-pager
+mountpoint /backup
+df -h /backup
+systemctl list-timers --all zabbix-backup.timer</code></pre>
+<p  data-en="Expected results: Result=success, exit 0, fresh SUCCESS and off-site snapshot. Resolution: Fix logged cause, preserve old verified sets, rerun/retrieve and test failure channel." data-fa="نتیجه مورد انتظار: Result=success، Exit 0، SUCCESS تازه و Snapshot Off-site. راه‌حل: علت Log رفع، قدیمی معتبر حفظ، اجرا/دریافت مجدد و کانال Failure تست.">Expected results: Result=success, exit 0, fresh SUCCESS and off-site snapshot. Resolution: Fix logged cause, preserve old verified sets, rerun/retrieve and test failure channel.</p>
+</section>
+<section id="best-practices"><h2  data-en="13. Production checklist" data-fa="۱۳. چک‌لیست Production">13. Production checklist</h2>
+<ul><li  data-en="[ ] Stable supported LTS/packages and advisories recorded; patch owner/window assigned." data-fa="[ ] LTS/Package پایدار و Advisory ثبت؛ مالک/Window Patch مشخص.">[ ] Stable supported LTS/packages and advisories recorded; patch owner/window assigned.</li><li  data-en="[ ] DNS/static IP, NTP, IOPS/capacity, DB/WAL headroom and encrypted /backup mount validated." data-fa="[ ] DNS/IP ثابت، NTP، IOPS/Capacity، فضای DB/WAL و Mount رمزنگاری‌شده /backup تأیید.">[ ] DNS/static IP, NTP, IOPS/capacity, DB/WAL headroom and encrypted /backup mount validated.</li><li  data-en="[ ] Restricted PostgreSQL role, SCRAM/peer and loopback pass positive/negative access tests." data-fa="[ ] Role محدود PostgreSQL، SCRAM/Peer و Loopback تست دسترسی مثبت/منفی موفق.">[ ] Restricted PostgreSQL role, SCRAM/peer and loopback pass positive/negative access tests.</li><li  data-en="[ ] Server/frontend/Linux/Windows services survive reboot; logs/permissions match package layout." data-fa="[ ] سرویس Server/Frontend/Linux/Windows پس از Reboot؛ Log/Permission منطبق بسته.">[ ] Server/frontend/Linux/Windows services survive reboot; logs/permissions match package layout.</li><li  data-en="[ ] Correct active/passive templates, hostnames/proxy and fresh CPU/RAM/disk/network/load/uptime data." data-fa="[ ] Template Active/Passive، Hostname/Proxy صحیح و داده تازه CPU/RAM/Disk/Network/Load/Uptime.">[ ] Correct active/passive templates, hostnames/proxy and fresh CPU/RAM/disk/network/load/uptime data.</li><li  data-en="[ ] Required services and Event Logs covered; discovery exclusions/thresholds reviewed." data-fa="[ ] Service ضروری و Event Log پوشش؛ Exclusion/Threshold بررسی.">[ ] Required services and Event Logs covered; discovery exclusions/thresholds reviewed.</li><li  data-en="[ ] Trigger PROBLEM/OK, severity, hysteresis, maintenance, dependency/escalation tested safely." data-fa="[ ] PROBLEM/OK، Severity، Hysteresis، Maintenance، Dependency/Escalation امن تست.">[ ] Trigger PROBLEM/OK, severity, hysteresis, maintenance, dependency/escalation tested safely.</li><li  data-en="[ ] Email/official Telegram action and recovery delivery verified with permitted test users." data-fa="[ ] تحویل Action/Recovery ایمیل و Telegram رسمی با Test User مجاز تأیید.">[ ] Email/official Telegram action and recovery delivery verified with permitted test users.</li><li  data-en="[ ] HTTPS renewal/chain, unique Agent PSK/cert and narrow firewall pass; no insecure fallback." data-fa="[ ] Renewal/Chain HTTPS، PSK/Cert یکتا و Firewall محدود موفق؛ بدون Fallback ناامن.">[ ] HTTPS renewal/chain, unique Agent PSK/cert and narrow firewall pass; no insecure fallback.</li><li  data-en="[ ] Named admins, MFA/RBAC/API scope, audit retention, sessions and emergency access tested." data-fa="[ ] Admin نام‌دار، MFA/RBAC/API محدود، Audit Retention، Session و دسترسی اضطراری تست.">[ ] Named admins, MFA/RBAC/API scope, audit retention, sessions and emergency access tested.</li><li  data-en="[ ] Timer, lock, space/integrity checks, failure transport and independent stale-success alerts tested." data-fa="[ ] Timer، Lock، Space/Integrity، Transport شکست و Alert مستقل سن Success تست.">[ ] Timer, lock, space/integrity checks, failure transport and independent stale-success alerts tested.</li><li  data-en="[ ] Encrypted off-site snapshot retrieved; separate vault keys, retention/immutable copies approved." data-fa="[ ] Snapshot Off-site رمزنگاری‌شده دریافت؛ Key Vault جدا، Retention/Immutable تأیید.">[ ] Encrypted off-site snapshot retrieved; separate vault keys, retention/immutable copies approved.</li><li  data-en="[ ] Isolated restore of DB/config/TLS/scripts, hosts/history/triggers/notifications meets measured RPO/RTO." data-fa="[ ] Restore ایزوله DB/Config/TLS/Script، Host/History/Trigger/Notification با RPO/RTO اندازه‌گیری‌شده کافی.">[ ] Isolated restore of DB/config/TLS/scripts, hosts/history/triggers/notifications meets measured RPO/RTO.</li><li  data-en="[ ] Operations owns dashboards, storage/queue/backup checks, incident/capacity/change/rollback runbooks." data-fa="[ ] Operations مالک Dashboard، Check Storage/Queue/Backup و Runbook رخداد/Capacity/Change/Rollback.">[ ] Operations owns dashboards, storage/queue/backup checks, incident/capacity/change/rollback runbooks.</li></ul>
+</section>
+<section id="conclusion"><h2  data-en="Operational handover and runtime acceptance" data-fa="تحویل عملیاتی و پذیرش Runtime">Operational handover and runtime acceptance</h2>
+<p  data-en="This website workspace validates article integration and static syntax. It does not install live Zabbix/PostgreSQL or execute a real backup, Windows MSI, notification or restore. Complete and record the staging acceptance evidence before production rollout. Hand over versions, protected secret paths, diagrams, dashboards, alert ownership, backup retention and measured restore evidence to Operations." data-fa="Workspace سایت، Integration مقاله و Syntax ایستا را بررسی می‌کند؛ Zabbix/PostgreSQL زنده نصب یا Backup واقعی، MSI، اعلان و Restore اجرا نمی‌کند. شاهد پذیرش Staging پیش از Production تکمیل و ثبت شود. Version، مسیر Secret محافظت‌شده، Diagram، Dashboard، مالک Alert، Retention و شاهد Restore اندازه‌گیری‌شده به Operations تحویل شود.">This website workspace validates article integration and static syntax. It does not install live Zabbix/PostgreSQL or execute a real backup, Windows MSI, notification or restore. Complete and record the staging acceptance evidence before production rollout. Hand over versions, protected secret paths, diagrams, dashboards, alert ownership, backup retention and measured restore evidence to Operations.</p>
+</section>
+<section id="faq"><h2  data-en="Frequently asked questions" data-fa="پرسش‌های متداول">Frequently asked questions</h2>
+<h3  data-en="Why 7.0 LTS instead of 8.0 RC?" data-fa="چرا 7.0 LTS به جای 8.0 RC؟">Why 7.0 LTS instead of 8.0 RC?</h3>
+<p  data-en="The verified lifecycle lists 7.0 as the latest released LTS. RC is not production; recheck the stable selector before deployment." data-fa="Lifecycle بررسی‌شده 7.0 را آخرین LTS منتشرشده می‌داند. RC برای Production نیست؛ Stable Selector قبل استقرار دوباره بررسی شود.">The verified lifecycle lists 7.0 as the latest released LTS. RC is not production; recheck the stable selector before deployment.</p>
+<h3  data-en="Which templates work with Agent 2?" data-fa="کدام Template با Agent 2 کار می‌کند؟">Which templates work with Agent 2?</h3>
+<p  data-en="Official Linux by Zabbix agent and Windows by Zabbix agent templates support Agent 2; choose their active variants for active checks." data-fa="Template رسمی Linux by Zabbix agent و Windows by Zabbix agent؛ برای Active نوع Active انتخاب شود.">Official Linux by Zabbix agent and Windows by Zabbix agent templates support Agent 2; choose their active variants for active checks.</p>
+<h3  data-en="Which ports are required?" data-fa="Port لازم چیست؟">Which ports are required?</h3>
+<p  data-en="Active agents connect to Server/Proxy TCP/10051; passive polling reaches agents TCP/10050, with TLS and source allowlists." data-fa="Agent فعال به Server/Proxy روی TCP/10051؛ Poll غیرفعال به Agent روی TCP/10050 با TLS و Allowlist.">Active agents connect to Server/Proxy TCP/10051; passive polling reaches agents TCP/10050, with TLS and source allowlists.</p>
+<h3  data-en="Is /etc/zabbix alone a backup?" data-fa="آیا /etc/zabbix به‌تنهایی بکاپ است؟">Is /etc/zabbix alone a backup?</h3>
+<p  data-en="No. Recover PostgreSQL together with protected configuration, TLS material and custom scripts." data-fa="خیر؛ PostgreSQL همراه Config محافظت‌شده، TLS و Script سفارشی بازیابی شود.">No. Recover PostgreSQL together with protected configuration, TLS material and custom scripts.</p>
+<h3  data-en="Does the script store DB passwords?" data-fa="Script Password DB ذخیره می‌کند؟">Does the script store DB passwords?</h3>
+<p  data-en="No. Local peer authentication uses postgres OS user and the restricted zabbix role. Off-site credentials are protected separately." data-fa="خیر؛ Peer محلی با کاربر OS برابر postgres و Role محدود zabbix. Credential Off-site جدا محافظت می‌شود.">No. Local peer authentication uses postgres OS user and the restricted zabbix role. Off-site credentials are protected separately.</p>
+<h3  data-en="When are old backups deleted?" data-fa="بکاپ قدیمی چه زمانی حذف می‌شود؟">When are old backups deleted?</h3>
+<p  data-en="Only after new archive verification and required off-site success, and only completed sets older than configured retention." data-fa="فقط پس از Verification جدید و Off-site لازم موفق، برای مجموعه تکمیل‌شده قدیمی طبق Retention.">Only after new archive verification and required off-site success, and only completed sets older than configured retention.</p>
+<h3  data-en="Can a dump provide PITR?" data-fa="آیا Dump، PITR می‌دهد؟">Can a dump provide PITR?</h3>
+<p  data-en="A dump restores its snapshot. PITR requires a physical base backup and complete WAL archive chain." data-fa="Dump به Snapshot برمی‌گردد؛ PITR نیازمند Base Backup فیزیکی و زنجیره کامل WAL است.">A dump restores its snapshot. PITR requires a physical base backup and complete WAL archive chain.</p>
+<h3  data-en="Do checksums prove recovery?" data-fa="Checksum اثبات Recovery است؟">Do checksums prove recovery?</h3>
+<p  data-en="No. Restore and validate hosts, data, triggers and notifications in isolation; record achieved RPO/RTO." data-fa="خیر؛ Host، Data، Trigger و Notification در Isolation بازیابی/تأیید و RPO/RTO ثبت شود.">No. Restore and validate hosts, data, triggers and notifications in isolation; record achieved RPO/RTO.</p>
+</section>
+<section id="official-references"><h2  data-en="Official references, downloads and related articles" data-fa="منابع رسمی، دانلود و مقاله مرتبط">Official references, downloads and related articles</h2>
+<p  data-en="References are linked in each chapter. Templates contain no real credentials and require approved addressing, secrets and staging validation. Download individual files or the complete package." data-fa="منابع در هر فصل لینک هستند. Template فاقد Credential واقعی و نیازمند آدرس/Secret مجاز و Validation Staging است. فایل منفرد یا بسته کامل دریافت کنید.">References are linked in each chapter. Templates contain no real credentials and require approved addressing, secrets and staging validation. Download individual files or the complete package.</p>
+<p><a href="/downloads/zabbix-server-linux-windows-agents-backup/zabbix-agent2-linux.conf" rel="noopener"><span  data-en="Download: Linux Agent 2 configuration" data-fa="دانلود: Configuration Agent 2 لینوکس">Download: Linux Agent 2 configuration</span></a></p>
+<p><a href="/downloads/zabbix-server-linux-windows-agents-backup/zabbix-agent2-windows.conf" rel="noopener"><span  data-en="Download: Windows Agent 2 configuration" data-fa="دانلود: Configuration Agent 2 ویندوز">Download: Windows Agent 2 configuration</span></a></p>
+<p><a href="/downloads/zabbix-server-linux-windows-agents-backup/install-zabbix-agent2.ps1" rel="noopener"><span  data-en="Download: PowerShell MSI installation" data-fa="دانلود: نصب MSI با PowerShell">Download: PowerShell MSI installation</span></a></p>
+<p><a href="/downloads/zabbix-server-linux-windows-agents-backup/zabbix-backup.sh" rel="noopener"><span  data-en="Download: Verified backup Bash script" data-fa="دانلود: Script Bash بکاپ معتبر">Download: Verified backup Bash script</span></a></p>
+<p><a href="/downloads/zabbix-server-linux-windows-agents-backup/zabbix-backup.env" rel="noopener"><span  data-en="Download: Backup environment template" data-fa="دانلود: Template محیط بکاپ">Download: Backup environment template</span></a></p>
+<p><a href="/downloads/zabbix-server-linux-windows-agents-backup/zabbix-backup.service" rel="noopener"><span  data-en="Download: Backup systemd service" data-fa="دانلود: سرویس systemd بکاپ">Download: Backup systemd service</span></a></p>
+<p><a href="/downloads/zabbix-server-linux-windows-agents-backup/zabbix-backup.timer" rel="noopener"><span  data-en="Download: Daily systemd timer" data-fa="دانلود: Timer روزانه systemd">Download: Daily systemd timer</span></a></p>
+<p><a href="/downloads/zabbix-server-linux-windows-agents-backup/zabbix-backup-failure.service" rel="noopener"><span  data-en="Download: Failure notification unit" data-fa="دانلود: Unit اعلان شکست">Download: Failure notification unit</span></a></p>
+<p><a href="/downloads/zabbix-server-linux-windows-agents-backup/zabbix-backup-notify" rel="noopener"><span  data-en="Download: Independent notification hook" data-fa="دانلود: Hook مستقل اعلان">Download: Independent notification hook</span></a></p>
+<p><a href="/downloads/zabbix-server-linux-windows-agents-backup/restore-runbook.md" rel="noopener"><span  data-en="Download: Restore runbook" data-fa="دانلود: Runbook بازیابی">Download: Restore runbook</span></a></p>
+<p><a href="/downloads/zabbix-server-linux-windows-agents-backup/security-checklist.md" rel="noopener"><span  data-en="Download: Security checklist" data-fa="دانلود: چک‌لیست امنیت">Download: Security checklist</span></a></p>
+<p><a href="/downloads/zabbix-server-linux-windows-agents-backup/README.md" rel="noopener"><span  data-en="Download: Package README" data-fa="دانلود: README بسته">Download: Package README</span></a></p>
+<p><a href="/downloads/zabbix-server-linux-windows-agents-backup/zabbix-configuration-package.zip" rel="noopener"><span  data-en="Complete configuration and runbook ZIP" data-fa="ZIP کامل Configuration و Runbook">Complete configuration and runbook ZIP</span></a></p>
+<p><a href="/articles/oracle-database-26ai-installation-oracle-linux" rel="noopener"><span  data-en="Related: Oracle enterprise backup and recovery" data-fa="مرتبط: Backup/Recovery سازمانی Oracle">Related: Oracle enterprise backup and recovery</span></a></p>
+<p><a href="/articles/apache-tomcat-linux-installation-security-hardening" rel="noopener"><span  data-en="Related: Tomcat service security" data-fa="مرتبط: امنیت سرویس Tomcat">Related: Tomcat service security</span></a></p>
+<p><a href="/articles/mongodb-installation-configuration-production-deployment" rel="noopener"><span  data-en="Related: MongoDB production deployment" data-fa="مرتبط: استقرار Production MongoDB">Related: MongoDB production deployment</span></a></p>
+<p><a href="/articles/redis-installation-configuration-replication" rel="noopener"><span  data-en="Related: Redis production monitoring" data-fa="مرتبط: مانیتورینگ Production Redis">Related: Redis production monitoring</span></a></p>
+<p><a href="/articles/linux-security-auditor-bash" rel="noopener"><span  data-en="Related: Linux security audit" data-fa="مرتبط: ممیزی امنیت Linux">Related: Linux security audit</span></a></p>
+<p><a href="/articles/nginx-installation-configuration-ubuntu" rel="noopener"><span  data-en="Related: Nginx on Ubuntu" data-fa="مرتبط: Nginx روی Ubuntu">Related: Nginx on Ubuntu</span></a></p>
+</section></article></main></body></html>

@@ -428,6 +428,18 @@ end
 
 معیار پذیرش: هر دو Member در حالت سالم واجد انتخاب باشند؛ با خرابی WAN1 اتصال تازه از WAN2 عبور کند؛ بعد از بازیابی، اتصال‌های جدید طبق Rule توزیع شوند؛ و اختلال یک Target منفرد به‌عنوان قطعی قطعی ISP گزارش نشود. رفتار اتصال‌های موجود، IP خروجی، تماس صوتی و برنامه‌های حساس جداگانه ثبت شود.
 
+## Security Considerations
+
+SD-WAN Policy امنیتی نیست. Rule انتخاب WAN اجازه عبور نمی‌دهد؛ Firewall Policy باید کمترین دسترسی لازم را مجاز کند. `service ALL` در نمونه برای نمایش Connectivity است؛ سیاست واقعی سازمان باید سرویس‌ها، کاربران و مقصدهای مجاز را کنترل کند.
+
+پروفایل‌های IPS، Antivirus، Web/DNS Filtering و Application Control را متناسب با نیاز و ظرفیت سخت‌افزار اعمال کنید. TLS Deep Inspection به مدیریت CA، استثناهای مجاز و بررسی سازگاری برنامه نیاز دارد. افزایش ظرفیت اینترنت به‌تنهایی ظرفیت Inspection دستگاه را افزایش نمی‌دهد.
+
+Management GUI/SSH را روی WAN عمومی بی‌دلیل باز نکنید. دسترسی مدیریت را از شبکه مشخص یا VPN سازمانی و با کنترل هویت محدود کنید. SNAT جای سیاست امنیتی را نمی‌گیرد.
+
+Traffic Capture و Debug می‌توانند اطلاعات حساس شامل IP، Hostname و جزئیات ارتباط را ثبت کنند. Capture محدود، مدت کوتاه و نگهداری کنترل‌شده داشته باشید. Debug را پس از پایان خاموش کنید و برای حل Asymmetry، کنترل‌های RPF/State را به‌صورت سراسری دور نزنید.
+
+این راهنما درباره **Outbound Internet** است. Publish کردن سرویس ورودی از دو ISP نیازمند طراحی VIP، DNS، دسترس‌پذیری ورودی و مسیر پاسخ است و از Load Balancing خروجی به‌صورت خودکار حاصل نمی‌شود.
+
 ## Weighted Load Balancing برای WANهای ۲۰۰ و ۱۰۰ Mbps
 
 نسبت ظرفیت اسمی:
@@ -740,21 +752,6 @@ diagnose debug reset
 
 Session Table را به‌طور سراسری برای حل مشکل پاک نکنید. این کار می‌تواند تماس‌ها، VPNها و اتصال‌های کاربران را قطع کند. برای آزمون انتخاب مسیر، اتصال تازه و Filter محدود اغلب کافی است.
 
-## Best Practices
-
-1. از ISPهای دارای مسیر فیزیکی و بالادست مستقل استفاده کنید؛ دو قرارداد لزوماً دو Failure Domain نیستند.
-2. Public Probe عمومی را با Checkهای مستقل سرویس‌های حیاتی تکمیل کنید. پروتکل Probe باید با سوال عملیاتی متناسب باشد.
-3. Critical Applicationها Rule جداگانه داشته باشند؛ همه Trafficها داخل یک Default Rule تجمیع نشوند.
-4. Rule عمومی Source-Destination را در انتهای Ruleهای اختصاصی قرار دهید و Fallback نهایی را مستند کنید.
-5. ظرفیت واقعی Upload/Download و Peak Usage را ثبت کنید؛ Hash مساوی الزاماً مصرف Mbps مساوی نیست.
-6. WAN پشتیبان را برای بار ضروری Dimension کنید و در قطعی Backup/Update را محدود کنید.
-7. Baseline کیفیت، Failover Time، SLA Fail و Recovery را ثبت و Alertها را به تغییر معنادار مرتبط کنید.
-8. سناریوهای قطع کابل، Gateway سالم با اینترنت خراب، Brownout، خرابی یک Target و خرابی هر دو WAN را آزمون کنید.
-9. برنامه‌های وابسته به IP Whitelist، SSO، Banking و SIP را جداگانه بررسی و در صورت نیاز Pin کنید.
-10. Route، Firewall Policy، NAT، SD-WAN Rule و Monitoring را به‌صورت یک Change قابل Rollback نگهداری کنید.
-11. Firmware مناسب مدل را با Release Notes و سیاست نگهداری سازمان انتخاب کنید؛ شماره نسخه مرجع مقاله توصیه Upgrade خودکار نیست.
-12. تغییر الگوریتم، Rule Order و SLA را با Session تازه و Traffic واقعی ارزیابی کنید.
-
 ## Common Mistakes
 
 | اشتباه | اثر | اصلاح |
@@ -776,17 +773,20 @@ Session Table را به‌طور سراسری برای حل مشکل پاک نک
 
 پخش مساوی تعداد Hash یا Session در لینک نامساوی الزاماً خطای قطعی نیست؛ مشکل زمانی است که بدون تحلیل ظرفیت، آن را توزیع بهینه پهنای باند فرض کنیم.
 
-## Security Considerations
+## Best Practices
 
-SD-WAN Policy امنیتی نیست. Rule انتخاب WAN اجازه عبور نمی‌دهد؛ Firewall Policy باید کمترین دسترسی لازم را مجاز کند. `service ALL` در نمونه برای نمایش Connectivity است؛ سیاست واقعی سازمان باید سرویس‌ها، کاربران و مقصدهای مجاز را کنترل کند.
-
-پروفایل‌های IPS، Antivirus، Web/DNS Filtering و Application Control را متناسب با نیاز و ظرفیت سخت‌افزار اعمال کنید. TLS Deep Inspection به مدیریت CA، استثناهای مجاز و بررسی سازگاری برنامه نیاز دارد. افزایش ظرفیت اینترنت به‌تنهایی ظرفیت Inspection دستگاه را افزایش نمی‌دهد.
-
-Management GUI/SSH را روی WAN عمومی بی‌دلیل باز نکنید. دسترسی مدیریت را از شبکه مشخص یا VPN سازمانی و با کنترل هویت محدود کنید. SNAT جای سیاست امنیتی را نمی‌گیرد.
-
-Traffic Capture و Debug می‌توانند اطلاعات حساس شامل IP، Hostname و جزئیات ارتباط را ثبت کنند. Capture محدود، مدت کوتاه و نگهداری کنترل‌شده داشته باشید. Debug را پس از پایان خاموش کنید و برای حل Asymmetry، کنترل‌های RPF/State را به‌صورت سراسری دور نزنید.
-
-این راهنما درباره **Outbound Internet** است. Publish کردن سرویس ورودی از دو ISP نیازمند طراحی VIP، DNS، دسترس‌پذیری ورودی و مسیر پاسخ است و از Load Balancing خروجی به‌صورت خودکار حاصل نمی‌شود.
+1. از ISPهای دارای مسیر فیزیکی و بالادست مستقل استفاده کنید؛ دو قرارداد لزوماً دو Failure Domain نیستند.
+2. Public Probe عمومی را با Checkهای مستقل سرویس‌های حیاتی تکمیل کنید. پروتکل Probe باید با سوال عملیاتی متناسب باشد.
+3. Critical Applicationها Rule جداگانه داشته باشند؛ همه Trafficها داخل یک Default Rule تجمیع نشوند.
+4. Rule عمومی Source-Destination را در انتهای Ruleهای اختصاصی قرار دهید و Fallback نهایی را مستند کنید.
+5. ظرفیت واقعی Upload/Download و Peak Usage را ثبت کنید؛ Hash مساوی الزاماً مصرف Mbps مساوی نیست.
+6. WAN پشتیبان را برای بار ضروری Dimension کنید و در قطعی Backup/Update را محدود کنید.
+7. Baseline کیفیت، Failover Time، SLA Fail و Recovery را ثبت و Alertها را به تغییر معنادار مرتبط کنید.
+8. سناریوهای قطع کابل، Gateway سالم با اینترنت خراب، Brownout، خرابی یک Target و خرابی هر دو WAN را آزمون کنید.
+9. برنامه‌های وابسته به IP Whitelist، SSO، Banking و SIP را جداگانه بررسی و در صورت نیاز Pin کنید.
+10. Route، Firewall Policy، NAT، SD-WAN Rule و Monitoring را به‌صورت یک Change قابل Rollback نگهداری کنید.
+11. Firmware مناسب مدل را با Release Notes و سیاست نگهداری سازمان انتخاب کنید؛ شماره نسخه مرجع مقاله توصیه Upgrade خودکار نیست.
+12. تغییر الگوریتم، Rule Order و SLA را با Session تازه و Traffic واقعی ارزیابی کنید.
 
 ## Conclusion: معماری پیشنهادی Production
 
@@ -867,13 +867,6 @@ ECMP برای Routing چندمسیره ساده مناسب است. وقتی کی
 
 خیر. توزیع Sessionهای جدید، تقسیم تک‌تک Packetهای یک TCP Flow بین دو ISP نیست. Packetهای یک Session معمولی باید مسیر و وضعیت سازگار داشته باشند.
 
-## SEO
-
-- **SEO Title:** لود بالانس و Failover در FortiGate با SD-WAN و SLA
-- **Meta Description:** آموزش عملی Load Balancing و Failover اینترنت در FortiGate با SD-WAN، Performance SLA، تنظیمات CLI و GUI، توزیع Source-Destination و عیب‌یابی Dual WAN.
-- **Slug:** `fortigate-sd-wan-load-balancing-failover`
-- **Keywords:** FortiGate Load Balancing, FortiGate SD-WAN, FortiGate Failover, FortiGate Performance SLA, FortiGate Dual WAN, FortiGate WAN Load Balancing, SD-WAN Load Balancing, FortiOS SD-WAN
-
 ## References
 
 این مقاله Tutorial مستقل است و ترجمه فصل‌های Fortinet نیست. رفتار و Syntax از منابع رسمی زیر بررسی شده‌اند؛ تحلیل ظرفیت، طراحی سناریو و Runbook ارائه‌شده برای همین محیط نمونه نوشته شده‌اند.
@@ -911,3 +904,9 @@ ECMP برای Routing چندمسیره ساده مناسب است. وقتی کی
 31. [FortiOS 7.6.6 — Debugging packet flow](https://docs.fortinet.com/document/fortigate/7.6.6/administration-guide/54688/debugging-the-packet-flow)
 32. [FortiOS 7.6.3 — get system status example](https://docs.fortinet.com/document/fortigate/7.6.3/administration-guide/441460)
 33. [FortiOS — CLI table subcommands](https://docs.fortinet.com/document/fortigate/7.2.0/administration-guide/627485/subcommands)
+## SEO
+
+- **SEO Title:** لود بالانس و Failover در FortiGate با SD-WAN و SLA
+- **Meta Description:** آموزش عملی Load Balancing و Failover اینترنت در FortiGate با SD-WAN، Performance SLA، تنظیمات CLI و GUI، توزیع Source-Destination و عیب‌یابی Dual WAN.
+- **Slug:** `fortigate-sd-wan-load-balancing-failover`
+- **Keywords:** FortiGate Load Balancing, FortiGate SD-WAN, FortiGate Failover, FortiGate Performance SLA, FortiGate Dual WAN, FortiGate WAN Load Balancing, SD-WAN Load Balancing, FortiOS SD-WAN

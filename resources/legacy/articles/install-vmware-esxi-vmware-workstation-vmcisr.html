@@ -312,15 +312,6 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-architecture"
-              ><span
-                data-fa="دو لایه Virtualization"
-                data-en="Two virtualization layers"
-                >Two virtualization layers</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#enterprise-prerequisites"
               ><span
                 data-fa="CPU، میزبان و Build سازگار"
@@ -330,20 +321,11 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-installation"
+            <a href="#enterprise-architecture"
               ><span
-                data-fa="ساخت ماشین ESXi و آزمون Host Client"
-                data-en="Build the ESXi VM and test Host Client"
-                >Build the ESXi VM and test Host Client</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#enterprise-troubleshooting"
-              ><span
-                data-fa="بررسی VMCISr و VT-x"
-                data-en="Investigate VMCISr and VT-x failures"
-                >Investigate VMCISr and VT-x failures</span
+                data-fa="دو لایه Virtualization"
+                data-en="Two virtualization layers"
+                >Two virtualization layers</span
               ></a
             >
           </li>
@@ -357,11 +339,29 @@
             >
           </li>
           <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="ساخت ماشین ESXi و آزمون Host Client"
+                data-en="Build the ESXi VM and test Host Client"
+                >Build the ESXi VM and test Host Client</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
             <a href="#enterprise-monitoring"
               ><span
                 data-fa="منابع میزبان و Guest"
                 data-en="Host and guest resource pressure"
                 >Host and guest resource pressure</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-troubleshooting"
+              ><span
+                data-fa="بررسی VMCISr و VT-x"
+                data-en="Investigate VMCISr and VT-x failures"
+                >Investigate VMCISr and VT-x failures</span
               ></a
             >
           </li>
@@ -499,39 +499,6 @@
                       failures from that VM’s logs.
                     </p>
                   </section>
-                  <section id="enterprise-architecture" class="article-section">
-                    <h2
-                      data-fa="دو لایه Virtualization"
-                      data-en="Two virtualization layers"
-                    >
-                      Two virtualization layers
-                    </h2>
-                    <p
-                      data-fa="Workstation ویژگی‌های CPU را به ESXi می‌دهد و ESXi آن‌ها را برای VMهای داخلی استفاده می‌کند. بالا آمدن خود ESXi به معنی در دسترس بودن Nested Virtualization برای VMهای داخل آن نیست. یک VM کوچک را هم Boot کنید."
-                      data-en="Workstation exposes CPU features to ESXi, which uses them for its guest VMs. Booting ESXi alone does not prove nested virtualization is available to those guests. Boot a small nested VM too."
-                    >
-                      Workstation exposes CPU features to ESXi, which uses them
-                      for its guest VMs. Booting ESXi alone does not prove
-                      nested virtualization is available to those guests. Boot a
-                      small nested VM too.
-                    </p>
-                    <h3
-                      id="enterprise-scenario"
-                      data-fa="مثال: تمرین تغییر vSwitch"
-                      data-en="Example: rehearse a vSwitch change"
-                    >
-                      Example: rehearse a vSwitch change
-                    </h3>
-                    <p
-                      data-fa="یک ESXi و دو VM کوچک داخل آن بسازید. شبکه مدیریت را Host-only نگه دارید و دسترسی بیرونی لازم را از NAT بدهید. این جداسازی مانع ورود ترافیک آزمایشی به LAN شرکت می‌شود."
-                      data-en="Build one ESXi host with two small nested VMs. Keep management host-only and provide required outbound access through NAT. This keeps test traffic out of the company LAN."
-                    >
-                      Build one ESXi host with two small nested VMs. Keep
-                      management host-only and provide required outbound access
-                      through NAT. This keeps test traffic out of the company
-                      LAN.
-                    </p>
-                  </section>
                   <section
                     id="enterprise-prerequisites"
                     class="article-section"
@@ -581,6 +548,56 @@
                       This workflow is for a lab. Check Broadcom’s
                       nested-support conditions. VMCISr names the failing module
                       rather than one universal cause across versions.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="دو لایه Virtualization"
+                      data-en="Two virtualization layers"
+                    >
+                      Two virtualization layers
+                    </h2>
+                    <p
+                      data-fa="Workstation ویژگی‌های CPU را به ESXi می‌دهد و ESXi آن‌ها را برای VMهای داخلی استفاده می‌کند. بالا آمدن خود ESXi به معنی در دسترس بودن Nested Virtualization برای VMهای داخل آن نیست. یک VM کوچک را هم Boot کنید."
+                      data-en="Workstation exposes CPU features to ESXi, which uses them for its guest VMs. Booting ESXi alone does not prove nested virtualization is available to those guests. Boot a small nested VM too."
+                    >
+                      Workstation exposes CPU features to ESXi, which uses them
+                      for its guest VMs. Booting ESXi alone does not prove
+                      nested virtualization is available to those guests. Boot a
+                      small nested VM too.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: تمرین تغییر vSwitch"
+                      data-en="Example: rehearse a vSwitch change"
+                    >
+                      Example: rehearse a vSwitch change
+                    </h3>
+                    <p
+                      data-fa="یک ESXi و دو VM کوچک داخل آن بسازید. شبکه مدیریت را Host-only نگه دارید و دسترسی بیرونی لازم را از NAT بدهید. این جداسازی مانع ورود ترافیک آزمایشی به LAN شرکت می‌شود."
+                      data-en="Build one ESXi host with two small nested VMs. Keep management host-only and provide required outbound access through NAT. This keeps test traffic out of the company LAN."
+                    >
+                      Build one ESXi host with two small nested VMs. Keep
+                      management host-only and provide required outbound access
+                      through NAT. This keeps test traffic out of the company
+                      LAN.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="امنیت میزبان هنگام Workaround"
+                      data-en="Host security during workarounds"
+                    >
+                      Host security during workarounds
+                    </h2>
+                    <p
+                      data-fa="از Credential مخصوص Lab استفاده کنید و Management را روی اینترنت نگذارید. اگر KB به تغییر Hyper-V، VBS یا Secure Boot اشاره دارد، Build و اثر امنیتی آن را بررسی کنید. خاموش‌کردن عمومی کنترل‌های میزبان راه‌حل هر خطای Nested نیست."
+                      data-en="Use lab-specific credentials and keep management off the Internet. When a KB calls for Hyper-V, VBS or Secure Boot changes, check its build scope and security impact. Disabling host controls is not a general nested-error fix."
+                    >
+                      Use lab-specific credentials and keep management off the
+                      Internet. When a KB calls for Hyper-V, VBS or Secure Boot
+                      changes, check its build scope and security impact.
+                      Disabling host controls is not a general nested-error fix.
                     </p>
                   </section>
                   <section id="enterprise-installation" class="article-section">
@@ -633,6 +650,22 @@
                       VM and test its network/storage.
                     </p>
                   </section>
+                  <section id="enterprise-monitoring" class="article-section">
+                    <h2
+                      data-fa="منابع میزبان و Guest"
+                      data-en="Host and guest resource pressure"
+                    >
+                      Host and guest resource pressure
+                    </h2>
+                    <p
+                      data-fa="RAM میزبان، Swapping داخل ESXi و Latency دیسک را بررسی کنید. VM کند در Lab ممکن است از Oversubscription میزبان باشد. نتیجه را همراه منابع تخصیص‌یافته ثبت کنید."
+                      data-en="Inspect host RAM, ESXi swapping and disk latency. Slow lab guests might reflect host oversubscription. Record results with the allocated resources."
+                    >
+                      Inspect host RAM, ESXi swapping and disk latency. Slow lab
+                      guests might reflect host oversubscription. Record results
+                      with the allocated resources.
+                    </p>
+                  </section>
                   <section
                     id="enterprise-troubleshooting"
                     class="article-section"
@@ -655,40 +688,10 @@
                       adapter/image compatibility checks, not arbitrary driver
                       injection.
                     </p>
-                  </section>
-                  <section id="enterprise-security" class="article-section">
-                    <h2
-                      data-fa="امنیت میزبان هنگام Workaround"
-                      data-en="Host security during workarounds"
-                    >
-                      Host security during workarounds
-                    </h2>
-                    <p
-                      data-fa="از Credential مخصوص Lab استفاده کنید و Management را روی اینترنت نگذارید. اگر KB به تغییر Hyper-V، VBS یا Secure Boot اشاره دارد، Build و اثر امنیتی آن را بررسی کنید. خاموش‌کردن عمومی کنترل‌های میزبان راه‌حل هر خطای Nested نیست."
-                      data-en="Use lab-specific credentials and keep management off the Internet. When a KB calls for Hyper-V, VBS or Secure Boot changes, check its build scope and security impact. Disabling host controls is not a general nested-error fix."
-                    >
-                      Use lab-specific credentials and keep management off the
-                      Internet. When a KB calls for Hyper-V, VBS or Secure Boot
-                      changes, check its build scope and security impact.
-                      Disabling host controls is not a general nested-error fix.
-                    </p>
-                  </section>
-                  <section id="enterprise-monitoring" class="article-section">
-                    <h2
-                      data-fa="منابع میزبان و Guest"
-                      data-en="Host and guest resource pressure"
-                    >
-                      Host and guest resource pressure
-                    </h2>
-                    <p
-                      data-fa="RAM میزبان، Swapping داخل ESXi و Latency دیسک را بررسی کنید. VM کند در Lab ممکن است از Oversubscription میزبان باشد. نتیجه را همراه منابع تخصیص‌یافته ثبت کنید."
-                      data-en="Inspect host RAM, ESXi swapping and disk latency. Slow lab guests might reflect host oversubscription. Record results with the allocated resources."
-                    >
-                      Inspect host RAM, ESXi swapping and disk latency. Slow lab
-                      guests might reflect host oversubscription. Record results
-                      with the allocated resources.
-                    </p>
-                  </section>
+                  <div id="technical-enterprise-troubleshooting"><h3 data-en="Collect the exact power-on failure on the Windows host" data-fa="ثبت خطای دقیق روشن‌شدن روی میزبان ویندوز">Collect the exact power-on failure on the Windows host</h3><p data-en="Replace the path with this powered-off VM’s actual folder. Read its log before editing VMX. The block is Windows PowerShell, runs on the Workstation host and makes no VM configuration change. A missing vmware.log calls for checking the actual VM folder and most recent power-on attempt." data-fa="مسیر را با پوشهٔ واقعی همین VM خاموش جایگزین کنید. پیش از ویرایش VMX لاگ را بخوانید. بلوک در Windows PowerShell میزبان Workstation اجرا می‌شود و تنظیمات VM را تغییر نمی‌دهد. نبود vmware.log نیازمند بررسی پوشهٔ واقعی و آخرین تلاش روشن‌شدن است.">Replace the path with this powered-off VM’s actual folder. Read its log before editing VMX. The block is Windows PowerShell, runs on the Workstation host and makes no VM configuration change. A missing vmware.log calls for checking the actual VM folder and most recent power-on attempt.</p><pre dir="ltr"><code class="language-powershell">$VmFolder = &#x27;D:\LabVMs\NestedESXi&#x27;
+Get-ChildItem -LiteralPath $VmFolder -Filter &#x27;vmware*.log&#x27; | Select-Object Name,Length,LastWriteTime
+Get-Content -LiteralPath (Join-Path $VmFolder &#x27;vmware.log&#x27;) -Tail 100
+Select-String -LiteralPath (Join-Path $VmFolder &#x27;vmware.log&#x27;) -Pattern &#x27;VMCISr&#x27;,&#x27;VMCI&#x27;,&#x27;VT-x&#x27;,&#x27;AMD-V&#x27;,&#x27;MonitorMode&#x27;</code></pre><p data-en="Expected: timestamped context around the actual failed module or CPU virtualization limitation. No match is not proof of support. Match the exact host, Workstation and ESXi builds to the vendor KB; preserve a powered-off VMX copy before any documented workaround and undo only that change if it fails. Never blindly delete VMCI entries or disable host security controls." data-fa="انتظار می‌رود زمینهٔ دارای زمان مربوط به ماژول خراب یا محدودیت مجازی‌سازی CPU پیدا شود. نبود عبارت، پشتیبانی را ثابت نمی‌کند. بیلد دقیق میزبان، Workstation و ESXi را با KB سازنده تطبیق دهید؛ پیش از workaround مستند، کپی VMX خاموش را حفظ و در صورت شکست فقط همان تغییر را برگردانید. VMCI را کورکورانه حذف یا امنیت میزبان را غیرفعال نکنید.">Expected: timestamped context around the actual failed module or CPU virtualization limitation. No match is not proof of support. Match the exact host, Workstation and ESXi builds to the vendor KB; preserve a powered-off VMX copy before any documented workaround and undo only that change if it fails. Never blindly delete VMCI entries or disable host security controls.</p></div></section>
                   <section id="enterprise-recovery" class="article-section">
                     <h2
                       data-fa="بازگرداندن VMX و داده Lab"

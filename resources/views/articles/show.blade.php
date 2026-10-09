@@ -152,6 +152,9 @@
                 [route('articles.index', [], false), route('articles.index', [], false), 'Back to articles', 'بازگشت به فهرست مقاله‌ها'],
                 $articleContent
             );
+            // Exclude embedded legacy author/footer sections before scanning headings.
+            // Otherwise a footer section can capture the next article H2 as its label.
+            $articleContent = preg_replace('~<footer\b[^>]*class=["\'][^"\']*article-footer[^"\']*["\'][^>]*>.*?</footer>~is', '', $articleContent) ?? $articleContent;
             // Build the TOC from the final rendered sections, not the legacy
             // toc_html stored during import. Legacy TOCs were often stale or
             // contained only the FAQ link after article repairs.
@@ -165,10 +168,10 @@
                     preg_match("/\\bdata-fa=['\"]([^'\"]*)['\"]/i", $attributes, $faMatch);
                     $en = html_entity_decode($enMatch[1] ?? $heading, ENT_QUOTES | ENT_HTML5, 'UTF-8');
                     $fa = html_entity_decode($faMatch[1] ?? $en, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-                    $tocHtml .= '<li class="article-nav-item"><a href="#'.e($id).'" data-en-aria-label="'.e($en).'" data-fa-aria-label="'.e($fa).'" aria-label="'.e($en).'"><span data-en="'.e($en).'" data-fa="'.e($fa).'">'.e($en).'</span></a></li>';
+                    $label = data_get($article->presentation, 'content_language') === 'fa' ? $fa : $en;
+                    $tocHtml .= '<li class="article-nav-item"><a href="#'.e($id).'" data-en-aria-label="'.e($en).'" data-fa-aria-label="'.e($fa).'" aria-label="'.e($label).'"><span data-en="'.e($en).'" data-fa="'.e($fa).'">'.e($label).'</span></a></li>';
                 }
             }
-                $articleContent = preg_replace('~<footer\b[^>]*class=["\'][^"\']*article-footer[^"\']*["\'][^>]*>.*?</footer>~is', '', $articleContent) ?? $articleContent;
               @endphp
           <div class="article-shell{{ $tocHtml ? ' article-shell--with-toc' : '' }}">
             @if ($tocHtml)

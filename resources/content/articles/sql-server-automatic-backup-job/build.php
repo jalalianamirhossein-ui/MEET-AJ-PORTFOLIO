@@ -16,6 +16,8 @@ if (! preg_match('~<article\b[^>]*class="article-body"[^>]*>(.*?)</article>~is',
     throw new RuntimeException('Original article body is missing.');
 }
 $content = preg_replace('~<footer\b[^>]*class="article-footer"[^>]*>.*?</footer>~is', '', $body[1]);
+require_once dirname(__DIR__, 4).'/app/Services/ArticleStructure.php';
+$content = (new \App\Services\ArticleStructure)->repair($content, 'sql-server-automatic-backup-job');
 $questions = [];
 foreach ($default['faq'] as [$question, $answer]) {
     $questions[] = ['@type' => 'Question', 'name' => $question, 'acceptedAnswer' => [

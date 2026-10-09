@@ -163,6 +163,15 @@
             >
           </li>
           <li class="article-nav-item">
+            <a href="#architecture"
+              ><span
+                data-en="Modular OU and GPO architecture"
+                data-fa="معماری Modular برای OU و GPO"
+                >Modular OU and GPO architecture</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
             <a href="#password-lockout"
               ><span
                 data-en="1. Password &amp; Account Lockout Policy"
@@ -251,15 +260,6 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#architecture"
-              ><span
-                data-en="Modular OU and GPO architecture"
-                data-fa="معماری Modular برای OU و GPO"
-                >Modular OU and GPO architecture</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#deployment"
               ><span
                 data-en="Safe deployment: Test OU to Production"
@@ -287,6 +287,15 @@
             >
           </li>
           <li class="article-nav-item">
+            <a href="#enterprise-checklist"
+              ><span
+                data-en="Enterprise Deployment Checklist"
+                data-fa="Enterprise Deployment Checklist"
+                >Enterprise Deployment Checklist</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
             <a href="#summary"
               ><span
                 data-en="Summary: purpose, target and priority"
@@ -301,15 +310,6 @@
                 data-en="Frequently Asked Questions"
                 data-fa="سؤالات متداول"
                 >Frequently Asked Questions</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#enterprise-checklist"
-              ><span
-                data-en="Enterprise Deployment Checklist"
-                data-fa="Enterprise Deployment Checklist"
-                >Enterprise Deployment Checklist</span
               ></a
             >
           </li>
@@ -433,6 +433,80 @@
               >
             </figcaption>
           </figure>
+        </section>
+        <section id="architecture">
+          <h2
+            data-en="Modular OU and GPO architecture"
+            data-fa="معماری Modular برای OU و GPO"
+          >
+            Modular OU and GPO architecture
+          </h2>
+          <figure>
+            <img
+              src="/assets/img/articles/content/Active-Directory-GPO-Architecture.png"
+              alt="Illustrative OU separation; domain-account password policy is linked at the domain root, and each setting has one owner."
+              width="1536"
+              height="1024"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>
+              <span
+                data-en="Illustrative OU separation; domain-account password policy is linked at the domain root, and each setting has one owner."
+                data-fa="تفکیک مفهومی OUها؛ Password Policy حساب Domain در Domain Root اعمال می‌شود. جایگاه Account Policies در تصویر جایگزین این قاعده نیست؛ هر Setting یک مالک دارد."
+                >Illustrative OU separation; domain-account password policy is
+                linked at the domain root, and each setting has one owner.</span
+              >
+            </figcaption>
+          </figure>
+          <p
+            data-en="Separate workstations, member servers, DCs and users. A large monolithic GPO couples unrelated changes and makes rollout and rollback harder. Define one authoritative owner per setting; do not repeatedly configure the same value in competing baselines."
+            data-fa="Workstation، Member Server، DC و User جدا باشند. GPO بزرگ تغییرات نامرتبط را به هم وابسته و Rollout/Rollback را دشوار می‌کند. برای هر Setting مالک معتبر واحد تعیین و مقدار یکسان در Baselineهای متعارض تکرار نشود."
+          >
+            Separate workstations, member servers, DCs and users. A large
+            monolithic GPO couples unrelated changes and makes rollout and
+            rollback harder. Define one authoritative owner per setting; do not
+            repeatedly configure the same value in competing baselines.
+          </p>
+          <pre dir="ltr"><code class="language-text">GPO-SEC-Password-Policy
+GPO-SEC-Defender
+GPO-SEC-Windows-Firewall
+GPO-OPS-WindowsUpdate-Clients
+GPO-OPS-WindowsUpdate-Servers
+GPO-SEC-USB-Control
+GPO-SEC-Workstation-Lock
+GPO-SEC-Local-Admin
+GPO-SEC-RDP-Hardening
+GPO-SEC-Audit-Logging
+GPO-SEC-Application-Hardening
+
+Domain
+│   └── Domain Password / Account Policy
+├── Domain Controllers
+│   └── DC Security GPO
+├── Servers
+│   ├── Server Security Baseline
+│   ├── Server Update Policy
+│   └── RDP Hardening
+├── Workstations
+│   ├── Workstation Security Baseline
+│   ├── Defender
+│   ├── Firewall
+│   ├── USB Control
+│   ├── Workstation Lock
+│   └── Windows Update
+└── Users
+    ├── Office Hardening
+    └── User Screen Saver Policy</code></pre>
+          <p
+            data-en="Split GPO-SEC-Application-Hardening into user/computer or product policies if ownership differs. Add Clients, Servers or DC suffixes when values differ. A member-server local-group policy must not inherit blindly onto DCs."
+            data-fa="اگر مالک متفاوت است، GPO-SEC-Application-Hardening به Policy User/Computer یا محصول تفکیک شود. در تفاوت مقدار، پسوند Clients، Servers یا DC اضافه کنید. Policy Local Group سرور Member نباید کورکورانه به DC برسد."
+          >
+            Split GPO-SEC-Application-Hardening into user/computer or product
+            policies if ownership differs. Add Clients, Servers or DC suffixes
+            when values differ. A member-server local-group policy must not
+            inherit blindly onto DCs.
+          </p>
         </section>
         <section id="password-lockout">
           <h2
@@ -2289,80 +2363,6 @@ Computer Configuration → Policies → Administrative Templates → PowerShell 
     StartTime = (Get-Date).AddMinutes(-15)
 }</code></pre>
         </section>
-        <section id="architecture">
-          <h2
-            data-en="Modular OU and GPO architecture"
-            data-fa="معماری Modular برای OU و GPO"
-          >
-            Modular OU and GPO architecture
-          </h2>
-          <figure>
-            <img
-              src="/assets/img/articles/content/Active-Directory-GPO-Architecture.png"
-              alt="Illustrative OU separation; domain-account password policy is linked at the domain root, and each setting has one owner."
-              width="1536"
-              height="1024"
-              loading="lazy"
-              decoding="async"
-            />
-            <figcaption>
-              <span
-                data-en="Illustrative OU separation; domain-account password policy is linked at the domain root, and each setting has one owner."
-                data-fa="تفکیک مفهومی OUها؛ Password Policy حساب Domain در Domain Root اعمال می‌شود. جایگاه Account Policies در تصویر جایگزین این قاعده نیست؛ هر Setting یک مالک دارد."
-                >Illustrative OU separation; domain-account password policy is
-                linked at the domain root, and each setting has one owner.</span
-              >
-            </figcaption>
-          </figure>
-          <p
-            data-en="Separate workstations, member servers, DCs and users. A large monolithic GPO couples unrelated changes and makes rollout and rollback harder. Define one authoritative owner per setting; do not repeatedly configure the same value in competing baselines."
-            data-fa="Workstation، Member Server، DC و User جدا باشند. GPO بزرگ تغییرات نامرتبط را به هم وابسته و Rollout/Rollback را دشوار می‌کند. برای هر Setting مالک معتبر واحد تعیین و مقدار یکسان در Baselineهای متعارض تکرار نشود."
-          >
-            Separate workstations, member servers, DCs and users. A large
-            monolithic GPO couples unrelated changes and makes rollout and
-            rollback harder. Define one authoritative owner per setting; do not
-            repeatedly configure the same value in competing baselines.
-          </p>
-          <pre dir="ltr"><code class="language-text">GPO-SEC-Password-Policy
-GPO-SEC-Defender
-GPO-SEC-Windows-Firewall
-GPO-OPS-WindowsUpdate-Clients
-GPO-OPS-WindowsUpdate-Servers
-GPO-SEC-USB-Control
-GPO-SEC-Workstation-Lock
-GPO-SEC-Local-Admin
-GPO-SEC-RDP-Hardening
-GPO-SEC-Audit-Logging
-GPO-SEC-Application-Hardening
-
-Domain
-│   └── Domain Password / Account Policy
-├── Domain Controllers
-│   └── DC Security GPO
-├── Servers
-│   ├── Server Security Baseline
-│   ├── Server Update Policy
-│   └── RDP Hardening
-├── Workstations
-│   ├── Workstation Security Baseline
-│   ├── Defender
-│   ├── Firewall
-│   ├── USB Control
-│   ├── Workstation Lock
-│   └── Windows Update
-└── Users
-    ├── Office Hardening
-    └── User Screen Saver Policy</code></pre>
-          <p
-            data-en="Split GPO-SEC-Application-Hardening into user/computer or product policies if ownership differs. Add Clients, Servers or DC suffixes when values differ. A member-server local-group policy must not inherit blindly onto DCs."
-            data-fa="اگر مالک متفاوت است، GPO-SEC-Application-Hardening به Policy User/Computer یا محصول تفکیک شود. در تفاوت مقدار، پسوند Clients، Servers یا DC اضافه کنید. Policy Local Group سرور Member نباید کورکورانه به DC برسد."
-          >
-            Split GPO-SEC-Application-Hardening into user/computer or product
-            policies if ownership differs. Add Clients, Servers or DC suffixes
-            when values differ. A member-server local-group policy must not
-            inherit blindly onto DCs.
-          </p>
-        </section>
         <section id="deployment">
           <h2
             data-en="Safe deployment: Test OU to Production"
@@ -2796,6 +2796,167 @@ Backup-GPO -All -Path &#039;D:\GPO-Backup&#039; -Comment &#039;Before security p
             Retain a change record with before/after values and verification
             evidence.
           </p>
+        </section>
+        <section id="enterprise-checklist">
+          <h2
+            data-en="Enterprise Deployment Checklist"
+            data-fa="Enterprise Deployment Checklist"
+          >
+            Enterprise Deployment Checklist
+          </h2>
+          <h3 data-en="Before deployment" data-fa="قبل از Deploy">
+            Before deployment
+          </h3>
+          <ul>
+            <li
+              data-en="☐ Inventory OS edition/build, lifecycle and update support."
+              data-fa="☐ Edition/Build، Lifecycle و پوشش Update ثبت شده است."
+            >
+              ☐ Inventory OS edition/build, lifecycle and update support.
+            </li>
+            <li
+              data-en="☐ Version and validate Windows, Edge, Office and LAPS templates."
+              data-fa="☐ Template مربوط به Windows، Edge، Office و LAPS نسخه‌بندی و بررسی شده است."
+            >
+              ☐ Version and validate Windows, Edge, Office and LAPS templates.
+            </li>
+            <li
+              data-en="☐ Approve values through security policy and change management."
+              data-fa="☐ مقادیر با Security Policy و Change Management تأیید شده‌اند."
+            >
+              ☐ Approve values through security policy and change management.
+            </li>
+            <li
+              data-en="☐ Separate DC, server, workstation and user scope."
+              data-fa="☐ Scope مربوط به DC، Server، Workstation و User جدا شده است."
+            >
+              ☐ Separate DC, server, workstation and user scope.
+            </li>
+            <li
+              data-en="☐ Identify management ownership and GPO/MDM/MDE conflicts."
+              data-fa="☐ مالک مدیریت و تداخل GPO/MDM/MDE مشخص است."
+            >
+              ☐ Identify management ownership and GPO/MDM/MDE conflicts.
+            </li>
+            <li
+              data-en="☐ Back up GPOs and record links, filtering and permissions."
+              data-fa="☐ Backup GPO و Link، Filtering و Permission ثبت شده است."
+            >
+              ☐ Back up GPOs and record links, filtering and permissions.
+            </li>
+            <li
+              data-en="☐ Check DNS, AD replication and SYSVOL/DFSR health."
+              data-fa="☐ سلامت DNS، AD Replication و SYSVOL/DFSR بررسی شده است."
+            >
+              ☐ Check DNS, AD replication and SYSVOL/DFSR health.
+            </li>
+            <li
+              data-en="☐ Select representative pilot devices/users and a rollout stop criterion."
+              data-fa="☐ Pilot نماینده و معیار توقف Rollout تعیین شده است."
+            >
+              ☐ Select representative pilot devices/users and a rollout stop
+              criterion.
+            </li>
+            <li
+              data-en="☐ Prepare firewall management rules and console/OOB access."
+              data-fa="☐ Rule مدیریت Firewall و Console/OOB آماده است."
+            >
+              ☐ Prepare firewall management rules and console/OOB access.
+            </li>
+            <li
+              data-en="☐ Record local administrators and confirm LAPS schema, ACLs and decryption."
+              data-fa="☐ Local Administrator ثبت و Schema، ACL و Decryption مربوط به LAPS بررسی شده است."
+            >
+              ☐ Record local administrators and confirm LAPS schema, ACLs and
+              decryption.
+            </li>
+            <li
+              data-en="☐ Plan maintenance, restart, log capacity, retention and SIEM ingestion."
+              data-fa="☐ Maintenance، Restart، ظرفیت Log، Retention و SIEM برنامه‌ریزی شده است."
+            >
+              ☐ Plan maintenance, restart, log capacity, retention and SIEM
+              ingestion.
+            </li>
+            <li
+              data-en="☐ Test the explicit rollback and recovery procedure."
+              data-fa="☐ Rollback صریح و فرآیند Recovery تست شده است."
+            >
+              ☐ Test the explicit rollback and recovery procedure.
+            </li>
+          </ul>
+          <h3 data-en="After deployment" data-fa="پس از Deploy">
+            After deployment
+          </h3>
+          <ul>
+            <li
+              data-en="☐ Run gpupdate and any required restart/logoff."
+              data-fa="☐ gpupdate و Restart/Logoff لازم انجام شده است."
+            >
+              ☐ Run gpupdate and any required restart/logoff.
+            </li>
+            <li
+              data-en="☐ Review gpresult winning settings and effective endpoint state."
+              data-fa="☐ Winning Setting در gpresult و وضعیت مؤثر Endpoint بررسی شده است."
+            >
+              ☐ Review gpresult winning settings and effective endpoint state.
+            </li>
+            <li
+              data-en="☐ Test both allowed and denied RDP/firewall scenarios."
+              data-fa="☐ سناریوی مجاز و غیرمجاز RDP/Firewall تست شده است."
+            >
+              ☐ Test both allowed and denied RDP/firewall scenarios.
+            </li>
+            <li
+              data-en="☐ Confirm legitimate administration and recovery still work."
+              data-fa="☐ دسترسی مدیریت مجاز و Recovery برقرار است."
+            >
+              ☐ Confirm legitimate administration and recovery still work.
+            </li>
+            <li
+              data-en="☐ Verify LAPS retrieval and post-use password rotation."
+              data-fa="☐ بازیابی LAPS و Rotate پس از استفاده تست شده است."
+            >
+              ☐ Verify LAPS retrieval and post-use password rotation.
+            </li>
+            <li
+              data-en="☐ Test USB read/write/execute and workstation lock timing."
+              data-fa="☐ Read/Write/Execute روی USB و زمان Lock تست شده است."
+            >
+              ☐ Test USB read/write/execute and workstation lock timing.
+            </li>
+            <li
+              data-en="☐ Verify patch compliance and post-restart application health."
+              data-fa="☐ Compliance وصله و سلامت برنامه پس از Restart بررسی شده است."
+            >
+              ☐ Verify patch compliance and post-restart application health.
+            </li>
+            <li
+              data-en="☐ Confirm audit/PowerShell events and alerts reach the central platform."
+              data-fa="☐ Event و Alert مربوط به Audit/PowerShell به سامانه مرکزی می‌رسند."
+            >
+              ☐ Confirm audit/PowerShell events and alerts reach the central
+              platform.
+            </li>
+            <li
+              data-en="☐ Validate Office macro, ActiveX and Edge policy on actual builds."
+              data-fa="☐ Macro، ActiveX و Edge Policy روی Build واقعی تست شده‌اند."
+            >
+              ☐ Validate Office macro, ActiveX and Edge policy on actual builds.
+            </li>
+            <li
+              data-en="☐ Record incidents, exceptions and baseline deviations."
+              data-fa="☐ Incident، استثنا و اختلاف Baseline ثبت شده‌اند."
+            >
+              ☐ Record incidents, exceptions and baseline deviations.
+            </li>
+            <li
+              data-en="☐ Expand scope only after pilot approval and assign periodic review ownership."
+              data-fa="☐ Scope پس از تأیید Pilot توسعه و مالک بازبینی دوره‌ای تعیین شده است."
+            >
+              ☐ Expand scope only after pilot approval and assign periodic
+              review ownership.
+            </li>
+          </ul>
         </section>
         <section id="summary">
           <h2
@@ -3238,167 +3399,6 @@ Backup-GPO -All -Path &#039;D:\GPO-Backup&#039; -Comment &#039;Before security p
               </p>
             </div>
           </div>
-        </section>
-        <section id="enterprise-checklist">
-          <h2
-            data-en="Enterprise Deployment Checklist"
-            data-fa="Enterprise Deployment Checklist"
-          >
-            Enterprise Deployment Checklist
-          </h2>
-          <h3 data-en="Before deployment" data-fa="قبل از Deploy">
-            Before deployment
-          </h3>
-          <ul>
-            <li
-              data-en="☐ Inventory OS edition/build, lifecycle and update support."
-              data-fa="☐ Edition/Build، Lifecycle و پوشش Update ثبت شده است."
-            >
-              ☐ Inventory OS edition/build, lifecycle and update support.
-            </li>
-            <li
-              data-en="☐ Version and validate Windows, Edge, Office and LAPS templates."
-              data-fa="☐ Template مربوط به Windows، Edge، Office و LAPS نسخه‌بندی و بررسی شده است."
-            >
-              ☐ Version and validate Windows, Edge, Office and LAPS templates.
-            </li>
-            <li
-              data-en="☐ Approve values through security policy and change management."
-              data-fa="☐ مقادیر با Security Policy و Change Management تأیید شده‌اند."
-            >
-              ☐ Approve values through security policy and change management.
-            </li>
-            <li
-              data-en="☐ Separate DC, server, workstation and user scope."
-              data-fa="☐ Scope مربوط به DC، Server، Workstation و User جدا شده است."
-            >
-              ☐ Separate DC, server, workstation and user scope.
-            </li>
-            <li
-              data-en="☐ Identify management ownership and GPO/MDM/MDE conflicts."
-              data-fa="☐ مالک مدیریت و تداخل GPO/MDM/MDE مشخص است."
-            >
-              ☐ Identify management ownership and GPO/MDM/MDE conflicts.
-            </li>
-            <li
-              data-en="☐ Back up GPOs and record links, filtering and permissions."
-              data-fa="☐ Backup GPO و Link، Filtering و Permission ثبت شده است."
-            >
-              ☐ Back up GPOs and record links, filtering and permissions.
-            </li>
-            <li
-              data-en="☐ Check DNS, AD replication and SYSVOL/DFSR health."
-              data-fa="☐ سلامت DNS، AD Replication و SYSVOL/DFSR بررسی شده است."
-            >
-              ☐ Check DNS, AD replication and SYSVOL/DFSR health.
-            </li>
-            <li
-              data-en="☐ Select representative pilot devices/users and a rollout stop criterion."
-              data-fa="☐ Pilot نماینده و معیار توقف Rollout تعیین شده است."
-            >
-              ☐ Select representative pilot devices/users and a rollout stop
-              criterion.
-            </li>
-            <li
-              data-en="☐ Prepare firewall management rules and console/OOB access."
-              data-fa="☐ Rule مدیریت Firewall و Console/OOB آماده است."
-            >
-              ☐ Prepare firewall management rules and console/OOB access.
-            </li>
-            <li
-              data-en="☐ Record local administrators and confirm LAPS schema, ACLs and decryption."
-              data-fa="☐ Local Administrator ثبت و Schema، ACL و Decryption مربوط به LAPS بررسی شده است."
-            >
-              ☐ Record local administrators and confirm LAPS schema, ACLs and
-              decryption.
-            </li>
-            <li
-              data-en="☐ Plan maintenance, restart, log capacity, retention and SIEM ingestion."
-              data-fa="☐ Maintenance، Restart، ظرفیت Log، Retention و SIEM برنامه‌ریزی شده است."
-            >
-              ☐ Plan maintenance, restart, log capacity, retention and SIEM
-              ingestion.
-            </li>
-            <li
-              data-en="☐ Test the explicit rollback and recovery procedure."
-              data-fa="☐ Rollback صریح و فرآیند Recovery تست شده است."
-            >
-              ☐ Test the explicit rollback and recovery procedure.
-            </li>
-          </ul>
-          <h3 data-en="After deployment" data-fa="پس از Deploy">
-            After deployment
-          </h3>
-          <ul>
-            <li
-              data-en="☐ Run gpupdate and any required restart/logoff."
-              data-fa="☐ gpupdate و Restart/Logoff لازم انجام شده است."
-            >
-              ☐ Run gpupdate and any required restart/logoff.
-            </li>
-            <li
-              data-en="☐ Review gpresult winning settings and effective endpoint state."
-              data-fa="☐ Winning Setting در gpresult و وضعیت مؤثر Endpoint بررسی شده است."
-            >
-              ☐ Review gpresult winning settings and effective endpoint state.
-            </li>
-            <li
-              data-en="☐ Test both allowed and denied RDP/firewall scenarios."
-              data-fa="☐ سناریوی مجاز و غیرمجاز RDP/Firewall تست شده است."
-            >
-              ☐ Test both allowed and denied RDP/firewall scenarios.
-            </li>
-            <li
-              data-en="☐ Confirm legitimate administration and recovery still work."
-              data-fa="☐ دسترسی مدیریت مجاز و Recovery برقرار است."
-            >
-              ☐ Confirm legitimate administration and recovery still work.
-            </li>
-            <li
-              data-en="☐ Verify LAPS retrieval and post-use password rotation."
-              data-fa="☐ بازیابی LAPS و Rotate پس از استفاده تست شده است."
-            >
-              ☐ Verify LAPS retrieval and post-use password rotation.
-            </li>
-            <li
-              data-en="☐ Test USB read/write/execute and workstation lock timing."
-              data-fa="☐ Read/Write/Execute روی USB و زمان Lock تست شده است."
-            >
-              ☐ Test USB read/write/execute and workstation lock timing.
-            </li>
-            <li
-              data-en="☐ Verify patch compliance and post-restart application health."
-              data-fa="☐ Compliance وصله و سلامت برنامه پس از Restart بررسی شده است."
-            >
-              ☐ Verify patch compliance and post-restart application health.
-            </li>
-            <li
-              data-en="☐ Confirm audit/PowerShell events and alerts reach the central platform."
-              data-fa="☐ Event و Alert مربوط به Audit/PowerShell به سامانه مرکزی می‌رسند."
-            >
-              ☐ Confirm audit/PowerShell events and alerts reach the central
-              platform.
-            </li>
-            <li
-              data-en="☐ Validate Office macro, ActiveX and Edge policy on actual builds."
-              data-fa="☐ Macro، ActiveX و Edge Policy روی Build واقعی تست شده‌اند."
-            >
-              ☐ Validate Office macro, ActiveX and Edge policy on actual builds.
-            </li>
-            <li
-              data-en="☐ Record incidents, exceptions and baseline deviations."
-              data-fa="☐ Incident، استثنا و اختلاف Baseline ثبت شده‌اند."
-            >
-              ☐ Record incidents, exceptions and baseline deviations.
-            </li>
-            <li
-              data-en="☐ Expand scope only after pilot approval and assign periodic review ownership."
-              data-fa="☐ Scope پس از تأیید Pilot توسعه و مالک بازبینی دوره‌ای تعیین شده است."
-            >
-              ☐ Expand scope only after pilot approval and assign periodic
-              review ownership.
-            </li>
-          </ul>
         </section>
         <section id="references">
           <h2

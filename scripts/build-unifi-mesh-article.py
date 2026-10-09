@@ -244,6 +244,10 @@ html = f'''<!doctype html><html lang="en" dir="ltr" data-article-language="en"><
 {dual('p',DESC['en'],DESC['fa'],'class="article-excerpt hero-subtitle"')}
 <img class="article-hero-thumbnail" src="{banner}" alt="{escape(IMAGES['banner'][2])}"></section>
 <article class="article-body" lang="en" dir="ltr">{chr(10).join(parts)}</article></main></body></html>'''
+import sys
+sys.path.insert(0, str(ROOT / 'scripts'))
+from article_structure import normalize_html, normalize_markdown
+html = normalize_html(html, SLUG)
 (ROOT/'resources/legacy/articles'/f'{SLUG}.html').write_text(html,encoding='utf-8')
 
 for folder, name, _, _ in IMAGES.values():

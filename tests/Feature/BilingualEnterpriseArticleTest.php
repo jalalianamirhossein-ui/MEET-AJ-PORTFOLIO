@@ -46,6 +46,8 @@ class BilingualEnterpriseArticleTest extends TestCase
                 }
                 $xp = $this->dom($html);
                 $meta = $article->presentation['localizations'][$lang];
+                $articleBody = $xp->query('//article[@class="article-body"]')->item(0);
+                $this->assertSame([], app(\App\Services\ArticleStructure::class)->numberingIssues($articleBody->ownerDocument->saveHTML($articleBody)), $article->slug.' '.$lang.' final Blade numbering');
                 $this->assertSame($lang, $xp->evaluate('string(/html/@lang)'), $article->slug);
                 $this->assertSame($lang, $xp->evaluate('string(/html/@data-article-language)'));
                 $this->assertSame($meta['meta_title'], $xp->evaluate('string(//head/title)'));
@@ -66,6 +68,11 @@ class BilingualEnterpriseArticleTest extends TestCase
                 $this->assertSame(0, $xp->query('//*[@id="legacy-history"]')->length);
                 $this->assertSame($lang, $xp->evaluate('string(//article[@class="article-body"]/@lang)'));
                 $this->assertSame($lang === 'fa' ? 'rtl' : 'ltr', $xp->evaluate('string(//article[@class="article-body"]/@dir)'));
+                foreach ($xp->query('//ul[contains(@class,"article-toc-list")]//a[span]') as $link) {
+                    $label = $xp->evaluate('string(./span/@data-'.$lang.')', $link);
+                    $this->assertSame($label, trim($link->textContent), $article->slug.' '.$lang.' TOC text');
+                    $this->assertSame($label, $link->getAttribute('aria-label'), $article->slug.' '.$lang.' TOC accessible label');
+                }
                 foreach ($xp->query('//a[@class="article-teaser-link"]') as $peer) {
                     $this->assertStringNotContainsString('?', $peer->getAttribute('href'));
                 }
@@ -106,6 +113,10 @@ class BilingualEnterpriseArticleTest extends TestCase
                 foreach ($xp->query('//ul[@class="article-toc-list"]//a[starts-with(@href,"#")]') as $anchor) {
                     $id = substr($anchor->getAttribute('href'), 1);
                     $this->assertSame(1, $xp->query('//*[@id="'.$id.'"]')->length, $article->slug.': '.$id);
+                    $target = $xp->query('//*[@id="'.$id.'"]/h2')->item(0);
+                    $this->assertNotNull($target, $article->slug.' TOC must target a main section');
+                    $normalize = fn ($v) => trim(preg_replace('/\s+/u', ' ', $v));
+                    $this->assertSame($normalize($target->textContent), $normalize($anchor->textContent), $article->slug.' TOC heading label');
                 }
             }
             $this->assertSame($localeCodes['fa'], $localeCodes['en'], $article->slug.' code drift');
@@ -228,7 +239,7 @@ class BilingualEnterpriseArticleTest extends TestCase
                 $xp = $this->dom($html);
                 $this->assertGreaterThanOrEqual(3, $xp->query('//section[@id="'.$section.'"]//tbody/tr')->length, $slug);
                 $this->assertSame(1, $xp->query('//ul[@class="article-toc-list"]//a[@href="#'.$section.'"]')->length);
-                $this->assertLessThan(strpos($html, '<section id="enterprise-installation"'), strpos($html, '<section id="'.$section.'"'));
+                $this->assertLessThan(strpos($html, 'id="enterprise-installation"'), strpos($html, 'id="'.$section.'"'));
             }
         }
     }

@@ -228,52 +228,52 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#testing"
-              ><span data-en="15. Testing" data-fa="۱۵. آزمون"
-                >15. Testing</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#expected-result"
-              ><span
-                data-en="16. Expected Result"
-                data-fa="۱۶. نتیجه مورد انتظار"
-                >16. Expected Result</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#troubleshooting"
-              ><span data-en="17. Troubleshooting" data-fa="۱۷. عیب‌یابی"
-                >17. Troubleshooting</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#security"
               ><span
-                data-en="18. Security Considerations"
-                data-fa="۱۸. ملاحظات امنیتی"
-                >18. Security Considerations</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#best-practices"
-              ><span
-                data-en="19. Production Best Practices"
-                data-fa="۱۹. توصیه‌های Production"
-                >19. Production Best Practices</span
+                data-en="15. Security Considerations"
+                data-fa="۱۵. ملاحظات امنیتی"
+                >15. Security Considerations</span
               ></a
             >
           </li>
           <li class="article-nav-item">
             <a href="#complete-configuration"
               ><span
-                data-en="20. Complete Example Configuration"
-                data-fa="۲۰. پیکربندی کامل مثال"
-                >20. Complete Example Configuration</span
+                data-en="16. Complete Example Configuration"
+                data-fa="۱۶. پیکربندی کامل مثال"
+                >16. Complete Example Configuration</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#testing"
+              ><span data-en="17. Testing" data-fa="۱۷. آزمون"
+                >17. Testing</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#expected-result"
+              ><span
+                data-en="18. Expected Result"
+                data-fa="۱۸. نتیجه مورد انتظار"
+                >18. Expected Result</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#troubleshooting"
+              ><span data-en="19. Troubleshooting" data-fa="۱۹. عیب‌یابی"
+                >19. Troubleshooting</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#best-practices"
+              ><span
+                data-en="20. Production Best Practices"
+                data-fa="۲۰. توصیه‌های Production"
+                >20. Production Best Practices</span
               ></a
             >
           </li>
@@ -992,8 +992,218 @@ add chain=srcnat src-address-list=PBR-ACTIVE out-interface=l2tp-vpn-example \
             >
           </p>
         </section>
+        <section id="security">
+          <h2
+            data-en="15. Security Considerations"
+            data-fa="۱۵. ملاحظات امنیتی"
+          >
+            15. Security Considerations
+          </h2>
+          <p
+            data-en="Keep the control addresses inaccessible from WAN. LAN-only trigger matchers protect state changes even if a broad input rule permits ping from elsewhere; input policy must separately restrict replies and all other services on these router-owned addresses. Add the following scoped destination list and input rules, then position allow followed by deny before broad input accepts and final drops."
+            data-fa="آدرس‌های کنترلی از WAN قابل دسترسی نباشند. شرط LAN روی Trigger تغییر وضعیت را محدود می‌کند، حتی اگر Rule عمومی input به مبدأ دیگری پاسخ Ping بدهد؛ Policy مربوط به input باید جداگانه پاسخ و تمام سرویس‌های دیگر روی این آدرس‌های روتر را محدود کند. List مقصد و Ruleهای محدود زیر را اضافه و به‌ترتیب Allow و Deny قبل از accept عمومی input و Drop نهایی قرار دهید."
+          >
+            Keep the control addresses inaccessible from WAN. LAN-only trigger
+            matchers protect state changes even if a broad input rule permits
+            ping from elsewhere; input policy must separately restrict replies
+            and all other services on these router-owned addresses. Add the
+            following scoped destination list and input rules, then position
+            allow followed by deny before broad input accepts and final drops.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall address-list
+add list=PBR-CONTROL-IPS address=10.255.255.1 comment=&quot;Enable trigger destination&quot;
+add list=PBR-CONTROL-IPS address=10.255.255.2 comment=&quot;Disable trigger destination&quot;
+/ip firewall filter
+add chain=input in-interface-list=LAN src-address=192.168.10.0/24 \
+    dst-address-list=PBR-CONTROL-IPS protocol=icmp icmp-options=8:0 \
+    action=accept comment=&quot;Allow authorized PBR echo requests&quot;
+add chain=input dst-address-list=PBR-CONTROL-IPS action=drop \
+    comment=&quot;Deny other access to PBR control addresses&quot;</code></pre>
+          <p
+            data-en="Verify an authorized LAN client receives an echo reply and an unauthorized internal or WAN source cannot reach either control IP. Existing established/related accepts and rule ordering must be reviewed; appending these rules below an earlier broad accept does not enforce the restriction. Do not expose control prefixes through WAN forwarding, published routes or DNAT."
+            data-fa="تأیید کنید Client مجاز LAN پاسخ Echo دریافت می‌کند و مبدأ داخلی غیرمجاز یا WAN به هیچ‌یک از IPهای کنترلی دسترسی ندارد. accept مربوط به established/related و ترتیب Ruleها را بررسی کنید؛ افزودن زیر accept گسترده محدودیت را اعمال نمی‌کند. Prefix کنترلی را از طریق WAN Forwarding، Route منتشرشده یا DNAT در دسترس قرار ندهید."
+          >
+            Verify an authorized LAN client receives an echo reply and an
+            unauthorized internal or WAN source cannot reach either control IP.
+            Existing established/related accepts and rule ordering must be
+            reviewed; appending these rules below an earlier broad accept does
+            not enforce the restriction. Do not expose control prefixes through
+            WAN forwarding, published routes or DNAT.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall filter print detail where chain=&quot;input&quot;
+/ip firewall filter print stats where dst-address-list=&quot;PBR-CONTROL-IPS&quot;</code></pre>
+          <p
+            data-en="A ping does not authenticate a person. Any authorized source can toggle its own state, and a spoofed LAN source can potentially toggle another client. Enforce access at the edge with suitable VLAN separation, source validation and DHCP/IP binding controls. For a strict allowlist, narrow both trigger source ranges and the input allow rule to approved hosts; keep the stable FastTrack exclusion covering that complete population."
+            data-fa="Ping شخص را احراز هویت نمی‌کند. هر مبدأ مجاز می‌تواند وضعیت خود را تغییر دهد و جعل IP در LAN ممکن است وضعیت Client دیگر را تغییر دهد. کنترل دسترسی را در لبه با جداسازی VLAN، اعتبارسنجی مبدأ و کنترل مناسب DHCP/IP Binding اعمال کنید. برای Allowlist سخت‌گیرانه، مبدأ هر دو Trigger و input allow را به Hostهای مجاز محدود و استثنای ثابت FastTrack را شامل تمام آن جمعیت نگه دارید."
+          >
+            A ping does not authenticate a person. Any authorized source can
+            toggle its own state, and a spoofed LAN source can potentially
+            toggle another client. Enforce access at the edge with suitable VLAN
+            separation, source validation and DHCP/IP binding controls. For a
+            strict allowlist, narrow both trigger source ranges and the input
+            allow rule to approved hosts; keep the stable FastTrack exclusion
+            covering that complete population.
+          </p>
+          <p
+            data-en="Do not use this mechanism as a VPN kill switch. Review lookup fall-through, gateway health and explicit drop/blackhole policy if traffic must never escape through main. The presented design does not guarantee fail-closed behavior when the custom route disappears. IPv6 can still follow a separate Internet route."
+            data-fa="این مکانیزم را VPN Kill Switch در نظر نگیرید. اگر ترافیک نباید هرگز از main خارج شود، Lookup Fall-through، سلامت Gateway و Policy صریح Drop/Blackhole را بررسی کنید. طراحی ارائه‌شده هنگام حذف Route اختصاصی رفتار Fail-closed را تضمین نمی‌کند. IPv6 نیز می‌تواند مسیر اینترنت جداگانه داشته باشد."
+          >
+            Do not use this mechanism as a VPN kill switch. Review lookup
+            fall-through, gateway health and explicit drop/blackhole policy if
+            traffic must never escape through main. The presented design does
+            not guarantee fail-closed behavior when the custom route disappears.
+            IPv6 can still follow a separate Internet route.
+          </p>
+        </section>
+        <section id="complete-configuration">
+          <h2
+            data-en="16. Complete Example Configuration"
+            data-fa="۱۶. پیکربندی کامل مثال"
+          >
+            16. Complete Example Configuration
+          </h2>
+          <p
+            data-en="Apply this once to the reviewed example environment in the sequence shown. The existing LAN interface list and working point-to-point tunnel must already exist; ordinary main routing and established/related forwarding must already work. This is an additive example, not an idempotent installer or a replacement firewall. Do not execute both individual section commands and the full block, or run the block twice: duplicate rules and name conflicts would result."
+            data-fa="این Config را یک‌بار به محیط مثال بررسی‌شده و به‌ترتیب زیر اعمال کنید. Interface List موجود LAN و Tunnel نقطه‌به‌نقطه فعال باید از قبل وجود داشته باشند؛ Routing عادی main و Forward مربوط به established/related باید سالم باشند. این مثال افزایشی است، نه Installer تکرارپذیر یا Firewall جایگزین. بخش‌های جداگانه و Block کامل را هر دو اجرا نکنید و Block را دوبار اجرا نکنید؛ Rule تکراری و تضاد نام ایجاد می‌شود."
+          >
+            Apply this once to the reviewed example environment in the sequence
+            shown. The existing LAN interface list and working point-to-point
+            tunnel must already exist; ordinary main routing and
+            established/related forwarding must already work. This is an
+            additive example, not an idempotent installer or a replacement
+            firewall. Do not execute both individual section commands and the
+            full block, or run the block twice: duplicate rules and name
+            conflicts would result.
+          </p>
+          <p
+            data-en="Step 1: back up, enter Safe Mode and inspect LAN, tunnel, input, mangle, NAT and all FastTrack rules. Step 2: integrate the stable FastTrack exceptions described in section 12 before client activation. Existing criteria must be preserved; the guarded example intentionally stops unless the reviewed rule is uniquely identified. Step 3: apply the following infrastructure and policy block; omit the final NAT rule if the selected routed design does not require it."
+            data-fa="مرحله ۱: Backup، Safe Mode و بررسی LAN، Tunnel، input، mangle، NAT و تمام FastTrack Ruleها. مرحله ۲: استثنای ثابت FastTrack بخش ۱۲ را قبل از فعال‌سازی Client ادغام کنید. شرط موجود باید حفظ شود؛ مثال Guardدار عمداً بدون شناسایی یکتای Rule بررسی‌شده متوقف می‌شود. مرحله ۳: Block زیر را اعمال کنید؛ اگر طراحی مسیریابی‌شده انتخاب‌شده به NAT نیاز ندارد، آخرین Rule آن را اجرا نکنید."
+          >
+            Step 1: back up, enter Safe Mode and inspect LAN, tunnel, input,
+            mangle, NAT and all FastTrack rules. Step 2: integrate the stable
+            FastTrack exceptions described in section 12 before client
+            activation. Existing criteria must be preserved; the guarded example
+            intentionally stops unless the reviewed rule is uniquely identified.
+            Step 3: apply the following infrastructure and policy block; omit
+            the final NAT rule if the selected routed design does not require
+            it.
+          </p>
+          <pre dir="ltr"><code class="language-routeros">/interface bridge
+add name=PBR-Control protocol-mode=none comment=&quot;PBR Control Interface&quot;
+/ip address
+add address=10.255.255.1/32 interface=PBR-Control comment=&quot;Enable PBR&quot;
+add address=10.255.255.2/32 interface=PBR-Control comment=&quot;Disable PBR&quot;
+
+/ip firewall address-list
+add list=LOCAL-NETS address=192.168.10.0/24 comment=&quot;LAN example&quot;
+add list=LOCAL-NETS address=192.168.20.0/24 comment=&quot;Internal VLAN example&quot;
+add list=PBR-ELIGIBLE address=192.168.10.0/24 comment=&quot;Stable FastTrack exclusion for trigger-capable clients&quot;
+
+/routing table
+add fib name=VPN-ROUTE
+/ip route
+add dst-address=0.0.0.0/0 gateway=l2tp-vpn-example \
+    routing-table=VPN-ROUTE comment=&quot;PBR default route&quot;
+
+/ip firewall mangle
+add chain=prerouting in-interface-list=LAN src-address=192.168.10.0/24 \
+    src-address-list=!PBR-REMOVE protocol=icmp icmp-options=8:0 \
+    dst-address=10.255.255.1 action=add-src-to-address-list \
+    address-list=PBR-ACTIVE address-list-timeout=none-dynamic \
+    passthrough=yes comment=&quot;Enable PBR using ICMP trigger&quot;
+
+/ip firewall mangle
+add chain=prerouting in-interface-list=LAN src-address=192.168.10.0/24 \
+    protocol=icmp icmp-options=8:0 dst-address=10.255.255.2 \
+    action=add-src-to-address-list address-list=PBR-REMOVE \
+    address-list-timeout=10s passthrough=yes comment=&quot;Disable PBR request&quot;
+
+/ip firewall mangle
+add chain=prerouting in-interface-list=LAN src-address-list=PBR-ACTIVE \
+    dst-address-list=!LOCAL-NETS dst-address-type=!local \
+    action=mark-routing new-routing-mark=VPN-ROUTE passthrough=no \
+    comment=&quot;Route PBR clients using VPN-ROUTE&quot;
+
+/system script
+add name=PBR-Remove-Worker policy=read,write,test dont-require-permissions=no source={
+    :if ([:len [/system script job find where script=&quot;PBR-Remove-Worker&quot;]] &gt; 1) do={
+        :return
+    }
+    :foreach request in=[/ip firewall address-list find where list=&quot;PBR-REMOVE&quot;] do={
+        :local clientIP &quot;&quot;
+        :do {
+            :set clientIP [/ip firewall address-list get $request address]
+            :local active [/ip firewall address-list find where list=&quot;PBR-ACTIVE&quot; and address=$clientIP]
+            :if ([:len $active] &gt; 0) do={
+                /ip firewall address-list remove $active
+                :log info (&quot;PBR disabled for client &quot; . $clientIP)
+            }
+            /ip firewall address-list remove $request
+        } on-error={
+            :if ([:len [/ip firewall address-list find where list=&quot;PBR-REMOVE&quot; and address=$clientIP]] &gt; 0) do={
+                :log warning (&quot;PBR removal failed; queued retry for &quot; . $clientIP)
+            }
+        }
+    }
+}
+
+/system scheduler
+add name=PBR-Remove-Scheduler start-time=startup interval=1s \
+    on-event=PBR-Remove-Worker policy=read,write,test \
+    comment=&quot;Process queued PBR disable requests&quot;
+
+/ip firewall address-list
+add list=PBR-CONTROL-IPS address=10.255.255.1 comment=&quot;Enable trigger destination&quot;
+add list=PBR-CONTROL-IPS address=10.255.255.2 comment=&quot;Disable trigger destination&quot;
+/ip firewall filter
+add chain=input in-interface-list=LAN src-address=192.168.10.0/24 \
+    dst-address-list=PBR-CONTROL-IPS protocol=icmp icmp-options=8:0 \
+    action=accept comment=&quot;Allow authorized PBR echo requests&quot;
+add chain=input dst-address-list=PBR-CONTROL-IPS action=drop \
+    comment=&quot;Deny other access to PBR control addresses&quot;
+
+/ip firewall nat
+add chain=srcnat src-address-list=PBR-ACTIVE out-interface=l2tp-vpn-example \
+    action=masquerade comment=&quot;NAT PBR traffic&quot;</code></pre>
+          <p
+            data-en="Step 4: review placement. On an existing router these add commands append rules: move the two input rules together before broad input accepts/drops, put trigger rules before policy-routing marks, and place scoped NAT before a conflicting earlier srcnat rule. There is no universal safe numeric move target. Integrate with PCC, security filtering and any other routing policies rather than blindly moving everything to position zero."
+            data-fa="مرحله ۴: جایگاه Ruleها را بررسی کنید. add روی روتر موجود Rule را در انتها اضافه می‌کند؛ دو Rule مربوط به input را کنار هم قبل از accept/drop عمومی، Triggerها را قبل از Routing Mark و NAT محدود را قبل از srcnat قبلی متعارض جابه‌جا کنید. شماره مقصد move امن و عمومی وجود ندارد. با PCC، فیلتر امنیتی و Policyهای دیگر ادغام کنید؛ همه Ruleها را کورکورانه به موقعیت صفر منتقل نکنید."
+          >
+            Step 4: review placement. On an existing router these add commands
+            append rules: move the two input rules together before broad input
+            accepts/drops, put trigger rules before policy-routing marks, and
+            place scoped NAT before a conflicting earlier srcnat rule. There is
+            no universal safe numeric move target. Integrate with PCC, security
+            filtering and any other routing policies rather than blindly moving
+            everything to position zero.
+          </p>
+          <p
+            data-en="Step 5: verify the complete state below, stop ongoing trigger pings, test the single pilot host with new sessions and confirm internal access in all states. Commit Safe Mode only after validation. The full block does not provision a VPN or automatically modify an unknown FastTrack ruleset."
+            data-fa="مرحله ۵: وضعیت کامل زیر را بررسی، Ping پیوسته Trigger را متوقف، Host آزمایشی را با Session تازه تست و دسترسی داخلی را در تمام وضعیت‌ها تأیید کنید. Safe Mode را فقط پس از تأیید Commit کنید. Block کامل VPN ایجاد نمی‌کند و Ruleset ناشناخته FastTrack را خودکار تغییر نمی‌دهد."
+          >
+            Step 5: verify the complete state below, stop ongoing trigger pings,
+            test the single pilot host with new sessions and confirm internal
+            access in all states. Commit Safe Mode only after validation. The
+            full block does not provision a VPN or automatically modify an
+            unknown FastTrack ruleset.
+          </p>
+          <pre
+            dir="ltr"
+          ><code class="language-routeros">/ip firewall address-list print where list=&quot;PBR-ACTIVE&quot;
+/ip firewall address-list print where list=&quot;PBR-REMOVE&quot;
+/ip firewall mangle print stats
+/routing table print
+/ip route print detail where routing-table=&quot;VPN-ROUTE&quot;
+/ip firewall connection print where src-address~&quot;^192[.]168[.]10[.]50(:|$)&quot;
+/system scheduler print detail where name=&quot;PBR-Remove-Scheduler&quot;
+/log print where message~&quot;PBR&quot;</code></pre>
+        </section>
         <section id="testing">
-          <h2 data-en="15. Testing" data-fa="۱۵. آزمون">15. Testing</h2>
+          <h2 data-en="17. Testing" data-fa="۱۷. آزمون">17. Testing</h2>
           <p
             data-en="Before rollout, confirm both trigger IPs are unused, LAN contains the client-facing L3 interface, and the tunnel can carry a fresh test connection. Capture the baseline public IPv4 using a trusted IP-check service of your choice; no real service domain is embedded here. Use an IPv4-specific check so an unrelated IPv6 path does not mask the result."
             data-fa="قبل از Rollout تأیید کنید Trigger IPها استفاده نشده‌اند، LAN شامل Interface لایه ۳ سمت Client است و Tunnel اتصال آزمایشی تازه را عبور می‌دهد. Public IPv4 پایه را با سرویس قابل اعتماد انتخاب خود بررسی کنید؛ هیچ Domain واقعی سرویس در مثال درج نشده است. بررسی را مخصوص IPv4 انجام دهید تا مسیر مستقل IPv6 نتیجه را پنهان نکند."
@@ -1055,8 +1265,8 @@ ping -c 1 10.255.255.2</code></pre>
           </p>
         </section>
         <section id="expected-result">
-          <h2 data-en="16. Expected Result" data-fa="۱۶. نتیجه مورد انتظار">
-            16. Expected Result
+          <h2 data-en="18. Expected Result" data-fa="۱۸. نتیجه مورد انتظار">
+            18. Expected Result
           </h2>
           <div class="table-responsive">
             <table>
@@ -1113,8 +1323,8 @@ ping -c 1 10.255.255.2</code></pre>
           </p>
         </section>
         <section id="troubleshooting">
-          <h2 data-en="17. Troubleshooting" data-fa="۱۷. عیب‌یابی">
-            17. Troubleshooting
+          <h2 data-en="19. Troubleshooting" data-fa="۱۹. عیب‌یابی">
+            19. Troubleshooting
           </h2>
           <p
             data-en="Use state, counters and fresh sessions together. Output below describes expected properties, not guaranteed numeric rule IDs or interface flags on every device."
@@ -1537,79 +1747,12 @@ ping -c 1 10.255.255.2</code></pre>
             Increase queue lifetime if scheduler latency warrants it.
           </p>
         </section>
-        <section id="security">
-          <h2
-            data-en="18. Security Considerations"
-            data-fa="۱۸. ملاحظات امنیتی"
-          >
-            18. Security Considerations
-          </h2>
-          <p
-            data-en="Keep the control addresses inaccessible from WAN. LAN-only trigger matchers protect state changes even if a broad input rule permits ping from elsewhere; input policy must separately restrict replies and all other services on these router-owned addresses. Add the following scoped destination list and input rules, then position allow followed by deny before broad input accepts and final drops."
-            data-fa="آدرس‌های کنترلی از WAN قابل دسترسی نباشند. شرط LAN روی Trigger تغییر وضعیت را محدود می‌کند، حتی اگر Rule عمومی input به مبدأ دیگری پاسخ Ping بدهد؛ Policy مربوط به input باید جداگانه پاسخ و تمام سرویس‌های دیگر روی این آدرس‌های روتر را محدود کند. List مقصد و Ruleهای محدود زیر را اضافه و به‌ترتیب Allow و Deny قبل از accept عمومی input و Drop نهایی قرار دهید."
-          >
-            Keep the control addresses inaccessible from WAN. LAN-only trigger
-            matchers protect state changes even if a broad input rule permits
-            ping from elsewhere; input policy must separately restrict replies
-            and all other services on these router-owned addresses. Add the
-            following scoped destination list and input rules, then position
-            allow followed by deny before broad input accepts and final drops.
-          </p>
-          <pre
-            dir="ltr"
-          ><code class="language-routeros">/ip firewall address-list
-add list=PBR-CONTROL-IPS address=10.255.255.1 comment=&quot;Enable trigger destination&quot;
-add list=PBR-CONTROL-IPS address=10.255.255.2 comment=&quot;Disable trigger destination&quot;
-/ip firewall filter
-add chain=input in-interface-list=LAN src-address=192.168.10.0/24 \
-    dst-address-list=PBR-CONTROL-IPS protocol=icmp icmp-options=8:0 \
-    action=accept comment=&quot;Allow authorized PBR echo requests&quot;
-add chain=input dst-address-list=PBR-CONTROL-IPS action=drop \
-    comment=&quot;Deny other access to PBR control addresses&quot;</code></pre>
-          <p
-            data-en="Verify an authorized LAN client receives an echo reply and an unauthorized internal or WAN source cannot reach either control IP. Existing established/related accepts and rule ordering must be reviewed; appending these rules below an earlier broad accept does not enforce the restriction. Do not expose control prefixes through WAN forwarding, published routes or DNAT."
-            data-fa="تأیید کنید Client مجاز LAN پاسخ Echo دریافت می‌کند و مبدأ داخلی غیرمجاز یا WAN به هیچ‌یک از IPهای کنترلی دسترسی ندارد. accept مربوط به established/related و ترتیب Ruleها را بررسی کنید؛ افزودن زیر accept گسترده محدودیت را اعمال نمی‌کند. Prefix کنترلی را از طریق WAN Forwarding، Route منتشرشده یا DNAT در دسترس قرار ندهید."
-          >
-            Verify an authorized LAN client receives an echo reply and an
-            unauthorized internal or WAN source cannot reach either control IP.
-            Existing established/related accepts and rule ordering must be
-            reviewed; appending these rules below an earlier broad accept does
-            not enforce the restriction. Do not expose control prefixes through
-            WAN forwarding, published routes or DNAT.
-          </p>
-          <pre
-            dir="ltr"
-          ><code class="language-routeros">/ip firewall filter print detail where chain=&quot;input&quot;
-/ip firewall filter print stats where dst-address-list=&quot;PBR-CONTROL-IPS&quot;</code></pre>
-          <p
-            data-en="A ping does not authenticate a person. Any authorized source can toggle its own state, and a spoofed LAN source can potentially toggle another client. Enforce access at the edge with suitable VLAN separation, source validation and DHCP/IP binding controls. For a strict allowlist, narrow both trigger source ranges and the input allow rule to approved hosts; keep the stable FastTrack exclusion covering that complete population."
-            data-fa="Ping شخص را احراز هویت نمی‌کند. هر مبدأ مجاز می‌تواند وضعیت خود را تغییر دهد و جعل IP در LAN ممکن است وضعیت Client دیگر را تغییر دهد. کنترل دسترسی را در لبه با جداسازی VLAN، اعتبارسنجی مبدأ و کنترل مناسب DHCP/IP Binding اعمال کنید. برای Allowlist سخت‌گیرانه، مبدأ هر دو Trigger و input allow را به Hostهای مجاز محدود و استثنای ثابت FastTrack را شامل تمام آن جمعیت نگه دارید."
-          >
-            A ping does not authenticate a person. Any authorized source can
-            toggle its own state, and a spoofed LAN source can potentially
-            toggle another client. Enforce access at the edge with suitable VLAN
-            separation, source validation and DHCP/IP binding controls. For a
-            strict allowlist, narrow both trigger source ranges and the input
-            allow rule to approved hosts; keep the stable FastTrack exclusion
-            covering that complete population.
-          </p>
-          <p
-            data-en="Do not use this mechanism as a VPN kill switch. Review lookup fall-through, gateway health and explicit drop/blackhole policy if traffic must never escape through main. The presented design does not guarantee fail-closed behavior when the custom route disappears. IPv6 can still follow a separate Internet route."
-            data-fa="این مکانیزم را VPN Kill Switch در نظر نگیرید. اگر ترافیک نباید هرگز از main خارج شود، Lookup Fall-through، سلامت Gateway و Policy صریح Drop/Blackhole را بررسی کنید. طراحی ارائه‌شده هنگام حذف Route اختصاصی رفتار Fail-closed را تضمین نمی‌کند. IPv6 نیز می‌تواند مسیر اینترنت جداگانه داشته باشد."
-          >
-            Do not use this mechanism as a VPN kill switch. Review lookup
-            fall-through, gateway health and explicit drop/blackhole policy if
-            traffic must never escape through main. The presented design does
-            not guarantee fail-closed behavior when the custom route disappears.
-            IPv6 can still follow a separate Internet route.
-          </p>
-        </section>
         <section id="best-practices">
           <h2
-            data-en="19. Production Best Practices"
-            data-fa="۱۹. توصیه‌های Production"
+            data-en="20. Production Best Practices"
+            data-fa="۲۰. توصیه‌های Production"
           >
-            19. Production Best Practices
+            20. Production Best Practices
           </h2>
           <p
             data-en="Before changes, save a binary backup and a readable export, transfer them to protected storage, and use RouterOS terminal Safe Mode (Ctrl+X). Exports may include sensitive topology even without exposed passwords; keep operational backups out of public documentation. Take a new backup after successful validation."
@@ -1660,149 +1803,6 @@ add chain=input dst-address-list=PBR-CONTROL-IPS action=drop \
             in a lab before deployment; documentation review and website tests
             are not device execution tests.
           </p>
-        </section>
-        <section id="complete-configuration">
-          <h2
-            data-en="20. Complete Example Configuration"
-            data-fa="۲۰. پیکربندی کامل مثال"
-          >
-            20. Complete Example Configuration
-          </h2>
-          <p
-            data-en="Apply this once to the reviewed example environment in the sequence shown. The existing LAN interface list and working point-to-point tunnel must already exist; ordinary main routing and established/related forwarding must already work. This is an additive example, not an idempotent installer or a replacement firewall. Do not execute both individual section commands and the full block, or run the block twice: duplicate rules and name conflicts would result."
-            data-fa="این Config را یک‌بار به محیط مثال بررسی‌شده و به‌ترتیب زیر اعمال کنید. Interface List موجود LAN و Tunnel نقطه‌به‌نقطه فعال باید از قبل وجود داشته باشند؛ Routing عادی main و Forward مربوط به established/related باید سالم باشند. این مثال افزایشی است، نه Installer تکرارپذیر یا Firewall جایگزین. بخش‌های جداگانه و Block کامل را هر دو اجرا نکنید و Block را دوبار اجرا نکنید؛ Rule تکراری و تضاد نام ایجاد می‌شود."
-          >
-            Apply this once to the reviewed example environment in the sequence
-            shown. The existing LAN interface list and working point-to-point
-            tunnel must already exist; ordinary main routing and
-            established/related forwarding must already work. This is an
-            additive example, not an idempotent installer or a replacement
-            firewall. Do not execute both individual section commands and the
-            full block, or run the block twice: duplicate rules and name
-            conflicts would result.
-          </p>
-          <p
-            data-en="Step 1: back up, enter Safe Mode and inspect LAN, tunnel, input, mangle, NAT and all FastTrack rules. Step 2: integrate the stable FastTrack exceptions described in section 12 before client activation. Existing criteria must be preserved; the guarded example intentionally stops unless the reviewed rule is uniquely identified. Step 3: apply the following infrastructure and policy block; omit the final NAT rule if the selected routed design does not require it."
-            data-fa="مرحله ۱: Backup، Safe Mode و بررسی LAN، Tunnel، input، mangle، NAT و تمام FastTrack Ruleها. مرحله ۲: استثنای ثابت FastTrack بخش ۱۲ را قبل از فعال‌سازی Client ادغام کنید. شرط موجود باید حفظ شود؛ مثال Guardدار عمداً بدون شناسایی یکتای Rule بررسی‌شده متوقف می‌شود. مرحله ۳: Block زیر را اعمال کنید؛ اگر طراحی مسیریابی‌شده انتخاب‌شده به NAT نیاز ندارد، آخرین Rule آن را اجرا نکنید."
-          >
-            Step 1: back up, enter Safe Mode and inspect LAN, tunnel, input,
-            mangle, NAT and all FastTrack rules. Step 2: integrate the stable
-            FastTrack exceptions described in section 12 before client
-            activation. Existing criteria must be preserved; the guarded example
-            intentionally stops unless the reviewed rule is uniquely identified.
-            Step 3: apply the following infrastructure and policy block; omit
-            the final NAT rule if the selected routed design does not require
-            it.
-          </p>
-          <pre dir="ltr"><code class="language-routeros">/interface bridge
-add name=PBR-Control protocol-mode=none comment=&quot;PBR Control Interface&quot;
-/ip address
-add address=10.255.255.1/32 interface=PBR-Control comment=&quot;Enable PBR&quot;
-add address=10.255.255.2/32 interface=PBR-Control comment=&quot;Disable PBR&quot;
-
-/ip firewall address-list
-add list=LOCAL-NETS address=192.168.10.0/24 comment=&quot;LAN example&quot;
-add list=LOCAL-NETS address=192.168.20.0/24 comment=&quot;Internal VLAN example&quot;
-add list=PBR-ELIGIBLE address=192.168.10.0/24 comment=&quot;Stable FastTrack exclusion for trigger-capable clients&quot;
-
-/routing table
-add fib name=VPN-ROUTE
-/ip route
-add dst-address=0.0.0.0/0 gateway=l2tp-vpn-example \
-    routing-table=VPN-ROUTE comment=&quot;PBR default route&quot;
-
-/ip firewall mangle
-add chain=prerouting in-interface-list=LAN src-address=192.168.10.0/24 \
-    src-address-list=!PBR-REMOVE protocol=icmp icmp-options=8:0 \
-    dst-address=10.255.255.1 action=add-src-to-address-list \
-    address-list=PBR-ACTIVE address-list-timeout=none-dynamic \
-    passthrough=yes comment=&quot;Enable PBR using ICMP trigger&quot;
-
-/ip firewall mangle
-add chain=prerouting in-interface-list=LAN src-address=192.168.10.0/24 \
-    protocol=icmp icmp-options=8:0 dst-address=10.255.255.2 \
-    action=add-src-to-address-list address-list=PBR-REMOVE \
-    address-list-timeout=10s passthrough=yes comment=&quot;Disable PBR request&quot;
-
-/ip firewall mangle
-add chain=prerouting in-interface-list=LAN src-address-list=PBR-ACTIVE \
-    dst-address-list=!LOCAL-NETS dst-address-type=!local \
-    action=mark-routing new-routing-mark=VPN-ROUTE passthrough=no \
-    comment=&quot;Route PBR clients using VPN-ROUTE&quot;
-
-/system script
-add name=PBR-Remove-Worker policy=read,write,test dont-require-permissions=no source={
-    :if ([:len [/system script job find where script=&quot;PBR-Remove-Worker&quot;]] &gt; 1) do={
-        :return
-    }
-    :foreach request in=[/ip firewall address-list find where list=&quot;PBR-REMOVE&quot;] do={
-        :local clientIP &quot;&quot;
-        :do {
-            :set clientIP [/ip firewall address-list get $request address]
-            :local active [/ip firewall address-list find where list=&quot;PBR-ACTIVE&quot; and address=$clientIP]
-            :if ([:len $active] &gt; 0) do={
-                /ip firewall address-list remove $active
-                :log info (&quot;PBR disabled for client &quot; . $clientIP)
-            }
-            /ip firewall address-list remove $request
-        } on-error={
-            :if ([:len [/ip firewall address-list find where list=&quot;PBR-REMOVE&quot; and address=$clientIP]] &gt; 0) do={
-                :log warning (&quot;PBR removal failed; queued retry for &quot; . $clientIP)
-            }
-        }
-    }
-}
-
-/system scheduler
-add name=PBR-Remove-Scheduler start-time=startup interval=1s \
-    on-event=PBR-Remove-Worker policy=read,write,test \
-    comment=&quot;Process queued PBR disable requests&quot;
-
-/ip firewall address-list
-add list=PBR-CONTROL-IPS address=10.255.255.1 comment=&quot;Enable trigger destination&quot;
-add list=PBR-CONTROL-IPS address=10.255.255.2 comment=&quot;Disable trigger destination&quot;
-/ip firewall filter
-add chain=input in-interface-list=LAN src-address=192.168.10.0/24 \
-    dst-address-list=PBR-CONTROL-IPS protocol=icmp icmp-options=8:0 \
-    action=accept comment=&quot;Allow authorized PBR echo requests&quot;
-add chain=input dst-address-list=PBR-CONTROL-IPS action=drop \
-    comment=&quot;Deny other access to PBR control addresses&quot;
-
-/ip firewall nat
-add chain=srcnat src-address-list=PBR-ACTIVE out-interface=l2tp-vpn-example \
-    action=masquerade comment=&quot;NAT PBR traffic&quot;</code></pre>
-          <p
-            data-en="Step 4: review placement. On an existing router these add commands append rules: move the two input rules together before broad input accepts/drops, put trigger rules before policy-routing marks, and place scoped NAT before a conflicting earlier srcnat rule. There is no universal safe numeric move target. Integrate with PCC, security filtering and any other routing policies rather than blindly moving everything to position zero."
-            data-fa="مرحله ۴: جایگاه Ruleها را بررسی کنید. add روی روتر موجود Rule را در انتها اضافه می‌کند؛ دو Rule مربوط به input را کنار هم قبل از accept/drop عمومی، Triggerها را قبل از Routing Mark و NAT محدود را قبل از srcnat قبلی متعارض جابه‌جا کنید. شماره مقصد move امن و عمومی وجود ندارد. با PCC، فیلتر امنیتی و Policyهای دیگر ادغام کنید؛ همه Ruleها را کورکورانه به موقعیت صفر منتقل نکنید."
-          >
-            Step 4: review placement. On an existing router these add commands
-            append rules: move the two input rules together before broad input
-            accepts/drops, put trigger rules before policy-routing marks, and
-            place scoped NAT before a conflicting earlier srcnat rule. There is
-            no universal safe numeric move target. Integrate with PCC, security
-            filtering and any other routing policies rather than blindly moving
-            everything to position zero.
-          </p>
-          <p
-            data-en="Step 5: verify the complete state below, stop ongoing trigger pings, test the single pilot host with new sessions and confirm internal access in all states. Commit Safe Mode only after validation. The full block does not provision a VPN or automatically modify an unknown FastTrack ruleset."
-            data-fa="مرحله ۵: وضعیت کامل زیر را بررسی، Ping پیوسته Trigger را متوقف، Host آزمایشی را با Session تازه تست و دسترسی داخلی را در تمام وضعیت‌ها تأیید کنید. Safe Mode را فقط پس از تأیید Commit کنید. Block کامل VPN ایجاد نمی‌کند و Ruleset ناشناخته FastTrack را خودکار تغییر نمی‌دهد."
-          >
-            Step 5: verify the complete state below, stop ongoing trigger pings,
-            test the single pilot host with new sessions and confirm internal
-            access in all states. Commit Safe Mode only after validation. The
-            full block does not provision a VPN or automatically modify an
-            unknown FastTrack ruleset.
-          </p>
-          <pre
-            dir="ltr"
-          ><code class="language-routeros">/ip firewall address-list print where list=&quot;PBR-ACTIVE&quot;
-/ip firewall address-list print where list=&quot;PBR-REMOVE&quot;
-/ip firewall mangle print stats
-/routing table print
-/ip route print detail where routing-table=&quot;VPN-ROUTE&quot;
-/ip firewall connection print where src-address~&quot;^192[.]168[.]10[.]50(:|$)&quot;
-/system scheduler print detail where name=&quot;PBR-Remove-Scheduler&quot;
-/log print where message~&quot;PBR&quot;</code></pre>
         </section>
         <section id="conclusion">
           <h2 data-en="Conclusion" data-fa="جمع‌بندی">Conclusion</h2>

@@ -1,6 +1,6 @@
 # آموزش نصب، راه‌اندازی و پیکربندی MongoDB در محیط Production
 
-راهنمای عملیاتی برای SysAdmin، DevOps، Backend و Infrastructure Engineer؛ بررسی منابع در ۷ اکتبر ۲۰۲۶. شاخه Stable رسمی فعلی 9.0 است؛ Release Notes نسخه 9.0.2 را منتشرشده و 9.0.3 را Upcoming معرفی می‌کند. جدیدترین Patch امضاشده موجود در مخزن رسمی انتخابی را نصب کنید؛ نسخه Upcoming هدف نصب نیست.
+راهنمای عملیاتی برای SysAdmin، DevOps، Backend و Infrastructure Engineer؛ شاخه Stable رسمی فعلی 9.0 است؛ Release Notes نسخه 9.0.2 را منتشرشده و 9.0.3 را Upcoming معرفی می‌کند. جدیدترین Patch امضاشده موجود در مخزن رسمی انتخابی را نصب کنید؛ نسخه Upcoming هدف نصب نیست.
 
 [فهرست رسمی نسخه‌های Stable](https://www.mongodb.com/docs/manual/release-notes/)
 
@@ -26,37 +26,7 @@ MongoDB یک Document Database از خانواده NoSQL است. Database مجم
 
 [Database و Collection در مستندات رسمی](https://www.mongodb.com/docs/manual/core/databases-and-collections/)
 
-## ۲. نمای معماری
-
-![معماری اتصال برنامه و Driver با احراز هویت روی TCP 27017 و ساختار Documentهای BSON در MongoDB](/assets/img/articles/content/mongodb-architecture.png)
-
-```text
-Application
-     |
-MongoDB Client / Driver
-     |
-MongoDB Server :27017
-     |
-Database
- +-- Collections
-     +-- Documents
-
-Production:
-Application
-     |
-Replica-aware MongoDB Driver / Connection Pool
-     |
-Replica Set: rs0
- +-----------+-----------+-----------+
- | Primary   | Secondary | Secondary |
- +-----------+-----------+-----------+
-```
-
-Driver همه Memberها را کشف می‌کند و عملیات را با توجه به Read Preference و Topology هدایت می‌کند. Replica Set به Load Balancer عمومی HTTP یا Round-Robin نیاز ندارد و چنین واسطه‌ای می‌تواند Topology را پنهان کند. Write معمولاً به Primary می‌رود؛ Secondaryها Replication انجام می‌دهند و با انتخاب صریح می‌توانند Read را با ملاحظات Consistency پاسخ دهند.
-
-[معماری رسمی Replication](https://www.mongodb.com/docs/manual/replication/)
-
-## ۳. پیش‌نیاز سرور
+## ۲. پیش‌نیاز سرور
 
 | منبع | مبنای برنامه‌ریزی |
 | --- | --- |
@@ -98,6 +68,36 @@ ulimit در Shell فقط همان Shell را تغییر می‌دهد و سرو�
 [محدودیت منابع UNIX](https://www.mongodb.com/docs/manual/reference/ulimit/)
 
 [تنظیم TCMalloc و THP برای MongoDB 8.0 و جدیدتر](https://www.mongodb.com/docs/manual/administration/tcmalloc-performance/)
+
+## ۳. نمای معماری
+
+![معماری اتصال برنامه و Driver با احراز هویت روی TCP 27017 و ساختار Documentهای BSON در MongoDB](/assets/img/articles/content/mongodb-architecture.png)
+
+```text
+Application
+     |
+MongoDB Client / Driver
+     |
+MongoDB Server :27017
+     |
+Database
+ +-- Collections
+     +-- Documents
+
+Production:
+Application
+     |
+Replica-aware MongoDB Driver / Connection Pool
+     |
+Replica Set: rs0
+ +-----------+-----------+-----------+
+ | Primary   | Secondary | Secondary |
+ +-----------+-----------+-----------+
+```
+
+Driver همه Memberها را کشف می‌کند و عملیات را با توجه به Read Preference و Topology هدایت می‌کند. Replica Set به Load Balancer عمومی HTTP یا Round-Robin نیاز ندارد و چنین واسطه‌ای می‌تواند Topology را پنهان کند. Write معمولاً به Primary می‌رود؛ Secondaryها Replication انجام می‌دهند و با انتخاب صریح می‌توانند Read را با ملاحظات Consistency پاسخ دهند.
+
+[معماری رسمی Replication](https://www.mongodb.com/docs/manual/replication/)
 
 ## ۴. بررسی پیش از نصب
 
@@ -255,21 +255,7 @@ WiredTiger موتور Storage پیش‌فرض است. از تنظیم قدیمی
 
 [پارامترهای رسمی پیکربندی mongod](https://www.mongodb.com/docs/manual/reference/configuration-options/)
 
-## ۹. دسترسی Remote امن
-
-```yaml
-net:
-  port: 27017
-  bindIp: 127.0.0.1,10.10.10.20
-```
-
-آدرس 10.10.10.20 باید روی همین سرور وجود داشته باشد. bindIp انتخاب Interface شنود است؛ محدودیت Source Client با Firewall اعمال می‌شود. پیش از فعال‌کردن Listener خصوصی، احراز هویت، TLS و Ruleهای Firewall بخش‌های ۱۰ تا ۱۴ را آماده کنید. مدیریت را از VPN یا Management Network انجام دهید و NAT یا Port Forward عمومی را حذف کنید.
-
-هشدار امنیتی: 0.0.0.0 روی همه Interfaceهای IPv4، از جمله NIC احتمالی Public، شنود می‌کند. در این راهنما پیش‌فرض نیست. استفاده استثنایی به Network Isolation، TLS و احراز هویت و بررسی Ruleهای Deny-by-Default در IPv4 و IPv6 نیاز دارد؛ bindIp به‌تنهایی Client را مجاز نمی‌کند.
-
-[تنظیم شبکه و IP Binding](https://www.mongodb.com/docs/manual/core/security-mongodb-configuration/)
-
-## ۱۰. احراز هویت MongoDB
+## ۹. احراز هویت MongoDB
 
 فقط در Bootstrap مسیر Standalone، وقتی Authorization هنوز خاموش است bindIp را 127.0.0.1 نگه دارید. به‌صورت محلی وصل شوید و اولین مدیر را بسازید. passwordPrompt() مقدار <STRONG-PASSWORD> را بدون درج در Command History می‌گیرد؛ pwd: "<STRONG-PASSWORD>" فقط نمایش Placeholder است و برای مدیریت Secret مناسب نیست.
 
@@ -309,13 +295,13 @@ db.runCommand({ connectionStatus: 1 })
 db.getSiblingDB("appdb").getCollectionNames()
 ```
 
-بررسی کنید Session تازه بدون احراز هویت نتواند Collectionهای appdb را فهرست کند. ping صرفاً Liveness است و ممکن است بدون مجوز دیتابیس موفق شود. پس از فعال‌سازی TLS از فرمان اتصال بخش ۱۴ استفاده کنید.
+بررسی کنید Session تازه بدون احراز هویت نتواند Collectionهای appdb را فهرست کند. ping صرفاً Liveness است و ممکن است بدون مجوز دیتابیس موفق شود. پس از فعال‌سازی TLS از فرمان اتصال بخش ۱۳ استفاده کنید.
 
 [راهنمای رسمی راه‌اندازی Access Control](https://www.mongodb.com/docs/manual/tutorial/enable-authentication/)
 
 [Roleهای داخلی و دسترسی مدیریتی](https://www.mongodb.com/docs/manual/reference/built-in-roles/)
 
-## ۱۱. حساب اختصاصی Application
+## ۱۰. حساب اختصاصی Application
 
 در Shell مدیر احراز هویت‌شده، User را در appdb بسازید. این حساب در appdb احراز هویت می‌شود و فقط همان Database را می‌خواند و می‌نویسد. برای هر Application، Environment و Job هویت جدا ایجاد کنید. سرویس Read-Only باید read بگیرد، نه readWrite.
 
@@ -335,7 +321,7 @@ mongosh --host 127.0.0.1 --username appuser --password \
 
 عملیات لازم برنامه را تست و ردشدن عملیات مدیریتی را تأیید کنید. Least Privilege شامل Role دیتابیس، دسترسی شبکه و OS است. Credential را از طریق Secret Store Rotate کنید و بدون ثبت گذرواژه در Source برنامه را به‌روزرسانی کنید.
 
-## ۱۲. ایمن‌سازی Firewall
+## ۱۱. ایمن‌سازی Firewall
 
 27017/TCP را فقط برای Hostهای مجاز Application/Management و Memberهای Replica باز کنید. CIDR مثال است؛ برای IP ثابت Ruleهای /32 مناسب‌ترند. Rule محدود، Allow عمومی قبلی را لغو نمی‌کند؛ تمام Ruleها و Cloud Security Group را بررسی کنید. پیش از فعال‌کردن Firewall دسترسی SSH و بازیابی از Console را آماده نگه دارید.
 
@@ -376,7 +362,7 @@ sudo firewall-cmd --zone=public --list-all
 
 [مستندات رسمی firewalld در Red Hat](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_firewalls_and_packet_filters/using-and-configuring-firewalld_firewall-packet-filters)
 
-## ۱۳. ایمن‌سازی MongoDB
+## ۱۲. ایمن‌سازی MongoDB
 
 ![لایه‌های امنیت MongoDB شامل TLS، احراز هویت، Firewall، Least Privilege و مسدودسازی دسترسی Public](/assets/img/articles/content/mongodb-security-architecture.png)
 
@@ -400,7 +386,7 @@ MongoDB Community امکانات Native Database Audit نسخه Enterprise را 
 
 [دامنه دسترسی امکانات Audit در MongoDB](https://www.mongodb.com/docs/manual/core/auditing/)
 
-## ۱۴. رمزنگاری TLS
+## ۱۳. رمزنگاری TLS
 
 برای هر سرور از Internal CA یا Trusted CA گواهی تهیه کنید. mongodb.pem شامل Certificate Chain و Private Key همان سرور و ca.pem فقط شامل CA Certificate است. SAN باید با DNS/IP استفاده‌شده در Client و Peer تطبیق داشته باشد؛ localhost/127.0.0.1 را فقط در صورت نیاز به Bootstrap محلی معتبر اضافه کنید. Private Key یکسان را بین Nodeها استفاده نکنید.
 
@@ -443,7 +429,73 @@ CA مورداعتماد، تطبیق Hostname، Expiry و رد اتصال Plaint
 
 [راهنمای رسمی پیکربندی TLS](https://www.mongodb.com/docs/manual/tutorial/configure-ssl/)
 
-## ۱۵. Replica Set در Production
+## ۱۴. دسترسی Remote امن
+
+```yaml
+net:
+  port: 27017
+  bindIp: 127.0.0.1,10.10.10.20
+```
+
+آدرس 10.10.10.20 باید روی همین سرور وجود داشته باشد. bindIp انتخاب Interface شنود است؛ محدودیت Source Client با Firewall اعمال می‌شود. پیش از فعال‌کردن Listener خصوصی، احراز هویت، TLS و Ruleهای Firewall بخش‌های ۹ تا ۱۳ را آماده کنید. مدیریت را از VPN یا Management Network انجام دهید و NAT یا Port Forward عمومی را حذف کنید.
+
+هشدار امنیتی: 0.0.0.0 روی همه Interfaceهای IPv4، از جمله NIC احتمالی Public، شنود می‌کند. در این راهنما پیش‌فرض نیست. استفاده استثنایی به Network Isolation، TLS و احراز هویت و بررسی Ruleهای Deny-by-Default در IPv4 و IPv6 نیاز دارد؛ bindIp به‌تنهایی Client را مجاز نمی‌کند.
+
+[تنظیم شبکه و IP Binding](https://www.mongodb.com/docs/manual/core/security-mongodb-configuration/)
+
+## ۱۵. احراز هویت داخلی Replica Set
+
+Internal Authentication هویت Member را تأیید می‌کند و Client Authorization لایه‌ای جداست. این بخش را پیش از Start Cluster بخش ۱۶ انجام دهید. مثال KeyFile درخواستی پشتیبانی می‌شود، اما راهنمای فعلی MongoDB برای Production، احراز هویت عضویت با X.509 و برای Development/Testing، KeyFile را توصیه می‌کند. KeyFile+TLS را مبنایی با محدودیت و نیازمند تصمیم امنیتی مستند بدانید، نه قوی‌ترین Profile تولید.
+
+### مثال KeyFile: تولید فقط یک بار
+
+```bash
+# Generate ONCE on mongo01. Use mongod for RPM installations.
+MONGO_SERVICE_USER=mongodb
+sudo install -d -m 750 -o "$MONGO_SERVICE_USER" -g "$MONGO_SERVICE_USER" /etc/mongodb
+sudo sh -c 'umask 077; openssl rand -base64 756 > /etc/mongodb/keyfile'
+sudo chmod 400 /etc/mongodb/keyfile
+sudo chown "$MONGO_SERVICE_USER:$MONGO_SERVICE_USER" /etc/mongodb/keyfile
+```
+
+همین فایل را دقیقاً با کانال توزیع Config/Secret رمزنگاری‌شده و احراز هویت‌شده در /etc/mongodb/keyfile روی mongo02 و mongo03 قرار دهید. مالک را در Debian/Ubuntu برابر mongodb:mongodb و در RPM برابر mongod:mongod و Mode را 400 روی همه Memberها تنظیم کنید. روی هر Node کلید تصادفی مستقل تولید نکنید و Byte یا Hash کلید را منتشر نکنید. Traverse والد و اجازه خواندن SELinux را بررسی کنید.
+
+```yaml
+security:
+  keyFile: /etc/mongodb/keyfile
+  authorization: enabled
+replication:
+  replSetName: rs0
+```
+
+KeyFile احراز هویت عضویت و Access Control را فعال می‌کند اما Wire را رمز نمی‌کند؛ requireTLS را حفظ کنید. Rotation را با کلیدهای پذیرفته‌شده همپوشان و مسیر Rolling رسمی انجام دهید تا Peerها همیشه کلید مشترک داشته باشند. KeyFile را خارج از Git و Backup داده در Secret System با کنترل دسترسی نگه دارید.
+
+### گزینه توصیه‌شده Production: اعضا با X.509
+
+```yaml
+security:
+  authorization: enabled
+  clusterAuthMode: x509
+net:
+  port: 27017
+  bindIp: 127.0.0.1,10.10.20.11
+  tls:
+    mode: requireTLS
+    certificateKeyFile: /etc/mongodb/mongodb.pem
+    clusterFile: /etc/mongodb/member.pem
+    CAFile: /etc/mongodb/ca.pem
+    allowConnectionsWithoutCertificates: true
+replication:
+  replSetName: rs0
+```
+
+در Cluster تازه این گزینه را به جای keyFile روی همه Memberها انتخاب و همان ترتیب Bootstrap اولین User را دنبال کنید. member.pem گواهی و کلید یکتای عضو از CA با کاربرد clientAuth است؛ گواهی سرور serverAuth می‌خواهد. Attributeهای عضویت O/OU/DC باید میان اعضا مطابق و از هویت Client جدا باشند. SAN با نام معرفی‌شده تطبیق کند. این Profile هنوز User برنامه با SCRAM روی TLS را می‌پذیرد؛ در صورت نیاز Policy از هویت Client مجزای X.509 و mTLS استفاده کنید. PKI را پیش از استقرار Provision و اعتبارسنجی کنید.
+
+[احراز هویت عضویت Production با X.509](https://www.mongodb.com/docs/manual/tutorial/configure-x509-member-authentication/)
+
+[Rotation کلید Replica Set](https://www.mongodb.com/docs/manual/tutorial/rotate-key-replica-set/)
+
+## ۱۶. Replica Set در Production
 
 ![Replica Set سه‌عضوی rs0 با Primary، Secondaryها، Election اکثریت و Failover خودکار](/assets/img/articles/content/mongodb-replica-set.png)
 
@@ -456,14 +508,14 @@ Replica Set: rs0
 
 سه Member رأی‌دهنده دارای Data را در Failure Domain مستقل و با Version یکسان قرار دهید. از DNS پایدار استفاده کنید؛ mongo01/mongo02/mongo03 نام کوتاه نمونه‌اند و FQDN در PKI واقعی بهتر است. DNS باید از هر Member و Application Host Resolve و با SAN گواهی مطابق باشد. host اعضا را به‌صورت IP خالی تنظیم نکنید.
 
-ترتیب Cluster تازه: روی همه Nodeها نصب کنید، mongod را Stop کنید، Mount و Certificateهای TLS را آماده کنید، Ruleهای Firewall برای Peer/Application را اعمال کنید، KeyFile مشترک بخش ۱۶ را توزیع کنید، سپس همه Memberها را Configure و Start کنید. Listener Replica بدون احراز هویت را موقتاً باز نکنید. تبدیل Standalone موجود به Backup، برنامه مهاجرت جدا و اتصال با User موجود نیاز دارد؛ با وجود User قبلی، Localhost Exception فعال نیست.
+ترتیب Cluster تازه: روی همه Nodeها نصب کنید، mongod را Stop کنید، Mount و Certificateهای TLS را آماده کنید، Ruleهای Firewall برای Peer/Application را اعمال کنید، KeyFile مشترک بخش ۱۵ را توزیع کنید، سپس همه Memberها را Configure و Start کنید. Listener Replica بدون احراز هویت را موقتاً باز نکنید. تبدیل Standalone موجود به Backup، برنامه مهاجرت جدا و اتصال با User موجود نیاز دارد؛ با وجود User قبلی، Localhost Exception فعال نیست.
 
 ```bash
 sudo systemctl stop mongod
 getent hosts mongo01 mongo02 mongo03
 ```
 
-پس از آماده‌سازی بخش ۱۶، تنظیم زیر را روی هر Node ادغام کنید. IP خصوصی همان Node یعنی .11، .12 یا .13 را قرار دهید. در RPM از /var/lib/mongo استفاده کنید. این Profile کامل آموزشی TLS+SCRAM/KeyFile است و Access Control از اولین Start Cluster فعال است.
+پس از آماده‌سازی بخش ۱۵، تنظیم زیر را روی هر Node ادغام کنید. IP خصوصی همان Node یعنی .11، .12 یا .13 را قرار دهید. در RPM از /var/lib/mongo استفاده کنید. این Profile کامل آموزشی TLS+SCRAM/KeyFile است و Access Control از اولین Start Cluster فعال است.
 
 ```yaml
 storage:
@@ -514,7 +566,7 @@ rs.status()
 db.hello().isWritablePrimary
 ```
 
-منتظر Election بمانید. اگر mongo01 Primary نیست، روی Primary منتخب با همان روش TLS محلی متصل شوید. mongoAdmin را با Role مدیریت User و مثال مدیر بخش ۱۰ همان‌جا بسازید و سپس با Credential دوباره وصل شوید. Exception با اولین User بسته می‌شود. appuser را یک بار روی Primary بسازید؛ Userها Replicate می‌شوند و نباید روی هر Secondary جدا ساخته شوند.
+منتظر Election بمانید. اگر mongo01 Primary نیست، روی Primary منتخب با همان روش TLS محلی متصل شوید. mongoAdmin را با Role مدیریت User و مثال مدیر بخش ۹ همان‌جا بسازید و سپس با Credential دوباره وصل شوید. Exception با اولین User بسته می‌شود. appuser را یک بار روی Primary بسازید؛ Userها Replicate می‌شوند و نباید روی هر Secondary جدا ساخته شوند.
 
 ### حساب جداگانه عملیات Cluster
 
@@ -550,58 +602,6 @@ Primary عملیات Write را می‌پذیرد و Secondaryها Oplog را ب
 
 [Write Concern و تأیید اکثریت](https://www.mongodb.com/docs/manual/reference/write-concern/)
 
-## ۱۶. احراز هویت داخلی Replica Set
-
-Internal Authentication هویت Member را تأیید می‌کند و Client Authorization لایه‌ای جداست. این بخش را پیش از Start Cluster بخش ۱۵ انجام دهید. مثال KeyFile درخواستی پشتیبانی می‌شود، اما راهنمای فعلی MongoDB برای Production، احراز هویت عضویت با X.509 و برای Development/Testing، KeyFile را توصیه می‌کند. KeyFile+TLS را مبنایی با محدودیت و نیازمند تصمیم امنیتی مستند بدانید، نه قوی‌ترین Profile تولید.
-
-### مثال KeyFile: تولید فقط یک بار
-
-```bash
-# Generate ONCE on mongo01. Use mongod for RPM installations.
-MONGO_SERVICE_USER=mongodb
-sudo install -d -m 750 -o "$MONGO_SERVICE_USER" -g "$MONGO_SERVICE_USER" /etc/mongodb
-sudo sh -c 'umask 077; openssl rand -base64 756 > /etc/mongodb/keyfile'
-sudo chmod 400 /etc/mongodb/keyfile
-sudo chown "$MONGO_SERVICE_USER:$MONGO_SERVICE_USER" /etc/mongodb/keyfile
-```
-
-همین فایل را دقیقاً با کانال توزیع Config/Secret رمزنگاری‌شده و احراز هویت‌شده در /etc/mongodb/keyfile روی mongo02 و mongo03 قرار دهید. مالک را در Debian/Ubuntu برابر mongodb:mongodb و در RPM برابر mongod:mongod و Mode را 400 روی همه Memberها تنظیم کنید. روی هر Node کلید تصادفی مستقل تولید نکنید و Byte یا Hash کلید را منتشر نکنید. Traverse والد و اجازه خواندن SELinux را بررسی کنید.
-
-```yaml
-security:
-  keyFile: /etc/mongodb/keyfile
-  authorization: enabled
-replication:
-  replSetName: rs0
-```
-
-KeyFile احراز هویت عضویت و Access Control را فعال می‌کند اما Wire را رمز نمی‌کند؛ requireTLS را حفظ کنید. Rotation را با کلیدهای پذیرفته‌شده همپوشان و مسیر Rolling رسمی انجام دهید تا Peerها همیشه کلید مشترک داشته باشند. KeyFile را خارج از Git و Backup داده در Secret System با کنترل دسترسی نگه دارید.
-
-### گزینه توصیه‌شده Production: اعضا با X.509
-
-```yaml
-security:
-  authorization: enabled
-  clusterAuthMode: x509
-net:
-  port: 27017
-  bindIp: 127.0.0.1,10.10.20.11
-  tls:
-    mode: requireTLS
-    certificateKeyFile: /etc/mongodb/mongodb.pem
-    clusterFile: /etc/mongodb/member.pem
-    CAFile: /etc/mongodb/ca.pem
-    allowConnectionsWithoutCertificates: true
-replication:
-  replSetName: rs0
-```
-
-در Cluster تازه این گزینه را به جای keyFile روی همه Memberها انتخاب و همان ترتیب Bootstrap اولین User را دنبال کنید. member.pem گواهی و کلید یکتای عضو از CA با کاربرد clientAuth است؛ گواهی سرور serverAuth می‌خواهد. Attributeهای عضویت O/OU/DC باید میان اعضا مطابق و از هویت Client جدا باشند. SAN با نام معرفی‌شده تطبیق کند. این Profile هنوز User برنامه با SCRAM روی TLS را می‌پذیرد؛ در صورت نیاز Policy از هویت Client مجزای X.509 و mTLS استفاده کنید. PKI را پیش از استقرار Provision و اعتبارسنجی کنید.
-
-[احراز هویت عضویت Production با X.509](https://www.mongodb.com/docs/manual/tutorial/configure-x509-member-authentication/)
-
-[Rotation کلید Replica Set](https://www.mongodb.com/docs/manual/tutorial/rotate-key-replica-set/)
-
 ## ۱۷. Connection String و Secretها
 
 ### URI برای Standalone
@@ -622,7 +622,59 @@ Credential واقعی را در Git، Log، Shell History و Process Argument ق
 
 [فرمت رسمی URI اتصال MongoDB](https://www.mongodb.com/docs/manual/reference/connection-string/)
 
-## ۱۸. Backup و بازیابی آزموده‌شده
+## ۱۸. Log و Slow Query
+
+```bash
+sudo tail -f /var/log/mongodb/mongod.log
+sudo journalctl -u mongod --no-pager
+sudo journalctl -u mongod -n 100 --no-pager
+```
+
+MongoDB Diagnostic Log ساختاریافته می‌نویسد. خطای Parse YAML، فقدان dbPath، Permission Denied، Address Already in Use، مالکیت KeyFile، خطای Handshake/Certificate TLS، خطای WiredTiger و Authentication Failure را جست‌وجو کنید. اولین خطای Startup معمولاً Restartهای بعدی را توضیح می‌دهد؛ پیش از اقدام Log را حفظ کنید.
+
+```yaml
+operationProfiling:
+  mode: off
+  slowOpThresholdMs: 100
+  slowOpSampleRate: 0.1
+```
+
+این نمونه Profiler دیتابیس را خاموش نگه می‌دارد و Sample از Slow Diagnostic Log می‌گیرد. ۱۰۰ میلی‌ثانیه و ۱۰ درصد نقطه آغاز متناسب با SLO هستند، نه عدد جهانی. Profile همه عملیات بار را افزایش می‌دهد و می‌تواند Query حساس ثبت کند. Log را با Retention محدود و Alert احراز هویت ناموفق، خطای Storage و Election متمرکز کنید.
+
+Rotation را پیش از پرشدن Disk تنظیم کنید. با systemLog.logRotate: reopen، Policy خارجی Rename/Create با مالک Service User اعمال و سپس logRotate یا SIGUSR1 مستند اجرا کنید. Policyهای ناسازگار rename/reopen را ترکیب نکنید و copytruncate را بی‌خطر فرض نکنید. Rotation و Retention را در Staging تست کنید.
+
+[Rotation رسمی Log در MongoDB](https://www.mongodb.com/docs/manual/tutorial/rotate-log-files/)
+
+[Profiler و تنظیم Slow Operation در مستندات رسمی](https://www.mongodb.com/docs/manual/tutorial/manage-the-database-profiler/)
+
+## ۱۹. مانیتورینگ و Alert
+
+```javascript
+use admin
+db.createUser({
+  user: "mongoMonitor",
+  pwd: passwordPrompt(),
+  roles: [{ role: "clusterMonitor", db: "admin" }]
+})
+```
+
+از MongoDB Exporter سازگار با Server، Prometheus برای جمع‌آوری و Grafana برای Dashboard استفاده کنید؛ Zabbix نیز می‌تواند MongoDB و Host Health را مستقل رصد کند. این‌ها Integration خارجی‌اند، نه Component همراه Community. بعضی Collectorها Read Permission بیشتری می‌خواهند؛ فقط Collector لازم را فعال و پس از بررسی مستندات همان Exporter، Role محدود بدهید. Endpoint و Secret مربوط به Exporter خصوصی بماند.
+
+| Metric / Event | هدف Alert |
+| --- | --- |
+| Connection / Operation | اشباع Pool، Connection Churn و Throughput غیرعادی نسبت به مبنا. |
+| Query Latency | نقض مستمر SLO در p95/p99؛ تفکیک Read/Write و Timeout. |
+| Replication Lag / Oplog Window | نزدیک‌شدن Lag به بودجه Recovery یا Retention Oplog؛ Sync ناموفق. |
+| Disk / Inode / I/O Latency | ظرفیت و پیش‌بینی رشد، تأخیر صف و خطر Volume پر. |
+| Memory / Page Fault / Swap | Major Fault و Swap در OS را با Eviction و Read Disk مرتبط ببینید؛ Minor Fault به‌تنهایی Incident نیست. |
+| Replica Status / Primary Election | نبود Primary، Member خارج از دسترس، Election مکرر یا تغییر غیرمنتظره Topology. |
+| Backup / Certificate / Log | Backup قدیمی، Restore Drill ناموفق، نزدیک‌شدن Expiry و Event امنیت/Storage در Log. |
+
+Metric هر Member و Telemetry سیستم‌عامل را جمع کنید؛ مانیتور فقط Primary، Secondary خراب را پنهان می‌کند. Threshold عملی، Owner و Runbook تعیین کنید. Alert و مسیر Notification را تست و سپس از دسترس خارج‌شدن یک Node را در Staging و بازیابی برنامه و تشخیص Primary جدید را بررسی کنید.
+
+[Metricهای رسمی مانیتورینگ Self-Managed](https://www.mongodb.com/docs/manual/administration/monitoring/)
+
+## ۲۰. Backup و بازیابی آزموده‌شده
 
 ![معماری Backup Server و مسیرهای موازی مانیتورینگ Prometheus، Grafana، Zabbix و Syslog برای MongoDB](/assets/img/articles/content/mongodb-backup-monitoring.png)
 
@@ -709,7 +761,35 @@ mongorestore \
 
 [روش‌های رسمی Backup](https://www.mongodb.com/docs/manual/core/backups/)
 
-## ۱۹. بررسی Performance
+## ۲۱. چک‌لیست اعتبارسنجی
+
+```bash
+systemctl is-active mongod
+sudo ss -lntp | grep 27017
+# Bare mongosh is only for the initial non-TLS localhost bootstrap.
+# For the secured deployment use:
+mongosh --host '<HOSTNAME>' --port 27017 --tls \
+  --tlsCAFile /etc/mongodb/ca.pem \
+  --username appuser --password --authenticationDatabase appdb appdb
+```
+
+```javascript
+db.runCommand({ ping: 1 })
+db.runCommand({ connectionStatus: 1 })
+db.getCollectionNames()
+```
+
+انتظار active، Listener فقط روی Interface مجاز، ping با ok:1 و authenticatedUsers شامل appuser در appdb داشته باشید. از Host برنامه مجاز تست و عدم اتصال Host غیرمجاز را تأیید کنید. دسترسی Collection بدون احراز هویت و اتصال Plaintext باید رد شود. در Replica با mongoOps وصل و rs.status() را بررسی کنید: یک Primary، دو Secondary سالم و Lag قابل‌قبول.
+
+```javascript
+// Authenticated mongoOps replica session:
+rs.status()
+rs.printSecondaryReplicationInfo()
+```
+
+در Staging آزمون Failover کنترل‌شده، Read/Write واقعی برنامه با تأیید اکثریت، دریافت Alert و Restore Backup در مقصد ایزوله تمیز را انجام دهید. این تست‌ها رفتاری فراتر از Process Liveness را مشخص می‌کنند. سینتکس نصب و پیکربندی با مستندات بررسی شده است؛ فرمان‌های استقرار Linux باید روی سرور مقصد شما اجرا و اعتبارسنجی شوند.
+
+## ۲۲. بررسی Performance
 
 ```bash
 # Install the distribution sysstat package for iostat.
@@ -746,7 +826,7 @@ db.users.aggregate([{ $collStats: { storageStats: {} } }])
 
 [آمار Collection و نکات Deprecation](https://www.mongodb.com/docs/manual/reference/method/db.collection.stats/)
 
-## ۲۰. Index و Query Plan
+## ۲۳. Index و Query Plan
 
 ```javascript
 use appdb
@@ -763,59 +843,7 @@ Compound Index را با Filter و Sort طراحی و با داده نمایند
 
 [Execution Statistics رسمی در explain](https://www.mongodb.com/docs/manual/reference/method/db.collection.explain/)
 
-## ۲۱. Log و Slow Query
-
-```bash
-sudo tail -f /var/log/mongodb/mongod.log
-sudo journalctl -u mongod --no-pager
-sudo journalctl -u mongod -n 100 --no-pager
-```
-
-MongoDB Diagnostic Log ساختاریافته می‌نویسد. خطای Parse YAML، فقدان dbPath، Permission Denied، Address Already in Use، مالکیت KeyFile، خطای Handshake/Certificate TLS، خطای WiredTiger و Authentication Failure را جست‌وجو کنید. اولین خطای Startup معمولاً Restartهای بعدی را توضیح می‌دهد؛ پیش از اقدام Log را حفظ کنید.
-
-```yaml
-operationProfiling:
-  mode: off
-  slowOpThresholdMs: 100
-  slowOpSampleRate: 0.1
-```
-
-این نمونه Profiler دیتابیس را خاموش نگه می‌دارد و Sample از Slow Diagnostic Log می‌گیرد. ۱۰۰ میلی‌ثانیه و ۱۰ درصد نقطه آغاز متناسب با SLO هستند، نه عدد جهانی. Profile همه عملیات بار را افزایش می‌دهد و می‌تواند Query حساس ثبت کند. Log را با Retention محدود و Alert احراز هویت ناموفق، خطای Storage و Election متمرکز کنید.
-
-Rotation را پیش از پرشدن Disk تنظیم کنید. با systemLog.logRotate: reopen، Policy خارجی Rename/Create با مالک Service User اعمال و سپس logRotate یا SIGUSR1 مستند اجرا کنید. Policyهای ناسازگار rename/reopen را ترکیب نکنید و copytruncate را بی‌خطر فرض نکنید. Rotation و Retention را در Staging تست کنید.
-
-[Rotation رسمی Log در MongoDB](https://www.mongodb.com/docs/manual/tutorial/rotate-log-files/)
-
-[Profiler و تنظیم Slow Operation در مستندات رسمی](https://www.mongodb.com/docs/manual/tutorial/manage-the-database-profiler/)
-
-## ۲۲. مانیتورینگ و Alert
-
-```javascript
-use admin
-db.createUser({
-  user: "mongoMonitor",
-  pwd: passwordPrompt(),
-  roles: [{ role: "clusterMonitor", db: "admin" }]
-})
-```
-
-از MongoDB Exporter سازگار با Server، Prometheus برای جمع‌آوری و Grafana برای Dashboard استفاده کنید؛ Zabbix نیز می‌تواند MongoDB و Host Health را مستقل رصد کند. این‌ها Integration خارجی‌اند، نه Component همراه Community. بعضی Collectorها Read Permission بیشتری می‌خواهند؛ فقط Collector لازم را فعال و پس از بررسی مستندات همان Exporter، Role محدود بدهید. Endpoint و Secret مربوط به Exporter خصوصی بماند.
-
-| Metric / Event | هدف Alert |
-| --- | --- |
-| Connection / Operation | اشباع Pool، Connection Churn و Throughput غیرعادی نسبت به مبنا. |
-| Query Latency | نقض مستمر SLO در p95/p99؛ تفکیک Read/Write و Timeout. |
-| Replication Lag / Oplog Window | نزدیک‌شدن Lag به بودجه Recovery یا Retention Oplog؛ Sync ناموفق. |
-| Disk / Inode / I/O Latency | ظرفیت و پیش‌بینی رشد، تأخیر صف و خطر Volume پر. |
-| Memory / Page Fault / Swap | Major Fault و Swap در OS را با Eviction و Read Disk مرتبط ببینید؛ Minor Fault به‌تنهایی Incident نیست. |
-| Replica Status / Primary Election | نبود Primary، Member خارج از دسترس، Election مکرر یا تغییر غیرمنتظره Topology. |
-| Backup / Certificate / Log | Backup قدیمی، Restore Drill ناموفق، نزدیک‌شدن Expiry و Event امنیت/Storage در Log. |
-
-Metric هر Member و Telemetry سیستم‌عامل را جمع کنید؛ مانیتور فقط Primary، Secondary خراب را پنهان می‌کند. Threshold عملی، Owner و Runbook تعیین کنید. Alert و مسیر Notification را تست و سپس از دسترس خارج‌شدن یک Node را در Staging و بازیابی برنامه و تشخیص Primary جدید را بررسی کنید.
-
-[Metricهای رسمی مانیتورینگ Self-Managed](https://www.mongodb.com/docs/manual/administration/monitoring/)
-
-## ۲۳. عیب‌یابی
+## ۲۴. عیب‌یابی
 
 ```bash
 sudo systemctl status mongod --no-pager
@@ -841,34 +869,6 @@ free -h
 | Disk I/O بالا | Working Set بزرگ‌تر از Cache، Storage کند، تداخل Backup/Resync | iostat -xz؛ vmstat؛ Metric Cache/Lag/Latency | Scan غیرضروری را کم، بار Backup را جدا و RAM/IOPS اندازه‌گیری‌شده تأمین کنید. |
 
 mongod --repair، Forced Reconfiguration، حذف فایل Data یا خاموش‌کردن Authorization را Repair عمومی ندانید. Evidence و آخرین Backup قابل بازیابی را حفظ کنید. Member عقب‌مانده از Oplog ممکن است Resync برنامه‌ریزی‌شده بخواهد؛ ابتدا Source سالم و ظرفیت را تأیید کنید.
-
-## ۲۴. چک‌لیست اعتبارسنجی
-
-```bash
-systemctl is-active mongod
-sudo ss -lntp | grep 27017
-# Bare mongosh is only for the initial non-TLS localhost bootstrap.
-# For the secured deployment use:
-mongosh --host '<HOSTNAME>' --port 27017 --tls \
-  --tlsCAFile /etc/mongodb/ca.pem \
-  --username appuser --password --authenticationDatabase appdb appdb
-```
-
-```javascript
-db.runCommand({ ping: 1 })
-db.runCommand({ connectionStatus: 1 })
-db.getCollectionNames()
-```
-
-انتظار active، Listener فقط روی Interface مجاز، ping با ok:1 و authenticatedUsers شامل appuser در appdb داشته باشید. از Host برنامه مجاز تست و عدم اتصال Host غیرمجاز را تأیید کنید. دسترسی Collection بدون احراز هویت و اتصال Plaintext باید رد شود. در Replica با mongoOps وصل و rs.status() را بررسی کنید: یک Primary، دو Secondary سالم و Lag قابل‌قبول.
-
-```javascript
-// Authenticated mongoOps replica session:
-rs.status()
-rs.printSecondaryReplicationInfo()
-```
-
-در Staging آزمون Failover کنترل‌شده، Read/Write واقعی برنامه با تأیید اکثریت، دریافت Alert و Restore Backup در مقصد ایزوله تمیز را انجام دهید. این تست‌ها رفتاری فراتر از Process Liveness را مشخص می‌کنند. سینتکس نصب و پیکربندی با مستندات بررسی شده است؛ فرمان‌های استقرار Linux باید روی سرور مقصد شما اجرا و اعتبارسنجی شوند.
 
 ## ۲۵. چک‌لیست Production
 
@@ -937,7 +937,7 @@ Inventory Node، Config مؤثر، وابستگی DNS/PKI، Owner Secret، Runbo
 
 ## منابع رسمی
 
-بررسی در ۷ اکتبر ۲۰۲۶ با مستندات MongoDB و راهنماهای رسمی توزیع‌های زیر انجام شده است. راهنمای Linux فعلی Selector توزیع دارد؛ توزیع و روش Package متناظر را انتخاب کنید. تعریف مخزن Community 9.0 علاوه بر آن در Source رسمی مستندات MongoDB تطبیق داده شد. URL کلید امضا موفق پاسخ داد؛ درخواست Metadata مخزن از شبکه نگارش HTTP 403 گرفت، بنابراین موجودبودن زنده Package باید با apt-cache policy یا dnf در شبکه استقرار تأیید شود.
+مراجع این راهنما مستندات MongoDB و راهنماهای رسمی توزیع‌های زیر هستند. راهنمای Linux فعلی Selector توزیع دارد؛ توزیع و روش Package متناظر را انتخاب کنید. تعریف مخزن Community 9.0 علاوه بر آن در Source رسمی مستندات MongoDB تطبیق داده شد. URL کلید امضا موفق پاسخ داد؛ درخواست Metadata مخزن از شبکه نگارش HTTP 403 گرفت، بنابراین موجودبودن زنده Package باید با apt-cache policy یا dnf در شبکه استقرار تأیید شود.
 
 [فهرست نسخه Stable](https://www.mongodb.com/docs/manual/release-notes/)
 

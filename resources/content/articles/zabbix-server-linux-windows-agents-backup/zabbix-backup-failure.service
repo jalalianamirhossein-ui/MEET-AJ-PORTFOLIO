@@ -1,0 +1,12 @@
+[Unit]
+Description=Notify independent operations channel of Zabbix backup failure
+
+[Service]
+Type=oneshot
+User=root
+UMask=0077
+ExecStart=/usr/local/sbin/zabbix-backup-notify 1 journal:zabbix-backup.service
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true

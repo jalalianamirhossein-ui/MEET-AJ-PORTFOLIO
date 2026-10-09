@@ -33,7 +33,7 @@ class CiscoCatalystHardeningArticleTest extends TestCase
         $l2 = file_get_contents($directory.'/l2-access.cfg');
         $l3 = file_get_contents($directory.'/l3-switch.cfg');
         foreach ([$l2, $l3] as $config) {
-            $this->assertContains(trim($config), $localizedCode['en']);
+            $this->assertContains(trim(str_replace("\r\n", "\n", $config)), $localizedCode['en']);
             $this->assertStringContainsString('v3 priv read NMS-READ access SNMP-ACL', $config);
             $this->assertStringContainsString('transport input ssh', $config);
             $this->assertStringNotContainsString('snmp-server community', $config);

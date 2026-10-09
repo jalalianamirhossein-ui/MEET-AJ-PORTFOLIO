@@ -367,15 +367,6 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-architecture"
-              ><span
-                data-fa="سرویس وب، Database و Worker"
-                data-en="Web service, database and worker"
-                >Web service, database and worker</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#enterprise-prerequisites"
               ><span
                 data-fa="نسخه‌های مبنا و دامنه سرویس"
@@ -385,11 +376,11 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-installation"
+            <a href="#enterprise-architecture"
               ><span
-                data-fa="نصب Dependency و راه‌اندازی سرویس‌ها"
-                data-en="Install dependencies and start services"
-                >Install dependencies and start services</span
+                data-fa="سرویس وب، Database و Worker"
+                data-en="Web service, database and worker"
+                >Web service, database and worker</span
               ></a
             >
           </li>
@@ -399,6 +390,15 @@
                 data-fa="API Permission و حفاظت Secretها"
                 data-en="API permissions and secret protection"
                 >API permissions and secret protection</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-installation"
+              ><span
+                data-fa="نصب Dependency و راه‌اندازی سرویس‌ها"
+                data-en="Install dependencies and start services"
+                >Install dependencies and start services</span
               ></a
             >
           </li>
@@ -554,39 +554,6 @@
                       single-server deployment through practical validation.
                     </p>
                   </section>
-                  <section id="enterprise-architecture" class="article-section">
-                    <h2
-                      data-fa="سرویس وب، Database و Worker"
-                      data-en="Web service, database and worker"
-                    >
-                      Web service, database and worker
-                    </h2>
-                    <p
-                      data-fa="Nginx درخواست HTTPS را به Gunicorn روی Loopback می‌دهد. NetBox داده را در PostgreSQL نگه می‌دارد و Worker از Redis برای Jobها استفاده می‌کند. Tasks و Cache در مثال Databaseهای Redis جدا دارند. Backup باید Database، Media، Config و Secretها را هماهنگ حفظ کند."
-                      data-en="Nginx forwards HTTPS to loopback Gunicorn. NetBox stores data in PostgreSQL and workers use Redis for jobs. Tasks and cache use separate Redis databases here. Protect database, media, configuration and secrets together."
-                    >
-                      Nginx forwards HTTPS to loopback Gunicorn. NetBox stores
-                      data in PostgreSQL and workers use Redis for jobs. Tasks
-                      and cache use separate Redis databases here. Protect
-                      database, media, configuration and secrets together.
-                    </p>
-                    <h3
-                      id="enterprise-scenario"
-                      data-fa="مثال: Inventory سه دیتاسنتر"
-                      data-en="Example: inventory for three datacenters"
-                    >
-                      Example: inventory for three datacenters
-                    </h3>
-                    <p
-                      data-fa="گروه مالک شبکه Device و Prefix را ثبت می‌کند. Automation با Token محدود می‌خواند و حق نوشتن فقط به نقش‌های مشخص داده می‌شود. برای آزمون، یک Site و Prefix بسازید و رد درخواست Write حساب Read-only را بررسی کنید."
-                      data-en="The network-owner group maintains devices/prefixes. Automation reads with restricted tokens, while defined roles control writes. Test with one site/prefix and confirm a read-only identity’s write request is rejected."
-                    >
-                      The network-owner group maintains devices/prefixes.
-                      Automation reads with restricted tokens, while defined
-                      roles control writes. Test with one site/prefix and
-                      confirm a read-only identity’s write request is rejected.
-                    </p>
-                  </section>
                   <section
                     id="enterprise-prerequisites"
                     class="article-section"
@@ -637,6 +604,56 @@
                       API_TOKEN_PEPPERS and token behavior to that release. This
                       procedure uses Git. Python-package installation is
                       experimental in 4.7.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="سرویس وب، Database و Worker"
+                      data-en="Web service, database and worker"
+                    >
+                      Web service, database and worker
+                    </h2>
+                    <p
+                      data-fa="Nginx درخواست HTTPS را به Gunicorn روی Loopback می‌دهد. NetBox داده را در PostgreSQL نگه می‌دارد و Worker از Redis برای Jobها استفاده می‌کند. Tasks و Cache در مثال Databaseهای Redis جدا دارند. Backup باید Database، Media، Config و Secretها را هماهنگ حفظ کند."
+                      data-en="Nginx forwards HTTPS to loopback Gunicorn. NetBox stores data in PostgreSQL and workers use Redis for jobs. Tasks and cache use separate Redis databases here. Protect database, media, configuration and secrets together."
+                    >
+                      Nginx forwards HTTPS to loopback Gunicorn. NetBox stores
+                      data in PostgreSQL and workers use Redis for jobs. Tasks
+                      and cache use separate Redis databases here. Protect
+                      database, media, configuration and secrets together.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: Inventory سه دیتاسنتر"
+                      data-en="Example: inventory for three datacenters"
+                    >
+                      Example: inventory for three datacenters
+                    </h3>
+                    <p
+                      data-fa="گروه مالک شبکه Device و Prefix را ثبت می‌کند. Automation با Token محدود می‌خواند و حق نوشتن فقط به نقش‌های مشخص داده می‌شود. برای آزمون، یک Site و Prefix بسازید و رد درخواست Write حساب Read-only را بررسی کنید."
+                      data-en="The network-owner group maintains devices/prefixes. Automation reads with restricted tokens, while defined roles control writes. Test with one site/prefix and confirm a read-only identity’s write request is rejected."
+                    >
+                      The network-owner group maintains devices/prefixes.
+                      Automation reads with restricted tokens, while defined
+                      roles control writes. Test with one site/prefix and
+                      confirm a read-only identity’s write request is rejected.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="API Permission و حفاظت Secretها"
+                      data-en="API permissions and secret protection"
+                    >
+                      API permissions and secret protection
+                    </h2>
+                    <p
+                      data-fa="PostgreSQL و Redis را روی شبکه عمومی Bind نکنید. API Token را با Role محدود و زمان انقضا بدهید و Superuser را برای کار روزانه استفاده نکنید. SECRET_KEY و API_TOKEN_PEPPERS را در Backup رمزنگاری‌شده حفظ کنید. چرخش بدون برنامه به Credential و Session اثر می‌گذارد."
+                      data-en="Keep PostgreSQL/Redis off public interfaces. Restrict API tokens by role and expiry, and avoid daily superuser use. Retain SECRET_KEY/API_TOKEN_PEPPERS in encrypted backups. Unplanned rotation affects credentials and sessions."
+                    >
+                      Keep PostgreSQL/Redis off public interfaces. Restrict API
+                      tokens by role and expiry, and avoid daily superuser use.
+                      Retain SECRET_KEY/API_TOKEN_PEPPERS in encrypted backups.
+                      Unplanned rotation affects credentials and sessions.
                     </p>
                   </section>
                   <section id="enterprise-installation" class="article-section">
@@ -746,24 +763,12 @@ sudo systemctl enable --now netbox netbox-rq</code></pre>
                       with a restricted token. Create a sample site/prefix in UI
                       and verify read-only write denial.
                     </p>
-                  </section>
-                  <section id="enterprise-security" class="article-section">
-                    <h2
-                      data-fa="API Permission و حفاظت Secretها"
-                      data-en="API permissions and secret protection"
-                    >
-                      API permissions and secret protection
-                    </h2>
-                    <p
-                      data-fa="PostgreSQL و Redis را روی شبکه عمومی Bind نکنید. API Token را با Role محدود و زمان انقضا بدهید و Superuser را برای کار روزانه استفاده نکنید. SECRET_KEY و API_TOKEN_PEPPERS را در Backup رمزنگاری‌شده حفظ کنید. چرخش بدون برنامه به Credential و Session اثر می‌گذارد."
-                      data-en="Keep PostgreSQL/Redis off public interfaces. Restrict API tokens by role and expiry, and avoid daily superuser use. Retain SECRET_KEY/API_TOKEN_PEPPERS in encrypted backups. Unplanned rotation affects credentials and sessions."
-                    >
-                      Keep PostgreSQL/Redis off public interfaces. Restrict API
-                      tokens by role and expiry, and avoid daily superuser use.
-                      Retain SECRET_KEY/API_TOKEN_PEPPERS in encrypted backups.
-                      Unplanned rotation affects credentials and sessions.
-                    </p>
-                  </section>
+                  <div id="technical-enterprise-installation"><h3 data-en="Activate the HTTPS virtual host and verify static assets" data-fa="فعال‌کردن virtual host مربوط به HTTPS و بررسی فایل ثابت">Activate the HTTPS virtual host and verify static assets</h3><p data-en="After creating the original complete TLS server block and approved certificate files, use this fresh-instance procedure. The first command deliberately stops if the configuration file is absent. Do not overwrite an existing symlink or remove Ubuntu’s default site without first checking which services it serves. These are host configuration changes requiring sudo." data-fa="پس از ساخت کامل server block قبلی و فایل گواهی معتبر، این روند نصب تازه را اجرا کنید. فرمان اول در نبود فایل تنظیمات متوقف می‌شود. symlink موجود را بازنویسی یا default site اوبونتو را بدون بررسی سرویس‌های آن حذف نکنید. این‌ها تغییر تنظیمات میزبان و نیازمند sudo هستند.">After creating the original complete TLS server block and approved certificate files, use this fresh-instance procedure. The first command deliberately stops if the configuration file is absent. Do not overwrite an existing symlink or remove Ubuntu’s default site without first checking which services it serves. These are host configuration changes requiring sudo.</p><pre dir="ltr"><code class="language-bash">test -f /etc/nginx/sites-available/netbox || exit 1
+sudo ln -s /etc/nginx/sites-available/netbox /etc/nginx/sites-enabled/netbox
+sudo nginx -t
+# Reload only after the syntax test succeeds.
+sudo systemctl reload nginx
+curl --fail --show-error --head https://netbox.example.com/login/</code></pre><p data-en="Expected: successful Nginx syntax and a successful login-page HTTP response with a trusted hostname certificate. File exists on ln means inspect the existing destination, not force replacement. A loaded page with missing styles needs checking the exact /static/ alias and generated static files; it does not imply a database failure." data-fa="انتظار می‌رود نحو Nginx صحیح و پاسخ صفحهٔ ورود با گواهی معتبر نام میزبان موفق باشد. File exists در ln یعنی مقصد موجود را بررسی کنید، نه جایگزینی اجباری. صفحهٔ بازشده بدون style نیازمند بررسی alias دقیق /static/ و فایل ثابت تولیدشده است و به معنی خرابی پایگاه داده نیست.">Expected: successful Nginx syntax and a successful login-page HTTP response with a trusted hostname certificate. File exists on ln means inspect the existing destination, not force replacement. A loaded page with missing styles needs checking the exact /static/ alias and generated static files; it does not imply a database failure.</p></div></section>
                   <section id="enterprise-monitoring" class="article-section">
                     <h2
                       data-fa="UI سالم با Job متوقف"
@@ -835,10 +840,35 @@ sudo -u netbox /opt/netbox/venv/bin/python /opt/netbox/netbox/manage.py check</c
                     </p>
                     <pre
                       dir="ltr"
-                    ><code class="language-bash">sudo install -d -m 700 /var/backups/netbox
-sudo bash -c &#x27;umask 077; sudo -u postgres pg_dump -Fc netbox &gt; /var/backups/netbox/netbox.dump&#x27;
-sudo bash -c &#x27;umask 077; tar -czf /var/backups/netbox/application-state.tar.gz -C /opt/netbox netbox/media netbox/reports netbox/scripts netbox/netbox/configuration.py&#x27;
-sudo chmod 600 /var/backups/netbox/application-state.tar.gz</code></pre>
+                    ><code class="language-bash">sudo bash &lt;&lt;'BASH'
+set -euo pipefail
+umask 077
+install -d -m 700 /var/backups/netbox
+# Fresh demo paths only: never overwrite the previous recovery set.
+test ! -e /var/backups/netbox/netbox.dump
+test ! -e /var/backups/netbox/application-state.tar.gz
+# Preserve backup failure and also fail if the writers cannot restart.
+resume_writers() {
+    local backup_status=$?
+    trap - EXIT
+    if ! systemctl start netbox netbox-rq; then
+        echo 'NetBox writers failed to restart; console recovery required' &gt;&amp;2
+        exit 1
+    fi
+    exit "$backup_status"
+}
+trap resume_writers EXIT
+systemctl stop netbox netbox-rq
+if systemctl is-active --quiet netbox netbox-rq; then
+    echo 'A NetBox writer is still active; backup aborted' &gt;&amp;2
+    exit 1
+fi
+sudo -u postgres pg_dump -Fc netbox &gt; /var/backups/netbox/netbox.dump
+tar -czf /var/backups/netbox/application-state.tar.gz -C /opt/netbox netbox/media netbox/reports netbox/scripts netbox/netbox/configuration.py
+pg_restore --list /var/backups/netbox/netbox.dump &gt;/dev/null
+tar -tzf /var/backups/netbox/application-state.tar.gz &gt;/dev/null
+BASH
+</code></pre>
                     <p
                       data-fa="Redirection در مثال داخل Shell دارای مجوز Root انجام می‌شود. فایل‌ها را خارج Host به مخزن امن منتقل کنید. Restore را با همان نسخه و Pluginها روی سرور جدا انجام دهید."
                       data-en="The example redirects within a root-authorized shell. Copy files off-host to protected storage. Restore on an isolated server with matching version/plugins."
@@ -886,7 +916,7 @@ sudo -u postgres psql -d netbox_restore -c &#x27;SELECT count(*) FROM dcim_site;
                       versions/plugins and test migrations in staging with a
                       restorable backup.
                     </p>
-                  </section>
+                  <div id="technical-enterprise-recovery"><h3 data-en="Actually stop writers during this single-node backup" data-fa="توقف واقعی نویسندگان در پشتیبان‌گیری تک‌گره‌ای">Actually stop writers during this single-node backup</h3><p data-en="The backup block above implements a coordinated single-node pause: announce downtime, let jobs finish, then stop netbox and netbox-rq before both archives are collected. Its exit trap restarts those services after success or failure. Check service-start status and the original failing endpoint afterward. Fresh-path guards prevent silently replacing a previous recovery set; for recurring backups use a reviewed unique-set/retention design. External writers, additional workers or replicas need their own coordination; this is not an HA backup recipe." data-fa="بلوک پشتیبان بالا توقف هماهنگ تک‌گره‌ای را اجرا می‌کند: قطعی را اعلام و اجازه دهید کارها تمام شوند؛ سپس netbox و netbox-rq پیش از ساخت هر دو آرشیو متوقف می‌شوند. trap خروج در موفقیت یا شکست سرویس‌ها را راه‌اندازی می‌کند. وضعیت راه‌اندازی و endpoint قبلی را بعداً بررسی کنید. کنترل مسیر جدید مانع جایگزینی خاموش مجموعهٔ بازیابی قبلی است؛ برای پشتیبان تکرارشونده طراحی مجموعهٔ یکتا و retention لازم است. نویسندهٔ خارجی، worker اضافه یا replica هماهنگی مستقل نیاز دارد؛ این روند پشتیبان HA نیست.">The backup block above implements a coordinated single-node pause: announce downtime, let jobs finish, then stop netbox and netbox-rq before both archives are collected. Its exit trap restarts those services after success or failure. Check service-start status and the original failing endpoint afterward. Fresh-path guards prevent silently replacing a previous recovery set; for recurring backups use a reviewed unique-set/retention design. External writers, additional workers or replicas need their own coordination; this is not an HA backup recipe.</p><p data-en="pg_restore --list and tar -tzf in the backup block check archive readability, not recoverability. A nonzero backup status requires investigation; partial files are not accepted recovery sets. Retain both archives from the same pause together and copy them off-host securely. Acceptance still requires the isolated restore, object counts, media files, login and canary job described above." data-fa="pg_restore --list و tar -tzf در بلوک پشتیبان، خوانایی آرشیو را می‌آزمایند، نه بازیابی‌پذیری. وضعیت غیرصفر پشتیبان نیازمند بررسی است؛ فایل ناقص مجموعهٔ بازیابی پذیرفته‌شده نیست. هر دو آرشیو همان توقف را کنار هم نگه دارید و امن به خارج میزبان منتقل کنید. پذیرش همچنان به restore جدا، شمارش آبجکت، media، ورود و کار آزمایشی توضیح‌داده‌شده وابسته است.">pg_restore --list and tar -tzf in the backup block check archive readability, not recoverability. A nonzero backup status requires investigation; partial files are not accepted recovery sets. Retain both archives from the same pause together and copy them off-host securely. Acceptance still requires the isolated restore, object counts, media files, login and canary job described above.</p></div></section>
                   <section id="faq" class="article-section">
                     <h2
                       data-fa="پرسش‌های متداول"

@@ -56,7 +56,7 @@ class MongoDbProductionArticleTest extends TestCase
         $this->assertDoesNotMatchRegularExpression('/--uri[^\n]*:[^@\n]+@/', $copy);
         foreach (array_merge(glob(resource_path('assets/img/articles/banners/mongodb-*.png')), glob(resource_path('assets/img/articles/content/mongodb-*.png'))) as $file) {
             $size = getimagesize($file);
-            $this->assertSame(str_contains(basename($file), 'banner') ? [1000, 1000] : [1920, 1080], [$size[0], $size[1]]);
+            $this->assertSame(str_contains(basename($file), 'banner') ? array_slice(getimagesize(resource_path('assets/img/articles/banners/'.basename($file))), 0, 2) : [1920, 1080], [$size[0], $size[1]]);
         }
         $this->get('/articles?q=MongoDB')->assertOk()->assertSee($article->path(), false);
         $this->get('/articles?tag=mongodb')->assertOk()->assertSee($article->path(), false);

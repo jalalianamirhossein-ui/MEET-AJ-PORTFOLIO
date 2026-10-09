@@ -310,20 +310,20 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-architecture"
-              ><span
-                data-fa="Source، Kernel Clock و برنامه"
-                data-en="Sources, kernel clock and applications"
-                >Sources, kernel clock and applications</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
             <a href="#enterprise-prerequisites"
               ><span
                 data-fa="Daemon زمان و مسیر NTP"
                 data-en="Time daemon and NTP reachability"
                 >Time daemon and NTP reachability</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a href="#enterprise-architecture"
+              ><span
+                data-fa="Source، Kernel Clock و برنامه"
+                data-en="Sources, kernel clock and applications"
+                >Sources, kernel clock and applications</span
               ></a
             >
           </li>
@@ -496,39 +496,6 @@
                       Asia/Tehran to UTC does not itself correct clock skew.
                     </p>
                   </section>
-                  <section id="enterprise-architecture" class="article-section">
-                    <h2
-                      data-fa="Source، Kernel Clock و برنامه"
-                      data-en="Sources, kernel clock and applications"
-                    >
-                      Sources, kernel clock and applications
-                    </h2>
-                    <p
-                      data-fa="Chronyd با اندازه‌گیری پاسخ Sourceها، خطای ساعت Kernel را اصلاح می‌کند. برنامه زمان را از سیستم می‌گیرد و Timezone فقط نمایش آن را تعیین می‌کند. جهش ناگهانی Clock روی Scheduling و Database اثر دارد."
-                      data-en="Chronyd uses source measurements to correct kernel-clock error. Applications read system time, while timezone controls display. Abrupt clock steps affect scheduling and databases."
-                    >
-                      Chronyd uses source measurements to correct kernel-clock
-                      error. Applications read system time, while timezone
-                      controls display. Abrupt clock steps affect scheduling and
-                      databases.
-                    </p>
-                    <h3
-                      id="enterprise-scenario"
-                      data-fa="مثال: دو Source داخلی"
-                      data-en="Example: two internal sources"
-                    >
-                      Example: two internal sources
-                    </h3>
-                    <p
-                      data-fa="سرورها از 10.20.30.53 و 10.20.30.54 زمان می‌گیرند و Log مرکزی UTC است. دو Source باید وابستگی مستقل داشته باشند. با دو منبع مخالف، تشخیص منبع درست قطعی نیست. برای تحمل خطای منبع، تعداد و تنوع بیشتر را طراحی کنید."
-                      data-en="Servers use 10.20.30.53 and 10.20.30.54, with central logs in UTC. Sources need independent dependencies. Two disagreeing sources do not establish which is correct. Design additional source diversity for fault tolerance."
-                    >
-                      Servers use 10.20.30.53 and 10.20.30.54, with central logs
-                      in UTC. Sources need independent dependencies. Two
-                      disagreeing sources do not establish which is correct.
-                      Design additional source diversity for fault tolerance.
-                    </p>
-                  </section>
                   <section
                     id="enterprise-prerequisites"
                     class="article-section"
@@ -576,6 +543,39 @@
                       timesyncd is another option for simple clients. Chrony
                       owns synchronization here. Timedatectl timesync-status
                       reports timesyncd. Use sources and tracking for Chrony.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="Source، Kernel Clock و برنامه"
+                      data-en="Sources, kernel clock and applications"
+                    >
+                      Sources, kernel clock and applications
+                    </h2>
+                    <p
+                      data-fa="Chronyd با اندازه‌گیری پاسخ Sourceها، خطای ساعت Kernel را اصلاح می‌کند. برنامه زمان را از سیستم می‌گیرد و Timezone فقط نمایش آن را تعیین می‌کند. جهش ناگهانی Clock روی Scheduling و Database اثر دارد."
+                      data-en="Chronyd uses source measurements to correct kernel-clock error. Applications read system time, while timezone controls display. Abrupt clock steps affect scheduling and databases."
+                    >
+                      Chronyd uses source measurements to correct kernel-clock
+                      error. Applications read system time, while timezone
+                      controls display. Abrupt clock steps affect scheduling and
+                      databases.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: دو Source داخلی"
+                      data-en="Example: two internal sources"
+                    >
+                      Example: two internal sources
+                    </h3>
+                    <p
+                      data-fa="سرورها از 10.20.30.53 و 10.20.30.54 زمان می‌گیرند و Log مرکزی UTC است. دو Source باید وابستگی مستقل داشته باشند. با دو منبع مخالف، تشخیص منبع درست قطعی نیست. برای تحمل خطای منبع، تعداد و تنوع بیشتر را طراحی کنید."
+                      data-en="Servers use 10.20.30.53 and 10.20.30.54, with central logs in UTC. Sources need independent dependencies. Two disagreeing sources do not establish which is correct. Design additional source diversity for fault tolerance."
+                    >
+                      Servers use 10.20.30.53 and 10.20.30.54, with central logs
+                      in UTC. Sources need independent dependencies. Two
+                      disagreeing sources do not establish which is correct.
+                      Design additional source diversity for fault tolerance.
                     </p>
                   </section>
                   <section id="enterprise-security" class="article-section">
@@ -633,6 +633,7 @@ sudo cp -a /etc/chrony /root/chrony-before-change</code></pre>
                       dir="ltr"
                     ><code class="language-text">server 10.20.30.53 iburst
 server 10.20.30.54 iburst</code></pre>
+                    <p data-fa="فرمان‌های زیر را یکی‌یکی اجرا کنید. پس از چاپ تنظیمات با chronyd -p و پیش از Restart، makestep و Sourceهای DHCP را بررسی کنید. اگر اصلاح ناگهانی ساعت مجاز نیست، Policy را با نیاز برنامه هماهنگ کنید و تغییر را در پنجرهٔ مناسب انجام دهید." data-en="Run the following commands one at a time. After printing the configuration with chronyd -p and before restarting, inspect makestep and DHCP-supplied sources. If abrupt clock correction is unacceptable, align policy with the workload and use an appropriate maintenance window.">Run the following commands one at a time. After printing the configuration with chronyd -p and before restarting, inspect makestep and DHCP-supplied sources. If abrupt clock correction is unacceptable, align policy with the workload and use an appropriate maintenance window.</p>
                     <pre
                       dir="ltr"
                     ><code class="language-bash">sudo chronyd -p -f /etc/chrony/chrony.conf
@@ -651,15 +652,7 @@ date -u --iso-8601=seconds</code></pre>
                       production with a large offset until its effects on
                       databases and scheduling have been assessed.
                     </p>
-                    <p
-                      data-fa="پیش از Restart، خروجی Config چاپ‌شده را برای makestep و Sourceهای DHCP بررسی کنید. اگر اصلاح ناگهانی مجاز نیست، Policy را با نیاز برنامه هماهنگ کنید و تغییر را در پنجره مناسب انجام دهید."
-                      data-en="Before restart, inspect the printed configuration for makestep and DHCP-supplied sources. If abrupt correction is unacceptable, align policy with the workload and use an appropriate maintenance window."
-                    >
-                      Before restart, inspect the printed configuration for
-                      makestep and DHCP-supplied sources. If abrupt correction
-                      is unacceptable, align policy with the workload and use an
-                      appropriate maintenance window.
-                    </p>
+
                   </section>
                   <section id="enterprise-monitoring" class="article-section">
                     <h2
@@ -677,7 +670,7 @@ date -u --iso-8601=seconds</code></pre>
                       align with application needs. Active Chrony does not
                       establish synchronization.
                     </p>
-                  </section>
+                  <div id="technical-enterprise-monitoring"><h3 data-en="Interpret Chrony evidence without stepping the clock" data-fa="تفسیر شواهد Chrony بدون پرش ساعت">Interpret Chrony evidence without stepping the clock</h3><p data-en="Illustrative fields, not measured output: a source row with ^*, Reach 377 and a small Last sample has been selected and has eight recent successful replies; 377 is an octal reach register, not a percentage. In tracking, Leap status Normal, Reference ID and System time quantify sync state and offset. Stratum alone is not accuracy. A source marked ^? with Reach 0 needs source/network investigation; ^x is treated as a falseticker. Allow multiple polling cycles before judging a newly started service." data-fa="فیلدهای آموزشی، نه خروجی اندازه‌گیری‌شده: منبع دارای ^*، Reach برابر 377 و Last sample کم انتخاب شده و هشت پاسخ اخیر موفق داشته است؛ 377 رجیستر reach هشت‌هشتی است، نه درصد. در tracking، Leap status برابر Normal، Reference ID و System time وضعیت و offset را مشخص می‌کنند. stratum به‌تنهایی دقت نیست. منبع ^? با Reach صفر نیازمند بررسی منبع و شبکه و ^x به‌عنوان falseticker شناخته شده است. پیش از قضاوت سرویس تازه‌راه‌اندازی‌شده چند دورهٔ poll صبر کنید.">Illustrative fields, not measured output: a source row with ^*, Reach 377 and a small Last sample has been selected and has eight recent successful replies; 377 is an octal reach register, not a percentage. In tracking, Leap status Normal, Reference ID and System time quantify sync state and offset. Stratum alone is not accuracy. A source marked ^? with Reach 0 needs source/network investigation; ^x is treated as a falseticker. Allow multiple polling cycles before judging a newly started service.</p><p><a href="https://chrony-project.org/doc/4.5/chronyc.html" rel="noopener" data-en="Chrony sources and tracking" data-fa="مستند رسمی: Chrony sources and tracking">Chrony sources and tracking</a></p></div></section>
                   <section
                     id="enterprise-troubleshooting"
                     class="article-section"

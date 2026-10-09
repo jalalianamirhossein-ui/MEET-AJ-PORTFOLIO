@@ -87,18 +87,18 @@
         <ul>
           <li class="article-nav-item">
             <a
-              href="#architecture"
-              data-en="Architecture and deployment contract"
-              data-fa="معماری و الزامات استقرار"
-              >Architecture and deployment contract</a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a
               href="#prechecks"
               data-en="1. Pre-Hardening Checks"
               data-fa="۱. بررسی پیش از هاردنینگ"
               >1. Pre-Hardening Checks</a
+            >
+          </li>
+          <li class="article-nav-item">
+            <a
+              href="#architecture"
+              data-en="Architecture and deployment contract"
+              data-fa="معماری و الزامات استقرار"
+              >Architecture and deployment contract</a
             >
           </li>
           <li class="article-nav-item">
@@ -243,18 +243,18 @@
           </li>
           <li class="article-nav-item">
             <a
-              href="#verification"
-              data-en="21. Verification and Acceptance"
-              data-fa="۲۱. اعتبارسنجی و پذیرش"
-              >21. Verification and Acceptance</a
+              href="#final-configs"
+              data-en="21. Final Independent Configurations"
+              data-fa="۲۱. پیکربندی‌های نهایی مستقل"
+              >21. Final Independent Configurations</a
             >
           </li>
           <li class="article-nav-item">
             <a
-              href="#final-configs"
-              data-en="22. Final Independent Configurations"
-              data-fa="۲۲. پیکربندی‌های نهایی مستقل"
-              >22. Final Independent Configurations</a
+              href="#verification"
+              data-en="22. Verification and Acceptance"
+              data-fa="۲۲. اعتبارسنجی و پذیرش"
+              >22. Verification and Acceptance</a
             >
           </li>
           <li class="article-nav-item">
@@ -312,94 +312,6 @@
         />
       </section>
       <article class="article-body" lang="en" dir="ltr">
-        <section id="architecture">
-          <h2
-            data-en="Architecture and deployment contract"
-            data-fa="معماری و الزامات استقرار"
-          >
-            Architecture and deployment contract
-          </h2>
-          <figure>
-            <img
-              src="/assets/img/articles/content/Modern Network Switch Hardening Topology.png"
-              alt="Cisco Catalyst hardening topology and separate management network"
-              width="1672"
-              height="941"
-              loading="lazy"
-              decoding="async"
-            />
-            <figcaption>
-              <span
-                data-en="Cisco Catalyst hardening topology and separate management network"
-                data-fa="توپولوژی هاردنینگ Cisco Catalyst و شبکهٔ مدیریت مجزا"
-                >Cisco Catalyst hardening topology and separate management
-                network</span
-              >
-            </figcaption>
-          </figure>
-          <p
-            data-en="This runbook is for Network Administrators, Network Engineers and Infrastructure Engineers operating Cisco Catalyst Layer 2 and Layer 3 switches with Cisco IOS or IOS XE. Management Plane protects administrative access and telemetry; Control Plane protects STP, routing adjacencies and CPU resources; Data Plane / Layer 2 Security protects endpoint traffic and trust boundaries."
-            data-fa="این راهنما برای Network Administrator، Network Engineer و Infrastructure Engineer و صرفاً سوئیچ‌های Cisco Catalyst لایه ۲ و ۳ با IOS یا IOS XE است. Management Plane دسترسی مدیریتی و Telemetry، Control Plane پروتکل STP و همسایگی Routing و منابع CPU، و Data Plane / Layer 2 Security ترافیک کاربران و مرزهای اعتماد را محافظت می‌کند."
-          >
-            This runbook is for Network Administrators, Network Engineers and
-            Infrastructure Engineers operating Cisco Catalyst Layer 2 and Layer
-            3 switches with Cisco IOS or IOS XE. Management Plane protects
-            administrative access and telemetry; Control Plane protects STP,
-            routing adjacencies and CPU resources; Data Plane / Layer 2 Security
-            protects endpoint traffic and trust boundaries.
-          </p>
-          <pre dir="ltr"><code class="language-cisco">Internet / WAN
-      |
-Firewall
-      |
-Core / L3 Switch
-      |
-Distribution
-      |
-Access L2 Switches
-      |
-Users / Phones / AP / Printers
-
-VLAN 99 - Management
-NMS / Zabbix / Syslog / NTP</code></pre>
-          <p
-            data-en="The firewall is only an architectural boundary; this article configures Catalyst switches exclusively. VLAN 99 is a separate management broadcast domain, not an authorization mechanism. Restrict its routing and physical access. Examples use RFC1918 networks: users 10.10.10.0/24, management 10.99.99.0/24, transit 10.255.255.0/30. These are invented examples, not organization addresses."
-            data-fa="Firewall فقط مرز معماری است و پیکربندی مقاله منحصراً مربوط به Catalyst است. VLAN 99 یک Broadcast Domain جدا برای مدیریت است و به‌تنهایی کنترل دسترسی ایجاد نمی‌کند؛ Routing و دسترسی فیزیکی آن را محدود کنید. شبکه‌های نمونه RFC1918 عبارت‌اند از کاربران 10.10.10.0/24، مدیریت 10.99.99.0/24 و Transit برابر 10.255.255.0/30؛ همگی مثال ساختگی‌اند."
-          >
-            The firewall is only an architectural boundary; this article
-            configures Catalyst switches exclusively. VLAN 99 is a separate
-            management broadcast domain, not an authorization mechanism.
-            Restrict its routing and physical access. Examples use RFC1918
-            networks: users 10.10.10.0/24, management 10.99.99.0/24, transit
-            10.255.255.0/30. These are invented examples, not organization
-            addresses.
-          </p>
-          <p
-            data-en="The baseline assumes IPv4, a global routing table, classic interface syntax and a tested Rapid-PVST design. Dedicated management ports in a VRF need VRF-specific routes and service syntax. Licenses, ASIC resources, interface types, VTY counts, crypto policies and release behavior differ; validate each block with CLI help and the matching command reference. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment."
-            data-fa="فرض نمونه‌ها IPv4، جدول Routing عمومی، Syntax کلاسیک اینترفیس و طراحی آزموده‌شده Rapid-PVST است. پورت مدیریت داخل VRF به Route و Syntax سرویس مخصوص VRF نیاز دارد. License، منابع ASIC، نوع پورت، تعداد VTY، سیاست رمزنگاری و رفتار نسخه‌ها متفاوت است؛ هر بلوک را با CLI Help و Command Reference متناظر بررسی کنید. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment."
-          >
-            The baseline assumes IPv4, a global routing table, classic interface
-            syntax and a tested Rapid-PVST design. Dedicated management ports in
-            a VRF need VRF-specific routes and service syntax. Licenses, ASIC
-            resources, interface types, VTY counts, crypto policies and release
-            behavior differ; validate each block with CLI help and the matching
-            command reference. Verify command availability for your Catalyst
-            platform and IOS/IOS XE release before deployment.
-          </p>
-          <div class="article-callout article-callout--warning" role="note">
-            <p
-              data-en="Production-ready means a reviewed deployment template, not blind paste. Preserve existing configuration, use console/out-of-band access, stage changes on one port/VLAN, test a new SSH session, and save only after validation. These IPv4 controls do not secure IPv6: separately assess IPv6 management ACLs, RA Guard and DHCPv6 Guard on supported Catalyst releases."
-              data-fa="Production-Ready یعنی Template قابل بازبینی و استقرار، نه اجرای کورکورانه. تنظیمات فعلی را حفظ کنید، Console یا Out-of-Band در دسترس داشته باشید، ابتدا یک پورت/VLAN را تست کنید، SSH جدید باز کنید و فقط پس از اعتبارسنجی Save کنید. کنترل‌های IPv4 این مقاله IPv6 را امن نمی‌کنند؛ ACL مدیریتی IPv6، RA Guard و DHCPv6 Guard را جداگانه در نسخه پشتیبانی‌شده بررسی کنید."
-            >
-              Production-ready means a reviewed deployment template, not blind
-              paste. Preserve existing configuration, use console/out-of-band
-              access, stage changes on one port/VLAN, test a new SSH session,
-              and save only after validation. These IPv4 controls do not secure
-              IPv6: separately assess IPv6 management ACLs, RA Guard and DHCPv6
-              Guard on supported Catalyst releases.
-            </p>
-          </div>
-        </section>
         <section id="prechecks">
           <h2
             data-en="1. Pre-Hardening Checks"
@@ -584,6 +496,94 @@ copy startup-config flash:pre-hardening-startup.cfg</code></pre>
             Verify command availability for your Catalyst platform and IOS/IOS
             XE release before deployment.
           </p>
+        </section>
+        <section id="architecture">
+          <h2
+            data-en="Architecture and deployment contract"
+            data-fa="معماری و الزامات استقرار"
+          >
+            Architecture and deployment contract
+          </h2>
+          <figure>
+            <img
+              src="/assets/img/articles/content/Modern Network Switch Hardening Topology.png"
+              alt="Cisco Catalyst hardening topology and separate management network"
+              width="1672"
+              height="941"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>
+              <span
+                data-en="Cisco Catalyst hardening topology and separate management network"
+                data-fa="توپولوژی هاردنینگ Cisco Catalyst و شبکهٔ مدیریت مجزا"
+                >Cisco Catalyst hardening topology and separate management
+                network</span
+              >
+            </figcaption>
+          </figure>
+          <p
+            data-en="This runbook is for Network Administrators, Network Engineers and Infrastructure Engineers operating Cisco Catalyst Layer 2 and Layer 3 switches with Cisco IOS or IOS XE. Management Plane protects administrative access and telemetry; Control Plane protects STP, routing adjacencies and CPU resources; Data Plane / Layer 2 Security protects endpoint traffic and trust boundaries."
+            data-fa="این راهنما برای Network Administrator، Network Engineer و Infrastructure Engineer و صرفاً سوئیچ‌های Cisco Catalyst لایه ۲ و ۳ با IOS یا IOS XE است. Management Plane دسترسی مدیریتی و Telemetry، Control Plane پروتکل STP و همسایگی Routing و منابع CPU، و Data Plane / Layer 2 Security ترافیک کاربران و مرزهای اعتماد را محافظت می‌کند."
+          >
+            This runbook is for Network Administrators, Network Engineers and
+            Infrastructure Engineers operating Cisco Catalyst Layer 2 and Layer
+            3 switches with Cisco IOS or IOS XE. Management Plane protects
+            administrative access and telemetry; Control Plane protects STP,
+            routing adjacencies and CPU resources; Data Plane / Layer 2 Security
+            protects endpoint traffic and trust boundaries.
+          </p>
+          <pre dir="ltr"><code class="language-cisco">Internet / WAN
+      |
+Firewall
+      |
+Core / L3 Switch
+      |
+Distribution
+      |
+Access L2 Switches
+      |
+Users / Phones / AP / Printers
+
+VLAN 99 - Management
+NMS / Zabbix / Syslog / NTP</code></pre>
+          <p
+            data-en="The firewall is only an architectural boundary; this article configures Catalyst switches exclusively. VLAN 99 is a separate management broadcast domain, not an authorization mechanism. Restrict its routing and physical access. Examples use RFC1918 networks: users 10.10.10.0/24, management 10.99.99.0/24, transit 10.255.255.0/30. These are invented examples, not organization addresses."
+            data-fa="Firewall فقط مرز معماری است و پیکربندی مقاله منحصراً مربوط به Catalyst است. VLAN 99 یک Broadcast Domain جدا برای مدیریت است و به‌تنهایی کنترل دسترسی ایجاد نمی‌کند؛ Routing و دسترسی فیزیکی آن را محدود کنید. شبکه‌های نمونه RFC1918 عبارت‌اند از کاربران 10.10.10.0/24، مدیریت 10.99.99.0/24 و Transit برابر 10.255.255.0/30؛ همگی مثال ساختگی‌اند."
+          >
+            The firewall is only an architectural boundary; this article
+            configures Catalyst switches exclusively. VLAN 99 is a separate
+            management broadcast domain, not an authorization mechanism.
+            Restrict its routing and physical access. Examples use RFC1918
+            networks: users 10.10.10.0/24, management 10.99.99.0/24, transit
+            10.255.255.0/30. These are invented examples, not organization
+            addresses.
+          </p>
+          <p
+            data-en="The baseline assumes IPv4, a global routing table, classic interface syntax and a tested Rapid-PVST design. Dedicated management ports in a VRF need VRF-specific routes and service syntax. Licenses, ASIC resources, interface types, VTY counts, crypto policies and release behavior differ; validate each block with CLI help and the matching command reference. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment."
+            data-fa="فرض نمونه‌ها IPv4، جدول Routing عمومی، Syntax کلاسیک اینترفیس و طراحی آزموده‌شده Rapid-PVST است. پورت مدیریت داخل VRF به Route و Syntax سرویس مخصوص VRF نیاز دارد. License، منابع ASIC، نوع پورت، تعداد VTY، سیاست رمزنگاری و رفتار نسخه‌ها متفاوت است؛ هر بلوک را با CLI Help و Command Reference متناظر بررسی کنید. Verify command availability for your Catalyst platform and IOS/IOS XE release before deployment."
+          >
+            The baseline assumes IPv4, a global routing table, classic interface
+            syntax and a tested Rapid-PVST design. Dedicated management ports in
+            a VRF need VRF-specific routes and service syntax. Licenses, ASIC
+            resources, interface types, VTY counts, crypto policies and release
+            behavior differ; validate each block with CLI help and the matching
+            command reference. Verify command availability for your Catalyst
+            platform and IOS/IOS XE release before deployment.
+          </p>
+          <div class="article-callout article-callout--warning" role="note">
+            <p
+              data-en="Production-ready means a reviewed deployment template, not blind paste. Preserve existing configuration, use console/out-of-band access, stage changes on one port/VLAN, test a new SSH session, and save only after validation. These IPv4 controls do not secure IPv6: separately assess IPv6 management ACLs, RA Guard and DHCPv6 Guard on supported Catalyst releases."
+              data-fa="Production-Ready یعنی Template قابل بازبینی و استقرار، نه اجرای کورکورانه. تنظیمات فعلی را حفظ کنید، Console یا Out-of-Band در دسترس داشته باشید، ابتدا یک پورت/VLAN را تست کنید، SSH جدید باز کنید و فقط پس از اعتبارسنجی Save کنید. کنترل‌های IPv4 این مقاله IPv6 را امن نمی‌کنند؛ ACL مدیریتی IPv6، RA Guard و DHCPv6 Guard را جداگانه در نسخه پشتیبانی‌شده بررسی کنید."
+            >
+              Production-ready means a reviewed deployment template, not blind
+              paste. Preserve existing configuration, use console/out-of-band
+              access, stage changes on one port/VLAN, test a new SSH session,
+              and save only after validation. These IPv4 controls do not secure
+              IPv6: separately assess IPv6 management ACLs, RA Guard and DHCPv6
+              Guard on supported Catalyst releases.
+            </p>
+          </div>
         </section>
         <section id="baseline">
           <h2
@@ -903,12 +903,12 @@ ip default-gateway &lt;GATEWAY&gt;</code></pre>
             test same-subnet and routed administrator access.
           </p>
           <p
-            data-en="Production: The VLAN must exist and normally have an active forwarding member/trunk. no ip routing belongs only to the L2 role. The complete standalone access template is in section 22."
-            data-fa="نکات Production: VLAN باید وجود داشته و معمولاً Member یا Trunk فعال در حالت Forwarding داشته باشد. no ip routing فقط متعلق به نقش L2 است. قالب کامل مستقل Access در بخش ۲۲ قرار دارد."
+            data-en="Production: The VLAN must exist and normally have an active forwarding member/trunk. no ip routing belongs only to the L2 role. The complete standalone access template is in section 21."
+            data-fa="نکات Production: VLAN باید وجود داشته و معمولاً Member یا Trunk فعال در حالت Forwarding داشته باشد. no ip routing فقط متعلق به نقش L2 است. قالب کامل مستقل Access در بخش ۲۱ قرار دارد."
           >
             Production: The VLAN must exist and normally have an active
             forwarding member/trunk. no ip routing belongs only to the L2 role.
-            The complete standalone access template is in section 22.
+            The complete standalone access template is in section 21.
           </p>
         </section>
         <section id="dhcp">
@@ -1628,13 +1628,13 @@ exit</code></pre>
             for redirects/proxy ARP state.
           </p>
           <p
-            data-en="Production: Check dependencies on redirects and proxy ARP before disabling them. Use an explicit route or a designed dynamic protocol, not ip default-gateway, when routing is active. The standalone section 22 example uses a routed /30 uplink and static default route."
-            data-fa="نکات Production: پیش از غیرفعال‌سازی وابستگی Redirect و Proxy ARP را بررسی کنید. در Routing فعال از Route صریح یا Dynamic Protocol طراحی‌شده استفاده کنید، نه ip default-gateway. نمونه مستقل بخش ۲۲ یک Uplink Routed با /30 و Static Default Route دارد."
+            data-en="Production: Check dependencies on redirects and proxy ARP before disabling them. Use an explicit route or a designed dynamic protocol, not ip default-gateway, when routing is active. The standalone section 21 example uses a routed /30 uplink and static default route."
+            data-fa="نکات Production: پیش از غیرفعال‌سازی وابستگی Redirect و Proxy ARP را بررسی کنید. در Routing فعال از Route صریح یا Dynamic Protocol طراحی‌شده استفاده کنید، نه ip default-gateway. نمونه مستقل بخش ۲۱ یک Uplink Routed با /30 و Static Default Route دارد."
           >
             Production: Check dependencies on redirects and proxy ARP before
             disabling them. Use an explicit route or a designed dynamic
             protocol, not ip default-gateway, when routing is active. The
-            standalone section 22 example uses a routed /30 uplink and static
+            standalone section 21 example uses a routed /30 uplink and static
             default route.
           </p>
           <p
@@ -2101,123 +2101,12 @@ snmp-server community &lt;COMMUNITY&gt; RO SNMP-ACL</code></pre>
             Catalyst platform and IOS/IOS XE release before deployment.
           </p>
         </section>
-        <section id="verification">
-          <h2
-            data-en="21. Verification and Acceptance"
-            data-fa="۲۱. اعتبارسنجی و پذیرش"
-          >
-            21. Verification and Acceptance
-          </h2>
-          <pre dir="ltr"><code class="language-cisco">show running-config
-show users
-show ip ssh
-show login
-show access-lists
-show spanning-tree
-show spanning-tree inconsistentports
-show port-security
-show port-security interface &lt;INTERFACE&gt;
-show ip dhcp snooping
-show ip dhcp snooping binding
-show ip arp inspection
-show ip arp inspection interfaces
-show logging
-show clock
-show ntp associations
-show snmp
-show ip interface brief
-show ip route</code></pre>
-          <table>
-            <thead>
-              <tr>
-                <th data-en="Group" data-fa="گروه">Group</th>
-                <th data-en="Expected result" data-fa="نتیجه مورد انتظار">
-                  Expected result
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td
-                  data-en="Management / AAA / SSH / ACL"
-                  data-fa="مدیریت / AAA / SSH / ACL"
-                >
-                  Management / AAA / SSH / ACL
-                </td>
-                <td
-                  data-en="Fresh approved SSH login succeeds; denied source/Telnet fails; privilege and counters match"
-                  data-fa="SSH جدید مجاز موفق، مبدأ غیرمجاز و Telnet ناموفق؛ Privilege و Counter صحیح"
-                >
-                  Fresh approved SSH login succeeds; denied source/Telnet fails;
-                  privilege and counters match
-                </td>
-              </tr>
-              <tr>
-                <td data-en="STP / Port Security" data-fa="STP / Port Security">
-                  STP / Port Security
-                </td>
-                <td
-                  data-en="Planned root, no unexpected inconsistent/err-disabled ports, correct learned MACs"
-                  data-fa="Root طراحی‌شده، نبود Inconsistent/err-disabled غیرمنتظره و MAC درست"
-                >
-                  Planned root, no unexpected inconsistent/err-disabled ports,
-                  correct learned MACs
-                </td>
-              </tr>
-              <tr>
-                <td data-en="DHCP / DAI / IPSG" data-fa="DHCP / DAI / IPSG">
-                  DHCP / DAI / IPSG
-                </td>
-                <td
-                  data-en="DHCP renew succeeds, bindings match inventory, only selected ingress trusted, static hosts work"
-                  data-fa="Renew موفق، Binding مطابق Inventory، Trust محدود ورودی و Static Host سالم"
-                >
-                  DHCP renew succeeds, bindings match inventory, only selected
-                  ingress trusted, static hosts work
-                </td>
-              </tr>
-              <tr>
-                <td data-en="Telemetry" data-fa="Telemetry">Telemetry</td>
-                <td
-                  data-en="Collector receives chosen severities; NTP selected peer; authorized authPriv polling succeeds"
-                  data-fa="Collector سطح انتخاب‌شده را دریافت کند؛ Peer NTP منتخب؛ Poll مجاز authPriv موفق"
-                >
-                  Collector receives chosen severities; NTP selected peer;
-                  authorized authPriv polling succeeds
-                </td>
-              </tr>
-              <tr>
-                <td data-en="SVI / Routing" data-fa="SVI / Routing">
-                  SVI / Routing
-                </td>
-                <td
-                  data-en="Management up/up; L3 connected/default routes and service exceptions valid; L2 management gateway reachable"
-                  data-fa="مدیریت up/up؛ Route متصل/Default و استثنای سرویس در L3 صحیح؛ Gateway مدیریتی L2 قابل دسترسی"
-                >
-                  Management up/up; L3 connected/default routes and service
-                  exceptions valid; L2 management gateway reachable
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <p
-            data-en="Command output alone is insufficient: test permitted and denied traffic, DHCP renewal, phone reboot, static printer access, NMS polling, failover and reload binding recovery. Use show ip verify source and show storm-control where supported. Save with copy running-config startup-config only after acceptance and capture a post-change backup. Retain an operational rollback procedure."
-            data-fa="خروجی Show کافی نیست؛ ترافیک مجاز و غیرمجاز، DHCP Renew، Reboot تلفن، Printer Static، Poll NMS، Failover و بازیابی Binding پس از Reload تست شود. در صورت پشتیبانی show ip verify source و show storm-control استفاده کنید. فقط پس از پذیرش copy running-config startup-config و Backup بعد از تغییر انجام شود. Rollback عملیاتی حفظ شود."
-          >
-            Command output alone is insufficient: test permitted and denied
-            traffic, DHCP renewal, phone reboot, static printer access, NMS
-            polling, failover and reload binding recovery. Use show ip verify
-            source and show storm-control where supported. Save with copy
-            running-config startup-config only after acceptance and capture a
-            post-change backup. Retain an operational rollback procedure.
-          </p>
-        </section>
         <section id="final-configs">
           <h2
-            data-en="22. Final Independent Configurations"
-            data-fa="۲۲. پیکربندی‌های نهایی مستقل"
+            data-en="21. Final Independent Configurations"
+            data-fa="۲۱. پیکربندی‌های نهایی مستقل"
           >
-            22. Final Independent Configurations
+            21. Final Independent Configurations
           </h2>
           <p
             data-en="Each file includes its own management baseline; no earlier block must be pasted to complete it. Replace every placeholder. The L2 role has an upstream trunk; the L3 role has a routed uplink to the upstream boundary and a downstream trunk to inspected access switches. ACCESS-PORTS means reviewed DHCP endpoint ports only. Static devices, AP trunks and infrastructure ports require their own profiles. USER-VLANS must include all intended DHCP user/voice VLANs, and each VLAN must be created; VLAN10 is the shown data example."
@@ -2747,6 +2636,117 @@ end
             >Download the L3 switch template</a
           >
         </section>
+        <section id="verification">
+          <h2
+            data-en="22. Verification and Acceptance"
+            data-fa="۲۲. اعتبارسنجی و پذیرش"
+          >
+            22. Verification and Acceptance
+          </h2>
+          <pre dir="ltr"><code class="language-cisco">show running-config
+show users
+show ip ssh
+show login
+show access-lists
+show spanning-tree
+show spanning-tree inconsistentports
+show port-security
+show port-security interface &lt;INTERFACE&gt;
+show ip dhcp snooping
+show ip dhcp snooping binding
+show ip arp inspection
+show ip arp inspection interfaces
+show logging
+show clock
+show ntp associations
+show snmp
+show ip interface brief
+show ip route</code></pre>
+          <table>
+            <thead>
+              <tr>
+                <th data-en="Group" data-fa="گروه">Group</th>
+                <th data-en="Expected result" data-fa="نتیجه مورد انتظار">
+                  Expected result
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td
+                  data-en="Management / AAA / SSH / ACL"
+                  data-fa="مدیریت / AAA / SSH / ACL"
+                >
+                  Management / AAA / SSH / ACL
+                </td>
+                <td
+                  data-en="Fresh approved SSH login succeeds; denied source/Telnet fails; privilege and counters match"
+                  data-fa="SSH جدید مجاز موفق، مبدأ غیرمجاز و Telnet ناموفق؛ Privilege و Counter صحیح"
+                >
+                  Fresh approved SSH login succeeds; denied source/Telnet fails;
+                  privilege and counters match
+                </td>
+              </tr>
+              <tr>
+                <td data-en="STP / Port Security" data-fa="STP / Port Security">
+                  STP / Port Security
+                </td>
+                <td
+                  data-en="Planned root, no unexpected inconsistent/err-disabled ports, correct learned MACs"
+                  data-fa="Root طراحی‌شده، نبود Inconsistent/err-disabled غیرمنتظره و MAC درست"
+                >
+                  Planned root, no unexpected inconsistent/err-disabled ports,
+                  correct learned MACs
+                </td>
+              </tr>
+              <tr>
+                <td data-en="DHCP / DAI / IPSG" data-fa="DHCP / DAI / IPSG">
+                  DHCP / DAI / IPSG
+                </td>
+                <td
+                  data-en="DHCP renew succeeds, bindings match inventory, only selected ingress trusted, static hosts work"
+                  data-fa="Renew موفق، Binding مطابق Inventory، Trust محدود ورودی و Static Host سالم"
+                >
+                  DHCP renew succeeds, bindings match inventory, only selected
+                  ingress trusted, static hosts work
+                </td>
+              </tr>
+              <tr>
+                <td data-en="Telemetry" data-fa="Telemetry">Telemetry</td>
+                <td
+                  data-en="Collector receives chosen severities; NTP selected peer; authorized authPriv polling succeeds"
+                  data-fa="Collector سطح انتخاب‌شده را دریافت کند؛ Peer NTP منتخب؛ Poll مجاز authPriv موفق"
+                >
+                  Collector receives chosen severities; NTP selected peer;
+                  authorized authPriv polling succeeds
+                </td>
+              </tr>
+              <tr>
+                <td data-en="SVI / Routing" data-fa="SVI / Routing">
+                  SVI / Routing
+                </td>
+                <td
+                  data-en="Management up/up; L3 connected/default routes and service exceptions valid; L2 management gateway reachable"
+                  data-fa="مدیریت up/up؛ Route متصل/Default و استثنای سرویس در L3 صحیح؛ Gateway مدیریتی L2 قابل دسترسی"
+                >
+                  Management up/up; L3 connected/default routes and service
+                  exceptions valid; L2 management gateway reachable
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p
+            data-en="Command output alone is insufficient: test permitted and denied traffic, DHCP renewal, phone reboot, static printer access, NMS polling, failover and reload binding recovery. Use show ip verify source and show storm-control where supported. Save with copy running-config startup-config only after acceptance and capture a post-change backup. Retain an operational rollback procedure."
+            data-fa="خروجی Show کافی نیست؛ ترافیک مجاز و غیرمجاز، DHCP Renew، Reboot تلفن، Printer Static، Poll NMS، Failover و بازیابی Binding پس از Reload تست شود. در صورت پشتیبانی show ip verify source و show storm-control استفاده کنید. فقط پس از پذیرش copy running-config startup-config و Backup بعد از تغییر انجام شود. Rollback عملیاتی حفظ شود."
+          >
+            Command output alone is insufficient: test permitted and denied
+            traffic, DHCP renewal, phone reboot, static printer access, NMS
+            polling, failover and reload binding recovery. Use show ip verify
+            source and show storm-control where supported. Save with copy
+            running-config startup-config only after acceptance and capture a
+            post-change backup. Retain an operational rollback procedure.
+          </p>
+        </section>
         <section id="warnings">
           <h2 data-en="23. Important Warnings" data-fa="۲۳. هشدارهای مهم">
             23. Important Warnings
@@ -2967,10 +2967,10 @@ end
             Official Cisco References
           </h2>
           <p
-            data-en="Reviewed on 2026-10-07. References describe particular Catalyst releases or software families; consult the matching guide, release notes and security advisories for the deployed PID/image. Examples are editorially reviewed against Cisco documentation; they have not been executed on your switches."
-            data-fa="بررسی منابع: 2026-10-07. منابع مربوط به نسخه یا خانواده نرم‌افزاری مشخص‌اند؛ راهنمای منطبق، Release Note و Security Advisory مربوط به PID/Image واقعی بررسی شود. مثال‌ها با مستندات Cisco بازبینی شده‌اند؛ روی سوئیچ شما اجرا نشده‌اند."
+            data-en="References describe particular Catalyst releases or software families; consult the matching guide, release notes and security advisories for the deployed PID/image. Examples are editorially reviewed against Cisco documentation; they have not been executed on your switches."
+            data-fa="منابع مربوط به نسخه یا خانواده نرم‌افزاری مشخص‌اند؛ راهنمای منطبق، Release Note و Security Advisory مربوط به PID/Image واقعی بررسی شود. مثال‌ها با مستندات Cisco بازبینی شده‌اند؛ روی سوئیچ شما اجرا نشده‌اند."
           >
-            Reviewed on 2026-10-07. References describe particular Catalyst
+            References describe particular Catalyst
             releases or software families; consult the matching guide, release
             notes and security advisories for the deployed PID/image. Examples
             are editorially reviewed against Cisco documentation; they have not

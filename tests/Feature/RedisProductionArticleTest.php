@@ -55,7 +55,7 @@ class RedisProductionArticleTest extends TestCase
                 $this->assertSame([1920, 1080], array_slice(getimagesize($path), 0, 2));
                 $this->assertSame(1, $xpath->query('//article//img[contains(@src,"'.$image.'") and string-length(@alt)>20]')->length);
             }
-            $this->assertSame([1000, 1000], array_slice(getimagesize(public_path('assets/img/articles/banners/redis-production-banner.png')), 0, 2));
+            $this->assertSame(array_slice(getimagesize(resource_path('assets/img/articles/banners/redis-production-banner.png')), 0, 2), array_slice(getimagesize(public_path('assets/img/articles/banners/redis-production-banner.png')), 0, 2));
         }
         $this->assertSame($codes['en'], $codes['fa'], 'Localization must preserve executable runbook code.');
         foreach (['primary-baseline.conf', 'replica-baseline.conf', 'bootstrap-acl.sh', 'tls-overlay.conf', 'cache-memory-overlay.conf', 'sentinel-monitor-template.conf', 'prometheus-scrape.yml'] as $file) {

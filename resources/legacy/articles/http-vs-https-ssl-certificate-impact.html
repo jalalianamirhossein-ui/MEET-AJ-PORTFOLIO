@@ -323,6 +323,15 @@
             >
           </li>
           <li class="article-nav-item">
+            <a href="#enterprise-prerequisites"
+              ><span
+                data-fa="ابزارهای بررسی TLS"
+                data-en="Tools for inspecting TLS"
+                >Tools for inspecting TLS</span
+              ></a
+            >
+          </li>
+          <li class="article-nav-item">
             <a href="#enterprise-architecture"
               ><span
                 data-fa="از DNS تا درخواست HTTP"
@@ -332,11 +341,9 @@
             >
           </li>
           <li class="article-nav-item">
-            <a href="#enterprise-prerequisites"
-              ><span
-                data-fa="ابزارهای بررسی TLS"
-                data-en="Tools for inspecting TLS"
-                >Tools for inspecting TLS</span
+            <a href="#enterprise-security"
+              ><span data-fa="مرز حفاظت TLS" data-en="TLS protection boundaries"
+                >TLS protection boundaries</span
               ></a
             >
           </li>
@@ -364,13 +371,6 @@
                 data-fa="تشخیص خطای گواهی و مرورگر"
                 data-en="Diagnose certificate and browser failures"
                 >Diagnose certificate and browser failures</span
-              ></a
-            >
-          </li>
-          <li class="article-nav-item">
-            <a href="#enterprise-security"
-              ><span data-fa="مرز حفاظت TLS" data-en="TLS protection boundaries"
-                >TLS protection boundaries</span
               ></a
             >
           </li>
@@ -643,39 +643,6 @@
                       familiar term SSL, while current deployments use TLS.
                     </p>
                   </section>
-                  <section id="enterprise-architecture" class="article-section">
-                    <h2
-                      data-fa="از DNS تا درخواست HTTP"
-                      data-en="From DNS to the HTTP request"
-                    >
-                      From DNS to the HTTP request
-                    </h2>
-                    <p
-                      data-fa="کلاینت مقصد را پیدا می‌کند و در TLS Handshake گواهی و نام سرور را بررسی می‌کند. درخواست HTTP پس از این مرحله ارسال می‌شود. اگر TLS روی Proxy تمام می‌شود، امنیت مسیر Proxy تا Backend را جدا طراحی کنید."
-                      data-en="The client locates the destination and verifies its certificate and name during the TLS handshake. HTTP follows. When a proxy terminates TLS, design protection for its backend connection separately."
-                    >
-                      The client locates the destination and verifies its
-                      certificate and name during the TLS handshake. HTTP
-                      follows. When a proxy terminates TLS, design protection
-                      for its backend connection separately.
-                    </p>
-                    <h3
-                      id="enterprise-scenario"
-                      data-fa="مثال: انتقال یک API به HTTPS"
-                      data-en="Example: move an API to HTTPS"
-                    >
-                      Example: move an API to HTTPS
-                    </h3>
-                    <p
-                      data-fa="برای انتقال API داخلی، DNS و Certificate مناسب را آماده کنید و اعتماد کلاینت‌های واقعی را روی سرور آزمایشی بسنجید. پس از موفقیت TLS و درخواست برنامه، Redirect و سپس HSTS را مرحله‌ای فعال کنید."
-                      data-en="Prepare DNS and a matching certificate for the internal API, then test real clients on staging. Once TLS and application requests pass, introduce redirects and HSTS in stages."
-                    >
-                      Prepare DNS and a matching certificate for the internal
-                      API, then test real clients on staging. Once TLS and
-                      application requests pass, introduce redirects and HSTS in
-                      stages.
-                    </p>
-                  </section>
                   <section
                     id="enterprise-prerequisites"
                     class="article-section"
@@ -726,6 +693,58 @@
                       older clients’ supported versions and algorithms. Browsers
                       acquire HSTS through trusted HTTPS. A redirect alone does
                       not protect the initial HTTP request.
+                    </p>
+                  </section>
+                  <section id="enterprise-architecture" class="article-section">
+                    <h2
+                      data-fa="از DNS تا درخواست HTTP"
+                      data-en="From DNS to the HTTP request"
+                    >
+                      From DNS to the HTTP request
+                    </h2>
+                    <p
+                      data-fa="کلاینت مقصد را پیدا می‌کند و در TLS Handshake گواهی و نام سرور را بررسی می‌کند. درخواست HTTP پس از این مرحله ارسال می‌شود. اگر TLS روی Proxy تمام می‌شود، امنیت مسیر Proxy تا Backend را جدا طراحی کنید."
+                      data-en="The client locates the destination and verifies its certificate and name during the TLS handshake. HTTP follows. When a proxy terminates TLS, design protection for its backend connection separately."
+                    >
+                      The client locates the destination and verifies its
+                      certificate and name during the TLS handshake. HTTP
+                      follows. When a proxy terminates TLS, design protection
+                      for its backend connection separately.
+                    </p>
+                    <h3
+                      id="enterprise-scenario"
+                      data-fa="مثال: انتقال یک API به HTTPS"
+                      data-en="Example: move an API to HTTPS"
+                    >
+                      Example: move an API to HTTPS
+                    </h3>
+                    <p
+                      data-fa="برای انتقال API داخلی، DNS و Certificate مناسب را آماده کنید و اعتماد کلاینت‌های واقعی را روی سرور آزمایشی بسنجید. پس از موفقیت TLS و درخواست برنامه، Redirect و سپس HSTS را مرحله‌ای فعال کنید."
+                      data-en="Prepare DNS and a matching certificate for the internal API, then test real clients on staging. Once TLS and application requests pass, introduce redirects and HSTS in stages."
+                    >
+                      Prepare DNS and a matching certificate for the internal
+                      API, then test real clients on staging. Once TLS and
+                      application requests pass, introduce redirects and HSTS in
+                      stages.
+                    </p>
+                  </section>
+                  <section id="enterprise-security" class="article-section">
+                    <h2
+                      data-fa="مرز حفاظت TLS"
+                      data-en="TLS protection boundaries"
+                    >
+                      TLS protection boundaries
+                    </h2>
+                    <p
+                      data-fa="نام SSL رایج است، اما SSLv2 و SSLv3 برای سرویس جدید مناسب نیستند. HTTPS منطق آسیب‌پذیر برنامه یا کلاینت آلوده را اصلاح نمی‌کند. Key را محدود کنید و برای Redirect از نام ثابت معتبر استفاده کنید. فعال‌سازی 0-RTT برای درخواست تغییردهنده داده به بررسی Replay نیاز دارد."
+                      data-en="SSL is common terminology, but SSLv2 and SSLv3 are unsuitable for new services. HTTPS does not repair vulnerable application logic or compromised clients. Restrict keys, use a fixed trusted redirect hostname and assess replay risks before 0-RTT for state-changing requests."
+                    >
+                      SSL is common terminology, but SSLv2 and SSLv3 are
+                      unsuitable for new services. HTTPS does not repair
+                      vulnerable application logic or compromised clients.
+                      Restrict keys, use a fixed trusted redirect hostname and
+                      assess replay risks before 0-RTT for state-changing
+                      requests.
                     </p>
                   </section>
                   <section id="enterprise-installation" class="article-section">
@@ -831,25 +850,6 @@ curl --fail --head https://app.example.com</code></pre>
                       failures require mixed-content, HSTS and browser CA
                       checks. OpenSSL without verification-error stopping
                       options might continue with warnings.
-                    </p>
-                  </section>
-                  <section id="enterprise-security" class="article-section">
-                    <h2
-                      data-fa="مرز حفاظت TLS"
-                      data-en="TLS protection boundaries"
-                    >
-                      TLS protection boundaries
-                    </h2>
-                    <p
-                      data-fa="نام SSL رایج است، اما SSLv2 و SSLv3 برای سرویس جدید مناسب نیستند. HTTPS منطق آسیب‌پذیر برنامه یا کلاینت آلوده را اصلاح نمی‌کند. Key را محدود کنید و برای Redirect از نام ثابت معتبر استفاده کنید. فعال‌سازی 0-RTT برای درخواست تغییردهنده داده به بررسی Replay نیاز دارد."
-                      data-en="SSL is common terminology, but SSLv2 and SSLv3 are unsuitable for new services. HTTPS does not repair vulnerable application logic or compromised clients. Restrict keys, use a fixed trusted redirect hostname and assess replay risks before 0-RTT for state-changing requests."
-                    >
-                      SSL is common terminology, but SSLv2 and SSLv3 are
-                      unsuitable for new services. HTTPS does not repair
-                      vulnerable application logic or compromised clients.
-                      Restrict keys, use a fixed trusted redirect hostname and
-                      assess replay risks before 0-RTT for state-changing
-                      requests.
                     </p>
                   </section>
                   <section id="enterprise-recovery" class="article-section">

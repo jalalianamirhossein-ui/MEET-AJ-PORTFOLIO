@@ -18,10 +18,16 @@ $body = preg_replace('/^<h1>.*?<\/h1>\s*/s', '', $body, 1);
 $body = str_replace('src="/assets/', 'loading="lazy" src="/assets/', $body);
 $body = preg_replace('/<img loading="lazy" src="([^"]+)" alt="([^"]*)">/', '<img loading="lazy" src="$1" alt="$2" decoding="async">', $body);
 $sectionNumber = 0;
-$body = preg_replace_callback('/<h2>(.*?)<\/h2>/s', static function (array $match) use (&$sectionNumber): string {
+$policy = json_decode(file_get_contents(dirname(__DIR__, 2).'/article-structure.json'), true, flags: JSON_THROW_ON_ERROR);
+$headingIds = $policy['articles']['truenas-zfs-enterprise']['heading_ids'];
+$body = preg_replace_callback('/<h2>(.*?)<\/h2>/s', static function (array $match) use (&$sectionNumber, $headingIds): string {
     $sectionNumber++;
     $prefix = $sectionNumber > 1 ? '</section>' : '';
-    return $prefix.'<section id="section-'.$sectionNumber.'"><h2>'.$match[1].'</h2>';
+    // Keep historical anchors stable even when Markdown sections change position.
+    $label = trim(strip_tags($match[1]));
+    $label = preg_replace('/^[0-9۰-۹٠-٩]+[.)]\s+/u', '', $label);
+    $id = $headingIds[$label] ?? throw new RuntimeException('Register the stable TrueNAS heading ID: '.$label);
+    return $prefix.'<section id="'.$id.'"><h2>'.$match[1].'</h2>';
 }, $body);
 $body .= $sectionNumber > 0 ? '</section>' : '';
 
@@ -56,5 +62,10 @@ $html = '<!doctype html><html lang="fa" dir="rtl" data-article-language="fa"><he
     .'</div></div></section><article class="article-body" lang="fa">'.$body.'</article></body></html>';
 
 $destination = dirname(__DIR__, 3).'/legacy/articles/truenas-zfs-enterprise.html';
+require_once dirname(__DIR__, 4).'/app/Services/ArticleStructure.php';
+$html = (new \App\Services\ArticleStructure)->repair($html, 'truenas-zfs-enterprise');
 file_put_contents($destination, $html);
+// Retain the established technical/card/FAQ repairs before applying translations.
+require dirname(__DIR__, 4).'/scripts/repair-truenas-article.php';
+file_put_contents($destination, (new \App\Services\ArticleStructure)->repair(file_get_contents($destination), 'truenas-zfs-enterprise'));
 echo $destination."\n";
