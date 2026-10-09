@@ -1,0 +1,13 @@
+[Unit]
+Description=Consistent Grafana metadata and configuration backup
+After=network-online.target grafana-server.service
+Wants=network-online.target
+[Service]
+Type=oneshot
+User=root
+EnvironmentFile=/etc/grafana/backup.env
+ExecStart=/usr/local/sbin/grafana-backup.sh
+UMask=0077
+TimeoutStartSec=20min
+PrivateTmp=true
+ProtectHome=true

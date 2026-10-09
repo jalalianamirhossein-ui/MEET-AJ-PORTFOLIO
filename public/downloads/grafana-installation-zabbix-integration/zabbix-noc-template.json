@@ -1,0 +1,177 @@
+{
+  "zabbix_export": {
+    "version": "7.0",
+    "template_groups": [
+      {
+        "uuid": "810d4f74172c5cfbb4f5ef9772885cce",
+        "name": "Templates/Custom"
+      }
+    ],
+    "templates": [
+      {
+        "uuid": "cdd499eb9a0750a8a15001fd456f3082",
+        "template": "Enterprise NOC summary",
+        "name": "Enterprise NOC summary",
+        "groups": [
+          {
+            "name": "Templates/Custom"
+          }
+        ],
+        "items": [
+          {
+            "uuid": "b8aeb9ddf7f4572bb755e54536601492",
+            "name": "NOC: Total monitored hosts",
+            "type": "TRAP",
+            "key": "noc.hosts.total",
+            "delay": "0",
+            "value_type": "UNSIGNED",
+            "history": "7d",
+            "trends": "365d",
+            "allowed_hosts": "{$NOC.SENDER.IP}",
+            "tags": [
+              {
+                "tag": "component",
+                "value": "noc"
+              }
+            ]
+          },
+          {
+            "uuid": "389b78bea40e5f28b9709db035895878",
+            "name": "NOC: Available hosts",
+            "type": "TRAP",
+            "key": "noc.hosts.available",
+            "delay": "0",
+            "value_type": "UNSIGNED",
+            "history": "7d",
+            "trends": "365d",
+            "allowed_hosts": "{$NOC.SENDER.IP}",
+            "tags": [
+              {
+                "tag": "component",
+                "value": "noc"
+              }
+            ]
+          },
+          {
+            "uuid": "f207de5b0c7f5a28877f268d03fc11cc",
+            "name": "NOC: Unavailable hosts",
+            "type": "TRAP",
+            "key": "noc.hosts.unavailable",
+            "delay": "0",
+            "value_type": "UNSIGNED",
+            "history": "7d",
+            "trends": "365d",
+            "allowed_hosts": "{$NOC.SENDER.IP}",
+            "tags": [
+              {
+                "tag": "component",
+                "value": "noc"
+              }
+            ]
+          },
+          {
+            "uuid": "dd3c5f2010d95c489d50b3ffdc64f08f",
+            "name": "NOC: Unknown availability",
+            "type": "TRAP",
+            "key": "noc.hosts.unknown",
+            "delay": "0",
+            "value_type": "UNSIGNED",
+            "history": "7d",
+            "trends": "365d",
+            "allowed_hosts": "{$NOC.SENDER.IP}",
+            "tags": [
+              {
+                "tag": "component",
+                "value": "noc"
+              }
+            ]
+          },
+          {
+            "uuid": "c84ba128aa805004968afc5ba01ed375",
+            "name": "NOC: Active problems",
+            "type": "TRAP",
+            "key": "noc.problems.active",
+            "delay": "0",
+            "value_type": "UNSIGNED",
+            "history": "7d",
+            "trends": "365d",
+            "allowed_hosts": "{$NOC.SENDER.IP}",
+            "tags": [
+              {
+                "tag": "component",
+                "value": "noc"
+              }
+            ]
+          },
+          {
+            "uuid": "39846ce2448d56e68ea734ba91d82b60",
+            "name": "NOC: Disaster problems",
+            "type": "TRAP",
+            "key": "noc.problems.disaster",
+            "delay": "0",
+            "value_type": "UNSIGNED",
+            "history": "7d",
+            "trends": "365d",
+            "allowed_hosts": "{$NOC.SENDER.IP}",
+            "tags": [
+              {
+                "tag": "component",
+                "value": "noc"
+              }
+            ]
+          },
+          {
+            "uuid": "50cbbe71158a5f0e946c90f9eaf5db2e",
+            "name": "NOC: High problems",
+            "type": "TRAP",
+            "key": "noc.problems.high",
+            "delay": "0",
+            "value_type": "UNSIGNED",
+            "history": "7d",
+            "trends": "365d",
+            "allowed_hosts": "{$NOC.SENDER.IP}",
+            "tags": [
+              {
+                "tag": "component",
+                "value": "noc"
+              }
+            ]
+          },
+          {
+            "uuid": "1aacd1312ac85ff1809d9194576f144d",
+            "name": "NOC: Last successful collection",
+            "type": "TRAP",
+            "key": "noc.last.success",
+            "delay": "0",
+            "value_type": "UNSIGNED",
+            "history": "7d",
+            "trends": "365d",
+            "allowed_hosts": "{$NOC.SENDER.IP}",
+            "tags": [
+              {
+                "tag": "component",
+                "value": "noc"
+              }
+            ],
+            "units": "unixtime",
+            "triggers": [
+              {
+                "uuid": "a38699f3110152aa93dbd257240af61d",
+                "expression": "nodata(/Enterprise NOC summary/noc.last.success,5m)=1",
+                "name": "NOC collector has not reported for 5 minutes",
+                "priority": "HIGH"
+              }
+            ]
+          }
+        ],
+        "macros": [
+          {
+            "macro": "{$NOC.SENDER.IP}",
+            "value": "192.0.2.20",
+            "description": "Source IP of authorized collector"
+          }
+        ]
+      }
+    ]
+  }
+}

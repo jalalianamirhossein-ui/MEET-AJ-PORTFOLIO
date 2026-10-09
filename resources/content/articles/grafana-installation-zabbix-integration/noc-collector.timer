@@ -1,0 +1,8 @@
+[Unit]
+Description=Refresh NOC summary every minute
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=1min
+Unit=noc-collector.service
+[Install]
+WantedBy=timers.target

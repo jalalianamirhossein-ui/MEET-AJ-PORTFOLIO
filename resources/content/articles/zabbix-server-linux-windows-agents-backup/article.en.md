@@ -1259,3 +1259,5 @@ References are linked in each chapter. Templates contain no real credentials and
 [Related: Linux security audit](https://meetaj.ir/articles/linux-security-auditor-bash)
 
 [Related: Nginx on Ubuntu](https://meetaj.ir/articles/nginx-installation-configuration-ubuntu)
+
+[Related: Grafana dashboards integrated with Zabbix](https://meetaj.ir/articles/grafana-installation-zabbix-integration)

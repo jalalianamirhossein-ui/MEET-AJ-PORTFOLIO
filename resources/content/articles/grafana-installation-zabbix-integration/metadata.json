@@ -1,0 +1,186 @@
+{
+  "slug": "grafana-installation-zabbix-integration",
+  "canonical_route": "/articles/grafana-installation-zabbix-integration",
+  "canonical_url": "https://meetaj.ir/articles/grafana-installation-zabbix-integration",
+  "reviewed_at": "2026-10-09",
+  "category": "linux",
+  "tags": [
+    "Grafana",
+    "Zabbix",
+    "Monitoring",
+    "Linux",
+    "DevOps",
+    "Infrastructure",
+    "Observability"
+  ],
+  "grafana_oss_version": "13.2.3",
+  "zabbix_plugin_version": "6.9.1",
+  "plugin_grafana_minimum": "11.6.0",
+  "zabbix_branch": "7.0 LTS",
+  "os": "Ubuntu Server 24.04 LTS",
+  "localizations": {
+    "en": {
+      "title": "Install Grafana on Ubuntu and Integrate with Zabbix – Complete Enterprise Monitoring Guide",
+      "meta_title": "Install Grafana on Ubuntu and Integrate with Zabbix – Complete Enterprise Monitoring Guide",
+      "description": "Install Grafana OSS on Ubuntu 24.04, connect Zabbix 7.0 via API, build Linux, Windows and NOC dashboards, secure HTTPS and validate backup and recovery.",
+      "keywords": [
+        "Grafana",
+        "Zabbix",
+        "Monitoring",
+        "Linux",
+        "DevOps",
+        "Infrastructure",
+        "Observability",
+        "Ubuntu 24.04",
+        "Grafana Zabbix plugin",
+        "NOC",
+        "Grafana backup"
+      ],
+      "faq": [
+        [
+          "Does Grafana replace Zabbix agents or Server?",
+          "No. Zabbix collects, stores and evaluates monitoring data; Grafana queries the Zabbix API and visualizes it."
+        ],
+        [
+          "Is Direct DB required?",
+          "No. The official plugin connects through the API. Direct DB is optional for numeric history/trend performance and needs a separately secured read-only role."
+        ],
+        [
+          "Which stable versions were verified?",
+          "Grafana OSS 13.2.3 and Zabbix app 6.9.1 on 9 October 2026; the plugin requires Grafana 11.6.0 or later and documents Zabbix 7.0 authentication."
+        ],
+        [
+          "What is the correct Zabbix API URL?",
+          "Verify the frontend mount: /api_jsonrpc.php at the root or /zabbix/api_jsonrpc.php when that is the installed web path."
+        ],
+        [
+          "Can I use Application variables on Zabbix 7.0?",
+          "Use Item tag variables. Zabbix removed Applications in 5.4, and the current plugin exposes a structured item-tag query."
+        ],
+        [
+          "Does the NOC JSON invent total-host counts?",
+          "No. Included API collector code and a trapper template implement scoped host/problem counts and freshness; install them before using the overview panels."
+        ],
+        [
+          "Can the Problems query create Grafana alerts?",
+          "No. Plugin alerting supports numeric Metrics and Item ID queries; use Zabbix triggers/actions for Zabbix problem notifications."
+        ],
+        [
+          "Why must the encryption secret be backed up?",
+          "Stored data-source credentials need the original encryption material for recovery. Dashboard JSON alone cannot restore those credentials."
+        ]
+      ],
+      "image_alt": "Grafana and Zabbix enterprise monitoring with Linux and Windows servers",
+      "image_title": "Install Grafana on Ubuntu and Integrate with Zabbix – Complete Enterprise Monitoring Guide",
+      "image_caption": "Enterprise dashboards, HTTPS security, backup and recovery"
+    },
+    "fa": {
+      "title": "آموزش جامع نصب گرافانا روی لینوکس و اتصال به زبیکس همراه با ساخت داشبوردهای مانیتورینگ سازمانی",
+      "meta_title": "آموزش جامع نصب گرافانا روی لینوکس و اتصال به زبیکس همراه با ساخت داشبوردهای مانیتورینگ سازمانی",
+      "description": "نصب Grafana OSS روی Ubuntu 24.04، اتصال API به Zabbix 7.0، ساخت داشبورد لینوکس، ویندوز و NOC، امنیت HTTPS و اعتبارسنجی بکاپ و بازیابی.",
+      "keywords": [
+        "Grafana",
+        "Zabbix",
+        "Monitoring",
+        "Linux",
+        "DevOps",
+        "Infrastructure",
+        "Observability",
+        "Ubuntu 24.04",
+        "Grafana Zabbix plugin",
+        "NOC",
+        "Grafana backup"
+      ],
+      "faq": [
+        [
+          "آیا گرافانا جایگزین Agent یا Server زبیکس است؟",
+          "خیر؛ زبیکس داده را جمع‌آوری، ذخیره و ارزیابی می‌کند و گرافانا API را Query و داده را نمایش می‌دهد."
+        ],
+        [
+          "آیا Direct DB الزامی است؟",
+          "خیر؛ افزونه رسمی با API متصل می‌شود. Direct DB برای عملکرد History/Trend عددی اختیاری و نیازمند Role محدود مستقل است."
+        ],
+        [
+          "کدام نسخه پایدار بررسی شد؟",
+          "Grafana OSS 13.2.3 و افزونه Zabbix 6.9.1 در ۹ اکتبر ۲۰۲۶؛ افزونه حداقل 11.6.0 نیاز دارد و احراز هویت Zabbix 7.0 را مستند می‌کند."
+        ],
+        [
+          "URL صحیح API زبیکس چیست؟",
+          "Mount رابط وب را بررسی کنید؛ /api_jsonrpc.php در Root یا /zabbix/api_jsonrpc.php وقتی همان مسیر نصب است."
+        ],
+        [
+          "آیا Variable نوع Application در Zabbix 7.0 کاربرد دارد؟",
+          "از Item tag استفاده کنید؛ زبیکس از 5.4 Applications را حذف کرده و افزونه جاری Query ساختاریافته Item tag دارد."
+        ],
+        [
+          "آیا JSON مربوط به NOC تعداد میزبان را فرض می‌کند؟",
+          "خیر؛ کد Collector API و Template Trapper همراه، تعداد Host/Problem محدود و تازگی را پیاده می‌کنند؛ پیش از Overview نصب شوند."
+        ],
+        [
+          "آیا Query نوع Problems هشدار گرافانا می‌سازد؟",
+          "خیر؛ هشدار افزونه Metrics و Item ID عددی را پشتیبانی می‌کند؛ اعلان Problem زبیکس با Trigger/Action زبیکس انجام شود."
+        ],
+        [
+          "چرا Secret رمزگذاری باید بکاپ شود؟",
+          "Credential ذخیره‌شده برای بازیابی به ماده رمزگذاری اصلی نیاز دارد؛ JSON داشبورد به‌تنهایی Credential را بازنمی‌گرداند."
+        ]
+      ],
+      "image_alt": "مانیتورینگ سازمانی گرافانا و زبیکس با سرور Linux و Windows",
+      "image_title": "آموزش جامع نصب گرافانا روی لینوکس و اتصال به زبیکس همراه با ساخت داشبوردهای مانیتورینگ سازمانی",
+      "image_caption": "داشبورد سازمانی، امنیت HTTPS، بکاپ و بازیابی"
+    }
+  },
+  "runtime_integration_tested": false,
+  "dashboard_provenance": "Authored importable JSON; query schema checked against official v6.9.1 plugin source",
+  "version_sources": [
+    "https://grafana.com/grafana/download?edition=oss",
+    "https://grafana.com/grafana/plugins/alexanderzobnin-zabbix-app/"
+  ],
+  "sections": [
+    "introduction",
+    "prerequisites",
+    "installation",
+    "security",
+    "zabbix-plugin",
+    "zabbix-connection",
+    "linux-dashboard",
+    "windows-dashboard",
+    "noc-dashboard",
+    "dashboard-variables",
+    "alerts-events",
+    "performance",
+    "backup-recovery",
+    "troubleshooting",
+    "production-checklist",
+    "conclusion",
+    "faq",
+    "official-references"
+  ],
+  "downloads": [
+    "nginx-bootstrap.conf",
+    "nginx-grafana.conf",
+    "grafana.ini",
+    "zabbix-datasource.yaml",
+    "zabbix-app.yaml",
+    "grafana.env.example",
+    "grafana-environment.conf",
+    "dashboard-provider.yaml",
+    "linux-dashboard.json",
+    "windows-dashboard.json",
+    "enterprise-noc-dashboard.json",
+    "zabbix-api-probe.py",
+    "noc-collector.py",
+    "noc-collector.env.example",
+    "noc-collector.service",
+    "noc-collector.timer",
+    "zabbix-noc-template.json",
+    "postgres-readonly.sql",
+    "grafana-backup.sh",
+    "grafana-backup.env.example",
+    "grafana-backup.service",
+    "grafana-backup.timer",
+    "restore-runbook.md",
+    "security-checklist.md",
+    "README.md"
+  ]
+}

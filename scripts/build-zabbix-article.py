@@ -618,6 +618,7 @@ p('References checked on 9 October 2026 are linked in each chapter. Templates co
 for name,en,fa in DOWNLOADS: link(f'/downloads/{SLUG}/{name}','Download: '+en,'دانلود: '+fa)
 link(f'/downloads/{SLUG}/zabbix-configuration-package.zip','Complete configuration and runbook ZIP','ZIP کامل Configuration و Runbook')
 for slug,en,fa in [
+ ('grafana-installation-zabbix-integration','Grafana dashboards integrated with Zabbix','داشبورد گرافانا متصل به زبیکس'),
  ('oracle-database-26ai-installation-oracle-linux','Oracle enterprise backup and recovery','Backup/Recovery سازمانی Oracle'),
  ('apache-tomcat-linux-installation-security-hardening','Tomcat service security','امنیت سرویس Tomcat'),
  ('mongodb-installation-configuration-production-deployment','MongoDB production deployment','استقرار Production MongoDB'),

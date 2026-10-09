@@ -1,0 +1,15 @@
+[Unit]
+Description=Zabbix API NOC summary collector
+After=network-online.target
+Wants=network-online.target
+[Service]
+Type=oneshot
+User=noc-collector
+Group=noc-collector
+EnvironmentFile=/etc/grafana/noc.env
+ExecStart=/usr/bin/python3 /usr/local/lib/grafana-noc/noc-collector.py
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+TimeoutStartSec=3min

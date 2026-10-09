@@ -4331,6 +4331,245 @@
         }
       ],
       "bilingual_blocks": []
+    },
+    "grafana-installation-zabbix-integration": {
+      "kind": "practical",
+      "procedures": [
+        {
+          "section": "prerequisites",
+          "artifacts": [
+            {
+              "sha256": "4dcfd466490e2376655b6aff79667e5fb7d54a197820704a80f2e57b5733bd08",
+              "description": "grafana.example.com  192.0.2.20"
+            },
+            {
+              "sha256": "7315429bb70f31af2d335b50a44be80c5b4a1e32b75cc317aa600e1ece93966f",
+              "description": "hostnamectl"
+            }
+          ]
+        },
+        {
+          "section": "installation",
+          "artifacts": [
+            {
+              "sha256": "fb2c23111cca75f3ca97ec5364c82d10f791a5352796c3e5266361a783cc8f2c",
+              "description": "sudo apt-get update"
+            },
+            {
+              "sha256": "a2522e1b790ea5515aaee8abf5ba521b96889b651c8ad34755522f3b1fcbf646",
+              "description": "sudo cp -a /etc/grafana/grafana.ini /etc/grafana/grafana.ini.before-enterprise"
+            },
+            {
+              "sha256": "e4bc853c26f5f6d9c505a3f502e7fa3c5ea0d178bacefc5a3876b556ee9f1c18",
+              "description": "[paths]"
+            }
+          ]
+        },
+        {
+          "section": "security",
+          "artifacts": [
+            {
+              "sha256": "49175a159eaff01af4fc1ac9481fd16dc18cd976e461582ac16c6caa3bf4a89b",
+              "description": "sudo ufw allow from 192.0.2.0/24 to any port 22 proto tcp"
+            },
+            {
+              "sha256": "f060328d7ab0746912ffdc0cf2458a550b5a085c027ae97ccfa14ad783fd77ed",
+              "description": "server {"
+            },
+            {
+              "sha256": "42a002b7658a7639a804f01b1d15d1ef1332c3b1fb761b7cc91847e51ef73b8f",
+              "description": "sudo apt-get install -y certbot"
+            },
+            {
+              "sha256": "58dceaa9a72645b4b8a3230470e8bdbaf53d001e971f4f94b847df692ff6bca6",
+              "description": "# Include inside nginx's http context (Ubuntu sites-enabled is in http)."
+            },
+            {
+              "sha256": "0a61effaccae1b8ee943727e86609f3279ce92d5a4b3a6b7cc41ab5ad5269177",
+              "description": "sudo install -d -m 0755 /etc/letsencrypt/renewal-hooks/deploy"
+            }
+          ]
+        },
+        {
+          "section": "zabbix-plugin",
+          "artifacts": [
+            {
+              "sha256": "ea8a0a80927d4a9207ebc8c0491156799d5b54a0af2d4a914545303c6a9831d0",
+              "description": "sudo grafana cli --pluginsDir /var/lib/grafana/plugins plugins install alexanderzobnin-zabbix-app"
+            },
+            {
+              "sha256": "a0817ebb2ffc1da7e2d8e73c4544c940934274bc1f80dc17a2d959b59893aa81",
+              "description": "apiVersion: 1"
+            },
+            {
+              "sha256": "d5585938fdc8d25cdd6be990084f7a1ec6d94b6489ca8c50ceab93d82a96639f",
+              "description": "sudo install -d -o root -g grafana -m 0750 /etc/grafana/provisioning/plugins"
+            }
+          ]
+        },
+        {
+          "section": "zabbix-connection",
+          "artifacts": [
+            {
+              "sha256": "4c3eccaf19e4aea7036c727ebf26db5583b201263fd665919fd9d60f8b402b67",
+              "description": "ZABBIX_API_URL=https://zabbix.example.com/api_jsonrpc.php"
+            },
+            {
+              "sha256": "94c51f019110a85eca76616a9d96cf70b21cd990e384f559fad636568e826d12",
+              "description": "sudo test -e /etc/grafana/secrets/zabbix-token || sudo install -o root -g root -m 0600 /dev/null /etc/grafana/secrets/za"
+            },
+            {
+              "sha256": "e9d1bb5fa2ec55ca6da155fa6d874265e182c4cd9835599efeb9bc247e3e1b93",
+              "description": "apiVersion: 1"
+            },
+            {
+              "sha256": "4142c12dac1ca41aeaf541c1b373b6cec1407f9c60da7ec5ddf819d38af76bb8",
+              "description": "sudo install -m 0600 -o root -g root grafana.env.example /etc/grafana/grafana-integration.env"
+            }
+          ]
+        },
+        {
+          "section": "linux-dashboard",
+          "artifacts": [
+            {
+              "sha256": "6e69fd2e07cf03482f10e5e779b27cfb61c8702641dd5ad2c572d61ee2b2555f",
+              "description": "sudo install -d -o root -g grafana -m 0750 /var/lib/grafana/dashboards"
+            },
+            {
+              "sha256": "354938ca3c1a9538660fc7dd2f335ab4a5c6d0b5e32540d11702cff173565b6a",
+              "description": "apiVersion: 1"
+            }
+          ]
+        },
+        {
+          "section": "windows-dashboard",
+          "artifacts": [
+            {
+              "sha256": "f20f7e50fd1371ec2204bb77478fd353d8f4b8411f57add79ed3db6b102c47d2",
+              "description": "eventlog[Application,,\"Error|Critical\",,,,skip]"
+            }
+          ]
+        },
+        {
+          "section": "noc-dashboard",
+          "artifacts": [
+            {
+              "sha256": "42338388ff92d3302f401dec7243daae6b33b378cad190a7d279e53c637a59ec",
+              "description": "sudo apt-get install -y zabbix-sender"
+            }
+          ]
+        },
+        {
+          "section": "dashboard-variables",
+          "artifacts": [
+            {
+              "sha256": "7e5070a4850cf0800776a5b23a9527682340e971a4e5bdbfa801d7301cc020b3",
+              "description": "{\"queryType\":\"group\",\"group\":\"/Linux servers|Windows servers/\"}"
+            }
+          ]
+        },
+        {
+          "section": "alerts-events",
+          "artifacts": [
+            {
+              "sha256": "a554dd635001b7e13dc0460ad62afbf15c5a89c8fdb76e2800f2a29ab12a4347",
+              "description": "[smtp]"
+            }
+          ]
+        },
+        {
+          "section": "performance",
+          "artifacts": [
+            {
+              "sha256": "4982145355194802e726a7a8091ea1edb6efbe6c12dd5f93529811e5b972b537",
+              "description": "-- Execute in the Zabbix PostgreSQL database as an administrator."
+            }
+          ]
+        },
+        {
+          "section": "backup-recovery",
+          "artifacts": [
+            {
+              "sha256": "0b52fa9398e61e4695045461d56c40e3b550c3d09ccee834ec12bcc7a7528c11",
+              "description": "#!/usr/bin/env bash"
+            },
+            {
+              "sha256": "135669778360a24c354749dec625990bc776da13cd88c0cc3a21b71b06ba4f3c",
+              "description": "sudo install -m 0750 -o root -g root grafana-backup.sh /usr/local/sbin/grafana-backup.sh"
+            },
+            {
+              "sha256": "5c2818be18a116235801fd203d67f83ea712b94db3fcf6638f15c6f293312765",
+              "description": "[Unit]"
+            },
+            {
+              "sha256": "4577c8ac833e1120a08c3e4ed109eed5e17e748bf0f2648571e41e5099099344",
+              "description": "[Unit]"
+            },
+            {
+              "sha256": "d753d6bf3b6bed52214af9d19bf989f61615eb11b0025cd5c33aa911dfee9b90",
+              "description": "# On the isolated recovery host; BACKUP_DIR is a trusted verified dated directory."
+            },
+            {
+              "sha256": "838f70f63d25afffc92ea03c05f7e925da08ade37b39bb1bbf49e3eff83831af",
+              "description": "sudo -u postgres createdb -O grafana grafana_recovery"
+            }
+          ]
+        },
+        {
+          "section": "troubleshooting",
+          "artifacts": [
+            {
+              "sha256": "64d21266e5c45138136157a55ea6ad37df2bf93bd7fd87753f724f6668ec16fb",
+              "description": "sudo systemctl status grafana-server --no-pager"
+            },
+            {
+              "sha256": "e50fb246c8c2e116f4ef1187aaa1fae7ccbecd11fdf897125dd6202611dfdc8b",
+              "description": "getent ahosts grafana.example.com"
+            },
+            {
+              "sha256": "7ca3bdc6263d61740d7027363026ba9babb2f12f83661a631b9bfa889698e2e3",
+              "description": "sudo grafana cli --pluginsDir /var/lib/grafana/plugins plugins ls"
+            },
+            {
+              "sha256": "1eff6ed71bf0c744151540a2a0eff695d7dbd7ea8d8b92e1a31e93f970b09b6b",
+              "description": "sudo ZABBIX_API_URL=https://zabbix.example.com/api_jsonrpc.php ZABBIX_TOKEN_FILE=/etc/grafana/secrets/zabbix-token pytho"
+            },
+            {
+              "sha256": "6ebe202401fa7aacff18d32597ca48d1ae4fea38cee808ee9bc891cf63247e19",
+              "description": "curl --fail --silent --show-error -H \"Content-Type: application/json-rpc\" --data '{\"jsonrpc\":\"2.0\",\"method\":\"apiinfo.ver"
+            },
+            {
+              "sha256": "fbe8628e350789f998f0f0b49e0b806c539f712261ab7ebcea419daa2dfb389e",
+              "description": "date -u"
+            },
+            {
+              "sha256": "d6befd395779d0e8122626844d12d52890ff34a26d1f35807d29bb0da874e16e",
+              "description": "sudo ZABBIX_API_URL=https://zabbix.example.com/api_jsonrpc.php ZABBIX_TOKEN_FILE=/etc/grafana/secrets/zabbix-token pytho"
+            },
+            {
+              "sha256": "268339b1f9e98a92117f08c976610bb78342634ad760b12e632f74062c3b4599",
+              "description": "getent ahosts zabbix.example.com"
+            },
+            {
+              "sha256": "a0bc0fd18a806787779e0461c1a8a84e58fe7c7dc4c1607b025db07ebc7f7e47",
+              "description": "openssl s_client -connect zabbix.example.com:443 -servername zabbix.example.com -verify_return_error </dev/null"
+            },
+            {
+              "sha256": "bcc8cb95b508c3a976d2cf2c29de74eb5fae5d343a77d24ef1a8c1ecf2284449",
+              "description": "sudo journalctl -u grafana-server -n 100 --no-pager"
+            },
+            {
+              "sha256": "45443a710c64ebb1438ec5bcc98d253db5d5828d1b967dd7f7fe62f8d0be028b",
+              "description": "grafana --version"
+            },
+            {
+              "sha256": "3c17ea42fda6f231960d8d74c5764c2092181489ffe2e20440cd71524060b271",
+              "description": "sudo journalctl -u grafana-server -n 100 --no-pager"
+            }
+          ]
+        }
+      ],
+      "bilingual_blocks": []
     }
   }
 }

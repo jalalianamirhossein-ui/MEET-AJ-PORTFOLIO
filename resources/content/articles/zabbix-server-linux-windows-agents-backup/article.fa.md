@@ -1259,3 +1259,5 @@ Dump به Snapshot برمی‌گردد؛ PITR نیازمند Base Backup فیز�
 [مرتبط: ممیزی امنیت Linux](https://meetaj.ir/articles/linux-security-auditor-bash)
 
 [مرتبط: Nginx روی Ubuntu](https://meetaj.ir/articles/nginx-installation-configuration-ubuntu)
+
+[مرتبط: داشبورد گرافانا متصل به زبیکس](https://meetaj.ir/articles/grafana-installation-zabbix-integration)

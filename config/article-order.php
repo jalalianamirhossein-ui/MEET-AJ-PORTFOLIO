@@ -9,6 +9,7 @@ return [
         'mikrotik-ping-triggered-policy-routing',
         'linux-security-auditor-bash',
         'zabbix-server-linux-windows-agents-backup',
+        'grafana-installation-zabbix-integration',
         'oracle-database-26ai-installation-oracle-linux',
         'mongodb-installation-configuration-production-deployment',
         'netbox-installation-setup-ubuntu',
