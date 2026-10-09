@@ -1,0 +1,11 @@
+[Unit]
+Description=Archived redo every 15 minutes
+
+[Timer]
+OnCalendar=*-*-* *:00/15:00
+Persistent=true
+AccuracySec=1min
+Unit=oracle-rman@archivelog.service
+
+[Install]
+WantedBy=timers.target

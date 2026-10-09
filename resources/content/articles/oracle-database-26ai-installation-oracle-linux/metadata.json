@@ -1,0 +1,160 @@
+{
+  "slug": "oracle-database-26ai-installation-oracle-linux",
+  "reviewed_at": "2026-10-09",
+  "database_product": "Oracle AI Database 26ai Enterprise Edition",
+  "public_base_version": "23.26.1.0.0",
+  "example_os": "Oracle Linux 9 x86_64",
+  "category": "linux",
+  "tags": [
+    "oracle",
+    "linux"
+  ],
+  "localizations": {
+    "en": {
+      "title": "Install and Secure Oracle Database 26ai on Oracle Linux: Complete Enterprise Guide",
+      "meta_title": "Install and Secure Oracle Database 26ai on Oracle Linux: Complete Enterprise Guide",
+      "description": "Install Oracle Database 26ai Enterprise on Oracle Linux 9 with automatic startup, security hardening, RMAN backups, scheduled jobs and tested recovery planning.",
+      "keywords": [
+        "Oracle Database 26ai",
+        "Oracle Linux 9",
+        "Oracle Enterprise Edition",
+        "Oracle installation",
+        "Oracle Restart",
+        "RMAN backup",
+        "Oracle recovery",
+        "Oracle security",
+        "CDB PDB",
+        "systemd"
+      ],
+      "faq": [
+        [
+          "Is 26ai the same package as Database Free?",
+          "No. This guide installs Enterprise Edition; Free has separate packages, service names and resource limits."
+        ],
+        [
+          "Why does the 26ai download identify 23.26.1?",
+          "26ai is the product release name. Its internal version/RU numbering differs; verify the installed binary and SQL patch level."
+        ],
+        [
+          "Does systemctl active prove that Oracle is ready?",
+          "No. Verify the instance, PDB state, listener service and a remote authenticated query."
+        ],
+        [
+          "Does Oracle Restart provide host failover?",
+          "It monitors and restarts components on a standalone host. Host failover needs a separately designed availability solution."
+        ],
+        [
+          "Can a normal full backup be the level 1 parent?",
+          "No. Use an incremental level 0 baseline for the level 1 recovery chain."
+        ],
+        [
+          "Does RMAN validation replace a restore test?",
+          "No. It checks selected files and backup readability; only an isolated restore proves the recovery workflow and measured RTO."
+        ],
+        [
+          "Is a local backup disk sufficient?",
+          "No. Keep independently protected off-host copies, necessary redo and key/config backups with verified transfer."
+        ],
+        [
+          "Is RMAN disk encryption included in base on-premises EE?",
+          "Oracle Advanced Security is required for this deployment. Verify entitlements before enabling encryption."
+        ]
+      ]
+    },
+    "fa": {
+      "title": "آموزش جامع نصب و راه‌اندازی Oracle Database 26ai روی Oracle Linux همراه با امنیت، بکاپ و بازیابی",
+      "meta_title": "آموزش جامع نصب و راه‌اندازی Oracle Database 26ai روی Oracle Linux همراه با امنیت، بکاپ و بازیابی",
+      "description": "نصب Oracle Database 26ai Enterprise روی Oracle Linux 9، راه‌اندازی خودکار سرویس، امنیت، بکاپ RMAN، زمان‌بندی و سناریوهای بازیابی در محیط سازمانی.",
+      "keywords": [
+        "Oracle Database 26ai",
+        "Oracle Linux 9",
+        "Oracle Enterprise Edition",
+        "Oracle installation",
+        "Oracle Restart",
+        "RMAN backup",
+        "Oracle recovery",
+        "Oracle security",
+        "CDB PDB",
+        "systemd"
+      ],
+      "faq": [
+        [
+          "آیا Package نسخه 26ai همان Database Free است؟",
+          "خیر؛ این راهنما Enterprise Edition را نصب می‌کند. Free دارای Package، نام سرویس و محدودیت مستقل است."
+        ],
+        [
+          "چرا دانلود 26ai شماره 23.26.1 دارد؟",
+          "26ai نام Release محصول است؛ شماره داخلی/RU متفاوت است. نسخه نصب‌شده Binary و SQL Patch را بررسی کنید."
+        ],
+        [
+          "آیا active در systemctl آمادگی Oracle را اثبات می‌کند؟",
+          "خیر؛ Instance، وضعیت PDB، سرویس Listener و Query احراز هویت‌شده Remote را بررسی کنید."
+        ],
+        [
+          "آیا Oracle Restart، Host Failover می‌دهد؟",
+          "Componentها را روی میزبان مستقل پایش و Restart می‌کند. Host Failover به راهکار Availability جدا نیاز دارد."
+        ],
+        [
+          "آیا Full Backup عادی Parent مربوط به Level 1 است؟",
+          "خیر؛ برای زنجیره Level 1 از Baseline نوع Incremental Level 0 استفاده کنید."
+        ],
+        [
+          "آیا Validation مربوط به RMAN جای Test Restore را می‌گیرد؟",
+          "خیر؛ فایل منتخب و خوانایی Backup را بررسی می‌کند. فقط Restore ایزوله، فرآیند Recovery و RTO واقعی را اثبات می‌کند."
+        ],
+        [
+          "آیا Disk محلی Backup کافی است؟",
+          "خیر؛ کپی Off-host مستقل، Redo لازم و Backup کلید/Config با انتقال تأییدشده نگه دارید."
+        ],
+        [
+          "آیا رمزنگاری Disk در RMAN در EE پایه داخل سازمان شامل است؟",
+          "برای این استقرار Oracle Advanced Security لازم است؛ پیش از فعال‌سازی مجوز را بررسی کنید."
+        ]
+      ]
+    }
+  },
+  "references": [
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/nfcoa/all-nfg.html",
+    "https://www.oracle.com/database/technologies/oracle26ai-linux-downloads.html",
+    "https://www.oracle.com/database/free/faq/",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/dblic/Licensing-Information.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/cncpt/introduction-to-oracle-database.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/multi/introduction-to-the-multitenant-architecture.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/ladbi/server-hardware-checklist-for-oracle-database-installation.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/ladbi/supported-oracle-linux-9-distributions-for-x86-64.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/ladbi/server-configuration-checklist-for-oracle-database-installation.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/ladbi/storage-checklist-for-oracle-database-installation.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/ladbi/automatically-configuring-oracle-linux-with-oracle-preinstallation-rpm.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/ladbi/running-rpm-packages-to-install-oracle-database.html",
+    "https://docs.oracle.com/en/operating-systems/oracle-linux/9/systemd/EnablingandDisablingServices.html",
+    "https://docs.oracle.com/en/operating-systems/oracle-linux/9/systemd/StartingandStoppingServices.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/admin/configuring-automatic-restart-of-an-oracle-database.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/ladbi/installing-and-configuring-oracle-grid-infrastructure-for-a-standalone-server.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/dbseg/configuring-authentication.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/sqlrf/CREATE-USER.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/sqpug/PASSWORD.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/netrf/oracle-net-listener-parameters-in-listener-ora.html",
+    "https://docs.oracle.com/en/operating-systems/oracle-linux/9/firewall/firewall-ConfiguringfirewalldZones.html",
+    "https://docs.oracle.com/en/operating-systems/oracle-linux/selinux/",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/dbseg/configuring-audit-policies.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/dbseg/configuring-transport-layer-security-encryption.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/dbtde/introduction-to-transparent-data-encryption.html",
+    "https://www.oracle.com/security-alerts/",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/bradv/rman-backup-concepts.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/admin/managing-archived-redo-log-files.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/bradv/configuring-rman-client-basic.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/bradv/maintaining-rman-backups.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/bradv/backing-up-database.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/rcmrf/BACKUP.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/bradv/configuring-rman-client-advanced.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/bradv/validating-database-files-backups.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/bradv/rman-complete-database-recovery.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/rcmrf/RECOVER.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/rcmrf/RESTORE.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/bradv/rman-performing-flashback-dbpitr.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/bradv/rman-recovery-advanced.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/arpls/DBMS_AUDIT_MGMT.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/26/sutil/oracle-adr-command-interpreter-adrci.html",
+    "https://docs.oracle.com/en/error-help/db/"
+  ]
+}

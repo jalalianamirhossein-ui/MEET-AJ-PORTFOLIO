@@ -1,0 +1,11 @@
+[Unit]
+Description=Weekly level 0: Sunday, 02:15
+
+[Timer]
+OnCalendar=Sun *-*-* 02:15:00
+Persistent=true
+AccuracySec=1min
+Unit=oracle-rman@level0.service
+
+[Install]
+WantedBy=timers.target

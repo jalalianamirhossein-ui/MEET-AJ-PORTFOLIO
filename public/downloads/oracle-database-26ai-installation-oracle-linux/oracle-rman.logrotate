@@ -1,0 +1,11 @@
+/backup/oracle/logs/backup.log {
+    daily
+    maxsize 100M
+    rotate 30
+    compress
+    delaycompress
+    missingok
+    notifempty
+    su oracle oinstall
+    create 0600 oracle oinstall
+}

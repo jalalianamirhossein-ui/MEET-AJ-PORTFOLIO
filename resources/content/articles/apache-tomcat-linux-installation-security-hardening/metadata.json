@@ -1,0 +1,115 @@
+{
+  "slug": "apache-tomcat-linux-installation-security-hardening",
+  "reviewed_at": "2026-10-09",
+  "tomcat_version": "11.0.26",
+  "java_major": 21,
+  "example_os": "Ubuntu Server 24.04 LTS",
+  "localizations": {
+    "en": {
+      "title": "Installing, Configuring, and Securing Apache Tomcat on Linux — Production-Ready Guide",
+      "meta_title": "Apache Tomcat 11 Installation and Security Hardening on Linux",
+      "description": "Deploy Tomcat 11 on Ubuntu with Java 21, a hardened systemd service, Nginx HTTPS, restricted permissions, WAR deployment, monitoring and safe upgrades.",
+      "keywords": [
+        "Apache Tomcat 11",
+        "Tomcat Linux Installation",
+        "Tomcat Security Hardening",
+        "Java 21",
+        "Ubuntu 24.04",
+        "RHEL",
+        "systemd",
+        "Nginx Reverse Proxy",
+        "Jakarta Servlet",
+        "WAR Deployment",
+        "DevOps"
+      ],
+      "faq": [
+        [
+          "Can Tomcat 11 run on Java 21?",
+          "Yes. Tomcat 11 requires Java 17 or later. Java 21 meets that requirement; application bytecode and dependencies must also be compatible."
+        ],
+        [
+          "Will a Tomcat 9 WAR run unchanged on 11?",
+          "Do not assume it. Java EE web APIs moved from javax.* to jakarta.* and API defaults changed. Rebuild and test the vendor-supported application."
+        ],
+        [
+          "Why keep CATALINA_HOME separate from CATALINA_BASE?",
+          "HOME contains release binaries; BASE contains the instance configuration, deployments and runtime paths. Separation supports reviewed upgrades without overwriting production configuration."
+        ],
+        [
+          "Why does the first localhost request return 404?",
+          "No ROOT application is installed in the empty protected webapps directory. Deploy the approved application and test its documented context path."
+        ],
+        [
+          "How is Tomcat stopped with shutdown port -1?",
+          "systemd sends SIGTERM to the foreground JVM. The JVM shutdown hook performs Tomcat shutdown; shutdown.sh is not the control method for this unit."
+        ],
+        [
+          "Can the service write to webapps?",
+          "No. A deployment operator installs reviewed artifacts as root:tomcat. Runtime state belongs in the specifically writable directories."
+        ],
+        [
+          "Is localhost HTTP safe between Nginx and Tomcat?",
+          "It stays on the same host and relies on host trust. Separate-host traffic needs a private restricted path and verified encryption where policy requires it."
+        ],
+        [
+          "Should Java SecurityManager be enabled?",
+          "No. Tomcat 11 removed support. Use least privilege, systemd restrictions and separate instances/VMs for distinct application trust boundaries."
+        ]
+      ]
+    },
+    "fa": {
+      "title": "آموزش نصب، راه‌اندازی و امن‌سازی Apache Tomcat روی لینوکس به‌صورت سرویس",
+      "meta_title": "آموزش نصب و امن‌سازی Apache Tomcat روی لینوکس",
+      "description": "نصب Tomcat 11 با Java 21 روی Ubuntu، سرویس امن systemd، پروکسی Nginx و HTTPS، مجوزهای محدود، استقرار WAR، مانیتورینگ و ارتقای امن در محیط Production.",
+      "keywords": [
+        "Apache Tomcat 11",
+        "Tomcat Linux Installation",
+        "Tomcat Security Hardening",
+        "Java 21",
+        "Ubuntu 24.04",
+        "RHEL",
+        "systemd",
+        "Nginx Reverse Proxy",
+        "Jakarta Servlet",
+        "WAR Deployment",
+        "DevOps",
+        "امن سازی تامکت",
+        "نصب Tomcat لینوکس"
+      ],
+      "faq": [
+        [
+          "آیا Tomcat 11 روی Java 21 اجرا می‌شود؟",
+          "بله؛ حداقل Java در Tomcat 11 نسخه 17 است. Java 21 سازگار است؛ Bytecode و Dependency برنامه نیز باید سازگار باشند."
+        ],
+        [
+          "آیا WAR مربوط به Tomcat 9 بدون تغییر روی 11 اجرا می‌شود؟",
+          "فرض نکنید. API وب از javax.* به jakarta.* و بعضی Defaultها تغییر کرده‌اند. برنامه پشتیبانی‌شده سازنده را بازسازی و تست کنید."
+        ],
+        [
+          "چرا CATALINA_HOME و CATALINA_BASE جدا هستند؟",
+          "HOME شامل Binary نسخه و BASE شامل Configuration، Deployment و مسیر Runtime مربوط به Instance است. جداسازی Upgrade بررسی‌شده را بدون Overwrite تنظیم Production ممکن می‌کند."
+        ],
+        [
+          "چرا درخواست اولیه localhost پاسخ 404 می‌دهد؟",
+          "در webapps خالی و محافظت‌شده، ROOT نصب نشده است. برنامه تأییدشده را Deploy و Context Path مستندش را تست کنید."
+        ],
+        [
+          "با shutdown port برابر -1 چگونه Tomcat متوقف می‌شود؟",
+          "systemd به JVM Foreground، SIGTERM می‌دهد و Shutdown Hook جاوا، Tomcat را متوقف می‌کند؛ shutdown.sh روش کنترل این Unit نیست."
+        ],
+        [
+          "آیا سرویس می‌تواند در webapps بنویسد؟",
+          "خیر؛ Operator، Artifact بررسی‌شده را با root:tomcat نصب می‌کند. State متغیر در مسیرهای مشخص قابل نوشتن است."
+        ],
+        [
+          "آیا HTTP محلی میان Nginx و Tomcat امن است؟",
+          "در همان Host باقی می‌ماند و به اعتماد Host وابسته است. ترافیک Host جدا به مسیر خصوصی محدود و در نیاز Policy به رمزنگاری معتبر نیاز دارد."
+        ],
+        [
+          "آیا Java SecurityManager باید فعال شود؟",
+          "خیر؛ Tomcat 11 پشتیبانی را حذف کرده است. از Least Privilege، محدودیت systemd و Instance/VM جدا برای مرز اعتماد متفاوت استفاده کنید."
+        ]
+      ]
+    }
+  }
+}

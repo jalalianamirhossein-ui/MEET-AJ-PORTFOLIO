@@ -1,0 +1,16 @@
+[Unit]
+Description=Custom RMAN backup job (%i), not database startup
+RequiresMountsFor=/backup/oracle /oradata /fra
+After=local-fs.target
+
+[Service]
+Type=oneshot
+User=oracle
+Group=oinstall
+EnvironmentFile=/etc/sysconfig/oracle-rman
+ExecStart=/usr/local/sbin/oracle-rman-backup.sh %i
+UMask=0077
+TimeoutStartSec=12h
+Nice=10
+StandardOutput=journal
+StandardError=journal

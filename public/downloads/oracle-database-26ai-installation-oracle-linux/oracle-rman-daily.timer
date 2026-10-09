@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily differential level 1: Monday–Saturday, 02:15
+
+[Timer]
+OnCalendar=Mon..Sat *-*-* 02:15:00
+Persistent=true
+AccuracySec=1min
+Unit=oracle-rman@level1.service
+
+[Install]
+WantedBy=timers.target

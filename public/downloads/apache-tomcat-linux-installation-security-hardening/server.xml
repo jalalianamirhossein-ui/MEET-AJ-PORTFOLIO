@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server port="-1">
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+  <Service name="Catalina">
+    <Connector address="127.0.0.1" port="8080"
+               protocol="org.apache.coyote.http11.Http11NioProtocol"
+               connectionTimeout="20000" maxThreads="200"
+               maxConnections="2048" acceptCount="100"
+               maxParameterCount="1000" maxPostSize="2097152"
+               maxHttpRequestHeaderSize="8192"
+               allowTrace="false" enableLookups="false"
+               URIEncoding="UTF-8" xpoweredBy="false"
+               proxyName="tomcat.example.com" proxyPort="443"
+               scheme="https" secure="true" />
+    <Engine name="Catalina" defaultHost="localhost">
+      <Host name="localhost" appBase="webapps"
+            autoDeploy="false" deployOnStartup="true"
+            unpackWARs="false" deployXML="false">
+        <Valve className="org.apache.catalina.valves.RemoteIpValve"
+               internalProxies="127.0.0.1/32"
+               remoteIpHeader="X-Forwarded-For"
+               requestAttributesEnabled="true" />
+        <Valve className="org.apache.catalina.valves.ErrorReportValve"
+               showReport="false" showServerInfo="false" />
+        <Valve className="org.apache.catalina.valves.AccessLogValve"
+               directory="logs" prefix="access." suffix=".log"
+               rotatable="true" maxDays="14"
+               requestAttributesEnabled="true"
+               pattern="%a %t &quot;%m %U %H&quot; %s %b %D" />
+      </Host>
+    </Engine>
+  </Service>
+</Server>
