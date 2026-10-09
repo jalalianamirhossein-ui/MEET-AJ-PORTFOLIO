@@ -1253,39 +1253,7 @@
 
   window.addEventListener("load", initArticlesLoadMore);
 
-  // Give the DevOps loop a visible cycle, including on cached reloads.
-  const preloader = document.querySelector("#preloader");
-
-  if (preloader) {
-    const preloaderStartedAt = performance.now();
-    const minimumPreloaderDuration = 1400;
-    let preloaderHideScheduled = false;
-    let preloaderDismissed = false;
-    preloader.setAttribute("aria-busy", "true");
-    const hidePreloader = () => {
-      if (preloaderDismissed) return;
-      preloaderDismissed = true;
-      preloader.setAttribute("aria-busy", "false");
-      preloader.classList.remove("visible");
-      preloader.classList.add("hidden");
-      window.setTimeout(() => {
-        preloader.style.display = "none";
-      }, 320);
-    };
-
-    const schedulePreloaderHide = () => {
-      if (preloaderHideScheduled) return;
-      preloaderHideScheduled = true;
-      window.setTimeout(hidePreloader, Math.max(0,
-        minimumPreloaderDuration - (performance.now() - preloaderStartedAt)));
-    };
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", schedulePreloaderHide, { once: true });
-    } else {
-      schedulePreloaderHide();
-    }
-    window.setTimeout(hidePreloader, 5000);
-  }
+  // The shared preloader partial reveals content independently of deferred scripts.
 
   // ===============================================
   // CONTACT FORM HANDLING

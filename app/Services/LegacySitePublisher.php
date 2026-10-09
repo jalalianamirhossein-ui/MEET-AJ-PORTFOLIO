@@ -119,7 +119,7 @@ BLADE;
     <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
     <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
-    <script src="/assets/js/main.js?v=1420" defer></script>
+    <script src="/assets/js/main.js?v=1422" defer></script>
     <script src="/assets/js/scroll-reveal.js?v=1" defer></script>
     <script src="/assets/js/service-catalog.js?v=1813" defer></script>
     <script src="/assets/js/i18n.js?v=1407" defer></script>

@@ -6,7 +6,14 @@
 **Verified:** 2026-09-21 by reading query scopes, view code, the service worker, and measuring published asset sizes on disk after `site:publish-assets`.
 **Current status:** [PROJECT-STATUS.md](PROJECT-STATUS.md).
 
-> **No performance measurement has ever been run on this project.** There is no Lighthouse report, no WebPageTest run, no load test, and no query profiling. Everything below is either a code-level fact or a file measurement. Treat every timing claim elsewhere as **UNKNOWN / NOT VERIFIED**.
+> There is no Lighthouse report, no WebPageTest run, no load test, and no query profiling. The isolated browser check below verifies loader behavior only; it does not measure full-page or production performance. Earlier timings elsewhere remain **UNKNOWN / NOT VERIFIED** unless supported by a dated measurement.
+
+## Loading correction — 2026-10-09
+
+- Removed the unconditional 1,400 ms minimum loader duration. Dismissal now lives inline in the shared loader partial and runs at document readiness (`interactive`), before deferred libraries finish loading. A 1,500 ms fallback prevents a stalled dependency from trapping the page behind the overlay; it is a maximum fallback, not a minimum display time.
+- Home and article Google Fonts stylesheets load with `media="print"` and switch to `all` on load. System fonts can render content while Google Fonts is slow or unavailable; `noscript` retains normal font loading.
+- An isolated headless Chrome check held both the font stylesheet and a deferred script pending. The loader released after about 52 ms, before `DOMContentLoaded`, then completed its existing 320 ms dismissal. The JavaScript-disabled check also kept content visible. This measures the loader fixture, not the complete website.
+- HTTP and HTTPS checks for `meetaj.ir` could not resolve the domain from the execution environment. Production DNS, server latency and transfer sizes remain unverified.
 
 ## Measured facts
 

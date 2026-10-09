@@ -201,7 +201,10 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Vazirmatn:wght@400;500;600;700&family=Estedad:wght@400;500;600;700&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Vazirmatn:wght@400;500;600;700&family=Estedad:wght@400;500;600;700&display=swap" rel="stylesheet" /></noscript>
 
     <!-- ===============================================
     STYLESHEETS & CSS FRAMEWORKS
@@ -1497,7 +1500,7 @@
 
     <!-- Main Application JavaScript -->
     <script src="/assets/js/contact-form.js?v=1403" defer></script>
-    <script src="/assets/js/main.js?v=1421" defer></script>
+    <script src="/assets/js/main.js?v=1422" defer></script>
     <script src="/assets/js/service-catalog.js?v=1816" defer></script>
     <script src="/assets/js/scroll-reveal.js?v=5" defer></script>
 

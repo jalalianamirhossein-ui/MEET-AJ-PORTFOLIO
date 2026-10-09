@@ -20,3 +20,28 @@
     <span id="loading-text" class="loading-text" data-en="Loading…" data-fa="در حال بارگذاری…">Loading…</span>
   </div>
 </div>
+<script>
+  (() => {
+    const preloader = document.getElementById("preloader");
+    let dismissed = false;
+    let fallback;
+    const hidePreloader = () => {
+      if (dismissed) return;
+      dismissed = true;
+      window.clearTimeout(fallback);
+      document.removeEventListener("readystatechange", onReady);
+      preloader.setAttribute("aria-busy", "false");
+      preloader.classList.remove("visible");
+      preloader.classList.add("hidden");
+      window.setTimeout(() => { preloader.style.display = "none"; }, 320);
+    };
+    const onReady = () => {
+      // Interactive occurs before deferred libraries finish downloading.
+      if (document.readyState !== "loading") hidePreloader();
+    };
+    // A stalled dependency must never keep the page behind the loader.
+    fallback = window.setTimeout(hidePreloader, 1500);
+    document.addEventListener("readystatechange", onReady);
+    onReady();
+  })();
+</script>
