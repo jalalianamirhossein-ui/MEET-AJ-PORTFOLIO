@@ -51,7 +51,7 @@ Standard Laravel hasher (bcrypt/argon as configured). No plaintext passwords in 
 | `X-Content-Type-Options` | `nosniff` |
 | `Referrer-Policy` | `strict-origin-when-cross-origin` |
 | `X-Frame-Options` | `SAMEORIGIN` |
-| `Strict-Transport-Security` | `max-age=31536000` **only if** `$request->secure()`; no subdomain policy |
+| `Strict-Transport-Security` | HTTPS responses: `max-age=31536000` when `FORCE_HTTPS=true`, otherwise `max-age=0`; absent on HTTP; no subdomain policy |
 | `Content-Security-Policy` | `base-uri 'self'; object-src 'none'; frame-ancestors 'self'` |
 | `Permissions-Policy` | `camera=(), microphone=(), geolocation=()` |
 | Cache-Control | `no-store` on the session-bearing homepage, `/admin`, `/livewire`, `/filament`, `/forms`, signed URLs and all POST |
@@ -70,9 +70,9 @@ Article HTML is normalized once before `ArticleHtmlSanitizer` at display time, i
 | `APP_DEBUG` | **false** |
 | `APP_ENV` | `production` |
 | `APP_KEY` | unique, generated on the server |
-| `APP_URL` | `https://meetaj.ir` |
-| `FORCE_HTTPS` | `true`; defaults on when `APP_ENV=production` |
-| `SESSION_SECURE_COOKIE` | `true` (requires HTTPS) |
+| `APP_URL` | `http://meetaj.ir` for HTTP hosting; HTTPS origin for HTTPS-only hosting |
+| `FORCE_HTTPS` | `false` by default; explicitly `true` for HTTPS-only hosting |
+| `SESSION_SECURE_COOKIE` | `false` for HTTP sessions; `true` for HTTPS-only hosting |
 
 Local `php artisan about` on 2026-09-16 showed **debug ENABLED**. That is a local `.env` setting, not production.
 

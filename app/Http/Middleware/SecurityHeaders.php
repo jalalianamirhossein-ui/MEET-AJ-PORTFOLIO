@@ -40,7 +40,7 @@ class SecurityHeaders
         }
 
         if ($request->secure()) {
-            $response->headers->set('Strict-Transport-Security', 'max-age=31536000');
+            $response->headers->set('Strict-Transport-Security', config('security.enforce_https') ? 'max-age=31536000' : 'max-age=0');
         }
 
         return $response;

@@ -46,16 +46,27 @@ class EnterpriseHardeningTest extends TestCase
 
     public function test_security_headers_cover_errors_admin_and_signed_responses(): void
     {
+        config(['security.enforce_https' => true]);
         foreach (['/', '/admin/login', '/missing-page'] as $path) {
             $response = $this->get('https://localhost'.$path);
             $response->assertHeader('Strict-Transport-Security', 'max-age=31536000')
                 ->assertHeader('Content-Security-Policy', "base-uri 'self'; object-src 'none'; frame-ancestors 'self'")
                 ->assertHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
         }
-        $this->get('http://localhost/')->assertHeaderMissing('Strict-Transport-Security');
+        config(['security.enforce_https' => false]);
+        $this->get('http://localhost/')->assertOk()->assertHeaderMissing('Strict-Transport-Security');
         foreach (['/articles?signature=test', '/filament/exports/999/download', '/livewire-anything/preview-file/missing'] as $path) {
             $this->assertStringContainsString('no-store', $this->get($path)->headers->get('Cache-Control'));
         }
+    }
+
+    public function test_http_hosting_allows_login_and_clears_https_upgrade_policy(): void
+    {
+        config(['security.enforce_https' => false, 'app.url' => 'http://meetaj.ir', 'session.secure' => false]);
+        $this->get('http://meetaj.ir/admin/login')->assertOk()
+            ->assertHeaderMissing('Location')->assertHeaderMissing('Strict-Transport-Security');
+        $this->get('https://meetaj.ir/admin/login')->assertOk()
+            ->assertHeader('Strict-Transport-Security', 'max-age=0');
     }
 
     public function test_mail_failures_log_only_safe_context_and_keep_the_request(): void

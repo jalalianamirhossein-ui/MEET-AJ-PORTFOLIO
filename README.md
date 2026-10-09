@@ -67,13 +67,13 @@ On a machine where `php` is not on PATH, prefix commands with the interpreter yo
 |-----|-------|------------|
 | `APP_ENV` | `local` | `production` |
 | `APP_DEBUG` | `false` | **`false`** |
-| `APP_URL` | `http://127.0.0.1:8000` | `https://meetaj.ir` |
+| `APP_URL` | `http://127.0.0.1:8000` | `http://meetaj.ir` for HTTP hosting |
 | `APP_TIMEZONE` | your choice | `Asia/Tehran` |
 | `DB_CONNECTION` | `sqlite` | `mysql` |
 | `SESSION_DRIVER`, `CACHE_STORE` | `file` | `file` |
 | `QUEUE_CONNECTION` | `sync` | `sync` |
-| `SESSION_SECURE_COOKIE` | — | `true` |
-| `FORCE_HTTPS` | `false` by default | `true` by default; verify proxy scheme forwarding |
+| `SESSION_SECURE_COOKIE` | — | `false` for HTTP; `true` for HTTPS-only hosting |
+| `FORCE_HTTPS` | `false` by default | `false` by default; enable explicitly for HTTPS-only hosting |
 | `TRUSTED_PROXIES` | empty | actual proxy IPs/CIDRs, or empty for direct hosting |
 | `CONTACT_NOTIFICATION_EMAIL` | optional | optional; empty disables notification mail |
 
@@ -184,7 +184,7 @@ Laravel's scheduler is **not used** and no cron entry is required. If a future f
 
 ## Security
 
-CSRF, a honeypot, two layers of rate limiting, request validation, hashed passwords, Filament session auth, and eight policies protect application entry points. Global middleware enforces production HTTPS, adds compatible CSP/permissions restrictions and host-only HSTS, and prevents caching of private/signed responses. Article text is normalized once before HTML sanitization. All CMS image fields use safe upload storage. `APP_DEBUG` must be `false` in production. No production penetration test was performed. Detail: [security architecture](docs/current/SECURITY.md) and [findings](docs/SECURITY-AUDIT-REPORT.md).
+CSRF, a honeypot, two layers of rate limiting, request validation, hashed passwords, Filament session auth, and eight policies protect application entry points. Global middleware optionally enforces HTTPS, adds compatible CSP/permissions restrictions and host-only HSTS for HTTPS-only hosting, and prevents caching of private/signed responses. HTTP hosting is supported; see [deployment modes](DEPLOYMENT.md). Article text is normalized once before HTML sanitization. All CMS image fields use safe upload storage. `APP_DEBUG` must be `false` in production. No production penetration test was performed. Detail: [security architecture](docs/current/SECURITY.md) and [findings](docs/SECURITY-AUDIT-REPORT.md).
 
 ## Project structure
 

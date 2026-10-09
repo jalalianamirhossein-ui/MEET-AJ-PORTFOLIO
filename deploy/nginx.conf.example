@@ -3,11 +3,7 @@
 server {
     listen 80;
     listen [::]:80;
-    server_name meetaj.ir;
-    return 308 https://meetaj.ir$request_uri;
-}
-
-server {
+    # Serve HTTP as well as HTTPS. Laravel redirects only when FORCE_HTTPS=true.
     listen 443 ssl;
     listen [::]:443 ssl;
     server_name meetaj.ir;
