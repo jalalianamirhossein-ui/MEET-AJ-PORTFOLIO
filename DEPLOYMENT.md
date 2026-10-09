@@ -28,7 +28,10 @@ php artisan filament:assets
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
+php artisan site:check-assets --url=https://meetaj.ir
 ```
+
+For the confirmed HTTPS CMS mixed-content failure and the precise asset-only recovery procedure, see [the diagnosis and deployment report](docs/qa/admin-assets-2026-10-10.md). Set the existing production `APP_URL` to `https://meetaj.ir`, leave `ASSET_URL` empty for same-origin assets, and configure actual trusted proxies when TLS terminates upstream. HTTP-only installations should check their real HTTP origin instead. No Node/Vite build is required. The update helper checks asset delivery before reporting success; `MEETAJ_VERIFY_URL` overrides the origin checked.
 
 Run reviewed pending migrations with a backup only if the chosen release needs them. Ensure `public/storage` links only to `storage/app/public`; do not expose all `storage/`. Disable script execution in uploads, deny dotfiles, and serve PHP only through the front controller. A reviewable Nginx TLS/redirect template is in [deploy/nginx.conf.example](deploy/nginx.conf.example); validate it with `nginx -t` on staging before installation. That server validation has not been executed here.
 

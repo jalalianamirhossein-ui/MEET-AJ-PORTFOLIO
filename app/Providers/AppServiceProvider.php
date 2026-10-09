@@ -19,6 +19,7 @@ use App\Policies\TagPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\HomepageContentPolicy;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +28,13 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // TLS may terminate at the CDN while PHP receives HTTP. Keep generated
+        // asset, Livewire and route URLs secure for a configured HTTPS site.
+        // Trusted proxy configuration is still required for request security.
+        if (parse_url((string) config('app.url'), PHP_URL_SCHEME) === 'https') {
+            URL::forceScheme('https');
+        }
+
         Gate::policy(Article::class, ArticlePolicy::class);
         Gate::policy(Testimonial::class, TestimonialPolicy::class);
         Gate::policy(Category::class, CategoryPolicy::class);

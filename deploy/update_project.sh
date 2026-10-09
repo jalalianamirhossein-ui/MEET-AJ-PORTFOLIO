@@ -23,10 +23,11 @@ git checkout "${BRANCH_NAME}"
 git pull --ff-only origin "${BRANCH_NAME}"
 
 composer install --no-dev --optimize-autoloader
+composer check-platform-reqs --no-dev
+php artisan optimize:clear
 php artisan migrate --force
 php artisan site:publish-assets --views
 php artisan filament:assets
-php artisan optimize:clear
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
@@ -36,6 +37,10 @@ chmod -R ug+rwx storage bootstrap/cache
 
 systemctl reload php8.4-fpm
 systemctl reload nginx
+
+# Check the externally visible page, including CDN/TLS and static asset delivery.
+# Override when the public origin differs from APP_URL, e.g. MEETAJ_VERIFY_URL=https://meetaj.ir.
+php artisan site:check-assets --url="${MEETAJ_VERIFY_URL:-}"
 
 echo
 echo "Update completed successfully. Current revision:"
